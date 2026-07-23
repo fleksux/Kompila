@@ -159,7 +159,8 @@ nav{
 :root{--amber-ink:#B8791B;} /* âmbar rebaixado pra ler sobre papel */
 .hero-stage{height:420vh;position:relative;background:var(--paper);} /* polvo 10s: ~4 telas de pista */
 .hero-sticky{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--paper);}
-#hero-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+#hero-vid,#hero-vid-mobile{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+#hero-vid-mobile{display:none;}
 .hero-over{
   position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;
   justify-content:center;padding-top:62px;color:var(--white);
@@ -394,9 +395,32 @@ footer{padding:50px 0;border-top:1px solid var(--line);}
   .loader-word{white-space:normal;font-size:clamp(72px,24vw,130px);}
   .loader-bottom{align-items:flex-end;}
   .loader-status{max-width:19ch;}
-  .hero-stage{height:340vh;}
-  .hero-h1{font-size:clamp(48px,14vw,72px);}
-  .hero-ctas .btn{width:100%;text-align:center;}
+  .hero-stage{height:100svh;min-height:680px;}
+  .hero-sticky{position:relative;height:100%;min-height:680px;}
+  #hero-vid{display:none;}
+  #hero-vid-mobile{display:block;object-position:center center;}
+  .hero-sticky::after{
+    content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(239,236,226,.7) 0%,rgba(239,236,226,.08) 31%,rgba(239,236,226,0) 58%,rgba(239,236,226,.78) 100%);
+  }
+  .hero-over{z-index:2;padding-top:0;color:var(--ink);}
+  .hero-over .shell{position:relative;height:100%;padding:0 22px;}
+  .hero-over .status{position:absolute;top:calc(76px + env(safe-area-inset-top));left:22px;margin:0;font-size:10px;color:#53585e;}
+  .hero-over .logo-vivo{display:none;}
+  .hero-h1{font-size:clamp(42px,12.5vw,62px);line-height:.82;}
+  .hero-h1 .lwrap{position:absolute;overflow:visible;}
+  .hero-h1 .lwrap:first-child{top:17%;left:22px;}
+  .hero-h1 .lwrap:last-child{top:56%;right:22px;text-align:right;}
+  .hero-h1 .l1{color:var(--amber-ink);}
+  .hero-h1 .l2{color:var(--ink);}
+  .hero-desc{position:absolute;top:70%;left:22px;right:22px;margin:0;max-width:36ch;font-size:clamp(11px,3.2vw,13px);line-height:1.45;color:#40454a;}
+  .hero-desc strong{color:var(--ink);}
+  .hero-ctas{position:absolute;top:83%;left:22px;right:22px;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0;}
+  .hero-ctas .btn{width:100%;padding:12px 6px;text-align:center;font-size:10px;white-space:nowrap;background:rgba(239,236,226,.8);backdrop-filter:blur(5px);}
+  .hero-ctas .btn.solid{background:var(--green);}
+  .hero-scroll-hint{bottom:calc(8px + env(safe-area-inset-bottom));font-size:9px;color:#5c6166;}
+  .hero-more{display:none;}
+  .only-desktop{display:none;}
   section{padding:70px 0;}
   .principio{grid-template-columns:1fr;gap:8px;padding:28px 0;}
   .principio .pnum{font-size:56px;}
@@ -410,6 +434,7 @@ footer{padding:50px 0;border-top:1px solid var(--line);}
   .manifesto-shape{width:70%;right:-35%;}
   .contato-inner{grid-template-columns:1fr;gap:36px;}
 }
+@media (min-width:861px){.only-mobile{display:none;}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important;}
   .curtain{display:none !important;}
@@ -485,7 +510,8 @@ footer{padding:50px 0;border-top:1px solid var(--line);}
 
 <header class="hero-stage" id="top">
   <div class="hero-sticky">
-    <video id="hero-vid" src="video/octopus-hero-scrub.mp4" poster="img/hero-poster.webp" muted playsinline preload="auto"></video>
+    <video id="hero-vid" data-src="video/octopus-hero-scrub.mp4" poster="img/hero-poster.webp" muted playsinline preload="none"></video>
+    <video id="hero-vid-mobile" data-src="video/kompila-logo-mobile-hero.mp4" poster="img/hero-mobile-poster.webp" muted autoplay loop playsinline preload="none" aria-hidden="true"></video>
     <div class="hero-over lite" id="hero-over">
       <div class="shell">
         <p class="status j" id="hero-status">$ status: <span class="amb" id="status-word">compilando</span><span class="cursor"></span></p>
@@ -500,7 +526,7 @@ footer{padding:50px 0;border-top:1px solid var(--line);}
           <a class="btn ghost" href="https://www.instagram.com/kompila.ai" target="_blank" rel="noopener">@kompila.ai</a>
         </div>
       </div>
-      <span class="hero-scroll-hint">// gira pra compilar</span>
+      <span class="hero-scroll-hint"><span class="only-desktop">// gira pra compilar</span><span class="only-mobile">// role para explorar</span></span>
       <a class="hero-more mono" id="hero-more" href="#essencia"><span class="g">[</span> conheça mais <span class="seta">↓</span> <span class="g">]</span></a>
     </div>
   </div>
@@ -794,6 +820,7 @@ footer{padding:50px 0;border-top:1px solid var(--line);}
 
 <script>
 const REDUCED=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const MOBILE_HERO=matchMedia('(max-width:860px)').matches;
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const ease=t=>1-Math.pow(1-t,3); /* easeOutCubic */
 
@@ -884,7 +911,7 @@ const MCH=(function(){
 const $=(s,c=document)=>c.querySelector(s);
 const $$=(s,c=document)=>[...c.querySelectorAll(s)];
 
-const heroStage=$('.hero-stage'),heroVid=$('#hero-vid'),heroOver=$('#hero-over');
+const heroStage=$('.hero-stage'),heroVid=$('#hero-vid'),heroMobileVid=$('#hero-vid-mobile'),heroOver=$('#hero-over');
 const heroL1=$('#hero-l1'),heroL2=$('#hero-l2'),heroDesc=$('#hero-desc'),heroCtas=$('#hero-ctas'),heroStatus=$('#hero-status');
 
 /* scrub do vídeo: alvo segue o scroll, currentTime persegue o alvo com lerp */
@@ -896,24 +923,32 @@ heroVid.addEventListener('loadedmetadata',()=>{
 if(heroVid.readyState>=1&&heroVid.duration)vidDur=heroVid.duration; /* metadata pode já ter carregado do cache */
 /* O scrub precisa do arquivo inteiro em memória: funciona até em servidores sem HTTP Range. */
 let heroBlobUrl='';
-fetch(heroVid.getAttribute('src')).then(r=>{
-  if(!r.ok)throw new Error('hero video unavailable');
-  return r.blob();
-}).then(blob=>{
-  const previousTime=heroVid.currentTime;
-  heroBlobUrl=URL.createObjectURL(blob);
-  heroVid.addEventListener('loadedmetadata',()=>{
-    vidDur=heroVid.duration;
-    try{heroVid.currentTime=Math.min(previousTime,Math.max(0,vidDur-.08));}catch(_){}
-    frame();
-  },{once:true});
-  heroVid.src=heroBlobUrl;
-  heroVid.load();
-}).catch(()=>{});
+if(MOBILE_HERO){
+  if(!REDUCED){
+    heroMobileVid.src=heroMobileVid.dataset.src;
+    heroMobileVid.load();
+    heroMobileVid.play().catch(()=>{});
+  }
+}else{
+  fetch(heroVid.dataset.src).then(r=>{
+    if(!r.ok)throw new Error('hero video unavailable');
+    return r.blob();
+  }).then(blob=>{
+    heroBlobUrl=URL.createObjectURL(blob);
+    heroVid.addEventListener('loadedmetadata',()=>{
+      vidDur=heroVid.duration;
+      try{heroVid.currentTime=0;}catch(_){}
+      frame();
+    },{once:true});
+    heroVid.src=heroBlobUrl;
+    heroVid.load();
+  }).catch(()=>{});
+}
 addEventListener('pagehide',()=>{if(heroBlobUrl)URL.revokeObjectURL(heroBlobUrl);},{once:true});
 
 /* sensor de brilho: amostra o frame atual e troca a cor do texto (claro no escuro, escuro no claro) */
 (function(){
+  if(MOBILE_HERO)return;
   const cv=document.createElement('canvas');cv.width=48;cv.height=27;
   const cx=cv.getContext('2d',{willReadFrequently:true});
   setInterval(()=>{
@@ -929,7 +964,7 @@ addEventListener('pagehide',()=>{if(heroBlobUrl)URL.revokeObjectURL(heroBlobUrl)
 })();
 (function vloop(){
   if(!vidDur&&heroVid.duration)vidDur=heroVid.duration;
-  if(!REDUCED&&vidDur&&Math.abs(heroVid.currentTime-vidTarget)>0.02){
+  if(!MOBILE_HERO&&!REDUCED&&vidDur&&Math.abs(heroVid.currentTime-vidTarget)>0.02){
     try{heroVid.currentTime+=(vidTarget-heroVid.currentTime)*0.3;}catch(_){}
   }
   requestAnimationFrame(vloop);
@@ -972,31 +1007,33 @@ function frame(){
 
   if(REDUCED)return;
 
-  /* ---------- HERO: vídeo compila com o scroll; texto sai antes do polvo nascer ---------- */
-  const runway=heroStage.offsetHeight-innerHeight;
-  const p=runway>0?clamp(y/runway,0,1):0;
-  if(vidDur)vidTarget=p*(vidDur-0.08);
-  /* texto desconstrói nos primeiros 16% da pista (fase de papel, antes do polvo montar) */
-  const hp=clamp(p/0.16,0,1);
-  const e=hp*hp;
-  const op=v=>clamp(v,0,1); /* opacity negativa é inválida e o browser IGNORA: sempre clampar */
-  heroL1.style.transform='translateX('+(-e*46)+'vw)';
-  heroL2.style.transform='translateX('+(e*46)+'vw)';
-  heroL1.style.opacity=heroL2.style.opacity=op(1-e*1.15);
-  heroDesc.style.transform='translateY('+(-e*70)+'px)';
-  heroDesc.style.opacity=op(1-e*1.6);
-  heroCtas.style.transform='translateY('+(-e*40)+'px)';
-  heroCtas.style.opacity=op(1-e*1.8);
-  heroCtas.style.pointerEvents=e>.5?'none':'auto';
-  heroStatus.style.opacity=op(1-e*2);
-  const heroLogo=$('#logo-vivo');
-  heroLogo.style.opacity=op(1-e*1.4);
-  heroLogo.style.pointerEvents=e>.5?'none':'auto';
-  const hint=$('.hero-scroll-hint');
-  if(hint)hint.style.opacity=op(1-p*4);
-  $('#hero-more').classList.toggle('on',p>0.82);
-  /* logo descompila enquanto some */
-  Logo.set(1-clamp((hp-.15)/.5,0,1));
+  /* ---------- HERO DESKTOP: vídeo compila com o scroll ---------- */
+  if(!MOBILE_HERO){
+    const runway=heroStage.offsetHeight-innerHeight;
+    const p=runway>0?clamp(y/runway,0,1):0;
+    if(vidDur)vidTarget=p*(vidDur-0.08);
+    /* texto desconstrói nos primeiros 16% da pista (fase de papel, antes do polvo montar) */
+    const hp=clamp(p/0.16,0,1);
+    const e=hp*hp;
+    const op=v=>clamp(v,0,1); /* opacity negativa é inválida e o browser IGNORA: sempre clampar */
+    heroL1.style.transform='translateX('+(-e*46)+'vw)';
+    heroL2.style.transform='translateX('+(e*46)+'vw)';
+    heroL1.style.opacity=heroL2.style.opacity=op(1-e*1.15);
+    heroDesc.style.transform='translateY('+(-e*70)+'px)';
+    heroDesc.style.opacity=op(1-e*1.6);
+    heroCtas.style.transform='translateY('+(-e*40)+'px)';
+    heroCtas.style.opacity=op(1-e*1.8);
+    heroCtas.style.pointerEvents=e>.5?'none':'auto';
+    heroStatus.style.opacity=op(1-e*2);
+    const heroLogo=$('#logo-vivo');
+    heroLogo.style.opacity=op(1-e*1.4);
+    heroLogo.style.pointerEvents=e>.5?'none':'auto';
+    const hint=$('.hero-scroll-hint');
+    if(hint)hint.style.opacity=op(1-p*4);
+    $('#hero-more').classList.toggle('on',p>0.82);
+    /* logo descompila enquanto some */
+    Logo.set(1-clamp((hp-.15)/.5,0,1));
+  }
 
   /* ---------- CORTINAS: papel descoberto na diagonal ---------- */
   curtains.forEach(c=>{
