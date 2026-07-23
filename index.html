@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.add('js');</script>
+<title>kompila · do bruto ao pronto.</title>
+<meta name="description" content="kompila: estúdio de tecnologia criativa. Estratégia, criatividade e IA para transformar ideias em soluções que funcionam. do bruto ao pronto.">
+<meta name="theme-color" content="#0A0B0E">
+<link rel="canonical" href="https://kompila.com.br/">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<meta property="og:title" content="kompila · do bruto ao pronto.">
+<meta property="og:description" content="Estúdio de tecnologia criativa. Estratégia, design e IA para transformar ideias soltas em soluções que funcionam.">
+<meta property="og:image" content="https://kompila.com.br/img/og-image.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kompila.com.br/">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"ProfessionalService",
+  "name":"kompila",
+  "url":"https://kompila.com.br/",
+  "email":"kompila.ai@gmail.com",
+  "description":"Estúdio de tecnologia criativa: estratégia, design e inteligência artificial do bruto ao pronto.",
+  "sameAs":["https://www.instagram.com/kompila.ai"]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;650;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --carbon:#0A0B0E;
+  --panel:#11151A;
+  --line:#252C34;
+  --paper:#F2F3EF;
+  --ink:#101114;
+  --white:#E9EBEE;
+  --muted:#949DA7;
+  --dim:#5E6873;
+  --amber:#FFB224;
+  --green:#2FD67B;
+  --green-paper:#159754;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --sans:'Inter',system-ui,sans-serif;
+  --disp:'Anton',Impact,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--carbon);color:var(--white);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+.js body.is-loading{overflow:hidden;}
+::selection{background:var(--green);color:var(--carbon);}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+.shell{width:min(1180px,calc(100% - 44px));margin:0 auto;}
+
+/* grão global */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:6;opacity:.55;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.disp{font-family:var(--disp);font-weight:400;text-transform:lowercase;letter-spacing:.005em;line-height:.9;}
+
+/* elementos manipulados por scroll: só transform/opacity */
+.j{will-change:transform,opacity;}
+
+/* ============ LOADER · DO BRUTO AO PRONTO ============ */
+.site-loader{display:none;}
+.js .site-loader{
+  position:fixed;inset:0;z-index:100;background:var(--carbon);color:var(--white);
+  display:grid;grid-template-rows:auto 1fr auto;padding:clamp(22px,4vw,56px);
+  overflow:hidden;isolation:isolate;transition:opacity .55s var(--ease),visibility .55s;
+}
+.site-loader::before{
+  content:"";position:absolute;inset:0;z-index:-2;opacity:.28;
+  background-image:radial-gradient(rgba(233,235,238,.18) .8px,transparent .8px);
+  background-size:7px 7px;
+}
+.site-loader::after{
+  content:"";position:absolute;z-index:-1;width:min(54vw,720px);aspect-ratio:1;
+  right:-12%;bottom:-35%;background:var(--green);
+  clip-path:polygon(50% 0,100% 100%,0 100%);transform:rotate(-18deg);
+  animation:loaderShape 1.25s var(--ease) both;
+}
+.site-loader.done{opacity:0;visibility:hidden;pointer-events:none;}
+.loader-top,.loader-bottom{display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;z-index:2;}
+.loader-kicker,.loader-status,.loader-count{font-family:var(--mono);}
+.loader-kicker{font-size:clamp(12px,1.4vw,15px);font-weight:600;letter-spacing:.02em;}
+.loader-kicker .g,.loader-status .g{color:var(--green);}
+.loader-kicker .a{color:var(--amber);}
+.loader-index{font:500 10px var(--mono);letter-spacing:.18em;color:var(--dim);text-transform:uppercase;}
+.loader-core{align-self:center;position:relative;z-index:2;width:min(1120px,100%);}
+.loader-word{
+  font-family:var(--mono);font-size:clamp(48px,11vw,150px);font-weight:600;line-height:.9;
+  letter-spacing:-.065em;text-transform:lowercase;white-space:nowrap;
+}
+.loader-word .g{color:var(--green);}
+.loader-word .raw{color:var(--amber);display:inline-block;animation:loaderGlitch .72s steps(2,end) infinite;}
+.loader-rule{height:1px;background:var(--line);margin-top:clamp(30px,5vw,62px);position:relative;overflow:hidden;}
+.loader-rule span{position:absolute;inset:0;background:linear-gradient(90deg,var(--amber),var(--green));transform:scaleX(0);transform-origin:left;transition:transform .22s linear;}
+.loader-bottom{font-size:11px;color:var(--muted);letter-spacing:.08em;}
+.loader-count{font-family:var(--disp);font-size:clamp(60px,11vw,150px);line-height:.65;color:var(--paper);}
+.loader-count small{font:500 11px var(--mono);color:var(--amber);margin-left:6px;}
+.loader-status{max-width:34ch;text-align:right;text-transform:uppercase;}
+@keyframes loaderGlitch{0%,72%{transform:none}76%{transform:translateX(-.025em) skewX(-5deg)}82%{transform:translateX(.018em)}88%,100%{transform:none}}
+@keyframes loaderShape{from{transform:translate(35%,35%) rotate(-32deg);opacity:0}to{transform:rotate(-18deg);opacity:1}}
+
+/* ============ BARRA DE COMPILAÇÃO ============ */
+.progress{
+  position:fixed;top:0;left:0;height:3px;width:0;z-index:40;
+  background:linear-gradient(90deg,var(--amber),var(--green));
+  background-size:100vw 100%;background-repeat:no-repeat;
+}
+
+/* ============ NAV ============ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  background:rgba(9,11,14,.86);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.nav-inner{height:62px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.mini-logo{font:600 15px var(--mono);white-space:nowrap;}
+.mini-logo .g{color:var(--green);}
+.nav-desc{font:500 10px var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.16em;}
+/* menu na gramática de módulo: .cases .serviços .blog */
+.nav-links{display:flex;gap:clamp(12px,2.4vw,28px);font:500 13px var(--mono);}
+.nav-links a{color:var(--muted);transition:color .18s;}
+.nav-links a .dot{color:var(--amber);}
+.nav-links a::before{content:"[ ";color:transparent;transition:color .18s;}
+.nav-links a::after{content:" ]";color:transparent;transition:color .18s;}
+.nav-links a:hover{color:var(--white);}
+.nav-links a:hover::before,.nav-links a:hover::after{color:var(--green);}
+.nav-links .fila{font-size:8px;color:var(--dim);vertical-align:super;margin-left:4px;letter-spacing:.12em;text-transform:uppercase;}
+.nav-cta{font:600 12px var(--mono);border:1px solid var(--green);color:var(--green);padding:9px 16px;transition:.18s;white-space:nowrap;}
+.nav-cta:hover{background:var(--green);color:var(--carbon);}
+
+/* ============ DEBRIS (entulho gráfico atravessando a tela) ============ */
+.debris{
+  position:absolute;pointer-events:none;user-select:none;z-index:1;
+  font:600 clamp(20px,3vw,40px) var(--mono);
+}
+.debris.tri{width:clamp(40px,6vw,90px);height:clamp(40px,6vw,90px);font-size:0;}
+.debris.tri.g{background:var(--green);clip-path:polygon(0 100%,100% 0,100% 100%);}
+.debris.tri.a{background:var(--amber);clip-path:polygon(0 0,100% 0,0 100%);}
+.debris.dots{
+  width:clamp(60px,8vw,120px);height:clamp(60px,8vw,120px);font-size:0;
+  background-image:radial-gradient(currentColor 1.6px,transparent 1.6px);
+  background-size:10px 10px;color:var(--dim);
+}
+
+/* ============ HERO · VÍDEO COMPILANDO NO SCROLL ============ */
+:root{--amber-ink:#B8791B;} /* âmbar rebaixado pra ler sobre papel */
+.hero-stage{height:420vh;position:relative;background:var(--paper);} /* polvo 10s: ~4 telas de pista */
+.hero-sticky{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--paper);}
+#hero-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.hero-over{
+  position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;
+  justify-content:center;padding-top:62px;color:var(--white);
+}
+/* troca de cor automática pelo brilho do frame: .lite = vídeo claro, texto escuro */
+.hero-over,.hero-over .l1,.hero-over .l2,.hero-over .hero-desc,.hero-over .hero-desc strong,
+.hero-over .status,.hero-over .status .amb,.hero-over .logo-vivo .g,.hero-over .logo-vivo .ch,
+.hero-over .btn.ghost{transition:color .35s ease,border-color .35s ease;}
+.hero-over.lite .l2{color:var(--ink);}
+.hero-over.lite .l1{color:var(--amber-ink);}
+.hero-over.lite .hero-desc{color:#4A4F57;}
+.hero-over.lite .hero-desc strong{color:var(--ink);}
+.hero-over.lite .status{color:#6B7178;}
+.hero-over.lite .status .amb{color:var(--amber-ink);}
+.hero-over.lite .status .cursor{background:var(--amber-ink);}
+.hero-over.lite .logo-vivo{color:var(--ink);}
+.hero-over.lite .logo-vivo .g{color:var(--green-paper);}
+.hero-over.lite .logo-vivo .ch.bruto{color:var(--amber-ink);}
+.hero-over.lite .btn.ghost{border-color:rgba(16,17,20,.35);color:var(--ink);}
+.hero-over.lite .hero-scroll-hint{color:#6B7178;}
+.hero-scroll-hint{
+  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#6B7178;
+  animation:hintPulse 2s ease-in-out infinite;
+}
+@keyframes hintPulse{50%{transform:translateX(-50%) translateY(5px);}}
+/* setinha "conheça mais": entra quando o polvo explode e sai de cena */
+.hero-more{
+  position:absolute;bottom:34px;left:50%;transform:translate(-50%,16px);
+  font:600 14px var(--mono);letter-spacing:.06em;color:var(--ink);
+  opacity:0;pointer-events:none;transition:opacity .45s var(--ease),transform .45s var(--ease);
+}
+.hero-more .g{color:var(--green-paper);}
+.hero-more .seta{display:inline-block;animation:setaBob 1.6s ease-in-out infinite;}
+@keyframes setaBob{50%{transform:translateY(5px);}}
+.hero-more.on{opacity:1;transform:translate(-50%,0);pointer-events:auto;}
+.hero-more:hover{color:var(--green-paper);}
+.status{font:500 12px var(--mono);color:var(--dim);letter-spacing:.05em;margin-bottom:18px;animation:fadeUp .6s .15s var(--ease) both;}
+.status .amb{color:var(--amber);}
+.status .cursor{display:inline-block;width:8px;height:13px;background:var(--amber);vertical-align:-2px;margin-left:3px;animation:blink 1s steps(1) infinite;}
+@keyframes blink{50%{opacity:0;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+.logo-vivo{font:600 clamp(18px,2.2vw,26px) var(--mono);letter-spacing:-.05em;margin-bottom:22px;cursor:pointer;animation:fadeUp .6s .3s var(--ease) both;}
+.logo-vivo .g{color:var(--green);}
+.logo-vivo .ch{display:inline-block;min-width:.58em;text-align:center;}
+.logo-vivo .ch.bruto{color:var(--amber);}
+.hero-h1{font-size:clamp(46px,8.5vw,118px);}
+.hero-h1 .lwrap{display:block;overflow:hidden;}
+.hero-h1 .l1,.hero-h1 .l2{display:block;transform:translateY(112%);animation:lineUp 1s var(--ease) forwards;}
+.hero-h1 .l1{color:var(--amber);animation-delay:.4s;}
+.hero-h1 .l2{color:var(--white);animation-delay:.55s;}
+@keyframes lineUp{to{transform:none;}}
+.hero-desc{margin-top:24px;max-width:52ch;font-size:clamp(15px,1.6vw,17px);color:var(--muted);animation:fadeUp .7s .9s var(--ease) both;}
+.hero-desc strong{color:var(--white);font-weight:650;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;animation:fadeUp .7s 1.05s var(--ease) both;}
+.btn{
+  display:inline-block;font:600 14px var(--mono);padding:15px 26px;
+  border:1px solid var(--green);color:var(--green);background:transparent;
+  cursor:pointer;transition:background .18s,color .18s,border-color .18s;
+}
+.btn:hover{background:var(--green);color:var(--carbon);}
+.btn.solid{background:var(--green);color:var(--carbon);}
+.btn.solid:hover{background:transparent;color:var(--green);}
+.btn.ghost{border-color:rgba(233,235,238,.35);color:var(--white);}
+.btn.ghost:hover{border-color:var(--white);background:transparent;color:var(--white);}
+.hero-num{
+  position:absolute;right:clamp(8px,3vw,40px);bottom:-2vw;z-index:1;
+  font-family:var(--disp);font-size:clamp(140px,26vw,380px);line-height:1;
+  color:transparent;-webkit-text-stroke:2px rgba(233,235,238,.14);
+  pointer-events:none;user-select:none;
+  animation:numIn 1.6s .8s var(--ease) both;
+}
+@keyframes numIn{from{opacity:0;}to{opacity:1;}}
+
+/* ============ MARQUEE ============ */
+.marquee{
+  overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:16px 0;background:var(--carbon);position:relative;z-index:2;
+}
+.marquee-track{display:flex;white-space:nowrap;width:max-content;animation:mq 26s linear infinite;}
+.marquee span{font:600 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:0 28px;}
+.marquee span b{color:var(--green);font-weight:600;}
+.marquee span i{color:var(--amber);font-style:normal;}
+@keyframes mq{to{transform:translateX(-50%);}}
+.marquee.paper-mq{background:var(--paper);border-color:rgba(16,17,20,.2);}
+.marquee.paper-mq span{color:#6B7178;}
+.marquee.paper-mq span b{color:var(--green-paper);}
+
+/* ============ SEÇÕES ============ */
+section{position:relative;padding:clamp(84px,11vw,120px) 0;overflow:hidden;}
+.label{font:600 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);}
+.paper .label{color:#6B7178;}
+.sec-head{margin-bottom:54px;max-width:900px;position:relative;z-index:2;}
+.sec-head .label{display:block;margin-bottom:20px;}
+.sec-title{font-size:clamp(46px,7.6vw,104px);}
+.sec-title .amb{color:var(--amber);}
+.paper .sec-title .amb{color:var(--green-paper);}
+.sec-sub{margin-top:22px;max-width:58ch;font-size:18px;color:var(--muted);}
+.paper .sec-sub{color:#4A4F57;}
+
+/* ============ PAPER + CORTINA DIAGONAL ============ */
+.paper{background:var(--paper);color:var(--ink);}
+.paper::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;
+  background-image:radial-gradient(rgba(10,11,14,.12) 1px,transparent 1px);
+  background-size:13px 13px;
+}
+.paper .shell{position:relative;z-index:2;}
+.curtain{
+  position:absolute;inset:-2%;background:var(--carbon);z-index:3;pointer-events:none;
+}
+
+/* ============ ESSÊNCIA ============ */
+.principios{border-top:2px solid var(--ink);position:relative;z-index:2;}
+.principio{
+  display:grid;grid-template-columns:180px 1fr 1.2fr;gap:34px;align-items:center;
+  padding:34px 0;border-bottom:1px solid rgba(16,17,20,.25);
+}
+.principio .pnum{font-family:var(--disp);font-size:clamp(64px,8vw,110px);line-height:.9;color:var(--ink);}
+.principio:nth-child(2) .pnum{color:var(--green-paper);}
+.principio:nth-child(3) .pnum{color:var(--amber);-webkit-text-stroke:1px rgba(16,17,20,.35);}
+.principio h3{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.03em;}
+.principio p{color:#4A4F57;font-size:16px;max-width:44ch;}
+
+/* ============ MÓDULOS ============ */
+.modulos-list{border-top:1px solid var(--line);position:relative;z-index:2;}
+.modulo{
+  display:grid;grid-template-columns:1.1fr 1fr auto;gap:28px;align-items:center;
+  padding:36px 0;border-bottom:1px solid var(--line);transition:background .2s;
+}
+.modulo:hover{background:var(--panel);}
+.modulo-mark{font:600 clamp(20px,3.4vw,38px) var(--mono);letter-spacing:-.045em;white-space:nowrap;}
+.modulo-mark .g{color:var(--green);display:inline-block;transition:transform .25s var(--ease);}
+.modulo:hover .modulo-mark .g:first-child{transform:translateX(-6px);}
+.modulo:hover .modulo-mark .g:last-child{transform:translateX(6px);}
+.modulo-mark .amb{color:var(--amber);}
+.modulo p{color:var(--muted);font-size:15px;max-width:44ch;}
+.modulo .tag{font:500 10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);padding:7px 12px;white-space:nowrap;}
+.modulo .tag.on{color:var(--green);border-color:var(--green);}
+.servs{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.servs span{
+  font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--line);padding:6px 11px;white-space:nowrap;
+  transition:.18s;
+}
+.modulo:hover .servs span{border-color:var(--dim);}
+.servs span b{color:var(--green);font-weight:500;margin-right:2px;}
+
+/* ============ ACORDEÃO DE JOBS ============ */
+.jobs-acc{border-top:1px solid var(--line);}
+.job{border-bottom:1px solid var(--line);}
+.job-head{
+  display:flex;align-items:center;gap:clamp(16px,3vw,34px);width:100%;
+  padding:26px 0;background:none;border:0;cursor:pointer;text-align:left;color:var(--white);
+  transition:padding-left .2s;
+}
+.job-head:hover{padding-left:14px;}
+.job-num{font:500 12px var(--mono);color:var(--amber);letter-spacing:.1em;}
+.job-nome{font-size:clamp(30px,4.6vw,54px);line-height:1;}
+.job-flag{margin-left:auto;font:600 15px var(--mono);color:var(--muted);white-space:nowrap;}
+.job-flag .g{color:var(--green);}
+.job-body{max-height:0;overflow:hidden;transition:max-height .9s var(--ease);}
+.job.open .job-body{max-height:1900px;}
+.job-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.2vw,24px);
+  padding:4px 0 38px;
+}
+.jcase{margin:0;}
+.jcase img,.jcase video{
+  width:100%;aspect-ratio:16/9;object-fit:contain;background:#0D0F13;
+  border:1px solid rgba(255,255,255,.09);display:block;
+}
+.jcase figcaption{
+  margin-top:10px;font:500 11px var(--mono);letter-spacing:.04em;color:var(--muted);
+}
+.job-cap{font:500 12px var(--mono);letter-spacing:.04em;color:var(--muted);}
+.jcase.vert img,.jcase.vert video{aspect-ratio:4/5;}
+.job-grid.social{grid-template-columns:repeat(6,1fr);gap:10px;}
+
+/* ============ SÉRIE ============ */
+.serie-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,34px);
+  margin-top:10px;position:relative;z-index:2;
+}
+.print{position:relative;}
+.print img{width:100%;aspect-ratio:4/5;object-fit:cover;border:1px solid rgba(255,255,255,.09);box-shadow:0 22px 50px rgba(0,0,0,.45);}
+.print figcaption{margin-top:12px;font:500 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:flex;justify-content:space-between;}
+.serie-cta{margin-top:52px;position:relative;z-index:2;}
+
+/* ============ MANIFESTO ============ */
+.manifesto-shape{
+  position:absolute;top:0;right:-10%;width:46%;height:100%;
+  background:var(--green);clip-path:polygon(62% 0,100% 0,100% 100%,0 100%);
+  opacity:.9;mix-blend-mode:multiply;
+}
+.manifesto-shape::after{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(10,11,14,.3) 1.2px,transparent 1.2px);
+  background-size:9px 9px;opacity:.3;
+}
+.manifesto-h{font-size:clamp(64px,12.5vw,180px);max-width:7ch;position:relative;z-index:2;}
+.manifesto-h .mw{display:inline-block;white-space:nowrap;}
+.manifesto-h .mch{display:inline-block;}
+.bruto-mark{font:600 clamp(16px,2vw,22px) var(--mono);color:var(--amber);margin-top:30px;position:relative;z-index:2;}
+.bruto-mark .g{color:var(--green-paper);}
+.manifesto-body{margin-top:26px;max-width:50ch;font-size:17px;color:#3A4048;position:relative;z-index:2;}
+.manifesto-body strong{color:var(--ink);}
+
+/* ============ CONTATO ============ */
+.contato-inner{display:grid;grid-template-columns:1fr .8fr;gap:64px;align-items:start;position:relative;z-index:2;}
+.contato-form{display:grid;gap:12px;}
+.contato-form input,.contato-form textarea{
+  background:var(--panel);border:1px solid var(--line);color:var(--white);
+  font:400 15px var(--sans);padding:15px 17px;outline:none;resize:vertical;transition:border-color .18s;
+}
+.contato-form input:focus,.contato-form textarea:focus{border-color:var(--green);}
+.contato-form ::placeholder{color:var(--dim);}
+.contato-nota{font:500 12px var(--mono);color:var(--dim);margin-top:6px;}
+.contato-side{display:grid;gap:10px;font:500 14px var(--mono);color:var(--muted);}
+.contato-side a{padding:17px 20px;border:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;transition:.18s;}
+.contato-side a:hover{border-color:var(--green);color:var(--green);}
+
+/* ============ FOOTER ============ */
+footer{padding:50px 0;border-top:1px solid var(--line);}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font:500 12px var(--mono);color:var(--dim);}
+
+/* ============ MOBILE ============ */
+@media (max-width:860px){
+  .nav-links{display:none;}
+  .loader-top{align-items:flex-start;}
+  .loader-index{max-width:16ch;text-align:right;}
+  .loader-word{white-space:normal;font-size:clamp(72px,24vw,130px);}
+  .loader-bottom{align-items:flex-end;}
+  .loader-status{max-width:19ch;}
+  .hero-stage{height:340vh;}
+  .hero-h1{font-size:clamp(48px,14vw,72px);}
+  .hero-ctas .btn{width:100%;text-align:center;}
+  section{padding:70px 0;}
+  .principio{grid-template-columns:1fr;gap:8px;padding:28px 0;}
+  .principio .pnum{font-size:56px;}
+  .modulo{grid-template-columns:1fr;gap:12px;}
+  .modulo .tag{justify-self:start;}
+  .serie-grid{grid-template-columns:1fr;}
+  .job-grid{grid-template-columns:1fr;}
+  .job-grid.social{grid-template-columns:repeat(2,1fr);}
+  .job.open .job-body{max-height:6000px;}
+  .job-nome{font-size:clamp(24px,7vw,34px);}
+  .manifesto-shape{width:70%;right:-35%;}
+  .contato-inner{grid-template-columns:1fr;gap:36px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;}
+  .curtain{display:none !important;}
+}
+</style>
+</head>
+<body class="is-loading">
+
+<div class="site-loader" id="site-loader" role="status" aria-live="polite" aria-label="Carregando o site da kompila">
+  <div class="loader-top">
+    <p class="loader-kicker"><span class="g">[</span> kompila <span class="g">]</span></p>
+    <p class="loader-index">build 017 · experiência digital</p>
+  </div>
+  <div class="loader-core">
+    <p class="loader-word" id="loader-word"><span class="g">[</span> komp<span class="raw">+0&lt;</span> <span class="g">]</span></p>
+    <div class="loader-rule" aria-hidden="true"><span id="loader-bar"></span></div>
+  </div>
+  <div class="loader-bottom">
+    <p class="loader-count"><span id="loader-count">00</span><small>%</small></p>
+    <p class="loader-status" id="loader-status"><span class="g">//</span> lendo matéria bruta</p>
+  </div>
+</div>
+<script>
+(function(){
+  const loader=document.getElementById('site-loader');
+  const bar=document.getElementById('loader-bar');
+  const count=document.getElementById('loader-count');
+  const status=document.getElementById('loader-status');
+  const word=document.getElementById('loader-word');
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const started=performance.now();
+  const stages=['lendo matéria bruta','compilando estrutura','ajustando movimento','validando entrega'];
+  let value=0,finished=false;
+  function render(){
+    count.textContent=String(Math.round(value)).padStart(2,'0');
+    bar.style.transform='scaleX('+(value/100)+')';
+    status.innerHTML='<span class="g">//</span> '+stages[Math.min(stages.length-1,Math.floor(value/25))];
+  }
+  const timer=setInterval(()=>{
+    if(finished)return;
+    const step=value<55?7:value<82?3:1;
+    value=Math.min(92,value+step);render();
+  },reduced?60:110);
+  function finish(){
+    if(finished)return;finished=true;clearInterval(timer);value=100;render();
+    word.innerHTML='<span class="g">[</span> kompila <span class="g">]</span>';
+    status.innerHTML='<span class="g">//</span> pronto para rodar';
+    setTimeout(()=>{
+      loader.classList.add('done');document.body.classList.remove('is-loading');
+      setTimeout(()=>loader.setAttribute('aria-hidden','true'),600);
+    },reduced?80:420);
+  }
+  function finishAfterMinimum(){setTimeout(finish,Math.max(0,(reduced?180:1050)-(performance.now()-started)));}
+  if(document.readyState==='complete')finishAfterMinimum();
+  else addEventListener('load',finishAfterMinimum,{once:true});
+  setTimeout(finish,reduced?900:4200);
+})();
+</script>
+
+<div class="progress" id="progress"></div>
+
+<nav>
+  <div class="shell nav-inner">
+    <a class="mini-logo" href="#top"><span class="g">[</span> kompila <span class="g">]</span></a>
+    <div class="nav-links">
+      <a href="#clientes"><span class="dot">.</span>cases</a>
+      <a href="#modulos"><span class="dot">.</span>serviços</a>
+      <a href="#serie"><span class="dot">.</span>blog<span class="fila">em fila</span></a>
+    </div>
+    <a class="nav-cta" href="#contato">iniciar projeto</a>
+  </div>
+</nav>
+
+<header class="hero-stage" id="top">
+  <div class="hero-sticky">
+    <video id="hero-vid" src="video/octopus-hero-scrub.mp4" poster="img/hero-poster.webp" muted playsinline preload="auto"></video>
+    <div class="hero-over lite" id="hero-over">
+      <div class="shell">
+        <p class="status j" id="hero-status">$ status: <span class="amb" id="status-word">compilando</span><span class="cursor"></span></p>
+        <p class="logo-vivo" id="logo-vivo" aria-hidden="true"><span class="g">[&nbsp;</span><span id="logo-chars"></span><span class="g">&nbsp;]</span></p>
+        <h1 class="disp hero-h1">
+          <span class="lwrap"><span class="l1 j" id="hero-l1">do bruto</span></span>
+          <span class="lwrap"><span class="l2 j" id="hero-l2">ao pronto.</span></span>
+        </h1>
+        <p class="hero-desc j" id="hero-desc"><strong>kompila: estúdio de tecnologia criativa.</strong> Estratégia, design e inteligência artificial para transformar ideias soltas em soluções que funcionam.</p>
+        <div class="hero-ctas j" id="hero-ctas">
+          <a class="btn solid" href="#contato">iniciar um projeto</a>
+          <a class="btn ghost" href="https://www.instagram.com/kompila.ai" target="_blank" rel="noopener">@kompila.ai</a>
+        </div>
+      </div>
+      <span class="hero-scroll-hint">// gira pra compilar</span>
+      <a class="hero-more mono" id="hero-more" href="#essencia"><span class="g">[</span> conheça mais <span class="seta">↓</span> <span class="g">]</span></a>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true"><div class="marquee-track" id="mq1"></div></div>
+
+<section id="essencia" class="paper">
+  <span class="debris j" style="top:12%;left:70%;color:var(--green-paper)" data-fly="y:130,r:40,s:1.6">[</span>
+  <span class="debris j" style="top:58%;left:88%;color:var(--green-paper)" data-fly="y:170,r:-30,s:1.2">]</span>
+  <span class="debris tri a j" style="top:70%;left:6%" data-fly="y:200,r:70,s:1.9"></span>
+  <span class="debris dots j" style="top:8%;left:40%;color:#9aa08f" data-fly="y:120,r:0,s:.8"></span>
+  <div class="shell">
+    <div class="sec-head">
+      <span class="label">01 · essência</span>
+      <h2 class="disp sec-title j" data-wipe>tecnologia não. <span class="amb">clareza.</span></h2>
+      <p class="sec-sub j" data-fly="y:60,r:0,s:1">A kompila reúne estratégia, criatividade e tecnologia para transformar ideias soltas, processos complexos e negócios em construção em soluções prontas para funcionar.</p>
+    </div>
+    <div class="principios">
+      <div class="principio j" data-fly="x:70,r:0,s:1">
+        <span class="pnum">01</span><h3>Traduzir</h3>
+        <p>Entender a complexidade antes de tentar simplificá-la.</p>
+      </div>
+      <div class="principio j" data-fly="x:-70,r:0,s:1">
+        <span class="pnum">02</span><h3>Construir</h3>
+        <p>Unir repertório humano e inteligência artificial com intenção.</p>
+      </div>
+      <div class="principio j" data-fly="x:70,r:0,s:1">
+        <span class="pnum">03</span><h3>Entregar</h3>
+        <p>Fazer a ideia sair do campo da possibilidade e começar a funcionar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="modulos">
+  <span class="debris j" style="top:10%;left:84%;color:var(--green)" data-fly="y:150,r:25,s:1.4">+0&lt;</span>
+  <span class="debris tri g j" style="top:76%;left:80%" data-fly="y:220,r:-50,s:1.7"></span>
+  <span class="debris dots j" style="top:34%;left:2%;color:var(--dim)" data-fly="y:140,r:20,s:.9"></span>
+  <div class="shell">
+    <div class="sec-head">
+      <span class="label">02 · módulos</span>
+      <h2 class="disp sec-title j" data-wipe>um sistema que <span class="amb">cresce.</span></h2>
+      <p class="sec-sub j" data-fly="y:60,r:0,s:1">Cada frente de atuação ganha um selo. O nome continua protagonista; o módulo informa a especialidade.</p>
+    </div>
+    <div class="modulos-list">
+      <div class="modulo j" data-fly="x:-90,r:-1,s:1">
+        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.marca</span> <span class="g">]</span></span>
+        <div>
+          <p>A marca inteira: do conceito ao motion, como esta aqui.</p>
+          <div class="servs"><span><b>+</b> identidade visual</span><span><b>+</b> branding</span><span><b>+</b> direção criativa</span><span><b>+</b> motion design</span><span><b>+</b> design gráfico</span></div>
+        </div>
+        <span class="tag on">no ar</span>
+      </div>
+      <div class="modulo j" data-fly="x:90,r:1,s:1">
+        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.insta</span> <span class="g">]</span></span>
+        <div>
+          <p>Gestão de perfil, capas, calendário e criativos com IA.</p>
+          <div class="servs"><span><b>+</b> social media</span><span><b>+</b> criativos com ia</span><span><b>+</b> capas e destaques</span><span><b>+</b> calendário de conteúdo</span><span><b>+</b> reels</span></div>
+        </div>
+        <span class="tag on">no ar</span>
+      </div>
+      <div class="modulo j" data-fly="x:-90,r:-1,s:1">
+        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.site</span> <span class="g">]</span></span>
+        <div>
+          <p>Sites premium, landings de conversão, SEO e AEO.</p>
+          <div class="servs"><span><b>+</b> design web</span><span><b>+</b> sites institucionais</span><span><b>+</b> landing pages</span><span><b>+</b> seo</span><span><b>+</b> aeo</span><span><b>+</b> blogs</span></div>
+        </div>
+        <span class="tag">compilando</span>
+      </div>
+      <div class="modulo j" data-fly="x:90,r:1,s:1">
+        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.lojas</span> <span class="g">]</span></span>
+        <div>
+          <p>Lojas WooCommerce, configuradores e operação com agente.</p>
+          <div class="servs"><span><b>+</b> lojas virtuais</span><span><b>+</b> woocommerce</span><span><b>+</b> configuradores de produto</span><span><b>+</b> operação com agente</span></div>
+        </div>
+        <span class="tag">em fila</span>
+      </div>
+      <div class="modulo j" data-fly="x:-90,r:-1,s:1">
+        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.ia</span> <span class="g">]</span></span>
+        <div>
+          <p>Atendimento por IA, automações e agentes sob medida.</p>
+          <div class="servs"><span><b>+</b> atendimento com ia</span><span><b>+</b> agente no whatsapp</span><span><b>+</b> automações</span><span><b>+</b> agentes sob medida</span></div>
+        </div>
+        <span class="tag">em fila</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="clientes">
+  <span class="debris tri g j" style="top:12%;left:88%" data-fly="y:170,r:-40,s:1.5"></span>
+  <div class="shell">
+    <div class="sec-head">
+      <span class="label">03 · cases</span>
+      <h2 class="disp sec-title j" data-wipe>trabalho que <span class="amb">rodou.</span></h2>
+      <p class="sec-sub j" data-fly="y:60,r:0,s:1">O que sai da esteira: filmes, sites, marcas e embalagens.</p>
+    </div>
+    <div class="jobs-acc j" data-fly="y:60,r:0,s:1">
+      <div class="job open">
+        <button class="job-head" id="job-video-trigger" type="button" aria-expanded="true" aria-controls="job-video">
+          <span class="job-num">01</span>
+          <span class="disp job-nome">vídeo · motion</span>
+          <span class="job-flag mono"><span class="g">[</span> <b>–</b> <span class="g">]</span></span>
+        </button>
+        <div class="job-body" id="job-video" role="region" aria-labelledby="job-video-trigger">
+          <div class="job-grid">
+            <figure class="jcase"><video src="video/case-video-p1play.mp4" muted loop playsinline preload="metadata"></video><figcaption>Filme de lançamento do P1PLAY, app de gestão dos painéis da P1LED.</figcaption></figure>
+            <figure class="jcase"><video src="video/case-aut-loop.mp4" muted loop playsinline preload="metadata"></video><figcaption>Filme de produto do aditivo DSKARB, linha automotiva da AUT.</figcaption></figure>
+            <figure class="jcase"><video src="video/case-99taxi.mp4" muted loop playsinline preload="metadata"></video><figcaption>Case 99: modernização com painel de LED indoor P2.5 flexível, pela P1LED.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="job">
+        <button class="job-head" id="job-sites-trigger" type="button" aria-expanded="false" aria-controls="job-sites">
+          <span class="job-num">02</span>
+          <span class="disp job-nome">sites</span>
+          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
+        </button>
+        <div class="job-body" id="job-sites" role="region" aria-labelledby="job-sites-trigger">
+          <div class="job-grid">
+            <figure class="jcase"><img src="img/cases/case-01-p1led.webp" alt="Case site P1LED" loading="lazy" decoding="async"><figcaption>Site oficial completo para a P1LED, indústria de painéis de LED premium.</figcaption></figure>
+            <figure class="jcase"><img src="img/cases/case-maeda.webp" alt="Case site Maeda Gastronomia" loading="lazy" decoding="async"><figcaption>Site institucional para a Maeda Gastronomia, buffet autoral em São Paulo.</figcaption></figure>
+            <figure class="jcase"><img src="img/cases/case-05-brand1.webp" alt="Case site Brand1" loading="lazy" decoding="async"><figcaption>Site para a Brand1, agência de marketing digital parceira do Cesar Cielo.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="job">
+        <button class="job-head" id="job-brand-trigger" type="button" aria-expanded="false" aria-controls="job-brand">
+          <span class="job-num">03</span>
+          <span class="disp job-nome">identidade visual</span>
+          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
+        </button>
+        <div class="job-body" id="job-brand" role="region" aria-labelledby="job-brand-trigger">
+          <div class="job-grid">
+            <figure class="jcase"><img src="img/cases/case-04-unisushi.webp" alt="Case identidade UNI Premium Sushi" loading="lazy" decoding="async"><figcaption>Identidade completa para o UNI Premium Sushi: marca, ambiente e experiência.</figcaption></figure>
+            <figure class="jcase"><img src="img/cases/case-09-p1led-brandbook.webp" alt="Case manual de identidade P1LED" loading="lazy" decoding="async"><figcaption>Manual de identidade da P1LED: diretrizes, sistema e aplicação da marca.</figcaption></figure>
+            <figure class="jcase"><img src="img/cases/case-07-maeda18.webp" alt="Case kit de evento Maeda 18 anos" loading="lazy" decoding="async"><figcaption>Kit dos 18 anos da Maeda: conceito, materiais e experiência da celebração.</figcaption></figure>
+            <figure class="jcase"><img src="img/cases/case-08-maeda-impressos.webp" alt="Case materiais impressos Maeda" loading="lazy" decoding="async"><figcaption>Papelaria impressa da Maeda Gastronomia: a marca que também se toca.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="job">
+        <button class="job-head" id="job-decks-trigger" type="button" aria-expanded="false" aria-controls="job-decks">
+          <span class="job-num">04</span>
+          <span class="disp job-nome">apresentações</span>
+          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
+        </button>
+        <div class="job-body" id="job-decks" role="region" aria-labelledby="job-decks-trigger">
+          <div class="job-grid">
+            <figure class="jcase"><img src="img/cases/case-10-p1led-fenix-ppt.webp" alt="Case apresentação P1LED e Fenix" loading="lazy" decoding="async"><figcaption>Apresentação comercial P1LED + Fenix: narrativa, hierarquia e impacto.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="job">
+        <button class="job-head" id="job-social-trigger" type="button" aria-expanded="false" aria-controls="job-social">
+          <span class="job-num">05</span>
+          <span class="disp job-nome">redes sociais</span>
+          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
+        </button>
+        <div class="job-body" id="job-social" role="region" aria-labelledby="job-social-trigger">
+          <div class="job-grid social">
+            <figure class="jcase vert"><img src="img/cases/social-post-nf1.webp" alt="Post P1LED Netflix: capa do carrossel" loading="lazy" decoding="async"></figure>
+            <figure class="jcase vert"><img src="img/cases/social-post-nf2.webp" alt="Post P1LED Netflix: do trânsito caótico" loading="lazy" decoding="async"></figure>
+            <figure class="jcase vert"><img src="img/cases/social-post-nf3.webp" alt="Post P1LED Netflix: ao jantar romântico" loading="lazy" decoding="async"></figure>
+            <figure class="jcase vert"><img src="img/cases/social-post-nf4.webp" alt="Post P1LED Netflix: produção virtual" loading="lazy" decoding="async"></figure>
+            <figure class="jcase vert"><img src="img/cases/social-post-projetamos.webp" alt="Post P1LED: mais que instalar, nós projetamos" loading="lazy" decoding="async"></figure>
+            <figure class="jcase vert"><img src="img/cases/social-post-historia.webp" alt="Post P1LED: qual a próxima história?" loading="lazy" decoding="async"></figure>
+          </div>
+          <p class="job-cap" style="margin:-18px 0 26px">Carrossel do feed da P1LED: cenários Netflix com produção virtual, do gancho à ação.</p>
+          <div class="job-grid" style="padding-top:0">
+            <figure class="jcase"><img src="img/cases/case-13-neon-social.webp" alt="Case redes sociais P1LED e Banco Neon" loading="lazy" decoding="async"><figcaption>Carrossel P1LED + Banco Neon: gancho, contexto, integração, presença e ação.</figcaption></figure>
+            <figure class="jcase"><img src="img/cases/case-14-vivara-artbox-social.webp" alt="Case redes sociais P1LED e Vivara Art.Box" loading="lazy" decoding="async"><figcaption>Carrossel P1LED + Vivara Art.Box: tecnologia que respeita a arte, do conceito à publicação.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="job">
+        <button class="job-head" id="job-packaging-trigger" type="button" aria-expanded="false" aria-controls="job-packaging">
+          <span class="job-num">06</span>
+          <span class="disp job-nome">embalagem</span>
+          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
+        </button>
+        <div class="job-body" id="job-packaging" role="region" aria-labelledby="job-packaging-trigger">
+          <div class="job-grid">
+            <figure class="jcase"><img src="img/cases/case-03-aut.webp" alt="Case embalagem rótulo DSKARB para AUT" loading="lazy" decoding="async"><figcaption>Rótulo e embalagem do aditivo DSKARB, linha automotiva da AUT.</figcaption></figure>
+            <figure class="jcase"><img src="img/cases/case-15-p1led-vx-bx-packaging.webp" alt="Case de personagem e embalagens P1LED VX e BX Series" loading="lazy" decoding="async"><figcaption>P1LED VX / BX Series: personagem, sistema visual e embalagem do bruto ao produto.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="job">
+        <button class="job-head" id="job-ai-trigger" type="button" aria-expanded="false" aria-controls="job-ai">
+          <span class="job-num">07</span>
+          <span class="disp job-nome">inteligência artificial</span>
+          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
+        </button>
+        <div class="job-body" id="job-ai" role="region" aria-labelledby="job-ai-trigger">
+          <div class="job-grid">
+            <figure class="jcase"><img src="img/cases/case-17-99-taxi-ai-environment.webp" alt="Projeto 3D realista do ambiente de marca do 99 Táxi Elétrico" loading="lazy" decoding="async"><figcaption>Criação do projeto 3D realista de ambiente para a experiência de marca 99 Táxi.</figcaption></figure>
+            <figure class="jcase"><video src="video/case-17-99-taxi-ai-environment.mp4" poster="img/cases/case-17-99-taxi-ai-environment.webp" muted loop playsinline preload="metadata"></video><figcaption>Vídeo de apresentação do ambiente 3D criado com inteligência artificial.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="serie-cta j" data-fly="y:40,r:0,s:1">
+      <a class="btn" href="https://regesux.work" target="_blank" rel="noopener">conheça como foi realizado cada projeto</a>
+    </div>
+  </div>
+</section>
+
+<section id="serie">
+  <span class="debris j" style="top:6%;left:6%;color:var(--amber)" data-fly="y:160,r:-20,s:1.3">nº</span>
+  <div class="shell">
+    <div class="sec-head">
+      <span class="label">03 · no feed</span>
+      <h2 class="disp sec-title j" data-wipe>presença com <span class="amb">propósito.</span></h2>
+      <p class="sec-sub j" data-fly="y:60,r:0,s:1">A série da kompila no Instagram: uma tese por post, no território visual da marca.</p>
+    </div>
+    <div class="serie-grid">
+      <figure class="print j" data-print="-1.6" data-dir="-1">
+        <img src="img/poster-01-lojas.webp" alt="Poster 01: sua loja precisa vender, não apenas existir." loading="lazy" decoding="async">
+        <figcaption><span>nº 01</span><span>kompila.lojas</span></figcaption>
+      </figure>
+      <figure class="print j" data-print="1.1" data-dir="1">
+        <img src="img/poster-03-design.webp" alt="Poster 03: design não é acabamento, é direção." loading="lazy" decoding="async">
+        <figcaption><span>nº 03</span><span>kompila</span></figcaption>
+      </figure>
+      <figure class="print j" data-print="-0.7" data-dir="-1">
+        <img src="img/poster-06-insta.webp" alt="Poster 06: conteúdo sem direção é só ruído." loading="lazy" decoding="async">
+        <figcaption><span>nº 06</span><span>kompila.insta</span></figcaption>
+      </figure>
+    </div>
+    <div class="serie-cta j" data-fly="y:50,r:0,s:1">
+      <a class="btn" href="https://www.instagram.com/kompila.ai" target="_blank" rel="noopener">seguir a série</a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee paper-mq" aria-hidden="true"><div class="marquee-track" id="mq2"></div></div>
+
+<section id="manifesto" class="paper">
+  <div class="curtain j" data-curtain></div>
+  <div class="manifesto-shape j" id="manifesto-shape"></div>
+  <span class="debris tri a j" style="top:16%;left:8%" data-fly="y:190,r:60,s:1.5"></span>
+  <div class="shell">
+    <span class="label">04 · manifesto</span>
+    <h2 class="disp manifesto-h" id="manifesto-h" style="margin-top:22px">o bruto quer forma.</h2>
+    <p class="bruto-mark j" data-fly="y:50,r:0,s:1"><span class="g">[</span> komp+0&lt; <span class="g">]</span></p>
+    <p class="manifesto-body j" data-fly="y:70,r:0,s:1">
+      Todo projeto nasce bruto: rascunho, ruído, caos com potencial.
+      Compilar é atravessar esse estado até a coisa rodar.
+      A kompila faz esse caminho inteiro, sem atalho e sem mistério.
+      <strong>do bruto ao pronto.</strong>
+    </p>
+  </div>
+</section>
+
+<section id="contato">
+  <span class="debris j" style="top:14%;left:78%;color:var(--green)" data-fly="y:140,r:15,s:1.3">[ ]</span>
+  <div class="shell">
+    <div class="sec-head">
+      <span class="label">05 · contato</span>
+      <h2 class="disp sec-title j" data-wipe>o que você precisa <span class="amb">compilar?</span></h2>
+      <p class="sec-sub j" data-fly="y:60,r:0,s:1">Conta em uma mensagem. A gente responde com um caminho claro.</p>
+    </div>
+    <div class="contato-inner">
+      <form class="contato-form j" data-fly="x:-60,r:0,s:1" onsubmit="event.preventDefault();this.querySelector('button').textContent='[ recebido ]';">
+        <input type="text" required placeholder="Seu nome" aria-label="nome">
+        <input type="email" required placeholder="seu@email.com" aria-label="email">
+        <textarea rows="4" required placeholder="O que está bruto aí? Site, loja, perfil, atendimento..." aria-label="mensagem"></textarea>
+        <button class="btn solid" type="submit">enviar</button>
+        <p class="contato-nota">// resposta em até 1 dia útil.</p>
+      </form>
+      <div class="contato-side j" data-fly="x:60,r:0,s:1">
+        <a href="https://www.instagram.com/kompila.ai" target="_blank" rel="noopener"><span>instagram</span><span>@kompila.ai →</span></a>
+        <a href="mailto:kompila.ai@gmail.com"><span>email</span><span>kompila.ai@gmail.com →</span></a>
+        <a href="https://kompila.com.br"><span>site</span><span>kompila.com.br →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="shell footer-inner">
+    <span class="mini-logo"><span class="g">[</span> kompila <span class="g">]</span></span>
+    <span>do bruto ao pronto.</span>
+    <span>© 2026 kompila</span>
+  </div>
+</footer>
+
+<script>
+const REDUCED=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const ease=t=>1-Math.pow(1-t,3); /* easeOutCubic */
+
+/* ===================================================================
+   LOGO VIVO: compila no load; DESCOMPILA quando o hero sai de cena
+   =================================================================== */
+const Logo=(function(){
+  const alvo="kompila", bruto="komp+0<", pool="+0<>#%&*=/\\";
+  const el=document.getElementById('logo-chars');
+  const n=alvo.length, spans=[];
+  for(let i=0;i<n;i++){
+    const s=document.createElement('span');
+    s.className='ch bruto';
+    s.textContent=bruto[i]||pool[i%pool.length];
+    el.appendChild(s);spans.push(s);
+  }
+  function set(p){ /* p=1 pronto, p=0 bruto */
+    const done=Math.round(p*n);
+    for(let i=0;i<n;i++){
+      if(i<done){spans[i].textContent=alvo[i];spans[i].classList.remove('bruto');}
+      else{
+        spans[i].classList.add('bruto');
+        if(Math.random()<.3)spans[i].textContent=(bruto[i]&&Math.random()<.5)?bruto[i]:pool[Math.floor(Math.random()*pool.length)];
+      }
+    }
+  }
+  if(REDUCED){set(1);return{set:()=>{}};}
+  /* compilação inicial 2,4s */
+  const DUR=2400,t0=performance.now();
+  let booting=true;
+  (function tick(t){
+    const p=clamp((t-t0)/DUR,0,1);
+    set(p);
+    if(p<1&&booting)requestAnimationFrame(tick);else booting=false;
+  })(t0);
+  document.getElementById('logo-vivo').addEventListener('click',()=>location.reload());
+  return{set:p=>{if(!booting)set(p);}};
+})();
+
+/* ===== status typewriter ===== */
+(function(){
+  if(REDUCED)return;
+  const words=['compilando','traduzindo','construindo','entregando'];
+  const el=document.getElementById('status-word');
+  let wi=0;
+  function typeWord(w,done){let i=0;(function s(){el.textContent=w.slice(0,++i);if(i<w.length)setTimeout(s,70);else setTimeout(done,2600);})();}
+  function eraseWord(done){(function s(){const t=el.textContent;el.textContent=t.slice(0,-1);if(t.length>1)setTimeout(s,40);else done();})();}
+  function loop(){eraseWord(()=>{wi=(wi+1)%words.length;typeWord(words[wi],loop);});}
+  setTimeout(loop,3400);
+})();
+
+/* ===== marquees ===== */
+(function(){
+  const brand='<span><b>[ kompila ]</b> do bruto ao pronto.</span><span>estúdio de tecnologia criativa</span><span><i>[ komp+0&lt; ]</i> compilando</span><span>design · comunicação · ia</span>';
+  const servicos=['lojas virtuais','social media','seo e aeo','ia','automação','design web','identidade visual','branding','landing pages','atendimento com ia','motion design','woocommerce','criativos com ia','agente no whatsapp']
+    .map(s=>'<span><b>+</b> '+s+'</span>').join('');
+  const h1=brand.repeat(3), h2=servicos.repeat(3);
+  document.getElementById('mq1').innerHTML=h1+h1;
+  document.getElementById('mq2').innerHTML=h2+h2;
+})();
+
+/* ===== manifesto: split por palavra/letra com vetor de dispersão ===== */
+const MCH=(function(){
+  const h=document.getElementById('manifesto-h');
+  const words=h.textContent.trim().split(/\s+/);
+  h.textContent='';
+  const chars=[];
+  let d=0;
+  words.forEach((word,wi)=>{
+    const w=document.createElement('span');w.className='mw';
+    for(const ch of word){
+      const s=document.createElement('span');
+      s.className='mch j';s.textContent=ch;
+      /* vetor de dispersão determinístico por índice */
+      const ang=(d*137.5)%360, R=140+(d*53)%160;
+      chars.push({el:s,dx:Math.cos(ang*Math.PI/180)*R,dy:Math.sin(ang*Math.PI/180)*R-120,rot:((d*67)%90)-45,i:d});
+      w.appendChild(s);d++;
+    }
+    h.appendChild(w);
+    if(wi<words.length-1)h.appendChild(document.createTextNode(' '));
+  });
+  return chars;
+})();
+
+/* ===================================================================
+   MOTOR DE SCRUB: tudo amarrado à posição do scroll, ida E volta
+   =================================================================== */
+const $=(s,c=document)=>c.querySelector(s);
+const $$=(s,c=document)=>[...c.querySelectorAll(s)];
+
+const heroStage=$('.hero-stage'),heroVid=$('#hero-vid'),heroOver=$('#hero-over');
+const heroL1=$('#hero-l1'),heroL2=$('#hero-l2'),heroDesc=$('#hero-desc'),heroCtas=$('#hero-ctas'),heroStatus=$('#hero-status');
+
+/* scrub do vídeo: alvo segue o scroll, currentTime persegue o alvo com lerp */
+let vidDur=0,vidTarget=0;
+heroVid.addEventListener('loadedmetadata',()=>{
+  vidDur=heroVid.duration;
+  if(REDUCED)try{heroVid.currentTime=6.5;}catch(_){} /* sem motion: para no carimbo kompila */
+});
+if(heroVid.readyState>=1&&heroVid.duration)vidDur=heroVid.duration; /* metadata pode já ter carregado do cache */
+/* O scrub precisa do arquivo inteiro em memória: funciona até em servidores sem HTTP Range. */
+let heroBlobUrl='';
+fetch(heroVid.getAttribute('src')).then(r=>{
+  if(!r.ok)throw new Error('hero video unavailable');
+  return r.blob();
+}).then(blob=>{
+  const previousTime=heroVid.currentTime;
+  heroBlobUrl=URL.createObjectURL(blob);
+  heroVid.addEventListener('loadedmetadata',()=>{
+    vidDur=heroVid.duration;
+    try{heroVid.currentTime=Math.min(previousTime,Math.max(0,vidDur-.08));}catch(_){}
+    frame();
+  },{once:true});
+  heroVid.src=heroBlobUrl;
+  heroVid.load();
+}).catch(()=>{});
+addEventListener('pagehide',()=>{if(heroBlobUrl)URL.revokeObjectURL(heroBlobUrl);},{once:true});
+
+/* sensor de brilho: amostra o frame atual e troca a cor do texto (claro no escuro, escuro no claro) */
+(function(){
+  const cv=document.createElement('canvas');cv.width=48;cv.height=27;
+  const cx=cv.getContext('2d',{willReadFrequently:true});
+  setInterval(()=>{
+    if(heroVid.readyState<2)return;
+    try{
+      cx.drawImage(heroVid,0,0,48,27);
+      const d=cx.getImageData(2,4,30,20).data; /* região esquerda-central, onde o texto vive */
+      let s=0,n=0;
+      for(let i=0;i<d.length;i+=16){s+=d[i]*.299+d[i+1]*.587+d[i+2]*.114;n++;}
+      heroOver.classList.toggle('lite',(s/n/255)>0.5);
+    }catch(_){}
+  },120);
+})();
+(function vloop(){
+  if(!vidDur&&heroVid.duration)vidDur=heroVid.duration;
+  if(!REDUCED&&vidDur&&Math.abs(heroVid.currentTime-vidTarget)>0.02){
+    try{heroVid.currentTime+=(vidTarget-heroVid.currentTime)*0.3;}catch(_){}
+  }
+  requestAnimationFrame(vloop);
+})();
+const flys=$$('[data-fly]').map(el=>{
+  const cfg={x:0,y:0,r:0,s:1};
+  el.dataset.fly.split(',').forEach(kv=>{const[k,v]=kv.split(':');cfg[k]=parseFloat(v);});
+  return{el,...cfg};
+});
+const wipes=$$('[data-wipe]');
+const curtains=$$('[data-curtain]');
+const prints=$$('[data-print]').map(el=>({el,rot:parseFloat(el.dataset.print),dir:parseFloat(el.dataset.dir)}));
+const manifestoSec=$('#manifesto'),manifestoShape=$('#manifesto-shape');
+const serieGrid=$('.serie-grid');
+const bar=$('#progress');
+
+/* progresso do elemento pela viewport: 0 = topo entrando embaixo, 1 = fundo saindo em cima */
+function prog(el,lead=0){
+  const r=el.getBoundingClientRect();
+  return clamp((innerHeight-r.top+lead)/(innerHeight+r.height),0,1);
+}
+/* progresso de entrada: 0..1 enquanto o el entra na tela */
+function enter(el,span=.55,lead=0){
+  const r=el.getBoundingClientRect();
+  return clamp((innerHeight-r.top+lead)/(innerHeight*span),0,1);
+}
+
+/* animações de load usam fill both/forwards: limpar ao terminar,
+   senão elas travam o transform e o scrub do scroll não assume */
+heroOver.addEventListener('animationend',e=>{e.target.style.animation='none';});
+
+let ticking=false;
+function frame(){
+  ticking=false;
+  const y=scrollY;
+
+  /* barra de compilação */
+  const max=document.documentElement.scrollHeight-innerHeight;
+  bar.style.width=(max>0?(y/max)*100:0)+'%';
+
+  if(REDUCED)return;
+
+  /* ---------- HERO: vídeo compila com o scroll; texto sai antes do polvo nascer ---------- */
+  const runway=heroStage.offsetHeight-innerHeight;
+  const p=runway>0?clamp(y/runway,0,1):0;
+  if(vidDur)vidTarget=p*(vidDur-0.08);
+  /* texto desconstrói nos primeiros 16% da pista (fase de papel, antes do polvo montar) */
+  const hp=clamp(p/0.16,0,1);
+  const e=hp*hp;
+  const op=v=>clamp(v,0,1); /* opacity negativa é inválida e o browser IGNORA: sempre clampar */
+  heroL1.style.transform='translateX('+(-e*46)+'vw)';
+  heroL2.style.transform='translateX('+(e*46)+'vw)';
+  heroL1.style.opacity=heroL2.style.opacity=op(1-e*1.15);
+  heroDesc.style.transform='translateY('+(-e*70)+'px)';
+  heroDesc.style.opacity=op(1-e*1.6);
+  heroCtas.style.transform='translateY('+(-e*40)+'px)';
+  heroCtas.style.opacity=op(1-e*1.8);
+  heroCtas.style.pointerEvents=e>.5?'none':'auto';
+  heroStatus.style.opacity=op(1-e*2);
+  const heroLogo=$('#logo-vivo');
+  heroLogo.style.opacity=op(1-e*1.4);
+  heroLogo.style.pointerEvents=e>.5?'none':'auto';
+  const hint=$('.hero-scroll-hint');
+  if(hint)hint.style.opacity=op(1-p*4);
+  $('#hero-more').classList.toggle('on',p>0.82);
+  /* logo descompila enquanto some */
+  Logo.set(1-clamp((hp-.15)/.5,0,1));
+
+  /* ---------- CORTINAS: papel descoberto na diagonal ---------- */
+  curtains.forEach(c=>{
+    const p=ease(enter(c.parentElement,.85));
+    c.style.transform='translate('+(p*130)+'%,'+(-p*40)+'%) rotate('+(p*-6)+'deg)';
+  });
+
+  /* ---------- TÍTULOS: wipe amarrado ao scroll ---------- */
+  wipes.forEach(w=>{
+    const p=enter(w,.5);
+    w.style.clipPath='inset(0 '+((1-p)*100)+'% 0 0)';
+  });
+
+  /* ---------- FLY: entra de fora, assenta, segue com drift ---------- */
+  flys.forEach(f=>{
+    const p=ease(enter(f.el,.6));
+    const post=prog(f.el);           /* drift contínuo depois de assentado */
+    const dx=f.x*(1-p), dy=f.y*(1-p)-(post-.5)*30*f.s;
+    f.el.style.transform='translate('+dx+'px,'+dy+'px) rotate('+(f.r*(1-p))+'deg)';
+    f.el.style.opacity=Math.min(1,p*1.6);
+  });
+
+  /* ---------- PRINTS: voam de baixo girando, assentam, derivam ---------- */
+  prints.forEach((pr,i)=>{
+    const p=ease(clamp(enter(serieGrid,.7)-i*.12,0,1));
+    const post=prog(pr.el);
+    const ty=(1-p)*110+ (i===1?14:0) - (post-.5)*40*(1+i*.3);
+    const rot=pr.rot+(1-p)*16*pr.dir;
+    pr.el.style.transform='translateY('+ty+'px) rotate('+rot+'deg)';
+    pr.el.style.opacity=Math.min(1,p*1.5);
+  });
+
+  /* ---------- MANIFESTO: letras se montam com o scroll (scrub) ---------- */
+  const mp=enter(manifestoSec,.9);
+  MCH.forEach(c=>{
+    const cp=ease(clamp((mp-.18-c.i*.016)/.3,0,1));
+    c.el.style.transform='translate('+(c.dx*(1-cp))+'px,'+(c.dy*(1-cp))+'px) rotate('+(c.rot*(1-cp))+'deg)';
+    c.el.style.opacity=Math.min(1,cp*1.8);
+    c.el.style.color=cp<.85?'var(--amber)':'var(--ink)';
+  });
+  manifestoShape.style.transform='translateX('+((1-ease(clamp(mp/.5,0,1)))*80)+'%)';
+
+  /* ---------- DEBRIS extra: já coberto por data-fly (s controla a deriva) ---------- */
+}
+/* acordeão de jobs: um aberto por vez */
+let accordionAction=0;
+$$('.job-head').forEach(h=>{
+  h.addEventListener('click',()=>{
+    const action=++accordionAction;
+    const job=h.parentElement, estava=job.classList.contains('open');
+    $$('.job').forEach(x=>{
+      x.classList.remove('open');
+      x.querySelector('.job-flag b').textContent='+';
+      x.querySelector('.job-head').setAttribute('aria-expanded','false');
+    });
+    if(!estava){
+      job.classList.add('open');
+      h.querySelector('.job-flag b').textContent='–';
+      h.setAttribute('aria-expanded','true');
+      const body=job.querySelector('.job-body');
+      let centered=false;
+      const centerJob=()=>{
+        if(centered||action!==accordionAction)return;
+        centered=true;
+        const rect=job.getBoundingClientRect();
+        const top=scrollY+rect.top+(rect.height/2)-(innerHeight/2);
+        window.scrollTo({top:Math.max(0,top),behavior:REDUCED?'auto':'smooth'});
+      };
+      if(REDUCED)requestAnimationFrame(centerJob);
+      else{
+        body.addEventListener('transitionend',e=>{if(e.propertyName==='max-height')centerJob();},{once:true});
+        setTimeout(centerJob,1000); /* fallback se o browser não emitir transitionend */
+      }
+    }
+  });
+});
+
+/* vídeos dos cases: tocam só quando visíveis */
+$$('.job video').forEach(v=>{
+  new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){v.play().catch(()=>{});}else{v.pause();}
+  }),{threshold:.25}).observe(v);
+});
+
+addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(frame);}},{passive:true});
+addEventListener('resize',()=>{if(!ticking){ticking=true;requestAnimationFrame(frame);}},{passive:true});
+/* primeiros frames (fonts/layout assentando) */
+frame();setTimeout(frame,60);setTimeout(frame,400);
+</script>
+</body>
+</html>
