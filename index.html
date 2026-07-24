@@ -827,7 +827,7 @@ footer{padding:50px 0;border-top:1px solid var(--line);}
       </div>
     </div>
     <div class="serie-cta j" data-fly="y:40,r:0,s:1">
-      <a class="btn" href="https://regesux.work" target="_blank" rel="noopener">conheça como foi realizado cada projeto</a>
+      <a class="btn" href="cases.html">conheça como foi realizado cada projeto</a>
     </div>
   </div>
 </section>
@@ -1023,12 +1023,18 @@ if(MOBILE_HERO){
     heroBlobUrl=URL.createObjectURL(blob);
     heroVid.addEventListener('loadedmetadata',()=>{
       vidDur=heroVid.duration;
-      try{heroVid.currentTime=0;}catch(_){}
+      /* Com redução de movimento, mantém um quadro em que o polvo está visível. */
+      try{heroVid.currentTime=REDUCED?6.5:0;}catch(_){}
       frame();
     },{once:true});
     heroVid.src=heroBlobUrl;
     heroVid.load();
-  }).catch(()=>{});
+  }).catch(()=>{
+    /* Se o carregamento em memória falhar, usa o MP4 direto em vez de deixar só o poster. */
+    heroVid.preload='auto';
+    heroVid.src=heroVid.dataset.src;
+    heroVid.load();
+  });
 }
 addEventListener('pagehide',()=>{if(heroBlobUrl)URL.revokeObjectURL(heroBlobUrl);},{once:true});
 
