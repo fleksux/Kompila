@@ -4,11 +4,12 @@
 <title>Maslu Select — alfaiataria escolhida peça a peça</title>
 <meta name="description" content="Maslu Select — loja de moda feminina em Rua Barão de Jaceguai, 482. Alfaiataria e tricot escolhidos peça a peça.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
  --ground:#F4F4F3; --ground2:#E9E9E7; --ink:#26211D; --mid:#84817B; --line:#DBDBD8; --paper:#FCFCFB;
- --serif:"Bodoni Moda",Didot,Georgia,serif; --sans:Roboto,-apple-system,Helvetica,Arial,sans-serif;
+ --serif:"Italiana",Didot,Georgia,serif; --sans:Roboto,-apple-system,Helvetica,Arial,sans-serif;
+ --creme:#E9DAC9; --areia:#D3B79F; --perola:#C3C2C1; --rose:#B69388; --azul:#96BFD6; --oliva:#7B7560; --terracota:#A46042; --cacau:#7F4331; --ambar:#7F3410; --vinho:#59192B; --carmim:#A30B18;
  --pad: clamp(20px, 4vw, 64px);
 }
 *{box-sizing:border-box}
@@ -129,7 +130,7 @@ footer .base{border-top:1px solid #3b3530;padding:18px var(--pad);display:flex;j
 .hero .cap{will-change:transform}
 .hero .cap{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);z-index:5;color:#fff;width:40vw;max-width:40vw;padding:100px 0;text-shadow:0 2px 28px rgba(0,0,0,.5)}
 .hero .cap .eyebrow{font-size:clamp(12px,.95vw,15px);letter-spacing:.34em;margin-bottom:18px}
-.hero .cap .nome{font-family:var(--serif);font-style:italic;font-size:clamp(26px,2.6vw,40px);color:#fff;margin:0 0 8px;opacity:.92}
+.hero .cap .nome{font-family:var(--serif);font-style:normal;letter-spacing:.02em;font-size:clamp(26px,2.6vw,40px);color:#fff;margin:0 0 8px;opacity:.92}
 .hero .cap h1{font-size:clamp(44px,5.6vw,84px);line-height:.98;color:#fff}
 .hero .cap h1 i{font-style:italic;display:block;font-size:.58em;margin:2px 0}
 .hero .cap p{color:#f0ece7;margin-top:20px;font-size:clamp(16px,1.35vw,20px);line-height:1.6;max-width:none}
@@ -140,11 +141,11 @@ footer .base{border-top:1px solid #3b3530;padding:18px var(--pad);display:flex;j
 .hero .slide:nth-child(3){--g0:rgba(42,24,14,.86);--g1:rgba(42,24,14,.58);--g2:rgba(42,24,14,.2)}
 .hero .slide:nth-child(4){--g0:rgba(40,16,22,.86);--g1:rgba(40,16,22,.58);--g2:rgba(40,16,22,.2)}
 .hero .dots{left:50%;transform:translateX(-50%);bottom:36px}
-.selos{display:grid;grid-template-columns:repeat(3,1fr);padding:0 var(--pad);border-bottom:1px solid var(--line)}
-.selos>div{display:flex;align-items:center;justify-content:center;gap:16px;padding:26px 18px;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);line-height:1.5;border-left:1px solid var(--line)}
+.selos{display:grid;grid-template-columns:repeat(3,1fr);padding:0 var(--pad);background:#E4E4E1;border-bottom:1px solid var(--line)}
+.selos>div{display:flex;align-items:center;justify-content:center;gap:18px;padding:30px 18px;font-size:14.5px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:#3E3A36;line-height:1.5;border-left:1px solid #CFCFCB}
 .selos>div:first-child{border-left:0}
-.si{width:30px;height:30px;flex:none;fill:none;stroke:var(--ink);stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:900px){.selos{grid-template-columns:1fr}.selos>div{border-left:0;padding:14px 0;border-top:1px solid var(--line)}.selos>div:first-child{border-top:0}}
+.si{width:34px;height:34px;flex:none;fill:none;stroke:var(--ink);stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
+
 .hA{display:flex;align-items:center;justify-content:space-between;gap:26px;padding:18px var(--pad)}
 .hA .mk{width:176px}
 .hA .menu{display:flex;gap:28px}
@@ -178,6 +179,95 @@ footer .base{border-top:1px solid #3b3530;padding:18px var(--pad);display:flex;j
  .lb .tile.open img{aspect-ratio:4/5}
  .lb .tile.open .pn,.cards .tile.open .pn{grid-area:auto}
  .cards .tile.open .im{grid-area:auto}}
+
+/* ===== MOBILE ===== */
+@media(max-width:900px){
+ body{overflow-x:hidden}
+ .hero{aspect-ratio:auto;height:60svh;min-height:460px;max-height:620px}
+ .hero .slide img{object-position:79% top}
+ .hero .slide:nth-child(1){--gS:rgb(38,36,33)} .hero .slide:nth-child(2){--gS:rgb(22,30,22)} .hero .slide:nth-child(3){--gS:rgb(42,24,14)} .hero .slide:nth-child(4){--gS:rgb(40,16,22)}
+ .hero .slide:before{background:linear-gradient(180deg,transparent 18%,var(--g2) 38%,var(--g1) 56%,var(--g0) 74%,var(--gS) 100%)}
+ .hero .cap{left:var(--pad);right:var(--pad);width:auto;max-width:none;top:auto;bottom:70px;transform:none!important;padding:0;text-align:center;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+ .hero .cap p{margin-left:auto;margin-right:auto}
+ .hero .cap .eyebrow{font-size:11px;letter-spacing:.3em;margin-bottom:10px}
+ .hero .cap .nome{font-size:22px;margin-bottom:6px}
+ .hero .cap h1{font-size:clamp(32px,9.6vw,42px);line-height:1.02}
+ .hero .cap p{font-size:15px;line-height:1.5;margin-top:12px}
+ .hero .dots{bottom:26px}
+ .selos{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:var(--pad);-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 0 0 var(--pad);gap:14px;scroll-behavior:smooth}
+ .selos::-webkit-scrollbar{display:none}
+ .selos>div{flex:0 0 82%;scroll-snap-align:start;justify-content:flex-start;gap:14px;padding:24px 0;font-size:14px;letter-spacing:.14em;white-space:nowrap;border-left:0!important;border-top:0!important}
+ .selos>div span br{display:none}
+ .selos>div:last-child{margin-right:var(--pad)}
+ .lb{grid-template-columns:repeat(2,1fr);gap:10px}
+ .lb figure:nth-child(9){display:none}
+ /* tudo centralizado no celular */
+ section h2,section .eyebrow,section p,section h3,.assin,.dados,.dados b,.dados span,.visita .txt,#historia .hist>div,.card h3,.card .dt,.pn{text-align:center}
+ section>.rev,.igsec .wrap>.rev,#historia .hist{justify-content:center!important;flex-direction:column;align-items:center!important}
+ section>.rev>div,.igsec .wrap>.rev>div{width:100%;text-align:center}
+ section h2{margin-left:auto;margin-right:auto}
+ section p,.dados{margin-left:auto;margin-right:auto}
+ .link,.btn,.pn .btn{margin-left:auto;margin-right:auto}
+ section .rev>.link,section .rev>a.link{display:inline-flex;margin-top:8px}
+ #lookbook>.rev .link{display:none}
+ .visita .txt .btn{display:inline-flex}
+ footer .top{grid-template-columns:1fr;text-align:center;gap:26px}
+ footer .mk{margin:0 auto}footer .top p{margin-left:auto;margin-right:auto}.pal{justify-content:center}
+ footer .base{justify-content:center;text-align:center;flex-direction:column;gap:6px}
+ .cards{gap:12px}
+ h2{font-size:clamp(28px,8vw,36px)}
+ .visita .txt{padding:36px var(--pad) 40px}
+ footer .top{grid-template-columns:1fr 1fr;gap:22px 16px;padding:40px var(--pad) 30px}
+ footer .top>div{min-width:0}
+ footer .mk{width:150px}
+ footer h4{font-size:10.5px;letter-spacing:.16em}
+ .pal i{width:24px;height:16px}
+}
+
+.menu-mob{display:none}
+@media(max-width:900px){.menu-mob{display:block}
+ /* mobile: foto no topo com titulo integrado */
+ #historia .hist{display:flex;flex-direction:column;gap:0}
+ #historia .hist>.rev:first-child{order:0;aspect-ratio:4/5;max-height:74svh;width:100vw;margin-left:calc(-1 * var(--pad));position:relative}
+ #historia .hist>.rev:first-child:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(28,27,26,.55) 70%,rgb(28,27,26) 100%);z-index:1}
+ #historia .hist>.rev:first-child .ttl{position:absolute;left:var(--pad);right:var(--pad);bottom:26px;z-index:2;color:#fff;text-align:center}
+ #historia .hist>.rev:first-child .ttl .eyebrow{color:#d9d6d1;margin-bottom:10px}
+ #historia .hist>.rev:first-child .ttl h2{color:#fff;font-size:clamp(32px,9.4vw,42px)}
+ #historia .hist>.rev:last-child{order:1;padding:28px 0 var(--sp)}
+ #historia .hist>.rev:last-child>.eyebrow,#historia .hist>.rev:last-child>h2{display:none}
+ #historia .hist>.rev:last-child p:first-of-type{margin-top:0}
+ .visita{display:flex;flex-direction:column}
+ .visita>.f,.visita>div:last-child{order:0;position:relative;min-height:0!important;aspect-ratio:2132/1536;max-height:74svh}
+ .visita>div:last-child:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(60,48,36,0) 22%,rgba(60,48,36,.5) 52%,rgba(48,38,28,.86) 78%,rgb(40,32,24) 100%);z-index:1}
+ .visita>div:last-child .ttl{position:absolute;left:var(--pad);right:var(--pad);bottom:26px;z-index:2;color:#fff;text-align:center}
+ .visita>div:last-child .ttl .eyebrow{color:#efe6da;margin-bottom:10px}
+ .visita>div:last-child .ttl h2{color:#fff;font-size:clamp(26px,7.4vw,34px)}
+ .visita>div:last-child .ttl{bottom:44px}
+ .visita>div:last-child img{object-position:8% center!important}
+ .visita .txt{order:1;padding-top:28px}
+ .visita .txt>.eyebrow,.visita .txt>h2{display:none}
+ .visita .txt p{margin-top:0!important}
+}
+
+/* ===== cards de produto no lookbook ===== */
+.lb figure.tile{aspect-ratio:auto;grid-template-rows:auto auto;background:transparent}
+.lb figure.tile>img{grid-area:1/1;aspect-ratio:4/5;width:100%;height:auto;object-fit:cover;background:var(--ground2)}
+.lb .meta{grid-area:2/1;padding:12px 0 4px}
+.lb .meta h3{font-family:var(--sans);font-size:13.5px;font-weight:400;letter-spacing:.01em;margin:0}
+.cores{display:flex;gap:6px;margin-top:9px}
+.cores i{width:11px;height:11px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+.lb .tile.open{grid-template-columns:1fr 1fr;grid-template-rows:auto auto}
+.lb .tile.open>img{grid-area:1/1/2/2;aspect-ratio:3/4;height:100%}
+.lb .tile.open .meta{grid-area:2/1/3/2}
+.lb .tile.open .pn{grid-area:1/2/3/3}
+/* ===== faixa editorial ===== */
+.faixa{position:relative;height:min(70vh,640px);overflow:hidden;background:#111;margin-top:var(--sp)}
+.faixa>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 12%}
+.faixa .conteudo{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0) 34%,rgba(0,0,0,.26) 60%,rgba(0,0,0,.72) 100%);padding:0 var(--pad) 58px}
+.faixa .eyebrow{color:#efe9e2}
+.faixa h2{font-size:clamp(34px,5.2vw,76px);line-height:1.04;max-width:16ch;margin:14px 0 22px;color:#fff}
+.faixa .link{color:#fff}
+@media(max-width:900px){.faixa{height:auto;aspect-ratio:16/9;min-height:0;max-height:none;margin-bottom:var(--sp)}#vendidos.sec-pad{padding-top:0}.faixa>img{object-position:50% 50%}.faixa .conteudo{justify-content:center;align-items:center;text-align:center;padding-bottom:0;padding-top:24%;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.28) 60%,rgba(0,0,0,.72) 100%)}.faixa h2{font-size:clamp(22px,6.2vw,28px);margin:4px 0 8px}.faixa .eyebrow{margin-bottom:0}.lb .meta h3{font-size:12.5px}.lb .meta{text-align:left}.lb .tile.open{grid-template-columns:1fr}.lb .tile.open>img{grid-area:auto}.lb .tile.open .meta,.lb .tile.open .pn{grid-area:auto}}
 </style>
 </head><body>
 <header><div class="hA">
@@ -212,16 +302,20 @@ footer .base{border-top:1px solid #3b3530;padding:18px var(--pad);display:flex;j
   <div class="dots"><button class="dot on" aria-label="Slide 1"></button><button class="dot" aria-label="Slide 2"></button><button class="dot" aria-label="Slide 3"></button><button class="dot" aria-label="Slide 4"></button></div>
 </section>
 <div class="selos">
-  <div><svg class="si" viewBox="0 0 24 24"><path d="M12 4a2 2 0 0 1 2 2c0 1.2-1 1.6-2 2.4v1.4"/><path d="M12 9.8 3.6 15.4A1.4 1.4 0 0 0 4.4 18h15.2a1.4 1.4 0 0 0 .8-2.6L12 9.8z"/></svg><span>Peça escolhida<br>uma a uma</span></div>
-  <div><svg class="si" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Provador com<br>hora marcada</span></div>
-  <div><svg class="si" viewBox="0 0 24 24"><path d="M12 3 3.5 7.2v9.6L12 21l8.5-4.2V7.2L12 3z"/><path d="M3.5 7.2 12 11.4l8.5-4.2M12 11.4V21"/></svg><span>Entrega no mesmo dia<br>no Alto Tietê</span></div>
+  <div><svg class="si" viewBox="0 0 24 24"><path d="M12 4a2 2 0 0 1 2 2c0 1.2-1 1.6-2 2.4v1.4"/><path d="M12 9.8 3.6 15.4A1.4 1.4 0 0 0 4.4 18h15.2a1.4 1.4 0 0 0 .8-2.6L12 9.8z"/></svg><span>Peça escolhida<br> uma a uma</span></div>
+  <div><svg class="si" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Provador com<br> hora marcada</span></div>
+  <div><svg class="si" viewBox="0 0 24 24"><path d="M12 3 3.5 7.2v9.6L12 21l8.5-4.2V7.2L12 3z"/><path d="M3.5 7.2 12 11.4l8.5-4.2M12 11.4V21"/></svg><span>Entrega no mesmo dia<br> no Alto Tietê</span></div>
 </div>
 
 <section class="sec-pad wrap" id="lookbook">
   <div class="rev" style="display:flex;align-items:flex-end;justify-content:space-between;gap:22px;flex-wrap:wrap;margin-bottom:30px">
     <div><p class="eyebrow">Lookbook</p><h2>A coleção inteira,<br>sem pressa.</h2></div>
     <a class="link" href="https://www.instagram.com/masluselect/"><svg class="sv igc-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>Ver mais no Instagram &nbsp;→</a></div>
-  <div class="lb"><figure class="rev d1 tile" tabindex="0"><img src="assets/img/look-1.webp" alt="Santorini" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Santorini</h3><p>Tricô texturizado off-white, gola alta com zíper e calça reta. A peça de manhã inteira.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Santorini%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d2 tile" tabindex="0"><img src="assets/img/look-2.webp" alt="Conjunto Oliva" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Conjunto Oliva</h3><p>Camisa de zíper e calça ampla em verde militar. Tecido com textura, cai leve.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Conjunto%20Oliva%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d3 tile" tabindex="0"><img src="assets/img/look-3.webp" alt="Colete Terracota" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Colete Terracota</h3><p>Colete alongado de botões duplos e pantalona, pesponto claro aparente. Foto da loja.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Colete%20Terracota%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d1 tile" tabindex="0"><img src="assets/img/look-4.webp" alt="Conjunto Creme" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Conjunto Creme</h3><p>Camisa e calça em creme, corte reto. Contra a porta vermelha, a cor aparece.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Conjunto%20Creme%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d2 tile" tabindex="0"><img src="assets/img/look-5.webp" alt="London" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>London</h3><p>Blazer bege sobre camisa listrada, calça de amarração. O clássico que veste o dia inteiro.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20London%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d3 tile" tabindex="0"><img src="assets/img/look-6.webp" alt="Alfaiataria Areia" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Alfaiataria Areia</h3><p>Blazer e calça em tom de areia. Dupla de peças que se vestem juntas ou separadas.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Alfaiataria%20Areia%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d1 tile" tabindex="0"><img src="assets/img/look-7.webp" alt="Helena Melissa" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Helena Melissa</h3><p>Colete de botões e pantalona em caramelo, cinto de amarração e pesponto contrastante.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Helena%20Melissa%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d2 tile" tabindex="0"><img src="assets/img/look-8.webp" alt="Conjunto Bordô" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Conjunto Bordô</h3><p>Colete transpassado e calça em bordô, com botões forrados. Para a noite que começa cedo.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Conjunto%20Bord%C3%B4%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d3 tile" tabindex="0"><img src="assets/img/look-9.webp" alt="Di Venezza" loading="lazy"><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Di Venezza</h3><p>Colete alongado e pantalona pespontada em bordô, com bolsa de verniz no mesmo tom.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Di%20Venezza%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure></div>
+  <div class="lb"><figure class="rev d1 tile" tabindex="0"><img src="assets/img/look-1.webp" alt="Santorini" loading="lazy"><div class="meta"><h3>Conjunto Tricot Manga Curta</h3><div class="cores"><i style="background:var(--creme)"></i><i style="background:var(--perola)"></i><i style="background:var(--azul)"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Santorini</h3><p>Tricô texturizado off-white, gola alta com zíper e calça reta. A peça de manhã inteira.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Santorini%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d2 tile" tabindex="0"><img src="assets/img/look-2.webp" alt="Conjunto Oliva" loading="lazy"><div class="meta"><h3>Conjunto Zíper Oliva</h3><div class="cores"><i style="background:var(--oliva)"></i><i style="background:var(--areia)"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Conjunto Oliva</h3><p>Camisa de zíper e calça ampla em verde militar. Tecido com textura, cai leve.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Conjunto%20Oliva%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d3 tile" tabindex="0"><img src="assets/img/look-3.webp" alt="Colete Terracota" loading="lazy"><div class="meta"><h3>Conjunto Colete e Pantalona</h3><div class="cores"><i style="background:var(--terracota)"></i><i style="background:var(--cacau)"></i><i style="background:var(--vinho)"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Colete Terracota</h3><p>Colete alongado de botões duplos e pantalona, pesponto claro aparente. Foto da loja.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Colete%20Terracota%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d1 tile" tabindex="0"><img src="assets/img/look-4.webp" alt="Conjunto Creme" loading="lazy"><div class="meta"><h3>Conjunto Gola Alta</h3><div class="cores"><i style="background:#F1EDE7"></i><i style="background:var(--perola)"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Conjunto Creme</h3><p>Camisa e calça em creme, corte reto. Contra a porta vermelha, a cor aparece.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Conjunto%20Creme%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d2 tile" tabindex="0"><img src="assets/img/look-5.webp" alt="London" loading="lazy"><div class="meta"><h3>Blazer de Alfaiataria</h3><div class="cores"><i style="background:var(--areia)"></i><i style="background:var(--rose)"></i><i style="background:#000"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>London</h3><p>Blazer bege sobre camisa listrada, calça de amarração. O clássico que veste o dia inteiro.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20London%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d3 tile" tabindex="0"><img src="assets/img/look-6.webp" alt="Alfaiataria Areia" loading="lazy"><div class="meta"><h3>Alfaiataria Areia</h3><div class="cores"><i style="background:var(--areia)"></i><i style="background:var(--creme)"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Alfaiataria Areia</h3><p>Blazer e calça em tom de areia. Dupla de peças que se vestem juntas ou separadas.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Alfaiataria%20Areia%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d1 tile" tabindex="0"><img src="assets/img/look-7.webp" alt="Helena Melissa" loading="lazy"><div class="meta"><h3>Conjunto Faixa Marcada</h3><div class="cores"><i style="background:var(--cacau)"></i><i style="background:var(--ambar)"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Helena Melissa</h3><p>Colete de botões e pantalona em caramelo, cinto de amarração e pesponto contrastante.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Helena%20Melissa%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d2 tile" tabindex="0"><img src="assets/img/look-8.webp" alt="Conjunto Bordô" loading="lazy"><div class="meta"><h3>Conjunto Colete Abotoado</h3><div class="cores"><i style="background:var(--vinho)"></i><i style="background:var(--carmim)"></i><i style="background:var(--oliva)"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Conjunto Bordô</h3><p>Colete transpassado e calça em bordô, com botões forrados. Para a noite que começa cedo.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Conjunto%20Bord%C3%B4%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure><figure class="rev d3 tile" tabindex="0"><img src="assets/img/look-9.webp" alt="Di Venezza" loading="lazy"><div class="meta"><h3>Colete Alongado Bordô</h3><div class="cores"><i style="background:var(--vinho)"></i><i style="background:var(--carmim)"></i></div></div><figcaption class="pn"><span class="pn-eye">A peça</span><h3>Di Venezza</h3><p>Colete alongado e pantalona pespontada em bordô, com bolsa de verniz no mesmo tom.</p><a class="btn" href="https://wa.me/5511930049771?text=Oi%2C%20vi%20a%20pe%C3%A7a%20Di%20Venezza%20no%20site%20e%20queria%20saber%20mais." target="_blank" rel="noopener"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Perguntar sobre essa</a><button class="pn-x" type="button" aria-label="Fechar">×</button></figcaption></figure></div>
+</section>
+<section class="faixa" id="editorial">
+  <img src="assets/img/faixa.webp" alt="Look off-white sobre parede terracota" loading="lazy">
+  <div class="conteudo"><p class="eyebrow">Editorial</p><h2>Neutro não é sem graça</h2><a class="link" href="#lookbook">Ver o lookbook &nbsp;→</a></div>
 </section>
 <section class="sec-pad wrap" id="vendidos">
   <div class="rev" style="margin-bottom:28px"><p class="eyebrow">Mais vendidos</p><h2>O que sai da loja mais rápido</h2></div>
@@ -238,12 +332,13 @@ footer .base{border-top:1px solid #3b3530;padding:18px var(--pad);display:flex;j
   <div class="hist">
     <div class="rev" style="position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--ground2)">
       <img src="assets/img/marlucia.webp" alt="Marlúcia Reges Maia, fundadora da Maslu Select" loading="lazy"
-       style="position:absolute;inset:0;filter:grayscale(1) contrast(1.04)"></div>
+       style="position:absolute;inset:0;filter:grayscale(1) contrast(1.04)"><div class="ttl menu-mob"><p class="eyebrow">A história</p><h2>Antes de ser sua,<br>foi escolhida.</h2></div></div>
     <div class="rev d1"><p class="eyebrow">A história</p>
       <h2>Antes de ser sua,<br>foi escolhida.</h2>
-      <p style="margin-top:20px">A Maslu nasceu pequena e continua escolhendo pequeno. Quem atende é quem compra, e quem compra olha o caimento, o avesso e a costura antes de deixar a peça entrar.</p>
-      <p>O que muda de uma estação para a outra é a cor da coleção. O que não muda é que nada entra aqui sem passar por uma escolha.</p>
-      <div class="assin">Marlúcia Reges Maia<small>Fundadora</small></div></div>
+      <p style="margin-top:20px">A Maslu nasceu pequena, na sala de uma casa. Hoje tem a primeira loja, e eu, Marlúcia Maia, tenho orgulho de cada passo até aqui.</p>
+      <p>O que mais me orgulha é ver a diferença que a gente faz na imagem e na autoestima de quem entra aqui. As nossas clientes são a maior recompensa.</p>
+      <p>Quem atende é quem compra. E quem compra escolhe a dedo o caimento, as costuras e cada detalhe. Isso resume a Maslu: <em>moda pra quem não aceita qualquer coisa.</em></p>
+      <div class="assin">Marlúcia Maia<small>Fundadora</small></div></div>
   </div>
 </section>
 <section id="visite">
@@ -259,7 +354,7 @@ footer .base{border-top:1px solid #3b3530;padding:18px var(--pad);display:flex;j
           </div>
           <a class="btn" style="margin-top:28px" href="https://wa.me/5511930049771"><svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M8.6 8.4c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6.3.5 1 1.5 2 2 .3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.5.8c.2.1.3.2.3.4 0 .4-.2 1.1-.9 1.3-.6.3-1.4.3-2.4-.1-1.6-.6-3-2-3.7-3.5-.4-.9-.5-1.8-.3-2.4z"/></svg>Falar com a loja</a>
         </div>
-        <div style="position:relative;min-height:340px"><img src="assets/img/loja-parede.webp" alt="Interior da loja Maslu Select" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:22% center"></div>
+        <div style="position:relative;min-height:340px"><img src="assets/img/loja-parede.webp" alt="Interior da loja Maslu Select" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:22% center"><div class="ttl menu-mob"><p class="eyebrow">Visite</p><h2>A loja tem porta,<br>e a gente te espera.</h2></div></div>
       </div></section>
 <footer>
       <div class="top">
@@ -305,7 +400,7 @@ footer .base{border-top:1px solid #3b3530;padding:18px var(--pad);display:flex;j
   var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target);} }); },{threshold:.14});
   document.querySelectorAll('.rev').forEach(function(el){ io.observe(el); });
   var hero=document.querySelector('.hero');
-  if(hero && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+  if(hero && !matchMedia('(prefers-reduced-motion:reduce)').matches && matchMedia('(min-width:900px)').matches){
     var imgs=hero.querySelectorAll('.slide img'), caps=hero.querySelectorAll('.cap'), tick=false;
     function px(){ var y=Math.max(0,window.scrollY), h=hero.offsetHeight; if(y>h){tick=false;return;}
       var a='translateY('+(y*0.35).toFixed(1)+'px)', c='translate(0,'+(y*0.15).toFixed(1)+'px) translateY(-50%)';
@@ -321,6 +416,18 @@ footer .base{border-top:1px solid #3b3530;padding:18px var(--pad);display:flex;j
     t.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' ') toggle(e); if(e.key==='Escape') t.classList.remove('open'); });
     var x=t.querySelector('.pn-x'); if(x) x.addEventListener('click',function(e){ e.stopPropagation(); t.classList.remove('open'); });
   });
+  var sel=document.querySelector('.selos');
+  if(sel && matchMedia('(max-width:900px)').matches){
+    var orig=[...sel.children]; orig.forEach(function(d){ sel.appendChild(d.cloneNode(true)); });
+    var step=function(){ return orig[0].offsetWidth+14; }, loopW=function(){ return step()*orig.length; }, st, lock=false;
+    function wrap(){ if(sel.scrollLeft>=loopW()){ lock=true; sel.style.scrollBehavior='auto'; sel.scrollLeft-=loopW(); sel.style.scrollBehavior=''; lock=false; } }
+    sel.addEventListener('scroll',function(){ if(!lock) wrap(); },{passive:true});
+    function nx(){ wrap(); sel.scrollBy({left:step(),behavior:'smooth'}); }
+    function arm(){ clearInterval(st); st=setInterval(nx,3200); }
+    sel.addEventListener('touchstart',function(){ clearInterval(st); },{passive:true});
+    sel.addEventListener('touchend',function(){ setTimeout(arm,1200); },{passive:true});
+    arm();
+  }
   var chk=document.getElementById('nav');
   document.querySelectorAll('.drawer a').forEach(function(a){ a.addEventListener('click',function(){ if(chk) chk.checked=false; }); });
 })();
