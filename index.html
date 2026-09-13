@@ -159,7 +159,7 @@ section{padding:120px 0}
 .chat-h .av{width:30px;height:30px;border-radius:50%;background:#171c22;display:grid;place-items:center;font:600 11px var(--mono)}
 .chat-h b{font-size:13px;display:block}.chat-h small{font:500 10px var(--mono);color:var(--cdim)}
 .chat-h .wa{margin-left:auto;font:600 10px var(--mono);color:var(--green);letter-spacing:.1em}
-.chat-b{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:250px}
+.chat-b{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:250px;max-height:400px;overflow:hidden}
 .cb{max-width:86%;padding:10px 12px;font-size:13px;line-height:1.4;border:1px solid var(--cline);border-radius:12px;background:#171c22;display:none}
 .cb.show{display:block}
 .cb time{display:block;font:500 9px var(--mono);color:var(--cdim);margin-top:6px;text-align:right}
@@ -169,6 +169,15 @@ section{padding:120px 0}
 .cb.ia{align-self:flex-end;background:rgba(47,214,123,.08);border-color:rgba(47,214,123,.4)}
 .cb.ia:before{content:"kompila · agente";display:block;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:4px}
 .cb .opts{display:flex;gap:6px;margin-top:8px}.cb .opts span{font:600 10px var(--mono);padding:4px 9px;border:1px solid rgba(47,214,123,.5);border-radius:999px;color:var(--green)}
+.cb.calc{align-self:flex-end;max-width:92%;background:#0f1318;border-color:rgba(255,178,36,.45);font:500 11px var(--mono);line-height:1.65;color:var(--cmuted)}
+.cb.calc:before{content:"cálculo · regra da empresa";display:block;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.cb.calc b{color:var(--off);font-weight:600}
+.resumo{right:0;top:0;width:290px;background:var(--carbon2);border:1px solid var(--cline);border-left:3px solid var(--green);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.55);padding:18px 20px;opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.2,.8,.2,1) .9s;color:var(--off);z-index:8}
+.demo[data-act="4"] .resumo{opacity:1;transform:none}
+.resumo .kk{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cdim)}
+.resumo .who{font-size:15px;font-weight:600;margin-top:4px}
+.resumo ul{list-style:none;margin:12px 0 0;padding:0;font:500 12px var(--mono);line-height:1.9;color:var(--cmuted)}
+.resumo li b{color:var(--off);font-weight:600}.resumo li.warn b{color:var(--amber)}.resumo li.ok b{color:var(--green)}
 .cb.me:before{content:"Renata · corretora";display:block;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:4px}
 .typing{display:none;gap:4px;padding:10px 12px;border:1px solid var(--cline);border-radius:12px;width:max-content;background:#171c22}
 .typing.show{display:flex}.typing.me{align-self:flex-end}
@@ -462,29 +471,34 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
         <div class="logo-state"><span class="st proc" id="stProc"><span class="b">[</span> komp<span class="dd"></span> <span class="b">]</span></span><span class="st hide" id="stOk"><span class="b">[</span> kompila <span class="b">]</span></span><small id="stLabel">processando</small></div>
         <div class="brk l">[</div><div class="brk r">]</div>
         <div class="chat">
-          <div class="chat-h"><div class="av">MO</div><div><b>Marcos Oliveira</b><small>campanha meta · +55 11 9····-4471</small></div><span class="wa">whatsapp</span></div>
-          <div class="chat-b">
+          <div class="chat-h"><div class="av">MO</div><div><b>Marcos Oliveira</b><small>sábado · campanha meta · +55 11 9····-4471</small></div><span class="wa">whatsapp</span></div>
+          <div class="chat-b" id="chatB">
             <div class="typing" id="typLead"><i></i><i></i><i></i></div>
-            <div class="cb" id="b1">Oi, vi o lançamento de vocês no Instagram. Tem apartamento de 2 quartos que aceita FGTS? Minha renda é 6 mil.<time>09:12</time></div>
-            <div class="cb bot" id="b2">Olá! Recebemos sua mensagem. Em breve um de nossos consultores entrará em contato.<time>09:12</time></div>
-            <div class="typing me" id="typMe"><i></i><i></i><i></i></div>
-            <div class="cb ia" id="b3">Oi Marcos! Tem sim: 2 quartos a partir de R$ 270 mil, aceita FGTS e Minha Casa Minha Vida. Renda de 6 mil entra na faixa do programa; a parcela exata sai na simulação com a Caixa. Quer visitar o decorado?<div class="opts"><span>sábado</span><span>domingo</span></div><time>09:12</time></div>
+            <div class="cb" id="b1">Oi, vi o lançamento de vocês no Instagram. Tem apartamento de 2 quartos que aceita FGTS?<time>sáb · 09:12</time></div>
+            <div class="typing me" id="typIa"><i></i><i></i><i></i></div>
+            <div class="cb ia" id="b2">Oi Marcos! Tem sim: 2 quartos a partir de R$ 270 mil, aceita FGTS e Minha Casa Minha Vida. Pra eu te passar a conta certa: qual a sua renda e pra quando você quer mudar?<time>09:12</time></div>
             <div class="typing" id="typLead2"><i></i><i></i><i></i></div>
-            <div class="cb" id="b4">Sábado de manhã.<time>09:13</time></div>
-            <div class="typing me" id="typMe2"><i></i><i></i><i></i></div>
-            <div class="cb me" id="b5">Marcos, sou a Renata. Te recebo sábado às 10h no stand da zona leste. Já te mando a localização.<time>09:15</time></div>
+            <div class="cb" id="b3">Renda de 6 mil. Queria até dezembro.<time>09:13</time></div>
+            <div class="cb calc" id="m1">unidade <b>2 quartos · R$ 270.000</b><br>renda <b>R$ 6.000</b> → faixa do programa<br>FGTS → aceito na entrada<br>parcela → <b>simulador da Caixa</b><br>prazo dezembro → <b>estoque disponível</b></div>
+            <div class="typing me" id="typIa2"><i></i><i></i><i></i></div>
+            <div class="cb ia" id="b4">Com 6 mil de renda você entra na faixa do programa e pode usar o FGTS na entrada. A parcela exata sai na simulação com a Caixa; eu deixo pronta pra visita. Quer conhecer o decorado?<div class="opts"><span>sábado</span><span>domingo</span></div><time>09:13</time></div>
+            <div class="typing" id="typLead3"><i></i><i></i><i></i></div>
+            <div class="cb" id="b5">Sábado de manhã.<time>09:14</time></div>
+            <div class="typing me" id="typMe"><i></i><i></i><i></i></div>
+            <div class="cb me" id="b6">Marcos, sou a Renata. Te recebo hoje às 10h no stand da zona leste. Já te mando a localização.<time>09:20</time></div>
           </div>
         </div>
         <div class="leadcard" id="lead">
           <div class="kk">lead · campanha meta · lançamento</div><div class="who">Marcos Oliveira</div><div class="meta">Apto 2 quartos · FGTS · R$ 270.000</div>
           <div class="timer"><b id="timer">0 s</b><span id="timerL">esperando</span></div>
-          <div class="badges"><span class="tag bad" id="bdOwner">sem dono</span><span class="tag warn" id="bdBot">só o bot respondeu</span><span class="tag bad" id="bdWin">fora da janela de 24 h</span><span class="tag ok" id="bdDono">kompila respondeu · 6 s</span><span class="tag ok" id="bdResp">Renata confirmou · 3 min</span><span class="tag ok" id="bdPts">visita · sábado 10h</span></div>
-          <div class="rod" id="rod"><span class="kk">rodízio</span><span class="av">CA</span><span class="av">DI</span><span class="av">PE</span><span class="av">RE</span></div>
+          <div class="badges"><span class="tag ok" id="bdAt">kompila atendeu · 09:12</span><span class="tag ok" id="bdQ">qualificado · 6 mil · dezembro</span><span class="tag warn" id="bdCalc">cálculo feito</span><span class="tag ok" id="bdBrief">briefing pronto</span><span class="tag bad" id="bdPass">5 min · Carlos não respondeu</span><span class="tag warn" id="bdRe">passou pra Renata</span><span class="tag ok" id="bdOk">visita · hoje 10h</span></div>
+          <div class="rod" id="rod"><span class="kk">fila</span><span class="av">CA</span><span class="av">DI</span><span class="av">PE</span><span class="av">RE</span></div>
         </div>
-        <div class="win w1" data-depth="12"><div class="bar"><i></i><i></i><i></i><span>painel</span></div><img src="img/mock-index.webp" alt=""></div>
-        <div class="win w2" data-depth="22"><div class="bar"><i></i><i></i><i></i><span>minha caixa</span></div><img src="img/mock-fila.webp" alt=""></div>
+        <div class="resumo"><div class="kk">resumo · segunda · 8h</div><div class="who">Fim de semana</div><ul><li><b>14</b> leads atendidos pela Kompila</li><li class="ok"><b>3</b> visitas marcadas</li><li class="warn"><b>1</b> passou de 5 min: Carlos</li><li class="ok"><b>0</b> leads órfãos</li></ul></div>
+        <div class="win w1" data-depth="12"><div class="bar"><i></i><i></i><i></i><span>agora</span></div><img src="img/mock-index.webp" alt=""></div>
+        <div class="win w2" data-depth="22"><div class="bar"><i></i><i></i><i></i><span>fila</span></div><img src="img/mock-fila.webp" alt=""></div>
         <div class="win w3" data-depth="8"><div class="bar"><i></i><i></i><i></i><span>conversa</span></div><img src="img/mock-conversa.webp" alt=""></div>
-        <div class="win w4" data-depth="28"><div class="bar"><i></i><i></i><i></i><span>gerente</span></div><img src="img/mock-gerente.webp" alt=""></div>
+        <div class="win w4" data-depth="28"><div class="bar"><i></i><i></i><i></i><span>equipe</span></div><img src="img/mock-gerente.webp" alt=""></div>
       </div>
     </div>
   </div>
@@ -702,17 +716,34 @@ function splitWords(root){var walker=document.createTreeWalker(root,NodeFilter.S
   var demo=document.getElementById('demo'),$=function(id){return document.getElementById(id)};
   var acts=[].slice.call(demo.querySelectorAll('.act')),navb=[].slice.call(document.querySelectorAll('#actnav button'));
   var timer=$('timer'),timerL=$('timerL'),lead=$('lead'),rod=$('rod'),avs=[].slice.call(rod.querySelectorAll('.av'));
-  var ACT={1:0,2:3600,3:9600,4:16000},LOOP=23500,timeouts=[],raf=null,t0=0,rodT=null,readT=[],running=false,words={};
+  var ACT={1:0,2:5200,3:10400,4:17500},LOOP=25000,timeouts=[],raf=null,t0=0,rodT=null,readT=[],running=false,words={};
   acts.forEach(function(a){words[a.dataset.i]=splitWords(a)});
-  function show(id,on){var el=$(id);if(el)el.classList.toggle('show',on!==false)}
+  var chatB=$('chatB');function show(id,on){var el=$(id);if(el)el.classList.toggle('show',on!==false);if(chatB)chatB.scrollTop=chatB.scrollHeight}
   function read(n){readT.forEach(clearTimeout);readT=[];Object.keys(words).forEach(function(k){words[k].forEach(function(w){w.classList.remove('lit')})});words[n].forEach(function(w,i){var isH=w.closest('h3')!==null;readT.push(setTimeout(function(){w.classList.add('lit')},isH?i*110:300+i*55))})}
   function setAct(n){demo.dataset.act=n;acts.forEach(function(a){a.classList.toggle('on',+a.dataset.i===n)});read(n);navb.forEach(function(b,i){b.classList.remove('on','done');b.querySelector('i').style.animation='none';if(i+1<n)b.classList.add('done');if(i+1===n){var d=((ACT[n+1]||LOOP)-ACT[n])/1000;b.style.setProperty('--d',d+'s');void b.offsetWidth;b.querySelector('i').style.animation='';b.classList.add('on')}})}
-  function reset(){['b1','b2','b3','b4','b5','typLead','typLead2','typMe','typMe2','bdOwner','bdBot','bdWin','bdDono','bdResp','bdPts'].forEach(function(id){show(id,false)});lead.className='leadcard';rod.classList.remove('show');avs.forEach(function(a){a.className='av'});timer.textContent='0 s';timerL.textContent='esperando';$('stProc').classList.remove('hide');$('stOk').classList.add('hide');$('stLabel').textContent='processando';if(raf)cancelAnimationFrame(raf);raf=null;if(rodT)clearInterval(rodT)}
+  function reset(){['b1','b2','b3','b4','b5','b6','m1','typLead','typLead2','typLead3','typIa','typIa2','typMe','bdAt','bdQ','bdCalc','bdBrief','bdPass','bdRe','bdOk'].forEach(function(id){show(id,false)});lead.className='leadcard';rod.classList.remove('show');avs.forEach(function(a){a.className='av'});timer.textContent='0 s';timerL.textContent='esperando';$('stProc').classList.remove('hide');$('stOk').classList.add('hide');$('stLabel').textContent='processando';if(raf)cancelAnimationFrame(raf);raf=null;if(rodT)clearInterval(rodT)}
   function live(){var s=Math.floor((performance.now()-t0)/1000);timer.textContent=s+' s';raf=requestAnimationFrame(live)}
-  function rodizio(){var i=0,n=0;avs.forEach(function(a){a.className='av'});avs[0].classList.add('off');rodT=setInterval(function(){avs.forEach(function(a){a.classList.remove('hot')});i=(i+1)%avs.length;if(i===0)i=1;avs[i].classList.add('hot');n++;if(n>=8){clearInterval(rodT);avs.forEach(function(a){a.classList.remove('hot')});avs[3].classList.add('hot')}},130)}
-  var steps=[[0,function(){setAct(1);show('typLead')}],[1200,function(){show('typLead',false);show('b1');t0=performance.now();live()}],[3600,function(){setAct(2);if(raf)cancelAnimationFrame(raf);raf=null}],[3800,function(){show('b2');show('bdBot')}],[4400,function(){timer.textContent='5 min';lead.className='leadcard warn'}],[5200,function(){timer.textContent='30 min';show('bdOwner')}],[6000,function(){timer.textContent='1 h'}],[6900,function(){timer.textContent='24 h';lead.className='leadcard bad';timerL.textContent='sem resposta'}],[7500,function(){show('bdWin')}],[8300,function(){timer.textContent='42 h'}],[9600,function(){setAct(3);timer.textContent='0 s';timerL.textContent='kompila ligada';lead.className='leadcard';show('bdOwner',false);show('bdWin',false);show('bdBot',false);rod.classList.add('show');rodizio()}],[10300,function(){show('typMe')}],[10900,function(){show('typMe',false);show('b3');show('bdDono');lead.className='leadcard ok';timer.textContent='6 s';timerL.textContent='kompila respondeu'}],[11800,function(){show('typLead2')}],[12300,function(){show('typLead2',false);show('b4')}],[12700,function(){show('typMe2')}],[13300,function(){show('typMe2',false);show('b5');show('bdResp');timer.textContent='3 min';timerL.textContent='visita marcada'}],[13800,function(){show('bdPts');$('stProc').classList.add('hide');$('stOk').classList.remove('hide');$('stLabel').textContent='entregue'}],[16000,function(){setAct(4)}]];
+  function rodizio(pick){var i=0,n=0;avs.forEach(function(a){a.classList.remove('hot')});rodT=setInterval(function(){avs.forEach(function(a){a.classList.remove('hot')});do{i=(i+1)%avs.length}while(avs[i].classList.contains('off'));avs[i].classList.add('hot');n++;if(n>=8){clearInterval(rodT);avs.forEach(function(a){a.classList.remove('hot')});avs[pick].classList.add('hot')}},130)}
+  var steps=[
+    [0,function(){setAct(1);show('typLead')}],
+    [1000,function(){show('typLead',false);show('b1');t0=performance.now();live()}],
+    [2600,function(){show('typIa')}],
+    [3400,function(){show('typIa',false);show('b2');if(raf)cancelAnimationFrame(raf);raf=null;timerL.textContent='kompila atendeu';lead.className='leadcard ok';show('bdAt')}],
+    [5200,function(){setAct(2);show('typLead2')}],
+    [6000,function(){show('typLead2',false);show('b3');timerL.textContent='qualificando';timer.textContent='09:13'}],
+    [6700,function(){show('m1');show('bdQ')}],
+    [7700,function(){show('typIa2')}],
+    [8500,function(){show('typIa2',false);show('b4');show('bdCalc');timerL.textContent='cálculo feito'}],
+    [10400,function(){setAct(3);show('typLead3')}],
+    [11000,function(){show('typLead3',false);show('b5');show('bdBrief');rod.classList.add('show');rodizio(0);timer.textContent='0 s';timerL.textContent='Carlos avisado';lead.className='leadcard'}],
+    [12200,function(){timer.textContent='2 min';lead.className='leadcard warn'}],
+    [13000,function(){timer.textContent='5 min';lead.className='leadcard bad';timerL.textContent='sem resposta';show('bdPass');avs[0].className='av off'}],
+    [13600,function(){rodizio(3);show('bdRe');timer.textContent='0 s';timerL.textContent='Renata avisada';lead.className='leadcard warn'}],
+    [14600,function(){show('typMe')}],
+    [15400,function(){show('typMe',false);show('b6');show('bdOk');timer.textContent='1 min';timerL.textContent='Renata respondeu';lead.className='leadcard ok';$('stProc').classList.add('hide');$('stOk').classList.remove('hide');$('stLabel').textContent='entregue'}],
+    [17500,function(){setAct(4)}]];
   function clearAll(){timeouts.forEach(clearTimeout);timeouts=[];readT.forEach(clearTimeout);readT=[];if(raf)cancelAnimationFrame(raf);raf=null;if(rodT)clearInterval(rodT)}
-  function run(from){clearAll();reset();running=true;steps.forEach(function(s){if(s[0]<from)s[1]();else timeouts.push(setTimeout(s[1],s[0]-from))});if(raf&&from>=3600){cancelAnimationFrame(raf);raf=null}timeouts.push(setTimeout(function(){run(0)},LOOP-from))}
+  function run(from){clearAll();reset();running=true;steps.forEach(function(s){if(s[0]<from)s[1]();else timeouts.push(setTimeout(s[1],s[0]-from))});if(raf&&from>=3400){cancelAnimationFrame(raf);raf=null}timeouts.push(setTimeout(function(){run(0)},LOOP-from))}
   navb.forEach(function(b){b.addEventListener('click',function(){run(ACT[+b.dataset.go])})});
   if(reduced){reset();steps.forEach(function(s){s[1]()});Object.keys(words).forEach(function(k){words[k].forEach(function(w){w.classList.add('lit')})})}
   else{var ioD=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!running)run(0);if(!e.isIntersecting&&running){clearAll();running=false}})},{threshold:.25});ioD.observe(demo);document.addEventListener('visibilitychange',function(){if(document.hidden){clearAll();running=false}})}
