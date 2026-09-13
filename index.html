@@ -413,6 +413,25 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
 .gs.kp{outline:2px solid var(--green);outline-offset:-2px}
 .gs.dk{background:var(--carbon);color:var(--off)}.gs.dk p,.gs.dk .gc span{color:var(--cmuted)}.gs.dk .gc b{color:var(--green)}.gs.dk .gn,.gs.dk .gc small{color:var(--cdim)}
 @media (max-width:860px){.gs{grid-template-columns:1fr;gap:18px;padding:28px 24px}.gs .gn{padding:0}.gc{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.gs.dk .gc{border-color:var(--cline)}.gl li b{white-space:normal}}
+
+/* mobile: cena empilhada, respiro, conector, preço */
+@media(max-width:700px){
+  .demo,.cta{padding:48px 6%}
+  #problema{padding-bottom:40px}
+  .stage{height:auto!important}
+  .scene{position:static;width:auto;height:auto;transform:none!important;display:grid;gap:14px}
+  .scene>*{position:static}
+  .scene .brk,.scene .win{display:none!important}
+  .scene .logo-state{justify-content:flex-end;order:-1}
+  .scene .chat,.scene .leadcard,.scene .resumo{width:100%;top:auto;right:auto;left:auto;opacity:1;transform:none!important;transition:none}
+  .demo[data-act="4"] .chat,.demo[data-act="4"] .leadcard{opacity:1;transform:none}
+  .scene .resumo{display:none}.demo[data-act="4"] .resumo{display:block}
+  .chat-b{max-height:340px}
+  .leadcard .timer b{font-size:34px}
+  .bolhas{gap:10px}.bolhas .grp{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.bolhas .ln{width:100%;height:28px;background:none}.bolhas .ln:after{left:50%;top:0;width:2px;height:28px;border-radius:0;background:var(--green-ink);animation:none}
+  .bolhas .bb{width:72px;height:72px;font-size:11px}.bolhas .bb.k{width:84px;height:84px;font-size:18px}
+  .gl li{flex-direction:column;gap:4px}.gl li b{text-align:left;white-space:normal}
+}
 </style>
 </head>
 <body>
