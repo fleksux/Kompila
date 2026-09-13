@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kompila · arquitetura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--carbon:#0a0b0e;--paper:#f3f4f1;--surface:#fff;--line:#e2e5df;--line2:#c9cec5;--ink:#111318;--ink2:#4b525b;--mute:#8a919a;--green:#12803F;--green2:#2fd67b;--gbg:#e6f7ec;--red:#c9203a;--rbg:#fde8eb;--amber:#9a5b00;--abg:#fff2d9;--blue:#1f4fa3;--bbg:#e8f0ff;--purple:#5b2ea6;--pbg:#f1e8ff;--font:"Inter",Helvetica,Arial,sans-serif;--mono:"JetBrains Mono",Menlo,monospace}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--paper);font-family:var(--font);color:var(--ink);font-size:13px}
+/* barra */
+.bar{position:fixed;left:0;right:0;top:0;height:56px;background:var(--carbon);color:#fff;display:flex;align-items:center;gap:14px;padding:0 20px;z-index:20}
+.bar .sig{font-family:var(--mono);font-weight:700;font-size:20px;letter-spacing:-.06em}.bar .sig i{font-style:normal;color:var(--green2)}
+.bar h1{font-size:14px;font-weight:600;margin:0 0 0 6px}.bar h1 span{color:#8a919a;font-weight:400;margin-left:8px}
+.bar .r{margin-left:auto;display:flex;gap:8px;align-items:center}
+.bar button{background:#1d232b;color:#fff;border:1px solid #2a3038;border-radius:8px;height:32px;padding:0 12px;font:500 12.5px var(--font);cursor:pointer}
+.bar button:hover{background:#2a3038}
+.bar .lg{display:flex;gap:14px;font-size:11.5px;color:#aab1ba;margin-right:12px}
+.bar .lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+/* canvas */
+#vp{position:fixed;inset:56px 0 0 0;cursor:grab;overflow:hidden}
+#vp.drag{cursor:grabbing}
+#cv{position:absolute;left:0;top:0;width:4400px;height:2640px;transform-origin:0 0;background:
+  linear-gradient(var(--line) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/40px 40px}
+#wires{position:absolute;left:0;top:0;width:4400px;height:2640px;pointer-events:none}
+#wires path{fill:none;stroke-width:2}
+#wires .w-data{stroke:var(--ink2)}#wires .w-ia{stroke:var(--green)}#wires .w-time{stroke:var(--red)}#wires .w-ui{stroke:var(--blue)}#wires .w-ext{stroke:var(--purple);stroke-dasharray:6 5}#wires .w-conf{stroke:var(--amber);stroke-dasharray:2 4}
+#wires text{font:500 11px var(--font);fill:var(--ink2)}
+#wires .lbl{fill:#fff;stroke:none}
+/* colunas */
+.col{position:absolute;top:24px;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);padding-bottom:8px;border-bottom:2px solid var(--line2)}
+.col b{display:block;font:700 15px var(--font);letter-spacing:0;text-transform:none;color:var(--ink);margin-top:2px}
+/* caixas */
+.bx{position:absolute;background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;box-shadow:0 1px 2px rgba(10,11,14,.05)}
+.bx h3{margin:0;font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:8px}
+.bx h3 .t{margin-left:auto;font:500 10.5px var(--mono);color:var(--mute);white-space:nowrap}
+.bx .tech{font:500 10.5px var(--mono);color:var(--green);margin:2px 0 8px}
+.bx ul{margin:0;padding:0;list-style:none}
+.bx li{font-size:12px;color:var(--ink2);padding:3px 0;border-top:1px solid var(--line);line-height:1.35}
+.bx li:first-child{border-top:0}
+.bx li b{color:var(--ink);font-weight:600}
+.bx li code{font:500 11px var(--mono);color:var(--ink);background:var(--paper);padding:0 4px;border-radius:4px}
+.bx li .k{font:500 11px var(--mono);color:var(--purple)}
+.bx li .w{font-size:11px;color:var(--mute)}
+.bx.dark{background:var(--carbon);color:#fff;border-color:var(--carbon)}
+.bx.dark h3{color:#fff}.bx.dark .tech{color:var(--green2)}.bx.dark li{color:#c4c9cf;border-color:#22282f}.bx.dark li b{color:#fff}.bx.dark li code{background:#1d232b;color:#fff}
+.bx.g{border-color:var(--green2);box-shadow:0 0 0 3px var(--gbg)}
+.bx.r{border-color:var(--red);box-shadow:0 0 0 3px var(--rbg)}
+.bx.b{border-color:var(--blue);box-shadow:0 0 0 3px var(--bbg)}
+.bx.p{border-color:var(--purple);box-shadow:0 0 0 3px var(--pbg)}
+.bx.a{border-color:#f2b53d;box-shadow:0 0 0 3px var(--abg)}
+.bx .tag{display:inline-block;font:600 10px var(--mono);padding:1px 6px;border-radius:5px;background:var(--gbg);color:var(--green)}
+.bx .tag.r{background:var(--rbg);color:var(--red)}.bx .tag.b{background:var(--bbg);color:var(--blue)}.bx .tag.p{background:var(--pbg);color:var(--purple)}.bx .tag.a{background:var(--abg);color:var(--amber)}
+/* tabela do banco */
+.tb{position:absolute;background:var(--surface);border:1px solid var(--line2);border-radius:10px;overflow:hidden}
+.tb h4{margin:0;padding:7px 10px;background:var(--carbon);color:#fff;font:600 12px var(--mono);display:flex;gap:8px;align-items:center}
+.tb h4 span{margin-left:auto;font-weight:400;font-size:10px;color:#8a919a}
+.tb div{padding:2px 10px;font:11.5px var(--mono);color:var(--ink2);border-top:1px solid var(--line);display:flex;gap:8px}
+.tb div b{color:var(--ink);font-weight:600;min-width:120px}
+.tb div i{font-style:normal;color:var(--mute);font-size:10.5px}
+.tb div.pk b{color:var(--green)}
+/* régua do tempo */
+.tl{position:absolute;display:grid;grid-template-columns:70px 1fr;gap:6px 12px;background:var(--surface);border:1px solid var(--red);box-shadow:0 0 0 3px var(--rbg);border-radius:12px;padding:12px 14px;font-size:12px}
+.tl h3{grid-column:1/-1;margin:0 0 4px;font-size:13.5px}
+.tl b{font:700 12px var(--mono);color:var(--green);text-align:right;white-space:nowrap}.tl b.r{color:var(--red)}
+.tl span{color:var(--ink2)}
+/* fluxo numerado */
+.seq{position:absolute;background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:12px 14px}
+.seq h3{margin:0 0 8px;font-size:13.5px}
+.seq table{border-collapse:collapse;width:100%;font-size:11.5px}
+.seq th{text-align:left;font:500 10.5px var(--mono);color:var(--mute);padding:4px 8px;border-bottom:1px solid var(--line2)}
+.seq td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+.seq td:first-child{font:700 12px var(--mono);color:var(--green);width:26px}
+.seq td b{color:var(--ink)}.seq td code{font:500 11px var(--mono);background:var(--paper);padding:0 4px;border-radius:4px;color:var(--ink)}
+.note{position:absolute;font-size:11.5px;color:var(--mute);max-width:420px;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="bar"><span class="sig"><i>[</i> kompila <i>]</i></span><h1>lead recovery · arquitetura v2.1 <span>13 set 2026 · a IA opera; a pessoa corrige</span></h1>
+  <div class="r"><div class="lg"><span><i style="background:#4b525b"></i>dado</span><span><i style="background:#12803F"></i>IA</span><span><i style="background:#c9203a"></i>tempo</span><span><i style="background:#1f4fa3"></i>tela</span><span><i style="background:#5b2ea6"></i>externo</span><span><i style="background:#9a5b00"></i>regra do cliente</span></div>
+  <button onclick="fit()">Ajustar à tela</button><button onclick="zoomBy(1.2)">+</button><button onclick="zoomBy(1/1.2)">−</button><button onclick="window.print()">Imprimir</button></div></div>
+<div id="vp"><div id="cv"><svg id="wires"></svg>
+
+<!-- ===================== colunas ===================== -->
+<div class="col" style="left:40px;width:420px">1 · canais<b>Onde o lead entra</b></div>
+<div class="col" style="left:520px;width:440px">2 · borda<b>Supabase Edge Functions · Deno/TS</b></div>
+<div class="col" style="left:1020px;width:820px">3 · banco<b>Supabase Postgres · São Paulo · RLS por tenant</b></div>
+<div class="col" style="left:1900px;width:900px">4 · inteligência<b>A IA que opera + motores + Conector</b></div>
+<div class="col" style="left:2860px;width:640px">5 · tempo<b>Guardião · pg_cron a cada minuto</b></div>
+<div class="col" style="left:3560px;width:800px">6 · pessoas<b>App web · React + Vite · Vercel</b></div>
+
+<!-- ===================== 1 · canais ===================== -->
+<div class="bx p" id="c_wa" style="left:40px;top:110px;width:420px"><h3>WhatsApp do cliente <span class="t">Meta Cloud API</span></h3><div class="tech">1 número por tenant · phone_number_id roteia · janela de 24 h</div><ul>
+<li><b>Mensagem do lead</b> texto, foto, áudio, resposta de botão ou lista</li>
+<li><b>Botões e listas nativas</b> "Terça 10h / Quarta 15h": o lead responde com um toque</li>
+<li><b>Status</b> sent · delivered · read voltam pelo mesmo webhook</li>
+<li><b>Template</b> fora da janela só passa o que a Meta aprovou (utilidade R$ 0,05)</li></ul></div>
+
+<div class="bx p" id="c_form" style="left:40px;top:340px;width:420px"><h3>Formulário · anúncio · indicação <span class="t">webhook</span></h3><div class="tech">POST /v1/leads · site, Meta Ads (click-to-WhatsApp), Instagram, planilha</div><ul>
+<li>nome, telefone E.164, origem, campanha, cep, consentimento</li>
+<li>o lead nasce igual ao do WhatsApp: a IA responde em segundos pelo número da empresa</li></ul></div>
+
+<div class="bx p" id="c_base" style="left:40px;top:500px;width:420px"><h3>Base esquecida <span class="t">importação</span></h3><div class="tech">CSV do CRM antigo · HubSpot da P1LED: 761 que nunca responderam</div><ul>
+<li>entra com <code>optin_ok</code> e <code>volta_em</code></li>
+<li>a IA reabre em lote (30/dia P1LED, 100/dia MRV) com template, 1 vez por ciclo</li></ul></div>
+
+<div class="bx p" id="c_out" style="left:40px;top:680px;width:420px"><h3>CRM de origem do cliente <span class="t">saída</span></h3><div class="tech">HubSpot · Salesforce · planilha · webhook por evento</div><ul>
+<li>recebe <code>lead_criado, ia_respondeu, fase_mudou, chamou_gente, fechado, perdido</code></li>
+<li>a fonte de verdade é a kompila; o CRM do cliente só recebe</li>
+<li>Fase 2: CAPI (evento de conversão de volta pro Meta Ads)</li></ul></div>
+
+<div class="bx p" id="c_push" style="left:40px;top:880px;width:420px"><h3>Celular da pessoa <span class="t">avisos</span></h3><div class="tech">WhatsApp da empresa pro vendedor · e-mail · push do app</div><ul>
+<li>"A IA parou em <b>Hotel Costa Verde</b>: lead pediu pessoa. Você tem 15 min." com link direto</li>
+<li>gerente: resumo das 08:00 e alerta de prazo estourado</li></ul></div>
+
+<div class="note" style="left:40px;top:1030px">Tudo que entra é <b>evento</b>. Nada é editado ou apagado: <code>evento</code> é imutável por política. É daí que saem Agora, Fila, Equipe e Resultado.</div>
+
+<!-- ===================== 2 · borda ===================== -->
+<div class="bx" id="e_wh" style="left:520px;top:110px;width:440px"><h3>whatsapp_webhook <span class="t">Edge Function</span></h3><div class="tech">GET verify_token · POST assinatura X-Hub-Signature-256</div><ul>
+<li><b>1.</b> tenant = <code>select id from tenant where meta_phone_number_id = payload.phone_number_id</code></li>
+<li><b>2.</b> <code>receber_mensagem_lead(tenant, telefone, texto, wa_id)</code> idempotente por <code>wa_id</code></li>
+<li><b>3.</b> devolve <b>200 em &lt; 500 ms</b>. Nada de LLM aqui: a Meta reenvia se demorar</li>
+<li>status de entrega atualiza <code>mensagem</code> pelo <code>wa_id</code></li></ul></div>
+
+<div class="bx" id="e_lead" style="left:520px;top:340px;width:440px"><h3>lead_webhook <span class="t">Edge Function</span></h3><div class="tech">chave do tenant no header · valida telefone · dedup por telefone aberto</div><ul>
+<li>cria <code>lead</code> (fase Novo, estado com a IA, sem dono) e o primeiro <code>evento</code></li>
+<li>dispara o bot como se fosse mensagem</li></ul></div>
+
+<div class="bx" id="e_send" style="left:520px;top:500px;width:440px"><h3>whatsapp_enviar <span class="t">Edge Function</span></h3><div class="tech">Graph API · texto, botões, lista, imagem (render), documento (PDF), template</div><ul>
+<li>dentro da janela: mensagem livre da IA</li>
+<li>fora: só template aprovado, e só com <code>optin_ok</code></li>
+<li>grava <code>mensagem</code> com <code>de = ia | humano | template</code></li></ul></div>
+
+<div class="bx" id="e_push" style="left:520px;top:680px;width:440px"><h3>push <span class="t">Edge Function</span></h3><div class="tech">chamado pelo guardião e pelo bot ao escalar</div><ul>
+<li>manda o aviso pro celular da pessoa com o link da conversa</li>
+<li>registra <code>evento avisou_pessoa</code></li></ul></div>
+
+<div class="bx" id="e_import" style="left:520px;top:840px;width:440px"><h3>importar_base <span class="t">Edge Function</span></h3><div class="tech">CSV → lead com perda(motivo, volta_em) · valida consentimento</div><ul><li>sem opt-in: não entra no ciclo de template; vai pra lista "ligar por telefone"</li></ul></div>
+
+<div class="bx" id="e_out" style="left:520px;top:980px;width:440px"><h3>saida_webhook <span class="t">Edge Function</span></h3><div class="tech">Database Webhook em insert de evento → POST no CRM do cliente</div><ul><li>retry com backoff; falha vira <code>evento saida_falhou</code> visível no Conector</li></ul></div>
+
+<div class="bx dark" id="e_auth" style="left:520px;top:1120px;width:440px"><h3>Auth · Realtime · Storage <span class="t">Supabase</span></h3><ul>
+<li><b>Auth</b> login por e-mail; <code>usuario.papel</code> = gerente · vendedor · supervisora · kompila</li>
+<li><b>Realtime</b> Fila, Conversa e Agora atualizam ao vivo (canal por tenant)</li>
+<li><b>Storage</b> fotos do lead, renders, PDFs de proposta (bucket por tenant)</li>
+<li><b>Secrets</b> token da Meta, Anthropic, Copiloto: nunca no repositório</li></ul></div>
+
+<!-- ===================== 3 · banco ===================== -->
+<div class="tb" id="t_tenant" style="left:1020px;top:110px;width:260px"><h4>tenant <span>1 por cliente</span></h4><div class="pk"><b>id</b><i>uuid</i></div><div><b>nome, setor, fuso</b></div><div><b>meta_phone_number_id</b><i>único · roteia</i></div><div><b>chave</b><i>kmp_&lt;id&gt;</i></div><div><b>ativo</b></div></div>
+
+<div class="tb" id="t_usuario" style="left:1300px;top:110px;width:260px"><h4>usuario <span>= auth.users</span></h4><div class="pk"><b>id</b></div><div><b>tenant_id</b></div><div><b>nome, ini, papel</b><i>gerente · vendedor · supervisora · kompila</i></div><div><b>telefone</b><i>pro aviso</i></div><div><b>sla_min</b><i>prazo pessoal</i></div></div>
+
+<div class="tb" id="t_presenca" style="left:1580px;top:110px;width:260px"><h4>presenca <span>batimento 60 s</span></h4><div class="pk"><b>usuario</b></div><div><b>visto_em</b><i>online = &lt; 5 min</i></div><div><b>no_rodizio</b></div></div>
+
+<div class="tb" id="t_lead" style="left:1020px;top:290px;width:380px"><h4>lead <span>1 por telefone aberto</span></h4><div class="pk"><b>id, tenant_id</b></div><div><b>nome, telefone E.164</b></div><div><b>origem, campanha, cep, cidade</b></div><div><b>interesse, valor_estimado</b><i>do motor</i></div><div><b>fase</b><i>do pipeline do Conector</i></div><div><b>fase_por, fase_em</b><i>IA ou pessoa</i></div><div><b>estado</b><i>ia · lead · humano · agendado · proposta · fechado · perdido · reabrindo</i></div><div><b>dono</b><i>pessoa, só quando precisa</i></div><div><b>confianca</b><i>0 a 1, da IA</i></div><div><b>optin_ok, optin_via, optin_em</b><i>LGPD</i></div><div><b>ref_externa</b><i>id no CRM do cliente</i></div><div><b>fechado_em, valor_fechado</b></div></div>
+
+<div class="tb" id="t_msg" style="left:1420px;top:290px;width:420px"><h4>mensagem <span>a conversa inteira</span></h4><div class="pk"><b>id, lead_id, em</b></div><div><b>de</b><i>lead · ia · humano · tool · template · sistema</i></div><div><b>texto</b></div><div><b>botoes</b><i>jsonb · o que a IA ofereceu</i></div><div><b>toque</b><i>true se veio de botão</i></div><div><b>tool_nome, tool_entrada, tool_saida</b><i>o motor, visível na tela</i></div><div><b>autor</b><i>usuario quando de = humano</i></div><div><b>wa_id</b><i>único · idempotência da Meta</i></div><div><b>status</b><i>sent · delivered · read</i></div></div>
+
+<div class="tb" id="t_pend" style="left:1020px;top:640px;width:380px"><h4>pendencia <span>a IA parou</span></h4><div class="pk"><b>lead_id</b></div><div><b>tipo</b><i>lead pediu pessoa · proposta · desconto · IA insegura…</i></div><div><b>regra</b><i>qual linha da escalada</i></div><div><b>para</b><i>usuario</i></div><div><b>desde</b><i>o relógio da pessoa</i></div><div><b>sla_min</b><i>copiado da regra</i></div><div><b>sugestao</b><i>rascunho da IA</i></div><div><b>resolvido_em, resolvido_por, como</b><i>aprovou · decidiu · devolveu</i></div></div>
+
+<div class="tb" id="t_agenda" style="left:1420px;top:640px;width:420px"><h4>agenda_ia <span>o que ninguém faria</span></h4><div class="pk"><b>id, lead_id</b></div><div><b>acao</b><i>followup_1 · followup_3 · followup_7 · followup_14 · lembrete_visita · template_23h · reabrir · cobrar_documento · pedir_nota</i></div><div><b>quando</b><i>timestamp</i></div><div><b>feito_em</b><i>null = pendente</i></div><div><b>resultado</b><i>respondeu · silêncio · erro</i></div></div>
+
+<div class="tb" id="t_evento" style="left:1020px;top:900px;width:380px"><h4>evento <span>imutável · sem update/delete</span></h4><div class="pk"><b>id, lead_id, em</b></div><div><b>tipo</b><i>lead_criado · ia_respondeu · motor_chamado · fase_mudou · chamou_gente · avisou_pessoa · pessoa_resolveu · pessoa_corrigiu · template_enviado · reaberto · fechado · perdido · nota</i></div><div><b>por</b><i>ia · usuario · guardiao</i></div><div><b>detalhe</b><i>jsonb</i></div></div>
+
+<div class="tb" id="t_briefing" style="left:1420px;top:900px;width:200px"><h4>briefing</h4><div class="pk"><b>lead_id</b></div><div><b>apurado</b><i>jsonb</i></div><div><b>falta</b></div><div><b>proximo_passo</b></div><div><b>temperatura</b></div><div><b>atualizado_em</b></div></div>
+
+<div class="tb" id="t_perda" style="left:1640px;top:900px;width:200px"><h4>perda</h4><div class="pk"><b>lead_id</b></div><div><b>motivo</b><i>dito pelo lead</i></div><div><b>volta_em</b><i>30 · 60 · 90 d</i></div><div><b>por</b><i>ia · usuario</i></div></div>
+
+<div class="tb" id="t_conector" style="left:1020px;top:1140px;width:400px"><h4>conector <span>a chave do cliente · jsonb versionado</span></h4><div class="pk"><b>tenant_id, versao</b></div><div><b>pipeline</b><i>fases, quem move, peso</i></div><div><b>autonomia</b><i>ação → sozinha · aprovação · nunca</i></div><div><b>escalada</b><i>regra → para → prazo → se estourar</i></div><div><b>motores</b><i>nome, url, versão, dono</i></div><div><b>templates</b><i>nome, status Meta, custo</i></div><div><b>tom, ia</b><i>nome, assinatura, modelo</i></div><div><b>regra</b><i>humano_min, limite_h, toques, expediente</i></div><div><b>dicas</b><i>iniciante · gerente</i></div></div>
+
+<div class="tb" id="t_aud" style="left:1440px;top:1140px;width:190px"><h4>auditoria</h4><div class="pk"><b>lead_id</b></div><div><b>nota, bem, mal, dica</b></div><div><b>por</b><i>retaguarda</i></div><div><b>visivel_para</b><i>gerente + pessoa</i></div></div>
+
+<div class="tb" id="t_resumo" style="left:1650px;top:1140px;width:190px"><h4>resumo</h4><div class="pk"><b>tenant_id, data</b></div><div><b>texto</b><i>5 linhas das 08:00</i></div></div>
+
+<div class="bx dark" id="t_fn" style="left:1020px;top:1400px;width:400px"><h3>Funções SQL <span class="t">uma implementação · tela, bot e cron chamam</span></h3><ul>
+<li><code>receber_mensagem_lead()</code> cria lead ou acha o aberto; grava mensagem</li>
+<li><code>mover_fase(lead, fase, por)</code> valida contra o pipeline do Conector; evento</li>
+<li><code>escalar(lead, regra)</code> cria pendencia, escolhe a pessoa (dono, rodízio por carga, gerente), chama push</li>
+<li><code>resolver_pendencia(lead, como)</code> aprovou · decidiu · devolveu; IA retoma</li>
+<li><code>agendar(lead, acao, quando)</code> e <code>executar_agenda()</code></li>
+<li><code>perder(lead, motivo)</code> decide <code>volta_em</code> pela tabela do Conector</li>
+<li><code>reabrir()</code> lote diário com limite por tenant</li>
+<li><code>registrar_evento()</code> gatilho em tudo acima</li></ul></div>
+
+<div class="bx dark" id="t_views" style="left:1440px;top:1400px;width:400px"><h3>Views pra tela <span class="t">RLS: cada papel vê o seu</span></h3><ul>
+<li><code>v_agora</code> leads hoje, 1ª resposta, resolvido pela IA, precisa de gente, fechado + 7 dias</li>
+<li><code>v_onde_esta</code> leads por fase e por tempo de espera, com quem conduz</li>
+<li><code>v_fila</code> pendências abertas, atraso contra sla_min</li>
+<li><code>v_pipeline</code> kanban com soma por fase</li>
+<li><code>v_equipe</code> por pessoa: chamadas, tempo médio, na mão, visitas, propostas, fechado</li>
+<li><code>v_resultado</code> fechado × meta, pipeline ponderado, custo IA × pessoas, perdas</li>
+<li><code>v_diario</code> eventos do dia com a marca "ninguém faria"</li></ul></div>
+
+<div class="bx a" id="t_hooks" style="left:1020px;top:1780px;width:820px"><h3>Gatilhos do banco <span class="t">Database Webhooks + pg_cron</span></h3><ul>
+<li><b>insert mensagem (de = lead)</b> → Edge Function <code>bot</code>, assíncrono. É o que separa o webhook rápido da IA lenta</li>
+<li><b>insert evento</b> → <code>saida_webhook</code> (CRM do cliente) e Realtime (telas)</li>
+<li><b>insert pendencia</b> → <code>push</code></li>
+<li><b>cron 1 min</b> → <code>guardiao()</code> e <code>executar_agenda()</code> · <b>08:00</b> → retaguarda: resumo do gerente · <b>09:00</b> → <code>reabrir()</code> · <b>23:00</b> → template_23h das conversas paradas</li>
+<li><b>RLS</b> toda tabela filtra <code>tenant_id = meu_tenant()</code>; vendedor só vê <code>lead.dono = eu</code> ou pendencia.para = eu; teste de isolamento na CI</li></ul></div>
+
+<!-- ===================== 4 · inteligência ===================== -->
+<div class="bx g" id="i_bot" style="left:1900px;top:110px;width:440px"><h3>bot · a IA da frente <span class="t">Edge Function · Anthropic</span></h3><div class="tech">Haiku 4.5 · tool use · &lt; R$ 0,06 por atendimento · 24 h</div><ul>
+<li><b>lê</b> o Conector do tenant: tom, o que pode sozinha, perguntas do motor, escalada</li>
+<li><b>decide por mensagem</b>: responder · perguntar (com botões) · chamar motor · mover fase · agendar próximo passo · escalar · perder com motivo</li>
+<li><b>ferramentas</b> <code>cotar</code> <code>agenda</code> <code>distancia</code> <code>gerar_render</code> <code>mover_fase</code> <code>agendar</code> <code>escalar</code> <code>perder</code> <code>enviar_template</code></li>
+<li><b>guardrails em código</b>: bloqueia "R$" sem tool call · máx. 8 mensagens por espera · nunca fora da janela · nunca pede CPF/documento · confiança &lt; 70% em 2 mensagens → escala · ação "nunca" do Conector é recusada antes do modelo</li>
+<li>grava <code>mensagem(de=ia)</code>, <code>mensagem(de=tool)</code>, <code>briefing</code>, <code>lead.confianca</code>, eventos</li></ul></div>
+
+<div class="bx g" id="i_back" style="left:1900px;top:470px;width:440px"><h3>retaguarda · a IA que revisa <span class="t">Anthropic</span></h3><div class="tech">Claude 5 · só lê · nunca fala com o lead</div><ul>
+<li><b>briefing</b> por lead a cada mensagem (apurado, falta, próximo passo, temperatura)</li>
+<li><b>resumo das 08:00</b> pro gerente: 5 linhas, o que travou, quem enrola</li>
+<li><b>auditoria</b>: nota 0 a 10 por conversa, visível só pro gerente e pra pessoa</li>
+<li><b>aprende com a correção</b>: quando a pessoa corrige fase ou responde o que a IA não soube, vira proposta de regra no Conector (o gerente aprova)</li></ul></div>
+
+<div class="bx a" id="i_con" style="left:2380px;top:110px;width:420px"><h3>Conector <span class="t">a chave do cliente</span></h3><div class="tech">kmp_&lt;tenant&gt; · JSON versionado · exporta e importa · editado pelo gerente</div><ul>
+<li><b>pipeline</b> fases, quem move, quando, peso</li>
+<li><b>o que a IA faz</b> sozinha · pede aprovação (de quem) · nunca</li>
+<li><b>quando chama gente</b> regra → para → prazo → se estourar</li>
+<li><b>motores</b> quais, onde, versão, dono, teste</li>
+<li><b>templates</b> da Meta, status, custo</li>
+<li><b>tom e horário</b> nome da IA, assinatura, expediente das pessoas</li>
+<li><b>o tempo, escrito</b> 0 s → 15 min → 30 min → 23 h → 24 h</li>
+<li><span class="tag a">P1LED</span> Novo → Qualificado → Cotado → Visita → Proposta → Fechado</li>
+<li><span class="tag a">MRV</span> Novo → Simulado → Visita marcada → Documentos → Análise Caixa → Fechado</li></ul></div>
+
+<div class="bx" id="i_mot_p1" style="left:2380px;top:520px;width:420px"><h3>motores · P1LED <span class="t">Edge Function conectores/p1led</span></h3><div class="tech">o LLM nunca calcula; chama um destes</div><ul>
+<li><code>cotar</code> → <span class="k">Copiloto P1LED (API, Supabase xnrez…)</span>: pitch pela distância, gabinete 960×960, instalação por placas e km, frete. Sem CEP não cota.</li>
+<li><code>distancia</code> → <span class="k">ViaCEP + BrasilAPI</span>: km até o hub; decide frete e se a IA marca visita sozinha (≤ 150 km)</li>
+<li><code>gerar_render</code> → <span class="k">Magnific (skill p1led-render)</span>: painel na foto do cliente, sem moldura</li>
+<li><code>agenda</code> → <span class="k">Google Calendar</span> dos vendedores: 2 horários, grava com endereço</li>
+<li><code>criar_registro</code> → rascunho de proposta no Copiloto; PDF volta pra conversa</li></ul></div>
+
+<div class="bx" id="i_mot_mrv" style="left:2380px;top:800px;width:420px"><h3>motores · MRV Itaquera <span class="t">Edge Function conectores/mrv</span></h3><ul>
+<li><code>simular_mcmv</code> → regras da Caixa (jul/2026) + tabela da loja: faixa pela renda, 30%, subsídio só F1 e F2, FGTS como entrada. Sempre "estimativa, a Caixa confirma"</li>
+<li><code>consultar_unidades</code> → espelho de vendas da <b>loja</b> (planilha): tipologia e faixa, sem número de apartamento</li>
+<li><code>agenda_decorado</code> → agenda dos corretores, rodízio por menos visitas no dia</li>
+<li><code>criar_registro</code> → lead no Salesforce da loja (ou planilha)</li></ul></div>
+
+<div class="bx" id="i_mot_new" style="left:2380px;top:1010px;width:420px"><h3>cliente novo <span class="t">molde</span></h3><div class="tech">interface fixa · cotar() · criar_registro() · perguntas()</div><ul><li>importa o JSON do Conector mais parecido, troca os motores, sobe. Meta da Fase 4: 1 dia sem a kompila mexer em código</li></ul></div>
+
+<div class="bx dark" id="i_cost" style="left:1900px;top:760px;width:440px"><h3>Custo por lead <span class="t">estimativa</span></h3><ul>
+<li>Haiku 4.5 · ~2 mil tokens × 8 trocas → <b>R$ 0,05</b></li>
+<li>template de utilidade → <b>R$ 0,05</b> por reabertura ou 23 h</li>
+<li>retaguarda: 1 briefing por lead + 1 resumo por dia por tenant</li>
+<li>limite diário por tenant com alerta no Conector</li>
+<li>pessoa: R$ 14 por chamada (hora de vendedor, editável)</li></ul></div>
+
+<div class="bx" id="i_learn" style="left:1900px;top:960px;width:440px"><h3>Ciclo de aprendizado <span class="t">semana 2 em diante</span></h3><ul>
+<li>pessoa corrige fase ou responde o que a IA não soube → <code>evento pessoa_corrigiu</code></li>
+<li>retaguarda agrupa por motivo → sugere regra ou dica no Conector</li>
+<li>gerente aprova → nova versão do Conector → a IA passa a fazer sozinha</li>
+<li>"Por que a IA chamou gente" na Equipe é o painel disso</li></ul></div>
+
+<!-- ===================== 5 · tempo ===================== -->
+<div class="tl" id="g_tl" style="left:2860px;top:110px;width:640px"><h3>Guardião · a régua, escrita</h3>
+<b>0 s</b><span>lead manda mensagem. <code>bot</code> responde em até 15 s, qualquer horário. Evento <code>ia_respondeu</code>.</span>
+<b>+ msg</b><span>a IA decide sozinha tudo que o Conector marca "sozinha": pergunta, cota, agenda, move fase, agenda follow-up.</span>
+<b>regra</b><span>bateu numa regra de escalada: <code>escalar()</code> cria <code>pendencia</code> com <code>desde = now()</code> e chama <code>push</code>. A IA responde ao lead que alguém retorna.</span>
+<b>15 min</b><span>pendência sem resolver: aviso de novo no celular. Evento <code>avisou_pessoa</code>.</span>
+<b class="r">30 min</b><span>2× o prazo: passa pro próximo online (rodízio por carga); ninguém online, vai pro gerente. Evento <code>transferido</code>.</span>
+<b>dias 1·3·7·14</b><span>lead calado: <code>agenda_ia</code> dispara o follow-up no dia certo. Dentro da janela, mensagem; fora, template. Ninguém lembra.</span>
+<b>23 h</b><span>conversa parada perto de fechar a janela: template de utilidade (R$ 0,05). Sem opt-in: aviso "ligue agora" pra pessoa.</span>
+<b class="r">24 h</b><span>regra fixa da kompila: pendência sem ação humana volta pra fila com relógio zerado; lead nunca morre por falta de gente. Evento <code>estourou_24</code>.</span>
+<b>30·60·90 d</b><span>perdido com motivo volta na data: <code>reabrir()</code> com template, 1 vez por ciclo, limite diário.</span>
+<b>véspera</b><span>visita marcada: lembrete pro lead e pra pessoa. Confirmou, evento; não confirmou, a IA reoferece horário.</span></div>
+
+<div class="bx r" id="g_cron" style="left:2860px;top:640px;width:640px"><h3>guardiao() · executar_agenda() <span class="t">pg_cron · 1 min · idempotente por evento</span></h3><ul>
+<li>pra cada <code>pendencia</code> aberta: delta = now() − desde; age só se ainda não existe o evento daquele degrau</li>
+<li>pra cada <code>agenda_ia</code> com quando ≤ now() e feito_em null: executa, grava resultado, agenda o próximo degrau</li>
+<li>presença: online = <code>visto_em &gt; now() − 5 min</code>; fechou o navegador, saiu do rodízio sozinho</li>
+<li>tudo que o guardião faz aparece no diário como "ninguém faria"</li>
+<li>D-04: pg_cron em vez de fila externa; 1 min basta pra 15 min / 24 h</li></ul></div>
+
+<div class="bx" id="g_obs" style="left:2860px;top:900px;width:640px"><h3>Observabilidade <span class="t">Sentry + logs + evento</span></h3><ul>
+<li>erro de Edge Function e de tela com stack no Sentry</li>
+<li>o negócio se mede pelos eventos: latência da 1ª resposta, % sem gente, atraso das pendências, custo</li>
+<li>alerta: bot com erro &gt; 1% em 10 min · motor com erro · custo do dia acima do limite · pendência &gt; 2× prazo</li></ul></div>
+
+<!-- ===================== 6 · pessoas ===================== -->
+<div class="bx b" id="u_ger" style="left:3560px;top:110px;width:390px"><h3>Gerente comercial <span class="t">vê tudo · edita o fluxo</span></h3><div class="tech">app.kompila.com.br · React + Vite + TS · Vercel · Realtime</div><ul>
+<li><b>Agora</b> conversão, 5 números, onde cada lead está (por fase · por espera), resultado do mês, precisa de gente, diário</li>
+<li><b>Pipeline</b> kanban com as fases do Conector</li>
+<li><b>Fila</b> o que travou esperando pessoa, por motivo</li>
+<li><b>Conversas</b> a IA conduz; pode assumir e devolver</li>
+<li><b>Leads</b> · <b>Equipe</b> · <b>Resultado</b></li>
+<li><b>Conector</b> edita regras, exporta JSON, testa motores</li></ul></div>
+
+<div class="bx b" id="u_vend" style="left:3970px;top:110px;width:390px"><h3>Vendedor · corretor <span class="t">só o dele</span></h3><div class="tech">celular, 390 px · RLS filtra por dono e pendencia.para</div><ul>
+<li><b>Meu resultado</b> fechado, leads, visitas, propostas, "respondi em"</li>
+<li><b>Meu pipeline</b> · <b>Precisa de mim</b> aprovar com um toque</li>
+<li><b>Conversas</b> a IA parou e espera ele; rascunho pronto</li>
+<li><b>A IA fez por mim</b> o trabalho chato que sumiu da lista</li>
+<li>não vê Equipe, Resultado, Conector</li></ul></div>
+
+<div class="bx b" id="u_sup" style="left:3560px;top:470px;width:390px"><h3>Supervisora da IA <span class="t">cargo que nasce com o produto</span></h3><ul>
+<li>recebe "IA insegura" (confiança &lt; 70%)</li>
+<li>responde, e a resposta vira regra proposta no Conector</li>
+<li>revisa auditoria da retaguarda</li></ul></div>
+
+<div class="bx b" id="u_komp" style="left:3970px;top:470px;width:390px"><h3>kompila <span class="t">todos os tenants</span></h3><ul>
+<li>cria tenant, liga número da Meta, sobe o Conector, aponta os motores</li>
+<li>vê custo por tenant, erros, limites</li>
+<li>não vê conversa do cliente sem pedido dele (LGPD)</li></ul></div>
+
+<div class="bx dark" id="u_infra" style="left:3560px;top:680px;width:800px"><h3>Infra e entrega <span class="t">nada entra em prod sem staging</span></h3><ul>
+<li><b>GitHub</b> org kompila · Actions: typecheck, testes, teste de isolamento RLS, migração em staging, deploy</li>
+<li><b>Supabase</b> 2 projetos: <code>kompila-staging</code> e <code>kompila-prod</code> (São Paulo, Pro ~US$ 25/mês) · migrações versionadas <code>supabase/migrations/NNNN_*.sql</code> · nunca SQL à mão em prod</li>
+<li><b>Vercel</b> preview por branch, prod em <code>app.kompila.com.br</code></li>
+<li><b>Meta</b> número de teste em dev/staging; número do cliente em prod; templates enviados pra aprovação no dia 1</li>
+<li><b>Anthropic</b> chave por ambiente, limite de gasto</li>
+<li><b>LGPD</b> consentimento por lead, CPF/documento nunca na conversa (link pro Copiloto ou link seguro), exportação e apagamento por lead, log de acesso, retenção 12 meses</li></ul></div>
+
+<div class="bx" id="u_repo" style="left:3560px;top:960px;width:800px"><h3>Repositório <span class="t">kompila-lead-recovery</span></h3><ul>
+<li><code>supabase/migrations/</code> schema, RLS, funções, cron</li>
+<li><code>supabase/functions/</code> whatsapp_webhook · lead_webhook · whatsapp_enviar · push · bot · retaguarda · importar_base · saida_webhook · <code>conectores/p1led</code> · <code>conectores/mrv</code></li>
+<li><code>app/</code> React: paginas/ (agora, pipeline, fila, conversa, leads, equipe, resultado, conector) · componentes/ · lib/api.ts (só views e RPCs)</li>
+<li><code>conectores/*.json</code> a chave de cada cliente, versionada</li>
+<li><code>docs/</code> PROJETO.md, ESPECs, este mapa, ADRs</li></ul></div>
+
+<!-- ===================== fluxo numerado ===================== -->
+<div class="seq" id="seq" style="left:40px;top:1990px;width:2200px"><h3>Um lead, do início ao fim · o que acontece, quem faz, com que tecnologia, e onde grava</h3>
+<table><thead><tr><th>#</th><th>o que acontece</th><th>quem</th><th>tecnologia</th><th>grava onde</th></tr></thead><tbody>
+<tr><td>1</td><td>Rogério manda "preciso de um painel pra fachada, 6 × 3"</td><td>lead</td><td>Meta Cloud API → <code>whatsapp_webhook</code></td><td><code>tenant</code> pelo phone_number_id · <code>lead</code> (Novo, estado ia) · <code>mensagem</code>(de=lead, wa_id) · <code>evento lead_criado</code></td></tr>
+<tr><td>2</td><td>webhook devolve 200 em &lt; 500 ms; o gatilho chama o bot</td><td>banco</td><td>Database Webhook → Edge <code>bot</code></td><td>nada; só dispara</td></tr>
+<tr><td>3</td><td>bot lê o Conector P1LED, responde em 11 s com botões "Fachada, pega sol / Dentro / Vitrine"</td><td>IA</td><td>Haiku 4.5 + <code>whatsapp_enviar</code> (botões nativos)</td><td><code>mensagem</code>(de=ia, botoes) · <code>evento ia_respondeu</code> · <code>briefing</code></td></tr>
+<tr><td>4</td><td>Rogério toca "Fachada, pega sol"; depois "15 m ou mais"</td><td>lead</td><td>Meta → webhook</td><td><code>mensagem</code>(de=lead, toque=true)</td></tr>
+<tr><td>5</td><td>bot chama <code>distancia</code> (CEP → 96 km, visita sozinha ok) e <code>cotar</code> (Copiloto: P10, 18 gabinetes, R$ 86.930 instalado)</td><td>IA + motor</td><td>Edge <code>conectores/p1led</code> → ViaCEP, BrasilAPI, API do Copiloto</td><td><code>mensagem</code>(de=tool, entrada, saída) · <code>lead.valor_estimado</code> · <code>evento motor_chamado</code></td></tr>
+<tr><td>6</td><td>bot responde a faixa, move o lead pra <b>Cotado</b>, pede a foto, agenda follow-up dia 1</td><td>IA</td><td><code>mover_fase()</code> · <code>agendar()</code></td><td><code>lead.fase=Cotado, fase_por=IA</code> · <code>agenda_ia</code>(followup_1) · <code>evento fase_mudou</code></td></tr>
+<tr><td>7</td><td>foto chega; bot chama <code>gerar_render</code> e manda a imagem; oferece 2 horários da agenda do Cesar</td><td>IA + motor</td><td>Magnific · Google Calendar · Storage</td><td><code>mensagem</code>(tool) · bucket do tenant · <code>evento motor_chamado</code></td></tr>
+<tr><td>8</td><td>Rogério pede 20% de desconto. Regra "desconto acima da alçada": a IA para, cria pendência pro Marcos, avisa o celular, e diz ao lead que o gerente decide hoje</td><td>IA → pessoa</td><td><code>escalar()</code> → <code>push</code></td><td><code>pendencia</code>(tipo, regra, para=Marcos, desde, sla 30) · <code>lead.estado=humano</code> · <code>evento chamou_gente</code> · <code>evento avisou_pessoa</code></td></tr>
+<tr><td>9</td><td>Marcos vê na Fila (Realtime), lê a sugestão da IA (15% + instalação no mesmo dia), toca "Decidir"</td><td>gerente</td><td>app · <code>resolver_pendencia()</code></td><td><code>pendencia.resolvido_em/por/como</code> · <code>evento pessoa_resolveu</code> (22 min) · <code>lead.estado=ia</code></td></tr>
+<tr><td>10</td><td>bot retoma com a decisão, monta a proposta pelo Copiloto e cria pendência "proposta esperando aprovação" pro Cesar (regra: proposta pede aprovação)</td><td>IA → pessoa</td><td><code>criar_registro</code> → PDF · <code>escalar()</code></td><td><code>pendencia</code>(proposta, para=Cesar, sla 60) · <code>lead.ref_externa</code></td></tr>
+<tr><td>11</td><td>Cesar aprova em 4 min no celular; a IA envia o PDF, move pra <b>Proposta</b>, agenda follow-up dia 1 e lembrete da visita na véspera</td><td>pessoa → IA</td><td><code>resolver_pendencia()</code> · <code>whatsapp_enviar</code>(documento) · <code>agendar()</code></td><td><code>mensagem</code>(de=ia, PDF) · <code>lead.fase=Proposta</code> · <code>agenda_ia</code>(followup_1, lembrete_visita)</td></tr>
+<tr><td>12</td><td>Rogério some. Dia 1, dia 3, dia 7: o guardião manda os follow-ups. Na 23ª hora de cada silêncio, template de utilidade. Ninguém lembrou de nada.</td><td>guardião</td><td>pg_cron → <code>executar_agenda()</code> → <code>whatsapp_enviar</code></td><td><code>agenda_ia.feito_em, resultado</code> · <code>mensagem</code>(de=template) · <code>evento template_enviado</code> · diário "ninguém faria"</td></tr>
+<tr><td>13</td><td>Dia 7 ele responde "fechou". A IA manda o link da ficha cadastral (CPF fica no Copiloto, não na conversa), move pra <b>Fechado</b> com valor, pede nota de 1 a 10</td><td>IA</td><td><code>whatsapp_enviar</code>(template ficha_cadastral) · <code>mover_fase()</code></td><td><code>lead.fase=Fechado, fechado_em, valor_fechado</code> · <code>evento fechado</code> · <code>evento nota</code></td></tr>
+<tr><td>14</td><td>Tudo que aconteceu sai pro HubSpot da P1LED por webhook; Agora, Equipe e Resultado leem as views; a retaguarda escreve o resumo das 08:00 e a auditoria</td><td>banco + retaguarda</td><td><code>saida_webhook</code> · Realtime · Claude 5</td><td>CRM do cliente · <code>resumo</code> · <code>auditoria</code></td></tr>
+</tbody></table></div>
+
+<div class="note" style="left:2300px;top:1990px;width:500px"><b style="color:var(--ink)">O que mudou em relação ao PROJETO.md 1.0 (v1)</b><br>saiu: <code>espera</code> (relógio do vendedor), <code>ponto</code>, placar, rodízio na entrada (lead nascia com dono). entrou: <code>pendencia</code> (relógio da pessoa só quando a IA chama), <code>agenda_ia</code> (o que ninguém faria), <code>conector</code> como jsonb versionado com autonomia e escalada, <code>lead.fase_por</code> e <code>lead.confianca</code>, retaguarda que aprende com a correção. O guardião passou de "cobrar o vendedor" pra "executar a agenda da IA e transferir pendência".</div>
+
+<div class="note" style="left:2300px;top:2230px;width:500px"><b style="color:var(--ink)">Decisões que valem</b><br>D-01 produto da kompila, multi-tenant · D-02 Supabase próprio · D-03 Meta direto · D-04 pg_cron · D-05 regra em SQL · D-06 conector por tenant · D-07 Haiku na frente, Claude 5 atrás · D-09 perder exige motivo · D-10 faixa de preço, nunca número seco. <b>Nova D-11:</b> a fase é da IA; a pessoa corrige, e a correção vira regra. <b>D-12:</b> lead sem dono é normal; dono só quando a IA chama.</div>
+
+<div class="note" style="left:2860px;top:1160px;width:640px"><b style="color:var(--ink)">Fase 0, 3 sessões paralelas (do PROJETO.md, ajustado)</b><br><b>BANCO</b>: schema acima, RLS, funções, gatilhos, cron, views. <b>BOT E MOTORES</b>: conector P1LED chamando o Copiloto com 7 testes, bot com as ferramentas e os guardrails, retaguarda do briefing. <b>APP</b>: as 8 telas da v2.1 lendo das views, celular em 390 px. Contrato entre sessões: este mapa. Só BANCO escreve migração.</div>
+
+</div></div>
+
+<script>
+/* ligações: de → para, classe, rótulo. As caixas são achadas por id. */
+const W=[
+ ['c_wa','e_wh','w-data','mensagem, status'],
+ ['c_form','e_lead','w-data','lead novo'],
+ ['c_base','e_import','w-data','CSV'],
+ ['e_wh','t_lead','w-data','receber_mensagem_lead()'],
+ ['e_wh','t_msg','w-data','wa_id único'],
+ ['e_lead','t_lead','w-data',''],
+ ['e_import','t_perda','w-data','volta_em'],
+ ['t_msg','i_bot','w-ia','Database Webhook · insert de=lead'],
+ ['i_bot','i_con','w-conf','lê tom, autonomia, escalada'],
+ ['i_bot','i_mot_p1','w-ia','tool call'],
+ ['i_bot','i_mot_mrv','w-ia','tool call'],
+ ['i_bot','t_msg','w-ia','de=ia · de=tool'],
+ ['i_bot','t_briefing','w-ia','briefing'],
+ ['i_bot','t_agenda','w-ia','agendar()'],
+ ['i_bot','t_pend','w-ia','escalar()'],
+ ['i_bot','e_send','w-ia','responde'],
+ ['e_send','c_wa','w-data','Graph API'],
+ ['t_pend','e_push','w-time','insert → push'],
+ ['e_push','c_push','w-data','aviso'],
+ ['i_con','t_conector','w-conf','jsonb versionado'],
+ ['i_mot_p1','t_msg','w-data','tool_saida'],
+ ['g_cron','t_pend','w-time','transfere · 24 h'],
+ ['g_cron','t_agenda','w-time','executa'],
+ ['g_cron','e_send','w-time','follow-up · template'],
+ ['t_evento','e_out','w-data','insert → webhook'],
+ ['e_out','c_out','w-ext','POST por evento'],
+ ['t_views','u_ger','w-ui','Realtime'],
+ ['t_views','u_vend','w-ui','RLS: só o dele'],
+ ['u_ger','t_fn','w-ui','resolver · corrigir'],
+ ['u_vend','t_fn','w-ui','aprovar'],
+ ['u_ger','i_con','w-conf','edita · exporta'],
+ ['i_back','t_aud','w-ia','auditoria'],
+ ['i_back','t_resumo','w-ia','08:00'],
+ ['i_back','i_con','w-conf','propõe regra'],
+ ['i_learn','i_back','w-ia',''],
+ ['i_mot_p1','i_mot_new','w-conf','molde'],
+ ['e_auth','u_ger','w-ui','Auth · Realtime'],
+ ['t_hooks','i_bot','w-ia',''],
+ ['t_hooks','g_cron','w-time','cron 1 min'],
+];
+const cv=document.getElementById('cv'), svg=document.getElementById('wires');
+function rect(id){const e=document.getElementById(id); return {x:e.offsetLeft,y:e.offsetTop,w:e.offsetWidth,h:e.offsetHeight}}
+function draw(){svg.innerHTML='';
+  W.forEach(([a,b,cls,lbl])=>{const A=rect(a),B=rect(b); let x1,y1,x2,y2;
+    if(B.x>A.x+A.w){x1=A.x+A.w;y1=A.y+A.h/2;x2=B.x;y2=B.y+B.h/2}
+    else if(A.x>B.x+B.w){x1=A.x;y1=A.y+A.h/2;x2=B.x+B.w;y2=B.y+B.h/2}
+    else if(B.y>A.y){x1=A.x+A.w/2;y1=A.y+A.h;x2=B.x+B.w/2;y2=B.y}
+    else{x1=A.x+A.w/2;y1=A.y;x2=B.x+B.w/2;y2=B.y+B.h}
+    const dx=Math.max(60,Math.abs(x2-x1)*0.4); const horiz=Math.abs(x2-x1)>Math.abs(y2-y1);
+    const d=horiz?`M${x1} ${y1} C${x1+(x2>x1?dx:-dx)} ${y1}, ${x2-(x2>x1?dx:-dx)} ${y2}, ${x2} ${y2}`:`M${x1} ${y1} C${x1} ${y1+(y2>y1?60:-60)}, ${x2} ${y2-(y2>y1?60:-60)}, ${x2} ${y2}`;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('d',d); p.setAttribute('class',cls); p.setAttribute('marker-end','url(#m-'+cls+')'); svg.appendChild(p);
+    if(lbl){const mx=(x1+x2)/2,my=(y1+y2)/2; const t=document.createElementNS('http://www.w3.org/2000/svg','text'); t.setAttribute('x',mx); t.setAttribute('y',my-4); t.setAttribute('text-anchor','middle'); t.textContent=lbl; const bg=document.createElementNS('http://www.w3.org/2000/svg','rect'); svg.appendChild(t); const bb=t.getBBox(); bg.setAttribute('x',bb.x-4); bg.setAttribute('y',bb.y-2); bg.setAttribute('width',bb.width+8); bg.setAttribute('height',bb.height+4); bg.setAttribute('rx',4); bg.setAttribute('class','lbl'); bg.setAttribute('fill','#fff'); bg.setAttribute('opacity','.92'); svg.insertBefore(bg,t)}
+  });
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+  defs.innerHTML=['w-data','w-ia','w-time','w-ui','w-ext','w-conf'].map(c=>`<marker id="m-${c}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${({'w-data':'#4b525b','w-ia':'#12803F','w-time':'#c9203a','w-ui':'#1f4fa3','w-ext':'#5b2ea6','w-conf':'#9a5b00'})[c]}"/></marker>`).join('');
+  svg.prepend(defs);
+}
+/* pan e zoom */
+const vp=document.getElementById('vp'); let s=1,tx=0,ty=0,drag=null;
+function apply(){cv.style.transform=`translate(${tx}px,${ty}px) scale(${s})`}
+function fit(){const r=vp.getBoundingClientRect(); s=Math.min(r.width/4400,r.height/2640)*0.98; tx=(r.width-4400*s)/2; ty=(r.height-2640*s)/2; apply()}
+function zoomBy(k){const r=vp.getBoundingClientRect(); const cx=r.width/2,cy=r.height/2; tx=cx-(cx-tx)*k; ty=cy-(cy-ty)*k; s*=k; apply()}
+vp.addEventListener('mousedown',e=>{drag={x:e.clientX-tx,y:e.clientY-ty};vp.classList.add('drag')});
+window.addEventListener('mousemove',e=>{if(!drag)return;tx=e.clientX-drag.x;ty=e.clientY-drag.y;apply()});
+window.addEventListener('mouseup',()=>{drag=null;vp.classList.remove('drag')});
+vp.addEventListener('wheel',e=>{e.preventDefault(); const k=e.deltaY<0?1.1:1/1.1; const r=vp.getBoundingClientRect(); const cx=e.clientX-r.left,cy=e.clientY-r.top; tx=cx-(cx-tx)*k; ty=cy-(cy-ty)*k; s*=k; apply()},{passive:false});
+document.fonts.ready.then(()=>{draw();fit()}); setTimeout(()=>{draw()},800);
+window.addEventListener('resize',()=>{});
+</script>
+</body>
+</html>
