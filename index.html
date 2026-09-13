@@ -2,1259 +2,742 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script>document.documentElement.classList.add('js');</script>
-<title>kompila · do bruto ao pronto.</title>
-<meta name="description" content="kompila: estúdio de tecnologia criativa. Estratégia, criatividade e IA para transformar ideias em soluções que funcionam. do bruto ao pronto.">
-<meta name="theme-color" content="#0A0B0E">
-<link rel="canonical" href="https://kompila.com.br/">
-<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
-<meta property="og:title" content="kompila · do bruto ao pronto.">
-<meta property="og:description" content="Estúdio de tecnologia criativa. Estratégia, design e IA para transformar ideias soltas em soluções que funcionam.">
-<meta property="og:image" content="https://kompila.com.br/img/og-image.jpg">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://kompila.com.br/">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"ProfessionalService",
-  "name":"kompila",
-  "url":"https://kompila.com.br/",
-  "email":"kompila.ai@gmail.com",
-  "description":"Estúdio de tecnologia criativa: estratégia, design e inteligência artificial do bruto ao pronto.",
-  "sameAs":["https://www.instagram.com/kompila.ai"]
-}
-</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kompila · você não perde venda por falta de lead. perde porque ninguém respondeu.</title>
+<meta name="description" content="Kompila Lead Recovery: o CRM que cobra resposta, o agente que atende no WhatsApp, a cotação dentro da conversa e o conector para o CRM que você já paga. Humano em 5 minutos. Nunca 24 horas sem resposta. Nenhum lead sem dono.">
+<meta property="og:title" content="kompila · lead recovery">
+<meta property="og:description" content="Você não perde venda por falta de lead. Perde porque ninguém respondeu.">
+<meta property="og:image" content="https://kompila.com.br/img/hero-diretor.webp">
+<meta name="theme-color" content="#f2f3ef">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="img/avatar-k.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;650;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if(!/static/.test(location.search))document.documentElement.classList.add('js')</script>
 <style>
+/* ===== tokens · brandbook v2 + identidade v2 (70% papel, 20% carbono, 10% verde) ===== */
 :root{
-  --carbon:#0A0B0E;
-  --panel:#11151A;
-  --line:#252C34;
-  --paper:#F2F3EF;
-  --ink:#101114;
-  --white:#E9EBEE;
-  --muted:#949DA7;
-  --dim:#5E6873;
-  --amber:#FFB224;
-  --green:#2FD67B;
-  --green-paper:#159754;
-  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
-  --sans:'Inter',system-ui,sans-serif;
-  --disp:'Anton',Impact,sans-serif;
-  --ease:cubic-bezier(.16,1,.3,1);
+  --paper:#f2f3ef;--white:#ffffff;--paper2:#e9ebe6;--line:#d9dcd4;--ink:#0a0b0e;--muted:#4a525b;--dim:#7a838c;
+  --carbon:#0a0b0e;--carbon2:#11151a;--cline:#252c34;--off:#e9ebee;--cmuted:#949da7;--cdim:#5e6873;
+  --green:#2fd67b;--green-ink:#159754;--green-deep:#0e5c33;--amber:#ffb224;--amber-ink:#a86a00;--red:#ff6577;--red-ink:#c9303c;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;--sans:"Inter",system-ui,sans-serif;
+  --t1:clamp(44px,6.2vw,92px);--t2:clamp(40px,5.2vw,76px);--t3:clamp(28px,3.2vw,46px);--t4:22px;--body:18px;--small:14px;--label:12px;
+  --r:40px;--r2:24px;--shell:1280px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  background:var(--carbon);color:var(--white);
-  font-family:var(--sans);font-size:16px;line-height:1.6;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 var(--body)/1.5 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.045em;line-height:1}
+p{margin:0}
+.shell{width:min(var(--shell),calc(100% - 48px));margin:auto}
+.k{font:500 var(--label) var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.b{color:var(--green-ink)}.on-dark .b,.dark .b{color:var(--green)}
+.mod{color:var(--amber-ink)}.dark .mod{color:var(--amber)}
+.grad{background:linear-gradient(100deg,#2fd67b 0%,#8fe3b0 40%,#159754 75%,#2fd67b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dots{background-image:radial-gradient(circle,rgba(10,11,14,.11) 1px,transparent 1.4px);background-size:22px 22px}
+.dark{background:var(--carbon);color:var(--off)}
+.dark .k{color:var(--cdim)}
+/* botões */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;font:500 16px var(--sans);letter-spacing:-.01em;background:var(--ink);color:#fff;transition:transform .15s,box-shadow .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn.wpp{background:var(--green-ink);color:#fff;box-shadow:0 12px 30px rgba(21,151,84,.28)}
+.btn.wpp svg{width:20px;height:20px;fill:currentColor}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+.dark .btn.ghost{color:var(--off);border-color:var(--cline)}.dark .btn.ghost:hover{border-color:var(--off)}
+.btn.light{background:#fff;color:var(--ink)}
+.scr{display:inline-block}
+/* ===== moldura entre colchetes (Clarvos) ===== */
+.frame{position:fixed;inset:10px;pointer-events:none;z-index:60;font:500 34px var(--mono);color:var(--green-ink);line-height:1}
+.frame i{position:absolute;font-style:normal;opacity:.9}
+.frame .tl{left:6px;top:0}.frame .tr{right:6px;top:0}.frame .bl{left:6px;bottom:0}.frame .br{right:6px;bottom:0}
+/* ===== nav pílula ===== */
+nav{position:fixed;top:32px;left:0;right:0;z-index:50;pointer-events:none;transition:transform .35s}
+nav.hide{transform:translateY(-120%)}
+nav .shell{display:flex;justify-content:space-between;align-items:center;gap:12px}
+nav .pill{pointer-events:auto;display:flex;align-items:center;gap:22px;padding:10px 10px 10px 18px;border-radius:999px;background:rgba(255,255,255,.78);backdrop-filter:blur(18px);border:1px solid rgba(10,11,14,.08);box-shadow:0 10px 30px rgba(10,11,14,.08)}
+nav .logo{font:600 16px var(--mono);letter-spacing:-.02em;white-space:nowrap}
+nav .links{display:flex;gap:18px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+nav .links a:hover{color:var(--ink)}
+nav .pill .btn{padding:10px 16px;font-size:14px}
+/* ===== hero: uma tela, dois títulos no mesmo lugar, botões no fim ===== */
+.hero{margin:12px;border-radius:var(--r);overflow:hidden;position:relative;background:#0a0b0e;color:#fff;height:calc(100svh - 24px);min-height:640px}
+.hero .bgwrap{position:absolute;inset:0;z-index:1}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:68% 40%}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,11,14,.8) 0%,rgba(10,11,14,.55) 42%,rgba(10,11,14,.08) 72%),linear-gradient(180deg,rgba(10,11,14,.3),transparent 35%,transparent 60%,rgba(10,11,14,.85))}
+.hero .fio{position:absolute;left:-2%;right:-2%;top:56%;height:220px;width:104%;pointer-events:none;opacity:.95}
+.hero .in{position:relative;z-index:2;height:100%;padding:130px 6% 52px;display:grid;grid-template-rows:auto 1fr auto;align-content:start}
+.hero .sub{max-width:420px;font-size:clamp(17px,1.5vw,22px);line-height:1.4;color:rgba(255,255,255,.85);letter-spacing:-.01em}
+.hero .sub .k{color:rgba(255,255,255,.55);display:block;margin-bottom:14px}
+.hero .titles{display:grid;align-self:center;margin-top:20px}
+.hero h1{grid-area:1/1;font-size:var(--t1);letter-spacing:-.05em;line-height:.96;max-width:13ch;transition:opacity .6s}
+.hero h1.gone{opacity:0;pointer-events:none}
+.hero .h1b{visibility:hidden;transition:font-size .7s cubic-bezier(.2,.8,.2,1),opacity .6s}.hero .h1b.live{visibility:visible}.hero .h1b.small{font-size:calc(var(--t1) * .78)}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;z-index:3;opacity:0;transform:translateY(14px);transition:opacity .7s,transform .7s}
+.hero .ctas.show{opacity:1;transform:none}
+.hero .ctas .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
+.hero .hcol{position:absolute;right:6%;top:0;bottom:0;z-index:3;width:340px;display:flex;align-items:center}
+.hero .hcard{position:static;width:340px;display:grid;gap:10px}
+.hero h1 .wrd{white-space:nowrap;display:inline}.hero h1 .ch{opacity:0}.hero h1 .ch.on{opacity:1}
+.hero h1 .caret{display:inline-block;width:.06em;height:.9em;background:#2fd67b;vertical-align:-.08em;margin-left:.04em;animation:blink 1s steps(2) infinite}
+.echo{position:relative;display:inline-block}
+.echo i{position:absolute;left:0;top:0;font-style:normal;opacity:0;pointer-events:none;white-space:nowrap}
+/* card do lead flutuando (nosso motion, versão hero) */
+.bub{background:#fff;color:#0a0b0e;border-radius:16px 16px 16px 4px;padding:12px 14px;font-size:14px;line-height:1.4;box-shadow:0 20px 50px rgba(0,0,0,.35);opacity:0;transform:translateY(10px);transition:.5s}
+.bub.show{opacity:1;transform:none}
+.bub .w{display:block;font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green-ink);margin-bottom:4px}
+.bub .t{display:block;font:500 10px var(--mono);color:#9aa1a8;text-align:right;margin-top:6px}
+.lead{background:rgba(17,21,26,.86);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--cline);border-radius:14px;padding:14px 16px;color:var(--off);opacity:0;transform:translateY(10px);transition:.5s}
+.lead.show{opacity:1;transform:none}
+.lead.warn{border-left-color:var(--amber)}.lead.bad{border-left-color:var(--red)}.lead.ok{border-left-color:var(--green)}
+.lead .kk{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cdim)}
+.lead .who{font-weight:600;font-size:15px;margin-top:2px}
+.lead .meta{font:500 11px var(--mono);color:var(--cmuted)}
+.lead .timer{display:flex;align-items:baseline;gap:8px;margin-top:10px}
+.lead .timer b{font:600 36px var(--mono);letter-spacing:-.05em;line-height:1;transition:color .3s}
+.lead .timer span{font:500 11px var(--mono);color:var(--cdim)}
+.lead.warn .timer b{color:var(--amber)}.lead.bad .timer b{color:var(--red)}.lead.ok .timer b{color:var(--green)}
+.lead .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;min-height:24px}
+.tag{font:600 10px var(--mono);letter-spacing:.06em;padding:4px 8px;border-radius:6px;border:1px solid;display:none}
+.tag.show{display:inline-block}
+.tag.bad{color:var(--red);border-color:rgba(255,101,119,.5);background:rgba(255,101,119,.1)}
+.tag.warn{color:var(--amber);border-color:rgba(255,178,36,.5);background:rgba(255,178,36,.08)}
+.tag.ok{color:var(--green);border-color:rgba(47,214,123,.5);background:rgba(47,214,123,.08)}
+/* ===== logos (HA) ===== */
+.logos{padding:40px 12px 0}
+.logos .pill{background:var(--carbon);color:var(--off);border-radius:999px;padding:26px 40px;display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:16px 30px;max-width:1100px;margin:auto}
+.logos .pill span{font:600 clamp(15px,1.6vw,21px) var(--sans);letter-spacing:-.03em;color:#c5cbd2}
+.logos .pill span.m{font-family:var(--mono);font-weight:600;letter-spacing:-.02em}
+.logos .cap{text-align:center;margin-top:14px}
+/* ===== seções ===== */
+section{padding:120px 0}
+.head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:60px}
+.head h2{font-size:var(--t2)}
+.head .lead-p{color:var(--muted);font-size:20px;line-height:1.45;max-width:520px;letter-spacing:-.01em}
+.dark .head .lead-p{color:var(--cmuted)}
+.head .k{display:block;margin-bottom:18px}
+.two-tone .dimt{color:var(--dim)}.dark .two-tone .dimt{color:var(--cdim)}
+/* ===== bloco do motion (carbono) + sem/com ===== */
+.demo{margin:12px;border-radius:var(--r);padding:110px 6%;position:relative;overflow:hidden}
+.demo-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:center}
+.acts{display:grid}
+.act{grid-area:1/1;opacity:0;transition:opacity .35s;pointer-events:none}
+.act.on{opacity:1;pointer-events:auto}
+.act h3{font-size:var(--t3);color:var(--off);line-height:1.04}
+.act p{font-size:18px;color:var(--cmuted);max-width:440px;margin-top:20px;line-height:1.45}
+.act p b{color:var(--off);font-weight:500}
+.wd{display:inline-block;color:#3a424c;transition:color .35s;white-space:pre-wrap}
+.wd.lit{color:inherit}.act p .wd.lit{color:var(--cmuted)}.act p b .wd.lit{color:var(--off)}
+.act-nav{display:flex;gap:8px;margin-top:36px;max-width:440px}
+.act-nav button{flex:1;height:26px;background:transparent;border:0;padding:0;cursor:pointer;text-align:left}
+.act-nav button i{display:block;height:2px;background:#252c34;position:relative;overflow:hidden}
+.act-nav button i:after{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:var(--green)}
+.act-nav button.done i:after{width:100%}
+.act-nav button.on i:after{animation:fill var(--d,5s) linear forwards}
+@keyframes fill{to{width:100%}}
+.act-nav button span{display:block;font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#5e6873;margin-top:8px;white-space:nowrap}
+.act-nav button.on span{color:var(--off)}
+.stage{position:relative;min-width:0}
+.scene{position:absolute;left:50%;top:0;width:560px;height:540px;transform-origin:top center;transform:translateX(-50%)}
+.scene>*{position:absolute}
+.logo-state{top:0;right:0;font:600 15px var(--mono);display:flex;gap:14px;align-items:center}
+.logo-state .proc{color:var(--amber)}.logo-state .proc .dd:after{content:"+0<";animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.logo-state .st.hide{display:none}
+.logo-state small{font:500 10px var(--mono);color:var(--cdim);letter-spacing:.14em;text-transform:uppercase}
+.brk{top:50%;margin-top:-80px;font:500 150px var(--mono);line-height:1;color:var(--green);opacity:0;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .5s;pointer-events:none;z-index:7}
+.brk.l{left:-64px;transform:translateX(-60px)}.brk.r{right:-64px;transform:translateX(60px)}
+.demo[data-act="3"] .brk{opacity:1;transform:none}
+.chat{left:0;top:50px;width:320px;background:var(--carbon2);border:1px solid var(--cline);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.55);opacity:0;transform:translateY(30px) scale(.96);transition:all .6s cubic-bezier(.2,.8,.2,1);overflow:hidden;color:var(--off)}
+.demo[data-act="1"] .chat,.demo[data-act="2"] .chat,.demo[data-act="3"] .chat{opacity:1;transform:none}
+.demo[data-act="4"] .chat{opacity:0;transform:translate(-40px,20px) scale(.9)}
+.chat-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--cline)}
+.chat-h .av{width:30px;height:30px;border-radius:50%;background:#171c22;display:grid;place-items:center;font:600 11px var(--mono)}
+.chat-h b{font-size:13px;display:block}.chat-h small{font:500 10px var(--mono);color:var(--cdim)}
+.chat-h .wa{margin-left:auto;font:600 10px var(--mono);color:var(--green);letter-spacing:.1em}
+.chat-b{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:250px}
+.cb{max-width:86%;padding:10px 12px;font-size:13px;line-height:1.4;border:1px solid var(--cline);border-radius:12px;background:#171c22;display:none}
+.cb.show{display:block}
+.cb time{display:block;font:500 9px var(--mono);color:var(--cdim);margin-top:6px;text-align:right}
+.cb.me{align-self:flex-end;background:rgba(47,214,123,.08);border-color:rgba(47,214,123,.4)}
+.cb.bot{font-size:12px;color:var(--cmuted);border-style:dashed}
+.cb.bot:before{content:"resposta automática";display:block;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.cb.ia{align-self:flex-end;background:rgba(47,214,123,.08);border-color:rgba(47,214,123,.4)}
+.cb.ia:before{content:"kompila · agente";display:block;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:4px}
+.cb .opts{display:flex;gap:6px;margin-top:8px}.cb .opts span{font:600 10px var(--mono);padding:4px 9px;border:1px solid rgba(47,214,123,.5);border-radius:999px;color:var(--green)}
+.cb.me:before{content:"Renata · corretora";display:block;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:4px}
+.typing{display:none;gap:4px;padding:10px 12px;border:1px solid var(--cline);border-radius:12px;width:max-content;background:#171c22}
+.typing.show{display:flex}.typing.me{align-self:flex-end}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--cmuted);animation:tp 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.leadcard{right:0;top:150px;width:290px;background:var(--carbon2);border:1px solid var(--cline);border-left:3px solid var(--cline);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.55);padding:18px 20px;opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.2,.8,.2,1);color:var(--off)}
+.demo[data-act="1"] .leadcard,.demo[data-act="2"] .leadcard,.demo[data-act="3"] .leadcard{opacity:1;transform:none}
+.demo[data-act="4"] .leadcard{opacity:0;transform:translate(40px,20px) scale(.9)}
+.leadcard.warn{border-left-color:var(--amber)}.leadcard.bad{border-left-color:var(--red)}.leadcard.ok{border-left-color:var(--green)}
+.leadcard .kk{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cdim)}
+.leadcard .who{font-size:15px;font-weight:600;margin-top:4px}.leadcard .meta{font:500 11px var(--mono);color:var(--cmuted)}
+.leadcard .timer{margin-top:16px;display:flex;align-items:baseline;gap:8px}
+.leadcard .timer b{font:600 40px var(--mono);letter-spacing:-.05em;line-height:1;transition:color .3s}
+.leadcard .timer span{font:500 11px var(--mono);color:var(--cdim)}
+.leadcard.warn .timer b{color:var(--amber)}.leadcard.bad .timer b{color:var(--red)}.leadcard.ok .timer b{color:var(--green)}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;min-height:52px;align-content:flex-start}
+.rod{margin-top:14px;padding-top:12px;border-top:1px solid var(--cline);display:none;align-items:center;gap:8px}
+.rod.show{display:flex}.rod .kk{margin-right:auto}
+.rod .av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:600 9px var(--mono);background:#171c22;border:1px solid var(--cline);transition:all .15s}
+.rod .av.hot{background:var(--green);color:#0a0b0e;border-color:var(--green);transform:scale(1.15)}
+.rod .av.off{opacity:.35;text-decoration:line-through}
+.win{width:300px;background:var(--carbon2);border:1px solid var(--cline);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55);opacity:0;transform:translateY(60px) scale(.9);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+.win .bar{display:flex;gap:5px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--cline)}
+.win .bar i{width:8px;height:8px;border-radius:50%;background:var(--cline)}
+.win .bar span{margin-left:8px;font:500 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--cdim)}
+.win img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.win.w1{width:360px;left:100px;top:110px;z-index:4}.win.w2{left:-20px;top:280px;z-index:5;width:260px}.win.w3{right:-10px;top:40px;z-index:3;width:280px}.win.w4{right:20px;top:330px;z-index:6;width:250px}
+.demo[data-act="4"] .win{opacity:1;transform:translate(var(--px,0),var(--py,0)) rotate(var(--r,0))}
+.demo[data-act="4"] .win.w1{transition-delay:.05s;--r:-1deg}.demo[data-act="4"] .win.w2{transition-delay:.25s;--r:1.5deg}.demo[data-act="4"] .win.w3{transition-delay:.45s;--r:2deg}.demo[data-act="4"] .win.w4{transition-delay:.65s;--r:-2deg}
+.semcom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:80px;align-items:end}
+.semcom>div{border-radius:var(--r2);padding:30px 30px 34px;min-height:280px;display:flex;flex-direction:column;justify-content:flex-end;gap:14px}
+.semcom .sc1{background:var(--carbon2);border:1px solid var(--cline)}
+.semcom .sc2{background:var(--carbon2);border:1px solid var(--cline)}
+.semcom .sc3{background:var(--green);color:var(--carbon);min-height:330px;box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.semcom h4{margin:0;font:500 var(--t4) var(--sans);letter-spacing:-.03em}
+.semcom ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.semcom li{font-size:15px;color:var(--cmuted);padding-left:18px;position:relative}
+.semcom li:before{content:"×";position:absolute;left:0;font-family:var(--mono);color:var(--red)}
+.semcom .sc3 li{color:rgba(10,11,14,.8)}.semcom .sc3 li:before{content:"→";color:var(--carbon)}
+.semcom .kk{font:600 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cdim)}.semcom .sc3 .kk{color:rgba(10,11,14,.6)}
+/* ===== números gigantes (Grassfeld) ===== */
+.nums{position:relative}
+.nums:before{content:"";position:absolute;inset:0;left:50%;transform:translateX(-50%);width:100%;max-width:1315px;background-image:repeating-linear-gradient(to right,rgba(10,11,14,.07) 0 1px,transparent 1px calc(20% - 1px));pointer-events:none}
+.nums .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
+.num{text-align:center;padding:30px 10px}
+.num b{display:block;font:500 clamp(84px,11vw,168px) var(--sans);letter-spacing:-.07em;line-height:.9}
+.num p{color:var(--muted);font-size:17px;max-width:320px;margin:20px auto 0;line-height:1.45}
+.num small{display:block;font:400 12px var(--mono);color:var(--dim);margin-top:10px}
+.num .k{display:block;margin-bottom:12px}
+/* ===== máquina (Pipefy) + jornada (Attio) ===== */
+.maq{display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:center;margin-top:20px}
+.maq .in,.maq .out{display:grid;gap:12px}
+.maq .card{background:#fff;border-radius:14px;padding:14px 16px;font-size:15px;box-shadow:0 12px 30px rgba(10,11,14,.08);position:relative;min-height:56px}
+.maq .card .w{display:block;font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.maq .card:nth-child(1){transform:rotate(-2deg)}.maq .card:nth-child(2){transform:rotate(1.5deg)}.maq .card:nth-child(3){transform:rotate(-1deg)}
+.maq .core{font:600 clamp(40px,5vw,72px) var(--mono);letter-spacing:-.05em;color:var(--ink);padding:30px 40px;background:var(--carbon);color:var(--off);border-radius:var(--r2);text-align:center;box-shadow:0 30px 60px rgba(10,11,14,.25)}
+.maq .core .b{color:var(--green)}
+.maq .core small{display:block;font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cdim);margin-top:10px}
+.maq .pill{background:var(--paper2);border-radius:999px;padding:12px 18px;font:500 15px var(--sans);display:flex;align-items:center;gap:10px;opacity:.35;transition:.4s}
+.maq .pill.on{opacity:1;background:#fff;box-shadow:0 12px 30px rgba(21,151,84,.18)}
+.maq .pill i{width:10px;height:10px;border-radius:50%;background:var(--line)}.maq .pill.on i{background:var(--green-ink)}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:32px;margin-top:80px;position:relative}
+.flow:before{content:"";position:absolute;left:8%;right:8%;top:22px;height:2px;background:var(--line)}
+.flow .line{position:absolute;left:8%;top:22px;height:2px;background:var(--green-ink);width:0;transition:width 1.6s ease-out}
+.flow.in .line{width:84%}
+.node{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;position:relative;font-size:14px;color:var(--muted);margin-top:44px}
+.node:before{content:"";position:absolute;left:50%;top:-44px;width:2px;height:44px;background:var(--line);transform:translateX(-50%)}
+.node b{display:block;font:600 15px var(--sans);color:var(--ink);margin-bottom:4px;letter-spacing:-.01em}
+.node .st{position:absolute;right:10px;top:-12px;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:var(--paper2);color:var(--dim)}
+.node.done{border-color:var(--green-ink)}.node.done .st{background:rgba(21,151,84,.12);color:var(--green-ink)}
+.node.run{border-color:var(--green-ink);box-shadow:0 0 0 4px rgba(47,214,123,.25)}.node.run .st{background:var(--green);color:var(--carbon)}
+.node .tm{font:600 12px var(--mono);color:var(--green-ink);display:block;margin-bottom:6px}
+/* ===== produto: blocos de cor (Superlógica) ===== */
+.prod{padding:0 12px 12px}
+.blk{border-radius:var(--r);padding:110px 7%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative}
+.blk+.blk{margin-top:-40px}
+.blk.g1{background:var(--green);color:var(--carbon)}
+.blk.g2{background:var(--carbon);color:var(--off)}
+.blk.g3{background:var(--green-ink);color:#fff}
+.blk.g4{background:var(--white);color:var(--ink);border:1px solid var(--line)}
+.blk .etq{font:600 15px var(--mono);letter-spacing:-.02em;display:inline-flex;align-items:center}
+.blk .etq .txt{display:inline-block;overflow:hidden;white-space:nowrap;width:0;transition:width .7s ease;vertical-align:bottom}
+.blk.in .etq .txt{width:var(--w,180px)}
+.blk .etq .b{color:var(--carbon)}.blk.g2 .etq .b{color:var(--green)}.blk.g3 .etq .b{color:#fff}.blk.g4 .etq .b{color:var(--green-ink)}
+.blk .etq .mod{color:var(--amber-ink)}.blk.g2 .etq .mod{color:var(--amber)}.blk.g3 .etq .mod{color:#ffd27a}.blk.g1 .etq .mod{color:#5c3d00}
+.blk .n{font:500 14px var(--mono);opacity:.6;margin-left:14px}
+.blk h3{font-size:var(--t3);margin-top:22px;line-height:1.04}
+.blk h3 .dimt{opacity:.55}
+.blk .task{margin-top:22px;font-size:18px;line-height:1.45;max-width:520px;opacity:.85;letter-spacing:-.01em}
+.blk .task:before{content:"“"}.blk .task:after{content:"”"}
+.blk ul{margin:26px 0 0;padding:0;list-style:none}
+.blk li{padding:12px 0;border-top:1px solid currentColor;border-color:rgba(127,127,127,.35);font-size:15px;opacity:.85}
+.blk li b{font-weight:500;opacity:1}
+.blk .st{position:absolute;right:7%;top:36px;font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:6px 10px;border-radius:999px;border:1px solid currentColor;opacity:.7}
+.shot{border-radius:var(--r2);overflow:hidden;background:#fff;box-shadow:0 40px 80px rgba(10,11,14,.25);aspect-ratio:16/11;position:relative}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left}
+.shot .cur{position:absolute;width:26px;height:26px;left:38%;top:44%;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));animation:cur 6s ease-in-out infinite}
+@keyframes cur{0%,100%{transform:translate(0,0)}35%{transform:translate(140px,60px)}55%{transform:translate(140px,60px) scale(.85)}70%{transform:translate(20px,-40px)}}
+.blk.g2 .shot{box-shadow:0 40px 80px rgba(0,0,0,.6)}
+/* conector em bolhas (Make) */
+.bolhas{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap}
+.bolhas .bb{width:84px;height:84px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font:600 12px var(--sans);text-align:center;color:var(--ink);box-shadow:0 12px 30px rgba(10,11,14,.1);line-height:1.1;padding:6px}
+.bolhas .bb.k{background:var(--carbon);color:var(--green);font:600 22px var(--mono);width:110px;height:110px}
+.bolhas .ln{width:54px;height:2px;background:var(--green-ink);position:relative}
+.bolhas .ln:after{content:"";position:absolute;top:-3px;left:0;width:8px;height:8px;border-radius:50%;background:var(--green);animation:go 1.6s linear infinite}
+@keyframes go{to{left:calc(100% - 8px)}}
+.bolhas .grp{display:grid;gap:12px}
+/* ===== feito para (Oleum) + brilho ===== */
+.para{margin:12px;border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:repeat(3,1fr);background:var(--carbon)}
+.para .p{position:relative;min-height:88vh;padding:0 7% 56px;text-align:left;display:flex;flex-direction:column;justify-content:flex-end;border-right:1px solid var(--cline);overflow:hidden;isolation:isolate}
+.para .p:last-child{border:0}
+/* a foto é o painel inteiro; texto embaixo, no escuro da própria foto */
+.para img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;z-index:1;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.para .p:hover img{transform:scale(1.04)}
+.para .p:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,14,.15) 0%,transparent 30%,transparent 50%,rgba(10,11,14,.92) 82%);z-index:2;pointer-events:none}
+.para h3{font-size:clamp(28px,2.6vw,40px);color:var(--off);line-height:1.05;max-width:12ch;position:relative;z-index:3}
+.para p{color:var(--cmuted);font-size:16px;max-width:320px;margin-top:14px;line-height:1.45;position:relative;z-index:3}
+/* ===== manifesto: cena tela cheia ===== */
+.mani{margin:12px;border-radius:var(--r);overflow:hidden;position:relative;min-height:92svh;display:flex;align-items:center;justify-content:center;text-align:center;background:#0a0b0e;color:#fff}
+.mani img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%;z-index:1}
+.mani:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 50% 45%,rgba(10,11,14,.72),rgba(10,11,14,.2) 70%,transparent),linear-gradient(180deg,rgba(10,11,14,.5),transparent 40%);z-index:2}
+.mani .shell{position:relative;z-index:3}
+.mani p.big{font-size:clamp(26px,3.2vw,44px);line-height:1.25;letter-spacing:-.03em;max-width:980px;margin:auto;font-weight:500}
+.mani .wm{color:rgba(255,255,255,.28);transition:color .3s}.mani .wm.lit{color:#fff}
+.mani .no{color:rgba(255,255,255,.7)}.mani .no .slot{background:rgba(47,214,123,.12);border:1px solid rgba(47,214,123,.35);color:var(--green)}
+.no{margin-top:70px;font-size:clamp(24px,3vw,36px);letter-spacing:-.03em;display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap}
+.no .slot{display:inline-grid;padding:10px 20px;border-radius:16px;background:var(--carbon);color:var(--off);overflow:hidden;min-width:16ch;text-align:left}
+.no .slot i{grid-area:1/1;font-style:normal;opacity:0;transform:translateY(100%);animation:slot 12s infinite}
+.no .slot i:nth-child(2){animation-delay:3s}.no .slot i:nth-child(3){animation-delay:6s}.no .slot i:nth-child(4){animation-delay:9s}
+@keyframes slot{0%,3%{opacity:0;transform:translateY(100%)}8%,22%{opacity:1;transform:none}27%,100%{opacity:0;transform:translateY(-100%)}}
+/* ===== prova ===== */
+.prova{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pc{background:#fff;border-radius:var(--r2);padding:34px;display:flex;flex-direction:column;gap:14px;min-height:340px}
+.pc .k{display:block}
+.pc b{font:500 clamp(48px,5vw,72px) var(--sans);letter-spacing:-.06em;line-height:.95;color:var(--red-ink)}
+.pc p{color:var(--muted);font-size:15px;line-height:1.45}
+.pc small{margin-top:auto;font:400 11px var(--mono);color:var(--dim);line-height:1.5;padding-top:12px;border-top:1px solid var(--line)}
+.quote{margin-top:16px;background:var(--carbon);color:var(--off);border-radius:var(--r2);padding:50px 56px;display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}
+.quote p{font-size:clamp(24px,2.6vw,36px);letter-spacing:-.03em;line-height:1.2;max-width:900px;font-weight:500}
+.quote span{font:500 12px var(--mono);color:var(--cdim);white-space:nowrap}
+/* ===== preço ===== */
+.price{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pr{background:#fff;border-radius:var(--r2);padding:44px;display:flex;flex-direction:column;gap:16px}
+.pr.main{outline:2px solid var(--green);outline-offset:-2px}
+.pr h3{font-size:var(--t3)}
+.pr p{color:var(--muted);font-size:17px;line-height:1.45}
+.pr ul{margin:8px 0 0;padding:0;list-style:none}
+.pr li{padding:12px 0;border-top:1px solid var(--line);font-size:15px;color:var(--muted);display:flex;justify-content:space-between;gap:16px}
+.pr li b{color:var(--ink);font-weight:500;font-family:var(--mono);font-size:13px;white-space:nowrap}
+/* ===== fechamento ===== */
+.cta{margin:12px;border-radius:var(--r);padding:140px 7%;text-align:center}
+.cta h2{font-size:var(--t1);letter-spacing:-.05em;line-height:.96;color:var(--off)}
+.cta .lead-p{color:var(--cmuted);font-size:20px;max-width:640px;margin:26px auto 0;line-height:1.45}
+.cta .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+.cta .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:80px;text-align:left}
+.cta .steps div{border:1px solid var(--cline);border-radius:20px;padding:26px}
+.cta .steps b{display:block;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cdim);margin-bottom:10px}
+.cta .steps span{font-size:18px;letter-spacing:-.02em;display:block;color:var(--off)}
+.cta .steps small{display:block;color:var(--cmuted);font-size:13px;margin-top:6px}
+footer{padding:40px 6%}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font:500 12px var(--mono);color:var(--dim)}
+.foot .logo{font-size:15px;color:var(--ink);font-weight:600}
+/* ===== chat do agente (Pipefy) ===== */
+.kchat{position:fixed;right:22px;bottom:22px;z-index:55;width:360px;max-width:calc(100vw - 44px);background:#fff;border-radius:22px;box-shadow:0 30px 70px rgba(10,11,14,.28);overflow:hidden;font-size:14px}
+.kchat:not(.open){width:auto;border-radius:999px;box-shadow:0 10px 30px rgba(10,11,14,.25)}
+.kchat:not(.open) .msgs,.kchat:not(.open) .opts,.kchat:not(.open) form,.kchat:not(.open) .wa{display:none}
+.kchat header{display:flex;align-items:center;gap:10px;padding:0 16px;background:var(--carbon);color:var(--off);cursor:pointer;height:44px}
+.kchat header .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(47,214,123,.25)}
+.kchat header b{font:600 13px var(--mono);letter-spacing:-.02em}.kchat header b .b{color:var(--green)}
+.kchat header small{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--cdim);margin-left:auto}
+.kchat:not(.open) header b,.kchat:not(.open) header small{display:none}
+.kchat:not(.open) header:after{content:"chat";font:600 13px var(--mono)}
+.kchat .msgs{padding:16px;display:grid;gap:10px;max-height:300px;overflow:auto}
+.kchat .m{padding:10px 14px;border-radius:14px;max-width:88%;line-height:1.4}
+.kchat .m.bot{background:var(--paper);border-bottom-left-radius:4px}
+.kchat .m.me{background:var(--green-ink);color:#fff;justify-self:end;border-bottom-right-radius:4px}
+.kchat .opts{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 12px}
+.kchat .opts button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font:500 13px var(--sans);cursor:pointer}
+.kchat .opts button:hover{border-color:var(--ink)}
+.kchat form{display:flex;gap:8px;padding:12px 16px 16px;border-top:1px solid var(--line)}
+.kchat input{flex:1;border:1px solid var(--line);border-radius:999px;padding:10px 14px;font:400 14px var(--sans)}
+.kchat form button{border:0;background:var(--ink);color:#fff;border-radius:999px;width:40px;cursor:pointer}
+.kchat .wa{display:block;text-align:center;padding:10px;font:500 12px var(--mono);color:var(--green-ink);border-top:1px solid var(--line)}
+/* ===== reveal ===== */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+html:not(.js) .rv{opacity:1;transform:none}
+html:not(.js) .hero h1 .ch{opacity:1}html:not(.js) .hero .h1a{display:none}html:not(.js) .hero .h1b{visibility:visible}html:not(.js) .hero .ctas{opacity:1;transform:none}
+html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;transform:none}html:not(.js) .maq .pill{opacity:1}html:not(.js) .blk .etq .txt{width:var(--w)}html:not(.js) .flow .line{width:84%}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+/* ===== responsivo ===== */
+@media(max-width:1100px){
+  .blk{grid-template-columns:1fr;gap:40px;padding:80px 7%}
+  .para{grid-template-columns:1fr}.para .p{min-height:70vh;border-right:0;border-bottom:1px solid var(--cline)}
+  .maq{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}.flow:before,.flow .line{display:none}
+  .demo-grid,.head,.price{grid-template-columns:1fr}
+  .semcom,.nums .grid,.prova{grid-template-columns:1fr}
+  .hero .hcol{display:none}
+  .frame{font-size:24px}
+  nav .links{display:none}
 }
-.js body.is-loading{overflow:hidden;}
-::selection{background:var(--green);color:var(--carbon);}
-a{color:inherit;text-decoration:none;}
-img{max-width:100%;display:block;}
-.shell{width:min(1180px,calc(100% - 44px));margin:0 auto;}
-
-/* grão global */
-body::after{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:6;opacity:.55;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+@media(max-width:700px){
+  .shell{width:min(100% - 24px,var(--shell))}
+  section{padding:80px 0}.demo,.cta{padding:80px 6%}
+  .hero{margin:8px;min-height:calc(100svh - 16px)}
+  .hero{height:auto;min-height:calc(100svh - 16px)}
+  .hero .in{padding:100px 6% 40px;height:auto;min-height:calc(100svh - 16px)}
+  .hero h1{max-width:none}
+  .hero .hcol{display:none}
+  .hero .fio{display:none}
+  .cta .steps{grid-template-columns:1fr}
+  .quote{grid-template-columns:1fr;padding:34px}
+  .flow{grid-template-columns:1fr}
+  .logos .pill{border-radius:28px;padding:22px}
+  .kchat{right:12px;bottom:12px}
+  .frame{display:none}
+  .act-nav button span{display:none}
 }
-
-.disp{font-family:var(--disp);font-weight:400;text-transform:lowercase;letter-spacing:.005em;line-height:.9;}
-
-/* elementos manipulados por scroll: só transform/opacity */
-.j{will-change:transform,opacity;}
-
-/* ============ LOADER · DO BRUTO AO PRONTO ============ */
-.site-loader{display:none;}
-.js .site-loader{
-  position:fixed;inset:0;z-index:100;background:var(--carbon);color:var(--white);
-  display:grid;grid-template-rows:auto 1fr auto;padding:clamp(22px,4vw,56px);
-  overflow:hidden;isolation:isolate;transition:opacity .55s var(--ease),visibility .55s;
-}
-.site-loader::before{
-  content:"";position:absolute;inset:0;z-index:-2;opacity:.28;
-  background-image:radial-gradient(rgba(233,235,238,.18) .8px,transparent .8px);
-  background-size:7px 7px;
-}
-.site-loader::after{
-  content:"";position:absolute;z-index:-1;width:min(54vw,720px);aspect-ratio:1;
-  right:-12%;bottom:-35%;background:var(--green);
-  clip-path:polygon(50% 0,100% 100%,0 100%);transform:rotate(-18deg);
-  animation:loaderShape 1.25s var(--ease) both;
-}
-.site-loader.done{opacity:0;visibility:hidden;pointer-events:none;}
-.loader-top,.loader-bottom{display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;z-index:2;}
-.loader-kicker,.loader-status,.loader-count{font-family:var(--mono);}
-.loader-kicker{font-size:clamp(12px,1.4vw,15px);font-weight:600;letter-spacing:.02em;}
-.loader-kicker .g,.loader-status .g{color:var(--green);}
-.loader-kicker .a{color:var(--amber);}
-.loader-index{font:500 10px var(--mono);letter-spacing:.18em;color:var(--dim);text-transform:uppercase;}
-.loader-core{align-self:center;position:relative;z-index:2;width:min(1120px,100%);}
-.loader-word{
-  font-family:var(--mono);font-size:clamp(48px,11vw,150px);font-weight:600;line-height:.9;
-  letter-spacing:-.065em;text-transform:lowercase;white-space:nowrap;
-}
-.loader-word .g{color:var(--green);}
-.loader-word .raw{color:var(--amber);display:inline-block;animation:loaderGlitch .72s steps(2,end) infinite;}
-.loader-rule{height:1px;background:var(--line);margin-top:clamp(30px,5vw,62px);position:relative;overflow:hidden;}
-.loader-rule span{position:absolute;inset:0;background:linear-gradient(90deg,var(--amber),var(--green));transform:scaleX(0);transform-origin:left;transition:transform .22s linear;}
-.loader-bottom{font-size:11px;color:var(--muted);letter-spacing:.08em;}
-.loader-count{font-family:var(--disp);font-size:clamp(60px,11vw,150px);line-height:.65;color:var(--paper);}
-.loader-count small{font:500 11px var(--mono);color:var(--amber);margin-left:6px;}
-.loader-status{max-width:34ch;text-align:right;text-transform:uppercase;}
-@keyframes loaderGlitch{0%,72%{transform:none}76%{transform:translateX(-.025em) skewX(-5deg)}82%{transform:translateX(.018em)}88%,100%{transform:none}}
-@keyframes loaderShape{from{transform:translate(35%,35%) rotate(-32deg);opacity:0}to{transform:rotate(-18deg);opacity:1}}
-
-/* ============ BARRA DE COMPILAÇÃO ============ */
-.progress{
-  position:fixed;top:0;left:0;height:3px;width:0;z-index:40;
-  background:linear-gradient(90deg,var(--amber),var(--green));
-  background-size:100vw 100%;background-repeat:no-repeat;
-}
-
-/* ============ NAV ============ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:20;
-  background:rgba(9,11,14,.86);backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-.nav-inner{height:62px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
-.mini-logo{font:600 15px var(--mono);white-space:nowrap;}
-.mini-logo .g{color:var(--green);}
-.nav-desc{font:500 10px var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.16em;}
-/* menu na gramática de módulo: .cases .serviços .blog */
-.nav-links{display:flex;gap:clamp(12px,2.4vw,28px);font:500 13px var(--mono);}
-.nav-links a{color:var(--muted);transition:color .18s;}
-.nav-links a .dot{color:var(--amber);}
-.nav-links a::before{content:"[ ";color:transparent;transition:color .18s;}
-.nav-links a::after{content:" ]";color:transparent;transition:color .18s;}
-.nav-links a:hover{color:var(--white);}
-.nav-links a:hover::before,.nav-links a:hover::after{color:var(--green);}
-.nav-links .fila{font-size:8px;color:var(--dim);vertical-align:super;margin-left:4px;letter-spacing:.12em;text-transform:uppercase;}
-.nav-cta{font:600 12px var(--mono);border:1px solid var(--green);color:var(--green);padding:9px 16px;transition:.18s;white-space:nowrap;background:transparent;cursor:pointer;}
-.nav-cta:hover{background:var(--green);color:var(--carbon);}
-
-/* ============ DEBRIS (entulho gráfico atravessando a tela) ============ */
-.debris{
-  position:absolute;pointer-events:none;user-select:none;z-index:1;
-  font:600 clamp(20px,3vw,40px) var(--mono);
-}
-.debris.tri{width:clamp(40px,6vw,90px);height:clamp(40px,6vw,90px);font-size:0;}
-.debris.tri.g{background:var(--green);clip-path:polygon(0 100%,100% 0,100% 100%);}
-.debris.tri.a{background:var(--amber);clip-path:polygon(0 0,100% 0,0 100%);}
-.debris.dots{
-  width:clamp(60px,8vw,120px);height:clamp(60px,8vw,120px);font-size:0;
-  background-image:radial-gradient(currentColor 1.6px,transparent 1.6px);
-  background-size:10px 10px;color:var(--dim);
-}
-
-/* ============ HERO · VÍDEO COMPILANDO NO SCROLL ============ */
-:root{--amber-ink:#B8791B;} /* âmbar rebaixado pra ler sobre papel */
-.hero-stage{height:420vh;position:relative;background:var(--paper);} /* polvo 10s: ~4 telas de pista */
-.hero-sticky{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--paper);}
-#hero-vid,#hero-vid-mobile{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-#hero-vid-mobile{display:none;}
-.hero-over{
-  position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;
-  justify-content:center;padding-top:62px;color:var(--white);
-}
-/* troca de cor automática pelo brilho do frame: .lite = vídeo claro, texto escuro */
-.hero-over,.hero-over .l1,.hero-over .l2,.hero-over .hero-desc,.hero-over .hero-desc strong,
-.hero-over .status,.hero-over .status .amb,.hero-over .logo-vivo .g,.hero-over .logo-vivo .ch,
-.hero-over .btn.ghost{transition:color .35s ease,border-color .35s ease;}
-.hero-over.lite .l2{color:var(--ink);}
-.hero-over.lite .l1{color:var(--amber-ink);}
-.hero-over.lite .hero-desc{color:#4A4F57;}
-.hero-over.lite .hero-desc strong{color:var(--ink);}
-.hero-over.lite .status{color:#6B7178;}
-.hero-over.lite .status .amb{color:var(--amber-ink);}
-.hero-over.lite .status .cursor{background:var(--amber-ink);}
-.hero-over.lite .logo-vivo{color:var(--ink);}
-.hero-over.lite .logo-vivo .g{color:var(--green-paper);}
-.hero-over.lite .logo-vivo .ch.bruto{color:var(--amber-ink);}
-.hero-over.lite .btn.ghost{border-color:rgba(16,17,20,.35);color:var(--ink);}
-.hero-over.lite .hero-scroll-hint{color:#6B7178;}
-.hero-scroll-hint{
-  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
-  font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#6B7178;
-  animation:hintPulse 2s ease-in-out infinite;
-}
-@keyframes hintPulse{50%{transform:translateX(-50%) translateY(5px);}}
-/* setinha "conheça mais": entra quando o polvo explode e sai de cena */
-.hero-more{
-  position:absolute;bottom:34px;left:50%;transform:translate(-50%,16px);
-  font:600 14px var(--mono);letter-spacing:.06em;color:var(--ink);
-  opacity:0;pointer-events:none;transition:opacity .45s var(--ease),transform .45s var(--ease);
-}
-.hero-more .g{color:var(--green-paper);}
-.hero-more .seta{display:inline-block;animation:setaBob 1.6s ease-in-out infinite;}
-@keyframes setaBob{50%{transform:translateY(5px);}}
-.hero-more.on{opacity:1;transform:translate(-50%,0);pointer-events:auto;}
-.hero-more:hover{color:var(--green-paper);}
-.status{font:500 12px var(--mono);color:var(--dim);letter-spacing:.05em;margin-bottom:18px;animation:fadeUp .6s .15s var(--ease) both;}
-.status .amb{color:var(--amber);}
-.status .cursor{display:inline-block;width:8px;height:13px;background:var(--amber);vertical-align:-2px;margin-left:3px;animation:blink 1s steps(1) infinite;}
-@keyframes blink{50%{opacity:0;}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
-.logo-vivo{font:600 clamp(18px,2.2vw,26px) var(--mono);letter-spacing:-.05em;margin-bottom:22px;cursor:pointer;animation:fadeUp .6s .3s var(--ease) both;}
-.logo-vivo .g{color:var(--green);}
-.logo-vivo .ch{display:inline-block;min-width:.58em;text-align:center;}
-.logo-vivo .ch.bruto{color:var(--amber);}
-.hero-h1{font-size:clamp(46px,8.5vw,118px);}
-.hero-h1 .lwrap{display:block;overflow:hidden;}
-.hero-h1 .l1,.hero-h1 .l2{display:block;transform:translateY(112%);animation:lineUp 1s var(--ease) forwards;}
-.hero-h1 .l1{color:var(--amber);animation-delay:.4s;}
-.hero-h1 .l2{color:var(--white);animation-delay:.55s;}
-@keyframes lineUp{to{transform:none;}}
-.hero-desc{margin-top:24px;max-width:52ch;font-size:clamp(15px,1.6vw,17px);color:var(--muted);animation:fadeUp .7s .9s var(--ease) both;}
-.hero-desc strong{color:var(--white);font-weight:650;}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;animation:fadeUp .7s 1.05s var(--ease) both;}
-.btn{
-  display:inline-block;font:600 14px var(--mono);padding:15px 26px;
-  border:1px solid var(--green);color:var(--green);background:transparent;
-  cursor:pointer;transition:background .18s,color .18s,border-color .18s;
-}
-.btn:hover{background:var(--green);color:var(--carbon);}
-.btn.solid{background:var(--green);color:var(--carbon);}
-.btn.solid:hover{background:transparent;color:var(--green);}
-.btn.ghost{border-color:rgba(233,235,238,.35);color:var(--white);}
-.btn.ghost:hover{border-color:var(--white);background:transparent;color:var(--white);}
-.hero-num{
-  position:absolute;right:clamp(8px,3vw,40px);bottom:-2vw;z-index:1;
-  font-family:var(--disp);font-size:clamp(140px,26vw,380px);line-height:1;
-  color:transparent;-webkit-text-stroke:2px rgba(233,235,238,.14);
-  pointer-events:none;user-select:none;
-  animation:numIn 1.6s .8s var(--ease) both;
-}
-@keyframes numIn{from{opacity:0;}to{opacity:1;}}
-
-/* ============ MARQUEE ============ */
-.marquee{
-  overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  padding:16px 0;background:var(--carbon);position:relative;z-index:2;
-}
-.marquee-track{display:flex;white-space:nowrap;width:max-content;animation:mq 26s linear infinite;}
-.marquee span{font:600 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:0 28px;}
-.marquee span b{color:var(--green);font-weight:600;}
-.marquee span i{color:var(--amber);font-style:normal;}
-@keyframes mq{to{transform:translateX(-50%);}}
-.marquee.paper-mq{background:var(--paper);border-color:rgba(16,17,20,.2);}
-.marquee.paper-mq span{color:#6B7178;}
-.marquee.paper-mq span b{color:var(--green-paper);}
-
-/* ============ SEÇÕES ============ */
-section{position:relative;padding:clamp(84px,11vw,120px) 0;overflow:hidden;}
-.label{font:600 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);}
-.paper .label{color:#6B7178;}
-.sec-head{margin-bottom:54px;max-width:900px;position:relative;z-index:2;}
-.sec-head .label{display:block;margin-bottom:20px;}
-.sec-title{font-size:clamp(46px,7.6vw,104px);}
-.sec-title .amb{color:var(--amber);}
-.paper .sec-title .amb{color:var(--green-paper);}
-.sec-sub{margin-top:22px;max-width:58ch;font-size:18px;color:var(--muted);}
-.paper .sec-sub{color:#4A4F57;}
-
-/* ============ PAPER + CORTINA DIAGONAL ============ */
-.paper{background:var(--paper);color:var(--ink);}
-.paper::before{
-  content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;
-  background-image:radial-gradient(rgba(10,11,14,.12) 1px,transparent 1px);
-  background-size:13px 13px;
-}
-.paper .shell{position:relative;z-index:2;}
-.curtain{
-  position:absolute;inset:-2%;background:var(--carbon);z-index:3;pointer-events:none;
-}
-
-/* ============ ESSÊNCIA ============ */
-.principios{border-top:2px solid var(--ink);position:relative;z-index:2;}
-.principio{
-  display:grid;grid-template-columns:180px 1fr 1.2fr;gap:34px;align-items:center;
-  padding:34px 0;border-bottom:1px solid rgba(16,17,20,.25);
-}
-.principio .pnum{font-family:var(--disp);font-size:clamp(64px,8vw,110px);line-height:.9;color:var(--ink);}
-.principio:nth-child(2) .pnum{color:var(--green-paper);}
-.principio:nth-child(3) .pnum{color:var(--amber);-webkit-text-stroke:1px rgba(16,17,20,.35);}
-.principio h3{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.03em;}
-.principio p{color:#4A4F57;font-size:16px;max-width:44ch;}
-
-/* ============ MÓDULOS ============ */
-.modulos-list{border-top:1px solid var(--line);position:relative;z-index:2;}
-.modulo{
-  display:grid;grid-template-columns:1.1fr 1fr auto;gap:28px;align-items:center;
-  padding:36px 0;border-bottom:1px solid var(--line);transition:background .2s;
-}
-.modulo:hover{background:var(--panel);}
-.modulo-mark{font:600 clamp(20px,3.4vw,38px) var(--mono);letter-spacing:-.045em;white-space:nowrap;}
-.modulo-mark .g{color:var(--green);display:inline-block;transition:transform .25s var(--ease);}
-.modulo:hover .modulo-mark .g:first-child{transform:translateX(-6px);}
-.modulo:hover .modulo-mark .g:last-child{transform:translateX(6px);}
-.modulo-mark .amb{color:var(--amber);}
-.modulo p{color:var(--muted);font-size:15px;max-width:44ch;}
-.modulo .tag{font:500 10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);padding:7px 12px;white-space:nowrap;}
-.modulo .tag.on{color:var(--green);border-color:var(--green);}
-.servs{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
-.servs span{
-  font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);border:1px solid var(--line);padding:6px 11px;white-space:nowrap;
-  transition:.18s;
-}
-.modulo:hover .servs span{border-color:var(--dim);}
-.servs span b{color:var(--green);font-weight:500;margin-right:2px;}
-
-/* ============ PROVA EM NÚMEROS ============ */
-.provas{padding:clamp(34px,4vw,48px) 0;background:var(--panel);}
-.provas::before{
-  content:"";position:absolute;inset:0;pointer-events:none;opacity:.08;
-  background-image:linear-gradient(90deg,transparent 49.8%,var(--green) 50%,transparent 50.2%);
-  background-size:25% 100%;
-}
-.provas-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:20px;position:relative;z-index:2;}
-.provas-title{max-width:none;font-size:clamp(28px,3vw,40px);line-height:.94;}
-.provas-title .amb{color:var(--amber);}
-.provas-note{max-width:42ch;font:500 9px var(--mono);line-height:1.55;letter-spacing:.07em;color:var(--dim);text-align:right;}
-.provas-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;z-index:2;}
-.prova{min-width:0;min-height:132px;padding:14px clamp(12px,1.6vw,22px) 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;gap:12px;}
-.prova:last-child{border-right:0;}
-.prova-index{font:500 8px var(--mono);letter-spacing:.14em;color:var(--dim);}
-.prova-num{display:block;font:600 clamp(28px,3.2vw,46px)/.9 var(--mono);letter-spacing:-.07em;color:var(--white);white-space:nowrap;}
-.prova:nth-child(2) .prova-num{color:var(--green);}
-.prova:nth-child(3) .prova-num{color:var(--amber);}
-.prova-num.compact{font-size:clamp(16px,1.7vw,24px);white-space:normal;line-height:1.02;letter-spacing:-.04em;}
-.prova p{max-width:28ch;font:500 9px var(--mono);line-height:1.35;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
-
-/* ============ ACORDEÃO DE JOBS ============ */
-.jobs-acc{border-top:1px solid var(--line);}
-.job{border-bottom:1px solid var(--line);}
-.job-head{
-  display:flex;align-items:center;gap:clamp(16px,3vw,34px);width:100%;
-  padding:26px 0;background:none;border:0;cursor:pointer;text-align:left;color:var(--white);
-  transition:padding-left .2s;
-}
-.job-head:hover{padding-left:14px;}
-.job-num{font:500 12px var(--mono);color:var(--amber);letter-spacing:.1em;}
-.job-nome{font-size:clamp(30px,4.6vw,54px);line-height:1;}
-.job-flag{margin-left:auto;font:600 15px var(--mono);color:var(--muted);white-space:nowrap;}
-.job-flag .g{color:var(--green);}
-.job-body{max-height:0;overflow:hidden;transition:max-height .9s var(--ease);}
-.job.open .job-body{max-height:1900px;}
-.job-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.2vw,24px);
-  padding:4px 0 38px;
-}
-.jcase{margin:0;}
-.jcase img,.jcase video{
-  width:100%;aspect-ratio:16/9;object-fit:contain;background:#0D0F13;
-  border:1px solid rgba(255,255,255,.09);display:block;
-}
-.jcase figcaption{
-  margin-top:10px;font:500 11px var(--mono);letter-spacing:.04em;color:var(--muted);
-}
-.job-cap{font:500 12px var(--mono);letter-spacing:.04em;color:var(--muted);}
-.jcase.vert img,.jcase.vert video{aspect-ratio:4/5;}
-.job-grid.social{grid-template-columns:repeat(6,1fr);gap:10px;}
-
-/* ============ SÉRIE ============ */
-.serie-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,34px);
-  margin-top:10px;position:relative;z-index:2;
-}
-.print{position:relative;}
-.print img{width:100%;aspect-ratio:4/5;object-fit:cover;border:1px solid rgba(255,255,255,.09);box-shadow:0 22px 50px rgba(0,0,0,.45);}
-.print figcaption{margin-top:12px;font:500 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:flex;justify-content:space-between;}
-.serie-cta{margin-top:52px;position:relative;z-index:2;}
-
-/* ============ MANIFESTO ============ */
-.manifesto-shape{
-  position:absolute;top:0;right:-10%;width:46%;height:100%;
-  background:var(--green);clip-path:polygon(62% 0,100% 0,100% 100%,0 100%);
-  opacity:.9;mix-blend-mode:multiply;
-}
-.manifesto-shape::after{
-  content:"";position:absolute;inset:0;
-  background-image:radial-gradient(rgba(10,11,14,.3) 1.2px,transparent 1.2px);
-  background-size:9px 9px;opacity:.3;
-}
-.manifesto-h{font-size:clamp(64px,12.5vw,180px);max-width:7ch;position:relative;z-index:2;}
-.manifesto-h .mw{display:inline-block;white-space:nowrap;}
-.manifesto-h .mch{display:inline-block;}
-.bruto-mark{font:600 clamp(16px,2vw,22px) var(--mono);color:var(--amber);margin-top:30px;position:relative;z-index:2;}
-.bruto-mark .g{color:var(--green-paper);}
-.manifesto-body{margin-top:26px;max-width:50ch;font-size:17px;color:#3A4048;position:relative;z-index:2;}
-.manifesto-body strong{color:var(--ink);}
-
-/* ============ POPUP DE CONTATO + WHATSAPP FLUTUANTE ============ */
-body.modal-open{overflow:hidden;}
-.whatsapp-float{
-  position:fixed;right:clamp(14px,2vw,28px);bottom:clamp(14px,2vw,28px);z-index:35;
-  display:flex;align-items:center;gap:9px;min-height:48px;padding:0 16px;
-  border:1px solid var(--green);background:rgba(9,11,14,.92);color:var(--green);
-  box-shadow:0 14px 38px rgba(0,0,0,.38);backdrop-filter:blur(12px);cursor:pointer;
-  font:600 11px var(--mono);letter-spacing:.04em;transition:.22s var(--ease);
-}
-.whatsapp-float:hover,.whatsapp-float:focus-visible{background:var(--green);color:var(--carbon);transform:translateY(-3px);outline:none;}
-.wpp-dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 rgba(47,214,123,.5);animation:wppPulse 2.2s infinite;}
-.wpp-number{max-width:0;opacity:0;overflow:hidden;white-space:nowrap;transition:max-width .3s var(--ease),opacity .2s;}
-.whatsapp-float:hover .wpp-number,.whatsapp-float:focus-visible .wpp-number{max-width:130px;opacity:1;}
-@keyframes wppPulse{60%{box-shadow:0 0 0 8px rgba(47,214,123,0)}100%{box-shadow:0 0 0 0 rgba(47,214,123,0)}}
-.contact-modal{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:22px;background:rgba(5,7,9,.82);backdrop-filter:blur(12px);opacity:0;visibility:hidden;pointer-events:none;transition:.3s var(--ease);}
-.contact-modal.open{opacity:1;visibility:visible;pointer-events:auto;}
-.contact-dialog{position:relative;width:min(720px,100%);max-height:calc(100svh - 44px);overflow:auto;background:var(--carbon);border:1px solid var(--line);padding:clamp(24px,5vw,54px);box-shadow:0 30px 90px rgba(0,0,0,.6);transform:translateY(28px) scale(.98);transition:.35s var(--ease);}
-.contact-modal.open .contact-dialog{transform:none;}
-.contact-dialog::before{content:"";position:absolute;top:0;left:0;width:38%;height:5px;background:linear-gradient(90deg,var(--amber),var(--green));}
-.contact-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border:1px solid var(--line);background:transparent;color:var(--muted);font:600 14px var(--mono);cursor:pointer;transition:.18s;}
-.contact-close:hover,.contact-close:focus-visible{border-color:var(--green);color:var(--green);outline:none;}
-.contact-kicker{font:600 10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--green);}
-.contact-title{margin-top:18px;max-width:8ch;font-size:clamp(44px,8vw,82px);}
-.contact-title .amb{color:var(--amber);}
-.contact-intro{margin:18px 0 28px;max-width:48ch;color:var(--muted);font-size:14px;}
-.contact-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.contact-form .full{grid-column:1/-1;}
-.contact-form input,.contact-form textarea{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--white);font:400 14px var(--sans);padding:14px 16px;outline:none;resize:vertical;transition:border-color .18s;}
-.contact-form input:focus,.contact-form textarea:focus{border-color:var(--green);}
-.contact-form ::placeholder{color:var(--dim);}
-.contact-form .btn{grid-column:1/-1;width:100%;}
-.contact-note{grid-column:1/-1;font:500 10px var(--mono);color:var(--dim);letter-spacing:.04em;}
-
-/* ============ FOOTER ============ */
-footer{padding:50px 0;border-top:1px solid var(--line);}
-.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font:500 12px var(--mono);color:var(--dim);}
-
-/* ============ MOBILE ============ */
-@media (max-width:860px){
-  .nav-links{display:none;}
-  .loader-top{align-items:flex-start;}
-  .loader-index{max-width:16ch;text-align:right;}
-  .loader-word{white-space:normal;font-size:clamp(72px,24vw,130px);}
-  .loader-bottom{align-items:flex-end;}
-  .loader-status{max-width:19ch;}
-  .hero-stage{height:100svh;min-height:680px;}
-  .hero-sticky{position:relative;height:100%;min-height:680px;}
-  #hero-vid{display:none;}
-  #hero-vid-mobile{display:block;object-position:center center;}
-  .hero-sticky::after{
-    content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:linear-gradient(180deg,rgba(239,236,226,.7) 0%,rgba(239,236,226,.08) 31%,rgba(239,236,226,0) 58%,rgba(239,236,226,.78) 100%);
-  }
-  .hero-over{z-index:2;padding-top:0;color:var(--ink);}
-  .hero-over .shell{position:relative;height:100%;padding:0 22px;}
-  .hero-over .status{position:absolute;top:calc(76px + env(safe-area-inset-top));left:22px;margin:0;font-size:10px;color:#53585e;}
-  .hero-over .logo-vivo{display:none;}
-  .hero-h1{font-size:clamp(42px,12.5vw,62px);line-height:.82;}
-  .hero-h1 .lwrap{position:absolute;overflow:visible;}
-  .hero-h1 .lwrap:first-child{top:17%;left:22px;}
-  .hero-h1 .lwrap:last-child{top:56%;right:22px;text-align:right;}
-  .hero-h1 .l1{color:var(--amber-ink);}
-  .hero-h1 .l2{color:var(--ink);}
-  .hero-desc{position:absolute;top:70%;left:22px;right:22px;margin:0;max-width:36ch;font-size:clamp(11px,3.2vw,13px);line-height:1.45;color:#40454a;}
-  .hero-desc strong{color:var(--ink);}
-  .hero-ctas{position:absolute;top:83%;left:22px;right:22px;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0;}
-  .hero-ctas .btn{width:100%;padding:12px 6px;text-align:center;font-size:10px;white-space:nowrap;background:rgba(239,236,226,.8);backdrop-filter:blur(5px);}
-  .hero-ctas .btn.solid{background:var(--green);}
-  .hero-scroll-hint{bottom:calc(8px + env(safe-area-inset-bottom));font-size:9px;color:#5c6166;}
-  .hero-more{display:none;}
-  .only-desktop{display:none;}
-  section{padding:70px 0;}
-  .principio{grid-template-columns:1fr;gap:8px;padding:28px 0;}
-  .principio .pnum{font-size:56px;}
-  .modulo{grid-template-columns:1fr;gap:12px;}
-  .modulo .tag{justify-self:start;}
-  .provas{padding:38px 0;}
-  .provas-head{align-items:start;flex-direction:column;gap:12px;margin-bottom:18px;}
-  .provas-title{font-size:clamp(30px,9vw,40px);max-width:12ch;}
-  .provas-note{text-align:left;}
-  .provas-grid{grid-template-columns:repeat(2,1fr);}
-  .prova{min-height:128px;padding:13px 12px 15px;}
-  .prova:nth-child(2){border-right:0;}
-  .prova:nth-child(-n+2){border-bottom:1px solid var(--line);}
-  .prova-num{font-size:clamp(27px,8.5vw,38px);}
-  .prova-num.compact{font-size:clamp(15px,4.7vw,21px);}
-  .prova p{font-size:8px;}
-  .serie-grid{grid-template-columns:1fr;}
-  .job-grid{grid-template-columns:1fr;}
-  .job-grid.social{grid-template-columns:repeat(2,1fr);}
-  .job.open .job-body{max-height:6000px;}
-  .job-nome{font-size:clamp(24px,7vw,34px);}
-  .manifesto-shape{width:70%;right:-35%;}
-  .whatsapp-float{right:14px;bottom:calc(14px + env(safe-area-inset-bottom));padding:0 14px;}
-  .wpp-number{display:none;}
-  .contact-modal{padding:10px;align-items:end;}
-  .contact-dialog{width:100%;max-height:calc(100svh - 20px);padding:28px 20px 22px;}
-  .contact-form{grid-template-columns:1fr;}
-  .contact-form .full,.contact-form .btn,.contact-note{grid-column:1;}
-}
-@media (min-width:861px){.only-mobile{display:none;}}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none !important;transition:none !important;}
-  .curtain{display:none !important;}
-}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body class="is-loading">
+<body>
 
-<div class="site-loader" id="site-loader" role="status" aria-live="polite" aria-label="Carregando o site da kompila">
-  <div class="loader-top">
-    <p class="loader-kicker"><span class="g">[</span> kompila <span class="g">]</span></p>
-    <p class="loader-index">build 017 · experiência digital</p>
-  </div>
-  <div class="loader-core">
-    <p class="loader-word" id="loader-word"><span class="g">[</span> komp<span class="raw">+0&lt;</span> <span class="g">]</span></p>
-    <div class="loader-rule" aria-hidden="true"><span id="loader-bar"></span></div>
-  </div>
-  <div class="loader-bottom">
-    <p class="loader-count"><span id="loader-count">00</span><small>%</small></p>
-    <p class="loader-status" id="loader-status"><span class="g">//</span> lendo matéria bruta</p>
-  </div>
-</div>
-<script>
-(function(){
-  const loader=document.getElementById('site-loader');
-  const bar=document.getElementById('loader-bar');
-  const count=document.getElementById('loader-count');
-  const status=document.getElementById('loader-status');
-  const word=document.getElementById('loader-word');
-  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const started=performance.now();
-  const stages=['lendo matéria bruta','compilando estrutura','ajustando movimento','validando entrega'];
-  let value=0,finished=false;
-  function render(){
-    count.textContent=String(Math.round(value)).padStart(2,'0');
-    bar.style.transform='scaleX('+(value/100)+')';
-    status.innerHTML='<span class="g">//</span> '+stages[Math.min(stages.length-1,Math.floor(value/25))];
-  }
-  const timer=setInterval(()=>{
-    if(finished)return;
-    const step=value<55?7:value<82?3:1;
-    value=Math.min(92,value+step);render();
-  },reduced?60:110);
-  function finish(){
-    if(finished)return;finished=true;clearInterval(timer);value=100;render();
-    word.innerHTML='<span class="g">[</span> kompila <span class="g">]</span>';
-    status.innerHTML='<span class="g">//</span> pronto para rodar';
-    setTimeout(()=>{
-      loader.classList.add('done');document.body.classList.remove('is-loading');
-      setTimeout(()=>loader.setAttribute('aria-hidden','true'),600);
-    },reduced?80:420);
-  }
-  function finishAfterMinimum(){setTimeout(finish,Math.max(0,(reduced?180:1050)-(performance.now()-started)));}
-  if(document.readyState==='complete')finishAfterMinimum();
-  else addEventListener('load',finishAfterMinimum,{once:true});
-  setTimeout(finish,reduced?900:4200);
-})();
-</script>
 
-<div class="progress" id="progress"></div>
-
-<button class="whatsapp-float" type="button" data-open-contact aria-haspopup="dialog" aria-controls="contact-modal" aria-label="Abrir contato pelo WhatsApp">
-  <span class="wpp-dot" aria-hidden="true"></span>
-  <span>[ wpp ]</span>
-  <span class="wpp-number">11 96288-4399</span>
-</button>
-
-<nav>
-  <div class="shell nav-inner">
-    <a class="mini-logo" href="#top"><span class="g">[</span> kompila <span class="g">]</span></a>
-    <div class="nav-links">
-      <a href="#clientes"><span class="dot">.</span>cases</a>
-      <a href="#modulos"><span class="dot">.</span>serviços</a>
-      <a href="#serie"><span class="dot">.</span>blog<span class="fila">em fila</span></a>
+<nav id="nav">
+  <div class="shell">
+    <div class="pill">
+      <a class="logo" href="#"><span class="b">[</span> kompila <span class="b">]</span></a>
+      <div class="links"><a href="#demo">o que acontece</a><a href="#produto">produto</a><a href="#para">pra quem</a><a href="#prova">prova</a><a href="#preco">preço</a></div>
+      <a class="btn wpp" href="https://wa.me/5511962884399?text=Quero%20ver%20o%20Kompila%20Lead%20Recovery%20na%20minha%20opera%C3%A7%C3%A3o" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z"/></svg>Falar no WhatsApp</a>
     </div>
-    <button class="nav-cta" type="button" data-open-contact aria-haspopup="dialog" aria-controls="contact-modal">iniciar projeto</button>
   </div>
 </nav>
 
-<header class="hero-stage" id="top">
-  <div class="hero-sticky">
-    <video id="hero-vid" data-src="video/octopus-hero-scrub.mp4" poster="img/hero-poster.webp" muted playsinline preload="none"></video>
-    <video id="hero-vid-mobile" data-src="video/kompila-logo-mobile-hero.mp4" poster="img/hero-mobile-poster.webp" muted autoplay loop playsinline preload="none" aria-hidden="true"></video>
-    <div class="hero-over lite" id="hero-over">
-      <div class="shell">
-        <p class="status j" id="hero-status">$ status: <span class="amb" id="status-word">compilando</span><span class="cursor"></span></p>
-        <p class="logo-vivo" id="logo-vivo" aria-hidden="true"><span class="g">[&nbsp;</span><span id="logo-chars"></span><span class="g">&nbsp;]</span></p>
-        <h1 class="disp hero-h1">
-          <span class="lwrap"><span class="l1 j" id="hero-l1">do bruto</span></span>
-          <span class="lwrap"><span class="l2 j" id="hero-l2">ao pronto.</span></span>
-        </h1>
-        <p class="hero-desc j" id="hero-desc"><strong>kompila: estúdio de tecnologia criativa.</strong> Estratégia, design e inteligência artificial para transformar ideias soltas em soluções que funcionam.</p>
-        <div class="hero-ctas j" id="hero-ctas">
-          <button class="btn solid" type="button" data-open-contact aria-haspopup="dialog" aria-controls="contact-modal">iniciar um projeto</button>
-          <a class="btn ghost" href="https://www.instagram.com/kompila.ai" target="_blank" rel="noopener">@kompila.ai</a>
-        </div>
-      </div>
-      <span class="hero-scroll-hint"><span class="only-desktop">// gira pra compilar</span><span class="only-mobile">// role para explorar</span></span>
-      <a class="hero-more mono" id="hero-more" href="#essencia"><span class="g">[</span> conheça mais <span class="seta">↓</span> <span class="g">]</span></a>
+<!-- 01 HERO -->
+<header class="hero" id="topo">
+  <div class="bgwrap">
+    <img class="bg" src="img/hero-diretor.webp" alt="Diretor comercial de braços cruzados numa sala de vendas com dezenas de mesas ao fundo" fetchpriority="high">
+    <div class="veil"></div>
+    <svg class="fio" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true"><path id="fioPath" d="M-20 150 C 260 210, 520 60, 800 110 S 1240 40, 1460 90" fill="none" stroke="#2fd67b" stroke-width="3" stroke-linecap="round"/></svg>
+  </div>
+  <div class="in">
+    <div class="sub"><span class="k">kompila · lead recovery</span>Para operações que recebem centenas de leads por mês e perdem no atendimento: incorporadoras, indústria de projeto, quem já paga CRM.</div>
+    <div class="titles">
+      <h1 class="h1a" id="h1a">Você não perde venda por falta de lead.</h1>
+      <h1 class="h1b" id="h1b">Perde porque <span class="grad">ninguém</span> <span class="echo"><span class="grad">respondeu.</span><i class="grad">respondeu.</i><i class="grad">respondeu.</i><i class="grad">respondeu.</i><i class="grad">respondeu.</i></span></h1>
+    </div>
+    <div class="ctas" id="ctas">
+      <a class="btn wpp" href="https://wa.me/5511962884399?text=Quero%20ver%20o%20Kompila%20Lead%20Recovery%20na%20minha%20opera%C3%A7%C3%A3o" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z"/></svg>Falar no WhatsApp</a>
+      <a class="btn ghost" href="#marcas">Ver quem já confia ↓</a>
+    </div>
+  </div>
+  <div class="hcol" id="hcol">
+    <div class="hcard" aria-hidden="true">
+      <div class="bub" id="hb1"><span class="w">lead · campanha meta · 09:12</span><span id="hb1t"></span><span class="t">whatsapp</span></div>
+      <div class="lead" id="hlead"><div class="kk">lead · lançamento zona leste</div><div class="who">Marcos Oliveira</div><div class="meta">apto 2 quartos · FGTS · R$ 270.000</div><div class="timer"><b id="htimer">0 s</b><span id="htimerL">esperando</span></div><div class="tags"><span class="tag bad" id="ht1">sem dono</span><span class="tag ok" id="ht2">kompila respondeu · 6 s</span><span class="tag ok" id="ht3">visita marcada · 3 min</span></div></div>
     </div>
   </div>
 </header>
 
-<div class="marquee" aria-hidden="true"><div class="marquee-track" id="mq1"></div></div>
-
-<section id="essencia" class="paper">
-  <span class="debris j" style="top:12%;left:70%;color:var(--green-paper)" data-fly="y:130,r:40,s:1.6">[</span>
-  <span class="debris j" style="top:58%;left:88%;color:var(--green-paper)" data-fly="y:170,r:-30,s:1.2">]</span>
-  <span class="debris tri a j" style="top:70%;left:6%" data-fly="y:200,r:70,s:1.9"></span>
-  <span class="debris dots j" style="top:8%;left:40%;color:#9aa08f" data-fly="y:120,r:0,s:.8"></span>
-  <div class="shell">
-    <div class="sec-head">
-      <span class="label">01 · essência</span>
-      <h2 class="disp sec-title j" data-wipe>tecnologia não. <span class="amb">clareza.</span></h2>
-      <p class="sec-sub j" data-fly="y:60,r:0,s:1">A kompila reúne estratégia, criatividade e tecnologia para transformar ideias soltas, processos complexos e negócios em construção em soluções prontas para funcionar.</p>
-    </div>
-    <div class="principios">
-      <div class="principio j" data-fly="x:70,r:0,s:1">
-        <span class="pnum">01</span><h3>Traduzir</h3>
-        <p>Entender a complexidade antes de tentar simplificá-la.</p>
-      </div>
-      <div class="principio j" data-fly="x:-70,r:0,s:1">
-        <span class="pnum">02</span><h3>Construir</h3>
-        <p>Unir repertório humano e inteligência artificial com intenção.</p>
-      </div>
-      <div class="principio j" data-fly="x:70,r:0,s:1">
-        <span class="pnum">03</span><h3>Entregar</h3>
-        <p>Fazer a ideia sair do campo da possibilidade e começar a funcionar.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="modulos">
-  <span class="debris j" style="top:10%;left:84%;color:var(--green)" data-fly="y:150,r:25,s:1.4">+0&lt;</span>
-  <span class="debris tri g j" style="top:76%;left:80%" data-fly="y:220,r:-50,s:1.7"></span>
-  <span class="debris dots j" style="top:34%;left:2%;color:var(--dim)" data-fly="y:140,r:20,s:.9"></span>
-  <div class="shell">
-    <div class="sec-head">
-      <span class="label">02 · módulos</span>
-      <h2 class="disp sec-title j" data-wipe>um sistema que <span class="amb">cresce.</span></h2>
-      <p class="sec-sub j" data-fly="y:60,r:0,s:1">Cada frente de atuação ganha um selo. O nome continua protagonista; o módulo informa a especialidade.</p>
-    </div>
-    <div class="modulos-list">
-      <div class="modulo j" data-fly="x:-90,r:-1,s:1">
-        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.marca</span> <span class="g">]</span></span>
-        <div>
-          <p>A marca inteira: do conceito ao motion, como esta aqui.</p>
-          <div class="servs"><span><b>+</b> identidade visual</span><span><b>+</b> branding</span><span><b>+</b> direção criativa</span><span><b>+</b> motion design</span><span><b>+</b> design gráfico</span></div>
-        </div>
-        <span class="tag on">no ar</span>
-      </div>
-      <div class="modulo j" data-fly="x:90,r:1,s:1">
-        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.insta</span> <span class="g">]</span></span>
-        <div>
-          <p>Gestão de perfil, capas, calendário e criativos com IA.</p>
-          <div class="servs"><span><b>+</b> social media</span><span><b>+</b> criativos com ia</span><span><b>+</b> capas e destaques</span><span><b>+</b> calendário de conteúdo</span><span><b>+</b> reels</span></div>
-        </div>
-        <span class="tag on">no ar</span>
-      </div>
-      <div class="modulo j" data-fly="x:-90,r:-1,s:1">
-        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.site</span> <span class="g">]</span></span>
-        <div>
-          <p>Sites premium, landings de conversão, SEO e AEO.</p>
-          <div class="servs"><span><b>+</b> design web</span><span><b>+</b> sites institucionais</span><span><b>+</b> landing pages</span><span><b>+</b> seo</span><span><b>+</b> aeo</span><span><b>+</b> blogs</span></div>
-        </div>
-        <span class="tag">compilando</span>
-      </div>
-      <div class="modulo j" data-fly="x:90,r:1,s:1">
-        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.lojas</span> <span class="g">]</span></span>
-        <div>
-          <p>Lojas WooCommerce, configuradores e operação com agente.</p>
-          <div class="servs"><span><b>+</b> lojas virtuais</span><span><b>+</b> woocommerce</span><span><b>+</b> configuradores de produto</span><span><b>+</b> operação com agente</span></div>
-        </div>
-        <span class="tag">em fila</span>
-      </div>
-      <div class="modulo j" data-fly="x:-90,r:-1,s:1">
-        <span class="modulo-mark"><span class="g">[</span> kompila<span class="amb">.ia</span> <span class="g">]</span></span>
-        <div>
-          <p>Atendimento por IA, automações e agentes sob medida.</p>
-          <div class="servs"><span><b>+</b> atendimento com ia</span><span><b>+</b> agente no whatsapp</span><span><b>+</b> automações</span><span><b>+</b> agentes sob medida</span></div>
-        </div>
-        <span class="tag">em fila</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="provas" aria-labelledby="provas-title">
-  <div class="shell">
-    <div class="provas-head">
-      <div>
-        <span class="label">[ resultado real ]</span>
-        <h2 class="disp provas-title j" id="provas-title" data-wipe>prova antes da <span class="amb">promessa.</span></h2>
-      </div>
-      <p class="provas-note j" data-fly="x:60,r:0,s:1">// experiência acumulada, operação ativa e repertório certificado.</p>
-    </div>
-    <div class="provas-grid">
-      <article class="prova j" data-fly="y:70,r:0,s:1">
-        <span class="prova-index">01 / entrega</span>
-        <strong class="prova-num">+450</strong>
-        <p>projetos entregues</p>
-      </article>
-      <article class="prova j" data-fly="y:90,r:0,s:1">
-        <span class="prova-index">02 / repertório</span>
-        <strong class="prova-num">+10</strong>
-        <p>anos de experiência profissional</p>
-      </article>
-      <article class="prova j" data-fly="y:110,r:0,s:1">
-        <span class="prova-index">03 / performance</span>
-        <strong class="prova-num">R$ 60 mil</strong>
-        <p>em tráfego pago administrado por mês</p>
-      </article>
-      <article class="prova j" data-fly="y:130,r:0,s:1">
-        <span class="prova-index">04 / certificação</span>
-        <strong class="prova-num compact">Google Ads<br>+ Meta Ads</strong>
-        <p>certificações profissionais</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section id="clientes">
-  <span class="debris tri g j" style="top:12%;left:88%" data-fly="y:170,r:-40,s:1.5"></span>
-  <div class="shell">
-    <div class="sec-head">
-      <span class="label">03 · cases</span>
-      <h2 class="disp sec-title j" data-wipe>trabalho que <span class="amb">rodou.</span></h2>
-      <p class="sec-sub j" data-fly="y:60,r:0,s:1">O que sai da esteira: filmes, sites, marcas e embalagens.</p>
-    </div>
-    <div class="jobs-acc j" data-fly="y:60,r:0,s:1">
-      <div class="job open">
-        <button class="job-head" id="job-video-trigger" type="button" aria-expanded="true" aria-controls="job-video">
-          <span class="job-num">01</span>
-          <span class="disp job-nome">vídeo · motion</span>
-          <span class="job-flag mono"><span class="g">[</span> <b>–</b> <span class="g">]</span></span>
-        </button>
-        <div class="job-body" id="job-video" role="region" aria-labelledby="job-video-trigger">
-          <div class="job-grid">
-            <figure class="jcase"><video src="video/case-video-p1play.mp4" muted loop playsinline preload="metadata"></video><figcaption>Filme de lançamento do P1PLAY, app de gestão dos painéis da P1LED.</figcaption></figure>
-            <figure class="jcase"><video src="video/case-aut-loop.mp4" muted loop playsinline preload="metadata"></video><figcaption>Filme de produto do aditivo DSKARB, linha automotiva da AUT.</figcaption></figure>
-            <figure class="jcase"><video src="video/case-99taxi.mp4" muted loop playsinline preload="metadata"></video><figcaption>Case 99: modernização com painel de LED indoor P2.5 flexível, pela P1LED.</figcaption></figure>
-            <figure class="jcase"><video src="video/case-ai-drone-simulation.mp4" muted loop playsinline preload="metadata"></video><figcaption>Simulação de voo de drone criada com inteligência artificial.</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="job">
-        <button class="job-head" id="job-sites-trigger" type="button" aria-expanded="false" aria-controls="job-sites">
-          <span class="job-num">02</span>
-          <span class="disp job-nome">sites</span>
-          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
-        </button>
-        <div class="job-body" id="job-sites" role="region" aria-labelledby="job-sites-trigger">
-          <div class="job-grid">
-            <figure class="jcase"><img src="img/cases/case-01-p1led.webp" alt="Case site P1LED" loading="lazy" decoding="async"><figcaption>Site oficial completo para a P1LED, indústria de painéis de LED premium.</figcaption></figure>
-            <figure class="jcase"><img src="img/cases/case-maeda.webp" alt="Case site Maeda Gastronomia" loading="lazy" decoding="async"><figcaption>Site institucional para a Maeda Gastronomia, buffet autoral em São Paulo.</figcaption></figure>
-            <figure class="jcase"><img src="img/cases/case-05-brand1.webp" alt="Case site Brand1" loading="lazy" decoding="async"><figcaption>Site para a Brand1, agência de marketing digital parceira do Cesar Cielo.</figcaption></figure>
-            <figure class="jcase"><img src="img/cases/case-18-clinica-glutee-site-desktop-mobile.webp" alt="Case do site responsivo da Clínica Glútee para desktop e mobile" loading="lazy" decoding="async"><figcaption>Site responsivo da Clínica Glútee: identidade, conteúdo e conversão em desktop e mobile.</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="job">
-        <button class="job-head" id="job-brand-trigger" type="button" aria-expanded="false" aria-controls="job-brand">
-          <span class="job-num">03</span>
-          <span class="disp job-nome">identidade visual</span>
-          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
-        </button>
-        <div class="job-body" id="job-brand" role="region" aria-labelledby="job-brand-trigger">
-          <div class="job-grid">
-            <figure class="jcase"><img src="img/cases/case-04-unisushi.webp" alt="Case identidade UNI Premium Sushi" loading="lazy" decoding="async"><figcaption>Identidade completa para o UNI Premium Sushi: marca, ambiente e experiência.</figcaption></figure>
-            <figure class="jcase"><img src="img/cases/case-09-p1led-brandbook.webp" alt="Case manual de identidade P1LED" loading="lazy" decoding="async"><figcaption>Manual de identidade da P1LED: diretrizes, sistema e aplicação da marca.</figcaption></figure>
-            <figure class="jcase"><img src="img/cases/case-07-maeda18.webp" alt="Case kit de evento Maeda 18 anos" loading="lazy" decoding="async"><figcaption>Kit dos 18 anos da Maeda: conceito, materiais e experiência da celebração.</figcaption></figure>
-            <figure class="jcase"><img src="img/cases/case-08-maeda-impressos.webp" alt="Case materiais impressos Maeda" loading="lazy" decoding="async"><figcaption>Papelaria impressa da Maeda Gastronomia: a marca que também se toca.</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="job">
-        <button class="job-head" id="job-decks-trigger" type="button" aria-expanded="false" aria-controls="job-decks">
-          <span class="job-num">04</span>
-          <span class="disp job-nome">apresentações</span>
-          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
-        </button>
-        <div class="job-body" id="job-decks" role="region" aria-labelledby="job-decks-trigger">
-          <div class="job-grid">
-            <figure class="jcase"><img src="img/cases/case-10-p1led-fenix-ppt.webp" alt="Case apresentação P1LED e Fenix" loading="lazy" decoding="async"><figcaption>Apresentação comercial P1LED + Fenix: narrativa, hierarquia e impacto.</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="job">
-        <button class="job-head" id="job-social-trigger" type="button" aria-expanded="false" aria-controls="job-social">
-          <span class="job-num">05</span>
-          <span class="disp job-nome">redes sociais</span>
-          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
-        </button>
-        <div class="job-body" id="job-social" role="region" aria-labelledby="job-social-trigger">
-          <div class="job-grid social">
-            <figure class="jcase vert"><img src="img/cases/social-post-nf1.webp" alt="Post P1LED Netflix: capa do carrossel" loading="lazy" decoding="async"></figure>
-            <figure class="jcase vert"><img src="img/cases/social-post-nf2.webp" alt="Post P1LED Netflix: do trânsito caótico" loading="lazy" decoding="async"></figure>
-            <figure class="jcase vert"><img src="img/cases/social-post-nf3.webp" alt="Post P1LED Netflix: ao jantar romântico" loading="lazy" decoding="async"></figure>
-            <figure class="jcase vert"><img src="img/cases/social-post-nf4.webp" alt="Post P1LED Netflix: produção virtual" loading="lazy" decoding="async"></figure>
-            <figure class="jcase vert"><img src="img/cases/social-post-projetamos.webp" alt="Post P1LED: mais que instalar, nós projetamos" loading="lazy" decoding="async"></figure>
-            <figure class="jcase vert"><img src="img/cases/social-post-historia.webp" alt="Post P1LED: qual a próxima história?" loading="lazy" decoding="async"></figure>
-          </div>
-          <p class="job-cap" style="margin:-18px 0 26px">Carrossel do feed da P1LED: cenários Netflix com produção virtual, do gancho à ação.</p>
-          <div class="job-grid" style="padding-top:0">
-            <figure class="jcase"><img src="img/cases/case-13-neon-social.webp" alt="Case redes sociais P1LED e Banco Neon" loading="lazy" decoding="async"><figcaption>Carrossel P1LED + Banco Neon: gancho, contexto, integração, presença e ação.</figcaption></figure>
-            <figure class="jcase"><img src="img/cases/case-14-vivara-artbox-social.webp" alt="Case redes sociais P1LED e Vivara Art.Box" loading="lazy" decoding="async"><figcaption>Carrossel P1LED + Vivara Art.Box: tecnologia que respeita a arte, do conceito à publicação.</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="job">
-        <button class="job-head" id="job-packaging-trigger" type="button" aria-expanded="false" aria-controls="job-packaging">
-          <span class="job-num">06</span>
-          <span class="disp job-nome">embalagem</span>
-          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
-        </button>
-        <div class="job-body" id="job-packaging" role="region" aria-labelledby="job-packaging-trigger">
-          <div class="job-grid">
-            <figure class="jcase"><img src="img/cases/case-03-aut.webp" alt="Case embalagem rótulo DSKARB para AUT" loading="lazy" decoding="async"><figcaption>Rótulo e embalagem do aditivo DSKARB, linha automotiva da AUT.</figcaption></figure>
-            <figure class="jcase"><img src="img/cases/case-15-p1led-vx-bx-packaging.webp" alt="Case de personagem e embalagens P1LED VX e BX Series" loading="lazy" decoding="async"><figcaption>P1LED VX / BX Series: personagem, sistema visual e embalagem do bruto ao produto.</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="job">
-        <button class="job-head" id="job-ai-trigger" type="button" aria-expanded="false" aria-controls="job-ai">
-          <span class="job-num">07</span>
-          <span class="disp job-nome">inteligência artificial</span>
-          <span class="job-flag mono"><span class="g">[</span> <b>+</b> <span class="g">]</span></span>
-        </button>
-        <div class="job-body" id="job-ai" role="region" aria-labelledby="job-ai-trigger">
-          <div class="job-grid">
-            <figure class="jcase"><img src="img/cases/case-17-99-taxi-ai-environment.webp" alt="Projeto 3D realista do ambiente de marca do 99 Táxi Elétrico" loading="lazy" decoding="async"><figcaption>Criação do projeto 3D realista de ambiente para a experiência de marca 99 Táxi.</figcaption></figure>
-            <figure class="jcase"><video src="video/case-17-99-taxi-ai-environment.mp4" poster="img/cases/case-17-99-taxi-ai-environment.webp" muted loop playsinline preload="metadata"></video><figcaption>Vídeo de apresentação do ambiente 3D criado com inteligência artificial.</figcaption></figure>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="serie-cta j" data-fly="y:40,r:0,s:1">
-      <a class="btn" href="cases.html">conheça como foi realizado cada projeto</a>
-    </div>
-  </div>
-</section>
-
-<section id="serie">
-  <span class="debris j" style="top:6%;left:6%;color:var(--amber)" data-fly="y:160,r:-20,s:1.3">nº</span>
-  <div class="shell">
-    <div class="sec-head">
-      <span class="label">03 · no feed</span>
-      <h2 class="disp sec-title j" data-wipe>presença com <span class="amb">propósito.</span></h2>
-      <p class="sec-sub j" data-fly="y:60,r:0,s:1">A série da kompila no Instagram: uma tese por post, no território visual da marca.</p>
-    </div>
-    <div class="serie-grid">
-      <figure class="print j" data-print="-1.6" data-dir="-1">
-        <img src="img/poster-01-lojas.webp" alt="Poster 01: sua loja precisa vender, não apenas existir." loading="lazy" decoding="async">
-        <figcaption><span>nº 01</span><span>kompila.lojas</span></figcaption>
-      </figure>
-      <figure class="print j" data-print="1.1" data-dir="1">
-        <img src="img/poster-03-design.webp" alt="Poster 03: design não é acabamento, é direção." loading="lazy" decoding="async">
-        <figcaption><span>nº 03</span><span>kompila</span></figcaption>
-      </figure>
-      <figure class="print j" data-print="-0.7" data-dir="-1">
-        <img src="img/poster-06-insta.webp" alt="Poster 06: conteúdo sem direção é só ruído." loading="lazy" decoding="async">
-        <figcaption><span>nº 06</span><span>kompila.insta</span></figcaption>
-      </figure>
-    </div>
-    <div class="serie-cta j" data-fly="y:50,r:0,s:1">
-      <a class="btn" href="https://www.instagram.com/kompila.ai" target="_blank" rel="noopener">seguir a série</a>
-    </div>
-  </div>
-</section>
-
-<div class="marquee paper-mq" aria-hidden="true"><div class="marquee-track" id="mq2"></div></div>
-
-<section id="manifesto" class="paper">
-  <div class="curtain j" data-curtain></div>
-  <div class="manifesto-shape j" id="manifesto-shape"></div>
-  <span class="debris tri a j" style="top:16%;left:8%" data-fly="y:190,r:60,s:1.5"></span>
-  <div class="shell">
-    <span class="label">04 · manifesto</span>
-    <h2 class="disp manifesto-h" id="manifesto-h" style="margin-top:22px">o bruto quer forma.</h2>
-    <p class="bruto-mark j" data-fly="y:50,r:0,s:1"><span class="g">[</span> komp+0&lt; <span class="g">]</span></p>
-    <p class="manifesto-body j" data-fly="y:70,r:0,s:1">
-      Todo projeto nasce bruto: rascunho, ruído, caos com potencial.
-      Compilar é atravessar esse estado até a coisa rodar.
-      A kompila faz esse caminho inteiro, sem atalho e sem mistério.
-      <strong>do bruto ao pronto.</strong>
-    </p>
-  </div>
-</section>
-
-<div class="contact-modal" id="contact-modal" aria-hidden="true">
-  <div class="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="contact-title">
-    <button class="contact-close" type="button" data-close-contact aria-label="Fechar formulário">×</button>
-    <p class="contact-kicker">[ novo projeto ]</p>
-    <h2 class="disp contact-title" id="contact-title">o que está <span class="amb">bruto aí?</span></h2>
-    <p class="contact-intro">Conta o ponto de partida. Ao enviar, organizamos seus dados em uma mensagem e abrimos a conversa diretamente no WhatsApp.</p>
-    <form class="contact-form" id="contato-form">
-      <input type="text" name="nome" required autocomplete="name" placeholder="Seu nome" aria-label="nome">
-      <input type="tel" name="whatsapp" required autocomplete="tel" inputmode="tel" placeholder="Seu WhatsApp" aria-label="whatsapp">
-      <input class="full" type="email" name="email" required autocomplete="email" placeholder="seu@email.com" aria-label="email">
-      <textarea class="full" name="mensagem" rows="4" required placeholder="Site, loja, perfil, campanha, automação..." aria-label="mensagem"></textarea>
-      <button class="btn solid" type="submit">continuar no WhatsApp →</button>
-      <p class="contact-note">// seus dados ainda não são armazenados. integração com banco de leads: próxima etapa.</p>
-    </form>
-  </div>
+<!-- 02 LOGOS -->
+<div class="logos rv" id="marcas">
+  <div class="pill"><span class="m">[ burnpixel ]</span><span>Maslu Select</span><span class="m">P1LED</span><span>Sinergy</span><span>MRV</span></div>
+  <div class="cap k">marcas que confiam</div>
 </div>
 
-<footer>
-  <div class="shell footer-inner">
-    <span class="mini-logo"><span class="g">[</span> kompila <span class="g">]</span></span>
-    <span>do bruto ao pronto.</span>
-    <span>© 2026 kompila</span>
+<!-- 03 O QUE ACONTECE COM UM LEAD (motion) + SEM/COM -->
+<section class="demo dark" id="demo" data-act="0" style="margin-top:60px">
+  <div class="head rv">
+    <div><span class="k">o que acontece com um lead</span><h2>Um comprador te chamou <span class="dimt" style="color:var(--cdim)">às 09:12.</span></h2></div>
+    <p class="lead-p">Do primeiro segundo até a resposta. Primeiro sem a Kompila, depois com.</p>
   </div>
-</footer>
+  <div class="demo-grid">
+    <div>
+      <div class="acts">
+        <div class="act" data-i="1"><h3>Um comprador acabou de te chamar.</h3><p>Viu o lançamento no Instagram, quer um apartamento de 2 quartos com FGTS. <b>Vale R$ 270 mil.</b> Nenhum corretor foi avisado.</p></div>
+        <div class="act" data-i="2"><h3>Às 09:12 o sistema respondeu sozinho. Ninguém entrou.</h3><p><b>23% das empresas nunca respondem um lead.</b> As que respondem levam 42 horas, em média. Harvard Business Review, 2.241 empresas testadas.</p></div>
+        <div class="act" data-i="3"><h3>Com a Kompila, a resposta sai em segundos. Com a faixa do programa.</h3><p>A Kompila lê a renda, consulta a regra da empresa e responde. <b>A Renata só entra pra confirmar a visita.</b> Se ela não responde em 5 minutos, a Kompila chama o próximo. Nenhuma conversa passa de 24 horas.</p></div>
+        <div class="act" data-i="4"><h3>Cliente que chama, recebe resposta. A empresa acompanha.</h3><p>O gerente recebe o resumo de manhã. A corretora vê só o que a Kompila pediu dela. <b>O CRM continua o mesmo.</b></p></div>
+      </div>
+      <div class="act-nav" id="actnav">
+        <button type="button" data-go="1"><i></i><span>01 · chamou</span></button>
+        <button type="button" data-go="2"><i></i><span>02 · sem resposta</span></button>
+        <button type="button" data-go="3"><i></i><span>03 · com a kompila</span></button>
+        <button type="button" data-go="4"><i></i><span>04 · o produto</span></button>
+      </div>
+    </div>
+    <div class="stage" id="stage">
+      <div class="scene" id="scene">
+        <div class="logo-state"><span class="st proc" id="stProc"><span class="b">[</span> komp<span class="dd"></span> <span class="b">]</span></span><span class="st hide" id="stOk"><span class="b">[</span> kompila <span class="b">]</span></span><small id="stLabel">processando</small></div>
+        <div class="brk l">[</div><div class="brk r">]</div>
+        <div class="chat">
+          <div class="chat-h"><div class="av">MO</div><div><b>Marcos Oliveira</b><small>campanha meta · +55 11 9····-4471</small></div><span class="wa">whatsapp</span></div>
+          <div class="chat-b">
+            <div class="typing" id="typLead"><i></i><i></i><i></i></div>
+            <div class="cb" id="b1">Oi, vi o lançamento de vocês no Instagram. Tem apartamento de 2 quartos que aceita FGTS? Minha renda é 6 mil.<time>09:12</time></div>
+            <div class="cb bot" id="b2">Olá! Recebemos sua mensagem. Em breve um de nossos consultores entrará em contato.<time>09:12</time></div>
+            <div class="typing me" id="typMe"><i></i><i></i><i></i></div>
+            <div class="cb ia" id="b3">Oi Marcos! Tem sim: 2 quartos a partir de R$ 270 mil, aceita FGTS e Minha Casa Minha Vida. Renda de 6 mil entra na faixa do programa; a parcela exata sai na simulação com a Caixa. Quer visitar o decorado?<div class="opts"><span>sábado</span><span>domingo</span></div><time>09:12</time></div>
+            <div class="typing" id="typLead2"><i></i><i></i><i></i></div>
+            <div class="cb" id="b4">Sábado de manhã.<time>09:13</time></div>
+            <div class="typing me" id="typMe2"><i></i><i></i><i></i></div>
+            <div class="cb me" id="b5">Marcos, sou a Renata. Te recebo sábado às 10h no stand da zona leste. Já te mando a localização.<time>09:15</time></div>
+          </div>
+        </div>
+        <div class="leadcard" id="lead">
+          <div class="kk">lead · campanha meta · lançamento</div><div class="who">Marcos Oliveira</div><div class="meta">Apto 2 quartos · FGTS · R$ 270.000</div>
+          <div class="timer"><b id="timer">0 s</b><span id="timerL">esperando</span></div>
+          <div class="badges"><span class="tag bad" id="bdOwner">sem dono</span><span class="tag warn" id="bdBot">só o bot respondeu</span><span class="tag bad" id="bdWin">fora da janela de 24 h</span><span class="tag ok" id="bdDono">kompila respondeu · 6 s</span><span class="tag ok" id="bdResp">Renata confirmou · 3 min</span><span class="tag ok" id="bdPts">visita · sábado 10h</span></div>
+          <div class="rod" id="rod"><span class="kk">rodízio</span><span class="av">CA</span><span class="av">DI</span><span class="av">PE</span><span class="av">RE</span></div>
+        </div>
+        <div class="win w1" data-depth="12"><div class="bar"><i></i><i></i><i></i><span>painel</span></div><img src="img/mock-index.webp" alt=""></div>
+        <div class="win w2" data-depth="22"><div class="bar"><i></i><i></i><i></i><span>minha caixa</span></div><img src="img/mock-fila.webp" alt=""></div>
+        <div class="win w3" data-depth="8"><div class="bar"><i></i><i></i><i></i><span>conversa</span></div><img src="img/mock-conversa.webp" alt=""></div>
+        <div class="win w4" data-depth="28"><div class="bar"><i></i><i></i><i></i><span>gerente</span></div><img src="img/mock-gerente.webp" alt=""></div>
+      </div>
+    </div>
+  </div>
+  <div class="semcom rv">
+    <div class="sc1"><span class="kk">a operação hoje</span><h4>O lead entra e espera alguém lembrar.</h4><ul><li>A fila é a caixa de quem abriu primeiro</li><li>Vendedor desativado segura o lead</li><li>O gerente descobre no fim do mês</li></ul></div>
+    <div class="sc2"><span class="kk">medido numa operação real</span><h4>761 leads sem nenhum contato.</h4><ul><li>1.771 sem dono em 12 semanas</li><li>rodízio quebrado desde 1º de julho</li><li>maior motivo de perda: “sem retorno”</li></ul></div>
+    <div class="sc3"><span class="kk">com a kompila</span><h4>Dono em 4 s. Humano em 5 min. Nunca 24 h.</h4><ul><li>Rodízio por disponibilidade, na entrada</li><li>Estourou 5 min, passa pro próximo</li><li>Resumo do gerente toda manhã, em texto</li></ul></div>
+  </div>
+</section>
 
+<!-- 04 NÚMEROS -->
+<section class="nums" id="tempo">
+  <div class="shell">
+    <div class="grid">
+      <div class="num rv"><span class="k">o que o mercado faz</span><b class="grad">42 h</b><p>é o tempo médio que uma empresa leva pra responder um lead. 23% nunca respondem.</p><small>Harvard Business Review · 2.241 empresas · 1,25 mi de leads</small></div>
+      <div class="num rv d1"><span class="k">medido de perto</span><b class="grad">761</b><p>leads sem nenhum contato em 12 semanas, numa empresa só, de 2.614 que entraram.</p><small>Portal HubSpot da P1LED · 11 e 12 set 2026</small></div>
+      <div class="num rv d2"><span class="k">a régua da kompila</span><b class="grad">5 min</b><p>é o tempo que o vendedor tem. Responder em 5 minutos dá 21 vezes mais chance de qualificar do que em 30.</p><small>MIT Sloan / InsideSales · 15 mil leads</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 A MÁQUINA + JORNADA -->
+<section class="dots" id="como" style="padding-top:0">
+  <div class="shell">
+    <div class="head rv">
+      <div><span class="k">como funciona</span><h2 class="two-tone"><span class="dimt">O lead entra.</span><br>A Kompila devolve resposta.</h2></div>
+      <p class="lead-p">Mensagem de um lado, vendedor certo do outro. No meio, uma régua que não negocia: dono em segundos, humano em 5 minutos, nunca 24 horas.</p>
+    </div>
+    <div class="maq rv">
+      <div class="in">
+        <div class="card"><span class="w">lead · instagram</span><span class="ty" data-text="Oi, vi o lançamento. Tem 2 quartos com FGTS?"></span></div>
+        <div class="card"><span class="w">lead · site</span><span class="ty" data-text="Quanto fica um painel de 6×3 m pra fachada?"></span></div>
+        <div class="card"><span class="w">lead · base antiga</span><span class="ty" data-text="Vocês ainda têm unidade no Guarulhos?"></span></div>
+      </div>
+      <div class="core" id="core"><span class="b">[</span> <span class="scr" data-text="kompila">kompila</span> <span class="b">]</span><small>lê o CRM · escolhe o dono · cobra o tempo</small></div>
+      <div class="out" id="out">
+        <div class="pill"><i></i>dono escolhido em 4 s</div>
+        <div class="pill"><i></i>vendedor avisado no celular</div>
+        <div class="pill"><i></i>respondeu em 3 min, fase andou</div>
+        <div class="pill"><i></i>resumo pro gerente às 8h</div>
+      </div>
+    </div>
+    <div class="flow rv" id="flow">
+      <div class="line"></div>
+      <div class="node done"><span class="st">feito</span><span class="tm">0 s</span><b>Lead entra</b>Campanha, site, WhatsApp ou base antiga em lote.</div>
+      <div class="node done"><span class="st">feito</span><span class="tm">4 s</span><b>Dono escolhido</b>Rodízio por disponibilidade. Nunca existe lead sem dono.</div>
+      <div class="node run"><span class="st">rodando</span><span class="tm">5 min</span><b>Humano responde</b>Senão, passa pro próximo. Responder anda a fase.</div>
+      <div class="node"><span class="st">se parar</span><span class="tm">24 h</span><b>Template e tarefa</b>Conversa parada dispara template oficial e tarefa.</div>
+      <div class="node"><span class="st">todo dia</span><span class="tm">8h</span><b>Resumo do gerente</b>“12 leads sem resposta, 3 acima de R$ 300 mil.”</div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 PRODUTO: 4 blocos de cor -->
+<div class="prod" id="produto">
+  <section class="blk g1 rv" style="--w:190px">
+    <span class="st">mockup pronto</span>
+    <div>
+      <span class="etq"><span class="b">[</span>&nbsp;<span class="txt">kompila <span class="mod">.crm</span></span>&nbsp;<span class="b">]</span><span class="n">01</span></span>
+      <h3><span class="dimt">O CRM que</span><br>cobra resposta.</h3>
+      <p class="task">Quando chegar um lead, avisar o vendedor certo em 4 segundos. Sem resposta em 5 minutos, passar pro próximo. Nunca deixar 24 horas sem resposta.</p>
+      <ul><li><b>A fila</b> é a caixa de cada vendedor, ordenada por quem espera há mais tempo</li><li><b>Lead parado é alarme</b>, não coluna “follow up”. A fase anda sozinha quando alguém responde</li><li><b>Placar</b> com pontos, sequência e prêmio do mês definido pela empresa</li></ul>
+    </div>
+    <div class="shot"><img src="img/mock-fila.webp" alt="Minha caixa: leads esperando resposta, do mais antigo pro mais novo"><svg class="cur" viewBox="0 0 24 24"><path d="M4 2l16 9-7 1.5L9 20z" fill="#fff" stroke="#0a0b0e" stroke-width="1.5"/></svg></div>
+  </section>
+  <section class="blk g2 rv" style="--w:230px">
+    <span class="st">em construção</span>
+    <div class="shot"><img src="img/mock-conversa.webp" alt="Conversa de WhatsApp dentro do CRM"></div>
+    <div>
+      <span class="etq"><span class="b">[</span>&nbsp;<span class="txt">kompila <span class="mod">.agente</span></span>&nbsp;<span class="b">]</span><span class="n">02</span></span>
+      <h3><span class="dimt">Atendimento no WhatsApp</span><br>que não dorme.</h3>
+      <p class="task">Responder em segundos, de madrugada também. Perguntar produto, prazo e orçamento com as regras da minha empresa. Passar pro humano na primeira hora do expediente.</p>
+      <ul><li><b>Qualifica</b> produto, prazo, orçamento e região, sem script genérico</li><li><b>Reabre</b> conversa parada com template oficial, dentro da janela da Meta</li><li><b>Entrega quente</b> pro vendedor, com o histórico inteiro</li></ul>
+    </div>
+  </section>
+  <section class="blk g3 rv" style="--w:260px">
+    <span class="st">em desenho</span>
+    <div>
+      <span class="etq"><span class="b">[</span>&nbsp;<span class="txt">kompila <span class="mod">.orçamento</span></span>&nbsp;<span class="b">]</span><span class="n">03</span></span>
+      <h3><span class="dimt">A cotação sai</span><br>dentro da conversa.</h3>
+      <p class="task">O pedido do cliente vira orçamento com a minha tabela, sem sair do WhatsApp. Só três coisas contam: cotou, enviou, aceitou.</p>
+      <ul><li><b>Cotação</b> pelo catálogo e pelas regras da empresa: tamanho, frete, instalação</li><li><b>Um lead, um valor</b>: alternativa não soma</li><li><b>Aceite</b> anda a fase, pontua o vendedor e avisa o gerente</li></ul>
+    </div>
+    <div class="shot"><img src="img/mock-index.webp" alt="Painel do CRM" style="object-position:top right"></div>
+  </section>
+  <section class="blk g4 rv" style="--w:250px">
+    <span class="st">em construção</span>
+    <div class="bolhas">
+      <div class="grp"><div class="bb">HubSpot</div><div class="bb">Salesforce</div><div class="bb">Pipedrive</div><div class="bb">Kommo</div></div>
+      <div class="ln"></div><div class="bb k">[ k ]</div><div class="ln"></div>
+      <div class="grp"><div class="bb">WhatsApp</div><div class="bb">vendedor</div><div class="bb">gerente</div></div>
+    </div>
+    <div>
+      <span class="etq"><span class="b">[</span>&nbsp;<span class="txt">kompila <span class="mod">.conector</span></span>&nbsp;<span class="b">]</span><span class="n">04</span></span>
+      <h3><span class="dimt">Liga no CRM</span><br>que você já paga.</h3>
+      <p class="task">Não quero trocar de CRM. Quero que alguém vigie o lead que ninguém pegou e escreva de volta no sistema que eu já uso.</p>
+      <ul><li><b>Lê</b> dono, fase, última atividade e conversa</li><li><b>Escreve</b> reabertura, mudança de fase, devolução à fila, tarefa</li><li><b>Avisa</b> o gerente toda manhã. Nada sai do seu CRM</li></ul>
+    </div>
+  </section>
+</div>
+
+<!-- 07 FEITO PARA -->
+<section class="para dark" id="para" style="padding:0">
+  <div class="p rv"><img src="img/feita-incorporadora.webp" alt=""><h3>Feita para <span class="grad">incorporadoras.</span></h3><p>Seis mil leads por mês, 160 vendas, 35 mil sem atendimento por ano. A base esquecida é onde está a conversão.</p></div>
+  <div class="p rv d1"><img src="img/feita-industria.webp" alt=""><h3>Feita para <span class="grad">indústria de projeto.</span></h3><p>Orçamento de R$ 20 a 300 mil. Um lead recuperado que fecha paga meses de serviço.</p></div>
+  <div class="p rv d2"><img src="img/feita-crm.webp" alt=""><h3>Feita para <span class="grad">quem já tem CRM.</span></h3><p>HubSpot, Salesforce, Pipedrive, Kommo. A Kompila entra por cima e fica na operação, não na implantação.</p></div>
+</section>
+
+<!-- 08 MANIFESTO -->
+<section class="mani" id="tese">
+  <img src="img/mani-escritorio.webp" alt="">
+  <div class="shell">
+    <p class="big" id="mani">O CRM cria o lead, distribui e mede. O que ele não faz é perceber que o lead ficou órfão e ir buscar. A Kompila faz isso: humano em 5 minutos, nunca 24 horas sem resposta, nenhum lead sem dono.</p>
+    <div class="no">Não <span class="slot"><i>cobramos por mensagem.</i><i>cobramos por usuário.</i><i>trocamos o seu CRM.</i><i>deixamos lead sem dono.</i></span></div>
+  </div>
+</section>
+
+<!-- 09 PROVA -->
+<section id="prova" style="padding-top:0">
+  <div class="shell">
+    <div class="head rv"><div><span class="k">a prova</span><h2 class="two-tone"><span class="dimt">Três fontes,</span><br>a mesma doença.</h2></div><p class="lead-p">Não é a empresa que é desorganizada. É o desenho: o CRM cuida de quem está sendo atendido e é cego pra quem ficou no meio.</p></div>
+    <div class="prova">
+      <div class="pc rv"><span class="k">P1LED · HubSpot · medido por dentro</span><b>761</b><p>leads sem nenhum contato em 12 semanas, de 2.614 criados. 1.771 sem dono. Rodízio quebrado desde 1º de julho e ninguém viu.</p><small>Portal HubSpot da P1LED · 11 e 12 set 2026</small></div>
+      <div class="pc rv d1"><span class="k">MRV · Salesforce · medido por fora</span><b>35 mil</b><p>leads por ano sem atendimento em duas lojas, sobre 6.000 atendidos e 160 vendas por mês. Recuperar 0,5% da base são 175 vendas.</p><small>Números relatados pela operação, a confirmar · Imobi Report out 2025</small></div>
+      <div class="pc rv d2"><span class="k">Setor · estudos</span><b>7%</b><p>das empresas respondem em 5 minutos. 58% nunca respondem. 93% dos leads que fecharam foram alcançados até a 6ª tentativa; a maioria para na primeira.</p><small>Drift · Velocify, 3,5 mi de leads · HBR 2011</small></div>
+    </div>
+    <div class="quote rv"><p>“O maior volume de conversões vem da base esquecida, dos leads antigos.”</p><span>VP Comercial da MRV · Imobi Report, out 2025</span></div>
+  </div>
+</section>
+
+<!-- 10 PREÇO -->
+<section id="preco" style="padding-top:0">
+  <div class="shell">
+    <div class="head rv"><div><span class="k">preço</span><h2 class="two-tone"><span class="dimt">Fixo baixo mais</span><br>por lead recuperado.</h2></div><p class="lead-p">O HubSpot cobra US$ 1 por lead que o agente dele recomenda. A Kompila cobra por lead que voltou a responder e por reunião marcada.</p></div>
+    <div class="price">
+      <div class="pr main rv"><span class="k b">o modelo</span><h3>fixo + resultado</h3><p>Fixo mensal na faixa do que uma agência cobra pra “cuidar do CRM”. Variável por lead recuperado e por reunião marcada.</p><ul><li><span>1 · ligar o nativo e medir 30 dias</span><b>1 tarde + linha de base</b></li><li><span>2 · a Kompila vigiando o lead</span><b>4 a 6 semanas</b></li><li><span>3 · atendimento no WhatsApp</span><b>depois da 2 provar número</b></li></ul></div>
+      <div class="pr rv d1"><span class="k">o que o cliente já paga hoje</span><ul style="margin-top:0"><li><span>Assento Sales Pro no HubSpot, por vendedor</span><b>R$ 495 a 550 / mês</b></li><li><span>Manutenção de agência HubSpot</span><b>R$ 3 a 8 mil / mês</b></li><li><span>Implantação por agência</span><b>R$ 5 a 70 mil</b></li><li><span>Negócio médio na P1LED</span><b>R$ 20 a 230 mil</b></li></ul><p style="font-size:15px">Um lead recuperado que fecha paga meses de serviço.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 FECHAMENTO -->
+<section class="cta dark" id="falar">
+  <span class="k">começa pelo caso zero</span>
+  <h2 style="margin-top:20px"><span class="b">[</span> uma tarde no seu CRM,<br>30 dias de medição <span class="b">]</span></h2>
+  <p class="lead-p">Sai com o número de leads sem dono, sem resposta em 24 h e reuniões marcadas. Esse é o “antes”. Só depois entra a Kompila.</p>
+  <div class="row"><a class="btn wpp" href="https://wa.me/5511962884399?text=Quero%20come%C3%A7ar%20pelo%20caso%20zero%20do%20Kompila%20Lead%20Recovery" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z"/></svg>Falar no WhatsApp</a><a class="btn ghost" href="#demo">Rever o que acontece com um lead</a></div>
+  <div class="steps rv"><div><b>precisa de</b><span>acesso de admin no CRM</span><small>e 2 minutos do diretor no rodízio</small></div><div><b>prazo</b><span>1 tarde + 30 dias</span><small>configuração, depois medição semanal</small></div><div><b>sai com</b><span>5 números</span><small>tempo de resposta, tempo até o humano, sem dono, parados há 24 h, contatos de ontem</small></div></div>
+</section>
+
+<footer><div class="foot"><a class="logo" href="#topo"><span class="b">[</span> kompila <span class="b">]</span></a><span>do bruto ao pronto.</span><span>lead recovery · crm · agente · orçamento · conector</span><a href="https://instagram.com/kompila.ai" target="_blank" rel="noopener">@kompila.ai</a></div></footer>
+
+<!-- chat do agente (roteirizado) -->
+<aside class="kchat" id="kchat">
+  <header id="kchatH"><span class="dot"></span><b><span class="b">[</span> kompila <span style="color:var(--amber)">.agente</span> <span class="b">]</span></b><small>responde em segundos</small></header>
+  <div class="msgs" id="kmsgs"><div class="m bot">Oi. Sou o agente da Kompila. Pra te dizer se faz sentido, só preciso saber: quantos leads chegam por mês na sua operação?</div></div>
+  <div class="opts" id="kopts"><button data-v="até 200">até 200</button><button data-v="200 a 1.000">200 a 1.000</button><button data-v="mais de 1.000">mais de 1.000</button></div>
+  <form id="kform"><input id="kin" placeholder="Escreva aqui" autocomplete="off"><button type="submit" aria-label="enviar">→</button></form>
+  <a class="wa" href="https://wa.me/5511962884399?text=Vim%20do%20site%20da%20Kompila" target="_blank" rel="noopener">continuar no WhatsApp →</a>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script>
-const REDUCED=matchMedia('(prefers-reduced-motion:reduce)').matches;
-const MOBILE_HERO=matchMedia('(max-width:860px)').matches;
-const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-const ease=t=>1-Math.pow(1-t,3); /* easeOutCubic */
-
-/* ===================================================================
-   LOGO VIVO: compila no load; DESCOMPILA quando o hero sai de cena
-   =================================================================== */
-const Logo=(function(){
-  const alvo="kompila", bruto="komp+0<", pool="+0<>#%&*=/\\";
-  const el=document.getElementById('logo-chars');
-  const n=alvo.length, spans=[];
-  for(let i=0;i<n;i++){
-    const s=document.createElement('span');
-    s.className='ch bruto';
-    s.textContent=bruto[i]||pool[i%pool.length];
-    el.appendChild(s);spans.push(s);
-  }
-  function set(p){ /* p=1 pronto, p=0 bruto */
-    const done=Math.round(p*n);
-    for(let i=0;i<n;i++){
-      if(i<done){spans[i].textContent=alvo[i];spans[i].classList.remove('bruto');}
-      else{
-        spans[i].classList.add('bruto');
-        if(Math.random()<.3)spans[i].textContent=(bruto[i]&&Math.random()<.5)?bruto[i]:pool[Math.floor(Math.random()*pool.length)];
-      }
-    }
-  }
-  if(REDUCED){set(1);return{set:()=>{}};}
-  /* compilação inicial 2,4s */
-  const DUR=2400,t0=performance.now();
-  let booting=true;
-  (function tick(t){
-    const p=clamp((t-t0)/DUR,0,1);
-    set(p);
-    if(p<1&&booting)requestAnimationFrame(tick);else booting=false;
-  })(t0);
-  document.getElementById('logo-vivo').addEventListener('click',()=>location.reload());
-  return{set:p=>{if(!booting)set(p);}};
-})();
-
-/* ===== status typewriter ===== */
 (function(){
-  if(REDUCED)return;
-  const words=['compilando','traduzindo','construindo','entregando'];
-  const el=document.getElementById('status-word');
-  let wi=0;
-  function typeWord(w,done){let i=0;(function s(){el.textContent=w.slice(0,++i);if(i<w.length)setTimeout(s,70);else setTimeout(done,2600);})();}
-  function eraseWord(done){(function s(){const t=el.textContent;el.textContent=t.slice(0,-1);if(t.length>1)setTimeout(s,40);else done();})();}
-  function loop(){eraseWord(()=>{wi=(wi+1)%words.length;typeWord(words[wi],loop);});}
-  setTimeout(loop,3400);
-})();
-
-/* ===== marquees ===== */
+var G=window.gsap,ST=window.ScrollTrigger,SPL=window.SplitText,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(G&&ST)G.registerPlugin(ST,SPL||{});
+/* rolagem amortecida */
+if(window.Lenis&&G&&!reduced){var lenis=new Lenis({lerp:.12});window.lenisRef=lenis;lenis.on('scroll',ST.update);G.ticker.add(function(t){lenis.raf(t*1000)});G.ticker.lagSmoothing(0)}
+/* nav some ao descer */
+var nav=document.getElementById('nav'),last=0;addEventListener('scroll',function(){var y=scrollY;nav.classList.toggle('hide',y>120&&y>last);last=y},{passive:true});
+/* reveal */
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+document.querySelectorAll('.rv,.blk,.flow').forEach(function(el){io.observe(el)});
+/* títulos linha a linha (SplitText) */
+if(G&&SPL&&!reduced){document.fonts.ready.then(function(){document.querySelectorAll('.head h2,.blk h3,.cta h2,.para h3').forEach(function(el){try{var s=new SPL(el,{type:'lines',linesClass:'ln',mask:'lines'});G.from(s.lines,{yPercent:110,duration:.9,ease:'power3.out',stagger:.08,scrollTrigger:{trigger:el,start:'top 88%',once:true}})}catch(e){}})})}
+/* hero: eco da palavra (Jamie) + fio que se desenha (Superlógica) */
+var fio=document.getElementById('fioPath');if(fio){var L=fio.getTotalLength();fio.style.strokeDasharray=L;fio.style.strokeDashoffset=L;setTimeout(function(){fio.style.transition='stroke-dashoffset 2.2s cubic-bezier(.2,.8,.2,1)';fio.style.strokeDashoffset=0},600)}
+/* hero: escreve o 1º título, apaga, escreve o 2º no mesmo lugar, mostra os botões */
+function wrapChars(el){var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),ns=[],n;while(n=walker.nextNode())if(n.nodeValue.trim()||n.nodeValue===' ')ns.push(n);ns.forEach(function(tn){if(tn.parentNode.closest('.echo i'))return;var f=document.createDocumentFragment();tn.nodeValue.split(/(\s+)/).forEach(function(part){if(!part)return;if(/^\s+$/.test(part)){var sp=document.createElement('span');sp.className='ch';sp.textContent=' ';f.appendChild(sp);return}var g=!!tn.parentNode.closest('.grad');var w=document.createElement('span');w.className='wrd';part.split('').forEach(function(c){var s=document.createElement('span');s.className='ch'+(g?' grad':'');s.textContent=c;w.appendChild(s)});f.appendChild(w)});tn.parentNode.replaceChild(f,tn)});el.querySelectorAll('.grad').forEach(function(gp){if(gp.tagName!=='I'&&gp.querySelector('.ch'))gp.classList.remove('grad')});return[].slice.call(el.querySelectorAll('.ch'))}
+var hero=document.querySelector('.hero'),h1a=document.getElementById('h1a'),h1b=document.getElementById('h1b'),ctas=document.getElementById('ctas'),ca=wrapChars(h1a),cb=wrapChars(h1b);
+function typeChars(chars,speed,cb2){var caret=document.createElement('span');caret.className='caret';var i=0;(function step(){if(i<chars.length){var c=chars[i];c.classList.add('on');c.after(caret);i++;setTimeout(step,c.textContent===' '?speed*1.6:speed+Math.random()*30)}else{setTimeout(function(){caret.remove();if(cb2)cb2()},900)}})()}
+if(reduced){ca.concat(cb).forEach(function(c){c.classList.add('on')});h1a.classList.add('gone');h1b.classList.add('live');ctas.classList.add('show')}
+else setTimeout(function(){typeChars(ca,52,function(){h1a.classList.add('gone');setTimeout(function(){h1b.classList.add('live');typeChars(cb,50,function(){h1b.classList.add('small');setTimeout(function(){ctas.classList.add('show')},450);if(G){G.timeline().to(ec,{opacity:function(i){return[.35,.25,.15,.08][i]},y:function(i){return -(i+1)*.5+'em'},x:function(i){return i%2?8:-8},duration:.6,ease:'power2.out',stagger:.06}).to(ec,{opacity:0,y:0,x:0,duration:1.3,ease:'power2.inOut'},'+=.5')}})},650)})},700);
+var ec=document.querySelectorAll('.echo i');
+/* hero: mensagem se digitando (Converge/Pipefy) + cronômetro (nosso) */
+var hb1=document.getElementById('hb1'),hb1t=document.getElementById('hb1t'),hl=document.getElementById('hlead'),ht=document.getElementById('htimer'),htl=document.getElementById('htimerL');
+function type(el,txt,speed,cb){var i=0;el.textContent='';(function t(){el.textContent=txt.slice(0,i)+(i<txt.length?'|':'');i++;if(i<=txt.length)setTimeout(t,speed+Math.random()*30);else if(cb)cb()})()}
+function heroLoop(){
+  ['ht1','ht2','ht3'].forEach(function(id){document.getElementById(id).classList.remove('show')});hl.className='lead';ht.textContent='0 s';htl.textContent='esperando';hb1.classList.remove('show');
+  setTimeout(function(){hb1.classList.add('show');type(hb1t,'Oi, vi o lançamento de vocês. Tem apartamento de 2 quartos que aceita FGTS?',38,function(){
+    hl.classList.add('show');var t0=performance.now(),r;(function tick(){var s=Math.floor((performance.now()-t0)/1000);ht.textContent=s+' s';if(s<4)r=requestAnimationFrame(tick)})();
+    setTimeout(function(){hl.classList.add('warn');ht.textContent='42 h';htl.textContent='sem resposta';document.getElementById('ht1').classList.add('show')},4300);
+    setTimeout(function(){hl.className='lead show ok';ht.textContent='6 s';htl.textContent='kompila respondeu';document.getElementById('ht1').classList.remove('show');document.getElementById('ht2').classList.add('show')},7300);
+    setTimeout(function(){ht.textContent='3 min';htl.textContent='visita marcada';document.getElementById('ht3').classList.add('show')},9300);
+    setTimeout(heroLoop,14500);
+  })},900);
+}
+if(!reduced)heroLoop();
+/* scramble nos botões e no core (Bitnomial) */
+var CH='[]+0<>=_-/\\|'.split('');
+function scramble(el,speed){var fin=el.dataset.text||el.textContent;el.dataset.text=fin;var it=0,n=fin.length;var t=setInterval(function(){el.textContent=fin.split('').map(function(c,i){return i<it?c:(c===' '?' ':CH[Math.random()*CH.length|0])}).join('');if(it>=n){clearInterval(t);el.textContent=fin}it+=.5},speed||30)}
+document.querySelectorAll('.scr').forEach(function(el){var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){scramble(el,40);io2.unobserve(el)}})});io2.observe(el)});
+/* máquina: cards se digitando + pílulas acendendo */
+var maq=document.querySelector('.maq');if(maq){var ioM=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;ioM.unobserve(maq);var tys=maq.querySelectorAll('.ty'),pills=maq.querySelectorAll('.pill');tys.forEach(function(el,i){setTimeout(function(){type(el,el.dataset.text,30)},i*1400)});pills.forEach(function(p,i){setTimeout(function(){p.classList.add('on')},2600+i*900)})})},{threshold:.4});ioM.observe(maq)}
+/* etiqueta [ ] que abre: já é CSS via .in */
+/* manifesto acende ao rolar (Oleum) */
+['mani'].forEach(function(id){var mani=document.getElementById(id);if(mani){var words=mani.textContent.split(' ');mani.innerHTML=words.map(function(w){return'<span class="wm">'+w+'</span>'}).join(' ');var wm=mani.querySelectorAll('.wm');addEventListener('scroll',function(){var r=mani.getBoundingClientRect();var p=Math.min(1,Math.max(0,(innerHeight*.85-r.top)/(r.height+innerHeight*.35)));wm.forEach(function(w,i){w.classList.toggle('lit',i/wm.length<p)})},{passive:true})}})
+/* palavras acendendo no motion */
+function splitWords(root){var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),nodes=[],n;while(n=walker.nextNode())if(n.nodeValue.trim())nodes.push(n);nodes.forEach(function(t){var frag=document.createDocumentFragment();t.nodeValue.split(/(\s+)/).forEach(function(part){if(!part)return;if(/^\s+$/.test(part)){frag.appendChild(document.createTextNode(part));return}var s=document.createElement('span');s.className='wd';s.textContent=part;frag.appendChild(s)});t.parentNode.replaceChild(frag,t)});return[].slice.call(root.querySelectorAll('.wd'))}
+/* motion */
 (function(){
-  const brand='<span><b>[ kompila ]</b> do bruto ao pronto.</span><span>estúdio de tecnologia criativa</span><span><i>[ komp+0&lt; ]</i> compilando</span><span>design · comunicação · ia</span>';
-  const servicos=['lojas virtuais','social media','seo e aeo','ia','automação','design web','identidade visual','branding','landing pages','atendimento com ia','motion design','woocommerce','criativos com ia','agente no whatsapp']
-    .map(s=>'<span><b>+</b> '+s+'</span>').join('');
-  const h1=brand.repeat(3), h2=servicos.repeat(3);
-  document.getElementById('mq1').innerHTML=h1+h1;
-  document.getElementById('mq2').innerHTML=h2+h2;
+  var demo=document.getElementById('demo'),$=function(id){return document.getElementById(id)};
+  var acts=[].slice.call(demo.querySelectorAll('.act')),navb=[].slice.call(document.querySelectorAll('#actnav button'));
+  var timer=$('timer'),timerL=$('timerL'),lead=$('lead'),rod=$('rod'),avs=[].slice.call(rod.querySelectorAll('.av'));
+  var ACT={1:0,2:3600,3:9600,4:16000},LOOP=23500,timeouts=[],raf=null,t0=0,rodT=null,readT=[],running=false,words={};
+  acts.forEach(function(a){words[a.dataset.i]=splitWords(a)});
+  function show(id,on){var el=$(id);if(el)el.classList.toggle('show',on!==false)}
+  function read(n){readT.forEach(clearTimeout);readT=[];Object.keys(words).forEach(function(k){words[k].forEach(function(w){w.classList.remove('lit')})});words[n].forEach(function(w,i){var isH=w.closest('h3')!==null;readT.push(setTimeout(function(){w.classList.add('lit')},isH?i*110:300+i*55))})}
+  function setAct(n){demo.dataset.act=n;acts.forEach(function(a){a.classList.toggle('on',+a.dataset.i===n)});read(n);navb.forEach(function(b,i){b.classList.remove('on','done');b.querySelector('i').style.animation='none';if(i+1<n)b.classList.add('done');if(i+1===n){var d=((ACT[n+1]||LOOP)-ACT[n])/1000;b.style.setProperty('--d',d+'s');void b.offsetWidth;b.querySelector('i').style.animation='';b.classList.add('on')}})}
+  function reset(){['b1','b2','b3','b4','b5','typLead','typLead2','typMe','typMe2','bdOwner','bdBot','bdWin','bdDono','bdResp','bdPts'].forEach(function(id){show(id,false)});lead.className='leadcard';rod.classList.remove('show');avs.forEach(function(a){a.className='av'});timer.textContent='0 s';timerL.textContent='esperando';$('stProc').classList.remove('hide');$('stOk').classList.add('hide');$('stLabel').textContent='processando';if(raf)cancelAnimationFrame(raf);raf=null;if(rodT)clearInterval(rodT)}
+  function live(){var s=Math.floor((performance.now()-t0)/1000);timer.textContent=s+' s';raf=requestAnimationFrame(live)}
+  function rodizio(){var i=0,n=0;avs.forEach(function(a){a.className='av'});avs[0].classList.add('off');rodT=setInterval(function(){avs.forEach(function(a){a.classList.remove('hot')});i=(i+1)%avs.length;if(i===0)i=1;avs[i].classList.add('hot');n++;if(n>=8){clearInterval(rodT);avs.forEach(function(a){a.classList.remove('hot')});avs[3].classList.add('hot')}},130)}
+  var steps=[[0,function(){setAct(1);show('typLead')}],[1200,function(){show('typLead',false);show('b1');t0=performance.now();live()}],[3600,function(){setAct(2);if(raf)cancelAnimationFrame(raf);raf=null}],[3800,function(){show('b2');show('bdBot')}],[4400,function(){timer.textContent='5 min';lead.className='leadcard warn'}],[5200,function(){timer.textContent='30 min';show('bdOwner')}],[6000,function(){timer.textContent='1 h'}],[6900,function(){timer.textContent='24 h';lead.className='leadcard bad';timerL.textContent='sem resposta'}],[7500,function(){show('bdWin')}],[8300,function(){timer.textContent='42 h'}],[9600,function(){setAct(3);timer.textContent='0 s';timerL.textContent='kompila ligada';lead.className='leadcard';show('bdOwner',false);show('bdWin',false);show('bdBot',false);rod.classList.add('show');rodizio()}],[10300,function(){show('typMe')}],[10900,function(){show('typMe',false);show('b3');show('bdDono');lead.className='leadcard ok';timer.textContent='6 s';timerL.textContent='kompila respondeu'}],[11800,function(){show('typLead2')}],[12300,function(){show('typLead2',false);show('b4')}],[12700,function(){show('typMe2')}],[13300,function(){show('typMe2',false);show('b5');show('bdResp');timer.textContent='3 min';timerL.textContent='visita marcada'}],[13800,function(){show('bdPts');$('stProc').classList.add('hide');$('stOk').classList.remove('hide');$('stLabel').textContent='entregue'}],[16000,function(){setAct(4)}]];
+  function clearAll(){timeouts.forEach(clearTimeout);timeouts=[];readT.forEach(clearTimeout);readT=[];if(raf)cancelAnimationFrame(raf);raf=null;if(rodT)clearInterval(rodT)}
+  function run(from){clearAll();reset();running=true;steps.forEach(function(s){if(s[0]<from)s[1]();else timeouts.push(setTimeout(s[1],s[0]-from))});if(raf&&from>=3600){cancelAnimationFrame(raf);raf=null}timeouts.push(setTimeout(function(){run(0)},LOOP-from))}
+  navb.forEach(function(b){b.addEventListener('click',function(){run(ACT[+b.dataset.go])})});
+  if(reduced){reset();steps.forEach(function(s){s[1]()});Object.keys(words).forEach(function(k){words[k].forEach(function(w){w.classList.add('lit')})})}
+  else{var ioD=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!running)run(0);if(!e.isIntersecting&&running){clearAll();running=false}})},{threshold:.25});ioD.observe(demo);document.addEventListener('visibilitychange',function(){if(document.hidden){clearAll();running=false}})}
+  var wins=[].slice.call(demo.querySelectorAll('.win'));demo.addEventListener('mousemove',function(e){if(demo.dataset.act!=='4')return;var r=demo.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;wins.forEach(function(w){var d=+w.dataset.depth;w.style.setProperty('--px',(-x*d)+'px');w.style.setProperty('--py',(-y*d)+'px')})});
+  var stage=$('stage'),scene=$('scene');function fit(){var s=Math.min(1,stage.clientWidth/600);scene.style.transform='translateX(-50%) scale('+s+')';stage.style.height=(540*s+10)+'px'}fit();addEventListener('resize',fit);
 })();
-
-/* ===== manifesto: split por palavra/letra com vetor de dispersão ===== */
-const MCH=(function(){
-  const h=document.getElementById('manifesto-h');
-  const words=h.textContent.trim().split(/\s+/);
-  h.textContent='';
-  const chars=[];
-  let d=0;
-  words.forEach((word,wi)=>{
-    const w=document.createElement('span');w.className='mw';
-    for(const ch of word){
-      const s=document.createElement('span');
-      s.className='mch j';s.textContent=ch;
-      /* vetor de dispersão determinístico por índice */
-      const ang=(d*137.5)%360, R=140+(d*53)%160;
-      chars.push({el:s,dx:Math.cos(ang*Math.PI/180)*R,dy:Math.sin(ang*Math.PI/180)*R-120,rot:((d*67)%90)-45,i:d});
-      w.appendChild(s);d++;
-    }
-    h.appendChild(w);
-    if(wi<words.length-1)h.appendChild(document.createTextNode(' '));
-  });
-  return chars;
-})();
-
-/* ===================================================================
-   MOTOR DE SCRUB: tudo amarrado à posição do scroll, ida E volta
-   =================================================================== */
-const $=(s,c=document)=>c.querySelector(s);
-const $$=(s,c=document)=>[...c.querySelectorAll(s)];
-
-const heroStage=$('.hero-stage'),heroVid=$('#hero-vid'),heroMobileVid=$('#hero-vid-mobile'),heroOver=$('#hero-over');
-const heroL1=$('#hero-l1'),heroL2=$('#hero-l2'),heroDesc=$('#hero-desc'),heroCtas=$('#hero-ctas'),heroStatus=$('#hero-status');
-
-/* scrub do vídeo: alvo segue o scroll, currentTime persegue o alvo com lerp */
-let vidDur=0,vidTarget=0;
-heroVid.addEventListener('loadedmetadata',()=>{
-  vidDur=heroVid.duration;
-  if(REDUCED)try{heroVid.currentTime=6.5;}catch(_){} /* sem motion: para no carimbo kompila */
-});
-if(heroVid.readyState>=1&&heroVid.duration)vidDur=heroVid.duration; /* metadata pode já ter carregado do cache */
-/* O scrub precisa do arquivo inteiro em memória: funciona até em servidores sem HTTP Range. */
-let heroBlobUrl='';
-if(MOBILE_HERO){
-  if(!REDUCED){
-    heroMobileVid.src=heroMobileVid.dataset.src;
-    heroMobileVid.load();
-    heroMobileVid.play().catch(()=>{});
-  }
-}else{
-  fetch(heroVid.dataset.src).then(r=>{
-    if(!r.ok)throw new Error('hero video unavailable');
-    return r.blob();
-  }).then(blob=>{
-    heroBlobUrl=URL.createObjectURL(blob);
-    heroVid.addEventListener('loadedmetadata',()=>{
-      vidDur=heroVid.duration;
-      /* Com redução de movimento, mantém um quadro em que o polvo está visível. */
-      try{heroVid.currentTime=REDUCED?6.5:0;}catch(_){}
-      frame();
-    },{once:true});
-    heroVid.src=heroBlobUrl;
-    heroVid.load();
-  }).catch(()=>{
-    /* Se o carregamento em memória falhar, usa o MP4 direto em vez de deixar só o poster. */
-    heroVid.preload='auto';
-    heroVid.src=heroVid.dataset.src;
-    heroVid.load();
-  });
-}
-addEventListener('pagehide',()=>{if(heroBlobUrl)URL.revokeObjectURL(heroBlobUrl);},{once:true});
-
-/* sensor de brilho: amostra o frame atual e troca a cor do texto (claro no escuro, escuro no claro) */
+/* chat roteirizado do agente */
 (function(){
-  if(MOBILE_HERO)return;
-  const cv=document.createElement('canvas');cv.width=48;cv.height=27;
-  const cx=cv.getContext('2d',{willReadFrequently:true});
-  setInterval(()=>{
-    if(heroVid.readyState<2)return;
-    try{
-      cx.drawImage(heroVid,0,0,48,27);
-      const d=cx.getImageData(2,4,30,20).data; /* região esquerda-central, onde o texto vive */
-      let s=0,n=0;
-      for(let i=0;i<d.length;i+=16){s+=d[i]*.299+d[i+1]*.587+d[i+2]*.114;n++;}
-      heroOver.classList.toggle('lite',(s/n/255)>0.5);
-    }catch(_){}
-  },120);
+  var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),form=document.getElementById('kform'),inp=document.getElementById('kin');
+  var step=0,answers={};
+  var script=[
+    {q:'quantos leads chegam por mês na sua operação?',o:['até 200','200 a 1.000','mais de 1.000']},
+    {q:'E hoje, quem responde o lead quando ele chama? ',o:['os vendedores','um bot','ninguém fixo']},
+    {q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Pipedrive','Kommo','outro / nenhum']},
+    {q:'Fechou. Com isso eu já sei por onde o caso zero começa. Me chama no WhatsApp que te mostro o painel com os números de uma operação real.',o:[]}
+  ];
+  function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
+  function renderOpts(){opts.innerHTML='';(script[step]&&script[step].o||[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.dataset.v=o;b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}
+  function answer(v){if(!script[step])return;add(v,true);answers[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);renderOpts()}else{renderOpts()}},600)}
+  opts.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){answer(b.dataset.v)})});
+  form.addEventListener('submit',function(e){e.preventDefault();var v=inp.value.trim();if(!v)return;inp.value='';if(script[step]&&script[step].o.length)answer(v);else{add(v,true);setTimeout(function(){add('Anotado. Me chama no WhatsApp que a gente continua por lá.')},500)}});
+  h.addEventListener('click',function(){box.classList.toggle('open')});
+  
 })();
-(function vloop(){
-  if(!vidDur&&heroVid.duration)vidDur=heroVid.duration;
-  if(!MOBILE_HERO&&!REDUCED&&vidDur&&Math.abs(heroVid.currentTime-vidTarget)>0.02){
-    try{heroVid.currentTime+=(vidTarget-heroVid.currentTime)*0.3;}catch(_){}
-  }
-  requestAnimationFrame(vloop);
 })();
-const flys=$$('[data-fly]').map(el=>{
-  const cfg={x:0,y:0,r:0,s:1};
-  el.dataset.fly.split(',').forEach(kv=>{const[k,v]=kv.split(':');cfg[k]=parseFloat(v);});
-  return{el,...cfg};
-});
-const wipes=$$('[data-wipe]');
-const curtains=$$('[data-curtain]');
-const prints=$$('[data-print]').map(el=>({el,rot:parseFloat(el.dataset.print),dir:parseFloat(el.dataset.dir)}));
-const manifestoSec=$('#manifesto'),manifestoShape=$('#manifesto-shape');
-const serieGrid=$('.serie-grid');
-const bar=$('#progress');
-
-/* progresso do elemento pela viewport: 0 = topo entrando embaixo, 1 = fundo saindo em cima */
-function prog(el,lead=0){
-  const r=el.getBoundingClientRect();
-  return clamp((innerHeight-r.top+lead)/(innerHeight+r.height),0,1);
-}
-/* progresso de entrada: 0..1 enquanto o el entra na tela */
-function enter(el,span=.55,lead=0){
-  const r=el.getBoundingClientRect();
-  return clamp((innerHeight-r.top+lead)/(innerHeight*span),0,1);
-}
-
-/* animações de load usam fill both/forwards: limpar ao terminar,
-   senão elas travam o transform e o scrub do scroll não assume */
-heroOver.addEventListener('animationend',e=>{e.target.style.animation='none';});
-
-let ticking=false;
-function frame(){
-  ticking=false;
-  const y=scrollY;
-
-  /* barra de compilação */
-  const max=document.documentElement.scrollHeight-innerHeight;
-  bar.style.width=(max>0?(y/max)*100:0)+'%';
-
-  if(REDUCED)return;
-
-  /* ---------- HERO DESKTOP: vídeo compila com o scroll ---------- */
-  if(!MOBILE_HERO){
-    const runway=heroStage.offsetHeight-innerHeight;
-    const p=runway>0?clamp(y/runway,0,1):0;
-    if(vidDur)vidTarget=p*(vidDur-0.08);
-    /* texto desconstrói nos primeiros 16% da pista (fase de papel, antes do polvo montar) */
-    const hp=clamp(p/0.16,0,1);
-    const e=hp*hp;
-    const op=v=>clamp(v,0,1); /* opacity negativa é inválida e o browser IGNORA: sempre clampar */
-    heroL1.style.transform='translateX('+(-e*46)+'vw)';
-    heroL2.style.transform='translateX('+(e*46)+'vw)';
-    heroL1.style.opacity=heroL2.style.opacity=op(1-e*1.15);
-    heroDesc.style.transform='translateY('+(-e*70)+'px)';
-    heroDesc.style.opacity=op(1-e*1.6);
-    heroCtas.style.transform='translateY('+(-e*40)+'px)';
-    heroCtas.style.opacity=op(1-e*1.8);
-    heroCtas.style.pointerEvents=e>.5?'none':'auto';
-    heroStatus.style.opacity=op(1-e*2);
-    const heroLogo=$('#logo-vivo');
-    heroLogo.style.opacity=op(1-e*1.4);
-    heroLogo.style.pointerEvents=e>.5?'none':'auto';
-    const hint=$('.hero-scroll-hint');
-    if(hint)hint.style.opacity=op(1-p*4);
-    $('#hero-more').classList.toggle('on',p>0.82);
-    /* logo descompila enquanto some */
-    Logo.set(1-clamp((hp-.15)/.5,0,1));
-  }
-
-  /* ---------- CORTINAS: papel descoberto na diagonal ---------- */
-  curtains.forEach(c=>{
-    const p=ease(enter(c.parentElement,.85));
-    c.style.transform='translate('+(p*130)+'%,'+(-p*40)+'%) rotate('+(p*-6)+'deg)';
-  });
-
-  /* ---------- TÍTULOS: wipe amarrado ao scroll ---------- */
-  wipes.forEach(w=>{
-    const p=enter(w,.5);
-    w.style.clipPath='inset(0 '+((1-p)*100)+'% 0 0)';
-  });
-
-  /* ---------- FLY: entra de fora, assenta, segue com drift ---------- */
-  flys.forEach(f=>{
-    const p=ease(enter(f.el,.6));
-    const post=prog(f.el);           /* drift contínuo depois de assentado */
-    const dx=f.x*(1-p), dy=f.y*(1-p)-(post-.5)*30*f.s;
-    f.el.style.transform='translate('+dx+'px,'+dy+'px) rotate('+(f.r*(1-p))+'deg)';
-    f.el.style.opacity=Math.min(1,p*1.6);
-  });
-
-  /* ---------- PRINTS: voam de baixo girando, assentam, derivam ---------- */
-  prints.forEach((pr,i)=>{
-    const p=ease(clamp(enter(serieGrid,.7)-i*.12,0,1));
-    const post=prog(pr.el);
-    const ty=(1-p)*110+ (i===1?14:0) - (post-.5)*40*(1+i*.3);
-    const rot=pr.rot+(1-p)*16*pr.dir;
-    pr.el.style.transform='translateY('+ty+'px) rotate('+rot+'deg)';
-    pr.el.style.opacity=Math.min(1,p*1.5);
-  });
-
-  /* ---------- MANIFESTO: letras se montam com o scroll (scrub) ---------- */
-  const mp=enter(manifestoSec,.9);
-  MCH.forEach(c=>{
-    const cp=ease(clamp((mp-.18-c.i*.016)/.3,0,1));
-    c.el.style.transform='translate('+(c.dx*(1-cp))+'px,'+(c.dy*(1-cp))+'px) rotate('+(c.rot*(1-cp))+'deg)';
-    c.el.style.opacity=Math.min(1,cp*1.8);
-    c.el.style.color=cp<.85?'var(--amber)':'var(--ink)';
-  });
-  manifestoShape.style.transform='translateX('+((1-ease(clamp(mp/.5,0,1)))*80)+'%)';
-
-  /* ---------- DEBRIS extra: já coberto por data-fly (s controla a deriva) ---------- */
-}
-/* acordeão de jobs: um aberto por vez */
-let accordionAction=0;
-$$('.job-head').forEach(h=>{
-  h.addEventListener('click',()=>{
-    const action=++accordionAction;
-    const job=h.parentElement, estava=job.classList.contains('open');
-    $$('.job').forEach(x=>{
-      x.classList.remove('open');
-      x.querySelector('.job-flag b').textContent='+';
-      x.querySelector('.job-head').setAttribute('aria-expanded','false');
-    });
-    if(!estava){
-      job.classList.add('open');
-      h.querySelector('.job-flag b').textContent='–';
-      h.setAttribute('aria-expanded','true');
-      const body=job.querySelector('.job-body');
-      let centered=false;
-      const centerJob=()=>{
-        if(centered||action!==accordionAction)return;
-        centered=true;
-        const rect=job.getBoundingClientRect();
-        const top=scrollY+rect.top+(rect.height/2)-(innerHeight/2);
-        window.scrollTo({top:Math.max(0,top),behavior:REDUCED?'auto':'smooth'});
-      };
-      if(REDUCED)requestAnimationFrame(centerJob);
-      else{
-        body.addEventListener('transitionend',e=>{if(e.propertyName==='max-height')centerJob();},{once:true});
-        setTimeout(centerJob,1000); /* fallback se o browser não emitir transitionend */
-      }
-    }
-  });
-});
-
-/* popup de captação: pronto para receber uma integração com banco de leads */
-const contactModal=$('#contact-modal');
-let contactReturnFocus=null;
-function openContact(opener){
-  contactReturnFocus=opener||document.activeElement;
-  contactModal.classList.add('open');
-  contactModal.setAttribute('aria-hidden','false');
-  document.body.classList.add('modal-open');
-  requestAnimationFrame(()=>contactModal.querySelector('input').focus());
-}
-function closeContact(){
-  contactModal.classList.remove('open');
-  contactModal.setAttribute('aria-hidden','true');
-  document.body.classList.remove('modal-open');
-  if(contactReturnFocus)contactReturnFocus.focus();
-}
-$$('[data-open-contact]').forEach(btn=>btn.addEventListener('click',()=>openContact(btn)));
-contactModal.querySelector('[data-close-contact]').addEventListener('click',closeContact);
-contactModal.addEventListener('click',e=>{if(e.target===contactModal)closeContact();});
-addEventListener('keydown',e=>{if(e.key==='Escape'&&contactModal.classList.contains('open'))closeContact();});
-
-/* formulário: transforma os dados em uma conversa pronta no WhatsApp */
-const contatoForm=$('#contato-form');
-if(contatoForm){
-  contatoForm.addEventListener('submit',e=>{
-    e.preventDefault();
-    const nome=contatoForm.elements.nome.value.trim();
-    const whatsapp=contatoForm.elements.whatsapp.value.trim();
-    const email=contatoForm.elements.email.value.trim();
-    const mensagem=contatoForm.elements.mensagem.value.trim();
-    const texto=`Olá! Vim pelo site da Kompila e quero conversar sobre um projeto.\n\nNome: ${nome}\nWhatsApp: ${whatsapp}\nE-mail: ${email}\nProjeto: ${mensagem}`;
-    const url='https://wa.me/5511962884399?text='+encodeURIComponent(texto);
-    const botao=contatoForm.querySelector('button');
-    botao.textContent='[ abrindo whatsapp ]';
-    window.open(url,'_blank','noopener,noreferrer');
-    setTimeout(()=>{botao.textContent='continuar no WhatsApp →';},1800);
-  });
-}
-
-/* vídeos dos cases: tocam só quando visíveis */
-$$('.job video').forEach(v=>{
-  new IntersectionObserver(es=>es.forEach(e=>{
-    if(e.isIntersecting){v.play().catch(()=>{});}else{v.pause();}
-  }),{threshold:.25}).observe(v);
-});
-
-addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(frame);}},{passive:true});
-addEventListener('resize',()=>{if(!ticking){ticking=true;requestAnimationFrame(frame);}},{passive:true});
-/* primeiros frames (fonts/layout assentando) */
-frame();setTimeout(frame,60);setTimeout(frame,400);
 </script>
 </body>
 </html>
