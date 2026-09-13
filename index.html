@@ -398,6 +398,21 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
   .act-nav button span{display:none}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* preço: leitura guiada */
+.guia{display:grid;gap:16px}
+.gs{background:#fff;border-radius:var(--r2);padding:40px 44px;display:grid;grid-template-columns:64px 1.35fr 1fr;gap:32px;align-items:stretch}
+.gs .gn{font:600 13px var(--mono);color:var(--dim);letter-spacing:.12em;padding-top:6px}
+.gs h3{font-size:var(--t4);letter-spacing:-.03em;line-height:1.15;margin-bottom:10px}
+.gs p{color:var(--muted);font-size:17px;line-height:1.45}
+.gl{margin:14px 0 0;padding:0;list-style:none}.gl li{padding:10px 0;border-top:1px solid var(--line);font-size:15px;color:var(--muted);display:flex;justify-content:space-between;gap:16px}.gl li b{color:var(--ink);font-weight:500;font-family:var(--mono);font-size:13px;white-space:nowrap;text-align:right}
+.gc{border-left:3px solid var(--green);padding:6px 0 6px 26px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.gc small{font:500 var(--label) var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.gc b{font:600 clamp(36px,4vw,56px) var(--mono);letter-spacing:-.05em;line-height:1;color:var(--ink)}
+.gc span{color:var(--muted);font-size:15px;line-height:1.4}
+.gs.kp{outline:2px solid var(--green);outline-offset:-2px}
+.gs.dk{background:var(--carbon);color:var(--off)}.gs.dk p,.gs.dk .gc span{color:var(--cmuted)}.gs.dk .gc b{color:var(--green)}.gs.dk .gn,.gs.dk .gc small{color:var(--cdim)}
+@media (max-width:860px){.gs{grid-template-columns:1fr;gap:18px;padding:28px 24px}.gs .gn{padding:0}.gc{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.gs.dk .gc{border-color:var(--cline)}.gl li b{white-space:normal}}
 </style>
 </head>
 <body>
@@ -627,10 +642,12 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
 <!-- 10 PREÇO -->
 <section id="preco" style="padding-top:0">
   <div class="shell">
-    <div class="head rv"><div><span class="k">preço</span><h2 class="two-tone"><span class="dimt">Fixo baixo mais</span><br>por lead recuperado.</h2></div><p class="lead-p">O HubSpot cobra US$ 1 por lead que o agente dele recomenda. A Kompila cobra por lead que voltou a responder e por reunião marcada.</p></div>
-    <div class="price">
-      <div class="pr main rv"><span class="k b">o modelo</span><h3>fixo + resultado</h3><p>Fixo mensal na faixa do que uma agência cobra para “cuidar do CRM”. Variável por lead recuperado e por reunião realizada na agenda.</p><ul><li><span>1 · ligar o nativo e medir 30 dias</span><b>1 tarde + linha de base</b></li><li><span>2 · a Kompila vigiando o lead</span><b>4 a 6 semanas</b></li><li><span>3 · atendimento ativo no WhatsApp</span><b>depois que a etapa 2 provar resultado em dinheiro</b></li></ul></div>
-      <div class="pr rv d1"><span class="k">o que o cliente já paga hoje</span><ul style="margin-top:0"><li><span>Assento Sales Pro no HubSpot, por vendedor</span><b>R$ 495 a R$ 550 / mês</b></li><li><span>Manutenção de agência parceira</span><b>R$ 3 mil a R$ 8 mil / mês</b></li><li><span>Implantação de CRM por agência</span><b>R$ 5 mil a R$ 70 mil</b></li><li><span>Negócio médio fechado</span><b>R$ 20 mil a R$ 270 mil</b></li></ul><p style="font-size:15px">Um único lead recuperado que fecha paga meses inteiros da operação.</p></div>
+    <div class="head rv"><div><span class="k">preço</span><h2 class="two-tone"><span class="dimt">Fixo baixo mais</span><br>por lead recuperado.</h2></div><p class="lead-p">Antes de dizer quanto custa, vale olhar quanto você já gasta pra ter um lead esperando.</p></div>
+    <div class="guia">
+      <div class="gs rv"><span class="gn">01</span><div class="gt"><h3>O que você já paga hoje</h3><ul class="gl"><li><span>Assento Sales Pro no HubSpot, por vendedor</span><b>R$ 495 a R$ 550 / mês</b></li><li><span>Agência “cuidando do CRM”</span><b>R$ 3 mil a R$ 8 mil / mês</b></li><li><span>Implantação do CRM, uma vez</span><b>R$ 5 mil a R$ 70 mil</b></li></ul></div><div class="gc"><small>numa operação de 3 vendedores</small><b>R$ 4.650</b><span>por mês, antes de qualquer lead ser respondido.</span></div></div>
+      <div class="gs rv d1"><span class="gn">02</span><div class="gt"><h3>O que esse dinheiro compra</h3><p>Um sistema que registra o lead, distribui e mede. Não responde, não cobra o vendedor, não percebe quando o lead ficou órfão.</p></div><div class="gc"><small>dentro de um CRM pago</small><b>761</b><span>leads sem nenhum contato em 12 semanas.</span></div></div>
+      <div class="gs kp rv d2"><span class="gn">03</span><div class="gt"><h3>O que a Kompila cobra</h3><p>Um fixo mensal na faixa do que a agência cobra. E um variável que só existe quando dá resultado.</p><ul class="gl"><li><span>Fixo mensal</span><b>na faixa da agência</b></li><li><span>Por lead recuperado</span><b>quando volta a responder</b></li><li><span>Por reunião marcada</span><b>quando entra na agenda</b></li></ul></div><div class="gc"><small>sem resultado</small><b>só o fixo</b><span>O HubSpot cobra US$ 1 por lead que o agente dele apenas recomenda.</span></div></div>
+      <div class="gs dk rv d3"><span class="gn">04</span><div class="gt"><h3>A conta que fecha</h3><p>Negócio médio fechado nas operações que medimos: R$ 20 mil a R$ 270 mil.</p></div><div class="gc"><small>um lead recuperado que fecha</small><b>1 lead</b><span>paga meses inteiros da operação.</span></div></div>
     </div>
   </div>
 </section>
