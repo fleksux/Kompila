@@ -61,8 +61,9 @@ nav .panel{display:none}
 /* hero: foto, título digitado */
 .hero{margin:12px;border-radius:32px;background:var(--carbon);color:#fff;height:calc(100svh - 24px);min-height:640px;position:relative;overflow:hidden;display:flex;align-items:flex-end}
 .hero .bgwrap{position:absolute;inset:0;z-index:1;will-change:transform}
-.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 30%;opacity:0;transform:scale(1.22) translateY(6%);transition:opacity 1.1s ease,transform 2.2s cubic-bezier(.2,.8,.2,1)}
-.hero.bgin img.bg{opacity:1;transform:scale(1.16) translateY(5%)}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 30%;opacity:0}
+.hero.bgin img.bg{animation:heroIn 2.2s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes heroIn{from{opacity:0;transform:scale(1.14) translateY(6%)}to{opacity:1;transform:scale(1.06) translateY(3%)}}
 .hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,11,14,.82) 0%,rgba(10,11,14,.7) 45%,rgba(10,11,14,.35) 68%,rgba(10,11,14,.1) 100%)}
 .hero .veil2{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,14,.35) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,0) 60%,rgba(10,11,14,.8) 100%)}
 .hero .in{position:relative;z-index:2;width:min(var(--shell),100% - 2*var(--gut));margin:0 auto;padding:0 0 72px;display:grid;gap:22px;justify-items:start}
@@ -93,8 +94,9 @@ nav .panel{display:none}
   nav .panel a{padding:14px 16px;font-size:16px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--line)}
   nav .panel .btn{margin-top:8px;color:#fff}
   .hero{margin:0;border-radius:0;height:auto;min-height:100svh}
-  .hero img.bg{object-position:79% 50%;transform:scale(1.08)}
-  .hero.bgin img.bg{transform:scale(1.08) translateY(30px)}
+  .hero img.bg{object-position:79% 50%}
+  .hero.bgin img.bg{animation-name:heroInM}
+  @keyframes heroInM{from{opacity:0;transform:scale(1.14)}to{opacity:1;transform:scale(1.08) translateY(30px)}}
   .hero .in{width:100%;padding:110px var(--gut) 40px;gap:16px}
   .hero h1{font-size:44px;font-weight:600;max-width:none}
   .hero .lead{font-size:17px}
@@ -445,7 +447,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .trust .mq{-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 @media(max-width:700px){.trust{padding:40px 0 32px}.trust .stats{grid-template-columns:1fr 1fr;gap:14px 12px;margin-bottom:22px}.trust .stats b{font-size:20px}.trust .stats span{font-size:12.5px}.hero .in{padding-bottom:40px}}
 
-@media(min-width:701px){.hero img.bg{object-position:100% 30%}.hero.bgin img.bg{transform:scale(1.06) translateY(3%)}}
+@media(min-width:701px){.hero img.bg{object-position:100% 30%}}
 </style>
 </head>
 <body>
@@ -704,7 +706,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 /* chat roteirizado */
 (function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Caso Zero.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
 </script>
-<script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0,img=document.getElementById('heroBg');function show(){requestAnimationFrame(function(){requestAnimationFrame(function(){hero.classList.add('bgin')})})}if(img&&img.complete&&img.naturalWidth)show();else if(img){img.addEventListener('load',show);img.addEventListener('error',show)}var wrap=hero.querySelector('.bgwrap');if(!(CSS.supports&&CSS.supports('animation-timeline: scroll()'))&&wrap){var t=false,y=0;addEventListener('scroll',function(){y=scrollY||0;if(y>hero.offsetHeight)return;if(!t){t=true;requestAnimationFrame(function(){t=false;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'})}},{passive:true})}addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
+<script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0,img=document.getElementById('heroBg');function show(){requestAnimationFrame(function(){requestAnimationFrame(function(){hero.classList.add('bgin');setTimeout(function(){img.style.willChange='transform';img.getBoundingClientRect();img.style.willChange=''},2400)})})}if(img&&img.complete&&img.naturalWidth)show();else if(img){img.addEventListener('load',show);img.addEventListener('error',show)}var wrap=hero.querySelector('.bgwrap');if(!(CSS.supports&&CSS.supports('animation-timeline: scroll()'))&&wrap){var t=false,y=0;addEventListener('scroll',function(){y=scrollY||0;if(y>hero.offsetHeight)return;if(!t){t=true;requestAnimationFrame(function(){t=false;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'})}},{passive:true})}addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
 <script>
 /* telas e conversas ganham vida quando entram na tela */
 (function(){
