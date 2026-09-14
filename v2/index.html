@@ -453,6 +453,23 @@ nav .logo .lr{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppe
 @media(max-width:700px){.hero .p{font-size:.8em;line-height:1.45;max-width:none;text-wrap:wrap}}
 
 @media(max-width:700px){.hero .titles,.hero .p{text-align:left}.hero h1,.hero .p{margin-left:0;margin-right:0}}
+
+/* celular: hero = tela cheia e calma (foto, título, texto, botões); a demo vai pro bloco seguinte */
+.dor{display:none}
+@media(max-width:700px){
+  .dor{display:block;padding:8px 0 56px;margin-top:-1px}
+  .dor .micro{text-align:center;font:500 13px var(--sans);color:rgba(255,255,255,.72);margin:0 0 12px}
+  .dor .feed{margin:0;max-width:none}
+  .hero{min-height:100svh;height:auto}
+  .hero .bgwrap{height:100%;bottom:0}
+  .hero .veil{background:linear-gradient(90deg,rgba(10,11,14,.8) 0%,rgba(10,11,14,.55) 42%,rgba(10,11,14,.08) 72%),linear-gradient(180deg,rgba(10,11,14,.3),transparent 35%,transparent 60%,rgba(10,11,14,.85))}
+  .hero img.bg{object-position:79% 50%}
+  .hero.bgin img.bg{transform:scale(1.08) translateY(30px)}
+  .hero .in{min-height:100svh;padding:100px var(--gut) 40px;justify-content:flex-end;gap:16px}
+  .hero .titles{margin-top:0}
+  .hero h1{font-size:44px;font-weight:500;letter-spacing:-.05em;line-height:.98}
+  .hero .p{font-size:17px;font-weight:400;line-height:1.4;color:rgba(255,255,255,.85);margin:0}
+}
 </style>
 </head>
 <body>
@@ -522,6 +539,7 @@ nav .logo .lr{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppe
   </div>
 </header>
 
+<section class="dark dor only-mob" id="dor"><div class="shell" id="dorIn"></div></section>
 <!-- 02 O VAZAMENTO -->
 <section id="vazamento">
   <div class="shell">
@@ -819,5 +837,6 @@ var wrap=hero.querySelector('.bgwrap');if(!(CSS.supports&&CSS.supports('animatio
 })();
 </script>
 <script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
+<script>(function(){if(!matchMedia('(max-width:700px)').matches)return;var d=document.getElementById('dorIn'),m=document.querySelector('.hero .micro'),f=document.getElementById('feed');if(d&&m&&f){d.appendChild(m);d.appendChild(f)}})();</script>
 </body>
 </html>
