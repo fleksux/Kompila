@@ -402,6 +402,13 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 
 .hero .copy,.hero .acts{display:grid;gap:22px;justify-items:start}
 @media(max-width:700px){.hero .copy,.hero .acts{gap:16px;width:100%}}
+
+/* hero em duas colunas: esquerda texto, direita notificações */
+.hero .in{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+.hero .left{display:grid;gap:22px;justify-items:start}
+.hero .right{position:relative;min-height:420px}
+.notif{position:absolute;right:0;bottom:0;width:min(100%,420px);height:100%}
+@media(max-width:900px){.hero .in{grid-template-columns:1fr}.hero .right{display:none}}
 </style>
 </head>
 <body>
@@ -429,6 +436,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <header class="hero" id="topo">
   <div class="bgwrap"><img class="bg" id="heroBg" src="../img/hero-diretor.webp" alt="Diretor comercial de braços cruzados numa sala de vendas" fetchpriority="high" decoding="async"><div class="veil"></div></div>
   <div class="in">
+    <div class="left">
     <div class="copy">
       <h1 id="h1">Você não perde venda por falta de lead. <span class="g">Perde porque ninguém respondeu.</span></h1>
       <p class="lead">A Kompila encontra os leads parados na sua operação, responde em segundos e garante que cada um tenha um responsável e uma próxima ação.</p>
@@ -437,8 +445,9 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
       <div class="ctas"><a class="btn green" href="#calc">Analisar meus leads</a><a class="btn ghost" href="#como">Ver como funciona</a></div>
       <div class="checks"><span>Sem trocar de CRM</span><span>Primeiro medimos, depois você decide</span></div>
     </div>
+    </div>
+    <div class="right"><div class="notif" id="notif" aria-hidden="true"></div></div>
   </div>
-  <div class="notif" id="notif" aria-hidden="true"></div>
   <div class="hero-marcas">
     <div class="stats"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><div><b>+25</b><span>marcas atendidas</span></div><div><b>R$ 500 mil</b><span>por mês administrados em mídia</span></div><div><b>Meta e Google Ads</b><span>equipe certificada</span></div></div>
     <div class="mq"><div class="mq-track"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span></div></div>
