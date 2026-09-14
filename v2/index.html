@@ -189,7 +189,7 @@ nav .panel{display:none}
 .quote p{font-size:clamp(20px,2vw,26px);font-weight:600;letter-spacing:-.02em;color:var(--ink);line-height:1.3}
 .quote small{font-size:13px;color:var(--muted);white-space:nowrap}
 
-/* caso zero (único bloco escuro) */
+/* diagnóstico (único bloco escuro) */
 .dark{background:var(--carbon);color:var(--off)}
 .dark h2{color:#fff}
 .dark .lead{color:var(--cmuted)}
@@ -543,11 +543,11 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cur.click:after{animation:clk .6s ease-out}
 @keyframes clk{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(2.2)}}
 
-/* caso zero: mesmo cartão escuro da vitrine, com movimento */
-#casozero{margin:0 12px;border-radius:32px;padding:88px 5%;position:relative;overflow:visible;clip-path:inset(0 round 32px);background:#0d1114 url(img/bg-showcase.webp) center right/cover no-repeat}
-#casozero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,17,20,.98) 0%,rgba(13,17,20,.92) 45%,rgba(13,17,20,.55) 100%)}
-#casozero .shell{position:relative;z-index:1}
-#casozero h2{font-size:clamp(30px,3.2vw,42px);max-width:22ch}
+/* diagnóstico: mesmo cartão escuro da vitrine, com movimento */
+#diagnostico{margin:0 12px;border-radius:32px;padding:88px 5%;position:relative;overflow:visible;clip-path:inset(0 round 32px);background:#0d1114 url(img/bg-showcase.webp) center right/cover no-repeat}
+#diagnostico:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,17,20,.98) 0%,rgba(13,17,20,.92) 45%,rgba(13,17,20,.55) 100%)}
+#diagnostico .shell{position:relative;z-index:1}
+#diagnostico h2{font-size:clamp(30px,3.2vw,42px);max-width:22ch}
 .cz ol li{opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1)}
 .cz ol li:before{transition:color .4s,background .4s;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.06);color:var(--cmuted);padding:0}
 .cz.live ol li{opacity:1;transform:none}
@@ -557,7 +557,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cz.live .side li{opacity:1;transform:none}
 .cz.live .side li:nth-child(1){transition-delay:.9s}.cz.live .side li:nth-child(2){transition-delay:1.05s}.cz.live .side li:nth-child(3){transition-delay:1.2s}.cz.live .side li:nth-child(4){transition-delay:1.35s}.cz.live .side li:nth-child(5){transition-delay:1.5s}.cz.live .side li:nth-child(6){transition-delay:1.65s}
 .cz .side{background:rgba(17,21,26,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-@media(max-width:700px){#casozero{margin:0;border-radius:0;clip-path:none;padding:56px 6%}#casozero:before{background:linear-gradient(180deg,rgba(13,17,20,.98),rgba(13,17,20,.92) 60%,rgba(13,17,20,.7))}}
+@media(max-width:700px){#diagnostico{margin:0;border-radius:0;clip-path:none;padding:56px 6%}#diagnostico:before{background:linear-gradient(180deg,rgba(13,17,20,.98),rgba(13,17,20,.92) 60%,rgba(13,17,20,.7))}}
 
 @media(min-width:901px){.cz{align-items:start}.cz .side{position:sticky;top:96px;align-self:start}}
 
@@ -617,11 +617,11 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
   <div class="shell">
     <div class="pill">
       <a class="logo" href="#"><span><span class="b">[</span> kompila <span class="b">]</span></span><small>lead recovery</small></a>
-      <div class="links"><a href="#vazamento">O vazamento</a><a href="#como">Como funciona</a><a href="#quem">Pra quem</a><a href="#casozero">Caso Zero</a><a href="#calc">Calculadora</a></div>
+      <div class="links"><a href="#vazamento">O vazamento</a><a href="#como">Como funciona</a><a href="#quem">Pra quem</a><a href="#diagnostico">Diagnóstico</a><a href="#calc">Calculadora</a></div>
       <a class="btn green" href="#calc">Analisar meus leads</a>
       <button type="button" class="menu" id="menuBtn" aria-label="menu"><svg class="ico io"><use href="#i-menu"/></svg><svg class="ico ic"><use href="#i-x"/></svg></button>
     </div>
-    <div class="panel" id="menuPanel"><a href="#vazamento">O vazamento</a><a href="#como">Como funciona</a><a href="#quem">Pra quem</a><a href="#casozero">Caso Zero</a><a href="#calc">Calculadora</a><a class="btn green" href="#calc">Analisar meus leads</a></div>
+    <div class="panel" id="menuPanel"><a href="#vazamento">O vazamento</a><a href="#como">Como funciona</a><a href="#quem">Pra quem</a><a href="#diagnostico">Diagnóstico</a><a href="#calc">Calculadora</a><a class="btn green" href="#calc">Analisar meus leads</a></div>
   </div>
 </nav>
 
@@ -768,13 +768,13 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
   </div>
 </section>
 
-<!-- CASO ZERO -->
-<section class="dark" id="casozero">
+<!-- DIAGNÓSTICO -->
+<section class="dark" id="diagnostico">
   <div class="shell">
     <div class="cz">
       <div class="rv">
         <h2>Primeiro encontramos o vazamento. Depois decidimos o que vale automatizar.</h2>
-        <p class="lead" style="margin:14px 0 24px">O Caso Zero é um diagnóstico da jornada dos seus leads, feito dentro do seu CRM. Sem migração, sem mudar a rotina da equipe.</p>
+        <p class="lead" style="margin:14px 0 24px">O Diagnóstico é a leitura da jornada dos seus leads, feita dentro do seu CRM. Sem migração, sem mudar a rotina da equipe.</p>
         <ol>
           <li><div><b>Entender</b><span>Canais, equipe, CRM, regras de distribuição, prazos e etapas de venda.</span></div></li>
           <li><div><b>Analisar</b><span>Um período autorizado do CRM: contatos sem resposta, sem responsável, sem próxima ação.</span></div></li>
@@ -784,7 +784,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
       </div>
       <div class="side rv">
         <h3>Você sai com</h3>
-        <ul><li>Mapa da jornada atual</li><li>Diagnóstico do vazamento</li><li>Cinco indicadores principais</li><li>Fila inicial de recuperação</li><li>Regras sugeridas de prazo</li><li>Estimativa financeira conservadora</li></ul>
+        <ul><li>Mapa da jornada atual</li><li>Onde está o vazamento</li><li>Cinco indicadores principais</li><li>Fila inicial de recuperação</li><li>Regras sugeridas de prazo</li><li>Estimativa financeira conservadora</li></ul>
         <a class="btn green" href="#calc">Quero analisar minha operação</a>
         <small>Primeiro medimos. Depois você decide.</small>
       </div>
@@ -797,7 +797,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
   <div class="shell">
     <div class="cwrap">
       <div class="cleft">
-      <div class="head rv"><h2>Quanto dinheiro pode estar parado na sua fila?</h2><p class="lead">Uma estimativa inicial com os números da sua operação. O valor real é validado no Caso Zero.</p></div>
+      <div class="head rv"><h2>Quanto dinheiro pode estar parado na sua fila?</h2><p class="lead">Uma estimativa inicial com os números da sua operação. O valor real é validado no Diagnóstico.</p></div>
       <form class="form rv" onsubmit="return false">
         <label><b>Leads por mês</b><input type="number" id="cL" value="6000" min="1"></label>
         <label><b>Quantos ficam sem resposta ou sem próxima ação (%)</b><input type="number" id="cP" value="20" min="0" max="100"></label>
@@ -824,7 +824,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
   <div class="shell">
     <div class="head rv"><h2>Perguntas frequentes</h2></div>
     <div class="rv">
-      <details><summary>Preciso trocar de CRM?</summary><p>Não. A Kompila se conecta à estrutura que a empresa já usa. Compatibilidade e acessos são avaliados no Caso Zero.</p></details>
+      <details><summary>Preciso trocar de CRM?</summary><p>Não. A Kompila se conecta à estrutura que a empresa já usa. Compatibilidade e acessos são avaliados no Diagnóstico.</p></details>
       <details><summary>A inteligência artificial substitui os vendedores?</summary><p>Não. Ela atende o primeiro momento, organiza as informações e garante continuidade. O vendedor entra com contexto para negociar e fechar.</p></details>
       <details><summary>O que acontece quando ninguém responde?</summary><p>O prazo é monitorado. Conforme a regra da empresa, o sistema alerta, devolve o lead para a fila ou aciona outro responsável.</p></details>
       <details><summary>Funciona fora do expediente?</summary><p>A camada automática responde e qualifica 24 horas. Fora do expediente, o lead fica preparado para o humano no início do próximo turno.</p></details>
@@ -864,7 +864,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 /* calculadora */
 (function(){var r=10,$=function(id){return document.getElementById(id)};function fmt(n){return n.toLocaleString('pt-BR')}function money(n){return n>=1000?'R$ '+Math.round(n/1000)+' mil':'R$ '+Math.round(n)}function calc(){var L=+$('cL').value||0,P=(+$('cP').value||0)/100,C=(+$('cC').value||0)/100,V=+$('cV').value||0;var parados=L*P,reat=parados*r/100,vendas=reat*C,v1=Math.floor(vendas),v2=Math.ceil(vendas);if(v2<1)v2=1;if(v1<0)v1=0;$('rL').textContent=fmt(L);$('rP').textContent=fmt(Math.round(parados));$('rR').textContent=fmt(Math.round(reat));$('rV').textContent=v1===v2?v1:v1+' a '+v2;$('rM').textContent=v1===v2?money(v1*V):money(v1*V)+' a '+money(v2*V);$('rSl').textContent={5:'No cenário conservador',10:'No cenário provável',20:'No cenário potencial'}[r]}document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});calc()})();
 /* chat roteirizado */
-(function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Caso Zero.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
+(function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Diagnóstico.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
 </script>
 <script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0,img=document.getElementById('heroBg');function show(){hero.classList.add('bgin');setTimeout(function(){img.style.willChange='transform';img.getBoundingClientRect();img.style.willChange=''},2400)}if(img&&img.complete&&img.naturalWidth)show();else if(img){img.addEventListener('load',show);img.addEventListener('error',show)}var wrap=hero.querySelector('.bgwrap');if(!(CSS.supports&&CSS.supports('animation-timeline: scroll()'))&&wrap){var t=false,y=0;addEventListener('scroll',function(){y=scrollY||0;if(y>hero.offsetHeight)return;if(!t){t=true;requestAnimationFrame(function(){t=false;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'})}},{passive:true})}addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
 <script>
