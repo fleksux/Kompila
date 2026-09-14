@@ -356,6 +356,15 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
 .win.kanban .kc em.bad{background:var(--red-soft);color:var(--red)}.win.kanban .kc em.ok{background:var(--green-soft);color:var(--green)}
 @media(max-width:900px){.sc-in{grid-template-columns:1fr;gap:28px;padding:36px 6%}.sc-txt{min-height:0}.sc-txt .pane{position:absolute}.sc-txt .pane.on{position:relative}.sc-shot{min-height:0}.sc-shot .pane{position:absolute}.sc-shot .pane.on{position:relative}.win.kanban .cols{grid-template-columns:1fr}}
 @media(max-width:700px){.showcase{margin:0;border-radius:0}.showcase .bgimg{background-position:center bottom}.showcase .bgimg:after{background:linear-gradient(180deg,rgba(13,17,20,.98) 0%,rgba(13,17,20,.92) 55%,rgba(13,17,20,.5) 100%)}.tabs{margin:0 var(--gut) 14px;max-width:none;justify-content:flex-start}.tabs button{padding:10px 16px;font-size:15px}.sc-txt h3{font-size:26px}.sc-txt ul{gap:14px}.win .kp{grid-template-columns:repeat(2,1fr)}}
+
+/* hero desktop: mais alto, respiro no topo, tudo à esquerda */
+@media(min-width:701px){
+  .hero{height:auto;min-height:calc(100svh - 24px)}
+  .hero .in{padding:200px 0 190px;justify-items:start}
+  .hero h1,.hero .lead{text-align:left}
+  .hero-marcas{padding-bottom:36px}
+  .hero-marcas p{text-align:left;margin:0 0 16px;width:min(var(--shell),100% - 2*var(--gut));margin-left:auto;margin-right:auto}
+}
 </style>
 </head>
 <body>
