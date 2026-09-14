@@ -365,6 +365,10 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
   .hero-marcas{padding-bottom:36px}
   .hero-marcas p{text-align:left;margin:0 0 16px;width:min(var(--shell),100% - 2*var(--gut));margin-left:auto;margin-right:auto}
 }
+
+/* guias: ?guias na URL ou tecla g */
+html.guias div,html.guias header,html.guias section,html.guias footer,html.guias nav,html.guias form{outline:1px solid rgba(47,125,255,.85);outline-offset:-1px}
+html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2px dashed rgba(47,125,255,.95);outline-offset:-2px}
 </style>
 </head>
 <body>
@@ -637,5 +641,6 @@ function go(n){cur=n;tabs.forEach(function(b,i){b.classList.toggle('on',i===n)})
 tabs.forEach(function(b,i){b.addEventListener('click',function(){touched=true;clearInterval(timer);go(i)})});
 var sc=document.getElementById('showcase');new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!timer&&!touched){timer=setInterval(function(){go((cur+1)%tabs.length)},6000)}else if(!e.isIntersecting&&timer){clearInterval(timer);timer=null}})},{threshold:.3}).observe(sc)})();
 </script>
+<script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
 </body>
 </html>
