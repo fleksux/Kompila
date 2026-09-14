@@ -400,6 +400,13 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
 .feed-h b{font-size:16px;line-height:1;align-self:center}
 .feed-b .cb.vend{align-self:flex-end;background:rgba(47,214,123,.08);border-color:rgba(47,214,123,.4)}
 .feed-b .cb.vend:before{content:"vendedor · 3 dias depois";color:var(--green)}
+
+/* parallax leve: sem blur pesado em cima da foto que se move */
+.feed{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(17,21,26,.78);contain:paint}
+.hero img.bg{will-change:transform,opacity;backface-visibility:hidden}
+/* guias: ?guias na URL ou tecla g */
+html.guias div,html.guias header,html.guias section,html.guias footer,html.guias nav,html.guias form{outline:1px solid rgba(47,125,255,.85);outline-offset:-1px}
+html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2px dashed rgba(47,125,255,.95);outline-offset:-2px}
 </style>
 </head>
 <body>
@@ -766,5 +773,6 @@ else setTimeout(function(){typeChars(ca,52,function(){h1a.classList.add('gone');
 var wrap=hero.querySelector('.bgwrap'),t=false;function px(){t=false;var y=scrollY||0;if(y>hero.offsetHeight)return;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'}addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(px)}},{passive:true});px();
 })();
 </script>
+<script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
 </body>
 </html>
