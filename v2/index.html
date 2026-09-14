@@ -433,13 +433,15 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
   .hero .in{padding:110px 0 70px;align-items:center}
   .hero h1{text-align:left}
 }
-.trust{padding:56px 0 40px;background:#fff}
-.trust .stats{width:min(var(--shell),100% - 2*var(--gut));margin:0 auto 32px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 32px}
-.trust .stats b{display:block;font:700 26px var(--sans);letter-spacing:-.03em;color:var(--ink);line-height:1.1}
-.trust .stats span{display:block;font-size:14px;color:var(--muted);margin-top:4px}
-.trust .mq-track span{color:#9aa1a9}
+.trust{padding:64px 0 56px;background:var(--soft);border-bottom:1px solid var(--line)}
+.trust .stats{width:min(var(--shell),100% - 2*var(--gut));margin:0 auto 40px;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.trust .stats>div{padding:6px 28px;border-left:1px solid var(--line);text-align:center}
+.trust .stats>div:first-child{border-left:0}
+.trust .stats b{display:block;font:700 clamp(28px,2.6vw,36px) var(--sans);letter-spacing:-.04em;color:var(--ink);line-height:1.05}
+.trust .stats span{display:block;font-size:14px;color:var(--muted);margin-top:6px}
+.trust .mq-track span{color:#8f979f;font-size:19px}
 .trust .mq{-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-@media(max-width:700px){.trust{padding:40px 0 32px}.trust .stats{grid-template-columns:1fr 1fr;gap:14px 12px;margin-bottom:22px}.trust .stats b{font-size:20px}.trust .stats span{font-size:12.5px}.hero .in{padding-bottom:40px}}
+@media(max-width:700px){.trust{padding:44px 0 36px}.trust .stats{grid-template-columns:1fr 1fr;gap:18px 0;margin-bottom:26px}.trust .stats>div{padding:4px 12px;border-left:0}.trust .stats>div:nth-child(even){border-left:1px solid var(--line)}.trust .stats b{font-size:24px}.trust .stats span{font-size:12.5px}.hero .in{padding-bottom:40px}}
 
 @media(min-width:701px){.hero img.bg{object-position:72% 30%}}
 </style>
@@ -700,7 +702,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 /* chat roteirizado */
 (function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Caso Zero.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
 </script>
-<script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0,img=document.getElementById('heroBg');function show(){requestAnimationFrame(function(){requestAnimationFrame(function(){hero.classList.add('bgin');setTimeout(function(){img.style.willChange='transform';img.getBoundingClientRect();img.style.willChange=''},2400)})})}if(img&&img.complete&&img.naturalWidth)show();else if(img){img.addEventListener('load',show);img.addEventListener('error',show)}var wrap=hero.querySelector('.bgwrap');if(!(CSS.supports&&CSS.supports('animation-timeline: scroll()'))&&wrap){var t=false,y=0;addEventListener('scroll',function(){y=scrollY||0;if(y>hero.offsetHeight)return;if(!t){t=true;requestAnimationFrame(function(){t=false;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'})}},{passive:true})}addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
+<script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0,img=document.getElementById('heroBg');function show(){hero.classList.add('bgin');setTimeout(function(){img.style.willChange='transform';img.getBoundingClientRect();img.style.willChange=''},2400)}if(img&&img.complete&&img.naturalWidth)show();else if(img){img.addEventListener('load',show);img.addEventListener('error',show)}var wrap=hero.querySelector('.bgwrap');if(!(CSS.supports&&CSS.supports('animation-timeline: scroll()'))&&wrap){var t=false,y=0;addEventListener('scroll',function(){y=scrollY||0;if(y>hero.offsetHeight)return;if(!t){t=true;requestAnimationFrame(function(){t=false;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'})}},{passive:true})}addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
 <script>
 /* telas e conversas ganham vida quando entram na tela */
 (function(){
