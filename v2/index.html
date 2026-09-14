@@ -305,8 +305,9 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
 .win li em.ok.ia:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:6px;vertical-align:middle;animation:pulse 1.2s ease-in-out infinite}
 /* conversas do WhatsApp acontecem quando entram na tela */
 .phone .msg{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.8,.2,1)}
+.phone .pb{min-height:220px}
 .phone .msg.on{opacity:1;transform:none}
-.phone .typing{display:none;gap:4px;padding:10px 12px;border-radius:14px;background:#fff;border:1px solid var(--line);width:max-content}
+.phone .typing{display:none;gap:4px;padding:10px 12px;border-radius:14px;background:#fff;border:1px solid var(--line);width:max-content;height:34px}
 .phone .typing.k{align-self:flex-end;background:var(--green-soft);border-color:#cfeadb}
 .phone .typing.show{display:flex}
 .phone .typing i{width:6px;height:6px;border-radius:50%;background:#9aa1a9;animation:tp 1s infinite}
@@ -330,15 +331,15 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
 .showcase .bgimg{position:absolute;inset:0;background:url(img/bg-showcase.webp) center right/cover no-repeat;opacity:.9}
 .showcase .bgimg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,17,20,.98) 0%,rgba(13,17,20,.9) 38%,rgba(13,17,20,.25) 70%,rgba(13,17,20,.1) 100%)}
 .sc-in{position:relative;z-index:2;display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:center;padding:56px 5% 56px 5%}
-.sc-txt{position:relative;min-height:420px}
+.sc-txt{position:relative;min-height:460px;height:460px}
 .sc-txt .pane{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-.sc-txt .pane.on{opacity:1;transform:none;pointer-events:auto;position:relative}
+.sc-txt .pane.on{opacity:1;transform:none;pointer-events:auto}
 .sc-txt h3{color:#fff;font-size:clamp(26px,2.6vw,36px);margin-bottom:14px}
 .sc-txt p{color:rgba(255,255,255,.78);font-size:17px;max-width:44ch}
 .sc-txt ul{margin-top:26px;display:grid;gap:18px}
 .sc-txt li{display:grid;gap:3px;padding-left:18px;border-left:2px solid rgba(47,214,123,.5)}
 .sc-txt li b{color:#fff;font-size:16px}.sc-txt li span{color:rgba(255,255,255,.7);font-size:14.5px;line-height:1.45}
-.sc-shot{position:relative;min-height:420px}
+.sc-shot{position:relative;min-height:460px;height:460px}
 .sc-shot .pane{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateX(40px) scale(.98);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1);pointer-events:none}
 .sc-shot .pane.on{opacity:1;transform:none;pointer-events:auto}
 .sc-shot .win,.sc-shot .phone{width:100%;box-shadow:0 40px 90px rgba(0,0,0,.45)}
@@ -354,7 +355,7 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
 .win.kanban .kc b{display:block;font-size:13px;color:var(--ink)}.win.kanban .kc span{font-size:12px;color:var(--muted)}
 .win.kanban .kc em{position:absolute;right:10px;top:10px;font-size:10px;font-style:normal;padding:2px 7px;border-radius:999px}
 .win.kanban .kc em.bad{background:var(--red-soft);color:var(--red)}.win.kanban .kc em.ok{background:var(--green-soft);color:var(--green)}
-@media(max-width:900px){.sc-in{grid-template-columns:1fr;gap:28px;padding:36px 6%}.sc-txt{min-height:0}.sc-txt .pane{position:absolute}.sc-txt .pane.on{position:relative}.sc-shot{min-height:0}.sc-shot .pane{position:absolute}.sc-shot .pane.on{position:relative}.win.kanban .cols{grid-template-columns:1fr}}
+@media(max-width:900px){.sc-in{grid-template-columns:1fr;gap:28px;padding:36px 6%}.sc-txt{height:auto;min-height:0}.sc-txt .pane{position:absolute}.sc-txt .pane.on{position:relative}.sc-shot{height:auto;min-height:0}.sc-shot .pane{position:absolute}.sc-shot .pane.on{position:relative}.win.kanban .cols{grid-template-columns:1fr}}
 @media(max-width:700px){.showcase{margin:0;border-radius:0}.showcase .bgimg{background-position:center bottom}.showcase .bgimg:after{background:linear-gradient(180deg,rgba(13,17,20,.98) 0%,rgba(13,17,20,.92) 55%,rgba(13,17,20,.5) 100%)}.tabs{margin:0 var(--gut) 14px;max-width:none;justify-content:flex-start}.tabs button{padding:10px 16px;font-size:15px}.sc-txt h3{font-size:26px}.sc-txt ul{gap:14px}.win .kp{grid-template-columns:repeat(2,1fr)}}
 
 /* hero desktop: mais alto, respiro no topo, tudo à esquerda */
@@ -668,7 +669,7 @@ function count(el){var to=parseFloat(el.dataset.count),suf=el.dataset.suf||'',de
 (function(){var tabs=[].slice.call(document.querySelectorAll('#tabs button')),tp=[].slice.call(document.querySelectorAll('#scTxt .pane')),sp=[].slice.call(document.querySelectorAll('#scShot .pane')),cur=0,timer=null,touched=false;
 function go(n){cur=n;tabs.forEach(function(b,i){b.classList.toggle('on',i===n)});tp.forEach(function(p,i){p.classList.toggle('on',i===n)});sp.forEach(function(p,i){p.classList.toggle('on',i===n)});var b=tabs[n],bar=b&&b.parentNode;if(bar&&bar.scrollWidth>bar.clientWidth){bar.scrollTo({left:b.offsetLeft-(bar.clientWidth-b.offsetWidth)/2,behavior:'smooth'})}}
 tabs.forEach(function(b,i){b.addEventListener('click',function(){touched=true;clearInterval(timer);go(i)})});
-var sc=document.getElementById('showcase');new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!timer&&!touched){timer=setInterval(function(){go((cur+1)%tabs.length)},6000)}else if(!e.isIntersecting&&timer){clearInterval(timer);timer=null}})},{threshold:.3}).observe(sc)})();
+})();
 </script>
 <script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
 <script>
