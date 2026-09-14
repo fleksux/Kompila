@@ -1,4 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <circle cx="256" cy="256" r="256" fill="#0A0B0E"/>
-  <text x="256" y="308" text-anchor="middle" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" font-size="150" font-weight="700"><tspan fill="#2FD67B">[</tspan><tspan fill="#E9EBEE">k</tspan><tspan fill="#2FD67B">]</tspan></text>
-</svg>
