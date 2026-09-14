@@ -419,6 +419,17 @@ html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2p
 @media(min-width:701px){.hero img.bg{object-position:70% 30%}.hero.bgin img.bg{transform:scale(1.22) translateY(6%)}}
 
 @media(min-width:701px){.hero{height:calc(100svh - 24px);min-height:640px}.hero .in{padding:110px 0 60px;height:100%;align-content:center}}
+
+.hero .ctas .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35);background:transparent}
+@media(max-width:700px){
+  .hero .in{padding:96px var(--gut) 40px;justify-content:flex-start;gap:16px}
+  .hero .titles{margin-top:auto}
+  .hero h1{font-size:46px}
+  .hero .p{font-size:17px;line-height:1.45;color:rgba(255,255,255,.88);margin:4px 0 6px}
+  .hero .micro{font:500 13px var(--sans);letter-spacing:0;text-transform:none;color:rgba(255,255,255,.72);margin-top:2px}
+  .hero .feed{margin-top:22px}
+  .feed-b .cb{font-size:14px}
+}
 </style>
 </head>
 <body>
@@ -478,7 +489,7 @@ html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2p
         <h1 class="h1b" id="h1b">Perde porque <span class="grad">ninguém</span> <span class="grad">respondeu.</span></h1>
       </div>
       <p class="p">A Kompila encontra oportunidades paradas, responde em segundos e garante que cada lead tenha um responsável e uma próxima ação.</p>
-      <div class="ctas" id="ctas"><a class="btn g" href="#calc">Analisar meus leads</a><a class="link" href="#pratica">Ver um lead sendo recuperado</a></div>
+      <div class="ctas" id="ctas"><a class="btn g" href="#calc">Analisar meus leads</a><a class="btn ghost" href="#pratica">Ver um lead sendo recuperado</a></div>
       <div class="micro">Funciona com o CRM e o WhatsApp da sua operação.</div>
     </div>
     <div class="feed" id="feed">
