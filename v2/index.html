@@ -562,6 +562,12 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 @media(min-width:901px){.cz{align-items:start}.cz .side{position:sticky;top:96px;align-self:start}}
 
 @media(min-width:901px){.cwrap{align-items:start}.cwrap .res{position:sticky;top:96px;align-self:start}}
+
+/* sticky com curso: coluna da esquerda mais alta que o card */
+.calc .cleft .head{margin-bottom:28px;max-width:none}
+.cz ol li{padding:26px 0}
+.cz .lead{margin-bottom:32px!important}
+@media(min-width:901px){.cwrap{grid-template-columns:1.1fr .9fr;gap:40px}.cwrap .res{top:110px}.cz .side{top:110px}}
 </style>
 </head>
 <body>
@@ -777,8 +783,9 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <!-- CALCULADORA -->
 <section class="calc" id="calc">
   <div class="shell">
-    <div class="head rv"><h2>Quanto dinheiro pode estar parado na sua fila?</h2><p class="lead">Uma estimativa inicial com os números da sua operação. O valor real é validado no Caso Zero.</p></div>
     <div class="cwrap">
+      <div class="cleft">
+      <div class="head rv"><h2>Quanto dinheiro pode estar parado na sua fila?</h2><p class="lead">Uma estimativa inicial com os números da sua operação. O valor real é validado no Caso Zero.</p></div>
       <form class="form rv" onsubmit="return false">
         <label><b>Leads por mês</b><input type="number" id="cL" value="6000" min="1"></label>
         <label><b>Quantos ficam sem resposta ou sem próxima ação (%)</b><input type="number" id="cP" value="20" min="0" max="100"></label>
@@ -786,6 +793,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
         <label><b>Quanto a empresa ganha por venda (R$)</b><input type="number" id="cV" value="14000" min="0"></label>
         <label><b>Quanto dos leads abandonados dá pra reativar</b><div class="seg" id="cS"><button type="button" data-r="5">Conservador 5%</button><button type="button" data-r="10" class="on">Provável 10%</button><button type="button" data-r="20">Potencial 20%</button></div></label>
       </form>
+      </div>
       <div class="res rv">
         <div class="row"><small>Sua operação recebe</small><b id="rL">6.000</b><span>leads por mês</span></div>
         <div class="row"><small>Aproximadamente</small><b id="rP">1.200</b><span>ficam sem continuidade</span></div>
