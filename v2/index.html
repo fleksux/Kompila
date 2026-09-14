@@ -459,6 +459,15 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .trust .stats>div{flex:1 1 0;position:relative;padding:6px 16px}
 .trust .stats>div+div:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:1px;background:var(--line)}
 @media(max-width:700px){.trust .stats{flex-wrap:wrap;gap:18px 24px;justify-content:flex-start}.trust .stats>div{white-space:normal}.trust .stats>div+div:before{display:none}}
+
+/* dados: primeiro na esquerda, último na direita, o resto proporcional; divisórias no meio dos vãos */
+.trust .stats{display:flex;justify-content:space-between;align-items:center;gap:0;flex-wrap:nowrap}
+.trust .stats>div{flex:0 0 auto;padding:0;text-align:center;white-space:nowrap}
+.trust .stats>div:first-child{text-align:left}
+.trust .stats>div:last-child{text-align:right}
+.trust .stats>div+div:before{display:none}
+.trust .stats .sep{flex:0 0 1px;align-self:stretch;background:var(--line);margin:8px 0}
+@media(max-width:700px){.trust .stats{flex-wrap:wrap;justify-content:flex-start;gap:16px 0}.trust .stats>div{flex:0 0 50%;text-align:left!important;white-space:normal}.trust .stats .sep{display:none}}
 </style>
 </head>
 <body>
@@ -503,7 +512,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <!-- DADOS + MARCAS -->
 <div class="trust">
   <div class="shell">
-    <div class="stats"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><div><b>+25</b><span>marcas atendidas</span></div><div><b>R$ 500 mil</b><span>por mês administrados em mídia</span></div><div><b>Meta e Google Ads</b><span>equipe certificada</span></div></div>
+    <div class="stats"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><i class="sep"></i><div><b>+25</b><span>marcas atendidas</span></div><i class="sep"></i><div><b>R$ 500 mil</b><span>por mês administrados em mídia</span></div><i class="sep"></i><div><b>Meta e Google Ads</b><span>equipe certificada</span></div></div>
   </div>
   <div class="mq"><div class="mq-track"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span></div></div>
 </div>
