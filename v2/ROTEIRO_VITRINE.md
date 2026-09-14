@@ -20,7 +20,7 @@ Tempo total falado: cerca de 1 min 40 s.
 | # | Na tela | Zoom | Legenda (narração) |
 |---|---|---|---|
 | 1 | A tela abre e os números sobem um a um: Leads hoje **14** · 1ª resposta **8 s** · Resolvidos pela Kompila **11** · Aguardando decisão humana **3** · Parados há 3+ dias · Fechado no mês. | não | Segunda, oito da manhã. Entraram 14 leads. O tempo médio de resposta foi oito segundos. |
-| 2 | O único número vermelho, **Aguardando decisão humana: 3**, e a lista embaixo (Marcos, Juliana, Ricardo) com o motivo de cada um. | sim, no 3 e na lista | Só três precisam de uma pessoa. E a tela mostra exatamente por quê. |
+| 2 | O único número vermelho, **Aguardando decisão humana: 3**, e a lista embaixo (Ricardo, Juliana, Paulo, os mesmos da Fila) com o motivo de cada um. | sim, no 3 e na lista | Só três precisam de uma pessoa. E a tela mostra exatamente por quê. |
 | 3 | Bloco **Hoje**: as linhas do diário entram uma a uma com a tag verde "ficaria esquecido": follow-up do dia 3, template antes da janela fechar às 22:40, base antiga reaberta. | não | De madrugada, ela fez o que ficaria esquecido: follow-up, janela protegida e base reaberta. |
 
 ## 2 · Fila (4 passos) · ~22 s
