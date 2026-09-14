@@ -394,6 +394,12 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
 .feed-f{display:flex;gap:6px;padding:10px 14px 14px;border-top:1px solid rgba(255,255,255,.1)}
 .feed .tag{opacity:0;transition:opacity .4s}.feed .tag.show{opacity:1}
 @media(max-width:700px){.feed{margin:10px 0 0;max-width:none}.hero .feed{order:5}.feed-b{height:170px}}
+
+.feed-h{padding:12px 16px;gap:12px}
+.feed-h img.av{width:44px;height:44px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.2);display:block}
+.feed-h b{font-size:16px;line-height:1;align-self:center}
+.feed-b .cb.vend{align-self:flex-end;background:rgba(47,214,123,.08);border-color:rgba(47,214,123,.4)}
+.feed-b .cb.vend:before{content:"vendedor · 3 dias depois";color:var(--green)}
 </style>
 </head>
 <body>
@@ -457,7 +463,7 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
       <div class="micro">Funciona com o CRM e o WhatsApp da sua operação.</div>
     </div>
     <div class="feed" id="feed">
-      <div class="feed-h"><div class="av" id="fdAv">MO</div><div><b id="fdName">Marcos Oliveira</b><small id="fdK">lead · campanha zona leste</small></div><div class="wait"><b id="fdN">0 s</b><small id="fdL">esperando</small></div></div>
+      <div class="feed-h"><img class="av" id="fdAv" src="img/lead-marcos.webp" alt=""><b id="fdName">Marcos Oliveira</b><div class="wait"><b id="fdN">0 s</b><small id="fdL">esperando</small></div></div>
       <div class="feed-b" id="feedB"></div>
       <div class="feed-f"><span class="tag bad" id="fdT1">sem responsável</span><span class="tag bad" id="fdT2">sem próxima ação</span></div>
     </div>
@@ -709,33 +715,36 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
 (function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});document.querySelectorAll('.rv').forEach(function(el){io.observe(el)})})();
 /* nav: esconde ao descer, mostra ao subir; menu celular */
 (function(){var n=document.getElementById('nav'),last=0;addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true});var b=document.getElementById('menuBtn'),p=document.getElementById('menuPanel');b.addEventListener('click',function(){n.classList.toggle('menu-open')});p.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){n.classList.remove('menu-open')})})})();
-/* hero: conversa não atendida (a dor), 3 operações */
-(function(){var b=document.getElementById('feedB'),n=document.getElementById('fdN'),l=document.getElementById('fdL'),t1=document.getElementById('fdT1'),t2=document.getElementById('fdT2'),av=document.getElementById('fdAv'),nm=document.getElementById('fdName'),kk=document.getElementById('fdK');if(!b)return;
+/* hero: conversa não atendida (a dor), 3 operações, vendedor chega tarde */
+(function(){var b=document.getElementById('feedB'),n=document.getElementById('fdN'),l=document.getElementById('fdL'),t1=document.getElementById('fdT1'),t2=document.getElementById('fdT2'),av=document.getElementById('fdAv'),nm=document.getElementById('fdName');if(!b)return;
 function add(txt,cls,time){var d=document.createElement('div');d.className='cb'+(cls?' '+cls:'');d.innerHTML=txt+'<time>'+time+'</time>';b.appendChild(d);while(b.children.length>3)b.removeChild(b.firstChild)}
 var cases=[
- {av:'MO',name:'Marcos Oliveira',k:'lead · campanha · lançamento',m:[
+ {av:'img/lead-marcos.webp',name:'Marcos Oliveira',m:[
   ['Oi, vi o lançamento de vocês no Instagram. Tem apartamento de dois quartos que aceita FGTS?','','sáb · 09:12','0 s','esperando'],
   ['Recebemos sua mensagem. Em breve um de nossos consultores entrará em contato.','sys','09:12','1 min','esperando'],
   ['Alguém consegue me responder? Queria visitar hoje ainda.','','sáb · 11:40','2 h 28','sem resposta'],
   ['Oi?','','sáb · 16:05','7 h','sem resposta'],
-  ['Já resolvi com outra construtora. Obrigado.','gone','seg · 09:03','42 h','lead perdido']]},
- {av:'JP',name:'Juliana Prado',k:'lead · loja online · instagram',m:[
+  ['Oi Marcos, tudo bem? Desculpa a demora, ainda tem interesse no lançamento?','vend','ter · 10:12','73 h','vendedor respondeu'],
+  ['Já resolvi com outra construtora. Obrigado.','gone','ter · 10:40','73 h','lead perdido']]},
+ {av:'img/lead-juliana.webp',name:'Juliana Prado',m:[
   ['Oi! Esse vestido verde tem no 42? Preciso pra sábado.','','qui · 19:48','0 s','esperando'],
   ['Olá! Nosso horário de atendimento é das 9h às 18h. Retornaremos em breve.','sys','19:48','1 min','esperando'],
   ['Consigo pagar no Pix e retirar na loja hoje?','','sex · 08:15','12 h','sem resposta'],
   ['Oi, alguém?','','sex · 12:30','17 h','sem resposta'],
-  ['Deixa, comprei em outro site.','gone','sex · 17:02','21 h','lead perdido']]},
- {av:'RN',name:'Ricardo Nunes',k:'lead · site · painel de led',m:[
+  ['Oi Juliana! Vi sua mensagem agora, o 42 chegou. Quer que eu separe?','vend','seg · 09:20','86 h','vendedor respondeu'],
+  ['Não precisa mais, comprei em outro site.','gone','seg · 09:31','86 h','lead perdido']]},
+ {av:'img/lead-ricardo.webp',name:'Ricardo Nunes',m:[
   ['Boa tarde. Quanto fica um painel de LED 6×3 m pra fachada de loja? Tenho verba aprovada.','','ter · 14:20','0 s','esperando'],
   ['Recebemos seu contato. Um consultor retornará em até 48 horas.','sys','14:20','1 min','esperando'],
   ['Preciso fechar essa semana. Vocês fazem a instalação?','','qua · 09:10','19 h','sem resposta'],
   ['Segue meu telefone, me liga por favor.','','qua · 15:45','25 h','sem resposta'],
-  ['Fechei com outro fornecedor.','gone','sex · 10:30','68 h','lead perdido']]}
+  ['Ricardo, boa tarde! Sou o consultor da fachada 6×3. Posso te ligar agora?','vend','seg · 14:05','144 h','vendedor respondeu'],
+  ['Fechei com outro fornecedor na sexta.','gone','seg · 14:22','144 h','lead perdido']]}
 ];
-var ci=0,at=[0,1400,4200,6000,9200];
-function run(){var c=cases[ci];ci=(ci+1)%cases.length;b.innerHTML='';t1.classList.remove('show');t2.classList.remove('show');av.textContent=c.av;nm.textContent=c.name;kk.textContent=c.k;
+var ci=0,at=[0,1400,4200,6000,8600,10400];
+function run(){var c=cases[ci];ci=(ci+1)%cases.length;b.innerHTML='';t1.classList.remove('show');t2.classList.remove('show');av.src=c.av;nm.textContent=c.name;
  c.m.forEach(function(x,i){setTimeout(function(){add(x[0],x[1],x[2]);n.textContent=x[3];l.textContent=x[4];if(i===2)t1.classList.add('show');if(i===3)t2.classList.add('show')},at[i])});
- setTimeout(run,13500)}
+ setTimeout(run,14800)}
 run()})();
 /* calculadora */
 (function(){var r=10,$=function(id){return document.getElementById(id)};function fmt(n){return n.toLocaleString('pt-BR')}function money(n){return n>=1000?'R$ '+Math.round(n/1000)+' mil':'R$ '+Math.round(n)}function calc(){var L=+$('cL').value||0,P=(+$('cP').value||0)/100,C=(+$('cC').value||0)/100,V=+$('cV').value||0;var parados=L*P,reat=parados*r/100,vendas=reat*C,v1=Math.max(1,Math.floor(vendas)),v2=Math.max(v1,Math.ceil(vendas));if(vendas<1){v1=0;v2=1}$('rL').textContent=fmt(L);$('rP').textContent=fmt(Math.round(parados));$('rR').textContent=fmt(Math.round(reat));$('rV').textContent=v1===v2?v1:v1+' a '+v2;$('rM').textContent=v1===v2?money(v1*V):money(v1*V)+' a '+money(v2*V);$('rSl').textContent={5:'no cenário conservador',10:'no cenário provável',20:'no cenário potencial'}[r]}document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});$('cBtn').addEventListener('click',calc);['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});calc()})();
