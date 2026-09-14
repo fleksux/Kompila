@@ -451,6 +451,12 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
   .hero h1{font-size:clamp(30px,2.45vw,36px);max-width:none;white-space:nowrap;letter-spacing:-.035em;line-height:1.1}
   .hero .lead{max-width:60ch;font-size:18px}
 }
+
+/* faixa de dados: sem largura definida, espalhados na mesma linha */
+.trust .stats{display:flex;justify-content:space-between;align-items:stretch;flex-wrap:nowrap;gap:24px}
+.trust .stats>div{flex:0 0 auto;padding:6px 0;border-left:0;text-align:left;white-space:nowrap}
+.trust .stats>div+div{border-left:0}
+@media(max-width:700px){.trust .stats{flex-wrap:wrap;gap:18px 24px;justify-content:flex-start}.trust .stats>div{white-space:normal}.trust .stats>div:nth-child(even){border-left:0}}
 </style>
 </head>
 <body>
