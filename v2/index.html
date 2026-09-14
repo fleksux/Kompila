@@ -559,6 +559,17 @@ html{overflow-x:hidden}
   .scr-list img,.scr-list .ini{width:36px;height:36px}
   .tela-txt h2{font-size:34px}.tela-txt p{font-size:17px;margin-top:14px}
 }
+
+.tela-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:22px}
+.tela-tags span{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--red-ink);padding:6px 12px;border:1px solid rgba(201,48,60,.35);border-radius:999px;background:rgba(255,101,119,.08)}
+.dark .tela{background:var(--carbon)}
+section.dark.tela{background:var(--carbon)}
+.dark .tela-txt p{color:var(--cmuted)}
+.phone{width:min(420px,100%);margin:0 auto;background:var(--carbon2);border:1px solid var(--cline);border-radius:34px;padding:10px;box-shadow:0 40px 90px rgba(0,0,0,.55)}
+.phone .chat{border-radius:26px;border:0}
+.phone .chat-h .avi{width:34px;height:34px;border-radius:50%;object-fit:cover}
+.phone .cb{font-size:14px}
+@media(max-width:700px){.phone{border-radius:28px;padding:8px}.phone .chat{border-radius:22px}}
 </style>
 </head>
 <body>
@@ -630,55 +641,50 @@ html{overflow-x:hidden}
 
 <section class="dark dor only-mob" id="dor"><div class="shell" id="dorIn"></div></section>
 <!-- 02 O VAZAMENTO -->
-<section id="vazamento">
+<section id="vazamento" class="tela">
   <div class="shell">
-    <div class="head rv two"><div><span class="k">o vazamento</span><h2>Seu CRM pode estar cheio de contatos <span class="dimt">e vazio de próximas ações.</span></h2></div><p class="lead-p">Você investe em mídia, produz campanhas e gera interesse. Mas uma parte desse investimento desaparece depois que o lead entra.</p></div>
-    <div class="grid4">
-      <div class="card rv"><svg class="ico"><use href="#i-user-x"/></svg><h3>Sem responsável</h3><p>O contato cai em uma fila geral ou fica preso com alguém indisponível.</p></div>
-      <div class="card rv d1"><svg class="ico"><use href="#i-clock"/></svg><h3>Sem resposta</h3><p>Quando o vendedor responde, o cliente já avançou com outra empresa.</p></div>
-      <div class="card rv d2"><svg class="ico"><use href="#i-route"/></svg><h3>Sem continuidade</h3><p>A primeira conversa acontece, mas ninguém define o próximo passo.</p></div>
-      <div class="card rv d3"><svg class="ico"><use href="#i-eye-off"/></svg><h3>Sem visibilidade</h3><p>O gerente só percebe o problema quando a meta não fecha.</p></div>
+    <div class="screen rv">
+      <div class="scr-top"><span class="scr-logo" style="color:var(--dim)">CRM · leads de entrada</span><span class="scr-tab on">Todos</span><span class="scr-tab">Meus</span><span class="scr-date">sex · 17:40</span></div>
+      <div class="scr-h">Sem responsável · 1.771 contatos</div>
+      <ul class="scr-list">
+        <li><img src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><span>Instagram · apto 2 quartos · última atividade: sáb</span></div><em class="bad">sem responsável</em><time class="bad">42 h</time></li>
+        <li><img src="img/lead-juliana.webp" alt=""><div><b>Juliana Prado</b><span>Site · vestido 42 · última atividade: qui</span></div><em class="bad">sem resposta</em><time class="bad">21 h</time></li>
+        <li><img src="img/lead-ricardo.webp" alt=""><div><b>Ricardo Nunes</b><span>Meta Ads · painel LED 6×3 · última atividade: ter</span></div><em class="bad">sem próxima ação</em><time class="bad">68 h</time></li>
+        <li><i class="ini">AS</i><div><b>Ana Souza</b><span>Google Ads · apto 3 quartos · última atividade: seg</span></div><em class="bad">vendedor desativado</em><time class="bad">4 d</time></li>
+        <li><i class="ini">PL</i><div><b>Paulo Lima</b><span>WhatsApp · painel 4×2 · última atividade: 12 set</span></div><em class="bad">sem responsável</em><time class="bad">6 d</time></li>
+        <li><i class="ini">CF</i><div><b>Carla Ferreira</b><span>Site · 2 quartos · última atividade: 09 set</span></div><em class="bad">sem resposta</em><time class="bad">9 d</time></li>
+      </ul>
     </div>
-    <div class="funil rv">
-      <div class="src"><span><svg class="ico"><use href="#i-mega"/></svg>Meta Ads</span><span><svg class="ico"><use href="#i-mega"/></svg>Google Ads</span><span><svg class="ico"><use href="#i-mega"/></svg>Landing page</span><span><svg class="ico"><use href="#i-chat"/></svg>WhatsApp</span></div>
-      <div class="tube"><b>1.000 leads</b><i class="leak" data-l="sem responsável"></i><i class="leak" data-l="sem resposta"></i><i class="leak" data-l="sem próxima ação"></i></div>
-      <div class="out"><b>27</b><small>chegam em venda</small></div>
+    <div class="tela-txt rv d1">
+      <span class="k" style="display:block;margin-bottom:14px">o vazamento</span>
+      <h2>Seu CRM pode estar cheio de contatos e vazio de próximas ações.</h2>
+      <p>Entre o lead entrar e alguém responder é onde o dinheiro da campanha desaparece.</p>
+      <div class="tela-tags"><span>Sem responsável</span><span>Sem resposta</span><span>Sem continuidade</span><span>Sem visibilidade</span></div>
     </div>
-    <p class="close rv">Mais tráfego colocado em uma operação que vaza apenas aumenta o desperdício.</p>
   </div>
 </section>
 
 <!-- 03 UM LEAD NA PRÁTICA -->
-<section class="dark" id="pratica">
+<section class="dark tela" id="pratica">
   <div class="shell">
-    <div class="head rv two"><div><span class="k">um lead na prática</span><h2>O cliente que chamava no sábado e morria na fila <span class="dimt">agora chega pronto para o vendedor.</span></h2></div><p class="lead-p">Uma conversa de WhatsApp no centro. Ao lado, o que a Kompila faz por trás, minuto a minuto.</p></div>
-    <div class="jour">
-      <div class="chat rv">
-        <div class="chat-h"><div class="av">MO</div><div><b>Marcos Oliveira</b><small>sábado · campanha zona leste</small></div><span class="wa">whatsapp</span></div>
+    <div class="phone rv">
+      <div class="chat">
+        <div class="chat-h"><img class="avi" src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><small>sábado · online</small></div><span class="wa">whatsapp</span></div>
         <div class="chat-b">
           <div class="cb">Oi, vi o lançamento de vocês no Instagram. Tem apartamento de dois quartos que aceita FGTS?<time>09:12</time></div>
           <div class="cb ia">Oi, Marcos. Temos opções de dois quartos que permitem o uso do FGTS. Posso fazer algumas perguntas para encontrar a condição mais adequada?<time>09:12</time></div>
           <div class="cb">Pode. Renda de 6 mil, queria mudar até dezembro. Zona Leste.<time>09:13</time></div>
           <div class="cb ia">Perfeito. Com essa renda você entra na faixa do programa e pode usar o FGTS na entrada. Prefere visitar o decorado sábado ou domingo?<time>09:13</time></div>
           <div class="cb">Sábado de manhã.<time>09:14</time></div>
-          <div class="cb brief"><b>Marcos Oliveira</b><br>Busca: dois quartos · Zona Leste<br>Renda: R$ 6.000 · FGTS: disponível<br>Prazo: até dezembro<br>Origem: campanha Zona Leste<br>Próxima ação: <b>confirmar visita sábado</b></div>
+          <div class="cb brief"><b>Marcos Oliveira</b><br>Busca: dois quartos · Zona Leste<br>Renda: R$ 6.000 · FGTS: disponível<br>Prazo: até dezembro<br>Próxima ação: <b>confirmar visita sábado</b></div>
           <div class="cb me">Oi, Marcos. Sou a Renata. Recebi suas informações e posso te atender sábado pela manhã. Vou enviar a localização e deixar sua visita confirmada.<time>09:21</time></div>
         </div>
       </div>
-      <div class="side rv d1">
-        <div class="step"><time>09:12</time><div><b>Mensagem recebida</b><div class="acts"><span>origem: Instagram</span><span>campanha: Zona Leste</span><span class="ok">espera: 0 s</span></div></div></div>
-        <div class="step"><time>09:12</time><div><b>A Kompila responde</b><div class="acts"><span class="ok">atendimento iniciado</span><span>intenção: compra de imóvel</span><span>só regras aprovadas pela empresa</span></div></div></div>
-        <div class="step"><time>09:13</time><div><b>Qualificação</b><div class="acts"><span>renda</span><span>região</span><span>prazo</span><span>FGTS</span><span class="ok">alta intenção</span><span class="ok">próxima ação: visita</span></div></div></div>
-        <div class="step"><time>09:14</time><div><b>Distribuição</b><div class="acts"><span class="ok">Renata acionada</span><span class="warn">prazo para assumir: 5 min</span></div></div></div>
-        <div class="step"><time>09:19</time><div><b>Regra de segurança</b><div class="acts"><span>SLA monitorado</span><span>se não assumir, volta pra fila</span><span>próximo disponível é acionado</span></div></div></div>
-        <div class="step"><time>09:21</time><div><b>Próxima ação confirmada</b><div class="acts"><span class="ok">visita agendada</span><span class="ok">CRM atualizado</span><span class="ok">histórico registrado</span></div></div></div>
-      </div>
     </div>
-    <div class="result rv">
-      <div><svg class="ico"><use href="#i-check"/></svg>Cliente atendido</div>
-      <div><svg class="ico"><use href="#i-user"/></svg>Vendedor com contexto</div>
-      <div><svg class="ico"><use href="#i-cal"/></svg>Próxima ação definida</div>
-      <div><svg class="ico"><use href="#i-panel"/></svg>Gestor com histórico completo</div>
+    <div class="tela-txt rv d1">
+      <span class="k" style="display:block;margin-bottom:14px">um lead na prática</span>
+      <h2>O cliente que morria na fila agora chega pronto para o vendedor.</h2>
+      <p>Sábado, 09:12. Às 09:21 a visita estava marcada e a Renata entrou só para confirmar.</p>
     </div>
   </div>
 </section>
