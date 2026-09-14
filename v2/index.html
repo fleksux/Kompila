@@ -288,6 +288,39 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
   .kchat:not(.open) header:before{display:none}
   .kchat.open{left:12px;right:12px;width:auto;max-width:none;border-radius:20px}
 }
+
+/* ===== vida: motions sem mexer na estrutura ===== */
+/* linhas das telas entram uma a uma */
+.win li{opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1)}
+.win.live li{opacity:1;transform:none}
+.win.live li:nth-child(1){transition-delay:.05s}.win.live li:nth-child(2){transition-delay:.15s}.win.live li:nth-child(3){transition-delay:.25s}.win.live li:nth-child(4){transition-delay:.35s}.win.live li:nth-child(5){transition-delay:.45s}.win.live li:nth-child(6){transition-delay:.55s}
+.win .kp div{opacity:0;transform:translateY(6px);transition:opacity .5s,transform .5s}
+.win.live .kp div{opacity:1;transform:none}
+.win.live .kp div:nth-child(2){transition-delay:.08s}.win.live .kp div:nth-child(3){transition-delay:.16s}.win.live .kp div:nth-child(4){transition-delay:.24s}
+/* relógio vermelho pulsa; IA conduzindo tem ponto vivo */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.win.live li time.bad{animation:pulse 1.6s ease-in-out infinite}
+.win li em.ok.ia:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:6px;vertical-align:middle;animation:pulse 1.2s ease-in-out infinite}
+/* conversas do WhatsApp acontecem quando entram na tela */
+.phone .msg{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.8,.2,1)}
+.phone .msg.on{opacity:1;transform:none}
+.phone .typing{display:none;gap:4px;padding:10px 12px;border-radius:14px;background:#fff;border:1px solid var(--line);width:max-content}
+.phone .typing.k{align-self:flex-end;background:var(--green-soft);border-color:#cfeadb}
+.phone .typing.show{display:flex}
+.phone .typing i{width:6px;height:6px;border-radius:50%;background:#9aa1a9;animation:tp 1s infinite}
+.phone .typing i:nth-child(2){animation-delay:.15s}.phone .typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-3px);opacity:1}}
+/* marcas entram em cascata */
+.brands .row span{opacity:0;transform:translateY(6px);transition:opacity .5s,transform .5s}
+.brands .row.in span{opacity:1;transform:none}
+.brands .row.in span:nth-child(n){transition-delay:calc(var(--i,0)*.06s)}
+/* botão verde respira de leve */
+@keyframes breathe{0%,100%{box-shadow:0 8px 24px rgba(21,151,84,.25)}50%{box-shadow:0 12px 34px rgba(21,151,84,.42)}}
+.hero .btn.green,.final .btn.green{animation:breathe 3.2s ease-in-out infinite}
+/* painéis suaves ganham profundidade no hover */
+.shot{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.f:hover .shot{transform:translateY(-4px)}
+@media(prefers-reduced-motion:reduce){.win li,.win .kp div,.phone .msg,.brands .row span{opacity:1!important;transform:none!important;transition:none}.hero .btn.green,.final .btn.green,.win.live li time.bad{animation:none}}
 </style>
 </head>
 <body>
@@ -327,8 +360,7 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
   <div class="shell">
     <p class="rv"><b>Vinte anos</b> de vendas online, atendimento e geração de leads. Marcas que confiam na Kompila:</p>
     <div class="row rv">
-      <span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span>
-      <span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Everlight</span><span>Vesti</span><span>Redde.ai</span>
+      <span style="--i:0">Burnpixel</span><span style="--i:1">Maslu Select</span><span style="--i:2">P1LED</span><span style="--i:3">Sinergy</span><span style="--i:4">AUT</span><span style="--i:5">Analu</span><span style="--i:6">Bravus Sport</span><span style="--i:7">Piuka</span><span style="--i:8">Kaisan</span><span style="--i:9">Everlight</span><span style="--i:10">Vesti</span><span style="--i:11">Redde.ai</span>
     </div>
   </div>
 </div>
@@ -452,9 +484,9 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
 <section class="proof" id="prova">
   <div class="shell">
     <div class="grid3">
-      <div class="num rv"><b>761</b><span>leads sem nenhum contato em 12 semanas, de 2.614 criados, dentro de um CRM pago.</span><small>Auditoria em portal HubSpot de um cliente parceiro · set 2026</small></div>
-      <div class="num rv"><b>42 h</b><span>é o tempo médio que uma empresa leva para responder um lead. 23% nunca respondem.</span><small>Harvard Business Review · 2.241 empresas</small></div>
-      <div class="num rv"><b>7%</b><span>das empresas respondem em 5 minutos. 93% dos leads que fecham são alcançados até a 6ª tentativa; a maioria desiste na primeira.</span><small>Drift · Velocify · 3,5 milhões de leads</small></div>
+      <div class="num rv"><b data-count="761">761</b><span>leads sem nenhum contato em 12 semanas, de 2.614 criados, dentro de um CRM pago.</span><small>Auditoria em portal HubSpot de um cliente parceiro · set 2026</small></div>
+      <div class="num rv"><b data-count="42" data-suf=" h">42 h</b><span>é o tempo médio que uma empresa leva para responder um lead. 23% nunca respondem.</span><small>Harvard Business Review · 2.241 empresas</small></div>
+      <div class="num rv"><b data-count="7" data-suf="%">7%</b><span>das empresas respondem em 5 minutos. 93% dos leads que fecham são alcançados até a 6ª tentativa; a maioria desiste na primeira.</span><small>Drift · Velocify · 3,5 milhões de leads</small></div>
     </div>
     <div class="quote rv"><p>"O maior volume de conversões vem da base esquecida, dos leads antigos."</p><small>VP Comercial da MRV · Imobi Report</small></div>
   </div>
@@ -557,5 +589,22 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
 (function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Caso Zero.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
 </script>
 <script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0;requestAnimationFrame(function(){requestAnimationFrame(function(){hero.classList.add('bgin')})});addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
+<script>
+/* telas e conversas ganham vida quando entram na tela */
+(function(){
+var reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;io.unobserve(el);
+ if(el.classList.contains('win')){el.classList.add('live');return}
+ if(el.classList.contains('phone')){play(el);return}
+ if(el.dataset.count!==undefined){count(el);return}
+})},{threshold:.35});
+document.querySelectorAll('.win,.phone,[data-count]').forEach(function(el){io.observe(el)});
+function play(ph){var body=ph.querySelector('.pb'),msgs=[].slice.call(body.querySelectorAll('.msg'));if(reduced){msgs.forEach(function(m){m.classList.add('on')});return}
+ var t=0;msgs.forEach(function(m,i){var mine=m.classList.contains('k')||m.classList.contains('v')||m.classList.contains('brief');var ty=document.createElement('div');ty.className='typing'+(mine?' k':'');ty.innerHTML='<i></i><i></i><i></i>';body.insertBefore(ty,m);
+  setTimeout(function(){ty.classList.add('show')},t);t+=mine?1100:800;
+  setTimeout(function(){ty.remove();m.classList.add('on')},t);t+=500})}
+function count(el){var to=parseFloat(el.dataset.count),suf=el.dataset.suf||'',dec=(el.dataset.count.split('.')[1]||'').length,t0=performance.now(),d=1300;(function f(now){var p=Math.min(1,(now-t0)/d);p=1-Math.pow(1-p,3);var v=to*p;el.textContent=(dec?v.toFixed(dec):Math.round(v).toLocaleString('pt-BR'))+suf;if(p<1)requestAnimationFrame(f)})(t0)}
+})();
+</script>
 </body>
 </html>
