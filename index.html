@@ -287,7 +287,7 @@ section{padding:120px 0}
 @keyframes go{to{left:calc(100% - 8px)}}
 .bolhas .grp{display:grid;gap:12px}
 /* ===== feito para (Oleum) + brilho ===== */
-.para{margin:12px;border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:repeat(3,1fr);background:var(--carbon)}
+.para{margin:12px;padding:0;border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:repeat(3,1fr);background:var(--carbon)}
 .para .p{position:relative;min-height:88vh;padding:0 7% 56px;text-align:left;display:flex;flex-direction:column;justify-content:flex-end;border-right:1px solid var(--cline);overflow:hidden;isolation:isolate}
 .para .p:last-child{border:0}
 /* a foto é o painel inteiro; texto embaixo, no escuro da própria foto */
@@ -439,6 +439,214 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
   .node .st{position:static;display:inline-block;margin:0 0 8px}
   .shot img{object-position:top right}
 }
+
+/* guias de layout: ?guias na URL ou tecla g */
+html.guias div{outline:1px solid rgba(47,125,255,.8);outline-offset:-1px}html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2px dashed rgba(47,125,255,.9);outline-offset:-2px}
+
+@media(max-width:700px){
+  .hero,.demo,.para,.mani,.cta,.prod .blk{margin:0;border-radius:0}.prod{padding:0}.logos{padding:32px 0 0}
+  .hero{min-height:100svh}.hero .in{min-height:100svh}
+  .shell{width:100%;padding:0 20px}
+}
+
+@media(max-width:700px){
+  .hero img.bg{object-position:79% 50%}
+  .hero .in{display:flex;flex-direction:column;justify-content:flex-end;gap:18px;padding:100px 6% 44px}
+  .hero .titles{order:1;margin-top:0}
+  .hero .sub{order:2;max-width:none;font-size:16px;color:rgba(255,255,255,.78)}
+  .hero .sub .k{display:none}
+  .hero .ctas{order:3;margin-top:6px}
+}
+
+@media(max-width:700px){
+  .hero .titles,.hero .sub,.hero .ctas{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+  .hero.enter .titles{opacity:1;transform:none}
+  .hero.enter .sub{opacity:1;transform:none;transition-delay:.15s}
+  .hero.enter .ctas{opacity:1;transform:none;transition-delay:.3s}
+}
+
+.hero .echo i{display:none}
+
+@media(max-width:700px){.hero .ctas{flex-direction:column;gap:10px}.hero .ctas .btn{width:100%;justify-content:center}}
+
+/* hero: foto entra e faz parallax */
+.hero .bgwrap{will-change:transform}
+.hero img.bg{opacity:0;transform:scale(1.14);transition:opacity 1.1s ease,transform 2.2s cubic-bezier(.2,.8,.2,1)}
+.hero.bgin img.bg{opacity:1;transform:scale(1.08)}
+@media(max-width:700px){.hero.bgin img.bg{transform:scale(1.08) translateY(30px)}}
+
+  .kchat:not(.open){right:0;bottom:16px;width:58px;height:58px;border-radius:50% 0 0 50%;box-shadow:0 12px 30px rgba(10,11,14,.3)}
+.kchat:not(.open) header{width:58px;height:58px;padding:0;background:var(--green);justify-content:center}
+.kchat:not(.open) header .dot{display:none}
+.kchat:not(.open) header:after{content:"";width:28px;height:28px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a0b0e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7.9 20A9 9 0 1 0 4 16.1L2 22Z'/%3E%3C/svg%3E") center/contain no-repeat}
+
+@media(min-width:701px){
+  .kchat:not(.open){width:auto;height:72px;bottom:24px;border-radius:36px 0 0 36px}
+  .kchat:not(.open) header{width:auto;height:72px;padding:0 30px 0 24px;gap:12px}
+  .kchat:not(.open) header:before{content:"chat";order:2;font:600 18px var(--mono);color:var(--carbon)}
+  .kchat:not(.open) header:after{order:1;width:34px;height:34px}
+}
+
+.kchat .kx{display:none;margin-left:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:var(--off);font:500 20px/1 var(--sans);cursor:pointer;align-items:center;justify-content:center}
+.kchat.open .kx{display:flex}
+
+@media(max-width:700px){.kchat.open{left:12px;right:12px;width:auto;max-width:none}}
+
+/* ===== padrão de respiro: lateral 6% em tudo; vertical 120 desktop / 64 celular ===== */
+.shell{width:min(var(--shell),88%);padding:0}
+nav .shell{width:min(var(--shell),88%)}
+.hero .in{padding-left:6%;padding-right:6%}
+.demo{padding:120px 6%}
+.blk{padding:120px 6%}
+.para .p{padding:0 6% 56px}
+.cta{padding:120px 6%}
+.logos{padding:40px 6% 0}
+footer{padding:40px 6%}
+@media(max-width:700px){
+  .shell,nav .shell{width:100%;padding:0 6%}
+  nav .pill{width:100%;justify-content:space-between;padding:8px 8px 8px 16px}
+  section{padding:64px 0}
+  .demo,.cta,.blk{padding:64px 6%}
+  #problema{padding-bottom:40px}
+  .hero .in{padding:100px 6% 44px}
+  .para .p{padding:0 6% 40px}
+  .logos{padding:32px 6% 0}
+  footer{padding:32px 6%}
+}
+
+.only-mob{display:none!important}
+@media(max-width:700px){.only-desk{display:none!important}.only-mob{display:inline-flex!important}nav .logo{font-size:20px}}
+nav .social{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;margin-left:-6px;color:var(--ink);pointer-events:auto}
+nav .pill{padding:8px 10px 8px 18px}
+
+@media(max-width:700px){nav .redes{display:flex!important;align-items:center;gap:2px;margin-left:auto}nav .social{margin-left:0}}
+
+@media(max-width:700px){
+  nav .menu-btn{display:inline-flex!important;align-items:center;justify-content:center;width:40px;height:40px;border:0;background:var(--ink);color:#fff;border-radius:50%;margin-left:6px;pointer-events:auto}
+  nav .menu-btn .i-close{display:none}nav.menu-open .menu-btn .i-open{display:none}nav.menu-open .menu-btn .i-close{display:block}
+  nav .menu-panel{display:none!important;pointer-events:auto;margin-top:8px;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border:1px solid rgba(10,11,14,.08);border-radius:24px;padding:10px;box-shadow:0 20px 50px rgba(10,11,14,.14);flex-direction:column}
+  nav.menu-open .menu-panel{display:flex!important}
+  nav .menu-panel a{padding:14px 16px;font:500 16px var(--sans);color:var(--ink);border-bottom:1px solid var(--line)}
+  nav .menu-panel a:last-of-type{border:0}
+  nav .menu-panel .btn{margin-top:8px;justify-content:center;color:#fff;border:0}
+}
+
+@media(max-width:700px){nav .shell{flex-direction:column;align-items:stretch;gap:0}nav .pill{width:100%}nav .menu-panel{width:100%}}
+
+@media(max-width:700px){
+  .logos .pill{display:none}
+  .logos .marquee{display:block!important;overflow:hidden;width:100%;padding:6px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .logos .track{display:flex;gap:34px;width:max-content;animation:mqroll 70s linear infinite;will-change:transform;backface-visibility:hidden;transform:translate3d(0,0,0)}
+  .logos .mq i{will-change:opacity,transform}
+  .logos .mq{font:600 20px var(--sans);letter-spacing:-.03em;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+  .logos .mq i{font:600 20px var(--mono);font-style:normal;color:var(--green-ink);opacity:0;transform:scale(.6);transition:opacity .35s,transform .35s}
+  .logos .mq.on i{opacity:1;transform:none}
+  @keyframes mqroll{to{transform:translateX(-50%)}}
+}
+
+@media(max-width:700px){
+  .logos{display:flex;flex-direction:column;gap:14px;padding:40px 6% 48px}
+  .logos .cap{order:1;text-align:left;margin:0}
+  .logos .sobre{order:2;display:block!important;margin:0 0 10px;font-size:17px;line-height:1.45;color:var(--muted)}
+  .logos .marquee{order:3;margin:0 -6%;width:auto}
+}
+
+@media(max-width:700px){.logos .sobre-t{order:2;display:block!important;font-size:30px;letter-spacing:-.04em;line-height:1.05;margin:2px 0 0;max-width:12ch}.logos .sobre{order:2;font-size:16px}}
+
+@media(max-width:700px){
+  nav .pill{background:rgba(255,255,255,.28);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.7);box-shadow:0 0 0 1px rgba(10,11,14,.05),0 14px 40px rgba(10,11,14,.18),0 0 32px rgba(47,214,123,.28),inset 0 1px 0 rgba(255,255,255,.8)}
+  nav .menu-panel{box-shadow:0 20px 50px rgba(10,11,14,.14),0 0 28px rgba(47,214,123,.22)}
+}
+
+@media(max-width:700px){nav .redes .social{display:none!important}nav .menu-btn{margin-left:0}}
+
+@media(max-width:700px){
+  .para{background:var(--paper);padding:0 6%;display:grid;gap:16px;margin:0}
+  .para .p{border-radius:var(--r2);overflow:hidden;background:var(--carbon);border:0;min-height:520px;isolation:isolate}
+  .para img{transition:none;transform:scale(1.4);will-change:transform}
+}
+
+@media(max-width:700px){
+  #problema .semcom{display:block;margin-top:0}
+  #problema .semcom>div{position:sticky;min-height:420px;margin-bottom:24px;box-shadow:0 -12px 40px rgba(0,0,0,.45)}
+  #problema .semcom .sc1{top:84px}
+  #problema .semcom .sc2{top:100px}
+  #problema .semcom .sc3{top:116px;margin-bottom:0}
+  #problema{padding-bottom:64px;overflow:visible}
+  #problema .semcom.rv{transform:none}
+}
+
+@media(max-width:700px){
+  /* como acontece: slide = tela + legenda */
+  #demo .head .lead-p{display:none}
+  #demo .head{margin-bottom:24px}
+  #demo .demo-grid{display:flex;flex-direction:column;gap:16px}
+  #demo .stage{order:1;touch-action:pan-y}
+  #demo .demo-grid>div:first-child{order:2;display:contents}
+  #demo .acts{order:2;min-height:0}
+  #demo .act p{display:none}
+  #demo .act h3{font-size:22px;line-height:1.15;text-align:center;padding:0 4%}
+  #demo .act-nav{order:3;margin:8px auto 0;max-width:260px}
+  /* uma tela por ato */
+  #demo .scene .chat,#demo .scene .leadcard,#demo .scene .resumo{display:none}
+  #demo[data-act="1"] .scene .chat,#demo[data-act="2"] .scene .chat,#demo[data-act="3"] .scene .leadcard,#demo[data-act="4"] .scene .resumo{display:block}
+  #demo .scene .logo-state{display:none}
+  #demo .chat-b{max-height:380px;min-height:300px}
+  #demo .leadcard{min-height:300px}
+}
+
+@media(max-width:700px){
+  #demo .head .h2m{display:block!important}
+  #demo .scene{height:440px}
+  #demo .scene .chat,#demo .scene .leadcard,#demo .scene .resumo{height:440px;overflow:hidden;transition:none}
+  #demo .chat-b{max-height:385px;min-height:0}
+  #demo .scene .leadcard,#demo .scene .resumo{display:none;flex-direction:column;justify-content:flex-start}
+  #demo[data-act="3"] .scene .leadcard,#demo[data-act="4"] .scene .resumo{display:flex}
+  #demo .ms .leadcard,#demo .ms .resumo{display:flex;flex-direction:column}
+  #demo .acts{height:64px;display:grid;align-items:start}
+}
+
+@media(max-width:700px){
+  #demo .head .h2m{display:none!important}
+  #demo .head{margin-bottom:12px}
+  #demo .head .k{display:block;font-size:11px}
+  #demo .acts{order:0;height:auto;min-height:88px;align-items:start;margin-bottom:4px}
+  #demo .act h3{text-align:left;padding:0;font-size:26px;line-height:1.1}
+  #demo .stage{order:1}
+  #demo .act-nav{order:2;margin:12px 0 0;max-width:none}
+}
+
+@media(max-width:700px){
+  #demo .demo-grid{display:none}
+  #demo .head{margin-bottom:8px}
+  .mslides{display:block!important;overflow:hidden;margin:0 -6%;padding:0 6%}
+  .ms-track{display:flex;transition:transform .45s cubic-bezier(.2,.8,.2,1);will-change:transform}
+  .ms-track.drag{transition:none}
+  .ms{flex:0 0 100%;min-width:0;padding-right:16px;box-sizing:border-box}
+  .ms h3{font-size:24px;line-height:1.1;color:var(--off);letter-spacing:-.04em;min-height:80px;margin:0 0 14px}
+  .ms-screen{height:420px}
+  .ms .chat,.ms .leadcard,.ms .resumo{position:static;width:100%;height:100%;opacity:1;transform:none;transition:none;overflow:hidden}
+  .ms .chat-b{max-height:none;min-height:0}
+  .ms .leadcard{display:flex;flex-direction:column}
+  .ms-dots{display:flex;gap:8px;justify-content:center;margin-top:18px}
+  .ms-dots i{width:8px;height:8px;border-radius:50%;background:#252c34;transition:background .3s,width .3s}
+  .ms-dots i.on{background:var(--green);width:22px;border-radius:4px}
+}
+
+@media(max-width:700px){
+  @keyframes msin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes mspop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+  .ms .cb.show,.ms .tag.show,.ms .resumo li,.ms .timer,.ms .rod.show,.ms .who,.ms .meta{opacity:0}
+  .ms.live .cb.show{animation:msin .5s cubic-bezier(.2,.8,.2,1) forwards}
+  .ms.live .cb.show:nth-child(1){animation-delay:.2s}.ms.live .cb.show:nth-child(2){animation-delay:1.1s}.ms.live .cb.show:nth-child(3){animation-delay:2s}
+  .ms.live .who,.ms.live .meta{animation:msin .4s forwards}
+  .ms.live .timer{animation:msin .5s .5s forwards}
+  .ms.live .tag.show{animation:mspop .35s cubic-bezier(.2,.8,.2,1) forwards}
+  .ms.live .tag.show:nth-child(1){animation-delay:.8s}.ms.live .tag.show:nth-child(2){animation-delay:1.1s}.ms.live .tag.show:nth-child(3){animation-delay:1.4s}.ms.live .tag.show:nth-child(4){animation-delay:1.8s}.ms.live .tag.show:nth-child(5){animation-delay:2.2s}.ms.live .tag.show:nth-child(6){animation-delay:2.6s}
+  .ms.live .rod.show{animation:msin .5s 2.9s forwards}
+  .ms.live .resumo li{animation:msin .5s forwards}
+  .ms.live .resumo li:nth-child(1){animation-delay:.5s}.ms.live .resumo li:nth-child(2){animation-delay:1s}.ms.live .resumo li:nth-child(3){animation-delay:1.5s}.ms.live .resumo li:nth-child(4){animation-delay:2s}
+}
 </style>
 </head>
 <body>
@@ -449,7 +657,12 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
     <div class="pill">
       <a class="logo" href="#"><span class="b">[</span> kompila <span class="b">]</span></a>
       <div class="links"><a href="#para">pra quem</a><a href="#problema">o que acontece</a><a href="#produto">produto</a><a href="#prova">prova</a><a href="#preco">preço</a></div>
-      <a class="btn wpp" href="https://wa.me/5511962884399?text=Quero%20ver%20o%20Kompila%20Lead%20Recovery%20na%20minha%20opera%C3%A7%C3%A3o" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z"/></svg>Falar no WhatsApp</a>
+      <a class="btn wpp only-desk" href="https://wa.me/5511962884399?text=Quero%20ver%20o%20Kompila%20Lead%20Recovery%20na%20minha%20opera%C3%A7%C3%A3o" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z"/></svg>Falar no WhatsApp</a>
+      <div class="redes only-mob"><span class="social only-mob" aria-label="WhatsApp"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z"/></svg></span><span class="social only-mob" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></span><button type="button" class="menu-btn only-mob" id="menuBtn" aria-label="menu" aria-expanded="false"><svg class="i-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg><svg class="i-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    </div>
+    <div class="menu-panel only-mob" id="menuPanel">
+      <a href="#para">pra quem</a><a href="#problema">o que acontece</a><a href="#produto">produto</a><a href="#prova">prova</a><a href="#preco">preço</a>
+      <a class="btn wpp" href="https://wa.me/5511962884399?text=Quero%20ver%20o%20Kompila%20Lead%20Recovery%20na%20minha%20opera%C3%A7%C3%A3o" target="_blank" rel="noopener">Falar no WhatsApp</a>
     </div>
   </div>
 </nav>
@@ -483,11 +696,14 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
 <!-- 02 LOGOS -->
 <div class="logos rv" id="marcas">
   <div class="pill"><span>Burnpixel</span><span>Maslu Select</span><span class="m">P1LED</span><span>Sinergy</span><span class="m">AUT</span><span>Analu</span></div>
+  <div class="marquee only-mob" id="marquee"><div class="track"><span class="mq"><i>[</i>Burnpixel<i>]</i></span><span class="mq"><i>[</i>Maslu Select<i>]</i></span><span class="mq"><i>[</i>P1LED<i>]</i></span><span class="mq"><i>[</i>Sinergy<i>]</i></span><span class="mq"><i>[</i>AUT<i>]</i></span><span class="mq"><i>[</i>Analu<i>]</i></span><span class="mq"><i>[</i>Bravus Sport<i>]</i></span><span class="mq"><i>[</i>Piuka<i>]</i></span><span class="mq"><i>[</i>Kaisan<i>]</i></span><span class="mq"><i>[</i>Elo Rocket<i>]</i></span><span class="mq"><i>[</i>Contingência Social<i>]</i></span><span class="mq"><i>[</i>Kit Escolar SP<i>]</i></span><span class="mq"><i>[</i>Vesti<i>]</i></span><span class="mq"><i>[</i>Brand1<i>]</i></span><span class="mq"><i>[</i>Conecta Mobile<i>]</i></span><span class="mq"><i>[</i>Everlight<i>]</i></span><span class="mq"><i>[</i>Peach Up<i>]</i></span><span class="mq"><i>[</i>Viki Saúde<i>]</i></span><span class="mq"><i>[</i>Valuation Jurídico<i>]</i></span><span class="mq"><i>[</i>Trevo Lácteos<i>]</i></span><span class="mq"><i>[</i>Ehrmann<i>]</i></span><span class="mq"><i>[</i>Redde.ai<i>]</i></span><span class="mq"><i>[</i>Net Vistos<i>]</i></span><span class="mq"><i>[</i>Via Motorista<i>]</i></span><span class="mq"><i>[</i>Elf Vape<i>]</i></span><span class="mq"><i>[</i>Burnpixel<i>]</i></span><span class="mq"><i>[</i>Maslu Select<i>]</i></span><span class="mq"><i>[</i>P1LED<i>]</i></span><span class="mq"><i>[</i>Sinergy<i>]</i></span><span class="mq"><i>[</i>AUT<i>]</i></span><span class="mq"><i>[</i>Analu<i>]</i></span><span class="mq"><i>[</i>Bravus Sport<i>]</i></span><span class="mq"><i>[</i>Piuka<i>]</i></span><span class="mq"><i>[</i>Kaisan<i>]</i></span><span class="mq"><i>[</i>Elo Rocket<i>]</i></span><span class="mq"><i>[</i>Contingência Social<i>]</i></span><span class="mq"><i>[</i>Kit Escolar SP<i>]</i></span><span class="mq"><i>[</i>Vesti<i>]</i></span><span class="mq"><i>[</i>Brand1<i>]</i></span><span class="mq"><i>[</i>Conecta Mobile<i>]</i></span><span class="mq"><i>[</i>Everlight<i>]</i></span><span class="mq"><i>[</i>Peach Up<i>]</i></span><span class="mq"><i>[</i>Viki Saúde<i>]</i></span><span class="mq"><i>[</i>Valuation Jurídico<i>]</i></span><span class="mq"><i>[</i>Trevo Lácteos<i>]</i></span><span class="mq"><i>[</i>Ehrmann<i>]</i></span><span class="mq"><i>[</i>Redde.ai<i>]</i></span><span class="mq"><i>[</i>Net Vistos<i>]</i></span><span class="mq"><i>[</i>Via Motorista<i>]</i></span><span class="mq"><i>[</i>Elf Vape<i>]</i></span></div></div>
   <div class="cap k">marcas que confiam</div>
+  <h3 class="sobre-t only-mob">Vinte anos vendendo online.</h3>
+  <p class="sobre only-mob">A Kompila nasce de 20 anos de operação em vendas online, atendimento e geração de leads. Hoje essa experiência vira site, loja, marca e atendimento com inteligência artificial para empresas que vendem.</p>
 </div>
 
 <!-- 07 FEITO PARA -->
-<section class="para dark" id="para" style="padding:0">
+<section class="para dark" id="para">
   <div class="p rv"><img src="img/feita-incorporadora.webp" alt=""><h3>Feita para <span class="grad">incorporadoras e imobiliárias.</span></h3><p>Centenas de leads por mês, equipes rotativas e milhares de contatos esquecidos na gaveta. Resgata a base antiga e garante que quem chama no domingo visite o decorado na terça.</p></div>
   <div class="p rv d1"><img src="img/feita-industria.webp" alt=""><h3>Feita para <span class="grad">indústria técnica e projetos B2B.</span></h3><p>Orçamentos de R$ 20 mil a R$ 300 mil. A cotação sai em segundos no WhatsApp e um único lead recuperado que fecha a compra já paga meses de operação.</p></div>
   <div class="p rv d2"><img src="img/feita-crm.webp" alt=""><h3>Feita para <span class="grad">quem já tem CRM.</span></h3><p>HubSpot, Salesforce, Pipedrive ou Kommo. Você não joga nada fora: a Kompila se conecta por cima do que você já usa e fica na operação do dia a dia, não na promessa de implantação.</p></div>
@@ -502,7 +718,7 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
   <div class="semcom rv" style="margin-top:0">
     <div class="sc1"><span class="kk">a operação hoje</span><h4>O lead chama no domingo, à noite ou no almoço e fica no vácuo.</h4><ul><li>Cai numa caixa geral; vendedor ausente segura o contato na gaveta.</li><li>A resposta humana demora horas ou dias; a conversa esfria e morre.</li><li>O gerente só descobre o desastre no dia 31, com a meta perdida.</li></ul></div>
     <div class="sc2"><span class="kk">medido numa operação real</span><h4>44% dos leads chegam fora do expediente; 761 nunca tiveram resposta.</h4><ul><li>1.771 leads sem dono em 12 semanas; rodízio quebrado em silêncio.</li><li>Janela de 24h estoura em massa; maior motivo de perda: “sem retorno”.</li><li>Dezenas de telas e gráficos no CRM que nenhum gestor tem tempo de auditar.</li></ul></div>
-    <div class="sc3"><span class="kk">com a kompila</span><h4>IA atende em segundos 24/7: acolhe, calcula e agenda no fim de semana.</h4><ul><li>Vendedor escalado em 4 s no expediente; fila de segunda às 08h já briefingada e pronta.</li><li>Humano em até 5 min (ou a fila anda); Guardião reativa antes de 24 h.</li><li>Resumo de 5 linhas no WhatsApp do gerente toda manhã com quem agiu e quem travou.</li></ul></div>
+    <div class="sc3"><span class="kk">com a kompila</span><h4>Resposta em segundos. Vendedor em 5 minutos.</h4><ul><li><b>Atende 24h por dia:</b> acolhe na hora, tira dúvidas e já calcula a proposta (inclusive no fim de semana).</li><li><b>Entrega para o vendedor em 4 segundos:</b> com tudo mastigado. Se o humano não responder em 5 minutos, a fila anda.</li><li><b>Zero leads esquecidos:</b> nenhuma conversa morre na gaveta e o gerente recebe o resumo no WhatsApp todo dia às 8h.</li></ul></div>
   </div>
 
 </section>
@@ -510,9 +726,41 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
 <!-- 04 COMO ACONTECE NA PRÁTICA (motion) -->
 <section class="demo dark" id="demo" data-act="0">
   <div class="head rv">
-    <div><span class="k">como acontece na prática</span><h2>Sábado, 09:12. <span class="dimt" style="color:var(--cdim)">Um cliente chama.</span></h2></div>
+    <div><span class="k">como acontece na prática</span><h2 class="only-desk">Sábado, 09:12. <span class="dimt" style="color:var(--cdim)">Um cliente chama.</span></h2><h2 class="only-mob h2m">Como acontece <span class="dimt" style="color:var(--cdim)">na prática.</span></h2></div>
     <p class="lead-p">O mesmo lead, do primeiro segundo até a visita marcada: o que a Kompila faz sozinha, quando chama a pessoa, e o que o gerente vê na segunda de manhã.</p>
-  </div>  <div class="demo-grid">
+  </div>
+  <div class="mslides only-mob" id="mslides">
+    <div class="ms-track" id="msTrack">
+      <div class="ms">
+        <h3>O cliente chama. A Kompila atende.</h3>
+        <div class="ms-screen">
+          <div class="chat ms-chat"><div class="chat-h"><div class="av">MO</div><div><b>Marcos Oliveira</b><small>sábado · campanha meta</small></div><span class="wa">whatsapp</span></div>
+          <div class="chat-b"><div class="cb show">Oi, vi o lançamento de vocês no Instagram. Tem apartamento de 2 quartos que aceita FGTS?<time>sáb · 09:12</time></div><div class="cb ia show">Oi Marcos! Tem sim: 2 quartos a partir de R$ 270 mil, aceita FGTS e Minha Casa Minha Vida. Pra eu te passar a conta certa: qual a sua renda e pra quando você quer mudar?<time>09:12</time></div></div></div>
+        </div>
+      </div>
+      <div class="ms">
+        <h3>Pergunta o que precisa e faz a conta na hora.</h3>
+        <div class="ms-screen">
+          <div class="chat ms-chat"><div class="chat-h"><div class="av">MO</div><div><b>Marcos Oliveira</b><small>sábado · campanha meta</small></div><span class="wa">whatsapp</span></div>
+          <div class="chat-b"><div class="cb show">Renda de 6 mil. Queria até dezembro.<time>09:13</time></div><div class="cb calc show">unidade <b>2 quartos · R$ 270.000</b><br>renda <b>R$ 6.000</b> → faixa do programa<br>FGTS → aceito na entrada<br>parcela → <b>simulador da Caixa</b></div><div class="cb ia show">Com 6 mil de renda você entra na faixa do programa e pode usar o FGTS na entrada. Quer conhecer o decorado?<div class="opts"><span>sábado</span><span>domingo</span></div><time>09:13</time></div></div></div>
+        </div>
+      </div>
+      <div class="ms">
+        <h3>Entrega o lead quente no colo do vendedor.</h3>
+        <div class="ms-screen">
+          <div class="leadcard ok ms-card"><div class="kk">lead · campanha meta · lançamento</div><div class="who">Marcos Oliveira</div><div class="meta">Apto 2 quartos · FGTS · R$ 270.000</div><div class="timer"><b>1 min</b><span>Renata respondeu</span></div><div class="badges"><span class="tag ok show">kompila atendeu · 09:12</span><span class="tag ok show">qualificado · 6 mil · dezembro</span><span class="tag ok show">briefing pronto</span><span class="tag bad show">5 min · Carlos não respondeu</span><span class="tag warn show">passou pra Renata</span><span class="tag ok show">visita · hoje 10h</span></div><div class="rod show"><span class="kk">fila</span><span class="av off">CA</span><span class="av">DI</span><span class="av">PE</span><span class="av hot">RE</span></div></div>
+        </div>
+      </div>
+      <div class="ms">
+        <h3>O vendedor cuida da fila dele. O gerente sabe de tudo às 8h.</h3>
+        <div class="ms-screen">
+          <div class="resumo ms-res"><div class="kk">resumo · segunda · 8h</div><div class="who">Fim de semana</div><ul><li><b>14</b> leads atendidos pela Kompila</li><li class="ok"><b>3</b> visitas marcadas</li><li class="warn"><b>1</b> passou de 5 min: Carlos</li><li class="ok"><b>0</b> leads órfãos</li></ul></div>
+        </div>
+      </div>
+    </div>
+    <div class="ms-dots" id="msDots"><i class="on"></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="demo-grid">
     <div>
       <div class="acts">
         <div class="act" data-i="1"><h3>O cliente chama. A Kompila atende.</h3><p>Em segundos, com a informação oficial da sua empresa. De madrugada, no domingo ou com 40 leads chamando ao mesmo tempo. <b>É a velocidade de um robô com o acolhimento de uma pessoa de verdade.</b></p></div>
@@ -691,7 +939,7 @@ html:not(.js) .act[data-i="4"]{opacity:1}html:not(.js) .demo .win{opacity:1;tran
 
 <!-- chat do agente (roteirizado) -->
 <aside class="kchat" id="kchat">
-  <header id="kchatH"><span class="dot"></span><b><span class="b">[</span> kompila <span style="color:var(--amber)">.agente</span> <span class="b">]</span></b><small>responde em segundos</small></header>
+  <header id="kchatH"><span class="dot"></span><b><span class="b">[</span> kompila <span style="color:var(--amber)">.agente</span> <span class="b">]</span></b><small>responde em segundos</small><button type="button" class="kx" id="kclose" aria-label="fechar">×</button></header>
   <div class="msgs" id="kmsgs"><div class="m bot">Oi! Sou o agente da Kompila. Pra te dizer se o Lead Recovery faz sentido para você, só preciso saber: quantos leads chegam por mês na sua operação?</div></div>
   <div class="opts" id="kopts"><button data-v="até 200">até 200</button><button data-v="200 a 1.000">200 a 1.000</button><button data-v="mais de 1.000">mais de 1.000</button></div>
   <form id="kform"><input id="kin" placeholder="Escreva aqui" autocomplete="off"><button type="submit" aria-label="enviar">→</button></form>
@@ -721,8 +969,10 @@ var fio=document.getElementById('fioPath');if(fio){var L=fio.getTotalLength();fi
 function wrapChars(el){var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),ns=[],n;while(n=walker.nextNode())if(n.nodeValue.trim()||n.nodeValue===' ')ns.push(n);ns.forEach(function(tn){if(tn.parentNode.closest('.echo i'))return;var f=document.createDocumentFragment();tn.nodeValue.split(/(\s+)/).forEach(function(part){if(!part)return;if(/^\s+$/.test(part)){var sp=document.createElement('span');sp.className='ch';sp.textContent=' ';f.appendChild(sp);return}var g=!!tn.parentNode.closest('.grad');var w=document.createElement('span');w.className='wrd';part.split('').forEach(function(c){var s=document.createElement('span');s.className='ch'+(g?' grad':'');s.textContent=c;w.appendChild(s)});f.appendChild(w)});tn.parentNode.replaceChild(f,tn)});el.querySelectorAll('.grad').forEach(function(gp){if(gp.tagName!=='I'&&gp.querySelector('.ch'))gp.classList.remove('grad')});return[].slice.call(el.querySelectorAll('.ch'))}
 var hero=document.querySelector('.hero'),h1a=document.getElementById('h1a'),h1b=document.getElementById('h1b'),ctas=document.getElementById('ctas'),ca=wrapChars(h1a),cb=wrapChars(h1b);
 function typeChars(chars,speed,cb2){var caret=document.createElement('span');caret.className='caret';var i=0;(function step(){if(i<chars.length){var c=chars[i];c.classList.add('on');c.after(caret);i++;setTimeout(step,c.textContent===' '?speed*1.6:speed+Math.random()*30)}else{setTimeout(function(){caret.remove();if(cb2)cb2()},900)}})()}
+var mobileHero=matchMedia('(max-width:700px)').matches;
+if(mobileHero){ctas.classList.add('show');requestAnimationFrame(function(){requestAnimationFrame(function(){hero.classList.add('enter')})})}
 if(reduced){ca.concat(cb).forEach(function(c){c.classList.add('on')});h1a.classList.add('gone');h1b.classList.add('live');ctas.classList.add('show')}
-else setTimeout(function(){typeChars(ca,52,function(){h1a.classList.add('gone');setTimeout(function(){h1b.classList.add('live');typeChars(cb,50,function(){h1b.classList.add('small');setTimeout(function(){ctas.classList.add('show')},450);if(G){G.timeline().to(ec,{opacity:function(i){return[.35,.25,.15,.08][i]},y:function(i){return -(i+1)*.5+'em'},x:function(i){return i%2?8:-8},duration:.6,ease:'power2.out',stagger:.06}).to(ec,{opacity:0,y:0,x:0,duration:1.3,ease:'power2.inOut'},'+=.5')}})},650)})},700);
+else setTimeout(function(){typeChars(ca,52,function(){h1a.classList.add('gone');setTimeout(function(){h1b.classList.add('live');typeChars(cb,50,function(){if(!mobileHero){h1b.classList.add('small');setTimeout(function(){ctas.classList.add('show')},450)}})},650)})},700);
 var ec=document.querySelectorAll('.echo i');
 /* hero: mensagem se digitando (Converge/Pipefy) + cronômetro (nosso) */
 var hb1=document.getElementById('hb1'),hb1t=document.getElementById('hb1t'),hl=document.getElementById('hlead'),ht=document.getElementById('htimer'),htl=document.getElementById('htimerL');
@@ -803,10 +1053,17 @@ function splitWords(root){var walker=document.createTreeWalker(root,NodeFilter.S
   function answer(v){if(!script[step])return;add(v,true);answers[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);renderOpts()}else{renderOpts()}},600)}
   opts.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){answer(b.dataset.v)})});
   form.addEventListener('submit',function(e){e.preventDefault();var v=inp.value.trim();if(!v)return;inp.value='';if(script[step]&&script[step].o.length)answer(v);else{add(v,true);setTimeout(function(){add('Anotado. Me chama no WhatsApp que a gente continua por lá.')},500)}});
-  h.addEventListener('click',function(){box.classList.toggle('open')});
+  h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')});
   
 })();
 })();
 </script>
+<script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
+<script>(function(){var hero=document.querySelector('.hero'),wrap=hero&&hero.querySelector('.bgwrap');if(!hero)return;requestAnimationFrame(function(){requestAnimationFrame(function(){hero.classList.add('bgin')})});if(!wrap)return;var t=false;function px(){t=false;var y=window.scrollY||0,h=hero.offsetHeight;if(y>h)return;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'}addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(px)}},{passive:true});px()})();</script>
+<script>(function(){var n=document.getElementById('nav'),b=document.getElementById('menuBtn'),p=document.getElementById('menuPanel');if(!b)return;function set(o){n.classList.toggle('menu-open',o);b.setAttribute('aria-expanded',o?'true':'false')}b.addEventListener('click',function(){set(!n.classList.contains('menu-open'))});p.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){set(false)})})})();</script>
+<script>(function(){var m=document.getElementById('marquee');if(!m||!matchMedia('(max-width:700px)').matches)return;var items=[].slice.call(m.querySelectorAll('.mq')),cur=null,vis=false,t=null;function tick(){var c=innerWidth/2,best=null,bd=1e9;for(var i=0;i<items.length;i++){var r=items[i].getBoundingClientRect();if(r.right<0||r.left>innerWidth)continue;var d=Math.abs((r.left+r.right)/2-c);if(d<bd){bd=d;best=items[i]}}if(best!==cur){if(cur)cur.classList.remove('on');cur=best;if(cur)cur.classList.add('on')}}new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis&&!t)t=setInterval(tick,160);if(!vis&&t){clearInterval(t);t=null}}).observe(m)})();</script>
+<script>(function(){if(!matchMedia('(max-width:700px)').matches)return;var cards=[].slice.call(document.querySelectorAll('.para .p')),imgs=cards.map(function(c){return c.querySelector('img')}),live=[],t=false;function px(){t=false;var vh=innerHeight;live.forEach(function(i){var r=cards[i].getBoundingClientRect();var p=(r.top+r.height/2-vh/2)/vh;imgs[i].style.transform='translate3d(0,'+(p*-110)+'px,0) scale(1.4)'})}var io=new IntersectionObserver(function(es){es.forEach(function(e){var i=cards.indexOf(e.target);if(e.isIntersecting){if(live.indexOf(i)<0)live.push(i)}else live=live.filter(function(x){return x!==i})});px()});cards.forEach(function(c){io.observe(c)});addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(px)}},{passive:true})})();</script>
+<script>(function(){if(!matchMedia('(max-width:700px)').matches)return;var st=document.getElementById('stage'),nb=[].slice.call(document.querySelectorAll('#actnav button')),demo=document.getElementById('demo');if(!st)return;var x0=null,y0=null;st.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});st.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)<40||Math.abs(dx)<Math.abs(dy))return;var n=+demo.dataset.act||1;n=dx<0?Math.min(4,n+1):Math.max(1,n-1);nb[n-1].click()},{passive:true})})();</script>
+<script>(function(){var box=document.getElementById('mslides');if(!box||!matchMedia('(max-width:700px)').matches)return;var tr=document.getElementById('msTrack'),dots=[].slice.call(document.querySelectorAll('#msDots i')),n=4,i=0,w=0,x0=null,dx=0,timer=null;function W(){w=box.clientWidth-box.clientWidth*0.12}function go(k){i=(k+n)%n;tr.classList.remove('drag');tr.style.transform='translate3d('+(-i*w)+'px,0,0)';dots.forEach(function(d,j){d.classList.toggle('on',j===i)});[].forEach.call(tr.children,function(sl,j){sl.classList.remove('live');if(j===i){void sl.offsetWidth;sl.classList.add('live')}})}function auto(){clearInterval(timer);timer=setInterval(function(){go(i+1)},5500)}W();go(0);auto();addEventListener('resize',function(){W();go(i)});box.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;dx=0;tr.classList.add('drag');clearInterval(timer)},{passive:true});box.addEventListener('touchmove',function(e){if(x0===null)return;dx=e.touches[0].clientX-x0;tr.style.transform='translate3d('+(-i*w+dx)+'px,0,0)'},{passive:true});box.addEventListener('touchend',function(){if(x0===null)return;x0=null;if(dx<-50)go(i+1);else if(dx>50)go(i-1);else go(i);auto()})})();</script>
 </body>
 </html>
