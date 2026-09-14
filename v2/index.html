@@ -407,6 +407,8 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
 /* guias: ?guias na URL ou tecla g */
 html.guias div,html.guias header,html.guias section,html.guias footer,html.guias nav,html.guias form{outline:1px solid rgba(47,125,255,.85);outline-offset:-1px}
 html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2px dashed rgba(47,125,255,.95);outline-offset:-2px}
+
+.hero .titles{transition:none}.hero .p{transition:opacity .7s,transform .7s,margin .7s}
 </style>
 </head>
 <body>
@@ -767,8 +769,8 @@ var ca=wrapChars(h1a),cb=wrapChars(h1b);
 function typeChars(chars,speed,done){var caret=document.createElement('span');caret.className='caret';var i=0;(function step(){if(i<chars.length){var c=chars[i];c.classList.add('on');c.after(caret);i++;setTimeout(step,c.textContent===' '?speed*1.6:speed+Math.random()*30)}else{setTimeout(function(){caret.remove();if(done)done()},900)}})()}
 requestAnimationFrame(function(){requestAnimationFrame(function(){hero.classList.add('bgin');if(mobileHero)hero.classList.add('enter')})});
 if(mobileHero)hero.classList.add('show');
-if(reduced){ca.concat(cb).forEach(function(c){c.classList.add('on')});h1a.classList.add('gone');h1b.classList.add('live');hero.classList.add('show')}
-else setTimeout(function(){typeChars(ca,52,function(){h1a.classList.add('gone');setTimeout(function(){h1b.classList.add('live');typeChars(cb,50,function(){if(!mobileHero){h1b.classList.add('small');setTimeout(function(){hero.classList.add('show')},450)}})},650)})},700);
+if(reduced){ca.concat(cb).forEach(function(c){c.classList.add('on')});h1a.classList.add('gone');h1a.style.display='none';h1b.classList.add('live');hero.classList.add('show')}
+else setTimeout(function(){typeChars(ca,52,function(){h1a.classList.add('gone');setTimeout(function(){h1a.style.display='none'},650);setTimeout(function(){h1b.classList.add('live');typeChars(cb,50,function(){if(!mobileHero){h1b.classList.add('small');setTimeout(function(){hero.classList.add('show')},450)}})},650)})},700);
 /* parallax da foto */
 var wrap=hero.querySelector('.bgwrap'),t=false;function px(){t=false;var y=scrollY||0;if(y>hero.offsetHeight)return;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'}addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(px)}},{passive:true});px();
 })();
