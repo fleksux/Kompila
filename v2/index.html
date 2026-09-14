@@ -570,6 +570,15 @@ section.dark.tela{background:var(--carbon)}
 .phone .chat-h .avi{width:34px;height:34px;border-radius:50%;object-fit:cover}
 .phone .cb{font-size:14px}
 @media(max-width:700px){.phone{border-radius:28px;padding:8px}.phone .chat{border-radius:22px}}
+
+/* autoridade + marcas passando */
+.marcas{padding:56px 0 48px;margin-top:-1px}
+.marcas .aut{text-align:center;font-size:clamp(18px,1.7vw,24px);line-height:1.4;color:var(--off);max-width:760px;margin:0 auto 36px}
+.mq{overflow:hidden;width:100%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.mq-track{display:flex;gap:56px;width:max-content;animation:mqroll 80s linear infinite;will-change:transform;transform:translate3d(0,0,0)}
+.mq-track span{font:600 22px var(--sans);letter-spacing:-.03em;color:#fff;white-space:nowrap;opacity:.9}
+@keyframes mqroll{to{transform:translateX(-50%)}}
+@media(max-width:700px){.marcas{padding:40px 0 36px}.marcas .aut{font-size:16px;margin-bottom:26px}.mq-track{gap:36px}.mq-track span{font-size:18px}}
 </style>
 </head>
 <body>
@@ -638,6 +647,11 @@ section.dark.tela{background:var(--carbon)}
     </div>
   </div>
 </header>
+
+<section class="dark marcas" id="marcas">
+  <div class="shell"><p class="aut rv">Vinte anos de vendas online, atendimento e geração de leads.<br>Marcas que confiam na Kompila:</p></div>
+  <div class="mq rv d1"><div class="mq-track"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span></div></div>
+</section>
 
 <section class="dark dor only-mob" id="dor"><div class="shell" id="dorIn"></div></section>
 <!-- 02 O VAZAMENTO -->
