@@ -63,7 +63,8 @@ nav .panel{display:none}
 .hero .bgwrap{position:absolute;inset:0;z-index:1;will-change:transform}
 .hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 30%;opacity:0;transform:scale(1.22) translateY(6%);transition:opacity 1.1s ease,transform 2.2s cubic-bezier(.2,.8,.2,1)}
 .hero.bgin img.bg{opacity:1;transform:scale(1.16) translateY(5%)}
-.hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,11,14,.82) 0%,rgba(10,11,14,.7) 45%,rgba(10,11,14,.35) 68%,rgba(10,11,14,.1) 100%),linear-gradient(180deg,rgba(10,11,14,.35) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,0) 60%,rgba(10,11,14,.8) 100%)}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,11,14,.82) 0%,rgba(10,11,14,.7) 45%,rgba(10,11,14,.35) 68%,rgba(10,11,14,.1) 100%)}
+.hero .veil2{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,14,.35) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,0) 60%,rgba(10,11,14,.8) 100%)}
 .hero .in{position:relative;z-index:2;width:min(var(--shell),100% - 2*var(--gut));margin:0 auto;padding:0 0 72px;display:grid;gap:22px;justify-items:start}
 .hero h1{color:#fff;max-width:14ch}
 .hero .lead{color:rgba(255,255,255,.85);max-width:560px}
@@ -444,7 +445,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .trust .mq{-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 @media(max-width:700px){.trust{padding:40px 0 32px}.trust .stats{grid-template-columns:1fr 1fr;gap:14px 12px;margin-bottom:22px}.trust .stats b{font-size:20px}.trust .stats span{font-size:12.5px}.hero .in{padding-bottom:40px}}
 
-@media(min-width:701px){.hero img.bg{object-position:88% 30%}.hero.bgin img.bg{transform:scale(1.12) translateY(4%)}}
+@media(min-width:701px){.hero img.bg{object-position:100% 30%}.hero.bgin img.bg{transform:scale(1.06) translateY(3%)}}
 </style>
 </head>
 <body>
@@ -470,7 +471,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 
 <!-- HERO -->
 <header class="hero" id="topo">
-  <div class="bgwrap"><img class="bg" id="heroBg" src="../img/hero-diretor.webp" alt="Diretor comercial de braços cruzados numa sala de vendas" fetchpriority="high" decoding="async"><div class="veil"></div></div>
+  <div class="bgwrap"><img class="bg" id="heroBg" src="../img/hero-diretor.webp" alt="Diretor comercial de braços cruzados numa sala de vendas" fetchpriority="high" decoding="async"><div class="veil"></div><div class="veil2"></div></div>
   <div class="in">
     <div class="left">
     <div class="copy">
