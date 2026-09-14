@@ -523,6 +523,42 @@ html{overflow-x:hidden}
 .feed-b .cb{max-height:220px;animation:fdin .6s cubic-bezier(.2,.8,.2,1);transition:opacity .45s ease,max-height .5s cubic-bezier(.2,.8,.2,1),margin .5s,padding .5s}
 .feed-b .cb.out{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin-top:-8px;overflow:hidden;border-color:transparent}
 .feed-h .wait b{transition:color .4s ease}
+
+/* bloco "tela real": print grande + título + uma frase */
+.tela{background:var(--paper2)}
+.tela .shell{display:grid;gap:40px}
+.screen{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 30px 70px rgba(10,11,14,.14);overflow:hidden;font-family:var(--sans)}
+.scr-top{display:flex;align-items:center;gap:18px;padding:14px 20px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}
+.scr-logo{font:600 14px var(--mono);color:var(--ink)}
+.scr-tab{padding:6px 10px;border-radius:999px}.scr-tab.on{background:var(--ink);color:#fff}
+.scr-date{margin-left:auto;font:500 12px var(--mono);color:var(--dim)}
+.scr-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.scr-kpi div{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.scr-kpi small{display:block;font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.scr-kpi b{display:block;font:600 28px var(--mono);letter-spacing:-.05em;margin:4px 0 2px}.scr-kpi b.g{color:var(--green-ink)}.scr-kpi b.r{color:var(--red-ink)}
+.scr-kpi span{font-size:12px;color:var(--muted)}
+.scr-h{padding:16px 20px 6px;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.scr-list{padding:0 20px 18px}
+.scr-list li{display:grid;grid-template-columns:40px 1fr auto auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.scr-list li:first-child{border-top:0}
+.scr-list img,.scr-list .ini{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.scr-list .ini{display:grid;place-items:center;background:var(--paper2);font:600 12px var(--mono);color:var(--muted);font-style:normal}
+.scr-list b{display:block;font-size:15px;font-weight:600}.scr-list span{font-size:13px;color:var(--muted)}
+.scr-list em{font:500 12px var(--sans);font-style:normal;padding:4px 9px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.scr-list em.ok{color:var(--green-ink);border-color:rgba(21,151,84,.35);background:rgba(47,214,123,.08)}.scr-list em.warn{color:#a86a00;border-color:rgba(255,178,36,.5);background:rgba(255,178,36,.1)}.scr-list em.bad{color:var(--red-ink);border-color:rgba(201,48,60,.35);background:rgba(255,101,119,.1)}
+.scr-list time{font:600 14px var(--mono);letter-spacing:-.03em;white-space:nowrap}.scr-list time.ok{color:var(--green-ink)}.scr-list time.warn{color:#a86a00}.scr-list time.bad{color:var(--red-ink)}
+.tela-txt{text-align:center;max-width:720px;margin:0 auto}
+.tela-txt h2{font-size:var(--t2);font-weight:600;letter-spacing:-.045em;line-height:1.02}
+.tela-txt p{margin-top:18px;font-size:19px;color:var(--muted)}
+@media(max-width:700px){
+  .tela .shell{gap:32px}
+  .screen{width:130%;border-radius:14px;font-size:14px}
+  .scr-top{gap:12px;padding:12px 16px}.scr-tab:not(.on){display:none}
+  .scr-kpi{grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px}.scr-kpi div{padding:10px}.scr-kpi b{font-size:22px}.scr-kpi span{display:none}
+  .scr-list{padding:0 16px 14px}.scr-list li{grid-template-columns:36px 1fr auto;gap:10px}.scr-list em{display:none}
+  .scr-list img,.scr-list .ini{width:36px;height:36px}
+  .tela-txt h2{font-size:34px}.tela-txt p{font-size:17px;margin-top:14px}
+}
 </style>
 </head>
 <body>
@@ -661,32 +697,24 @@ html{overflow-x:hidden}
 </section>
 
 <!-- 05 PAINEL DO GERENTE -->
-<section id="painel" style="padding-top:0">
+<section id="painel" class="tela">
   <div class="shell">
-    <div class="head rv two"><div><span class="k">segunda-feira, 8h</span><h2>O gerente não precisa procurar o problema. <span class="dimt">O problema chega organizado até ele.</span></h2></div></div>
-    <div class="dash rv">
-      <div class="bar"><i></i><i></i><i></i><span>kompila · painel · seg 8h</span></div>
-      <div class="body">
-        <div style="display:grid;gap:16px">
-          <div class="kpis"><div class="g"><b>14/14</b><small>leads atendidos no fim de semana</small></div><div class="g"><b>3</b><small>visitas agendadas</small></div><div class="r"><b>1</b><small>vendedor ultrapassou o prazo</small></div></div>
-          <div class="box"><span class="k">resumo do fim de semana</span><ul class="resumo"><li>Leads recebidos<b>14</b></li><li class="g">Atendidos pela Kompila<b>14</b></li><li>Qualificados<b>8</b></li><li class="g">Visitas agendadas<b>3</b></li><li class="r">Vendedor fora do prazo<b>1</b></li><li>Lead redistribuído<b>1</b></li><li class="g">Leads sem responsável<b>0</b></li></ul></div>
-          <div class="box"><span class="k">tempo médio até a primeira resposta</span><div class="bars"><div><span>Kompila</span><i style="--w:4%"></i><span>8 s</span></div><div><span>Renata</span><i style="--w:30%"></i><span>3 min</span></div><div><span>Diego</span><i style="--w:45%"></i><span>4 min</span></div><div class="r"><span>Carlos</span><i style="--w:100%"></i><span>19 min</span></div></div></div>
-        </div>
-        <div style="display:grid;gap:16px;align-content:start">
-          <div class="box"><span class="k">alertas</span><ul class="alerts">
-            <li><svg class="ico"><use href="#i-alert"/></svg><div>Carlos ultrapassou o prazo<small>3 leads esperando ação</small></div></li>
-            <li><svg class="ico"><use href="#i-funnel"/></svg><div>Campanha Guarulhos<small>recebeu 22 leads, apenas 7 avançaram</small></div></li>
-            <li><svg class="ico"><use href="#i-zap"/></svg><div>Lead de alta prioridade<small>renda compatível, visita ainda não confirmada</small></div></li>
-          </ul></div>
-          <div class="box"><span class="k">funil · fim de semana</span><div class="bars"><div><span>campanha</span><i style="--w:100%"></i><span>14</span></div><div><span>atendido</span><i style="--w:100%"></i><span>14</span></div><div><span>qualificado</span><i style="--w:57%"></i><span>8</span></div><div><span>visita</span><i style="--w:21%"></i><span>3</span></div></div></div>
-        </div>
-      </div>
+    <div class="screen rv">
+      <div class="scr-top"><span class="scr-logo"><span class="b">[</span> kompila <span class="b">]</span></span><span class="scr-tab on">Agora</span><span class="scr-tab">Fila</span><span class="scr-tab">Equipe</span><span class="scr-date">seg · 08:00</span></div>
+      <div class="scr-kpi"><div><small>fim de semana</small><b>14</b><span>leads atendidos</span></div><div><small>visitas</small><b class="g">3</b><span>agendadas</span></div><div><small>fora do prazo</small><b class="r">1</b><span>vendedor</span></div><div><small>órfãos</small><b class="g">0</b><span>leads</span></div></div>
+      <div class="scr-h">Esperando uma pessoa</div>
+      <ul class="scr-list">
+        <li><img src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><span>Apto 2 quartos · visita sábado 10h</span></div><em class="ok">confirmado</em><time class="ok">3 min</time></li>
+        <li><img src="img/lead-juliana.webp" alt=""><div><b>Juliana Prado</b><span>Vestido 42 · retirar na loja</span></div><em class="warn">aguardando Diego</em><time class="warn">4 min</time></li>
+        <li><img src="img/lead-ricardo.webp" alt=""><div><b>Ricardo Nunes</b><span>Painel LED 6×3 m · fachada</span></div><em class="bad">Carlos não respondeu</em><time class="bad">19 min</time></li>
+        <li><i class="ini">AS</i><div><b>Ana Souza</b><span>Apto 3 quartos · FGTS</span></div><em class="ok">IA conduzindo</em><time class="ok">0 s</time></li>
+        <li><i class="ini">PL</i><div><b>Paulo Lima</b><span>Orçamento painel 4×2 m</span></div><em class="warn">redistribuído → Renata</em><time class="warn">1 min</time></li>
+      </ul>
     </div>
-    <ul class="mlist rv">
-      <li><svg class="ico"><use href="#i-check"/></svg>Tempo até a primeira resposta</li><li><svg class="ico"><use href="#i-check"/></svg>Tempo até o atendimento humano</li><li><svg class="ico"><use href="#i-check"/></svg>Leads sem responsável</li>
-      <li><svg class="ico"><use href="#i-check"/></svg>Conversas sem próxima ação</li><li><svg class="ico"><use href="#i-check"/></svg>Leads em risco</li><li><svg class="ico"><use href="#i-check"/></svg>Motivos de perda</li>
-      <li><svg class="ico"><use href="#i-check"/></svg>Conversão por origem</li><li><svg class="ico"><use href="#i-check"/></svg>Desempenho por vendedor</li><li><svg class="ico"><use href="#i-check"/></svg>Reuniões e visitas agendadas</li>
-    </ul>
+    <div class="tela-txt rv d1">
+      <h2>O gerente não precisa procurar o problema.</h2>
+      <p>Segunda, 8h: quem respondeu, quem enrolou e qual lead está em risco.</p>
+    </div>
   </div>
 </section>
 
