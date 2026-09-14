@@ -470,6 +470,18 @@ nav .logo .lr{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppe
   .hero h1{font-size:44px;font-weight:500;letter-spacing:-.05em;line-height:.98}
   .hero .p{font-size:17px;font-weight:400;line-height:1.4;color:rgba(255,255,255,.85);margin:0}
 }
+
+/* título que apaga sai do fluxo na hora (sem caixa vazia em cima) */
+.hero .titles{position:relative}
+.hero h1.gone{position:absolute;left:0;top:0;width:100%}
+@media(max-width:700px){
+  .hero .in{padding-bottom:28px}
+  .dor{padding:14px 0 56px}
+  .feed-h b{white-space:nowrap;font-size:15px}
+  .feed-h .wait small{white-space:nowrap;font-size:9px}
+  .feed-h .wait b{font-size:20px}
+  .feed-b{height:236px}
+}
 </style>
 </head>
 <body>
@@ -794,21 +806,21 @@ var cases=[
   ['Recebemos sua mensagem. Em breve um de nossos consultores entrará em contato.','sys','09:12','1 min','esperando'],
   ['Alguém consegue me responder? Queria visitar hoje ainda.','','sáb · 11:40','2 h 28','sem resposta'],
   ['Oi?','','sáb · 16:05','7 h','sem resposta'],
-  ['Oi Marcos, tudo bem? Desculpa a demora, ainda tem interesse no lançamento?','vend','ter · 10:12','73 h','vendedor respondeu'],
+  ['Oi Marcos, tudo bem? Desculpa a demora, ainda tem interesse no lançamento?','vend','ter · 10:12','73 h','vendedor, tarde'],
   ['Já resolvi com outra construtora. Obrigado.','gone','ter · 10:40','73 h','lead perdido']]},
  {av:'img/lead-juliana.webp',name:'Juliana Prado',m:[
   ['Oi! Esse vestido verde tem no 42? Preciso pra sábado.','','qui · 19:48','0 s','esperando'],
   ['Olá! Nosso horário de atendimento é das 9h às 18h. Retornaremos em breve.','sys','19:48','1 min','esperando'],
   ['Consigo pagar no Pix e retirar na loja hoje?','','sex · 08:15','12 h','sem resposta'],
   ['Oi, alguém?','','sex · 12:30','17 h','sem resposta'],
-  ['Oi Juliana! Vi sua mensagem agora, o 42 chegou. Quer que eu separe?','vend','seg · 09:20','86 h','vendedor respondeu'],
+  ['Oi Juliana! Vi sua mensagem agora, o 42 chegou. Quer que eu separe?','vend','seg · 09:20','86 h','vendedor, tarde'],
   ['Não precisa mais, comprei em outro site.','gone','seg · 09:31','86 h','lead perdido']]},
  {av:'img/lead-ricardo.webp',name:'Ricardo Nunes',m:[
   ['Boa tarde. Quanto fica um painel de LED 6×3 m pra fachada de loja? Tenho verba aprovada.','','ter · 14:20','0 s','esperando'],
   ['Recebemos seu contato. Um consultor retornará em até 48 horas.','sys','14:20','1 min','esperando'],
   ['Preciso fechar essa semana. Vocês fazem a instalação?','','qua · 09:10','19 h','sem resposta'],
   ['Segue meu telefone, me liga por favor.','','qua · 15:45','25 h','sem resposta'],
-  ['Ricardo, boa tarde! Sou o consultor da fachada 6×3. Posso te ligar agora?','vend','seg · 14:05','144 h','vendedor respondeu'],
+  ['Ricardo, boa tarde! Sou o consultor da fachada 6×3. Posso te ligar agora?','vend','seg · 14:05','144 h','vendedor, tarde'],
   ['Fechei com outro fornecedor na sexta.','gone','seg · 14:22','144 h','lead perdido']]}
 ];
 var ci=0,at=[0,1400,4200,6000,8600,10400];
