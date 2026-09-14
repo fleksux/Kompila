@@ -351,7 +351,7 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
 .hero .h1b{visibility:hidden;transition:font-size .7s cubic-bezier(.2,.8,.2,1),opacity .6s}.hero .h1b.live{visibility:visible}.hero .h1b.small{font-size:calc(var(--t1) * .78)}
 .hero h1 .grad{color:var(--green)}
 .hero h1 .wrd{white-space:nowrap;display:inline}.hero h1 .ch{opacity:0}.hero h1 .ch.on{opacity:1}
-.hero h1 .caret{display:inline-block;width:.06em;height:.9em;background:#2fd67b;vertical-align:-.08em;margin-left:.04em;animation:blink 1s steps(2) infinite}
+.hero h1 .caret{display:inline-block;width:0;height:.9em;vertical-align:-.08em;box-shadow:.03em 0 0 .03em #2fd67b;animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:.25}}
 .hero .p,.hero .ctas,.hero .micro{opacity:0;transform:translateY(14px);transition:opacity .7s,transform .7s}
 .hero.show .p,.hero.show .ctas,.hero.show .micro{opacity:1;transform:none}
@@ -451,6 +451,8 @@ nav .logo .lr{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppe
 @media(max-width:700px){.hero h1{font-size:40px;font-weight:600;letter-spacing:-.04em;line-height:1.04;text-wrap:wrap}}
 
 @media(max-width:700px){.hero .p{font-size:.875em;line-height:1.45;max-width:none;text-wrap:wrap}}
+
+@media(max-width:700px){.hero .titles,.hero .p{text-align:left}.hero h1,.hero .p{margin-left:0;margin-right:0}}
 </style>
 </head>
 <body>
