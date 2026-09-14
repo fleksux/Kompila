@@ -390,6 +390,13 @@ html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2p
 .ntf.dead small{color:#8a8f96;background:rgba(255,255,255,.08)}
 
 @media(min-width:701px){.hero h1{font-size:clamp(36px,3.9vw,54px);max-width:26ch}}
+
+/* dados de apresentação no rodapé do hero */
+.hero-marcas .stats{width:min(var(--shell),100% - 2*var(--gut));margin:0 auto 22px;display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:12px 48px}
+.hero-marcas .stats b{display:block;font:700 22px var(--sans);letter-spacing:-.03em;color:#fff;line-height:1.1}
+.hero-marcas .stats span{display:block;font-size:13px;color:rgba(255,255,255,.7);margin-top:2px}
+@media(max-width:700px){.hero-marcas .stats{grid-template-columns:1fr 1fr;gap:12px 16px;margin-bottom:16px}.hero-marcas .stats b{font-size:18px}.hero-marcas .stats span{font-size:12px}.hero .in{padding-bottom:210px}}
+@media(min-width:701px){.hero .in{padding-bottom:230px}}
 </style>
 </head>
 <body>
@@ -424,7 +431,7 @@ html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2p
   </div>
   <div class="notif" id="notif" aria-hidden="true"></div>
   <div class="hero-marcas">
-    <p>Com a confiança de quem vende há 20 anos online: incorporadoras, indústria, varejo e serviços</p>
+    <div class="stats"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><div><b>+25</b><span>marcas atendidas</span></div><div><b>R$ 500 mil</b><span>por mês administrados em mídia</span></div><div><b>Meta e Google Ads</b><span>equipe certificada</span></div></div>
     <div class="mq"><div class="mq-track"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span></div></div>
   </div>
 </header>
