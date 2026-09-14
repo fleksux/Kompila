@@ -884,7 +884,7 @@ function wrap(el){var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,n
 var hs=[].slice.call(document.querySelectorAll('.head h2,.cta h2')),map=new Map();hs.forEach(function(h){map.set(h,wrap(h))});
 function write(h){h.classList.add('live');var chars=map.get(h);chars.forEach(function(c,i){setTimeout(function(){c.classList.add('on')},120+i*18)})}
 if(reduced){hs.forEach(function(h){h.classList.add('live');map.get(h).forEach(function(c){c.classList.add('on')})});return}
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;io.unobserve(e.target);write(e.target)})},{threshold:.3});hs.forEach(function(h){io.observe(h)});
+var done=new Set();function go(h){if(done.has(h))return;done.add(h);write(h)}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)go(e.target)})},{threshold:.05});hs.forEach(function(h){io.observe(h)});function chk(){var vh=innerHeight;hs.forEach(function(h){var r=h.getBoundingClientRect();if(r.top<vh*.9&&r.bottom>0)go(h)})}addEventListener('scroll',chk,{passive:true});addEventListener('load',chk);setTimeout(chk,300);
 })();
 </script>
 </body>
