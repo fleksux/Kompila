@@ -276,8 +276,8 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
   section,.proof,.final{padding:56px 0}
   .shot{margin-top:36px;border-radius:18px;padding:12px}
   .win .kp{grid-template-columns:repeat(2,1fr)}
-  .win li{grid-template-columns:34px 1fr auto;gap:10px}.win li em{display:none}
-  .win .bar .tab{display:none}
+  .win li{grid-template-columns:34px 1fr auto;grid-template-areas:"av txt time" "av tag time";gap:4px 10px;align-items:center}.win li img,.win li i{grid-area:av}.win li>div{grid-area:txt}.win li em{grid-area:tag;justify-self:start;font-size:11px}.win li time{grid-area:time;align-self:center}
+  .win .bar .tab:not(.on){display:none}
   .feat .head{text-align:left;margin-bottom:36px}
   .grid{gap:44px}
   .f.wide .txt h3{font-size:26px}
