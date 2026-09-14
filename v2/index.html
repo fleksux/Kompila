@@ -508,6 +508,16 @@ nav .logo .lr{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppe
 .head h2 .ch,.cta h2 .ch{opacity:0;transition:opacity .35s ease}
 .head h2 .ch.on,.cta h2 .ch.on{opacity:1}
 .head h2 .wrd,.cta h2 .wrd{white-space:nowrap}
+
+/* celular: menu dentro dos 6%, sem estourar */
+html{overflow-x:hidden}
+@media(max-width:700px){
+  nav .shell{width:100%;padding:0 var(--gut)}
+  nav .pill{width:100%;gap:10px;padding:8px 8px 8px 14px}
+  nav .logo{font-size:18px;gap:6px;min-width:0;overflow:hidden}
+  nav .logo .lr{font-size:9px;letter-spacing:.08em;white-space:nowrap}
+  nav .menu-btn{flex:none}
+}
 </style>
 </head>
 <body>
