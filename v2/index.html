@@ -457,7 +457,7 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
       <div class="micro">Funciona com o CRM e o WhatsApp da sua operação.</div>
     </div>
     <div class="feed" id="feed">
-      <div class="feed-h"><div class="av">MO</div><div><b>Marcos Oliveira</b><small>lead · campanha zona leste</small></div><div class="wait"><b id="fdN">0 s</b><small id="fdL">esperando</small></div></div>
+      <div class="feed-h"><div class="av" id="fdAv">MO</div><div><b id="fdName">Marcos Oliveira</b><small id="fdK">lead · campanha zona leste</small></div><div class="wait"><b id="fdN">0 s</b><small id="fdL">esperando</small></div></div>
       <div class="feed-b" id="feedB"></div>
       <div class="feed-f"><span class="tag bad" id="fdT1">sem responsável</span><span class="tag bad" id="fdT2">sem próxima ação</span></div>
     </div>
@@ -709,19 +709,34 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
 (function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});document.querySelectorAll('.rv').forEach(function(el){io.observe(el)})})();
 /* nav: esconde ao descer, mostra ao subir; menu celular */
 (function(){var n=document.getElementById('nav'),last=0;addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true});var b=document.getElementById('menuBtn'),p=document.getElementById('menuPanel');b.addEventListener('click',function(){n.classList.toggle('menu-open')});p.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){n.classList.remove('menu-open')})})})();
-/* hero: conversa não atendida (a dor) */
-(function(){var b=document.getElementById('feedB'),n=document.getElementById('fdN'),l=document.getElementById('fdL'),t1=document.getElementById('fdT1'),t2=document.getElementById('fdT2');if(!b)return;
+/* hero: conversa não atendida (a dor), 3 operações */
+(function(){var b=document.getElementById('feedB'),n=document.getElementById('fdN'),l=document.getElementById('fdL'),t1=document.getElementById('fdT1'),t2=document.getElementById('fdT2'),av=document.getElementById('fdAv'),nm=document.getElementById('fdName'),kk=document.getElementById('fdK');if(!b)return;
 function add(txt,cls,time){var d=document.createElement('div');d.className='cb'+(cls?' '+cls:'');d.innerHTML=txt+'<time>'+time+'</time>';b.appendChild(d);while(b.children.length>3)b.removeChild(b.firstChild)}
-var seq=[
- [0,function(){b.innerHTML='';t1.classList.remove('show');t2.classList.remove('show');n.textContent='0 s';l.textContent='esperando';add('Oi, vi o lançamento de vocês no Instagram. Tem apartamento de dois quartos que aceita FGTS?','','sáb · 09:12')}],
- [1400,function(){add('Recebemos sua mensagem. Em breve um de nossos consultores entrará em contato.','sys','09:12');n.textContent='1 min'}],
- [3000,function(){n.textContent='2 h';t1.classList.add('show')}],
- [4200,function(){add('Alguém consegue me responder? Queria visitar hoje ainda.','','sáb · 11:40');n.textContent='2 h 28';l.textContent='sem resposta'}],
- [6000,function(){add('Oi?','','sáb · 16:05');n.textContent='7 h';t2.classList.add('show')}],
- [8000,function(){n.textContent='42 h'}],
- [9200,function(){add('Já resolvi com outra construtora. Obrigado.','gone','seg · 09:03');l.textContent='lead perdido'}]
+var cases=[
+ {av:'MO',name:'Marcos Oliveira',k:'lead · campanha · lançamento',m:[
+  ['Oi, vi o lançamento de vocês no Instagram. Tem apartamento de dois quartos que aceita FGTS?','','sáb · 09:12','0 s','esperando'],
+  ['Recebemos sua mensagem. Em breve um de nossos consultores entrará em contato.','sys','09:12','1 min','esperando'],
+  ['Alguém consegue me responder? Queria visitar hoje ainda.','','sáb · 11:40','2 h 28','sem resposta'],
+  ['Oi?','','sáb · 16:05','7 h','sem resposta'],
+  ['Já resolvi com outra construtora. Obrigado.','gone','seg · 09:03','42 h','lead perdido']]},
+ {av:'JP',name:'Juliana Prado',k:'lead · loja online · instagram',m:[
+  ['Oi! Esse vestido verde tem no 42? Preciso pra sábado.','','qui · 19:48','0 s','esperando'],
+  ['Olá! Nosso horário de atendimento é das 9h às 18h. Retornaremos em breve.','sys','19:48','1 min','esperando'],
+  ['Consigo pagar no Pix e retirar na loja hoje?','','sex · 08:15','12 h','sem resposta'],
+  ['Oi, alguém?','','sex · 12:30','17 h','sem resposta'],
+  ['Deixa, comprei em outro site.','gone','sex · 17:02','21 h','lead perdido']]},
+ {av:'RN',name:'Ricardo Nunes',k:'lead · site · painel de led',m:[
+  ['Boa tarde. Quanto fica um painel de LED 6×3 m pra fachada de loja? Tenho verba aprovada.','','ter · 14:20','0 s','esperando'],
+  ['Recebemos seu contato. Um consultor retornará em até 48 horas.','sys','14:20','1 min','esperando'],
+  ['Preciso fechar essa semana. Vocês fazem a instalação?','','qua · 09:10','19 h','sem resposta'],
+  ['Segue meu telefone, me liga por favor.','','qua · 15:45','25 h','sem resposta'],
+  ['Fechei com outro fornecedor.','gone','sex · 10:30','68 h','lead perdido']]}
 ];
-function run(){seq.forEach(function(x){setTimeout(x[1],x[0])});setTimeout(run,13500)}run()})();
+var ci=0,at=[0,1400,4200,6000,9200];
+function run(){var c=cases[ci];ci=(ci+1)%cases.length;b.innerHTML='';t1.classList.remove('show');t2.classList.remove('show');av.textContent=c.av;nm.textContent=c.name;kk.textContent=c.k;
+ c.m.forEach(function(x,i){setTimeout(function(){add(x[0],x[1],x[2]);n.textContent=x[3];l.textContent=x[4];if(i===2)t1.classList.add('show');if(i===3)t2.classList.add('show')},at[i])});
+ setTimeout(run,13500)}
+run()})();
 /* calculadora */
 (function(){var r=10,$=function(id){return document.getElementById(id)};function fmt(n){return n.toLocaleString('pt-BR')}function money(n){return n>=1000?'R$ '+Math.round(n/1000)+' mil':'R$ '+Math.round(n)}function calc(){var L=+$('cL').value||0,P=(+$('cP').value||0)/100,C=(+$('cC').value||0)/100,V=+$('cV').value||0;var parados=L*P,reat=parados*r/100,vendas=reat*C,v1=Math.max(1,Math.floor(vendas)),v2=Math.max(v1,Math.ceil(vendas));if(vendas<1){v1=0;v2=1}$('rL').textContent=fmt(L);$('rP').textContent=fmt(Math.round(parados));$('rR').textContent=fmt(Math.round(reat));$('rV').textContent=v1===v2?v1:v1+' a '+v2;$('rM').textContent=v1===v2?money(v1*V):money(v1*V)+' a '+money(v2*V);$('rSl').textContent={5:'no cenário conservador',10:'no cenário provável',20:'no cenário potencial'}[r]}document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});$('cBtn').addEventListener('click',calc);['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});calc()})();
 /* chat roteirizado */
