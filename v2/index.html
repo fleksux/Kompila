@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kompila · você não perde venda por falta de lead. perde porque ninguém respondeu.</title>
+<meta name="description" content="Kompila Lead Recovery: encontra os leads parados na sua operação, responde em segundos, organiza a fila e garante que cada oportunidade tenha um responsável e uma próxima ação. Conectado ao CRM e ao WhatsApp que sua equipe já usa.">
+<meta property="og:title" content="kompila · lead recovery">
+<meta property="og:description" content="Você não perde venda por falta de lead. Perde porque ninguém respondeu.">
+<meta property="og:image" content="https://kompila.com.br/img/og-image.jpg">
+<meta name="theme-color" content="#0a0b0e">
+<link rel="icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f2f3ef;--white:#fff;--paper2:#e9ebe6;--line:#d9dcd4;--ink:#0a0b0e;--muted:#4a525b;--dim:#7a838c;
+  --carbon:#0a0b0e;--carbon2:#11151a;--cline:#252c34;--off:#e9ebee;--cmuted:#949da7;--cdim:#5e6873;
+  --green:#2fd67b;--green-ink:#159754;--amber:#ffb224;--red:#ff6577;--red-ink:#c9303c;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;--sans:"Inter",system-ui,sans-serif;
+  --t1:clamp(40px,6vw,88px);--t2:clamp(32px,4.4vw,64px);--t3:clamp(24px,2.6vw,38px);--t4:20px;--body:17px;--label:12px;
+  --r:32px;--r2:20px;--shell:1200px;--gut:6%;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 var(--body)/1.5 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img,svg{max-width:100%;display:block}
+h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.04em;line-height:1.02}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+.shell{width:min(var(--shell),100% - 2*var(--gut));margin:auto}
+section{padding:120px 0}
+.k{font:500 var(--label) var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.dark{background:var(--carbon);color:var(--off)}
+.dark .k{color:var(--cdim)}
+.dark .muted{color:var(--cmuted)}
+.muted{color:var(--muted)}
+.b{color:var(--green-ink)}.dark .b{color:var(--green)}
+.two h2 .dimt{color:var(--dim)}.dark .two h2 .dimt{color:var(--cdim)}
+.head{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end;margin-bottom:56px}
+.head h2{font-size:var(--t2)}
+.head .k{display:block;margin-bottom:16px}
+.lead-p{font-size:19px;line-height:1.45;color:var(--muted);max-width:520px}
+.dark .lead-p{color:var(--cmuted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 26px;border-radius:999px;font:500 16px var(--sans);letter-spacing:-.01em;background:var(--ink);color:#fff;white-space:nowrap;border:0;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.g{background:var(--green-ink);color:#fff;box-shadow:0 12px 30px rgba(21,151,84,.28)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.dark .btn.ghost{color:#fff;border-color:rgba(255,255,255,.3)}
+.btn svg{width:20px;height:20px}
+.ico{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tag{font:600 10px var(--mono);letter-spacing:.06em;padding:4px 8px;border-radius:6px;border:1px solid;display:inline-block}
+.tag.bad{color:var(--red);border-color:rgba(255,101,119,.5);background:rgba(255,101,119,.1)}
+.tag.warn{color:var(--amber);border-color:rgba(255,178,36,.5);background:rgba(255,178,36,.08)}
+.tag.ok{color:var(--green);border-color:rgba(47,214,123,.5);background:rgba(47,214,123,.08)}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+/* nav */
+nav{position:fixed;top:24px;left:0;right:0;z-index:50;pointer-events:none;transition:transform .35s}
+nav.hide{transform:translateY(-130%)}
+nav .pill{pointer-events:auto;display:flex;align-items:center;gap:22px;padding:8px 8px 8px 18px;border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(10,11,14,.08);box-shadow:0 10px 30px rgba(10,11,14,.08)}
+nav .logo{font:600 16px var(--mono);letter-spacing:-.02em;white-space:nowrap}
+nav .links{display:flex;gap:18px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:auto}
+nav .links a:hover{color:var(--ink)}
+nav .pill .btn{padding:10px 16px;font-size:14px}
+nav .menu-btn{display:none}
+nav .menu-panel{display:none}
+
+/* hero */
+.hero{margin:12px;border-radius:var(--r);background:var(--carbon);color:#fff;min-height:calc(100svh - 24px);display:grid;align-items:center;position:relative;overflow:hidden}
+.hero .in{width:min(var(--shell),100% - 2*var(--gut));margin:auto;padding:130px 0 70px;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero .k{display:block;margin-bottom:18px}
+.hero h1{font-size:var(--t1);letter-spacing:-.05em;line-height:.98}
+.hero h1 .l2{display:block;color:var(--green)}
+.hero .p{font-size:19px;line-height:1.45;color:var(--cmuted);max-width:520px;margin:26px 0 30px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.hero .ctas a.link{font:500 15px var(--sans);color:var(--off);padding:16px 8px;border-bottom:1px solid rgba(255,255,255,.25)}
+.hero .micro{margin-top:22px;font:500 12px var(--mono);letter-spacing:.06em;color:var(--cdim);text-transform:uppercase}
+.hero .glow{position:absolute;inset:auto -20% -40% auto;width:70%;height:80%;background:radial-gradient(closest-side,rgba(47,214,123,.16),transparent);pointer-events:none}
+/* card do lead (hero) */
+.lc{background:var(--carbon2);border:1px solid var(--cline);border-left:3px solid var(--cline);border-radius:var(--r2);padding:24px 26px;box-shadow:0 40px 90px rgba(0,0,0,.55);width:100%;max-width:440px;margin-left:auto;transition:border-color .4s}
+.lc.bad{border-left-color:var(--red)}.lc.warn{border-left-color:var(--amber)}.lc.ok{border-left-color:var(--green)}
+.lc .kk{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cdim)}
+.lc .who{font-size:20px;font-weight:600;margin-top:6px}
+.lc .meta{font:500 12px var(--mono);color:var(--cmuted);line-height:1.7;margin-top:6px}
+.lc .st{display:flex;align-items:center;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid var(--cline)}
+.lc .st .n{font:600 34px var(--mono);letter-spacing:-.05em;line-height:1;transition:color .3s}
+.lc.bad .st .n{color:var(--red)}.lc.warn .st .n{color:var(--amber)}.lc.ok .st .n{color:var(--green)}
+.lc .st small{font:500 11px var(--mono);color:var(--cdim);text-transform:uppercase;letter-spacing:.1em}
+.lc .steps{display:grid;gap:8px;margin-top:16px;min-height:132px}
+.lc .steps div{display:flex;align-items:center;gap:10px;font:500 13px var(--sans);color:var(--cmuted);opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s}
+.lc .steps div.on{opacity:1;transform:none;color:var(--off)}
+.lc .steps div.bad{color:var(--red)}.lc .steps div.bad.on{color:var(--red)}
+.lc .steps .ico{width:18px;height:18px;flex:none}
+.lc .steps .ok .ico{stroke:var(--green)}.lc .steps .bad .ico{stroke:var(--red)}
+
+/* vazamento */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:28px 26px}
+.dark .card{background:var(--carbon2);border-color:var(--cline)}
+.card .ico{width:26px;height:26px;margin-bottom:18px;stroke:var(--red-ink)}
+.card h3{font-size:var(--t4);letter-spacing:-.03em;margin-bottom:8px}
+.card p{color:var(--muted);font-size:15px;line-height:1.45}
+.close{margin-top:40px;font-size:var(--t3);letter-spacing:-.04em;max-width:22ch;line-height:1.1}
+.funil{margin-top:56px;background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:34px;display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:24px;align-items:center}
+.funil .src{display:grid;gap:8px}
+.funil .src span{display:flex;align-items:center;gap:10px;font:500 13px var(--mono);color:var(--muted)}
+.funil .src .ico{width:16px;height:16px;stroke:var(--dim)}
+.funil .tube{position:relative;height:120px;background:linear-gradient(90deg,var(--green-ink),rgba(21,151,84,.35) 60%,var(--line));border-radius:60px;overflow:visible}
+.funil .tube b{position:absolute;left:18px;top:50%;transform:translateY(-50%);font:600 22px var(--mono);color:#fff;letter-spacing:-.04em}
+.funil .tube .leak{position:absolute;top:100%;width:2px;height:34px;background:var(--red);animation:drip 1.6s ease-in infinite}
+.funil .tube .leak:after{content:attr(data-l);position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;font:600 10px var(--mono);letter-spacing:.06em;color:var(--red-ink);margin-top:6px;text-transform:uppercase}
+.funil .tube .leak:nth-child(2){left:32%;animation-delay:.2s}.funil .tube .leak:nth-child(3){left:55%;animation-delay:.6s}.funil .tube .leak:nth-child(4){left:76%;animation-delay:1s}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top;opacity:1}70%{transform:scaleY(1);opacity:1}100%{opacity:0}}
+.funil .out{text-align:center}
+.funil .out b{display:block;font:600 40px var(--mono);letter-spacing:-.05em;color:var(--ink)}
+.funil .out small{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+
+/* lead na prática */
+.jour{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+.chat{background:var(--carbon2);border:1px solid var(--cline);border-radius:var(--r2);overflow:hidden}
+.chat-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--cline)}
+.chat-h .av{width:30px;height:30px;border-radius:50%;background:#171c22;display:grid;place-items:center;font:600 11px var(--mono)}
+.chat-h b{font-size:13px;display:block}.chat-h small{font:500 10px var(--mono);color:var(--cdim)}
+.chat-h .wa{margin-left:auto;font:600 10px var(--mono);color:var(--green);letter-spacing:.1em}
+.chat-b{padding:14px;display:flex;flex-direction:column;gap:10px}
+.cb{max-width:86%;padding:10px 12px;font-size:14px;line-height:1.4;border:1px solid var(--cline);border-radius:12px;background:#171c22}
+.cb time{display:block;font:500 9px var(--mono);color:var(--cdim);margin-top:6px;text-align:right}
+.cb.ia,.cb.me{align-self:flex-end;background:rgba(47,214,123,.08);border-color:rgba(47,214,123,.4)}
+.cb:before{display:block;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--cdim);margin-bottom:4px}
+.cb.ia:before{content:"kompila";color:var(--green)}.cb.me:before{content:"Renata · vendedora";color:var(--green)}
+.cb.brief{align-self:stretch;max-width:none;background:#0f1318;border-color:rgba(255,178,36,.45);font:500 12px var(--mono);line-height:1.7;color:var(--cmuted)}
+.cb.brief:before{content:"briefing enviado pra Renata";color:var(--amber)}
+.cb.brief b{color:var(--off);font-weight:600}
+.side{display:grid;gap:10px;position:sticky;top:100px}
+.step{background:var(--carbon2);border:1px solid var(--cline);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.step time{font:600 12px var(--mono);color:var(--green);letter-spacing:.04em;padding-top:2px}
+.step b{display:block;font-size:14px;margin-bottom:6px}
+.step .acts{display:flex;flex-wrap:wrap;gap:6px}
+.step .acts span{font:500 11px var(--mono);color:var(--cmuted);padding:3px 8px;border:1px solid var(--cline);border-radius:999px}
+.step .acts span.ok{color:var(--green);border-color:rgba(47,214,123,.4)}.step .acts span.warn{color:var(--amber);border-color:rgba(255,178,36,.4)}
+.result{margin-top:24px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.result div{background:rgba(47,214,123,.08);border:1px solid rgba(47,214,123,.35);border-radius:14px;padding:16px;display:flex;gap:10px;align-items:center;font-size:14px}
+.result .ico{width:18px;height:18px;stroke:var(--green);flex:none}
+
+/* pessoas */
+.hub{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hub .card{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+.hub .card .ico{stroke:var(--green-ink);margin:0}
+.hub .card small{display:block;margin-top:12px;font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+
+/* painel */
+.dash{background:#fff;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;box-shadow:0 40px 90px rgba(10,11,14,.18)}
+.dash .bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);font:500 11px var(--mono);color:var(--dim)}
+.dash .bar i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dash .bar span{margin-left:8px;letter-spacing:.1em;text-transform:uppercase}
+.dash .body{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:16px}
+.dash .box{border:1px solid var(--line);border-radius:14px;padding:16px}
+.dash .box .k{display:block;margin-bottom:10px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpis div{border:1px solid var(--line);border-radius:12px;padding:12px}
+.kpis b{display:block;font:600 26px var(--mono);letter-spacing:-.05em}
+.kpis small{font:500 11px var(--sans);color:var(--dim)}
+.kpis .g b{color:var(--green-ink)}.kpis .r b{color:var(--red-ink)}
+.resumo li{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.resumo li b{font-family:var(--mono);font-weight:600}
+.resumo li.g b{color:var(--green-ink)}.resumo li.r b{color:var(--red-ink)}
+.alerts li{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;align-items:start}
+.alerts .ico{width:18px;height:18px;stroke:var(--red-ink);margin-top:2px}
+.alerts li small{display:block;color:var(--dim);font-size:13px}
+.bars{display:grid;gap:8px;margin-top:6px}
+.bars div{display:grid;grid-template-columns:70px 1fr 40px;gap:10px;align-items:center;font:500 12px var(--mono);color:var(--muted)}
+.bars i{height:8px;border-radius:4px;background:var(--paper2);position:relative;overflow:hidden}
+.bars i:after{content:"";position:absolute;inset:0;width:var(--w);background:var(--green-ink);border-radius:4px}
+.bars .r i:after{background:var(--red-ink)}
+.mlist{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px 24px}
+.mlist li{font-size:15px;color:var(--muted);padding:10px 0;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.mlist .ico{width:16px;height:16px;stroke:var(--green-ink);flex:none}
+
+/* integrações */
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:12px;align-items:center;margin:40px 0}
+.flow .n{background:var(--carbon2);border:1px solid var(--cline);border-radius:14px;padding:18px;text-align:center;font:500 13px var(--mono);color:var(--cmuted);line-height:1.6}
+.flow .n.k2{background:var(--green);color:var(--carbon);font-weight:600;font-size:18px;letter-spacing:-.03em}
+.flow .arrow{color:var(--cdim);font-size:22px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cmp .card h3{font-family:var(--mono);font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--cdim);margin-bottom:16px}
+.cmp .card.kp h3{color:var(--green)}
+.cmp li{padding:10px 0;border-top:1px solid var(--cline);font-size:15px;color:var(--cmuted);display:flex;gap:10px;align-items:center}
+.cmp .kp li{color:var(--off)}
+.cmp .ico{width:16px;height:16px;stroke:var(--cdim);flex:none}.cmp .kp .ico{stroke:var(--green)}
+.logos{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:center;margin-top:40px;font:600 18px var(--sans);letter-spacing:-.03em;color:var(--cdim)}
+.logos small{flex-basis:100%;font:500 12px var(--mono);color:var(--cdim);letter-spacing:.04em}
+
+/* prova / scanner */
+.scan{margin-top:48px;display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:20px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:34px}
+.scan .left b{display:block;font:600 40px var(--mono);letter-spacing:-.05em}
+.scan .left small{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.scan .mid{position:relative;height:140px;border:1px dashed var(--line);border-radius:14px;overflow:hidden;background:repeating-linear-gradient(0deg,transparent 0 12px,rgba(10,11,14,.04) 12px 13px)}
+.scan .mid:after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--green-ink);box-shadow:0 0 18px var(--green);animation:scan 2.4s linear infinite}
+@keyframes scan{to{top:100%}}
+.scan .mid span{position:absolute;left:14px;top:12px;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--green-ink)}
+.scan .right{display:grid;gap:8px}
+.scan .right div{display:flex;gap:10px;align-items:center;font:500 13px var(--sans);padding:8px 12px;border:1px solid var(--line);border-radius:10px}
+.scan .right .ico{width:16px;height:16px;stroke:var(--red-ink)}
+.nums{margin-top:40px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.nums div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+.nums b{display:block;font:600 24px var(--mono);color:var(--green-ink);letter-spacing:-.04em;margin-bottom:8px}
+.nums span{font-size:14px;color:var(--muted)}
+
+/* caso zero */
+.steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative}
+.steps4 .card{background:var(--carbon2);border-color:var(--cline)}
+.steps4 .card .ico{stroke:var(--green)}
+.steps4 .card small{display:block;font:600 11px var(--mono);letter-spacing:.12em;color:var(--cdim);margin-bottom:10px}
+.steps4 .card p{color:var(--cmuted)}
+.recebe{margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.recebe ul{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px}
+.recebe li{font-size:15px;color:var(--cmuted);padding:8px 0;border-top:1px solid var(--cline);display:flex;gap:10px;align-items:center}
+.recebe .ico{width:16px;height:16px;stroke:var(--green);flex:none}
+.cta-block{display:grid;gap:12px;justify-items:start}
+.cta-block small{font-size:14px;color:var(--cmuted);max-width:34ch}
+
+/* calculadora */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.form{background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:28px;display:grid;gap:18px}
+.form label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
+.form label b{font-weight:500;color:var(--ink)}
+.form input{font:500 18px var(--mono);padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);width:100%}
+.form small{color:var(--dim);font-size:12px}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;padding:10px;border-radius:999px;border:1px solid var(--line);background:#fff;font:500 13px var(--sans);cursor:pointer}
+.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.res{background:var(--carbon);color:var(--off);border-radius:var(--r2);padding:28px;display:grid;gap:14px;position:sticky;top:100px}
+.res .row{display:grid;gap:2px;padding:10px 0;border-top:1px solid var(--cline)}
+.res .row:first-of-type{border:0}
+.res .row small{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cdim)}
+.res .row b{font:600 26px var(--mono);letter-spacing:-.04em}
+.res .row.big b{font-size:clamp(34px,4vw,52px);color:var(--green)}
+.res .row span{font-size:13px;color:var(--cmuted)}
+.res .warn{font-size:12px;color:var(--cdim);line-height:1.45}
+
+/* modelo */
+.eq{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1.2fr;gap:12px;align-items:center;margin:40px 0}
+.eq .n{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center;font:500 15px var(--sans)}
+.eq .n.out{background:var(--ink);color:#fff;font-weight:600}
+.eq .op{font:600 26px var(--mono);color:var(--dim);text-align:center}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.two-col ul li{padding:8px 0;border-top:1px solid var(--line);font-size:15px;color:var(--muted)}
+
+/* faq */
+.faq{max-width:820px;margin:auto}
+.faq details{border-top:1px solid var(--line);padding:6px 0}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;font-size:19px;font-weight:500;padding:16px 40px 16px 0;position:relative;letter-spacing:-.02em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";position:absolute;right:0;top:12px;font:400 26px var(--mono);color:var(--dim)}
+.faq details[open] summary:after{content:"−"}
+.faq details p{padding:0 0 18px;color:var(--muted);font-size:16px;line-height:1.5;max-width:70ch}
+
+/* fechamento */
+.cta{margin:12px;border-radius:var(--r);padding:120px var(--gut);display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.cta h2{font-size:var(--t2)}
+.cta .micro{margin-top:24px;font:500 13px var(--mono);color:var(--cdim);line-height:1.9}
+
+/* footer */
+footer{padding:40px var(--gut);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font:500 12px var(--mono);color:var(--dim)}
+footer .logo{font:600 15px var(--mono);color:var(--ink)}
+
+/* chat */
+.kchat{position:fixed;right:0;bottom:24px;z-index:55;width:360px;max-width:calc(100vw - 24px);background:#fff;border-radius:22px 0 0 22px;box-shadow:0 30px 70px rgba(10,11,14,.28);overflow:hidden;font-size:14px}
+.kchat:not(.open){width:auto;height:72px;border-radius:36px 0 0 36px;box-shadow:0 12px 30px rgba(10,11,14,.3)}
+.kchat header{display:flex;align-items:center;gap:12px;padding:0 16px;background:var(--carbon);color:var(--off);cursor:pointer;height:48px}
+.kchat:not(.open) header{height:72px;padding:0 30px 0 24px;background:var(--green);color:var(--carbon)}
+.kchat header b{font:600 13px var(--mono)}.kchat header b .b{color:var(--green)}
+.kchat header small{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--cdim);margin-left:auto}
+.kchat:not(.open) header b,.kchat:not(.open) header small,.kchat:not(.open) .kx{display:none}
+.kchat:not(.open) header:before{content:"chat";order:2;font:600 18px var(--mono)}
+.kchat header .bub{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:none}
+.kchat:not(.open) header .bub{display:block;order:1}
+.kchat .kx{margin-left:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:var(--off);font:500 20px/1 var(--sans);cursor:pointer}
+.kchat .msgs{padding:14px;display:grid;gap:8px;max-height:320px;overflow:auto}
+.kchat .m{padding:10px 14px;border-radius:14px;max-width:88%;line-height:1.4}
+.kchat .m.bot{background:var(--paper);border-bottom-left-radius:4px}
+.kchat .m.me{background:var(--green-ink);color:#fff;justify-self:end;border-bottom-right-radius:4px}
+.kchat .opts{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 14px}
+.kchat .opts button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font:500 13px var(--sans);cursor:pointer}
+.kchat .opts button:hover{border-color:var(--ink)}
+.kchat .wa{display:none;text-align:center;padding:12px;font:600 14px var(--sans);color:#fff;background:var(--green-ink)}
+.kchat.done .wa{display:block}.kchat.done .opts{display:none}
+.kchat:not(.open) .msgs,.kchat:not(.open) .opts,.kchat:not(.open) .wa{display:none}
+
+/* ===== celular ===== */
+@media(max-width:1000px){
+  .head,.hero .in,.jour,.hub,.calc,.two-col,.cmp,.recebe,.cta{grid-template-columns:1fr}
+  .grid4,.steps4{grid-template-columns:1fr 1fr}
+  .flow{grid-template-columns:1fr}.flow .arrow{text-align:center;transform:rotate(90deg)}
+  .eq{grid-template-columns:1fr}.eq .op{transform:rotate(90deg)}
+  .nums{grid-template-columns:1fr 1fr}
+  .result{grid-template-columns:1fr 1fr}
+  .scan{grid-template-columns:1fr}
+  .funil{grid-template-columns:1fr}
+  .mlist{grid-template-columns:1fr 1fr}
+  .dash .body{grid-template-columns:1fr}
+  nav .links{display:none}
+  .side{position:static}
+  .res{position:static}
+}
+@media(max-width:700px){
+  section{padding:64px 0}
+  .shell{width:100%;padding:0 var(--gut)}
+  .hero,.cta{margin:0;border-radius:0}
+  .hero .in{width:100%;padding:110px var(--gut) 44px}
+  .hero h1{font-size:44px}
+  .hero .ctas{flex-direction:column;align-items:stretch}.hero .ctas .btn{width:100%}.hero .ctas a.link{text-align:center}
+  .lc{max-width:none}
+  .grid4,.steps4,.nums,.result,.mlist,.recebe ul{grid-template-columns:1fr}
+  .head{margin-bottom:32px}
+  .close{font-size:24px}
+  .funil{padding:22px}.funil .tube{height:80px}.funil .tube .leak{height:26px}.funil .tube .leak:after{display:none}.funil .tube{margin-bottom:8px}
+  .cta{padding:64px var(--gut)}
+  nav{top:12px}
+  nav .pill{width:100%;justify-content:space-between;background:rgba(255,255,255,.28);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.7);box-shadow:0 14px 40px rgba(10,11,14,.18),0 0 32px rgba(47,214,123,.28)}
+  nav .logo{font-size:20px}
+  nav .pill .btn{display:none}
+  nav .menu-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:0;background:var(--ink);color:#fff;border-radius:50%;pointer-events:auto}
+  nav .menu-btn .ic{display:none}nav.menu-open .menu-btn .io{display:none}nav.menu-open .menu-btn .ic{display:block}
+  nav.menu-open .menu-panel{display:flex;flex-direction:column;pointer-events:auto;margin-top:8px;background:rgba(255,255,255,.96);border:1px solid rgba(10,11,14,.08);border-radius:24px;padding:10px;box-shadow:0 20px 50px rgba(10,11,14,.14)}
+  nav .menu-panel a{padding:14px 16px;font:500 16px var(--sans);border-bottom:1px solid var(--line)}
+  nav .menu-panel a:last-of-type{border:0}
+  nav .menu-panel .btn{margin-top:8px;color:#fff;border:0}
+  .kchat:not(.open){height:58px;border-radius:50% 0 0 50%;bottom:16px}
+  .kchat:not(.open) header{width:58px;height:58px;padding:0;justify-content:center}
+  .kchat:not(.open) header:before{display:none}
+  .kchat:not(.open) header .bub{width:28px;height:28px}
+  .kchat.open{left:12px;right:12px;width:auto;max-width:none;border-radius:22px}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-user-x" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 8 5 5"/><path d="m22 8-5 5"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol>
+  <symbol id="i-mega" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+  <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M9.9 4.2A10 10 0 0 1 12 4c7 0 10 8 10 8a13 13 0 0 1-1.7 2.7"/><path d="M6.6 6.6A13 13 0 0 0 2 12s3 8 10 8a10 10 0 0 0 5.4-1.6"/><path d="m2 2 20 20"/><path d="M14.1 14.1a3 3 0 0 1-4.2-4.2"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-panel" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M14 9h3"/><path d="M14 13h3"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 5a3 3 0 1 0-5.9 1A3 3 0 0 0 4 9.5a3 3 0 0 0 1.4 5A3 3 0 0 0 8 19a3 3 0 0 0 4-1.5"/><path d="M12 5a3 3 0 1 1 5.9 1A3 3 0 0 1 20 9.5a3 3 0 0 1-1.4 5A3 3 0 0 1 16 19a3 3 0 0 1-4-1.5"/><path d="M12 5v12.5"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M22 3H2l8 9.5V19l4 2v-8.5L22 3z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<nav id="nav">
+  <div class="shell">
+    <div class="pill">
+      <a class="logo" href="#"><span class="b">[</span> kompila <span class="b">]</span></a>
+      <div class="links"><a href="#vazamento">O vazamento</a><a href="#pratica">Como funciona</a><a href="#pessoas">O que você recebe</a><a href="#casozero">Caso Zero</a></div>
+      <a class="btn g" href="#calc">Analisar meus leads</a>
+      <button type="button" class="menu-btn" id="menuBtn" aria-label="menu"><svg class="ico io"><use href="#i-menu"/></svg><svg class="ico ic"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="menu-panel" id="menuPanel">
+      <a href="#vazamento">O vazamento</a><a href="#pratica">Como funciona</a><a href="#pessoas">O que você recebe</a><a href="#casozero">Caso Zero</a>
+      <a class="btn g" href="#calc">Analisar meus leads</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 01 HERO -->
+<header class="hero" id="topo">
+  <div class="glow"></div>
+  <div class="in">
+    <div>
+      <span class="k">kompila · lead recovery</span>
+      <h1>Você não perde venda por falta de lead.<span class="l2">Perde porque ninguém respondeu.</span></h1>
+      <p class="p">A Kompila encontra oportunidades paradas, responde em segundos e garante que cada lead tenha um responsável e uma próxima ação.</p>
+      <div class="ctas"><a class="btn g" href="#calc">Analisar meus leads</a><a class="link" href="#pratica">Ver um lead sendo recuperado</a></div>
+      <div class="micro">Funciona com o CRM e o WhatsApp da sua operação.</div>
+    </div>
+    <div class="lc bad" id="lc">
+      <div class="kk">lead recebido · instagram</div>
+      <div class="who">Marcos Oliveira</div>
+      <div class="meta">Apartamento de 2 quartos<br>Renda familiar: R$ 6.000<br>Origem: campanha Zona Leste</div>
+      <div class="st"><span class="n" id="lcN">42 h</span><small id="lcL">sem resposta</small></div>
+      <div class="steps" id="lcS">
+        <div class="bad"><svg class="ico"><use href="#i-user-x"/></svg>Nenhum responsável</div>
+        <div class="bad"><svg class="ico"><use href="#i-clock"/></svg>Nenhuma próxima ação</div>
+        <div class="ok"><svg class="ico"><use href="#i-zap"/></svg>Kompila acionada</div>
+        <div class="ok"><svg class="ico"><use href="#i-check"/></svg>Respondido em 6 segundos</div>
+        <div class="ok"><svg class="ico"><use href="#i-filter"/></svg>Qualificado</div>
+        <div class="ok"><svg class="ico"><use href="#i-user"/></svg>Vendedor acionado</div>
+        <div class="ok"><svg class="ico"><use href="#i-cal"/></svg>Visita agendada</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 02 O VAZAMENTO -->
+<section id="vazamento">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">o vazamento</span><h2>Seu CRM pode estar cheio de contatos <span class="dimt">e vazio de próximas ações.</span></h2></div><p class="lead-p">Você investe em mídia, produz campanhas e gera interesse. Mas uma parte desse investimento desaparece depois que o lead entra.</p></div>
+    <div class="grid4">
+      <div class="card rv"><svg class="ico"><use href="#i-user-x"/></svg><h3>Sem responsável</h3><p>O contato cai em uma fila geral ou fica preso com alguém indisponível.</p></div>
+      <div class="card rv d1"><svg class="ico"><use href="#i-clock"/></svg><h3>Sem resposta</h3><p>Quando o vendedor responde, o cliente já avançou com outra empresa.</p></div>
+      <div class="card rv d2"><svg class="ico"><use href="#i-route"/></svg><h3>Sem continuidade</h3><p>A primeira conversa acontece, mas ninguém define o próximo passo.</p></div>
+      <div class="card rv d3"><svg class="ico"><use href="#i-eye-off"/></svg><h3>Sem visibilidade</h3><p>O gerente só percebe o problema quando a meta não fecha.</p></div>
+    </div>
+    <div class="funil rv">
+      <div class="src"><span><svg class="ico"><use href="#i-mega"/></svg>Meta Ads</span><span><svg class="ico"><use href="#i-mega"/></svg>Google Ads</span><span><svg class="ico"><use href="#i-mega"/></svg>Landing page</span><span><svg class="ico"><use href="#i-chat"/></svg>WhatsApp</span></div>
+      <div class="tube"><b>1.000 leads</b><i class="leak" data-l="sem responsável"></i><i class="leak" data-l="sem resposta"></i><i class="leak" data-l="sem próxima ação"></i></div>
+      <div class="out"><b>27</b><small>chegam em venda</small></div>
+    </div>
+    <p class="close rv">Mais tráfego colocado em uma operação que vaza apenas aumenta o desperdício.</p>
+  </div>
+</section>
+
+<!-- 03 UM LEAD NA PRÁTICA -->
+<section class="dark" id="pratica">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">um lead na prática</span><h2>O cliente que chamava no sábado e morria na fila <span class="dimt">agora chega pronto para o vendedor.</span></h2></div><p class="lead-p">Uma conversa de WhatsApp no centro. Ao lado, o que a Kompila faz por trás, minuto a minuto.</p></div>
+    <div class="jour">
+      <div class="chat rv">
+        <div class="chat-h"><div class="av">MO</div><div><b>Marcos Oliveira</b><small>sábado · campanha zona leste</small></div><span class="wa">whatsapp</span></div>
+        <div class="chat-b">
+          <div class="cb">Oi, vi o lançamento de vocês no Instagram. Tem apartamento de dois quartos que aceita FGTS?<time>09:12</time></div>
+          <div class="cb ia">Oi, Marcos. Temos opções de dois quartos que permitem o uso do FGTS. Posso fazer algumas perguntas para encontrar a condição mais adequada?<time>09:12</time></div>
+          <div class="cb">Pode. Renda de 6 mil, queria mudar até dezembro. Zona Leste.<time>09:13</time></div>
+          <div class="cb ia">Perfeito. Com essa renda você entra na faixa do programa e pode usar o FGTS na entrada. Prefere visitar o decorado sábado ou domingo?<time>09:13</time></div>
+          <div class="cb">Sábado de manhã.<time>09:14</time></div>
+          <div class="cb brief"><b>Marcos Oliveira</b><br>Busca: dois quartos · Zona Leste<br>Renda: R$ 6.000 · FGTS: disponível<br>Prazo: até dezembro<br>Origem: campanha Zona Leste<br>Próxima ação: <b>confirmar visita sábado</b></div>
+          <div class="cb me">Oi, Marcos. Sou a Renata. Recebi suas informações e posso te atender sábado pela manhã. Vou enviar a localização e deixar sua visita confirmada.<time>09:21</time></div>
+        </div>
+      </div>
+      <div class="side rv d1">
+        <div class="step"><time>09:12</time><div><b>Mensagem recebida</b><div class="acts"><span>origem: Instagram</span><span>campanha: Zona Leste</span><span class="ok">espera: 0 s</span></div></div></div>
+        <div class="step"><time>09:12</time><div><b>A Kompila responde</b><div class="acts"><span class="ok">atendimento iniciado</span><span>intenção: compra de imóvel</span><span>só regras aprovadas pela empresa</span></div></div></div>
+        <div class="step"><time>09:13</time><div><b>Qualificação</b><div class="acts"><span>renda</span><span>região</span><span>prazo</span><span>FGTS</span><span class="ok">alta intenção</span><span class="ok">próxima ação: visita</span></div></div></div>
+        <div class="step"><time>09:14</time><div><b>Distribuição</b><div class="acts"><span class="ok">Renata acionada</span><span class="warn">prazo para assumir: 5 min</span></div></div></div>
+        <div class="step"><time>09:19</time><div><b>Regra de segurança</b><div class="acts"><span>SLA monitorado</span><span>se não assumir, volta pra fila</span><span>próximo disponível é acionado</span></div></div></div>
+        <div class="step"><time>09:21</time><div><b>Próxima ação confirmada</b><div class="acts"><span class="ok">visita agendada</span><span class="ok">CRM atualizado</span><span class="ok">histórico registrado</span></div></div></div>
+      </div>
+    </div>
+    <div class="result rv">
+      <div><svg class="ico"><use href="#i-check"/></svg>Cliente atendido</div>
+      <div><svg class="ico"><use href="#i-user"/></svg>Vendedor com contexto</div>
+      <div><svg class="ico"><use href="#i-cal"/></svg>Próxima ação definida</div>
+      <div><svg class="ico"><use href="#i-panel"/></svg>Gestor com histórico completo</div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 O QUE MUDA -->
+<section id="pessoas">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">o que muda na operação</span><h2>Uma única inteligência. <span class="dimt">Um resultado diferente para cada pessoa.</span></h2></div></div>
+    <div class="hub">
+      <div class="card rv"><svg class="ico"><use href="#i-chat"/></svg><div><h3>Cliente</h3><p>Recebe resposta rápida e não precisa repetir as mesmas informações para cada atendente.</p><small>indicador: tempo de espera</small></div></div>
+      <div class="card rv d1"><svg class="ico"><use href="#i-user"/></svg><div><h3>Vendedor</h3><p>Recebe o lead qualificado, com contexto, briefing pronto e a próxima ação definida.</p><small>indicador: fila pessoal organizada</small></div></div>
+      <div class="card rv d2"><svg class="ico"><use href="#i-panel"/></svg><div><h3>Gerente</h3><p>Enxerga atrasos, responsáveis, leads em risco, fila e produtividade da equipe.</p><small>indicador: painel de alertas</small></div></div>
+      <div class="card rv d3"><svg class="ico"><use href="#i-chart"/></svg><div><h3>Diretor</h3><p>Entende quais campanhas, canais, unidades e equipes estão virando venda e onde o investimento está sendo desperdiçado.</p><small>indicador: conversão e receita</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 PAINEL DO GERENTE -->
+<section id="painel" style="padding-top:0">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">segunda-feira, 8h</span><h2>O gerente não precisa procurar o problema. <span class="dimt">O problema chega organizado até ele.</span></h2></div></div>
+    <div class="dash rv">
+      <div class="bar"><i></i><i></i><i></i><span>kompila · painel · seg 8h</span></div>
+      <div class="body">
+        <div style="display:grid;gap:16px">
+          <div class="kpis"><div class="g"><b>14/14</b><small>leads atendidos no fim de semana</small></div><div class="g"><b>3</b><small>visitas agendadas</small></div><div class="r"><b>1</b><small>vendedor ultrapassou o prazo</small></div></div>
+          <div class="box"><span class="k">resumo do fim de semana</span><ul class="resumo"><li>Leads recebidos<b>14</b></li><li class="g">Atendidos pela Kompila<b>14</b></li><li>Qualificados<b>8</b></li><li class="g">Visitas agendadas<b>3</b></li><li class="r">Vendedor fora do prazo<b>1</b></li><li>Lead redistribuído<b>1</b></li><li class="g">Leads sem responsável<b>0</b></li></ul></div>
+          <div class="box"><span class="k">tempo médio até a primeira resposta</span><div class="bars"><div><span>Kompila</span><i style="--w:4%"></i><span>8 s</span></div><div><span>Renata</span><i style="--w:30%"></i><span>3 min</span></div><div><span>Diego</span><i style="--w:45%"></i><span>4 min</span></div><div class="r"><span>Carlos</span><i style="--w:100%"></i><span>19 min</span></div></div></div>
+        </div>
+        <div style="display:grid;gap:16px;align-content:start">
+          <div class="box"><span class="k">alertas</span><ul class="alerts">
+            <li><svg class="ico"><use href="#i-alert"/></svg><div>Carlos ultrapassou o prazo<small>3 leads esperando ação</small></div></li>
+            <li><svg class="ico"><use href="#i-funnel"/></svg><div>Campanha Guarulhos<small>recebeu 22 leads, apenas 7 avançaram</small></div></li>
+            <li><svg class="ico"><use href="#i-zap"/></svg><div>Lead de alta prioridade<small>renda compatível, visita ainda não confirmada</small></div></li>
+          </ul></div>
+          <div class="box"><span class="k">funil · fim de semana</span><div class="bars"><div><span>campanha</span><i style="--w:100%"></i><span>14</span></div><div><span>atendido</span><i style="--w:100%"></i><span>14</span></div><div><span>qualificado</span><i style="--w:57%"></i><span>8</span></div><div><span>visita</span><i style="--w:21%"></i><span>3</span></div></div></div>
+        </div>
+      </div>
+    </div>
+    <ul class="mlist rv">
+      <li><svg class="ico"><use href="#i-check"/></svg>Tempo até a primeira resposta</li><li><svg class="ico"><use href="#i-check"/></svg>Tempo até o atendimento humano</li><li><svg class="ico"><use href="#i-check"/></svg>Leads sem responsável</li>
+      <li><svg class="ico"><use href="#i-check"/></svg>Conversas sem próxima ação</li><li><svg class="ico"><use href="#i-check"/></svg>Leads em risco</li><li><svg class="ico"><use href="#i-check"/></svg>Motivos de perda</li>
+      <li><svg class="ico"><use href="#i-check"/></svg>Conversão por origem</li><li><svg class="ico"><use href="#i-check"/></svg>Desempenho por vendedor</li><li><svg class="ico"><use href="#i-check"/></svg>Reuniões e visitas agendadas</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 06 INTEGRAÇÕES -->
+<section class="dark" id="integra">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">use o que sua empresa já paga</span><h2>Seu CRM continua. <span class="dimt">A Kompila passa a vigiar o que acontece dentro dele.</span></h2></div><p class="lead-p">O CRM continua registrando contatos, negócios e etapas. A Kompila monitora tempo, responsável, última atividade e próxima ação. Quando uma regra é descumprida, ela reage.</p></div>
+    <div class="flow rv">
+      <div class="n">Meta Ads · Google<br>Site · WhatsApp</div><div class="arrow">→</div>
+      <div class="n">CRM atual</div><div class="arrow">→</div>
+      <div class="n k2">[ kompila ]</div><div class="arrow">→</div>
+      <div class="n">Cliente atendido<br>Vendedor acionado<br>Gerente informado</div>
+    </div>
+    <div class="cmp">
+      <div class="card rv"><h3>Seu CRM</h3><ul><li><svg class="ico"><use href="#i-check"/></svg>Registra o lead</li><li><svg class="ico"><use href="#i-check"/></svg>Guarda o histórico</li><li><svg class="ico"><use href="#i-check"/></svg>Organiza o funil</li><li><svg class="ico"><use href="#i-check"/></svg>Produz relatórios</li></ul></div>
+      <div class="card kp rv d1"><h3>Kompila</h3><ul><li><svg class="ico"><use href="#i-clock"/></svg>Monitora o tempo</li><li><svg class="ico"><use href="#i-alert"/></svg>Identifica abandono</li><li><svg class="ico"><use href="#i-route"/></svg>Cobra a próxima ação</li><li><svg class="ico"><use href="#i-swap"/></svg>Redistribui o lead</li><li><svg class="ico"><use href="#i-chat"/></svg>Recupera conversas</li><li><svg class="ico"><use href="#i-panel"/></svg>Resume a operação</li></ul></div>
+    </div>
+    <div class="logos rv"><span>HubSpot</span><span>Salesforce</span><span>Pipedrive</span><span>Kommo</span><span>WhatsApp</span><span>Formulários e landing pages</span><small>Compatibilidade e formato de cada integração são confirmados durante o Caso Zero.</small></div>
+  </div>
+</section>
+
+<!-- 07 A PROVA -->
+<section id="prova">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">a primeira prova não é um depoimento</span><h2>Ela está dentro do <span class="dimt">seu próprio CRM.</span></h2></div><p class="lead-p">Não começamos dizendo quanto a inteligência artificial pode vender. Começamos descobrindo quanto a sua operação já está deixando escapar.</p></div>
+    <div class="scan rv">
+      <div class="left"><b>12.482</b><small>contatos analisados</small></div>
+      <div class="mid"><span>kompila · lendo o CRM</span></div>
+      <div class="right"><div><svg class="ico"><use href="#i-user-x"/></svg>Leads sem responsável</div><div><svg class="ico"><use href="#i-clock"/></svg>Conversas paradas</div><div><svg class="ico"><use href="#i-alert"/></svg>Prazo ultrapassado</div><div><svg class="ico"><use href="#i-route"/></svg>Base recuperável</div></div>
+    </div>
+    <div class="nums rv">
+      <div><b>01</b><span>Tempo até a primeira resposta</span></div>
+      <div><b>02</b><span>Tempo até o atendimento humano</span></div>
+      <div><b>03</b><span>Leads sem responsável</span></div>
+      <div><b>04</b><span>Conversas sem próxima ação</span></div>
+      <div><b>05</b><span>Oportunidades que poderiam voltar para a fila</span></div>
+    </div>
+    <p class="close rv">Você não precisa acreditar em uma estimativa genérica. A Kompila mostra o vazamento usando os dados da sua própria empresa.</p>
+  </div>
+</section>
+
+<!-- 08 CASO ZERO -->
+<section class="dark" id="casozero">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">comece pelo caso zero</span><h2>Primeiro encontramos o vazamento. <span class="dimt">Depois decidimos o que vale automatizar.</span></h2></div><p class="lead-p">O Caso Zero é um diagnóstico controlado da jornada dos seus leads. A conversa inicial não exige migração nem mudança imediata na rotina da equipe.</p></div>
+    <div class="steps4">
+      <div class="card rv"><svg class="ico"><use href="#i-chat"/></svg><small>01 · entender</small><h3>Mapeamos a operação</h3><p>Canais, equipe, CRM, regras de distribuição, prazos e etapas de venda.</p></div>
+      <div class="card rv d1"><svg class="ico"><use href="#i-db"/></svg><small>02 · analisar</small><h3>Lemos um período autorizado</h3><p>Uma amostra do CRM para encontrar contatos sem resposta, sem responsável ou sem próxima ação.</p></div>
+      <div class="card rv d2"><svg class="ico"><use href="#i-alert"/></svg><small>03 · identificar</small><h3>Encontramos o vazamento</h3><p>Onde o lead entra, onde ele para e qual regra deveria impedir a perda.</p></div>
+      <div class="card rv d3"><svg class="ico"><use href="#i-route"/></svg><small>04 · projetar</small><h3>Entregamos o plano</h3><p>Regras, prioridades e o plano de recuperação.</p></div>
+    </div>
+    <div class="recebe">
+      <div class="rv"><span class="k" style="display:block;margin-bottom:10px">o que a empresa recebe</span><ul>
+        <li><svg class="ico"><use href="#i-check"/></svg>Mapa da jornada atual</li><li><svg class="ico"><use href="#i-check"/></svg>Diagnóstico do vazamento</li><li><svg class="ico"><use href="#i-check"/></svg>Cinco indicadores principais</li><li><svg class="ico"><use href="#i-check"/></svg>Fila inicial de recuperação</li><li><svg class="ico"><use href="#i-check"/></svg>Regras sugeridas de prazo</li><li><svg class="ico"><use href="#i-check"/></svg>Plano de implantação</li><li><svg class="ico"><use href="#i-check"/></svg>Estimativa financeira conservadora</li>
+      </ul></div>
+      <div class="cta-block rv d1"><a class="btn g" href="#calc">Quero analisar minha operação</a><small>Primeiro medimos. Depois você decide.</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 CALCULADORA -->
+<section id="calc">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">calculadora do vazamento</span><h2>Quanto dinheiro pode estar parado <span class="dimt">na sua fila?</span></h2></div><p class="lead-p">Use alguns números da sua operação para uma estimativa inicial do potencial que existe nos leads sem atendimento.</p></div>
+    <div class="calc">
+      <form class="form rv" id="cf" onsubmit="return false">
+        <label><b>Quantos leads entram por mês?</b><input type="number" id="cL" value="6000" min="1"></label>
+        <label><b>Quantos ficam sem resposta ou sem próxima ação? (%)</b><input type="number" id="cP" value="20" min="0" max="100"><small>Se não souber, 20% é uma referência conservadora do que medimos.</small></label>
+        <label><b>Taxa atual de conversão em vendas (%)</b><input type="number" id="cC" value="2.7" min="0" max="100" step="0.1"></label>
+        <label><b>Quanto a empresa ganha por venda? (R$)</b><input type="number" id="cV" value="14000" min="0"><small>Para imóveis, a receita ou comissão da operação, não o valor do apartamento.</small></label>
+        <label><b>Quanto dos leads abandonados acreditamos reativar?</b><div class="seg" id="cS"><button type="button" data-r="5">Conservador · 5%</button><button type="button" data-r="10" class="on">Provável · 10%</button><button type="button" data-r="20">Potencial · 20%</button></div></label>
+        <button class="btn g" type="button" id="cBtn">Calcular meu vazamento</button>
+      </form>
+      <div class="res rv d1">
+        <div class="row"><small>sua operação recebe</small><b id="rL">6.000</b><span>leads por mês</span></div>
+        <div class="row"><small>aproximadamente</small><b id="rP">1.200</b><span>podem estar ficando sem continuidade</span></div>
+        <div class="row"><small id="rSl">no cenário provável</small><b id="rR">120</b><span>voltariam a conversar</span></div>
+        <div class="row"><small>mantendo a conversão atual</small><b id="rV">3 a 4</b><span>vendas adicionais por mês</span></div>
+        <div class="row big"><small>potencial financeiro estimado</small><b id="rM">R$ 42 mil a R$ 56 mil</b><span>por mês</span></div>
+        <p class="warn">Esta é uma simulação baseada nos números informados, não uma garantia de resultado. O potencial real é validado durante o Caso Zero.</p>
+        <a class="btn g" href="https://wa.me/5511962884399?text=Quero%20validar%20o%20n%C3%BAmero%20da%20calculadora%20no%20meu%20CRM%20(Caso%20Zero)" target="_blank" rel="noopener">Validar esse número no meu CRM</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 MODELO COMERCIAL -->
+<section id="modelo" style="padding-top:0">
+  <div class="shell">
+    <div class="head rv two"><div><span class="k">modelo comercial</span><h2>O investimento acompanha o tamanho da operação <span class="dimt">e o trabalho necessário.</span></h2></div></div>
+    <div class="eq rv">
+      <div class="n">Volume de leads</div><div class="op">+</div><div class="n">Complexidade da integração</div><div class="op">+</div><div class="n">Resultado acompanhado</div><div class="op">=</div><div class="n out">Plano da operação</div>
+    </div>
+    <div class="two-col">
+      <div class="rv"><span class="k" style="display:block;margin-bottom:10px">a proposta considera</span><ul><li>Volume mensal de leads</li><li>CRM utilizado</li><li>Canais de entrada</li><li>Quantidade de vendedores</li><li>Regras de distribuição</li><li>Módulos necessários</li><li>Nível de acompanhamento</li></ul></div>
+      <div class="rv d1"><p class="lead-p" style="margin-bottom:24px">O modelo pode combinar uma estrutura mensal fixa com uma parcela variável relacionada a resultados confirmados, como lead recuperado ou reunião agendada. Você sabe o que será medido antes da implantação.</p><a class="btn" href="#calc">Receber uma análise inicial</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 FAQ -->
+<section id="faq" style="padding-top:0">
+  <div class="shell">
+    <div class="head rv two" style="margin-bottom:32px"><div><span class="k">perguntas frequentes</span><h2>Antes de decidir, <span class="dimt">o que todo mundo pergunta.</span></h2></div></div>
+    <div class="faq rv">
+      <details><summary>Preciso trocar de CRM?</summary><p>Não. A Kompila foi pensada para se conectar à estrutura que a empresa já utiliza. A compatibilidade e os acessos necessários são avaliados no Caso Zero.</p></details>
+      <details><summary>A inteligência artificial substitui os vendedores?</summary><p>Não. Ela atende o primeiro momento, organiza as informações e garante continuidade. O vendedor entra com contexto para conduzir negociação e fechamento.</p></details>
+      <details><summary>O que acontece quando ninguém responde?</summary><p>O prazo é monitorado. Dependendo da regra definida pela empresa, o sistema alerta, devolve o lead para a fila ou aciona outro responsável.</p></details>
+      <details><summary>Funciona fora do expediente?</summary><p>A camada automática pode responder e qualificar durante 24 horas. Fora do expediente, o lead fica preparado para o atendimento humano no início do próximo turno.</p></details>
+      <details><summary>A IA pode inventar preços ou condições?</summary><p>A operação utiliza conteúdos, tabelas e regras aprovadas pela empresa. Valores sensíveis ou decisões que dependam de sistemas oficiais podem exigir confirmação antes do envio.</p></details>
+      <details><summary>Como os dados são tratados?</summary><p>O projeto define acessos, permissões, registros de atividade e responsabilidades de tratamento antes da integração. Apenas os dados necessários para executar a operação são utilizados.</p></details>
+      <details><summary>Quanto tempo demora o diagnóstico?</summary><p>A análise histórica pode revelar os primeiros vazamentos rapidamente. O prazo completo depende do CRM, do volume de dados e das autorizações de acesso.</p></details>
+      <details><summary>Quanto custa?</summary><p>O valor depende do volume, das integrações e das regras da operação. A conversa inicial serve para definir o escopo e confirmar se existe potencial financeiro que justifique o projeto.</p></details>
+      <details><summary>Funciona para minha empresa?</summary><p>Funciona para operações que recebem leads em volume e dependem de uma primeira resposta rápida: incorporadoras, imobiliárias, indústria técnica e projetos B2B, e qualquer empresa que já paga CRM e ainda perde lead na fila. O Caso Zero confirma isso com os seus dados.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 12 FECHAMENTO -->
+<section class="cta dark" id="fim">
+  <div>
+    <span class="k" style="display:block;margin-bottom:16px">o lead já custou dinheiro para chegar até a sua empresa</span>
+    <h2>Agora descubra quantos estão esperando uma resposta, um responsável <span class="b">ou apenas a próxima ação.</span></h2>
+    <p class="lead-p" style="margin:22px 0 28px">Antes de investir em mais tráfego, enxergue o que aconteceu com as oportunidades que você já conquistou.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn g" href="#calc">Analisar meus leads</a><a class="btn ghost" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20entender%20quantos%20leads%20est%C3%A3o%20parados%20na%20minha%20opera%C3%A7%C3%A3o." target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg>Falar com a Kompila no WhatsApp</a></div>
+    <div class="micro">Uma conversa inicial.<br>Cinco números na mesa.<br>Um plano baseado na sua operação.</div>
+  </div>
+  <div class="lc ok" style="margin:0 auto">
+    <div class="kk">lead recuperado</div>
+    <div class="who">Marcos Oliveira</div>
+    <div class="meta">Apartamento de 2 quartos<br>Origem: campanha Zona Leste</div>
+    <div class="st"><span class="n">09:21</span><small>visita confirmada</small></div>
+    <div class="steps" style="min-height:0"><div class="ok on"><svg class="ico"><use href="#i-check"/></svg>Respondido</div><div class="ok on"><svg class="ico"><use href="#i-filter"/></svg>Qualificado</div><div class="ok on"><svg class="ico"><use href="#i-user"/></svg>Responsável definido</div><div class="ok on"><svg class="ico"><use href="#i-cal"/></svg>Visita agendada</div></div>
+  </div>
+</section>
+
+<footer><span class="logo"><span class="b">[</span> kompila <span class="b">]</span></span><span>do bruto ao pronto. · lead recovery · crm · agente · orçamento · conector</span><span>@kompila.ai</span></footer>
+
+<!-- 13 CHAT -->
+<div class="kchat" id="kchat">
+  <header id="kchatH"><svg class="bub"><use href="#i-chat"/></svg><b><span class="b">[</span> kompila <span style="color:var(--amber)">.agente</span> <span class="b">]</span></b><small>responde em segundos</small><button type="button" class="kx" id="kclose" aria-label="fechar">×</button></header>
+  <div class="msgs" id="kmsgs"><div class="m bot">Oi. Para entender se o Lead Recovery faz sentido para sua operação, preciso de quatro informações rápidas. Quantos leads chegam por mês?</div></div>
+  <div class="opts" id="kopts"></div>
+  <a class="wa" id="kwa" href="#" target="_blank" rel="noopener">Continuar no WhatsApp →</a>
+</div>
+
+<script>
+/* reveal */
+(function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});document.querySelectorAll('.rv').forEach(function(el){io.observe(el)})})();
+/* nav: esconde ao descer, mostra ao subir; menu celular */
+(function(){var n=document.getElementById('nav'),last=0;addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true});var b=document.getElementById('menuBtn'),p=document.getElementById('menuPanel');b.addEventListener('click',function(){n.classList.toggle('menu-open')});p.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){n.classList.remove('menu-open')})})})();
+/* hero: card do lead muda de estado */
+(function(){var lc=document.getElementById('lc'),n=document.getElementById('lcN'),l=document.getElementById('lcL'),steps=[].slice.call(document.querySelectorAll('#lcS div'));function reset(){lc.className='lc bad';n.textContent='42 h';l.textContent='sem resposta';steps.forEach(function(s){s.classList.remove('on')})}var seq=[[600,function(){steps[0].classList.add('on')}],[1200,function(){steps[1].classList.add('on')}],[2600,function(){lc.className='lc warn';n.textContent='0 s';l.textContent='kompila acionada';steps[0].classList.remove('on');steps[1].classList.remove('on');steps[2].classList.add('on')}],[3600,function(){lc.className='lc ok';n.textContent='6 s';l.textContent='respondido';steps[3].classList.add('on')}],[4400,function(){steps[4].classList.add('on')}],[5200,function(){steps[5].classList.add('on');n.textContent='4 s';l.textContent='vendedor acionado'}],[6200,function(){steps[6].classList.add('on');n.textContent='09:21';l.textContent='visita agendada'}]];function run(){reset();seq.forEach(function(s){setTimeout(s[1],s[0])});setTimeout(run,9500)}run()})();
+/* calculadora */
+(function(){var r=10,$=function(id){return document.getElementById(id)};function fmt(n){return n.toLocaleString('pt-BR')}function money(n){return n>=1000?'R$ '+Math.round(n/1000)+' mil':'R$ '+Math.round(n)}function calc(){var L=+$('cL').value||0,P=(+$('cP').value||0)/100,C=(+$('cC').value||0)/100,V=+$('cV').value||0;var parados=L*P,reat=parados*r/100,vendas=reat*C,v1=Math.max(1,Math.floor(vendas)),v2=Math.max(v1,Math.ceil(vendas));if(vendas<1){v1=0;v2=1}$('rL').textContent=fmt(L);$('rP').textContent=fmt(Math.round(parados));$('rR').textContent=fmt(Math.round(reat));$('rV').textContent=v1===v2?v1:v1+' a '+v2;$('rM').textContent=v1===v2?money(v1*V):money(v1*V)+' a '+money(v2*V);$('rSl').textContent={5:'no cenário conservador',10:'no cenário provável',20:'no cenário potencial'}[r]}document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});$('cBtn').addEventListener('click',calc);['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});calc()})();
+/* chat roteirizado */
+(function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Caso Zero.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
+</script>
+</body>
+</html>
