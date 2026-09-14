@@ -498,6 +498,14 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 @media(max-width:900px){.sc-txt .pane,.sc-shot .pane{position:static}.sc-shot .stack{height:auto}}
 
 .sc-txt li b,.sc-txt li span{display:block}
+
+/* pra quem: celular com tamanho travado; setas de acordeão em chevron */
+.acc{align-items:start}
+.acc .shot{align-self:start}
+.acc .phone{height:460px;overflow:hidden;display:flex;flex-direction:column}
+.acc .phone .pb{flex:1;min-height:0;overflow:hidden;justify-content:flex-end}
+.acc summary:after,.faq summary:after{content:"";width:22px;height:22px;flex:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7480' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat;transform:none;transition:transform .25s ease;font-size:0}
+.acc details[open] summary:after,.faq details[open] summary:after{transform:rotate(180deg)}
 </style>
 </head>
 <body>
