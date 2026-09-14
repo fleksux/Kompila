@@ -409,6 +409,12 @@ html.guias div,html.guias header,html.guias section,html.guias footer,html.guias
 html.guias section,html.guias header,html.guias footer,html.guias nav{outline:2px dashed rgba(47,125,255,.95);outline-offset:-2px}
 
 .hero .titles{transition:none}.hero .p{transition:opacity .7s,transform .7s,margin .7s}
+
+/* parallax no compositor (sem JS) onde o navegador suporta */
+@supports (animation-timeline: scroll()){
+  .hero .bgwrap{animation:heroPara linear both;animation-timeline:scroll(root);animation-range:0 100vh}
+  @keyframes heroPara{to{transform:translate3d(0,28vh,0)}}
+}
 </style>
 </head>
 <body>
@@ -772,7 +778,7 @@ if(mobileHero)hero.classList.add('show');
 if(reduced){ca.concat(cb).forEach(function(c){c.classList.add('on')});h1a.classList.add('gone');h1a.style.display='none';h1b.classList.add('live');hero.classList.add('show')}
 else setTimeout(function(){typeChars(ca,52,function(){h1a.classList.add('gone');setTimeout(function(){h1a.style.display='none'},650);setTimeout(function(){h1b.classList.add('live');typeChars(cb,50,function(){if(!mobileHero){h1b.classList.add('small');setTimeout(function(){hero.classList.add('show')},450)}})},650)})},700);
 /* parallax da foto */
-var wrap=hero.querySelector('.bgwrap'),t=false;function px(){t=false;var y=scrollY||0;if(y>hero.offsetHeight)return;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'}addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(px)}},{passive:true});px();
+var wrap=hero.querySelector('.bgwrap');if(!(CSS.supports&&CSS.supports('animation-timeline: scroll()'))){var t=false,y=0;function px(){t=false;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'}addEventListener('scroll',function(){y=scrollY||0;if(y>hero.offsetHeight)return;if(!t){t=true;requestAnimationFrame(px)}},{passive:true})}
 })();
 </script>
 <script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
