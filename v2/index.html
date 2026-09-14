@@ -518,6 +518,11 @@ html{overflow-x:hidden}
   nav .logo .lr{font-size:9px;letter-spacing:.08em;white-space:nowrap}
   nav .menu-btn{flex:none}
 }
+
+/* painel: mensagens entram e saem suaves */
+.feed-b .cb{max-height:220px;animation:fdin .6s cubic-bezier(.2,.8,.2,1);transition:opacity .45s ease,max-height .5s cubic-bezier(.2,.8,.2,1),margin .5s,padding .5s}
+.feed-b .cb.out{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin-top:-8px;overflow:hidden;border-color:transparent}
+.feed-h .wait b{transition:color .4s ease}
 </style>
 </head>
 <body>
@@ -835,7 +840,7 @@ html{overflow-x:hidden}
 (function(){var n=document.getElementById('nav'),last=0;addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true});var b=document.getElementById('menuBtn'),p=document.getElementById('menuPanel');b.addEventListener('click',function(){n.classList.toggle('menu-open')});p.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){n.classList.remove('menu-open')})})})();
 /* hero: conversa não atendida (a dor), 3 operações, vendedor chega tarde */
 (function(){var b=document.getElementById('feedB'),n=document.getElementById('fdN'),l=document.getElementById('fdL'),t1=document.getElementById('fdT1'),t2=document.getElementById('fdT2'),av=document.getElementById('fdAv'),nm=document.getElementById('fdName');if(!b)return;
-function add(txt,cls,time){var d=document.createElement('div');d.className='cb'+(cls?' '+cls:'');d.innerHTML=txt+'<time>'+time+'</time>';b.appendChild(d);while(b.children.length>3)b.removeChild(b.firstChild)}
+function add(txt,cls,time){var d=document.createElement('div');d.className='cb'+(cls?' '+cls:'');d.innerHTML=txt+'<time>'+time+'</time>';b.appendChild(d);var live=[].filter.call(b.children,function(x){return !x.classList.contains('out')});while(live.length>3){var old=live.shift();old.classList.add('out');setTimeout(function(){if(old.parentNode)old.parentNode.removeChild(old)},520)}}
 var cases=[
  {av:'img/lead-marcos.webp',name:'Marcos Oliveira',m:[
   ['Oi, vi o lançamento de vocês no Instagram. Tem apartamento de dois quartos que aceita FGTS?','','sáb · 09:12','0 s','esperando'],
