@@ -455,9 +455,9 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 /* faixa de dados: sem largura definida, espalhados na mesma linha */
 .trust .stats{display:flex;justify-content:space-between;align-items:stretch;flex-wrap:nowrap;gap:24px}
 .trust .stats>div{flex:0 0 auto;padding:6px 0;border-left:0;text-align:center;white-space:nowrap}
-.trust .stats>div{position:relative;padding:6px 0}
-.trust .stats>div+div:before{content:"";position:absolute;left:calc(-12px - 0.5px);top:8px;bottom:8px;width:1px;background:var(--line)}
-.trust .stats{gap:24px}
+.trust .stats{gap:0}
+.trust .stats>div{flex:1 1 0;position:relative;padding:6px 16px}
+.trust .stats>div+div:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:1px;background:var(--line)}
 @media(max-width:700px){.trust .stats{flex-wrap:wrap;gap:18px 24px;justify-content:flex-start}.trust .stats>div{white-space:normal}.trust .stats>div+div:before{display:none}}
 </style>
 </head>
