@@ -399,6 +399,9 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .hero-marcas .stats span{display:block;font-size:13px;color:rgba(255,255,255,.7);margin-top:2px}
 @media(max-width:700px){.hero-marcas .stats{grid-template-columns:1fr 1fr;gap:12px 16px;margin-bottom:16px}.hero-marcas .stats b{font-size:18px}.hero-marcas .stats span{font-size:12px}.hero .in{padding-bottom:210px}}
 @media(min-width:701px){.hero .in{padding-bottom:230px}}
+
+.hero .copy,.hero .acts{display:grid;gap:22px;justify-items:start}
+@media(max-width:700px){.hero .copy,.hero .acts{gap:16px;width:100%}}
 </style>
 </head>
 <body>
@@ -426,10 +429,14 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <header class="hero" id="topo">
   <div class="bgwrap"><img class="bg" id="heroBg" src="../img/hero-diretor.webp" alt="Diretor comercial de braços cruzados numa sala de vendas" fetchpriority="high" decoding="async"><div class="veil"></div></div>
   <div class="in">
-    <h1 id="h1">Você não perde venda por falta de lead. <span class="g">Perde porque ninguém respondeu.</span></h1>
-    <p class="lead">A Kompila encontra os leads parados na sua operação, responde em segundos e garante que cada um tenha um responsável e uma próxima ação.</p>
-    <div class="ctas"><a class="btn green" href="#calc">Analisar meus leads</a><a class="btn ghost" href="#como">Ver como funciona</a></div>
-    <div class="checks"><span>Sem trocar de CRM</span><span>Primeiro medimos, depois você decide</span></div>
+    <div class="copy">
+      <h1 id="h1">Você não perde venda por falta de lead. <span class="g">Perde porque ninguém respondeu.</span></h1>
+      <p class="lead">A Kompila encontra os leads parados na sua operação, responde em segundos e garante que cada um tenha um responsável e uma próxima ação.</p>
+    </div>
+    <div class="acts">
+      <div class="ctas"><a class="btn green" href="#calc">Analisar meus leads</a><a class="btn ghost" href="#como">Ver como funciona</a></div>
+      <div class="checks"><span>Sem trocar de CRM</span><span>Primeiro medimos, depois você decide</span></div>
+    </div>
   </div>
   <div class="notif" id="notif" aria-hidden="true"></div>
   <div class="hero-marcas">
