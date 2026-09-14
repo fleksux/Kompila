@@ -586,12 +586,12 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .sc-shot .pane{grid-area:1/1}
 .sc-cap{grid-area:2/1;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;min-height:56px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px)}
 .sc-cap .n{font:600 11px var(--mono);letter-spacing:.04em;color:#2fd67b;background:rgba(47,214,123,.12);padding:4px 8px;border-radius:999px;white-space:nowrap}
-.sc-cap p{margin:0;color:#fff;font-size:15px;line-height:1.35;min-height:1.35em;opacity:1;transition:opacity .25s}
+.sc-cap p{margin:0;color:#fff;font-size:15px;line-height:1.35;min-height:2.7em;display:flex;align-items:center;opacity:1;transition:opacity .25s}
 .sc-cap p.out{opacity:0}
 .sc-cap .pp{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
 .sc-cap .pp svg{width:16px;height:16px;fill:#fff}.sc-cap .pp .ic-play{display:none}.sc-cap.paused .pp .ic-play{display:block}.sc-cap.paused .pp .ic-pause{display:none}
-.sc-cap .cta{grid-column:1/-1;justify-self:start;display:none;font-size:14px;font-weight:600;color:#2fd67b;text-decoration:none}
-.sc-cap.seen .cta{display:inline-block}
+.sc-cap .cta{grid-column:1/-1;justify-self:start;visibility:hidden;display:inline-block;font-size:14px;font-weight:600;color:#2fd67b;text-decoration:none}
+.sc-cap.seen .cta{visibility:visible}
 .sc-cap .cta:after{content:" →"}
 .win .zm{display:flex;flex-direction:column;flex:1;min-height:0;transition:transform 1.1s cubic-bezier(.2,.8,.2,1);transform-origin:50% 50%}
 .sc-shot .win .kp div{transition:opacity .5s,transform .5s,box-shadow .5s}
