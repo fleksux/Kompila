@@ -148,7 +148,7 @@ nav .panel{display:none}
 .mq-track{display:flex;gap:56px;width:max-content;animation:mqroll 90s linear infinite;will-change:transform;transform:translate3d(0,0,0)}
 .mq-track span{font:700 19px var(--sans);letter-spacing:-.03em;color:#fff;white-space:nowrap;opacity:.9}
 @keyframes mqroll{to{transform:translateX(-50%)}}
-@media(max-width:700px){.hero .in{padding-bottom:132px}.hero-marcas{padding-bottom:22px}.hero-marcas p{font-size:12.5px;margin-bottom:12px}.mq-track{gap:36px}.mq-track span{font-size:16px}}
+@media(max-width:700px){.hero-marcas{padding-bottom:22px}.hero-marcas p{font-size:12.5px;margin-bottom:12px}.mq-track{gap:36px}.mq-track span{font-size:16px}}
 
 /* blocos de recurso */
 .feat{padding:0 0 96px}
@@ -397,8 +397,8 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .hero-marcas .stats{width:min(var(--shell),100% - 2*var(--gut));margin:0 auto 22px;display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:12px 48px}
 .hero-marcas .stats b{display:block;font:700 22px var(--sans);letter-spacing:-.03em;color:#fff;line-height:1.1}
 .hero-marcas .stats span{display:block;font-size:13px;color:rgba(255,255,255,.7);margin-top:2px}
-@media(max-width:700px){.hero-marcas .stats{grid-template-columns:1fr 1fr;gap:12px 16px;margin-bottom:16px}.hero-marcas .stats b{font-size:18px}.hero-marcas .stats span{font-size:12px}.hero .in{padding-bottom:210px}}
-@media(min-width:701px){.hero .in{padding-bottom:230px}}
+@media(max-width:700px){.hero-marcas .stats{grid-template-columns:1fr 1fr;gap:12px 16px;margin-bottom:16px}.hero-marcas .stats b{font-size:18px}.hero-marcas .stats span{font-size:12px}}
+
 
 .hero .copy,.hero .acts{display:grid;gap:22px;justify-items:start}
 @media(max-width:700px){.hero .copy,.hero .acts{gap:16px;width:100%}}
@@ -423,6 +423,26 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 }
 
 @media(min-width:901px){.hero .in{justify-items:stretch;align-items:end}.hero .right{width:100%;min-height:460px}}
+
+/* hero: centralizado, tela cheia; dados e marcas fora do banner */
+@media(min-width:701px){
+  .hero{height:calc(100svh - 24px);min-height:640px;display:flex;align-items:center}
+  .hero .in{display:grid;grid-template-columns:1fr;justify-items:center;padding:110px 0 70px;text-align:center}
+  .hero .left{justify-items:center;text-align:center;max-width:820px}
+  .hero .copy,.hero .acts{justify-items:center}
+  .hero h1{max-width:20ch;text-align:center}
+  .hero .lead{text-align:center;max-width:600px}
+  .hero .checks{justify-content:center}
+  .hero .right{display:none}
+  .notif{display:none}
+}
+.trust{padding:56px 0 40px;background:#fff}
+.trust .stats{width:min(var(--shell),100% - 2*var(--gut));margin:0 auto 32px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 32px}
+.trust .stats b{display:block;font:700 26px var(--sans);letter-spacing:-.03em;color:var(--ink);line-height:1.1}
+.trust .stats span{display:block;font-size:14px;color:var(--muted);margin-top:4px}
+.trust .mq-track span{color:#9aa1a9}
+.trust .mq{-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+@media(max-width:700px){.trust{padding:40px 0 32px}.trust .stats{grid-template-columns:1fr 1fr;gap:14px 12px;margin-bottom:22px}.trust .stats b{font-size:20px}.trust .stats span{font-size:12.5px}.hero .in{padding-bottom:40px}}
 </style>
 </head>
 <body>
@@ -462,11 +482,15 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
     </div>
     <div class="right"><div class="notif" id="notif" aria-hidden="true"></div></div>
   </div>
-  <div class="hero-marcas">
-    <div class="stats"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><div><b>+25</b><span>marcas atendidas</span></div><div><b>R$ 500 mil</b><span>por mês administrados em mídia</span></div><div><b>Meta e Google Ads</b><span>equipe certificada</span></div></div>
-    <div class="mq"><div class="mq-track"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span></div></div>
-  </div>
 </header>
+
+<!-- DADOS + MARCAS -->
+<div class="trust">
+  <div class="shell">
+    <div class="stats"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><div><b>+25</b><span>marcas atendidas</span></div><div><b>R$ 500 mil</b><span>por mês administrados em mídia</span></div><div><b>Meta e Google Ads</b><span>equipe certificada</span></div></div>
+  </div>
+  <div class="mq"><div class="mq-track"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span></div></div>
+</div>
 
 
 <!-- O VAZAMENTO -->
