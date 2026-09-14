@@ -317,6 +317,43 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
 .shot{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .f:hover .shot{transform:translateY(-4px)}
 @media(prefers-reduced-motion:reduce){.win li,.win .kp div,.phone .msg,.brands .row span{opacity:1!important;transform:none!important;transition:none}.hero .btn.green,.final .btn.green,.win.live li time.bad{animation:none}}
+
+/* vitrine com abas (Magnific) */
+.tabs{display:flex;justify-content:center;gap:4px;width:max-content;max-width:calc(100% - 2*var(--gut));margin:0 auto 18px;padding:6px;background:#fff;border:1px solid var(--line);border-radius:999px;box-shadow:0 10px 30px rgba(10,11,14,.06);overflow:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{border:0;background:transparent;border-radius:999px;padding:12px 22px;font:500 16px var(--sans);color:var(--ink);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:8px;transition:background .25s,color .25s}
+.tabs button i{font:600 11px var(--sans);font-style:normal;padding:3px 8px;border-radius:999px;background:var(--green-soft);color:var(--green)}
+.tabs button.on{background:var(--ink);color:#fff}
+.showcase{position:relative;margin:0 12px;border-radius:32px;background:#0d1114;color:#fff;overflow:hidden;min-height:560px}
+.showcase .bgimg{position:absolute;inset:0;background:url(img/bg-showcase.webp) center right/cover no-repeat;opacity:.9}
+.showcase .bgimg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,17,20,.98) 0%,rgba(13,17,20,.9) 38%,rgba(13,17,20,.25) 70%,rgba(13,17,20,.1) 100%)}
+.sc-in{position:relative;z-index:2;display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:center;padding:56px 5% 56px 5%}
+.sc-txt{position:relative;min-height:420px}
+.sc-txt .pane{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.sc-txt .pane.on{opacity:1;transform:none;pointer-events:auto;position:relative}
+.sc-txt h3{color:#fff;font-size:clamp(26px,2.6vw,36px);margin-bottom:14px}
+.sc-txt p{color:rgba(255,255,255,.78);font-size:17px;max-width:44ch}
+.sc-txt ul{margin-top:26px;display:grid;gap:18px}
+.sc-txt li{display:grid;gap:3px;padding-left:18px;border-left:2px solid rgba(47,214,123,.5)}
+.sc-txt li b{color:#fff;font-size:16px}.sc-txt li span{color:rgba(255,255,255,.7);font-size:14.5px;line-height:1.45}
+.sc-shot{position:relative;min-height:420px}
+.sc-shot .pane{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateX(40px) scale(.98);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.sc-shot .pane.on{opacity:1;transform:none;pointer-events:auto}
+.sc-shot .win,.sc-shot .phone{width:100%;box-shadow:0 40px 90px rgba(0,0,0,.45)}
+.sc-shot .phone{max-width:360px}
+.win.static li,.win.static .kp div{opacity:1;transform:none;transition:none}
+.win .bars{display:grid;gap:10px;padding:8px 18px 18px}
+.win .bars div{display:grid;grid-template-columns:90px 1fr 44px;gap:10px;align-items:center;font:500 12px var(--sans);color:var(--muted)}
+.win .bars i{height:8px;border-radius:4px;background:var(--soft2);position:relative;overflow:hidden}
+.win .bars i:after{content:"";position:absolute;inset:0;width:var(--w);background:var(--green);border-radius:4px}
+.win.kanban .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 18px}
+.win.kanban h4{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.win.kanban .kc{background:var(--soft);border-radius:10px;padding:10px 12px;margin-bottom:8px;position:relative}
+.win.kanban .kc b{display:block;font-size:13px;color:var(--ink)}.win.kanban .kc span{font-size:12px;color:var(--muted)}
+.win.kanban .kc em{position:absolute;right:10px;top:10px;font-size:10px;font-style:normal;padding:2px 7px;border-radius:999px}
+.win.kanban .kc em.bad{background:var(--red-soft);color:var(--red)}.win.kanban .kc em.ok{background:var(--green-soft);color:var(--green)}
+@media(max-width:900px){.sc-in{grid-template-columns:1fr;gap:28px;padding:36px 6%}.sc-txt{min-height:0}.sc-txt .pane{position:absolute}.sc-txt .pane.on{position:relative}.sc-shot{min-height:0}.sc-shot .pane{position:absolute}.sc-shot .pane.on{position:relative}.win.kanban .cols{grid-template-columns:1fr}}
+@media(max-width:700px){.showcase{margin:0;border-radius:0}.showcase .bgimg{background-position:center bottom}.showcase .bgimg:after{background:linear-gradient(180deg,rgba(13,17,20,.98) 0%,rgba(13,17,20,.92) 55%,rgba(13,17,20,.5) 100%)}.tabs{margin:0 var(--gut) 14px;max-width:none;justify-content:flex-start}.tabs button{padding:10px 16px;font-size:15px}.sc-txt h3{font-size:26px}.sc-txt ul{gap:14px}.win .kp{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -382,65 +419,50 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}footer .logo .b{color:va
   </div>
 </section>
 
-<!-- COMO FUNCIONA -->
+<!-- COMO FUNCIONA · vitrine com abas (Magnific) -->
 <section class="feat" id="como">
   <div class="shell">
     <div class="head rv"><h2>Um lead, do primeiro contato até a próxima ação.</h2><p class="lead">O que antes morria no fim de semana chega pronto para o vendedor.</p></div>
-    <div class="grid">
-      <div class="f rv">
-        <div class="shot">
-          <div class="phone">
-            <div class="ph"><img src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><small>sábado · 09:12</small></div><span class="wa">whatsapp</span></div>
-            <div class="pb">
-              <div class="msg">Oi, vi o lançamento de vocês no Instagram. Tem apartamento de dois quartos que aceita FGTS?<time>09:12</time></div>
-              <div class="msg k">Oi, Marcos. Temos opções de dois quartos que permitem o uso do FGTS. Posso fazer algumas perguntas para encontrar a condição mais adequada?<time>09:12</time></div>
-            </div>
-          </div>
+  </div>
+  <div class="tabs rv" id="tabs" role="tablist">
+    <button class="on" data-t="0">Agora</button>
+    <button data-t="1">Fila <i>guardião</i></button>
+    <button data-t="2">Conversas</button>
+    <button data-t="3">Pipeline</button>
+    <button data-t="4">Resultado <i>novo</i></button>
+  </div>
+  <div class="showcase rv" id="showcase">
+    <div class="bgimg"></div>
+    <div class="sc-in">
+      <div class="sc-txt" id="scTxt">
+        <div class="pane on" data-p="0">
+          <h3>O dia inteiro numa tela só.</h3>
+          <p>Leads do dia, primeira resposta, o que a Kompila resolveu sozinha e o que está esperando gente. Onde cada lead está, em bolinhas.</p>
+          <ul><li><b>Diário do que a IA fez</b><span>Follow-up do dia 3, template antes da janela fechar, base reaberta. O que ninguém faria, feito.</span></li><li><b>Parados há 3+ dias</b><span>Aparecem antes de virar perda. Com quem, há quanto tempo, e a sugestão.</span></li><li><b>Tempo real</b><span>A tela muda quando o lead responde. Sem F5.</span></li></ul>
         </div>
-        <h3>Atende em segundos, no sábado também</h3>
-        <p>A Kompila responde na hora, com as informações e regras aprovadas pela sua empresa. Nada de "em breve um consultor entrará em contato".</p>
+        <div class="pane" data-p="1">
+          <h3>Tudo que espera uma pessoa, com prazo.</h3><p>Cada card diz por que parou, há quanto tempo, e o que a Kompila sugere. Três toques: aprovar, decidir, devolver.</p>
+          <ul><li><b>Guardião</b><span>Passou do prazo, avisa no celular. Em 2× o prazo, transfere pro próximo online. Em 24 h, volta pra fila com o relógio zerado.</span></li><li><b>Lead nunca morre por falta de gente</b><span>Perder exige motivo, e o motivo marca a data de volta: 30, 60 ou 90 dias.</span></li><li><b>Rodízio por disponibilidade</b><span>Quem está online recebe. Quem saiu não segura lead.</span></li></ul>
+        </div>
+        <div class="pane" data-p="2">
+          <h3>O WhatsApp dentro do CRM.</h3><p>Quem conduz aparece no topo: a Kompila ou a pessoa. Assumir e devolver com um toque. A fase anda sozinha, com "corrigir" se a IA errou.</p>
+          <ul><li><b>Motor de verdade, não chute</b><span>Cotação e financiamento saem por código, com entrada e saída visíveis na conversa. O número bate com a tabela.</span></li><li><b>Caminho do lead</b><span>Passo a passo, com o tempo entre cada passo.</span></li><li><b>O que a IA vai fazer</b><span>Antes de fazer. Sozinha, pedindo aprovação, ou nunca: regra do gerente.</span></li></ul>
+        </div>
+        <div class="pane" data-p="3">
+          <h3>Kanban com as fases do seu cliente.</h3><p>Arrasta pra mover. Cada card diz "calado há X · na fase há Y". As fases vêm do addon do cliente, não de um padrão genérico.</p>
+          <ul><li><b>Fase movida pela IA</b><span>Visita marcada, proposta enviada, aceite: a IA move e registra quem moveu.</span></li><li><b>Do anúncio até a venda</b><span>O clique do anúncio fica guardado no lead: campanha › anúncio › lead › fechado.</span></li><li><b>Multi-cliente</b><span>Cada empresa no seu espaço, isolada no banco desde o dia 1.</span></li></ul>
+        </div>
+        <div class="pane" data-p="4">
+          <h3>Fechado × meta, e a conta que o dono faz.</h3><p>Meta por empresa e por pessoa, previsão = fechado + pipeline ponderado, ritmo do mês, origem × conversão, perdas por motivo.</p>
+          <ul><li><b>Custo IA × pessoas</b><span>Quanto custou atender com a Kompila e quanto custaria com gente. Na tela.</span></li><li><b>Relatório em três perguntas</b><span>Sem formulário: escolhe em três toques e o relatório abre com a frase que importa. PDF ou planilha.</span></li><li><b>Conversão de volta pro anúncio</b><span>Lead qualificado e venda voltam pra Meta e Google como evento.</span></li></ul>
+        </div>
       </div>
-      <div class="f rv">
-        <div class="shot">
-          <div class="phone">
-            <div class="ph"><img src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><small>sábado · 09:13</small></div><span class="wa">whatsapp</span></div>
-            <div class="pb">
-              <div class="msg">Renda de 6 mil, queria mudar até dezembro. Zona Leste.<time>09:13</time></div>
-              <div class="msg k">Com essa renda você entra na faixa do programa e pode usar o FGTS na entrada. Prefere visitar o decorado sábado ou domingo?<time>09:13</time></div>
-              <div class="msg">Sábado de manhã.<time>09:14</time></div>
-            </div>
-          </div>
-        </div>
-        <h3>Qualifica e faz a conta</h3>
-        <p>Descobre renda, região, prazo e o que a pessoa procura. Consulta o catálogo e as regras da empresa, sem inventar preço nem condição.</p>
-      </div>
-      <div class="f rv">
-        <div class="shot sun">
-          <div class="phone">
-            <div class="ph"><img src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><small>sábado · 09:14</small></div><span class="wa">whatsapp</span></div>
-            <div class="pb">
-              <div class="msg brief"><b>Marcos Oliveira</b><br>Busca: dois quartos · Zona Leste<br>Renda: R$ 6.000 · FGTS: disponível<br>Prazo: até dezembro<br>Próxima ação: <b>confirmar visita sábado</b></div>
-              <div class="msg v">Oi, Marcos. Sou a Renata. Posso te atender sábado pela manhã. Vou enviar a localização e deixar sua visita confirmada.<time>09:21</time></div>
-            </div>
-          </div>
-        </div>
-        <h3>Entrega o lead pronto para o vendedor</h3>
-        <p>O vendedor recebe o briefing no celular e entra só para fechar. Se não assumir em 5 minutos, o lead volta para a fila e o próximo disponível é acionado.</p>
-      </div>
-      <div class="f rv">
-        <div class="shot">
-          <div class="win">
-            <div class="bar"><span class="lg"><span class="b">[</span> kompila <span class="b">]</span></span><span class="tab">Agora</span><span class="tab on">Equipe</span><span class="dt">seg · 08:00</span></div>
-            <div class="sub">Tempo até assumir o lead</div>
-            <ul>
-              <li><i>RE</i><div><b>Renata</b><span>6 leads · 2 visitas</span></div><em class="ok">no prazo</em><time class="ok">3 min</time></li>
-              <li><i>DI</i><div><b>Diego</b><span>5 leads · 1 visita</span></div><em class="ok">no prazo</em><time class="ok">4 min</time></li>
-              <li><i>CA</i><div><b>Carlos</b><span>3 leads · 1 redistribuído</span></div><em class="bad">fora do prazo</em><time class="bad">19 min</time></li>
-            </ul>
-          </div>
-        </div>
-        <h3>O gerente vê tudo às 8h da manhã</h3>
-        <p>Quem respondeu rápido, quem enrolou, qual lead ficou em risco e o que a Kompila atendeu sozinha. Sem procurar em dezenas de relatórios.</p>
+      <div class="sc-shot" id="scShot">
+        <div class="pane on" data-p="0"><div class="win live static"><div class="bar"><span class="lg"><span class="b">[</span> kompila <span class="b">]</span></span><span class="tab on">Agora</span><span class="tab">Fila</span><span class="tab">Equipe</span><span class="dt">seg · 08:00</span></div><div class="kp"><div><small>Leads hoje</small><b>14</b></div><div><small>1ª resposta</small><b class="g">8 s</b></div><div><small>Resolvido sem gente</small><b class="g">11</b></div><div><small>Precisa de gente</small><b class="r">3</b></div></div><div class="sub">Esperando uma pessoa</div><ul><li><img src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><span>Apto 2 quartos · visita sábado 10h</span></div><em class="ok">confirmado</em><time class="ok">3 min</time></li><li><img src="img/lead-juliana.webp" alt=""><div><b>Juliana Prado</b><span>Vestido 42 · retirar na loja</span></div><em class="warn">aguardando Diego</em><time class="warn">4 min</time></li><li><img src="img/lead-ricardo.webp" alt=""><div><b>Ricardo Nunes</b><span>Painel LED 6×3 m · fachada</span></div><em class="bad">Carlos não respondeu</em><time class="bad">19 min</time></li><li><i>AS</i><div><b>Ana Souza</b><span>Apto 3 quartos · FGTS</span></div><em class="ok ia">IA conduzindo</em><time class="ok">0 s</time></li></ul></div></div>
+        <div class="pane" data-p="1"><div class="win live static"><div class="bar"><span class="lg"><span class="b">[</span> kompila <span class="b">]</span></span><span class="tab">Agora</span><span class="tab on">Fila</span><span class="dt">seg · 08:04</span></div><div class="sub">Precisa de gente · 3</div><ul><li><img src="img/lead-ricardo.webp" alt=""><div><b>Ricardo Nunes</b><span>Carlos passou de 5 min · sugestão: transferir pra Renata</span></div><em class="bad">2× o prazo</em><time class="bad">19 min</time></li><li><img src="img/lead-juliana.webp" alt=""><div><b>Juliana Prado</b><span>Diego precisa confirmar o Pix · sugestão: aprovar reserva</span></div><em class="warn">aprovar</em><time class="warn">4 min</time></li><li><i>PL</i><div><b>Paulo Lima</b><span>Desconto acima de 15% · sugestão: decidir</span></div><em class="warn">decidir</em><time class="warn">2 min</time></li></ul><div class="sub">Esperando o lead, não você · 6</div><ul><li><i>AS</i><div><b>Ana Souza</b><span>Follow-up dia 3 agendado pra amanhã 09:00</span></div><em class="ok">IA cuida</em><time class="ok">—</time></li><li><i>CF</i><div><b>Carla Ferreira</b><span>Template de utilidade antes da janela fechar · 22:40</span></div><em class="ok">IA cuida</em><time class="ok">—</time></li></ul></div></div>
+        <div class="pane" data-p="2"><div class="phone static"><div class="ph"><img src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><small>conduzindo: <b style="color:var(--green);display:inline">Kompila</b> · assumir</small></div><span class="wa">whatsapp</span></div><div class="pb"><div class="msg on">Renda de 6 mil, queria mudar até dezembro. Zona Leste.<time>09:13</time></div><div class="msg brief on"><b>motor · simular_financiamento</b><br>entrada: renda 6.000 · imóvel 270.000 · FGTS sim<br>saída: <b>faixa 2 · parcela R$ 1.890 · subsídio R$ 12.400</b></div><div class="msg k on">Com essa renda você entra na faixa 2 do programa: parcela a partir de R$ 1.890 e subsídio de R$ 12.400, usando o FGTS na entrada. Prefere visitar o decorado sábado ou domingo?<time>09:13</time></div><div class="msg on">Sábado de manhã.<time>09:14</time></div></div></div></div>
+        <div class="pane" data-p="3"><div class="win live static kanban"><div class="bar"><span class="lg"><span class="b">[</span> kompila <span class="b">]</span></span><span class="tab on">Pipeline</span><span class="dt">P1LED · 14 leads</span></div><div class="cols"><div><h4>Cotado <span>4</span></h4><div class="kc"><b>Marcos Oliveira</b><span>calado há 2 h · na fase há 1 d</span></div><div class="kc"><b>Paulo Lima</b><span>calado há 6 d · na fase há 8 d</span><em class="bad">parado</em></div></div><div><h4>Visita <span>1</span></h4><div class="kc"><b>Ana Souza</b><span>sábado 10h · movido pela IA</span><em class="ok">corrigir</em></div></div><div><h4>Proposta <span>3</span></h4><div class="kc"><b>Ricardo Nunes</b><span>R$ 42.000 · enviada ontem</span></div><div class="kc"><b>Carla Ferreira</b><span>R$ 18.500 · aceite pendente</span></div></div></div></div></div>
+        <div class="pane" data-p="4"><div class="win live static"><div class="bar"><span class="lg"><span class="b">[</span> kompila <span class="b">]</span></span><span class="tab on">Resultado</span><span class="dt">setembro</span></div><div class="kp"><div><small>Fechado × meta</small><b>R$ 128 mil <span style="font-size:13px;color:var(--muted)">/ 180</span></b></div><div><small>Previsão</small><b class="g">R$ 171 mil</b></div><div><small>Custo IA</small><b>R$ 412</b></div><div><small>Custo pessoas</small><b class="r">R$ 9.800</b></div></div><div class="sub">Origem × conversão</div><div class="bars"><div><span>Meta Ads</span><i style="--w:72%"></i><span>3,1%</span></div><div><span>Google</span><i style="--w:55%"></i><span>2,4%</span></div><div><span>Site</span><i style="--w:38%"></i><span>1,6%</span></div><div><span>Base antiga</span><i style="--w:88%"></i><span>3,8%</span></div></div></div></div>
       </div>
     </div>
   </div>
@@ -597,6 +619,13 @@ function play(ph){var body=ph.querySelector('.pb'),msgs=[].slice.call(body.query
   setTimeout(function(){ty.remove();m.classList.add('on')},t);t+=500})}
 function count(el){var to=parseFloat(el.dataset.count),suf=el.dataset.suf||'',dec=(el.dataset.count.split('.')[1]||'').length,t0=performance.now(),d=1300;(function f(now){var p=Math.min(1,(now-t0)/d);p=1-Math.pow(1-p,3);var v=to*p;el.textContent=(dec?v.toFixed(dec):Math.round(v).toLocaleString('pt-BR'))+suf;if(p<1)requestAnimationFrame(f)})(t0)}
 })();
+</script>
+<script>
+/* vitrine com abas: troca com fade, gira sozinha até o toque */
+(function(){var tabs=[].slice.call(document.querySelectorAll('#tabs button')),tp=[].slice.call(document.querySelectorAll('#scTxt .pane')),sp=[].slice.call(document.querySelectorAll('#scShot .pane')),cur=0,timer=null,touched=false;
+function go(n){cur=n;tabs.forEach(function(b,i){b.classList.toggle('on',i===n)});tp.forEach(function(p,i){p.classList.toggle('on',i===n)});sp.forEach(function(p,i){p.classList.toggle('on',i===n)});var b=tabs[n];if(b&&b.scrollIntoView)b.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'})}
+tabs.forEach(function(b,i){b.addEventListener('click',function(){touched=true;clearInterval(timer);go(i)})});
+var sc=document.getElementById('showcase');new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!timer&&!touched){timer=setInterval(function(){go((cur+1)%tabs.length)},6000)}else if(!e.isIntersecting&&timer){clearInterval(timer);timer=null}})},{threshold:.3}).observe(sc)})();
 </script>
 </body>
 </html>
