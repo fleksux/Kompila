@@ -337,6 +337,34 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
   .kchat:not(.open) header .bub{width:28px;height:28px}
   .kchat.open{left:12px;right:12px;width:auto;max-width:none;border-radius:22px}
 }
+
+/* hero: foto + título digitado (v1) */
+.hero .bgwrap{position:absolute;inset:0;z-index:1;will-change:transform}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:68% 40%;opacity:0;transform:scale(1.14);transition:opacity 1.1s ease,transform 2.2s cubic-bezier(.2,.8,.2,1)}
+.hero.bgin img.bg{opacity:1;transform:scale(1.08)}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,11,14,.85) 0%,rgba(10,11,14,.6) 42%,rgba(10,11,14,.12) 72%),linear-gradient(180deg,rgba(10,11,14,.3),transparent 35%,transparent 60%,rgba(10,11,14,.85))}
+.hero .in{position:relative;z-index:2}
+.hero .glow{display:none}
+.hero .titles{display:grid}
+.hero h1{grid-area:1/1;max-width:13ch;transition:opacity .6s}
+.hero h1.gone{opacity:0;pointer-events:none}
+.hero .h1b{visibility:hidden;transition:font-size .7s cubic-bezier(.2,.8,.2,1),opacity .6s}.hero .h1b.live{visibility:visible}.hero .h1b.small{font-size:calc(var(--t1) * .78)}
+.hero h1 .grad{color:var(--green)}
+.hero h1 .wrd{white-space:nowrap;display:inline}.hero h1 .ch{opacity:0}.hero h1 .ch.on{opacity:1}
+.hero h1 .caret{display:inline-block;width:.06em;height:.9em;background:#2fd67b;vertical-align:-.08em;margin-left:.04em;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.hero .p,.hero .ctas,.hero .micro{opacity:0;transform:translateY(14px);transition:opacity .7s,transform .7s}
+.hero.show .p,.hero.show .ctas,.hero.show .micro{opacity:1;transform:none}
+.hero .lc{position:relative;z-index:2}
+@media(max-width:700px){
+  .hero img.bg{object-position:79% 50%}
+  .hero.bgin img.bg{transform:scale(1.08) translateY(30px)}
+  .hero .in{display:flex;flex-direction:column;justify-content:flex-end;gap:18px}
+  .hero .titles{order:1}.hero .p{order:2;font-size:16px}.hero .ctas{order:3}.hero .micro{order:4}.hero .lc{order:5;margin-top:10px}
+  .hero .p,.hero .ctas,.hero .micro{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+  .hero.enter .p,.hero.enter .ctas,.hero.enter .micro{opacity:1;transform:none}
+  .hero.enter .ctas{transition-delay:.15s}.hero.enter .micro{transition-delay:.3s}
+}
 </style>
 </head>
 <body>
@@ -384,13 +412,19 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
 
 <!-- 01 HERO -->
 <header class="hero" id="topo">
-  <div class="glow"></div>
+  <div class="bgwrap">
+    <img class="bg" src="../img/hero-diretor.webp" alt="Diretor comercial de braços cruzados numa sala de vendas" fetchpriority="high">
+    <div class="veil"></div>
+  </div>
   <div class="in">
     <div>
       <span class="k">kompila · lead recovery</span>
-      <h1>Você não perde venda por falta de lead.<span class="l2">Perde porque ninguém respondeu.</span></h1>
+      <div class="titles">
+        <h1 class="h1a" id="h1a">Você não perde venda por falta de lead.</h1>
+        <h1 class="h1b" id="h1b">Perde porque <span class="grad">ninguém</span> <span class="grad">respondeu.</span></h1>
+      </div>
       <p class="p">A Kompila encontra oportunidades paradas, responde em segundos e garante que cada lead tenha um responsável e uma próxima ação.</p>
-      <div class="ctas"><a class="btn g" href="#calc">Analisar meus leads</a><a class="link" href="#pratica">Ver um lead sendo recuperado</a></div>
+      <div class="ctas" id="ctas"><a class="btn g" href="#calc">Analisar meus leads</a><a class="link" href="#pratica">Ver um lead sendo recuperado</a></div>
       <div class="micro">Funciona com o CRM e o WhatsApp da sua operação.</div>
     </div>
     <div class="lc bad" id="lc">
@@ -662,6 +696,21 @@ footer .logo{font:600 15px var(--mono);color:var(--ink)}
 (function(){var r=10,$=function(id){return document.getElementById(id)};function fmt(n){return n.toLocaleString('pt-BR')}function money(n){return n>=1000?'R$ '+Math.round(n/1000)+' mil':'R$ '+Math.round(n)}function calc(){var L=+$('cL').value||0,P=(+$('cP').value||0)/100,C=(+$('cC').value||0)/100,V=+$('cV').value||0;var parados=L*P,reat=parados*r/100,vendas=reat*C,v1=Math.max(1,Math.floor(vendas)),v2=Math.max(v1,Math.ceil(vendas));if(vendas<1){v1=0;v2=1}$('rL').textContent=fmt(L);$('rP').textContent=fmt(Math.round(parados));$('rR').textContent=fmt(Math.round(reat));$('rV').textContent=v1===v2?v1:v1+' a '+v2;$('rM').textContent=v1===v2?money(v1*V):money(v1*V)+' a '+money(v2*V);$('rSl').textContent={5:'no cenário conservador',10:'no cenário provável',20:'no cenário potencial'}[r]}document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});$('cBtn').addEventListener('click',calc);['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});calc()})();
 /* chat roteirizado */
 (function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Caso Zero.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
+</script>
+<script>
+(function(){
+var reduced=matchMedia('(prefers-reduced-motion:reduce)').matches,mobileHero=matchMedia('(max-width:700px)').matches;
+var hero=document.querySelector('.hero'),h1a=document.getElementById('h1a'),h1b=document.getElementById('h1b');
+function wrapChars(el){var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),ns=[],n;while(n=walker.nextNode())if(n.nodeValue.trim()||n.nodeValue===' ')ns.push(n);var out=[];ns.forEach(function(tn){var f=document.createDocumentFragment();tn.nodeValue.split(/(\s+)/).forEach(function(part){if(!part)return;if(/^\s+$/.test(part)){var sp=document.createElement('span');sp.className='ch';sp.textContent=' ';f.appendChild(sp);out.push(sp);return}var g=!!tn.parentNode.closest('.grad');var w=document.createElement('span');w.className='wrd';part.split('').forEach(function(c){var s=document.createElement('span');s.className='ch'+(g?' grad':'');s.textContent=c;w.appendChild(s);out.push(s)});f.appendChild(w)});tn.parentNode.replaceChild(f,tn)});return out}
+var ca=wrapChars(h1a),cb=wrapChars(h1b);
+function typeChars(chars,speed,done){var caret=document.createElement('span');caret.className='caret';var i=0;(function step(){if(i<chars.length){var c=chars[i];c.classList.add('on');c.after(caret);i++;setTimeout(step,c.textContent===' '?speed*1.6:speed+Math.random()*30)}else{setTimeout(function(){caret.remove();if(done)done()},900)}})()}
+requestAnimationFrame(function(){requestAnimationFrame(function(){hero.classList.add('bgin');if(mobileHero)hero.classList.add('enter')})});
+if(mobileHero)hero.classList.add('show');
+if(reduced){ca.concat(cb).forEach(function(c){c.classList.add('on')});h1a.classList.add('gone');h1b.classList.add('live');hero.classList.add('show')}
+else setTimeout(function(){typeChars(ca,52,function(){h1a.classList.add('gone');setTimeout(function(){h1b.classList.add('live');typeChars(cb,50,function(){if(!mobileHero){h1b.classList.add('small');setTimeout(function(){hero.classList.add('show')},450)}})},650)})},700);
+/* parallax da foto */
+var wrap=hero.querySelector('.bgwrap'),t=false;function px(){t=false;var y=scrollY||0;if(y>hero.offsetHeight)return;wrap.style.transform='translate3d(0,'+(y*.28)+'px,0)'}addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(px)}},{passive:true});px();
+})();
 </script>
 </body>
 </html>
