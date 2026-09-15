@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kompila mensageria · o WhatsApp da empresa por API</title>
+<meta name="description" content="Vários números num painel, API e webhook, plugin WordPress, n8n. O WhatsApp deixa de ser um celular na gaveta.">
+<link rel="canonical" href="https://kompila.com.br/mensageria/">
+<link rel="icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/produto.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></symbol>
+  <symbol id="i-calc" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 6h8"/><path d="M16 14v4"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-cash" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12.6 2.9 21 11.3a2 2 0 0 1 0 2.8l-6.9 6.9a2 2 0 0 1-2.8 0L2.9 12.6A2 2 0 0 1 2.3 11V4a2 2 0 0 1 2-2h7a2 2 0 0 1 1.3.6z"/><circle cx="7.5" cy="7.5" r=".5"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 8.5 4.5L12 11 3.5 6.5z"/><path d="m3.5 12 8.5 4.5 8.5-4.5"/><path d="m3.5 17.5 8.5 4.5 8.5-4.5"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<nav id="nav">
+  <div class="shell">
+    <div class="pill">
+      <a class="logo" href="../"><span><span class="b">[</span> kompila <span class="b">]</span></span></a>
+      <div class="links"><div class="dd"><button type="button" class="ddb" id="ddb" aria-expanded="false">Produtos <svg viewBox="0 0 24 24" class="chev"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="ddp" id="ddp"><a href="../loja/" target="_blank" rel="noopener"><b><em>kompila</em> loja</b><span>Você conversa, a loja se monta.</span><i class="">em construção</i></a><a href="../crm/" target="_blank" rel="noopener"><b><em>kompila</em> lead recovery</b><span>A IA atende, qualifica e marca. O vendedor só fecha.</span><i class="on">disponível</i></a><a href="../online/" target="_blank" rel="noopener"><b><em>kompila</em> online</b><span>Sua empresa respondendo dia e noite.</span><i class="">em construção</i></a><a href="../mensageria/" target="_blank" rel="noopener"><b><em>kompila</em> mensageria</b><span>O WhatsApp da empresa por API.</span><i class="">em construção</i></a><a href="../trafego/" target="_blank" rel="noopener"><b><em>kompila</em> tráfego</b><span>Anúncio que sabe qual lead virou venda.</span><i class="on">disponível</i></a><a href="../design/" target="_blank" rel="noopener"><b><em>kompila</em> design</b><span>Marca, site e criativo feitos pra vender.</span><i class="on">disponível</i></a><a href="../blog/" target="_blank" rel="noopener"><b><em>kompila</em> blog</b><span>O que o mercado está medindo, com fonte.</span><i class="">em construção</i></a><a class="all" href="../#produtos">Ver as três frentes →</a></div></div><a href="../crm/" target="_blank" rel="noopener">Lead Recovery</a><a href="../#cases">Cases</a><a href="../#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a></div>
+      <div class="nctas"><a class="btn ghost wa" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20conhecer%20os%20produtos." target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg>Falar no WhatsApp</a><a class="btn green" href="../crm/#calc">Medir a minha operação</a></div>
+      <button type="button" class="menu" id="menuBtn" aria-label="menu"><svg class="ico io"><use href="#i-menu"/></svg><svg class="ico ic"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="panel" id="menuPanel"><a href="../crm/" target="_blank" rel="noopener"><b>Lead Recovery</b></a><small class="ph">Produtos</small><a href="../loja/" target="_blank" rel="noopener" class="pi"><em>kompila</em> loja <i class="">em construção</i></a><a href="../crm/" target="_blank" rel="noopener" class="pi"><em>kompila</em> lead recovery <i class="on">disponível</i></a><a href="../online/" target="_blank" rel="noopener" class="pi"><em>kompila</em> online <i class="">em construção</i></a><a href="../mensageria/" target="_blank" rel="noopener" class="pi"><em>kompila</em> mensageria <i class="">em construção</i></a><a href="../trafego/" target="_blank" rel="noopener" class="pi"><em>kompila</em> tráfego <i class="on">disponível</i></a><a href="../design/" target="_blank" rel="noopener" class="pi"><em>kompila</em> design <i class="on">disponível</i></a><a href="../blog/" target="_blank" rel="noopener" class="pi"><em>kompila</em> blog <i class="">em construção</i></a><a href="../#cases">Cases</a><a href="../#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a><a class="btn green" href="../crm/#calc">Medir a minha operação</a></div>
+  </div>
+</nav>
+
+<section class="ph" id="topo">
+  <div class="cbg" aria-hidden="true"><img src="../img/home/cap-sistema.webp" alt=""></div>
+  <div class="shell pgrid">
+    <div class="ptext rv"><div class="pk"><span class="pn"><em>kompila</em> mensageria</span><span class="tag">em construção</span></div><h1>O WhatsApp da empresa <em>por API.</em></h1><p class="lead">Vários números num painel, API e webhook, plugin WordPress e n8n. O número é da empresa, o histórico fica na empresa, e a loja, o site e o sistema mandam mensagem sozinhos.</p><div class="ctas"><a class="btn green" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20conhecer%20o%20produto%20mensageria" target="_blank" rel="noopener">Entrar na lista</a><a class="btn ghost" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20conhecer%20o%20produto%20mensageria" target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg>Falar no WhatsApp</a></div></div>
+    <div class="pmedia rv"><div class="bigviz vmsg2"><svg viewBox="0 0 440 200"><g class="pill"><rect x="0" y="10" width="130" height="34" rx="17"/><text x="65" y="32">(11) 9····  loja</text></g><g class="pill" style="--d:.15s"><rect x="0" y="83" width="130" height="34" rx="17"/><text x="65" y="105">(11) 9····  vendas</text></g><g class="pill" style="--d:.3s"><rect x="0" y="156" width="130" height="34" rx="17"/><text x="65" y="178">(21) 9····  campanha</text></g><path class="ln" d="M130 27 C210 27 230 100 300 100"/><path class="ln" d="M130 100 H300"/><path class="ln" d="M130 173 C210 173 230 100 300 100"/><g class="box"><rect x="300" y="62" width="140" height="76" rx="14"/><text x="370" y="96">1 painel</text><text class="s" x="370" y="118">API · webhook · WP · n8n</text></g></svg></div></div>
+  </div>
+</section>
+
+<section class="strip"><div class="shell"><div class="dhead rv"><h2>O que você recebe.</h2><p class="lead">Sem promessa solta. Cada item abaixo é uma tela, uma regra ou uma entrega com data.</p></div></div></section>
+<section class="dark recebe"><div class="shell"><div class="rgrid"><div class="icol rv"><i><svg class="ico"><use href="#i-msg"/></svg></i><b>Vários números, um painel</b><p>Cada loja, cada vendedor, cada campanha com o seu número. Tudo numa tela só.</p></div><div class="icol rv"><i><svg class="ico"><use href="#i-swap"/></svg></i><b>API e webhook</b><p>Mandar e receber mensagem a partir da sua loja, do seu sistema ou de qualquer automação.</p></div><div class="icol rv"><i><svg class="ico"><use href="#i-layers"/></svg></i><b>Plugin WordPress</b><p>Pedido, carrinho abandonado e formulário mandando WhatsApp sem código.</p></div><div class="icol rv"><i><svg class="ico"><use href="#i-route"/></svg></i><b>n8n e automações</b><p>Fluxos prontos pra ligar a mensageria no que você já usa.</p></div><div class="icol rv"><i><svg class="ico"><use href="#i-db"/></svg></i><b>Histórico na empresa</b><p>A conversa fica registrada e etiquetada, não no celular de alguém.</p></div><div class="icol rv"><i><svg class="ico"><use href="#i-bolt"/></svg></i><b>Base do atendimento</b><p>É por aqui que o kompila online e o Lead Recovery falam com o cliente.</p></div></div></div></section>
+
+<section class="como"><div class="shell"><div class="dhead rv"><h2>Como funciona.</h2><p class="lead">Quatro passos. O primeiro é seu; os outros são nossos.</p></div><ol class="how rv"><li><i>01</i><div><b>Conecta o número</b><span>O número da empresa entra no painel.</span></div></li><li><i>02</i><div><b>Liga no que você usa</b><span>Loja, site, CRM ou automação, pela API, pelo plugin ou pelo n8n.</span></div></li><li><i>03</i><div><b>Manda e recebe</b><span>Confirmação de pedido, lembrete, resposta. Pela empresa, não pelo celular.</span></div></li><li><i>04</i><div><b>Acompanha</b><span>Histórico, etiquetas e quem respondeu o quê.</span></div></li></ol></div></section>
+
+
+
+
+
+
+
+<section class="faq" id="faq"><div class="shell"><div class="dhead rv"><h2>Perguntas.</h2><p class="lead">Respostas curtas. O que não estiver aqui, a gente responde no WhatsApp.</p></div><div class="rv faqlist"><details open><summary>Preciso trocar o meu número?</summary><p>Não. O número atual da empresa entra no painel.</p></details><details><summary>Funciona com a minha loja?</summary><p>Sim. Plugin WordPress pra loja em WooCommerce, API e webhook pro resto.</p></details><details><summary>Quando fica disponível?</summary><p>Está em construção, junto com o kompila online. Entre na lista.</p></details></div></div></section>
+
+<section class="final" id="fim"><div class="shell"><h2 class="rv">Entre na lista e seja avisado primeiro.</h2><p class="lead rv">Sem spam. Um WhatsApp quando o produto abrir, e a sua vez na fila.</p><div class="ctas rv"><a class="btn green" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20conhecer%20o%20produto%20mensageria" target="_blank" rel="noopener">Entrar na lista</a><a class="btn ghost" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20conhecer%20o%20produto%20mensageria" target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg>Falar no WhatsApp</a></div></div></section>
+
+<div class="shell"><footer><span class="logo"><span class="b">[</span> kompila <span class="b">]</span></span><span>loja · lead recovery · online · mensageria · tráfego · design · blog</span><span>@kompila.ai</span></footer></div>
+
+<script>
+(function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});document.querySelectorAll('.rv').forEach(function(el){io.observe(el)})})();
+(function(){var n=document.getElementById('nav'),b=document.getElementById('menuBtn');b.addEventListener('click',function(){n.classList.toggle('open')});document.querySelectorAll('#menuPanel a').forEach(function(a){a.addEventListener('click',function(){n.classList.remove('open')})})})();
+(function(){var n=document.getElementById('nav'),last=0;addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();
+(function(){var d=document.querySelector('nav .dd'),b=document.getElementById('ddb');if(!d)return;var t;function open(){clearTimeout(t);d.classList.add('open')}function close(){t=setTimeout(function(){d.classList.remove('open')},160)}d.addEventListener('mouseenter',open);d.addEventListener('mouseleave',close);b.addEventListener('click',function(){d.classList.contains('open')?(clearTimeout(t),d.classList.remove('open')):open()});document.addEventListener('click',function(e){if(!d.contains(e.target)){clearTimeout(t);d.classList.remove('open')}})})();
+(function(){var h=document.documentElement;if(/[?&]still/.test(location.search))h.classList.add('still');if(/[?&]guias/.test(location.search))h.classList.add('guias')})();
+</script>
+</body>
+</html>
