@@ -42,14 +42,19 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .ctas{display:flex;gap:10px;flex-wrap:wrap}
 .hero .btn{padding:16px 24px;border-radius:999px;font-weight:600;font-size:15px}
 .hero .btn.g{background:var(--green);color:#0a0b0e}.hero .btn.o{border:1px solid rgba(255,255,255,.2);color:#fff}
-.hero .meta{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;padding-top:6px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:16px}
+.hero .meta{display:flex;justify-content:flex-start;align-items:flex-end;gap:14px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:16px}
 .hero .who{font:500 12px var(--mono);color:var(--cmuted);letter-spacing:.04em}
-.hero .who{max-width:52ch}.hero .who b{display:block;color:#fff;font:700 17px var(--sans);letter-spacing:-.01em;margin-bottom:3px}
-.hero .tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.hero .who{position:absolute;z-index:3;left:71.5%;top:calc(36% + min(18svh,150px) + 26px);transform:translateX(-50%);width:min(30vw,440px);text-align:center;font:500 12.5px var(--mono);color:var(--cmuted);letter-spacing:.02em;line-height:1.45}.hero .who b{display:block;color:#fff;font:700 clamp(17px,1.5vw,22px) var(--sans);letter-spacing:-.02em;margin-bottom:6px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+.hero .tags{display:flex;gap:6px;flex-wrap:wrap}
 .hero .tags span{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
 .hero .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
-@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:73%;top:24svh;transform:translate(-50%,-50%);width:min(60vw,260px);height:24svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .meta{flex-direction:column;align-items:flex-start}.hero .tags{justify-content:flex-start}}
+@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:73%;top:24svh;transform:translate(-50%,-50%);width:min(60vw,260px);height:24svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .who{left:50%;top:calc(24svh + 12svh + 16px);width:80vw;font-size:12px}}
 @media(prefers-reduced-motion:reduce){.hero .bg .slide,.hero .bg img.cor{transition:none;animation:none;opacity:1}}
+
+/* cada cena com o rosto no mesmo ponto e tamanho */
+.hero .bg .slide:nth-child(1) img{object-position:50% 20%;transform:scale(1.02);transform-origin:71.5% 36%}
+.hero .bg .slide:nth-child(2) img{object-position:50% 14%;transform:scale(1.04);transform-origin:71.5% 36%}
+.hero .bg .slide:nth-child(3) img{object-position:50% 24%;transform:scale(.96);transform-origin:71.5% 36%}
 </style>
 </head>
 <body>
@@ -59,13 +64,14 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
   <div class="bg" aria-hidden="true"><div class="slide on"><img class="bw" src="img/hero-moda-bw.webp" alt=""><img class="cor" src="img/hero-moda.webp" alt=""></div><div class="slide"><img class="bw" src="img/hero-led-bw.webp" alt=""><img class="cor" src="img/hero-led.webp" alt=""></div><div class="slide"><img class="bw" src="img/hero-contab-bw.webp" alt=""><img class="cor" src="img/hero-contab.webp" alt=""></div></div>
   <div class="fade" aria-hidden="true"></div>
   <div class="target" aria-hidden="true"><svg class="br l" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M60 2 H6 V98 H60" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg><svg class="br r" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M0 2 H54 V98 H0" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg></div>
+  <div class="who" id="who"><b>Anúncio virando lead. Lead virando venda.</b>quem chama no anúncio recebe resposta em segundos e sai com hora marcada</div>
   <div class="shell hgrid">
     <div class="copy">
       <h1>A sua venda andando <em>sozinha.</em></h1>
       <p class="lead">Do anúncio ao contrato, a Kompila faz o trabalho repetitivo: <b>atende, qualifica, marca, cobra e registra</b>. A sua equipe só vende.</p>
       <div class="ctas"><a class="btn g" href="#produtos">Ver os produtos</a><a class="btn o" href="#diagnostico">Medir a minha operação</a></div>
     </div>
-    <div class="meta"><div class="who" id="who"><b>Anúncio virando lead. Lead virando venda.</b>quem chama no anúncio recebe resposta em segundos e sai com hora marcada</div><div class="tags" id="tags"><span class="on">anúncio → venda</span><span>orçamento → contrato</span><span>loja → faturamento</span></div></div>
+    <div class="meta"><div class="tags" id="tags"><span class="on">anúncio → venda</span><span>orçamento → contrato</span><span>loja → faturamento</span></div></div>
   </div>
 </section>
 
