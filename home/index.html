@@ -44,11 +44,10 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .btn.g{background:var(--green);color:#0a0b0e}.hero .btn.o{border:1px solid rgba(255,255,255,.2);color:#fff}
 .hero .meta{display:flex;justify-content:flex-start;align-items:flex-end;gap:14px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:16px}
 .hero .who{font:500 12px var(--mono);color:var(--cmuted);letter-spacing:.04em}
-.hero .who{position:absolute;z-index:3;left:71.5%;top:calc(34% + min(18svh,150px) + 18px);transform:translateX(-50%);width:min(32vw,460px);text-align:center;font:500 12.5px var(--mono);color:var(--cmuted);letter-spacing:.02em;line-height:1.45;padding:14px 18px;border-radius:14px;background:rgba(10,11,14,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08)}.hero .who b{display:block;color:#fff;font:700 clamp(17px,1.5vw,22px) var(--sans);letter-spacing:-.02em;margin-bottom:6px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
-.hero .tags{display:flex;gap:6px;flex-wrap:wrap}
-.hero .tags span{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
+.hero .tags{position:absolute;z-index:3;left:71.5%;top:calc(34% + min(18svh,150px) + 18px);transform:translateX(-50%);display:flex;gap:6px;flex-wrap:nowrap;justify-content:center;white-space:nowrap}
+.hero .who{position:absolute;z-index:3;left:71.5%;top:calc(34% + min(18svh,150px) + 66px);transform:translateX(-50%);width:min(34vw,480px);text-align:center;font:600 clamp(15px,1.3vw,19px) var(--sans);color:#fff;letter-spacing:-.01em;line-height:1.3;padding:12px 18px;border-radius:14px;background:rgba(10,11,14,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08)}.hero .tags span{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
 .hero .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
-@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:73%;top:24svh;transform:translate(-50%,-50%);width:min(60vw,260px);height:24svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .who{left:50%;top:calc(24svh + 12svh + 16px);width:80vw;font-size:12px}.hero .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 20%}}
+@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:73%;top:24svh;transform:translate(-50%,-50%);width:min(60vw,260px);height:24svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .tags{left:50%;top:calc(24svh + 12svh + 12px);flex-wrap:wrap;width:90vw}.hero .who{left:50%;top:calc(24svh + 12svh + 60px);width:86vw;font-size:14px}.hero .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 20%}}
 @media(prefers-reduced-motion:reduce){.hero .bg .slide,.hero .bg img.cor{transition:none;animation:none;opacity:1}}
 
 </style>
@@ -60,7 +59,8 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
   <div class="bg" aria-hidden="true"><div class="slide on" data-fx=".72" data-fy=".24" data-fh=".14"><img class="bw" src="img/hero-moda-bw.webp" alt=""><img class="cor" src="img/hero-moda.webp" alt=""></div><div class="slide" data-fx=".71" data-fy=".17" data-fh=".19"><img class="bw" src="img/hero-led-bw.webp" alt=""><img class="cor" src="img/hero-led.webp" alt=""></div><div class="slide" data-fx=".72" data-fy=".22" data-fh=".18"><img class="bw" src="img/hero-contab-bw.webp" alt=""><img class="cor" src="img/hero-contab.webp" alt=""></div></div>
   <div class="fade" aria-hidden="true"></div>
   <div class="target" aria-hidden="true"><svg class="br l" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M60 2 H6 V98 H60" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg><svg class="br r" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M0 2 H54 V98 H0" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg></div>
-  <div class="who" id="who"><b>Anúncio virando lead. Lead virando venda.</b>quem chama no anúncio recebe resposta em segundos e sai com hora marcada</div>
+  <div class="tags" id="tags"><span class="on">anúncio → venda</span><span>orçamento → contrato</span><span>loja → faturamento</span></div>
+  <div class="who" id="who">“Vendi de madrugada, sem ninguém acordado.”</div>
   <div class="shell hgrid">
     <div class="copy">
       <h1>A sua venda andando <em>sozinha.</em></h1>
@@ -72,9 +72,9 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 </section>
 
 <script>
-(function(){var im=[].slice.call(document.querySelectorAll('.hero .bg .slide')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=[['Anúncio virando lead. Lead virando venda.','quem chama no anúncio recebe resposta em segundos e sai com hora marcada'],['Orçamento virando contrato.','a cotação sai na hora, a proposta é cobrada sozinha e o aceite vira Fechado'],['Produto virando loja. Loja virando faturamento.','a loja se monta conversando, vende de madrugada e ativa quem já comprou']],i=0;
+(function(){var im=[].slice.call(document.querySelectorAll('.hero .bg .slide')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=['“Vendi de madrugada, sem ninguém acordado.”','“A cotação saiu em minutos. Fechei o evento no mesmo dia.”','“Meu time só fala com quem já quer comprar.”'],i=0;
 if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-setInterval(function(){i=(i+1)%im.length;im.forEach(function(x,k){x.classList.toggle('on',k===i)});tg.forEach(function(x,k){x.classList.toggle('on',k===i)});who.innerHTML='<b>'+W[i][0]+'</b>'+W[i][1]},6000)})();
+setInterval(function(){i=(i+1)%im.length;im.forEach(function(x,k){x.classList.toggle('on',k===i)});tg.forEach(function(x,k){x.classList.toggle('on',k===i)});who.textContent=W[i]},6000)})();
 </script>
 
 <script>
