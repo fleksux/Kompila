@@ -934,6 +934,51 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
   .ig .igcap{flex-direction:column;align-items:flex-start;gap:10px;margin-top:16px}
 }
 @media(max-width:700px){.segs button{padding:12px}.segs button b{font-size:13px}.segs button span{display:none}.segs button{grid-template-rows:auto}.ig .igcap p{font-size:15px}}
+
+/* prova: número vermelho, mini infográfico animado no canto, notícias do setor */
+.proof .num{position:relative}
+.proof .num b{color:var(--red)}
+.proof .mini{position:absolute;right:22px;top:22px;width:88px;height:56px}
+.proof .m1{display:flex;align-items:flex-end;gap:4px}
+.proof .m1 i{flex:1;height:100%;background:var(--carbon);border-radius:2px;transform-origin:bottom;animation:barin 1.2s ease both}
+.proof .m1 i:nth-child(2){height:78%}.proof .m1 i:nth-child(3){height:88%}.proof .m1 i:nth-child(4){height:70%}.proof .m1 i:nth-child(5){height:92%}.proof .m1 i:nth-child(6){height:74%}.proof .m1 i:nth-child(7){height:84%}
+.proof .m1 i.d{background:var(--soft2);animation:barfall 4.6s ease-in-out infinite}
+.proof .m1 i.d:nth-child(8){height:80%;animation-delay:.2s}.proof .m1 i.d:nth-child(9){height:66%;animation-delay:.9s}.proof .m1 i.d:nth-child(10){height:76%;animation-delay:1.6s}
+@keyframes barin{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes barfall{0%,15%{transform:scaleY(1);opacity:1;background:var(--carbon)}45%,80%{transform:scaleY(.08);opacity:.6;background:var(--soft2)}100%{transform:scaleY(1);opacity:1;background:var(--carbon)}}
+.proof .m2 svg{width:56px;height:56px;position:absolute;right:0;top:0}
+.proof .m2 .tr{fill:none;stroke:var(--soft2);stroke-width:6}
+.proof .m2 .arc{fill:none;stroke:var(--carbon);stroke-width:6;stroke-linecap:round;stroke-dasharray:163.4;stroke-dashoffset:163.4;transform:rotate(-90deg);transform-origin:50% 50%;animation:arc 5s ease-in-out infinite}
+.proof .m2 .hand{stroke:var(--green);stroke-width:3;stroke-linecap:round;transform-origin:32px 32px;animation:hand 5s linear infinite}
+.proof .m2 em{position:absolute;left:0;top:18px;font:600 10px var(--mono);font-style:normal;color:var(--green);background:var(--green-soft);padding:2px 6px;border-radius:999px}
+@keyframes arc{0%{stroke-dashoffset:163.4}60%,85%{stroke-dashoffset:125.8}100%{stroke-dashoffset:163.4}}
+@keyframes hand{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.proof .m3{display:flex;align-items:center;justify-content:flex-end;gap:5px}
+.proof .m3 i{width:16px;height:16px;border-radius:50%;background:var(--soft2);color:var(--muted);font:700 9px var(--sans);font-style:normal;display:grid;place-items:center;animation:dot 6s ease-in-out infinite}
+.proof .m3 i:nth-child(2){animation-delay:.6s}.proof .m3 i:nth-child(3){animation-delay:1.2s}.proof .m3 i:nth-child(4){animation-delay:1.8s}.proof .m3 i:nth-child(5){animation-delay:2.4s}.proof .m3 i:nth-child(6){animation-delay:3s}
+.proof .m3 i.x{animation-name:dotx}.proof .m3 i.ok{animation-name:dotok}
+@keyframes dot{0%,8%{background:var(--soft2);color:var(--muted)}20%,80%{background:var(--carbon);color:#fff}92%,100%{background:var(--soft2);color:var(--muted)}}
+@keyframes dotx{0%,8%{background:var(--soft2);color:var(--muted)}20%,80%{background:var(--soft2);color:var(--muted);box-shadow:0 0 0 2px var(--line) inset}92%,100%{background:var(--soft2)}}
+@keyframes dotok{0%,8%{background:var(--soft2);color:var(--muted)}20%,80%{background:var(--green);color:#fff;box-shadow:0 0 0 4px var(--green-soft)}92%,100%{background:var(--soft2);color:var(--muted);box-shadow:none}}
+.proof .num b{padding-right:100px}
+.news{background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:24px 28px}
+.news .nh{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}.news h3{margin:0;font-size:16px;color:var(--ink)}.news .nh span{font-size:12.5px;color:var(--muted)}
+.news ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px}
+.news li{border-top:1px solid var(--line)}
+.news a{display:block;padding:12px 0;text-decoration:none;color:inherit}
+.news a b{display:block;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.35}.news a:hover b{color:var(--green)}
+.news a span{display:block;margin-top:4px;font-size:12px;color:var(--muted)}
+@media(max-width:700px){.news ul{grid-template-columns:1fr}.proof .mini{right:16px;top:16px;width:72px;height:46px}.proof .num b{padding-right:80px}.proof .m2 svg{width:46px;height:46px}.proof .m2 em{top:14px}}
+@media(prefers-reduced-motion:reduce){.proof .mini *{animation:none!important}}
+
+.news .ncols{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.news h4{margin:10px 0 4px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--green)}
+.news ul{display:block}
+.news a{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;padding:12px 0}
+.news a img{width:34px;height:34px;border-radius:9px;object-fit:contain;background:#fff;border:1px solid var(--line)}
+.news a i{width:34px;height:34px;border-radius:9px;background:var(--carbon);color:#fff;font:700 12px var(--sans);font-style:normal;display:grid;place-items:center}
+.news a b{font-size:14px}
+@media(max-width:900px){.news .ncols{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1131,11 +1176,15 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <section class="proof" id="prova">
   <div class="shell">
     <div class="grid3">
-      <div class="num rv"><b data-count="761">761</b><span>leads sem nenhum contato em 12 semanas, de 2.614 criados, dentro de um CRM pago.</span><small>Auditoria em portal HubSpot de um cliente parceiro · set 2026</small></div>
-      <div class="num rv"><b data-count="42" data-suf=" h">42 h</b><span>é o tempo médio que uma empresa leva para responder um lead. 23% nunca respondem.</span><small>Harvard Business Review · 2.241 empresas</small></div>
-      <div class="num rv"><b data-count="7" data-suf="%">7%</b><span>das empresas respondem em 5 minutos. 93% dos leads que fecham são alcançados até a 6ª tentativa; a maioria desiste na primeira.</span><small>Drift · Velocify · 3,5 milhões de leads</small></div>
+      <div class="num rv"><div class="mini m1" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="d"></i><i class="d"></i><i class="d"></i></div><b data-count="761">761</b><span>leads sem nenhum contato em 12 semanas, de 2.614 criados, dentro de um CRM pago.</span><small>Auditoria em portal HubSpot de um cliente parceiro · set 2026</small></div>
+      <div class="num rv"><div class="mini m2" aria-hidden="true"><svg viewBox="0 0 64 64"><circle class="tr" cx="32" cy="32" r="26"/><circle class="arc" cx="32" cy="32" r="26"/><line class="hand" x1="32" y1="32" x2="32" y2="12"/></svg><em>5 min</em></div><b data-count="42" data-suf=" h">42 h</b><span>é o tempo médio que uma empresa leva para responder um lead. 23% nunca respondem.</span><small>Harvard Business Review · 2.241 empresas</small></div>
+      <div class="num rv"><div class="mini m3" aria-hidden="true"><i class="x">1</i><i>2</i><i>3</i><i>4</i><i>5</i><i class="ok">6</i></div><b data-count="7" data-suf="%">7%</b><span>das empresas respondem em 5 minutos. 93% dos leads que fecham são alcançados até a 6ª tentativa; a maioria desiste na primeira.</span><small>Drift · Velocify · 3,5 milhões de leads</small></div>
     </div>
-    <div class="quote rv"><p>"O maior volume de conversões vem da base esquecida, dos leads antigos."</p><small>VP Comercial da MRV · Imobi Report</small></div>
+    <div class="news rv"><div class="nh"><h3>Notícias do setor</h3><span>o que o mercado está medindo, com fonte</span></div><div class="ncols">
+<div class="ncol"><h4>Imobiliário</h4><ul><li><a href="https://www.mylarpro.com.br/blog/tempo-de-resposta-ao-lead-imobiliario" target="_blank" rel="noopener"><img src="img/fontes/morada.png" alt=""><div><b>5 h 08 até o primeiro contato. 47% dos leads imobiliários ficam sem nenhum atendimento.</b><span>Morada.ai · pesquisa · maio 2026</span></div></a></li><li><a href="https://imobireport.com.br" target="_blank" rel="noopener"><img src="img/fontes/imobireport.png" alt=""><div><b>"O maior volume de conversões vem da base esquecida, dos leads antigos."</b><span>VP Comercial da MRV · Imobi Report</span></div></a></li></ul></div>
+<div class="ncol"><h4>Loja online</h4><ul><li><a href="https://omni.chat/blog/chat-commerce-brasil-varejo/" target="_blank" rel="noopener"><img src="img/fontes/omni.png" alt=""><div><b>25% dos contatos com marcas acontecem fora do horário comercial. 58% do pós-venda já é resolvido por IA.</b><span>OmniChat · Chat Commerce Report 2026 · 51 milhões de conversas</span></div></a></li><li><a href="https://www.mylarpro.com.br/blog/tempo-de-resposta-ao-lead-imobiliario" target="_blank" rel="noopener"><img src="img/fontes/leadster.png" alt=""><div><b>3,7 milhões de leads analisados: quem leva o lead pro WhatsApp converte 3,12%. Sem WhatsApp, 2,52%.</b><span>Leadster · Panorama de Geração de Leads 2025</span></div></a></li></ul></div>
+<div class="ncol"><h4>Empresas de venda</h4><ul><li><a href="https://www.rdstation.com/pesquisas/panoramas-rdstation-2025/vendas/cenario/" target="_blank" rel="noopener"><img src="img/fontes/rdstation.png" alt=""><div><b>72% das empresas brasileiras não bateram a meta de vendas em 2024.</b><span>RD Station · Panorama de Vendas 2025 · 1.504 empresas</span></div></a></li><li><a href="https://www.mylarpro.com.br/blog/tempo-de-resposta-ao-lead-imobiliario" target="_blank" rel="noopener"><i>Se</i><div><b>Mais de 80% das empresas de serviços usam o WhatsApp como canal principal. Só 6% reconhecem a importância do CRM.</b><span>Sebrae · pesquisa com 1.300 empresas · 2025</span></div></a></li></ul></div>
+</div></div>
   </div>
 </section>
 
