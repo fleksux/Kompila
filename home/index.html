@@ -44,7 +44,7 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .btn.g{background:var(--green);color:#0a0b0e}.hero .btn.o{border:1px solid rgba(255,255,255,.2);color:#fff}
 .hero .meta{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;padding-top:6px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:16px}
 .hero .who{font:500 12px var(--mono);color:var(--cmuted);letter-spacing:.04em}
-.hero .who b{display:block;color:#fff;font:700 15px var(--sans);letter-spacing:0;margin-bottom:2px}
+.hero .who{max-width:52ch}.hero .who b{display:block;color:#fff;font:700 17px var(--sans);letter-spacing:-.01em;margin-bottom:3px}
 .hero .tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .hero .tags span{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
 .hero .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
@@ -65,12 +65,12 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
       <p class="lead">Do anúncio ao contrato, a Kompila faz o trabalho repetitivo: <b>atende, qualifica, marca, cobra e registra</b>. A sua equipe só vende.</p>
       <div class="ctas"><a class="btn g" href="#produtos">Ver os produtos</a><a class="btn o" href="#diagnostico">Medir a minha operação</a></div>
     </div>
-    <div class="meta"><div class="who" id="who"><b>Dona de marca de moda</b>coleção nova · pedidos no WhatsApp</div><div class="tags" id="tags"><span class="on">moda</span><span>eventos e LED</span><span>escritórios de venda</span></div></div>
+    <div class="meta"><div class="who" id="who"><b>Anúncio virando lead. Lead virando venda.</b>quem chama no anúncio recebe resposta em segundos e sai com hora marcada</div><div class="tags" id="tags"><span class="on">anúncio → venda</span><span>orçamento → contrato</span><span>loja → faturamento</span></div></div>
   </div>
 </section>
 
 <script>
-(function(){var im=[].slice.call(document.querySelectorAll('.hero .bg .slide')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=[['Dona de marca de moda','coleção nova · pedidos no WhatsApp'],['Produtor de eventos','painel de LED · orçamento em minutos'],['Sócia de escritório de vendas','leads do anúncio · fila sem fura']],i=0;
+(function(){var im=[].slice.call(document.querySelectorAll('.hero .bg .slide')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=[['Anúncio virando lead. Lead virando venda.','quem chama no anúncio recebe resposta em segundos e sai com hora marcada'],['Orçamento virando contrato.','a cotação sai na hora, a proposta é cobrada sozinha e o aceite vira Fechado'],['Produto virando loja. Loja virando faturamento.','a loja se monta conversando, vende de madrugada e ativa quem já comprou']],i=0;
 if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
 setInterval(function(){i=(i+1)%im.length;im.forEach(function(x,k){x.classList.toggle('on',k===i)});tg.forEach(function(x,k){x.classList.toggle('on',k===i)});who.innerHTML='<b>'+W[i][0]+'</b>'+W[i][1]},6000)})();
 </script>
