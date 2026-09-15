@@ -1144,6 +1144,26 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 }
 
 /* ===== HOME ===== */
+/* menu: dropdown de produtos */
+nav .links{align-items:center}
+nav .dd{position:relative}
+nav .ddb{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:0;font:500 14px var(--sans);color:var(--text);cursor:pointer}
+nav .ddb:hover,nav .dd.open .ddb{color:var(--ink)}
+nav .ddb .chev{width:14px;height:14px;transition:transform .25s}nav .dd.open .ddb .chev{transform:rotate(180deg)}
+nav .ddp{position:absolute;left:50%;top:calc(100% + 18px);transform:translate(-50%,6px);width:560px;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border:1px solid rgba(10,11,14,.08);border-radius:20px;padding:10px;box-shadow:0 30px 70px rgba(10,11,14,.18);display:grid;grid-template-columns:1fr 1fr;gap:2px;opacity:0;pointer-events:none;transition:opacity .2s,transform .25s}
+nav .dd.open .ddp{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+nav .ddp:before{content:"";position:absolute;left:0;right:0;top:-18px;height:18px}
+nav .ddp a{display:grid;gap:3px;padding:12px 14px;border-radius:12px;color:var(--ink)}
+nav .ddp a:hover{background:var(--soft)}
+nav .ddp a b{font:600 14px var(--mono);letter-spacing:-.01em;color:var(--ink)}nav .ddp a b em{font-style:normal;color:var(--green)}
+nav .ddp a span{font-size:12.5px;color:var(--muted);line-height:1.35}
+nav .ddp a i{justify-self:start;font:600 10px var(--sans);font-style:normal;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--soft2);color:var(--muted);margin-top:2px}
+nav .ddp a i.on{background:var(--green-soft);color:var(--green)}
+nav .ddp a.all{grid-column:1/-1;font-size:13px;font-weight:600;color:var(--ink);padding:12px 14px;border-top:1px solid var(--line);border-radius:0 0 12px 12px;margin-top:4px}
+nav .panel .ph{display:block;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 16px 4px}
+nav .panel a.pi{display:flex;align-items:center;gap:8px;font:600 15px var(--mono)}nav .panel a.pi em{font-style:normal;color:var(--green)}
+nav .panel a.pi i{margin-left:auto;font:600 10px var(--sans);font-style:normal;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--soft2);color:var(--muted)}nav .panel a.pi i.on{background:var(--green-soft);color:var(--green)}
+
 /* ===== HOME v2: capítulos, inteligência, cases, promessa ===== */
 .build{padding:96px 0 0;background:#fff}
 .strip{padding:72px 0;background:#fff}.strip .dhead{margin:0}
@@ -1431,11 +1451,11 @@ nav .logo{font-size:20px}
   <div class="shell">
     <div class="pill">
       <a class="logo" href="#topo"><span><span class="b">[</span> kompila <span class="b">]</span></span></a>
-      <div class="links"><a href="#produtos">O que fazemos</a><a href="#tudo">Inteligência</a><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a></div>
+      <div class="links"><div class="dd"><button type="button" class="ddb" id="ddb" aria-expanded="false">Produtos <svg viewBox="0 0 24 24" class="chev"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="ddp" id="ddp"><a href="#cap-loja"><b><em>kompila</em> loja</b><span>Você conversa, a loja se monta.</span><i class="">em construção</i></a><a href="../"><b><em>kompila</em> lead recovery</b><span>A IA atende, qualifica e marca. O vendedor só fecha.</span><i class="on">disponível</i></a><a href="#cap-sistema"><b><em>kompila</em> online</b><span>Sua empresa respondendo dia e noite.</span><i class="">em construção</i></a><a href="#cap-sistema"><b><em>kompila</em> mensageria</b><span>O WhatsApp da empresa por API.</span><i class="">em construção</i></a><a href="#cap-design"><b><em>kompila</em> tráfego</b><span>Anúncio que sabe qual lead virou venda.</span><i class="on">disponível</i></a><a href="#cap-design"><b><em>kompila</em> design</b><span>Marca, site e criativo feitos pra vender.</span><i class="on">disponível</i></a><a href="#cap-design"><b><em>kompila</em> blog</b><span>O que o mercado está medindo, com fonte.</span><i class="">em construção</i></a><a class="all" href="#produtos">Ver as três frentes →</a></div></div><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a></div>
       <a class="btn green" href="../#calc">Medir a minha operação</a>
       <button type="button" class="menu" id="menuBtn" aria-label="menu"><svg class="ico io"><use href="#i-menu"/></svg><svg class="ico ic"><use href="#i-x"/></svg></button>
     </div>
-    <div class="panel" id="menuPanel"><a href="#produtos">O que fazemos</a><a href="#tudo">Inteligência</a><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a><a class="btn green" href="../#calc">Medir a minha operação</a></div>
+    <div class="panel" id="menuPanel"><small class="ph">Produtos</small><a href="#cap-loja" class="pi"><em>kompila</em> loja <i class="">em construção</i></a><a href="../" class="pi"><em>kompila</em> lead recovery <i class="on">disponível</i></a><a href="#cap-sistema" class="pi"><em>kompila</em> online <i class="">em construção</i></a><a href="#cap-sistema" class="pi"><em>kompila</em> mensageria <i class="">em construção</i></a><a href="#cap-design" class="pi"><em>kompila</em> tráfego <i class="on">disponível</i></a><a href="#cap-design" class="pi"><em>kompila</em> design <i class="on">disponível</i></a><a href="#cap-design" class="pi"><em>kompila</em> blog <i class="">em construção</i></a><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a><a class="btn green" href="../#calc">Medir a minha operação</a></div>
   </div>
 </nav>
 
@@ -1574,6 +1594,7 @@ function render(n){i=n;im.forEach(function(x,k){x.classList.toggle('on',k===n)})
 render(+(location.search.match(/cena=(\d)/)||[0,0])[1]%S.length);if(matchMedia('(prefers-reduced-motion:reduce)').matches){[].slice.call(ol.children).forEach(function(li){li.classList.add('on','done')});return}
 timer=setInterval(function(){render((i+1)%S.length)},7500)})();
 </script>
-<script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');if(/[?&]still/.test(location.search))h.classList.add('still');addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
+<script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');if(/[?&]still/.test(location.search))h.classList.add('still');if(/[?&]dd/.test(location.search)){var q=document.querySelector('nav .dd');q&&q.classList.add('open')}addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
+<script>(function(){var d=document.querySelector('nav .dd'),b=document.getElementById('ddb');if(!d)return;var t;function open(){clearTimeout(t);d.classList.add('open');b.setAttribute('aria-expanded','true')}function close(){t=setTimeout(function(){d.classList.remove('open');b.setAttribute('aria-expanded','false')},160)}d.addEventListener('mouseenter',open);d.addEventListener('mouseleave',close);b.addEventListener('click',function(){d.classList.contains('open')?(clearTimeout(t),d.classList.remove('open')):open()});document.addEventListener('click',function(e){if(!d.contains(e.target)){clearTimeout(t);d.classList.remove('open')}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){d.classList.remove('open')}});d.querySelectorAll('.ddp a').forEach(function(a){a.addEventListener('click',function(){d.classList.remove('open')})})})();</script>
 </body>
 </html>
