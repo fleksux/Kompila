@@ -1049,6 +1049,22 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cz .scan .btn{margin-top:18px}
 .cz .scan .ft{margin-top:10px;text-align:center;font-size:12.5px;color:var(--cmuted)}
 @media(prefers-reduced-motion:reduce){.cz .scan .line{display:none}.cz .scan .chips em{opacity:1;transform:none}}
+
+/* diagnóstico: título em cima, descrição à direita, dois boxes da mesma altura */
+.dhead{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end;margin-bottom:32px}
+.dhead h2{margin:0;max-width:20ch}
+.dhead .lead{margin:0;justify-self:end;max-width:44ch;text-align:left}
+#diagnostico .cz{grid-template-columns:1fr 1fr;gap:24px;align-items:stretch}
+#diagnostico .cz .side{position:static;top:auto;align-self:stretch;display:flex;flex-direction:column;padding:22px 24px}
+#diagnostico .cz .side.steps ol.tl{margin:6px 0 0;flex:1}
+#diagnostico .cz .side.steps .sh{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+#diagnostico .cz .side.steps .sh .ic{width:42px;height:42px;border-radius:50%;background:rgba(47,214,123,.16);display:grid;place-items:center}#diagnostico .cz .side.steps .sh .ic .ico{width:20px;height:20px;stroke:#2fd67b}
+#diagnostico .cz .side.steps .sh b{display:block;color:#fff;font-size:17px}#diagnostico .cz .side.steps .sh small{color:var(--cmuted);font-size:13px}
+#diagnostico .cz .side.steps .ft{margin-top:auto;padding-top:14px;text-align:left;font-size:12.5px;color:var(--cmuted)}
+#diagnostico .cz .side.scan .btn{margin-top:auto}
+.cz ol.tl li{padding:16px 0}
+.cz ol.tl li:after{top:56px;bottom:-16px}
+@media(max-width:900px){.dhead{grid-template-columns:1fr;gap:14px}.dhead .lead{justify-self:start}#diagnostico .cz{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1253,16 +1269,17 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <!-- DIAGNÓSTICO -->
 <section class="dark" id="diagnostico">
   <div class="shell">
+    <div class="dhead rv"><h2>Primeiro encontramos o vazamento. Depois decidimos o que vale automatizar.</h2><p class="lead">O Diagnóstico é a leitura da jornada dos seus leads, feita dentro do seu CRM. Sem migração, sem mudar a rotina da equipe.</p></div>
     <div class="cz">
-      <div class="rv">
-        <h2>Primeiro encontramos o vazamento. Depois decidimos o que vale automatizar.</h2>
-        <p class="lead" style="margin:14px 0 24px">O Diagnóstico é a leitura da jornada dos seus leads, feita dentro do seu CRM. Sem migração, sem mudar a rotina da equipe.</p>
+      <div class="side rv steps">
+        <div class="sh"><span class="ic"><svg class="ico"><use href="#i-route"/></svg></span><div><b>Como funciona o Diagnóstico</b><small>quatro passos, dentro do seu CRM</small></div></div>
         <ol class="tl">
           <li><i>01</i><div><b>Entender</b><span>Canais, equipe, CRM, regras de distribuição, prazos e etapas de venda.</span></div></li>
           <li><i>02</i><div><b>Analisar</b><span>Um período autorizado do CRM: contatos sem resposta, sem responsável, sem próxima ação.</span></div></li>
           <li><i>03</i><div><b>Identificar</b><span>Onde o lead entra, onde para e qual regra deveria impedir a perda.</span></div></li>
           <li><i>04</i><div><b>Projetar</b><span>Regras, prioridades e o plano de recuperação.</span></div></li>
         </ol>
+        <small class="ft">Primeiro medimos. Depois você decide.</small>
       </div>
       <div class="side rv scan">
         <div class="sh"><span class="ic"><svg class="ico"><use href="#i-chart"/></svg></span><div><b>Análise autorizada</b><small id="scanSt">Lendo dados do seu CRM…</small></div><em class="live-dot"></em></div>
