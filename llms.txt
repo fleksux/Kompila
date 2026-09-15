@@ -1,0 +1,29 @@
+# Kompila
+
+> A Kompila é um agente de IA que atende leads no WhatsApp em segundos, qualifica, marca visita e escreve no CRM que a empresa já usa (HubSpot, Salesforce, Kommo, Pipedrive). O vendedor recebe o lead pronto no WhatsApp dele; o CRM fica para o gestor. Brasil, em português.
+
+## O que faz
+- Responde cada lead em segundos, 24 horas, inclusive com a loja fechada.
+- Qualifica com motores aprovados pela empresa (financiamento, cotação por m², estoque), sem inventar número.
+- Marca visita técnica e aciona o vendedor da vez no rodízio.
+- Guardião: se o vendedor não responde no prazo, avisa no celular; em 2× o prazo, segue a conversa e passa o lead para a fila de outro vendedor online.
+- Move o pipeline sozinho (visita marcada, proposta, contrato) e registra quem moveu.
+- Reabre a base antiga em 30, 60 ou 90 dias.
+- Devolve a conversão para Meta Ads e Google Ads.
+- Relatório em três toques para o gestor, em PDF.
+
+## Para quem
+- Incorporadoras e imobiliárias
+- Indústria técnica e projetos B2B (orçamentos de R$ 20 mil a R$ 300 mil)
+- Lojas online
+- Empresas que já têm CRM e não querem migrar
+
+## Como começa
+- Diagnóstico: leitura autorizada de 12 semanas do CRM (primeira resposta, atendimento humano, leads sem responsável, sem próxima ação, base recuperável). Sem migração. Primeiro medimos, depois o cliente decide.
+
+## Modelo comercial
+- Fixo mensal + variável por resultado confirmado (lead recuperado, visita marcada). Escopo definido no Diagnóstico.
+
+## Contato
+- Site: https://kompila.com.br/
+- WhatsApp: +55 11 96288-4399
