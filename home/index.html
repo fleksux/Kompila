@@ -61,6 +61,14 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 @media(max-width:900px){.hero{height:auto;min-height:100svh}.hwrap{padding:92px 0 28px;grid-template-rows:auto auto}.hero .copy{max-width:none;padding-top:44svh}.hero .bg img{object-position:71.5% 12%}.hero .target{top:22svh;width:min(38vw,160px);height:18svh}.hero h1{font-size:clamp(44px,12vw,72px)}.hero .flow{height:auto;overflow:visible}.hero .fh{flex-direction:column;align-items:flex-start}.hero .fh .q{white-space:normal;height:auto}.hero .steps{grid-template-columns:repeat(2,1fr)}.hero .steps li:nth-child(2n):after,.hero .steps li:nth-child(2n):before{display:none}.hero .steps li:nth-child(3):after,.hero .steps li:nth-child(3):before{display:block}}
 @media(prefers-reduced-motion:reduce){.hero .bg .slide,.hero .bg img.cor{transition:none;animation:none;opacity:1}}
 
+
+/* guias: ?guias na URL ou tecla g */
+html.guias div,html.guias section,html.guias nav,html.guias ol,html.guias li{outline:1px solid rgba(47,125,255,.85);outline-offset:-1px}
+html.guias section,html.guias nav{outline:2px dashed rgba(47,125,255,.95);outline-offset:-2px}
+html.guias h1,html.guias p,html.guias a.btn,html.guias .q{outline:1px dotted rgba(47,125,255,.7);outline-offset:-1px}
+html.guias body:before,html.guias body:after{content:"";position:fixed;top:0;bottom:0;width:0;border-left:1px solid #ff3b7a;z-index:99;pointer-events:none}
+html.guias body:before{left:6%}html.guias body:after{left:94%}
+html.guias .hero .target{outline:1px solid #ff3b7a}
 </style>
 </head>
 <body>
@@ -94,5 +102,6 @@ render(0);if(matchMedia('(prefers-reduced-motion:reduce)').matches){[].slice.cal
 timer=setInterval(function(){render((i+1)%S.length)},7500)})();
 </script>
 
+<script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
 </body>
 </html>
