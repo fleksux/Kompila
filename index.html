@@ -1126,6 +1126,8 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cwrap .res .fun{justify-content:space-between}
 /* ===== celular: vitrine 'Como funciona' (fim do CSS, vence o que está acima) ===== */
 @media(max-width:700px){
+  /* kanban: a moldura interna (.zm) cortava as colunas 3 e 4 antes da câmera andar; quem corta é a janela (.win) */
+  .win.kanban .zm{overflow:visible}
   .win .bar{gap:8px;padding:10px 12px}.win .bar .lg{font-size:12px}
   .win ul.fila7 li{grid-template-columns:28px minmax(0,1fr) 40px;grid-template-areas:"av txt time" "av tag time"}
   .win ul.fila7 .orig{display:none}.win ul.fila7 .to{grid-area:txt;justify-self:end;align-self:start;height:0}#winAgora.detail ul.fila7 .to{height:auto}.win ul.fila7 .to{font-size:11px;gap:4px}.win ul.fila7 .to i,.win ul.fila7 .to img{width:18px;height:18px}
