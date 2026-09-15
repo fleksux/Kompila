@@ -1144,6 +1144,23 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 }
 
 /* ===== HOME ===== */
+
+/* menu 100% do container */
+nav{top:16px}
+nav .shell{width:min(1240px,100% - 2*var(--gut))}
+nav .pill{width:100%;height:64px;justify-content:space-between;gap:24px;padding:0 10px 0 22px;border-radius:999px}
+nav .links{margin-left:0;gap:24px;font-size:15px}
+nav .nctas{display:flex;gap:8px;align-items:center}
+nav .pill .btn{height:44px;padding:0 18px;font-size:14px}
+nav .pill .btn.ghost{border-color:rgba(10,11,14,.16);color:var(--ink);background:transparent}
+nav .pill .btn.ghost:hover{border-color:var(--ink)}
+nav .pill .btn.ghost .ico{width:18px;height:18px}
+@media(max-width:1180px){nav .pill .btn.ghost{display:none}}
+nav .links a,nav .ddb{white-space:nowrap}
+@media(max-width:1100px){nav .links{gap:14px;font-size:14px}nav .pill{gap:14px;padding-left:16px}nav .logo{font-size:18px}nav .pill .btn{padding:0 14px;font-size:13px}}
+@media(max-width:900px){nav .links{display:none}nav .pill{height:56px;padding:0 8px 0 16px}nav .nctas .btn.green{display:inline-flex;height:40px;padding:0 14px}nav .menu{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:0;border-radius:50%;background:var(--ink);color:#fff;flex:none}nav .nctas{margin-left:auto}}
+@media(max-width:700px){nav .pill .btn.green{display:none}nav .nctas{display:none}}
+@media(max-width:480px){nav .nctas{display:none}}
 /* menu: dropdown de produtos */
 nav .links{align-items:center}
 nav .dd{position:relative}
@@ -1462,11 +1479,11 @@ nav .logo{font-size:20px}
   <div class="shell">
     <div class="pill">
       <a class="logo" href="#topo"><span><span class="b">[</span> kompila <span class="b">]</span></span></a>
-      <div class="links"><div class="dd"><button type="button" class="ddb" id="ddb" aria-expanded="false">Produtos <svg viewBox="0 0 24 24" class="chev"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="ddp" id="ddp"><a href="#cap-loja"><b><em>kompila</em> loja</b><span>Você conversa, a loja se monta.</span><i class="">em construção</i></a><a href="../"><b><em>kompila</em> lead recovery</b><span>A IA atende, qualifica e marca. O vendedor só fecha.</span><i class="on">disponível</i></a><a href="#cap-sistema"><b><em>kompila</em> online</b><span>Sua empresa respondendo dia e noite.</span><i class="">em construção</i></a><a href="#cap-sistema"><b><em>kompila</em> mensageria</b><span>O WhatsApp da empresa por API.</span><i class="">em construção</i></a><a href="#cap-design"><b><em>kompila</em> tráfego</b><span>Anúncio que sabe qual lead virou venda.</span><i class="on">disponível</i></a><a href="#cap-design"><b><em>kompila</em> design</b><span>Marca, site e criativo feitos pra vender.</span><i class="on">disponível</i></a><a href="#cap-design"><b><em>kompila</em> blog</b><span>O que o mercado está medindo, com fonte.</span><i class="">em construção</i></a><a class="all" href="#produtos">Ver as três frentes →</a></div></div><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a></div>
-      <a class="btn green" href="../#calc">Medir a minha operação</a>
+      <div class="links"><div class="dd"><button type="button" class="ddb" id="ddb" aria-expanded="false">Produtos <svg viewBox="0 0 24 24" class="chev"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="ddp" id="ddp"><a href="#cap-loja"><b><em>kompila</em> loja</b><span>Você conversa, a loja se monta.</span><i class="">em construção</i></a><a href="../"><b><em>kompila</em> lead recovery</b><span>A IA atende, qualifica e marca. O vendedor só fecha.</span><i class="on">disponível</i></a><a href="#cap-sistema"><b><em>kompila</em> online</b><span>Sua empresa respondendo dia e noite.</span><i class="">em construção</i></a><a href="#cap-sistema"><b><em>kompila</em> mensageria</b><span>O WhatsApp da empresa por API.</span><i class="">em construção</i></a><a href="#cap-design"><b><em>kompila</em> tráfego</b><span>Anúncio que sabe qual lead virou venda.</span><i class="on">disponível</i></a><a href="#cap-design"><b><em>kompila</em> design</b><span>Marca, site e criativo feitos pra vender.</span><i class="on">disponível</i></a><a href="#cap-design"><b><em>kompila</em> blog</b><span>O que o mercado está medindo, com fonte.</span><i class="">em construção</i></a><a class="all" href="#produtos">Ver as três frentes →</a></div></div><a href="../">Lead Recovery</a><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a></div>
+      <div class="nctas"><a class="btn ghost wa" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20conhecer%20os%20produtos." target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg>Falar no WhatsApp</a><a class="btn green" href="../#calc">Medir a minha operação</a></div>
       <button type="button" class="menu" id="menuBtn" aria-label="menu"><svg class="ico io"><use href="#i-menu"/></svg><svg class="ico ic"><use href="#i-x"/></svg></button>
     </div>
-    <div class="panel" id="menuPanel"><small class="ph">Produtos</small><a href="#cap-loja" class="pi"><em>kompila</em> loja <i class="">em construção</i></a><a href="../" class="pi"><em>kompila</em> lead recovery <i class="on">disponível</i></a><a href="#cap-sistema" class="pi"><em>kompila</em> online <i class="">em construção</i></a><a href="#cap-sistema" class="pi"><em>kompila</em> mensageria <i class="">em construção</i></a><a href="#cap-design" class="pi"><em>kompila</em> tráfego <i class="on">disponível</i></a><a href="#cap-design" class="pi"><em>kompila</em> design <i class="on">disponível</i></a><a href="#cap-design" class="pi"><em>kompila</em> blog <i class="">em construção</i></a><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a><a class="btn green" href="../#calc">Medir a minha operação</a></div>
+    <div class="panel" id="menuPanel"><a href="../"><b>Lead Recovery</b></a><small class="ph">Produtos</small><a href="#cap-loja" class="pi"><em>kompila</em> loja <i class="">em construção</i></a><a href="../" class="pi"><em>kompila</em> lead recovery <i class="on">disponível</i></a><a href="#cap-sistema" class="pi"><em>kompila</em> online <i class="">em construção</i></a><a href="#cap-sistema" class="pi"><em>kompila</em> mensageria <i class="">em construção</i></a><a href="#cap-design" class="pi"><em>kompila</em> tráfego <i class="on">disponível</i></a><a href="#cap-design" class="pi"><em>kompila</em> design <i class="on">disponível</i></a><a href="#cap-design" class="pi"><em>kompila</em> blog <i class="">em construção</i></a><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a><a class="btn green" href="../#calc">Medir a minha operação</a></div>
   </div>
 </nav>
 
