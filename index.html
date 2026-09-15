@@ -1082,6 +1082,44 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cz .scan .out{margin-top:18px;padding-top:16px}
 .cz .scan .chips{margin-bottom:8px}
 .cz .scan .btn{margin-top:22px}
+
+/* calculadora: mesmo esquema do diagnóstico */
+.calc .dhead{margin-bottom:28px}.calc .dhead h2{color:var(--ink)}.calc .dhead .lead{color:var(--muted)}
+.cwrap{align-items:stretch;gap:24px}
+.cwrap .cbox{display:flex;flex-direction:column;padding:22px 24px;border-radius:var(--r2)}
+.cwrap .form{background:#fff;border:1px solid var(--line);gap:0}
+.cwrap .form .sh{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cwrap .form .sh .ic{width:42px;height:42px;border-radius:50%;background:var(--green-soft);display:grid;place-items:center}.cwrap .form .sh .ic .ico{width:20px;height:20px;stroke:var(--green)}
+.cwrap .form .sh b{display:block;font-size:17px;color:var(--ink)}.cwrap .form .sh small{font-size:13px;color:var(--muted)}
+.cwrap .form .fr{display:grid;grid-template-columns:36px 1fr 118px;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.cwrap .form .fr:first-of-type{border-top:0}
+.cwrap .form .fi{width:36px;height:36px;border-radius:50%;background:var(--soft);display:grid;place-items:center}.cwrap .form .fi .ico{width:17px;height:17px;stroke:var(--muted)}
+.cwrap .form .ft b{display:block;font-size:14.5px;color:var(--ink)}.cwrap .form .ft small{display:block;font-size:12px;color:var(--muted)}
+.cwrap .form .fr input{height:44px;font:700 17px var(--mono);text-align:right;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);width:100%;letter-spacing:-.02em}
+.cwrap .form .fr input:focus{outline:2px solid var(--green);outline-offset:0;background:#fff}
+.cwrap .form .fsc{margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+.cwrap .form .fsc small{display:block;font-size:12px;color:var(--muted);margin-bottom:8px}
+.cwrap .seg button{height:auto;padding:8px 6px;border-radius:12px;display:grid;gap:1px}
+.cwrap .seg button b{font-size:12.5px;font-weight:600}.cwrap .seg button span{font:600 12px var(--mono);color:var(--muted)}.cwrap .seg button.on span{color:#2fd67b}
+.cwrap .form .ft2{display:block;margin-top:12px;font-size:11.5px;color:var(--muted)}
+.cwrap .res{background:var(--carbon);border-color:var(--carbon);color:#fff;gap:0}
+.cwrap .res .pot{padding:6px 0 16px;border-bottom:1px solid var(--cline)}
+.cwrap .res .pot small{display:block;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:#2fd67b}
+.cwrap .res .pot b{display:block;font:700 clamp(38px,4vw,52px) var(--mono);letter-spacing:-.04em;color:#fff;line-height:1.05;margin-top:4px}
+.cwrap .res .pot span{display:block;font-size:14px;color:var(--cmuted);margin-top:4px}.cwrap .res .pot em{font-style:normal;color:#fff}
+.cwrap .res .fun{display:grid;gap:12px;padding:16px 0;flex:1}
+.cwrap .res .fr2{display:grid;grid-template-columns:1fr auto;grid-template-areas:"lb num" "bar bar" "un un";gap:2px 12px;align-items:end}
+.cwrap .res .fr2 .lb{grid-area:lb;font-size:13px;color:var(--cmuted)}
+.cwrap .res .fr2 b{grid-area:num;font:700 22px var(--mono);letter-spacing:-.03em;color:#fff}
+.cwrap .res .fr2 i{grid-area:bar;height:8px;border-radius:4px;background:rgba(255,255,255,.08);position:relative;overflow:hidden;margin-top:4px}
+.cwrap .res .fr2 i u{position:absolute;left:0;top:0;bottom:0;width:var(--w);background:#3b4550;border-radius:4px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.cwrap .res .fr2.hi i u{background:#2fd67b}.cwrap .res .fr2.hi b{color:#2fd67b}
+.cwrap .res .fr2 .un{grid-area:un;font-size:12px;color:var(--cmuted)}
+.cwrap .res .btn{margin-top:auto;width:100%}
+.cwrap .res .warn{margin-top:10px;font-size:11.5px;color:var(--cmuted);line-height:1.45}
+.cwrap .res .bump{animation:bump .45s cubic-bezier(.2,.8,.2,1)}
+@media(min-width:901px){.cwrap{grid-template-columns:1fr 1fr;gap:24px}.cwrap .res{position:static;top:auto}}
+@media(max-width:700px){.cwrap .form .fr{grid-template-columns:1fr 104px;grid-template-areas:"t in"}.cwrap .form .fi{display:none}.cwrap .form .fr .ft{grid-area:t}.cwrap .form .fr input{grid-area:in}}
 </style>
 </head>
 <body>
@@ -1319,25 +1357,27 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <!-- CALCULADORA -->
 <section class="calc" id="calc">
   <div class="shell">
+    <div class="dhead rv"><h2>Quanto dinheiro pode estar parado na sua fila?</h2><p class="lead">Uma estimativa inicial com os números da sua operação. O valor real é validado no Diagnóstico.</p></div>
     <div class="cwrap">
-      <div class="cleft">
-      <div class="head rv"><h2>Quanto dinheiro pode estar parado na sua fila?</h2><p class="lead">Uma estimativa inicial com os números da sua operação. O valor real é validado no Diagnóstico.</p></div>
-      <form class="form rv" onsubmit="return false">
-        <label><b>Leads por mês</b><input type="number" id="cL" value="6000" min="1"></label>
-        <label><b>Quantos ficam sem resposta ou sem próxima ação (%)</b><input type="number" id="cP" value="20" min="0" max="100"></label>
-        <label><b>Conversão atual em vendas (%)</b><input type="number" id="cC" value="2.7" min="0" max="100" step="0.1"></label>
-        <label><b>Quanto a empresa ganha por venda (R$)</b><input type="number" id="cV" value="14000" min="0"></label>
-        <label><b>Quanto dos leads abandonados dá pra reativar</b><div class="seg" id="cS"><button type="button" data-r="5">Conservador 5%</button><button type="button" data-r="10" class="on">Provável 10%</button><button type="button" data-r="20">Potencial 20%</button></div></label>
+      <form class="form rv cbox" onsubmit="return false">
+        <div class="sh"><span class="ic"><svg class="ico"><use href="#i-calc"/></svg></span><div><b>Os números da sua operação</b><small>mexa e veja o resultado ao lado</small></div></div>
+        <label class="fr"><span class="fi"><svg class="ico"><use href="#i-users"/></svg></span><span class="ft"><b>Leads por mês</b><small>o que entra por ads, site e WhatsApp</small></span><input type="text" inputmode="numeric" id="cL" value="6000"></label>
+        <label class="fr"><span class="fi"><svg class="ico"><use href="#i-alert"/></svg></span><span class="ft"><b>Sem resposta ou sem próxima ação</b><small>% dos leads que param no caminho</small></span><input type="text" inputmode="decimal" id="cP" value="20" data-suf="%"></label>
+        <label class="fr"><span class="fi"><svg class="ico"><use href="#i-chart"/></svg></span><span class="ft"><b>Conversão atual em vendas</b><small>% dos leads que viram contrato</small></span><input type="text" inputmode="decimal" id="cC" value="2,7" data-suf="%"></label>
+        <label class="fr"><span class="fi"><svg class="ico"><use href="#i-cash"/></svg></span><span class="ft"><b>Ganho por venda</b><small>receita média de um contrato</small></span><input type="text" inputmode="numeric" id="cV" value="14000" data-pre="R$"></label>
+        <div class="fsc"><small>Cenário de recuperação · quanto dos parados volta a conversar</small><div class="seg" id="cS"><button type="button" data-r="5"><b>Conservador</b><span>5%</span></button><button type="button" data-r="10" class="on"><b>Provável</b><span>10%</span></button><button type="button" data-r="20"><b>Potencial</b><span>20%</span></button></div></div>
+        <small class="ft2">Estimativa, não garantia de resultado.</small>
       </form>
-      </div>
-      <div class="res rv">
-        <div class="row"><small>Sua operação recebe</small><b id="rL">6.000</b><span>leads por mês</span></div>
-        <div class="row"><small>Aproximadamente</small><b id="rP">1.200</b><span>ficam sem continuidade</span></div>
-        <div class="row"><small id="rSl">No cenário provável</small><b id="rR">120</b><span>voltariam a conversar</span></div>
-        <div class="row"><small>Mantendo a conversão atual</small><b id="rV">3 a 4</b><span>vendas adicionais por mês</span></div>
-        <div class="row big"><small>Potencial financeiro estimado</small><b id="rM">R$ 42 mil a R$ 56 mil</b><span>por mês</span></div>
-        <p class="warn">Simulação com os números informados, não garantia de resultado.</p>
-        <a class="btn green" href="https://wa.me/5511962884399?text=Quero%20validar%20o%20n%C3%BAmero%20da%20calculadora%20no%20meu%20CRM%20(Caso%20Zero)" target="_blank" rel="noopener">Validar esse número no meu CRM</a>
+      <div class="res rv cbox">
+        <div class="pot"><small>Potencial estimado</small><b id="rM">R$ 45 mil</b><span>por mês <em id="rSl">no cenário provável</em></span></div>
+        <div class="fun">
+          <div class="fr2"><span class="lb">Sua operação recebe</span><i><u style="--w:100%"></u></i><b id="rL">6.000</b><span class="un">leads por mês</span></div>
+          <div class="fr2"><span class="lb">Ficam sem continuidade</span><i><u id="bP" style="--w:20%"></u></i><b id="rP">1.200</b><span class="un">leads</span></div>
+          <div class="fr2"><span class="lb">Voltariam a conversar</span><i><u id="bR" style="--w:2%"></u></i><b id="rR">120</b><span class="un">conversas retomadas</span></div>
+          <div class="fr2 hi"><span class="lb">Vendas a mais, mantendo sua conversão</span><i><u id="bV" style="--w:1%"></u></i><b id="rV">3,2</b><span class="un">vendas por mês</span></div>
+        </div>
+        <a class="btn green" href="https://wa.me/5511962884399?text=Quero%20validar%20o%20n%C3%BAmero%20da%20calculadora%20no%20meu%20CRM" target="_blank" rel="noopener">Validar esse número no meu CRM</a>
+        <p class="warn">Conta: leads × % parados × cenário × sua conversão × ganho por venda. Simulação com os números informados.</p>
       </div>
     </div>
   </div>
@@ -1386,7 +1426,9 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 /* título se escreve */
 (function(){var h=document.getElementById('h1');if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;var walker=document.createTreeWalker(h,NodeFilter.SHOW_TEXT,null),ns=[],n;while(n=walker.nextNode())if(n.nodeValue.trim()||n.nodeValue===' ')ns.push(n);var chars=[];ns.forEach(function(tn){var f=document.createDocumentFragment();tn.nodeValue.split(/(\s+)/).forEach(function(part){if(!part)return;if(/^\s+$/.test(part)){var sp=document.createElement('span');sp.textContent=' ';f.appendChild(sp);return}var w=document.createElement('span');w.className='wrd';part.split('').forEach(function(c){var s=document.createElement('span');s.className='ch';s.textContent=c;w.appendChild(s);chars.push(s)});f.appendChild(w)});tn.parentNode.replaceChild(f,tn)});var caret=document.createElement('span');caret.className='caret';var i=0;setTimeout(function step(){if(i<chars.length){var c=chars[i];c.classList.add('on');c.after(caret);i++;setTimeout(step,34)}else setTimeout(function(){caret.remove()},900)},500)})();
 /* calculadora */
-(function(){var r=10,$=function(id){return document.getElementById(id)};function fmt(n){return n.toLocaleString('pt-BR')}function money(n){return n>=1000?'R$ '+Math.round(n/1000)+' mil':'R$ '+Math.round(n)}function calc(){var L=+$('cL').value||0,P=(+$('cP').value||0)/100,C=(+$('cC').value||0)/100,V=+$('cV').value||0;var parados=L*P,reat=parados*r/100,vendas=reat*C,v1=Math.floor(vendas),v2=Math.ceil(vendas);if(v2<1)v2=1;if(v1<0)v1=0;$('rL').textContent=fmt(L);$('rP').textContent=fmt(Math.round(parados));$('rR').textContent=fmt(Math.round(reat));$('rV').textContent=v1===v2?v1:v1+' a '+v2;$('rM').textContent=v1===v2?money(v1*V):money(v1*V)+' a '+money(v2*V);$('rSl').textContent={5:'No cenário conservador',10:'No cenário provável',20:'No cenário potencial'}[r]}document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});calc()})();
+(function(){var r=10,$=function(id){return document.getElementById(id)};function num(id){var v=String($(id).value).replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.');var n=parseFloat(v);return isNaN(n)?0:n}function fmt(n){return Math.round(n).toLocaleString('pt-BR')}function dec(n){return n>=10?String(Math.round(n)):n.toFixed(1).replace('.',',')}function money(n){if(n>=1e6)return 'R$ '+(n/1e6).toFixed(1).replace('.',',')+' mi';if(n>=1000)return 'R$ '+Math.round(n/1000)+' mil';return 'R$ '+Math.round(n)}
+function calc(){var L=num('cL'),P=num('cP')/100,C=num('cC')/100,V=num('cV');var parados=L*P,reat=parados*r/100,vendas=reat*C,m=vendas*V;$('rL').textContent=fmt(L);$('rP').textContent=fmt(parados);$('rR').textContent=fmt(reat);$('rV').textContent=dec(vendas);$('rM').textContent=money(m);$('rSl').textContent={5:'no cenário conservador',10:'no cenário provável',20:'no cenário potencial'}[r];var pct=function(x){return L?Math.max(1.5,x/L*100):0};$('bP').style.setProperty('--w',pct(parados)+'%');$('bR').style.setProperty('--w',pct(reat)+'%');$('bV').style.setProperty('--w',pct(vendas)+'%');[$('rM'),$('rV')].forEach(function(e){e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump')})}
+document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});calc()})();
 /* chat roteirizado */
 (function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Diagnóstico.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
 </script>
