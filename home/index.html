@@ -21,11 +21,11 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 @media(max-width:900px){nav .links{display:none}}
 /* hero: foto grande à direita, sumindo pra esquerda; a pessoa sempre no alvo dos colchetes */
 .hero{position:relative;min-height:100svh;display:grid;align-items:end;padding:120px 0 48px;overflow:hidden;background:var(--bg)}
-.hero .bg{position:absolute;top:0;bottom:0;right:0;width:min(62vw,1100px);display:grid}
-.hero .bg img{grid-area:1/1;width:100%;height:100%;object-fit:cover;object-position:50% 0%;filter:grayscale(1) contrast(1.08);opacity:0;transform:scale(1.03);transition:opacity .9s ease,transform 1.4s ease}
+.hero .bg{position:absolute;inset:0;display:grid}
+.hero .bg img{grid-area:1/1;width:100%;height:100%;object-fit:cover;object-position:50% 28%;filter:grayscale(1) contrast(1.08);opacity:0;transform:scale(1.03);transition:opacity .9s ease,transform 1.4s ease}
 .hero .bg img.on{opacity:1;transform:none}
-.hero .fade{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,var(--bg) 34%,rgba(10,11,14,.55) 52%,rgba(10,11,14,0) 68%),linear-gradient(180deg,rgba(10,11,14,.55) 0%,rgba(10,11,14,0) 22%,rgba(10,11,14,0) 70%,var(--bg) 100%);pointer-events:none}
-.hero .target{position:absolute;right:calc(var(--gut) + 2vw);top:50%;transform:translateY(-46%);width:min(30vw,520px);height:min(74svh,700px);display:flex;justify-content:space-between;color:var(--green);filter:drop-shadow(0 0 18px rgba(47,214,123,.45));pointer-events:none}
+.hero .fade{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,rgba(10,11,14,.92) 30%,rgba(10,11,14,.35) 50%,rgba(10,11,14,0) 62%),linear-gradient(180deg,rgba(10,11,14,.55) 0%,rgba(10,11,14,0) 22%,rgba(10,11,14,0) 70%,var(--bg) 100%);pointer-events:none}
+.hero .target{position:absolute;left:73%;top:50%;transform:translate(-50%,-44%);width:min(26vw,460px);height:min(70svh,660px);display:flex;justify-content:space-between;color:var(--green);filter:drop-shadow(0 0 18px rgba(47,214,123,.45));pointer-events:none}
 .hero .target .br{width:44px;height:100%}
 .hgrid{position:relative;z-index:2;display:grid;grid-template-columns:1fr;gap:28px}
 .hero .copy{display:grid;gap:22px;justify-items:start;max-width:640px}
@@ -42,7 +42,7 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .hero .tags span{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
 .hero .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
-@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{width:100%;height:58svh;bottom:auto}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:50%;top:32svh;transform:translate(-50%,-50%);width:min(70vw,320px);height:48svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .meta{flex-direction:column;align-items:flex-start}.hero .tags{justify-content:flex-start}}
+@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:50%;top:32svh;transform:translate(-50%,-50%);width:min(70vw,320px);height:48svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .meta{flex-direction:column;align-items:flex-start}.hero .tags{justify-content:flex-start}}
 @media(prefers-reduced-motion:reduce){.hero .bg img{transition:none}}
 </style>
 </head>
@@ -50,7 +50,7 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 <nav><div class="bar"><a class="lg" href="/"><b>[</b> kompila <b>]</b></a><div class="links"><a href="#produtos">Produtos</a><a href="#tudo">Tudo ligado</a><a href="#prova">Prova</a><a href="#equipe">Equipe</a><a href="#blog">Blog</a></div><a class="btn" href="#diagnostico">Falar com a Kompila</a></div></nav>
 
 <section class="hero" id="topo">
-  <div class="bg" aria-hidden="true"><img src="img/retrato-moda.webp" class="on" alt=""><img src="img/retrato-led.webp" alt=""><img src="img/retrato-contab.webp" alt=""></div>
+  <div class="bg" aria-hidden="true"><img src="img/hero-moda.webp" class="on" alt=""><img src="img/hero-led.webp" alt=""><img src="img/hero-contab.webp" alt=""></div>
   <div class="fade" aria-hidden="true"></div>
   <div class="target" aria-hidden="true"><svg class="br l" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M60 2 H6 V98 H60" fill="none" stroke="currentColor" stroke-width="7" vector-effect="non-scaling-stroke"/></svg><svg class="br r" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M0 2 H54 V98 H0" fill="none" stroke="currentColor" stroke-width="7" vector-effect="non-scaling-stroke"/></svg></div>
   <div class="shell hgrid">
