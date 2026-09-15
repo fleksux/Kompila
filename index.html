@@ -1478,7 +1478,9 @@ function steps(p,S){cap.style.visibility='';SEQ={p:p,S:S};ambStart(p,cur);clock(
 function show(i){if(!SEQ)return;var S=SEQ.S,p=SEQ.p;if(i>=S.list.length){cap.classList.add('seen');ST=setTimeout(function(){S.reset(p);show(0)},1500);return}SI=i;var st=S.list[i];setCap(st.cap,i,S.list.length);st.run(p);if(!reduced&&!paused)ST=setTimeout(function(){show(i+1)},st.ms)}
 function stopSteps(){clearTimeout(ST);SEQ=null;cap.style.visibility='hidden';ambStop()}
 capPP.addEventListener('click',function(){paused=!paused;cap.classList.toggle('paused',paused);cap.classList.add('seen');if(!paused&&SEQ)show(SI+1);else clearTimeout(ST)});
-document.getElementById('scShot').addEventListener('pointerdown',function(e){if(e.target.closest('.sc-cap'))return;if(SEQ&&!paused){paused=true;cap.classList.add('paused','seen');clearTimeout(ST)}});
+/* pausa só no toque parado (tap); rolar a página com o dedo em cima da tela não pausa */
+var tapX=0,tapY=0,tapT=0;function onTap(fn){var el=document.getElementById('scShot');el.addEventListener('pointerdown',function(e){tapX=e.clientX;tapY=e.clientY;tapT=Date.now()},{passive:true});el.addEventListener('pointerup',function(e){if(Math.abs(e.clientX-tapX)<8&&Math.abs(e.clientY-tapY)<8&&Date.now()-tapT<400)fn(e)})}
+onTap(function(e){if(e.target.closest('.sc-cap'))return;if(SEQ&&!paused){paused=true;cap.classList.add('paused','seen');clearTimeout(ST)}});
 capT.addEventListener('click',function(){if(reduced&&SEQ){show(SI+1)}});
 function sc(p,x,y,k){var z=p.querySelector('.zm');z.style.transformOrigin=x+' '+y;z.style.transform='scale('+k+')'}
 function unsc(p){var z=p.querySelector('.zm');z.style.transform='';z.style.transformOrigin=''}
@@ -1542,7 +1544,7 @@ function go(n){cur=n;tabs.forEach(function(b,i){b.classList.toggle('on',i===n)})
 function stopAuto(){touched=true;clearInterval(timer);timer=null}
 function startAuto(){clearInterval(timer);timer=setInterval(function(){if(document.hidden||touched)return;go((cur+1)%tabs.length)},10000)}
 tabs.forEach(function(b,i){b.addEventListener('click',function(){stopAuto();go(i)})});
-document.getElementById('scShot').addEventListener('pointerdown',stopAuto);capPP.addEventListener('click',stopAuto);
+onTap(stopAuto);capPP.addEventListener('click',stopAuto);
 var sc0=document.getElementById('showcase');new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!touched){go(cur);if(!reduced)startAuto()}}else{clearInterval(timer);timer=null}})},{threshold:.3}).observe(sc0);
 })();
 </script>
