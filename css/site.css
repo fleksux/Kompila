@@ -1447,6 +1447,7 @@ nav .logo{font-size:20px}
 .hh .ctas .btn{width:100%;justify-content:center;text-align:center;display:inline-flex;align-items:center;height:52px}
 .hhwrap>*{min-width:0}
 .hh .flow{padding-top:14px;min-width:0;max-width:100%}
+.hh .steps{display:none!important}
 .hh .steps{max-width:100%}
 .hh .copy{width:100%}
 .final .ctas{flex-direction:column;align-items:stretch}.final .ctas .btn{width:100%}
