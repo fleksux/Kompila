@@ -877,6 +877,63 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .win .cmp .row.big .k{font-size:17px;color:var(--green)}
 .win .met{margin:8px 18px 0;font-size:11.5px;color:var(--muted);line-height:1.4}
 @media(max-width:700px){.win .kp.k4{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.win .kp.k4 div{min-height:64px;padding:8px}.win .kp.k4 b{font-size:17px}.win .cmp .hd,.win .cmp .row{grid-template-columns:1.2fr 1fr 1fr}.win .cmp .row em{display:none}}
+
+/* ===== pra quem: 4 botões, infográfico por segmento ===== */
+.who .head .lead{max-width:60ch;margin:12px 0 0}
+.segs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:28px 0 18px}
+.segs button{display:grid;grid-template-columns:24px 1fr;grid-template-rows:auto auto;gap:2px 10px;align-items:center;text-align:left;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:#fff;cursor:pointer;font-family:var(--sans);transition:border-color .2s,box-shadow .2s,background .2s}
+.segs button .ico{grid-row:1/3;width:22px;height:22px;stroke:var(--green)}
+.segs button b{font-size:14.5px;color:var(--ink);line-height:1.2}.segs button span{font-size:12px;color:var(--muted);line-height:1.25}
+.segs button.on{background:var(--carbon);border-color:var(--carbon);box-shadow:0 14px 34px rgba(10,11,14,.16)}
+.segs button.on b{color:#fff}.segs button.on span{color:#aab1ba}.segs button.on .ico{stroke:#2fd67b}
+.segpanel{display:grid;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 24px 60px rgba(10,11,14,.08);overflow:hidden}
+.ig{grid-area:1/1;display:grid;grid-template-columns:1fr 36px 1.25fr 36px 1.1fr;gap:0;padding:28px 28px 20px;opacity:0;pointer-events:none;transition:opacity .35s}
+.ig.on{opacity:1;pointer-events:auto}
+.ig h5{margin:0 0 10px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ig .col{min-width:0}
+.ig .ocs{display:grid;gap:8px}
+.ig .oc{display:grid;grid-template-columns:10px 1fr;gap:4px 10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--soft);font:600 13.5px var(--sans);font-style:normal;color:var(--ink);opacity:0;transform:translateX(-10px);transition:opacity .3s,transform .35s}
+.ig .oc i{grid-row:1/3;width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.ig .oc small{font:500 11.5px var(--sans);color:var(--muted)}
+.ig .oc.o-meta i{background:#2f5bd1}.ig .oc.o-google i{background:#b45f06}.ig .oc.o-instagram i{background:#b3266f}.ig .oc.o-whatsapp i{background:var(--green)}.ig .oc.o-site i{background:var(--text)}
+.ig .cn{position:relative}.ig .cn i{position:absolute;left:0;right:0;top:50%;height:2px;background:var(--line);transform:scaleX(0);transform-origin:left;transition:transform .5s}
+.ig .cn i:after{content:"";position:absolute;right:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--green);opacity:0;transition:opacity .2s .4s}
+.ig .knode{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ig .klogo{font:700 16px var(--mono);color:#fff;background:var(--carbon);padding:6px 10px;border-radius:10px}.ig .klogo b{color:#2fd67b}
+.ig .knode h5{margin:0}
+.ig ul{margin:0;padding:0;list-style:none}
+.ig .kdo li{display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:start;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--text);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+.ig .kdo li:first-child{border-top:0}
+.ig .kdo li i{width:20px;height:20px;border-radius:50%;background:var(--green-soft);color:var(--green);font:700 11px var(--sans);font-style:normal;display:grid;place-items:center;margin-top:1px}
+.ig .leadcard{background:var(--carbon);color:#fff;border-radius:16px;padding:14px 16px;opacity:0;transform:translateY(10px);transition:opacity .35s,transform .4s}
+.ig .lh{display:flex;gap:10px;align-items:center;margin-bottom:8px}.ig .lh img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.ig .lh b{display:block;font-size:14.5px}.ig .lh span{font-size:12px;color:#aab1ba}
+.ig .chk li{display:grid;grid-template-columns:20px 1fr auto;gap:8px;align-items:center;padding:7px 0;border-top:1px solid rgba(255,255,255,.1);font-size:13px;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s}
+.ig .chk li i{width:20px;height:20px;border-radius:50%;background:#2fd67b;color:#0a0b0e;font:700 11px var(--sans);font-style:normal;display:grid;place-items:center}
+.ig .chk li time{font:600 11px var(--mono);color:#aab1ba}
+.ig .whoget{display:flex;gap:10px;align-items:center;margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--green-soft);opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.ig .whoget img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.ig .whoget small{display:block;font:600 10.5px var(--sans);letter-spacing:.04em;text-transform:uppercase;color:var(--green)}.ig .whoget b{display:block;font-size:14px;color:var(--ink)}.ig .whoget span{font-size:12px;color:var(--muted)}
+.ig .igcap{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);opacity:0;transition:opacity .4s}
+.ig .igcap p{margin:0;font-size:16px;color:var(--ink);max-width:56ch}
+.ig .num{display:flex;align-items:baseline;gap:8px;white-space:nowrap;font-size:12.5px;color:var(--muted)}.ig .num b{font:700 26px var(--mono);letter-spacing:-.03em;color:var(--green)}
+.ig .crmbox{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;opacity:0;transition:opacity .3s}
+.ig .crml{display:grid;grid-template-columns:1fr 1fr;gap:6px}.ig .crml li{font-size:13px;font-weight:600;color:var(--ink);background:var(--soft);padding:7px 10px;border-radius:8px}
+.ig .outs{display:grid;gap:8px}
+.ig .out{display:grid;grid-template-columns:36px 1fr;gap:2px 10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--soft);opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.ig .out img{grid-row:1/3;width:36px;height:36px;border-radius:50%;object-fit:cover}.ig .out b{font-size:14px;color:var(--ink)}.ig .out span{font-size:12px;color:var(--muted)}
+/* revelação */
+.ig.on .oc.in,.ig.on .kdo li.in,.ig.on .leadcard.in,.ig.on .chk li.in,.ig.on .whoget.in,.ig.on .out.in{opacity:1;transform:none}
+.ig.on .cn.in i{transform:scaleX(1)}.ig.on .cn.in i:after{opacity:1}
+.ig.on .crmbox.in,.ig.on .igcap.in{opacity:1}
+@media(max-width:900px){
+  .segs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ig{grid-template-columns:1fr;padding:20px 18px 16px}
+  .ig .cn{height:28px}.ig .cn i{left:24px;right:auto;top:0;bottom:0;height:auto;width:2px;transform:scaleY(0);transform-origin:top}.ig .cn i:after{right:-4px;top:auto;bottom:-4px}
+  .ig.on .cn.in i{transform:scaleY(1)}
+  .ig .igcap{flex-direction:column;align-items:flex-start;gap:10px;margin-top:16px}
+}
+@media(max-width:700px){.segs button{padding:12px}.segs button b{font-size:13px}.segs button span{display:none}.segs button{grid-template-rows:auto}.ig .igcap p{font-size:15px}}
 </style>
 </head>
 <body>
@@ -1031,25 +1088,41 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <!-- PRA QUEM -->
 <section class="who" id="quem" style="padding-top:0">
   <div class="shell">
-    <div class="head rv"><h2>Veja o que a Kompila faz para uma operação como a sua.</h2></div>
-    <div class="acc">
-      <div class="rv">
-        <details open><summary>Incorporadoras e imobiliárias</summary><p>Centenas de leads por mês, equipes rotativas e milhares de contatos esquecidos na gaveta. Resgata a base antiga e garante que quem chama no domingo visite o decorado na terça.</p></details>
-        <details><summary>Indústria técnica e projetos B2B</summary><p>Orçamentos de R$ 20 mil a R$ 300 mil. A cotação sai em segundos no WhatsApp e um único lead recuperado que fecha já paga meses de operação.</p></details>
-        <details><summary>Loja online</summary><p>A cliente pergunta o tamanho às 19h48 e quer retirar amanhã. A Kompila responde, confere o estoque e reserva; o vendedor confirma na abertura da loja.</p></details>
-        <details><summary>Quem já tem CRM</summary><p>HubSpot, Salesforce, Pipedrive ou Kommo. Você não joga nada fora: a Kompila lê responsável, fase e última atividade, e escreve de volta reabertura, avanço de fase e tarefas.</p></details>
-      </div>
-      <div class="shot rv">
-        <div class="phone">
-          <div class="ph"><img src="img/lead-juliana.webp" alt=""><div><b>Juliana Prado</b><small>quinta · 19:48</small></div><span class="wa">whatsapp</span></div>
-          <div class="pb">
-            <div class="msg">Oi! Esse vestido verde tem no 42? Preciso pra sábado.<time>19:48</time></div>
-            <div class="msg k">Oi, Juliana! Tem sim, o 42 está em estoque. Quer que eu reserve pra você retirar na loja amanhã a partir das 10h?<time>19:48</time></div>
-            <div class="msg">Quero! Consigo pagar no Pix?<time>19:49</time></div>
-            <div class="msg k">Consegue. Reservei em seu nome. O Diego te manda o Pix assim que a loja abrir.<time>19:49</time></div>
-          </div>
-        </div>
-      </div>
+    <div class="head rv"><h2>Veja o que a Kompila faz para uma operação como a sua.</h2><p class="lead">Escolha a sua. O caminho é o mesmo: o lead chega, a Kompila resolve, o vendedor recebe pronto no WhatsApp.</p></div>
+    <div class="segs rv" id="segs" role="tablist"><button class="on" data-s="0"><svg class="ico"><use href="#i-layers"/></svg><b>Incorporadoras e imobiliárias</b><span>centenas de leads, equipe rotativa</span></button><button data-s="1"><svg class="ico"><use href="#i-calc"/></svg><b>Indústria técnica e B2B</b><span>orçamento de R$ 20 mil a R$ 300 mil</span></button><button data-s="2"><svg class="ico"><use href="#i-tag"/></svg><b>Loja online</b><span>cliente pergunta à noite, retira amanhã</span></button><button data-s="3"><svg class="ico"><use href="#i-swap"/></svg><b>Quem já tem CRM</b><span>HubSpot, Salesforce, Kommo, Pipedrive</span></button></div>
+    <div class="segpanel rv" id="segpanel">
+<div class="ig" data-s="0">
+  <div class="col c1"><h5>De onde chega</h5><div class="ocs"><em class="oc o-instagram"><i></i>Instagram<small>campanha Lançamento Zona Leste</small></em><em class="oc o-meta"><i></i>Meta Ads<small>campanha Painel Fachada</small></em><em class="oc o-site"><i></i>Site<small>simulador de financiamento</small></em></div></div>
+  <div class="cn"><i></i></div>
+  <div class="col c2"><div class="knode"><span class="klogo"><b>[</b>k<b>]</b></span><h5>O que a Kompila faz</h5></div><ul class="kdo"><li><i>✓</i><span>Responde em 6 s, mesmo com o stand fechado</span></li><li><i>✓</i><span>Simula financiamento pela tabela: renda, FGTS, faixa</span></li><li><i>✓</i><span>Marca a visita técnica e avisa o corretor da vez</span></li><li><i>✓</i><span>Reabre a base antiga em 30, 60 ou 90 dias</span></li></ul></div>
+  <div class="cn"><i></i></div>
+  <div class="col c3"><div class="leadcard"><div class="lh"><img src="img/lead-marcos.webp" alt=""><div><b>Marcos Oliveira</b><span>Apto 2 quartos · Zona Leste</span></div></div><ul class="chk"><li><i>✓</i><span>Respondido</span><time>09:12</time></li><li><i>✓</i><span>Qualificado · renda R$ 6 mil, FGTS</span><time>09:13</time></li><li><i>✓</i><span>Visita técnica marcada · sáb 10h</span><time>09:14</time></li><li><i>✓</i><span>Corretora confirmou</span><time>09:23</time></li></ul></div><div class="whoget"><img src="img/equipe-renata.webp" alt=""><div><small>recebe pronto no WhatsApp</small><b>Renata Lopes</b><span>corretora da vez no rodízio</span></div></div></div>
+  <div class="igcap"><p>Quem chama no domingo visita o decorado na terça. E a base esquecida volta a converter.</p><span class="num"><b>3,8%</b>conversão da base antiga</span></div>
+</div>
+<div class="ig" data-s="1">
+  <div class="col c1"><h5>De onde chega</h5><div class="ocs"><em class="oc o-google"><i></i>Google Ads<small>pesquisa "painel de led 4x2"</small></em><em class="oc o-meta"><i></i>Meta Ads<small>campanha Painel Fachada</small></em><em class="oc o-site"><i></i>Site<small>formulário de orçamento</small></em></div></div>
+  <div class="cn"><i></i></div>
+  <div class="col c2"><div class="knode"><span class="klogo"><b>[</b>k<b>]</b></span><h5>O que a Kompila faz</h5></div><ul class="kdo"><li><i>✓</i><span>Entende o pedido técnico: medida, uso, prazo</span></li><li><i>✓</i><span>Cota por m² na hora, com a tabela da empresa</span></li><li><i>✓</i><span>Manda a proposta e cobra o aceite em 2 dias</span></li><li><i>✓</i><span>Contrato assinado: move pra Fechado e avisa o anúncio</span></li></ul></div>
+  <div class="cn"><i></i></div>
+  <div class="col c3"><div class="leadcard"><div class="lh"><img src="img/lead-ricardo.webp" alt=""><div><b>Ricardo Nunes</b><span>Painel LED 6×3 m · fachada</span></div></div><ul class="chk"><li><i>✓</i><span>Respondido</span><time>08:19</time></li><li><i>✓</i><span>Cotado · R$ 42.000</span><time>08:21</time></li><li><i>✓</i><span>Proposta enviada</span><time>ontem</time></li><li><i>✓</i><span>Contrato assinado</span><time>hoje</time></li></ul></div><div class="whoget"><img src="img/equipe-carlos.webp" alt=""><div><small>recebe pronto no WhatsApp</small><b>Carlos Andrade</b><span>vendedor técnico</span></div></div></div>
+  <div class="igcap"><p>Orçamentos de R$ 20 mil a R$ 300 mil. Um lead recuperado que fecha paga meses de operação.</p><span class="num"><b>R$ 42 mil</b>fechado sem o vendedor abrir o CRM</span></div>
+</div>
+<div class="ig" data-s="2">
+  <div class="col c1"><h5>De onde chega</h5><div class="ocs"><em class="oc o-whatsapp"><i></i>WhatsApp<small>link da bio</small></em><em class="oc o-instagram"><i></i>Instagram<small>story do vestido verde</small></em><em class="oc o-site"><i></i>Site<small>página do produto</small></em></div></div>
+  <div class="cn"><i></i></div>
+  <div class="col c2"><div class="knode"><span class="klogo"><b>[</b>k<b>]</b></span><h5>O que a Kompila faz</h5></div><ul class="kdo"><li><i>✓</i><span>Responde às 19h48, com a loja fechada</span></li><li><i>✓</i><span>Confere o estoque: tamanho 42 disponível</span></li><li><i>✓</i><span>Reserva em nome da cliente e prepara o Pix</span></li><li><i>✓</i><span>O vendedor confirma na abertura, com um ok no WhatsApp</span></li></ul></div>
+  <div class="cn"><i></i></div>
+  <div class="col c3"><div class="leadcard"><div class="lh"><img src="img/lead-juliana.webp" alt=""><div><b>Juliana Prado</b><span>Vestido verde 42 · retirar sábado</span></div></div><ul class="chk"><li><i>✓</i><span>Respondida</span><time>19:48</time></li><li><i>✓</i><span>Estoque conferido · 42 ok</span><time>19:48</time></li><li><i>✓</i><span>Reservada · Pix preparado</span><time>19:49</time></li><li><i>✓</i><span>Diego confirmou o Pix</span><time>10:02</time></li></ul></div><div class="whoget"><img src="img/equipe-diego.webp" alt=""><div><small>recebe pronto no WhatsApp</small><b>Diego Santos</b><span>vendedor da loja</span></div></div></div>
+  <div class="igcap"><p>A cliente pergunta às 19h48 e quer retirar amanhã. Retira às 10h, sem ninguém ter perdido a venda de noite.</p><span class="num"><b>19h48</b>hora em que a venda começou</span></div>
+</div>
+<div class="ig crm" data-s="3">
+  <div class="col c1"><h5>De onde chega</h5><div class="ocs"><em class="oc o-meta"><i></i>Ads<small>Meta e Google</small></em><em class="oc o-site"><i></i>Site<small>formulários e chat</small></em><em class="oc o-whatsapp"><i></i>WhatsApp<small>número da empresa</small></em></div></div>
+  <div class="cn"><i></i></div>
+  <div class="col c2"><div class="crmbox"><h5>Seu CRM continua</h5><ul class="crml"><li>HubSpot</li><li>Salesforce</li><li>Kommo</li><li>Pipedrive</li></ul></div><div class="knode"><span class="klogo"><b>[</b>k<b>]</b></span><h5>A Kompila lê e escreve</h5></div><ul class="kdo"><li><i>✓</i><span>Lê responsável, fase e última atividade</span></li><li><i>✓</i><span>Escreve de volta: reabertura, avanço de fase, tarefa</span></li><li><i>✓</i><span>Nada é migrado. Nada é jogado fora</span></li></ul></div>
+  <div class="cn"><i></i></div>
+  <div class="col c3"><div class="outs"><div class="out"><img src="img/lead-marcos.webp" alt=""><b>Cliente atendido</b><span>em segundos, no WhatsApp</span></div><div class="out"><img src="img/equipe-renata.webp" alt=""><b>Vendedor acionado</b><span>no WhatsApp dele, já qualificado</span></div><div class="out"><img src="img/equipe-beatriz.webp" alt=""><b>Gestor informado</b><span>no CRM que ele já usa</span></div></div></div>
+  <div class="igcap"><p>Você não joga nada fora. A compatibilidade é confirmada no Diagnóstico, antes de qualquer promessa.</p><span class="num"><b>0</b>migração</span></div>
+</div>
     </div>
   </div>
 </section>
@@ -1276,5 +1349,26 @@ var i=0;function spawn(){var m=msgs[i%msgs.length];i++;var d=document.createElem
 var t=null;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!t){spawn();t=setInterval(spawn,2300)}else if(!e.isIntersecting&&t){clearInterval(t);t=null}})},{threshold:.2}).observe(box.parentNode)})();
 </script>
 <script>(function(){var cz=document.querySelector('.cz');if(!cz)return;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cz.classList.add('live')}})},{threshold:.05}).observe(cz);addEventListener('scroll',function(){var r=cz.getBoundingClientRect();if(r.top<innerHeight*.85&&r.bottom>0)cz.classList.add('live')},{passive:true})})();</script>
+
+<script>
+(function(){var segs=[].slice.call(document.querySelectorAll('#segs button')),igs=[].slice.call(document.querySelectorAll('#segpanel .ig')),T=[],cur=0,timer=null,touched=false;
+function later(f,ms){T.push(setTimeout(f,ms))}
+function show(n){T.forEach(clearTimeout);T=[];cur=n;segs.forEach(function(b,i){b.classList.toggle('on',i===n)});igs.forEach(function(g,i){g.classList.toggle('on',i===n);g.querySelectorAll('.in').forEach(function(e){e.classList.remove('in')})});var g=igs[n],t=150;
+ g.querySelectorAll('.oc').forEach(function(e){later(function(){e.classList.add('in')},t);t+=160});
+ var cn=g.querySelectorAll('.cn');later(function(){cn[0].classList.add('in')},t);t+=450;
+ var cb=g.querySelector('.crmbox');if(cb){later(function(){cb.classList.add('in')},t);t+=400}
+ g.querySelectorAll('.kdo li').forEach(function(e){later(function(){e.classList.add('in')},t);t+=420});
+ later(function(){cn[1].classList.add('in')},t);t+=450;
+ var lc=g.querySelector('.leadcard');if(lc){later(function(){lc.classList.add('in')},t);t+=350}
+ g.querySelectorAll('.chk li').forEach(function(e){later(function(){e.classList.add('in')},t);t+=480});
+ g.querySelectorAll('.out').forEach(function(e){later(function(){e.classList.add('in')},t);t+=380});
+ var w=g.querySelector('.whoget');if(w){later(function(){w.classList.add('in')},t);t+=500}
+ later(function(){g.querySelector('.igcap').classList.add('in')},t);t+=600;
+ clearTimeout(timer);if(!touched)timer=setTimeout(function(){show((cur+1)%igs.length)},t+5500)}
+segs.forEach(function(b,i){b.addEventListener('click',function(){touched=true;clearTimeout(timer);show(i)})});
+var started=false;new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersecting&&!started){started=true;show(0);obs.unobserve(e.target)}})},{threshold:.25}).observe(document.getElementById('segpanel'));
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){touched=true}
+})();
+</script>
 </body>
 </html>
