@@ -1542,7 +1542,7 @@ function anim(n,p){clearT();stopSteps();
 }
 function go(n){cur=n;tabs.forEach(function(b,i){b.classList.toggle('on',i===n)});tp.forEach(function(p,i){p.classList.toggle('on',i===n)});sp.forEach(function(p,i){p.classList.toggle('on',i===n);if(i===n){var w=p.querySelector('.win');if(w){w.classList.remove('live');void w.offsetWidth;w.classList.add('live')}var ph=p.querySelector('.phone');if(ph&&window.__playPhone)setTimeout(function(){window.__playPhone(ph)},350);anim(n,p)}});var b=tabs[n],bar=b&&b.parentNode;if(bar&&bar.scrollWidth>bar.clientWidth){bar.scrollTo({left:b.offsetLeft-(bar.clientWidth-b.offsetWidth)/2,behavior:'smooth'})}}
 function stopAuto(){touched=true;clearInterval(timer);timer=null}
-function startAuto(){clearInterval(timer);timer=setInterval(function(){if(document.hidden||touched)return;go((cur+1)%tabs.length)},10000)}
+function startAuto(){clearInterval(timer);timer=setInterval(function(){if(document.hidden||touched)return;go((cur+1)%tabs.length)},5000)}
 tabs.forEach(function(b,i){b.addEventListener('click',function(){stopAuto();go(i)})});
 onTap(stopAuto);capPP.addEventListener('click',stopAuto);
 var sc0=document.getElementById('showcase');new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!touched){go(cur);if(!reduced)startAuto()}}else{clearInterval(timer);timer=null}})},{threshold:.3}).observe(sc0);
