@@ -1148,7 +1148,7 @@ nav .pill .btn.ghost{border-color:rgba(10,11,14,.16);color:var(--ink);background
 nav .pill .btn.ghost:hover{border-color:var(--ink)}
 nav .pill .btn.ghost .ico{width:18px;height:18px}
 @media(max-width:1180px){nav .pill .btn.ghost{display:none}}
-nav .links a,nav .ddb{white-space:nowrap}
+nav .links>a,nav .ddb{white-space:nowrap}nav .ddp a,nav .ddp a span{white-space:normal}
 @media(max-width:1100px){nav .links{gap:14px;font-size:14px}nav .pill{gap:14px;padding-left:16px}nav .logo{font-size:18px}nav .pill .btn{padding:0 14px;font-size:13px}}
 @media(max-width:900px){nav .links{display:none}nav .pill{height:56px;padding:0 8px 0 16px}nav .nctas .btn.green{display:inline-flex;height:40px;padding:0 14px}nav .menu{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:0;border-radius:50%;background:var(--ink);color:#fff;flex:none}nav .nctas{margin-left:auto}}
 @media(max-width:700px){nav .pill .btn.green{display:none}nav .nctas{display:none}}
@@ -1159,9 +1159,10 @@ nav .dd{position:relative}
 nav .ddb{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:0;font:500 14px var(--sans);color:var(--text);cursor:pointer}
 nav .ddb:hover,nav .dd.open .ddb{color:var(--ink)}
 nav .ddb .chev{width:14px;height:14px;transition:transform .25s}nav .dd.open .ddb .chev{transform:rotate(180deg)}
-nav .ddp{position:absolute;left:50%;top:calc(100% + 18px);transform:translate(-50%,6px);width:520px;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border:1px solid rgba(10,11,14,.08);border-radius:20px;padding:10px;box-shadow:0 30px 70px rgba(10,11,14,.18);display:grid;grid-template-columns:1fr 1fr;gap:2px;opacity:0;pointer-events:none;transition:opacity .2s,transform .25s}
-nav .dd.open .ddp{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
-nav .ddp:before{content:"";position:absolute;left:0;right:0;top:-18px;height:18px}
+nav .ddp{position:absolute;left:0;top:calc(100% + 14px);width:520px;background:#fff;border:1px solid rgba(10,11,14,.1);border-radius:20px;padding:10px;box-shadow:0 30px 70px rgba(10,11,14,.22);display:none;grid-template-columns:1fr 1fr;gap:2px;z-index:60}
+nav .dd.open .ddp,nav .dd:hover .ddp{display:grid}
+nav .ddp:before{content:"";position:absolute;left:0;right:0;top:-16px;height:16px}
+nav .dd{position:relative;padding:20px 0}
 nav .ddp a{display:grid;gap:3px;padding:12px 14px;border-radius:12px;color:var(--ink)}
 nav .ddp a:hover{background:var(--soft)}
 nav .ddp a b{font:600 14px var(--mono);letter-spacing:-.01em;color:var(--ink)}nav .ddp a b em{font-style:normal;color:var(--green)}
