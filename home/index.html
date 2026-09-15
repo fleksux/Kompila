@@ -31,8 +31,8 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .bg .slide.on img.cor{animation:acende 1.8s ease .5s both}
 @keyframes acende{0%{opacity:0;filter:brightness(1.35) saturate(1.3)}60%{opacity:1;filter:brightness(1.12) saturate(1.15)}100%{opacity:1;filter:none}}
 .hero .fade{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,rgba(10,11,14,.92) 30%,rgba(10,11,14,.35) 50%,rgba(10,11,14,0) 62%),linear-gradient(180deg,rgba(10,11,14,.55) 0%,rgba(10,11,14,0) 22%,rgba(10,11,14,0) 70%,var(--bg) 100%);pointer-events:none}
-.hero .target{position:absolute;left:71.5%;top:34%;transform:translate(-50%,-50%);width:min(22vw,380px);height:min(40svh,340px);display:flex;justify-content:space-between;color:var(--green);filter:drop-shadow(0 0 18px rgba(47,214,123,.45));pointer-events:none}
-.hero .target .br{width:38px;height:100%}
+.hero .target{position:absolute;left:71.5%;top:50%;transform:translate(-50%,-50%);width:min(30vw,520px);height:min(62svh,560px);display:flex;justify-content:space-between;color:var(--green);filter:drop-shadow(0 0 18px rgba(47,214,123,.45));pointer-events:none}
+.hero .target .br{width:34px;height:100%}
 .hgrid{position:relative;z-index:2;display:grid;grid-template-columns:1fr;gap:28px}
 .hero .copy{display:grid;gap:22px;justify-items:start;max-width:640px}
 .hero h1{margin:0;font-weight:800;font-size:clamp(48px,min(7vw,11svh),104px);line-height:.92;letter-spacing:-.05em;color:#fff}
@@ -44,12 +44,19 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .btn.g{background:var(--green);color:#0a0b0e}.hero .btn.o{border:1px solid rgba(255,255,255,.2);color:#fff}
 .hero .meta{display:flex;justify-content:flex-start;align-items:flex-end;gap:14px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:16px}
 .hero .who{font:500 12px var(--mono);color:var(--cmuted);letter-spacing:.04em}
-.hero .tags{position:absolute;z-index:3;left:71.5%;bottom:calc(40px + 74px);transform:translateX(-50%);display:flex;gap:6px;flex-wrap:nowrap;justify-content:center;white-space:nowrap}
-.hero .who{position:absolute;z-index:3;left:71.5%;bottom:40px;transform:translateX(-50%);width:min(34vw,480px);text-align:center;font:600 clamp(15px,1.3vw,19px) var(--sans);color:#fff;letter-spacing:-.01em;line-height:1.3;padding:12px 18px;border-radius:14px;background:rgba(10,11,14,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08)}.hero .tags span{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:#d7dce2;background:rgba(10,11,14,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all .3s}
 .hero .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
-@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:73%;top:24svh;transform:translate(-50%,-50%);width:min(60vw,260px);height:24svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .tags{left:50%;top:calc(24svh + 12svh + 12px);flex-wrap:wrap;width:90vw}.hero .who{left:50%;top:calc(24svh + 12svh + 60px);width:86vw;font-size:14px}.hero .bg img{object-position:71.5% 34%}}
+@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .bg img{object-position:71.5% 34%}}
 @media(prefers-reduced-motion:reduce){.hero .bg .slide,.hero .bg img.cor{transition:none;animation:none;opacity:1}}
 
+
+/* a fala do empreendedor vive na coluna do texto */
+.hero .say{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;align-items:center;margin-top:10px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);max-width:640px}
+.hero .say .tag{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--green);border:1px solid rgba(47,214,123,.4);padding:6px 10px;border-radius:999px;white-space:nowrap}
+.hero .say .q{font:500 clamp(15px,1.25vw,18px) var(--sans);color:#fff;letter-spacing:-.01em;line-height:1.35;min-height:2.7em;display:flex;align-items:center}
+.hero .say .dots{grid-column:1/-1;display:flex;gap:6px}
+.hero .say .dots i{width:22px;height:3px;border-radius:2px;background:rgba(255,255,255,.15);transition:background .3s}
+.hero .say .dots i.on{background:var(--green)}
+@media(max-width:900px){.hero .target{left:71.5%;top:30svh;width:min(64vw,300px);height:44svh}.hero .say{max-width:none}}
 </style>
 </head>
 <body>
@@ -59,22 +66,21 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
   <div class="bg" aria-hidden="true"><div class="slide on" data-fx=".72" data-fy=".24" data-fh=".14"><img class="bw" src="img/hero-moda.webp" alt=""><img class="cor" src="img/hero-moda.webp" alt=""></div><div class="slide" data-fx=".71" data-fy=".17" data-fh=".19"><img class="bw" src="img/hero-led.webp" alt=""><img class="cor" src="img/hero-led.webp" alt=""></div><div class="slide" data-fx=".72" data-fy=".22" data-fh=".18"><img class="bw" src="img/hero-contab.webp" alt=""><img class="cor" src="img/hero-contab.webp" alt=""></div></div>
   <div class="fade" aria-hidden="true"></div>
   <div class="target" aria-hidden="true"><svg class="br l" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M60 2 H6 V98 H60" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg><svg class="br r" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M0 2 H54 V98 H0" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg></div>
-  <div class="tags" id="tags"><span class="on">anúncio → venda</span><span>orçamento → contrato</span><span>loja → faturamento</span></div>
-  <div class="who" id="who">“Vendi de madrugada, sem ninguém acordado.”</div>
-  <div class="shell hgrid">
+    <div class="shell hgrid">
     <div class="copy">
       <h1>A sua venda andando <em>sozinha.</em></h1>
       <p class="lead">Do anúncio ao contrato, a Kompila faz o trabalho repetitivo: <b>atende, qualifica, marca, cobra e registra</b>. A sua equipe só vende.</p>
       <div class="ctas"><a class="btn g" href="#produtos">Ver os produtos</a><a class="btn o" href="#diagnostico">Medir a minha operação</a></div>
+      <div class="say"><span class="tag" id="tag">orçamento → contrato</span><span class="q" id="who">“A cotação saiu em minutos. Fechei o evento no mesmo dia.”</span><span class="dots" id="dots"><i class="on"></i><i></i><i></i></span></div>
     </div>
     
   </div>
 </section>
 
 <script>
-(function(){var im=[].slice.call(document.querySelectorAll('.hero .bg .slide')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=['“Vendi de madrugada, sem ninguém acordado.”','“A cotação saiu em minutos. Fechei o evento no mesmo dia.”','“Meu time só fala com quem já quer comprar.”'],i=0;
-if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-setInterval(function(){i=(i+1)%im.length;im.forEach(function(x,k){x.classList.toggle('on',k===i)});tg.forEach(function(x,k){x.classList.toggle('on',k===i)});who.textContent=W[i]},6000)})();
+(function(){var im=[].slice.call(document.querySelectorAll('.hero .bg .slide')),dots=[].slice.call(document.querySelectorAll('#dots i')),tag=document.getElementById('tag'),who=document.getElementById('who'),T=['anúncio → venda','orçamento → contrato','loja → faturamento'],W=['“Vendi de madrugada, sem ninguém acordado.”','“A cotação saiu em minutos. Fechei o evento no mesmo dia.”','“Meu time só fala com quem já quer comprar.”'],i=1;
+function go(n){i=n;im.forEach(function(x,k){x.classList.toggle('on',k===i)});dots.forEach(function(x,k){x.classList.toggle('on',k===i)});tag.textContent=T[i];who.textContent=W[i]}
+go(0);if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;setInterval(function(){go((i+1)%im.length)},6500)})();
 </script>
 
 </body>
