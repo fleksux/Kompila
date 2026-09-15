@@ -1065,6 +1065,23 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cz ol.tl li{padding:16px 0}
 .cz ol.tl li:after{top:56px;bottom:-16px}
 @media(max-width:900px){.dhead{grid-template-columns:1fr;gap:14px}.dhead .lead{justify-self:start}#diagnostico .cz{grid-template-columns:1fr}}
+
+/* passos espalhados até embaixo e animados em sequência: passo, linha, passo, linha */
+#diagnostico .cz .side.steps ol.tl{display:flex;flex-direction:column;flex:1;margin:10px 0 0}
+#diagnostico .cz .side.steps ol.tl li{flex:1;padding:0 0 12px;display:grid;grid-template-columns:44px 1fr;gap:18px;align-items:start}
+#diagnostico .cz .side.steps ol.tl li:last-child{flex:0 0 auto}
+#diagnostico .cz .side.steps ol.tl li:after{top:48px;bottom:0;left:19px}
+#diagnostico .cz .side.steps ol.tl li:last-child:after{display:none}
+.cz.live ol.tl li{transition-delay:0s}
+.cz.live ol.tl li:nth-child(1){transition-delay:.2s}.cz.live ol.tl li:nth-child(2){transition-delay:1.3s}.cz.live ol.tl li:nth-child(3){transition-delay:2.4s}.cz.live ol.tl li:nth-child(4){transition-delay:3.5s}
+.cz.live ol.tl li:nth-child(1) i{transition-delay:.3s}.cz.live ol.tl li:nth-child(2) i{transition-delay:1.4s}.cz.live ol.tl li:nth-child(3) i{transition-delay:2.5s}.cz.live ol.tl li:nth-child(4) i{transition-delay:3.6s}
+.cz ol.tl li:after{transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.cz.live ol.tl li:nth-child(1):after{transition-delay:.7s}.cz.live ol.tl li:nth-child(2):after{transition-delay:1.8s}.cz.live ol.tl li:nth-child(3):after{transition-delay:2.9s}
+#diagnostico .cz .side.steps .ft{margin-top:14px}
+/* card da análise: respiro entre chips e botão */
+.cz .scan .out{margin-top:18px;padding-top:16px}
+.cz .scan .chips{margin-bottom:8px}
+.cz .scan .btn{margin-top:22px}
 </style>
 </head>
 <body>
