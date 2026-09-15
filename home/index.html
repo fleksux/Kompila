@@ -1146,6 +1146,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 /* ===== HOME ===== */
 /* ===== HOME v2: capítulos, inteligência, cases, promessa ===== */
 .build{padding:96px 0 0;background:#fff}
+.strip{padding:72px 0;background:#fff}.strip .dhead{margin:0}
 .build .dhead{margin-bottom:48px}
 .cap{position:relative;color:var(--off);overflow:hidden;padding:88px 0;border-top:1px solid rgba(255,255,255,.06)}
 .cap .cbg{position:absolute;inset:0;z-index:0}
@@ -1178,7 +1179,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cap:nth-child(odd) .win.second{justify-self:start;margin-right:0;margin-left:-24px}
 @media(max-width:900px){.cap{padding:64px 0}.cap .cgrid,.cap:nth-child(odd) .cgrid{grid-template-columns:1fr;gap:32px}.cap:nth-child(odd) .ctext{order:1}.cap:nth-child(odd) .cshots{order:2}.cap .win.second{width:70%;margin-bottom:-20px}.cap .cbg:after,.cap:nth-child(odd) .cbg:after{background:rgba(10,11,14,.8)}}
 /* inteligência */
-.intel .dhead{margin-bottom:44px}
+.intel{padding-top:72px}
 .icols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:64px}
 .icol{background:var(--carbon2);border:1px solid var(--cline);border-radius:var(--r2);padding:24px}
 .icol i{width:44px;height:44px;border-radius:12px;background:rgba(47,214,123,.12);display:grid;place-items:center;margin-bottom:16px}
@@ -1480,9 +1481,11 @@ nav .logo{font-size:20px}
 </article>
 </section>
 
-<section class="dark intel" id="tudo">
+<section class="strip" id="tudo">
+  <div class="shell"><div class="dhead rv"><h2>Tudo que criamos tem inteligência dentro.</h2><p class="lead">Não é um chatbot colado na porta. A IA está na loja, no sistema e no site, fazendo o trabalho repetitivo que hoje trava a sua equipe.</p></div></div>
+</section>
+<section class="dark intel">
   <div class="shell">
-    <div class="dhead rv"><h2>Tudo que criamos tem inteligência dentro.</h2><p class="lead">Não é um chatbot colado na porta. A IA está na loja, no sistema e no site, fazendo o trabalho repetitivo que hoje trava a sua equipe.</p></div>
     <div class="icols"><div class="icol rv"><i><svg class="ico"><use href="#i-tag"/></svg></i><b>Na loja</b><ul><li>Responde tamanho, estoque e prazo na hora, no WhatsApp e no Instagram.</li><li>Marca o provador e avisa a loja.</li><li>O painel diz o que precisa de você hoje, não um relatório de 40 abas.</li></ul></div><div class="icol rv"><i><svg class="ico"><use href="#i-db"/></svg></i><b>No sistema</b><ul><li>Primeira resposta em segundos, 24 h, com as regras da empresa.</li><li>Cotação pela tabela aprovada, não pela cabeça do vendedor.</li><li>Guardião: passou do prazo, avisa; dobrou, passa pra outro.</li></ul></div><div class="icol rv"><i><svg class="ico"><use href="#i-layers"/></svg></i><b>No site e no anúncio</b><ul><li>Formulário vira lead no CRM com origem e campanha.</li><li>Conteúdo sai com a fonte ao lado.</li><li>A venda volta pro Meta e pro Google como conversão.</li></ul></div></div>
     <div class="chain rv" id="chain">
       <p class="cl">E tudo ligado, num caminho só:</p>
