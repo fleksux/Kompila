@@ -14,59 +14,61 @@ a{color:inherit;text-decoration:none}
 .shell{width:min(1240px,100% - 2*var(--gut));margin:0 auto}
 /* nav */
 nav{position:fixed;top:14px;left:0;right:0;z-index:20;display:flex;justify-content:center;pointer-events:none}
-nav .bar{pointer-events:auto;display:flex;align-items:center;gap:22px;padding:10px 12px 10px 18px;border-radius:999px;background:rgba(17,21,26,.72);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1)}
-nav .lg{font:600 15px var(--mono);color:#fff}nav .lg b{color:var(--green)}
-nav .links{display:flex;gap:18px;font-size:14px;color:var(--cmuted)}nav .links a:hover{color:#fff}
-nav .btn{padding:10px 16px;border-radius:999px;background:var(--green);color:#0a0b0e;font-weight:600;font-size:14px}
+nav .bar{pointer-events:auto;display:flex;align-items:center;gap:28px;padding:12px 12px 12px 22px;border-radius:999px;background:rgba(17,21,26,.72);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1)}
+nav .lg{font:600 18px var(--mono);color:#fff}nav .lg b{color:var(--green)}
+nav .links{display:flex;gap:22px;font-size:16px;font-weight:500;color:var(--cmuted)}nav .links a:hover{color:#fff}
+nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a0b0e;font-weight:600;font-size:15px}
 @media(max-width:900px){nav .links{display:none}}
 /* hero */
-.hero{position:relative;min-height:100svh;overflow:hidden;display:grid;align-items:end}
-.hero .k{position:absolute;inset:0;pointer-events:none}
-.hero .k svg{position:absolute;left:50%;top:50%;width:min(92vw,1100px);height:auto;transform:translate(-50%,-52%)}
-.hero .k .l,.hero .k .r{fill:none;stroke:var(--green);stroke-width:1.5;opacity:.9}
-.hero .k .glow{fill:var(--green);opacity:.16;filter:blur(60px)}
-.hero .ph{position:absolute;left:55%;bottom:0;transform:translateX(-50%);height:min(94svh,980px);width:auto;display:grid;justify-items:center}
-.hero .ph img{grid-area:1/1;height:min(94svh,980px);width:auto;object-fit:contain;object-position:bottom;filter:grayscale(1) contrast(1.08);opacity:0;transition:opacity .9s ease;mask-image:linear-gradient(180deg,#000 78%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,#000 78%,transparent 100%)}
-.hero .ph img.on{opacity:1}
-.hero .copy{position:relative;z-index:3;padding:0 0 56px;display:grid;gap:18px;justify-items:start}
-.hero h1{margin:0;font-weight:800;font-size:clamp(52px,8.6vw,128px);line-height:.92;letter-spacing:-.05em;color:#fff;max-width:9ch}
+.hero{position:relative;min-height:100svh;display:grid;align-items:center;padding:120px 0 60px;overflow:hidden}
+.hgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+.hero .copy{display:grid;gap:22px;justify-items:start}
+.hero h1{margin:0;font-weight:800;font-size:clamp(52px,7.4vw,112px);line-height:.92;letter-spacing:-.05em;color:#fff}
 .hero h1 em{font-style:normal;color:var(--green)}
-.hero .sub{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:end;width:100%}
-.hero .lead{margin:0;max-width:40ch;font-size:clamp(16px,1.4vw,20px);color:var(--cmuted);line-height:1.45}
+.hero .lead{margin:0;max-width:44ch;font-size:clamp(16px,1.35vw,19px);color:var(--cmuted);line-height:1.5}
 .hero .lead b{color:#fff;font-weight:600}
-.hero .tags{justify-self:end;display:flex;gap:8px;flex-wrap:wrap}
-.hero .tags span{font:600 11.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
-.hero .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
 .hero .ctas{display:flex;gap:10px;flex-wrap:wrap}
 .hero .btn{padding:16px 24px;border-radius:999px;font-weight:600;font-size:15px}
 .hero .btn.g{background:var(--green);color:#0a0b0e}.hero .btn.o{border:1px solid rgba(255,255,255,.2);color:#fff}
-.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,14,.1),rgba(10,11,14,0) 40%,rgba(10,11,14,.75) 78%,var(--bg) 100%);pointer-events:none;z-index:2}
-.hero .who{position:absolute;right:var(--gut);top:110px;z-index:3;text-align:right;font:500 12px var(--mono);color:var(--cmuted);letter-spacing:.04em}
-.hero .who b{display:block;color:#fff;font:700 14px var(--sans);letter-spacing:0;margin-bottom:2px}
-@media(max-width:900px){.hero .ph{height:min(72svh,700px);bottom:200px}.hero h1{font-size:clamp(52px,16vw,92px)}.hero .sub{grid-template-columns:1fr}.hero .tags{justify-self:start}.hero .who{top:84px}.hero .k svg{width:150vw}}
-@media(prefers-reduced-motion:reduce){.hero .ph img{transition:none}}
+/* a chave: lugar fixo, os rostos aparecem dentro */
+.frame{position:relative;display:grid;grid-template-columns:44px 1fr 44px;grid-template-rows:min(70svh,620px) auto;align-items:stretch;justify-self:end;width:100%;max-width:560px}
+.frame .glow{position:absolute;inset:10% 8%;background:radial-gradient(ellipse at 50% 60%,rgba(47,214,123,.28),transparent 65%);filter:blur(30px);pointer-events:none}
+.frame .br{grid-row:1;width:44px;height:100%;color:var(--green);filter:drop-shadow(0 0 18px rgba(47,214,123,.45))}
+.frame .ph{position:relative;overflow:hidden;grid-row:1}
+.frame .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%;filter:grayscale(1) contrast(1.08);opacity:0;transform:scale(1.02);transition:opacity .8s ease,transform 1.2s ease;mask-image:linear-gradient(180deg,#000 82%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,#000 82%,transparent 100%)}
+.frame .ph img.on{opacity:1;transform:none}
+.frame .meta{grid-column:1/-1;grid-row:2;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 8px 0}
+.frame .who{font:500 12px var(--mono);color:var(--cmuted);letter-spacing:.04em}
+.frame .who b{display:block;color:#fff;font:700 15px var(--sans);letter-spacing:0;margin-bottom:2px}
+.frame .tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:52%}
+.frame .tags span{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
+.frame .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
+@media(max-width:900px){.hgrid{grid-template-columns:1fr;gap:70px}.hero{padding:100px 0 40px}.frame{justify-self:center;grid-template-rows:min(58svh,520px) auto;max-width:420px;grid-template-columns:32px 1fr 32px}.frame .br{width:32px}.frame .meta{flex-direction:column}.frame .tags{max-width:none;justify-content:flex-start}.hero h1{font-size:clamp(48px,14vw,84px)}}
+@media(prefers-reduced-motion:reduce){.frame .ph img{transition:none}}
 </style>
 </head>
 <body>
 <nav><div class="bar"><a class="lg" href="/"><b>[</b> kompila <b>]</b></a><div class="links"><a href="#produtos">Produtos</a><a href="#tudo">Tudo ligado</a><a href="#prova">Prova</a><a href="#equipe">Equipe</a><a href="#blog">Blog</a></div><a class="btn" href="#diagnostico">Falar com a Kompila</a></div></nav>
 
 <section class="hero" id="topo">
-  <div class="k" aria-hidden="true"><svg viewBox="0 0 1100 900"><ellipse class="glow" cx="550" cy="520" rx="330" ry="260"/><path class="l" d="M300 120 H210 V780 H300"/><path class="r" d="M800 120 H890 V780 H800"/></svg></div>
-  <div class="ph" aria-hidden="true"><img src="img/retrato-moda.webp" class="on" alt=""><img src="img/retrato-led.webp" alt=""><img src="img/retrato-contab.webp" alt=""></div>
-  <div class="veil"></div>
-  <div class="who" id="who"><b>Dona de marca de moda</b>coleção nova · pedidos no WhatsApp</div>
-  <div class="shell copy">
-    <h1>A sua venda andando <em>sozinha.</em></h1>
-    <div class="sub">
+  <div class="shell hgrid">
+    <div class="copy">
+      <h1>A sua venda andando <em>sozinha.</em></h1>
       <p class="lead">Do anúncio ao contrato, a Kompila faz o trabalho repetitivo: <b>atende, qualifica, marca, cobra e registra</b>. A sua equipe só vende.</p>
-      <div class="tags" id="tags"><span class="on">moda</span><span>eventos e LED</span><span>escritórios de venda</span></div>
+      <div class="ctas"><a class="btn g" href="#produtos">Ver os produtos</a><a class="btn o" href="#diagnostico">Medir a minha operação</a></div>
     </div>
-    <div class="ctas"><a class="btn g" href="#produtos">Ver os produtos</a><a class="btn o" href="#diagnostico">Medir a minha operação</a></div>
+    <div class="frame">
+      <div class="glow"></div>
+      <svg class="br l" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M60 2 H6 V98 H60" fill="none" stroke="currentColor" stroke-width="7" vector-effect="non-scaling-stroke"/></svg>
+      <div class="ph"><img src="img/retrato-moda.webp" class="on" alt=""><img src="img/retrato-led.webp" alt=""><img src="img/retrato-contab.webp" alt=""></div>
+      <svg class="br r" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M0 2 H54 V98 H0" fill="none" stroke="currentColor" stroke-width="7" vector-effect="non-scaling-stroke"/></svg>
+      <div class="meta"><div class="who" id="who"><b>Dona de marca de moda</b>coleção nova · pedidos no WhatsApp</div><div class="tags" id="tags"><span class="on">moda</span><span>eventos e LED</span><span>escritórios de venda</span></div></div>
+    </div>
   </div>
 </section>
 
 <script>
-(function(){var im=[].slice.call(document.querySelectorAll('.hero .ph img')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=[['Dona de marca de moda','coleção nova · pedidos no WhatsApp'],['Produtor de eventos','painel de LED · orçamento em minutos'],['Sócia de escritório de vendas','leads do anúncio · fila sem fura']],i=0;
+(function(){var im=[].slice.call(document.querySelectorAll('.frame .ph img')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=[['Dona de marca de moda','coleção nova · pedidos no WhatsApp'],['Produtor de eventos','painel de LED · orçamento em minutos'],['Sócia de escritório de vendas','leads do anúncio · fila sem fura']],i=0;
 if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
 setInterval(function(){i=(i+1)%im.length;im.forEach(function(x,k){x.classList.toggle('on',k===i)});tg.forEach(function(x,k){x.classList.toggle('on',k===i)});who.innerHTML='<b>'+W[i][0]+'</b>'+W[i][1]},6000)})();
 </script>
