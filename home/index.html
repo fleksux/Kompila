@@ -42,23 +42,23 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .btn{padding:16px 24px;border-radius:999px;font-weight:600;font-size:15px}
 .hero .btn.g{background:var(--green);color:#0a0b0e}.hero .btn.o{border:1px solid rgba(255,255,255,.2);color:#fff}
 /* base: esteira animada */
-.hero .flow{padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}
+.hero .flow{padding-top:18px;border-top:1px solid rgba(255,255,255,.12);height:168px;box-sizing:border-box;overflow:hidden}
 .hero .fh{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}
-.hero .fh .q{font:500 clamp(14px,1.15vw,17px) var(--sans);color:#fff;letter-spacing:-.01em}
+.hero .fh .q{font:500 clamp(14px,1.15vw,17px) var(--sans);color:#fff;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;height:1.3em}
 .hero .dots{display:flex;gap:6px}.hero .dots i{width:22px;height:3px;border-radius:2px;background:rgba(255,255,255,.15);transition:background .3s}.hero .dots i.on{background:var(--green)}
 .hero .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative}
-.hero .steps li{position:relative;display:block;padding:0 14px 0 0;opacity:.35;transition:opacity .35s}
+.hero .steps li{position:relative;display:block;padding:0 14px 0 0;opacity:.35;transition:opacity .35s;height:88px}
 .hero .steps li i{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.25);display:grid;place-items:center;font:700 12px var(--mono);color:#fff;background:rgba(10,11,14,.6);transition:all .35s;position:relative;z-index:1}
-.hero .steps li b{display:block;font-size:13.5px;font-weight:600;color:#fff;line-height:1.2;margin-top:10px}
-.hero .steps li span{display:block;font-size:11.5px;color:var(--cmuted);line-height:1.25;margin-top:2px}
+.hero .steps li b{display:block;font-size:13.5px;font-weight:600;color:#fff;line-height:1.2;margin-top:10px;height:1.2em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero .steps li span{display:block;font-size:11.5px;color:var(--cmuted);line-height:1.25;margin-top:2px;height:2.5em;overflow:hidden}
 .hero .steps li:after{content:"";position:absolute;left:40px;right:8px;top:17px;height:1.5px;background:rgba(255,255,255,.15)}
 .hero .steps li:last-child:after{display:none}
 .hero .steps li:before{content:"";position:absolute;left:40px;top:17px;height:1.5px;width:0;background:var(--green);transition:width .5s ease;z-index:0}
 .hero .steps li.on{opacity:1}.hero .steps li.on i{border-color:var(--green);background:var(--green);color:#0a0b0e;box-shadow:0 0 0 5px rgba(47,214,123,.18)}
 .hero .steps li.done:before{width:calc(100% - 48px)}
 .hero .steps li.on.last i{background:#fff;border-color:#fff}
-@media(max-width:1100px){.hero .steps{grid-template-columns:repeat(3,1fr);gap:6px 0}.hero .steps li:nth-child(3):after,.hero .steps li:nth-child(3):before{display:none}}
-@media(max-width:900px){.hero{height:auto;min-height:100svh}.hwrap{padding:92px 0 28px;grid-template-rows:auto auto}.hero .copy{max-width:none;padding-top:44svh}.hero .bg img{object-position:71.5% 12%}.hero .target{top:22svh;width:min(38vw,160px);height:18svh}.hero h1{font-size:clamp(44px,12vw,72px)}.hero .fh{flex-direction:column;align-items:flex-start}.hero .steps{grid-template-columns:repeat(2,1fr)}.hero .steps li:nth-child(2n):after,.hero .steps li:nth-child(2n):before{display:none}.hero .steps li:nth-child(3):after,.hero .steps li:nth-child(3):before{display:block}}
+@media(max-width:1100px){.hero .flow{height:260px}.hero .steps{grid-template-columns:repeat(3,1fr);gap:6px 0}.hero .steps li:nth-child(3):after,.hero .steps li:nth-child(3):before{display:none}}
+@media(max-width:900px){.hero{height:auto;min-height:100svh}.hwrap{padding:92px 0 28px;grid-template-rows:auto auto}.hero .copy{max-width:none;padding-top:44svh}.hero .bg img{object-position:71.5% 12%}.hero .target{top:22svh;width:min(38vw,160px);height:18svh}.hero h1{font-size:clamp(44px,12vw,72px)}.hero .flow{height:auto;overflow:visible}.hero .fh{flex-direction:column;align-items:flex-start}.hero .fh .q{white-space:normal;height:auto}.hero .steps{grid-template-columns:repeat(2,1fr)}.hero .steps li:nth-child(2n):after,.hero .steps li:nth-child(2n):before{display:none}.hero .steps li:nth-child(3):after,.hero .steps li:nth-child(3):before{display:block}}
 @media(prefers-reduced-motion:reduce){.hero .bg .slide,.hero .bg img.cor{transition:none;animation:none;opacity:1}}
 
 </style>
