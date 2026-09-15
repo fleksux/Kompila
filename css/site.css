@@ -1179,8 +1179,14 @@ nav .panel a.pi i{margin-left:auto;font:600 10px var(--sans);font-style:normal;l
 .hh .copy{justify-items:center;text-align:center;padding-top:40svh}
 .hh h1{max-width:12ch}
 .hh .lead{max-width:34ch}
-.hh .ctas{justify-content:center}
-.hh .flow{padding-top:14px}
+.hh .ctas{justify-content:center;flex-direction:column;width:100%;gap:10px}
+.hh .ctas .btn{width:100%;justify-content:center;text-align:center;display:inline-flex;align-items:center;height:52px}
+.hhwrap>*{min-width:0}
+.hh .flow{padding-top:14px;min-width:0;max-width:100%}
+.hh .steps{max-width:100%}
+.hh .copy{width:100%}
+.final .ctas{flex-direction:column;align-items:stretch}.final .ctas .btn{width:100%}
+.ph .ctas,.lh .ctas{flex-direction:column;align-items:stretch}.ph .ctas .btn,.lh .ctas .btn{width:100%}
 .hh .fh{align-items:center!important;text-align:center}
 .hh .fh .q{width:100%;text-align:center}
 .hh .dots{justify-content:center;width:100%}
