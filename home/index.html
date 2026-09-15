@@ -1317,6 +1317,7 @@ html.still{scroll-behavior:auto}html.still .rv{opacity:1;transform:none}html.sti
 .hh .copy{display:grid;gap:22px;justify-items:start;align-content:center;max-width:56%}
 .hh h1{margin:0;font-weight:800;font-size:clamp(52px,min(8.2vw,13svh),132px);line-height:.9;letter-spacing:-.05em;color:#fff}
 .hh h1 em{font-style:normal;color:#2fd67b}
+.hh h1{transition:opacity .35s ease,transform .35s ease}.hh h1.sw{opacity:0;transform:translateY(6px)}
 .hh .lead{margin:0;max-width:46ch;font-size:clamp(16px,1.35vw,19px);color:var(--cmuted);line-height:1.5}
 .hh .lead b{color:#fff;font-weight:600}
 .hh .ctas{display:flex;gap:10px;flex-wrap:wrap}
@@ -1493,7 +1494,7 @@ nav .logo{font-size:20px}
   <div class="target" aria-hidden="true"><svg class="br l" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M60 3 H8 V97 H60" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg><svg class="br r" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M0 3 H52 V97 H0" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg></div>
   <div class="shell hhwrap">
     <div class="copy">
-      <h1>A sua venda andando <em>sozinha.</em></h1>
+      <h1 id="hh1">A sua loja vendendo <em>sozinha.</em></h1>
       <p class="lead">Loja, marca, anúncio, atendimento e sistema, <b>feitos pela mesma equipe e ligados na mesma venda</b>. Você entra com o produto. A Kompila monta o resto e mede o que fechou.</p>
       <div class="ctas"><a class="btn g" href="#produtos">Ver os produtos</a><a class="btn o" href="#diagnostico">Medir a minha operação</a></div>
     </div>
@@ -1613,11 +1614,11 @@ new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersec
 <script>
 (function(){var h=document.querySelector('.hh');if(!h||matchMedia('(prefers-reduced-motion:reduce)').matches)return;var mx=0,my=0,sy=0,raf=0;function paint(){raf=0;h.style.setProperty('--mx',mx.toFixed(3));h.style.setProperty('--my',my.toFixed(3));h.style.setProperty('--sy',sy.toFixed(1))}function ask(){if(!raf)raf=requestAnimationFrame(paint)}if(matchMedia('(hover:hover)').matches){h.addEventListener('mousemove',function(e){var r=h.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*2-1;my=(e.clientY-r.top)/r.height*2-1;ask()});h.addEventListener('mouseleave',function(){mx=0;my=0;ask()})}addEventListener('scroll',function(){sy=Math.min(scrollY,h.offsetHeight);ask()},{passive:true})})();
 (function(){var im=[].slice.call(document.querySelectorAll('.hh .bg .slide')),dots=[].slice.call(document.querySelectorAll('#dots i')),who=document.getElementById('who'),ol=document.getElementById('steps'),T=[];
-var S=[{q:'“Vendi de madrugada, sem ninguém acordado.”',f:[['Instagram','cliente pergunta 19h48'],['Loja','tamanho e estoque na hora'],['Atendente IA','responde e reserva'],['Pix','link gerado sozinho'],['Vendedor','confirma na abertura'],['Entrega','retira às 10h']]},
-{q:'“A cotação saiu em minutos. Fechei o evento no mesmo dia.”',f:[['Google Ads','pesquisa painel de LED'],['Lead no CRM','entra com origem e campanha'],['WhatsApp','resposta em 6 s'],['Cotação','por m², pela tabela'],['Proposta','enviada e cobrada'],['Contrato','aceite vira Fechado']]},
-{q:'“Meu time só fala com quem já quer comprar.”',f:[['Meta Ads','campanha Painel Fachada'],['Lead no CRM','sem digitar nada'],['Atendente IA','qualifica e marca'],['Vendedor da vez','recebe pronto no WhatsApp'],['Visita','técnica, agendada'],['Venda','registrada e devolvida ao anúncio']]}];
+var S=[{t:'A sua loja vendendo <em>sozinha.</em>',q:'“Vendi de madrugada, sem ninguém acordado.”',f:[['Instagram','cliente pergunta 19h48'],['Loja','tamanho e estoque na hora'],['Atendente IA','responde e reserva'],['Pix','link gerado sozinho'],['Vendedor','confirma na abertura'],['Entrega','retira às 10h']]},
+{t:'O orçamento saindo <em>sozinho.</em>',q:'“A cotação saiu em minutos. Fechei o evento no mesmo dia.”',f:[['Google Ads','pesquisa painel de LED'],['Lead no CRM','entra com origem e campanha'],['WhatsApp','resposta em 6 s'],['Cotação','por m², pela tabela'],['Proposta','enviada e cobrada'],['Contrato','aceite vira Fechado']]},
+{t:'A sua venda andando <em>sozinha.</em>',q:'“Meu time só fala com quem já quer comprar.”',f:[['Meta Ads','campanha Painel Fachada'],['Lead no CRM','sem digitar nada'],['Atendente IA','qualifica e marca'],['Vendedor da vez','recebe pronto no WhatsApp'],['Visita','técnica, agendada'],['Venda','registrada e devolvida ao anúncio']]}];
 var i=0,timer=null;
-function render(n){i=n;im.forEach(function(x,k){x.classList.toggle('on',k===n)});dots.forEach(function(x,k){x.classList.toggle('on',k===n)});who.textContent=S[n].q;T.forEach(clearTimeout);T=[];ol.innerHTML=S[n].f.map(function(st,k){return '<li'+(k===5?' class="last"':'')+'><i>'+(k+1)+'</i><div><b>'+st[0]+'</b><span>'+st[1]+'</span></div></li>'}).join('');var lis=[].slice.call(ol.children);lis.forEach(function(li,k){T.push(setTimeout(function(){li.classList.add('on');if(k>0)lis[k-1].classList.add('done')},600+k*750))})}
+var h1=document.getElementById('hh1');function render(n){i=n;if(h1&&h1.dataset.n!==String(n)){h1.dataset.n=n;h1.classList.add('sw');setTimeout(function(){h1.innerHTML=S[n].t;h1.classList.remove('sw')},h1.dataset.first?350:0);h1.dataset.first=1}im.forEach(function(x,k){x.classList.toggle('on',k===n)});dots.forEach(function(x,k){x.classList.toggle('on',k===n)});who.textContent=S[n].q;T.forEach(clearTimeout);T=[];ol.innerHTML=S[n].f.map(function(st,k){return '<li'+(k===5?' class="last"':'')+'><i>'+(k+1)+'</i><div><b>'+st[0]+'</b><span>'+st[1]+'</span></div></li>'}).join('');var lis=[].slice.call(ol.children);lis.forEach(function(li,k){T.push(setTimeout(function(){li.classList.add('on');if(k>0)lis[k-1].classList.add('done')},600+k*750))})}
 render(+(location.search.match(/cena=(\d)/)||[0,0])[1]%S.length);if(matchMedia('(prefers-reduced-motion:reduce)').matches){[].slice.call(ol.children).forEach(function(li){li.classList.add('on','done')});return}
 timer=setInterval(function(){render((i+1)%S.length)},7500)})();
 </script>
