@@ -927,10 +927,10 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .ig.on .crmbox.in,.ig.on .igcap.in{opacity:1}
 @media(max-width:900px){
   .segs{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .ig{grid-template-columns:1fr;padding:20px 18px 16px}
+  .segpanel{grid-template-columns:minmax(0,1fr)}.ig{grid-template-columns:minmax(0,1fr);padding:20px 18px 16px;min-width:0;max-width:100%}.ig>*{min-width:0;max-width:100%}
   .ig .cn{height:28px}.ig .cn i{left:24px;right:auto;top:0;bottom:0;height:auto;width:2px;transform:scaleY(0);transform-origin:top}.ig .cn i:after{right:-4px;top:auto;bottom:-4px}
   .ig.on .cn.in i{transform:scaleY(1)}
-  .ig .igcap{flex-direction:column;align-items:flex-start;gap:10px;margin-top:16px}
+  .ig .igcap{flex-direction:column;align-items:flex-start;gap:10px;margin-top:16px}.ig .num{white-space:normal;flex-wrap:wrap;max-width:100%}
 }
 @media(max-width:700px){.segs button{padding:12px}.segs button b{font-size:13px}.segs button span{display:none}.segs button{grid-template-rows:auto}.ig .igcap p{font-size:15px}}
 
