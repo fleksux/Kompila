@@ -838,6 +838,11 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .win ul.fila7 .to i.k{background:var(--carbon);color:#2fd67b}
 #winAgora.detail ul.fila7 .to{opacity:1;width:auto;overflow:visible}
 #winAgora.detail ul.fila7 li{background:transparent}
+
+.win ul.fila7 li>div{display:flex;align-items:baseline;gap:8px;min-width:0}
+.win ul.fila7 li>div b{white-space:nowrap}.win ul.fila7 li>div .s2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win ul.fila7 li{padding:5px 0}
+@media(max-width:700px){.win ul.fila7 li>div{display:block}}
 </style>
 </head>
 <body>
@@ -1194,7 +1199,7 @@ var ambT=null,ambI=0,clkT=null;
 function ambStart(p,n){ambStop();var list=AMB[n];if(!list||reduced)return;var box=p.querySelector('.ntfs');if(!box){box=document.createElement('div');box.className='ntfs';p.querySelector('.win').appendChild(box)}ambI=0;function pop(){if(paused){ambT=setTimeout(pop,800);return}var e=list[ambI%list.length];ambI++;var d=document.createElement('div');d.className='ntf2';d.innerHTML='<i></i><div><b></b><span></span></div><small></small>';d.querySelector('b').textContent=e[0];d.querySelector('span').textContent=e[1];d.querySelector('small').textContent=e[2];box.appendChild(d);requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('in')})});setTimeout(function(){d.classList.add('out');setTimeout(function(){d.remove()},300)},4600);ambT=setTimeout(pop,6200)}ambT=setTimeout(pop,1800)}
 function ambStop(){clearTimeout(ambT);clearInterval(clkT);document.querySelectorAll('.sc-shot .ntfs').forEach(function(b){b.innerHTML=''})}
 function clock(p){var dt=p.querySelector('.bar .dt');if(!dt)return;var m=dt.textContent.match(/(\d\d):(\d\d)/);if(!m)return;var base=dt.textContent,sec=(+m[1])*3600+(+m[2])*60+Math.floor(Math.random()*40);function two(x){return (x<10?'0':'')+x}function tick(){if(!paused)sec++;var h=Math.floor(sec/3600)%24,mi=Math.floor(sec%3600/60),se=sec%60;dt.textContent=base.replace(/\d\d:\d\d/,two(h)+':'+two(mi)+':'+two(se))}tick();clkT=setInterval(tick,1000)}
-var AGORA={reset:function(p){var w=p.querySelector('.win');w.classList.remove('focus','detail');unsc(p);clearInterval(AGORA.t);p.querySelectorAll('.fila7 .dest').forEach(function(e){e.textContent=e.dataset.orig||(e.dataset.orig=e.textContent)});p.querySelectorAll('.fila7 li').forEach(function(li){li.classList.remove('in','set','ok-row','warn-row')});['agN','agR','agH','agFora'].forEach(function(id){p.querySelector('#'+id).textContent='0'});p.querySelector('#agTime').textContent='06:40:00';var c=p.querySelector('#agClock');c.classList.remove('open');p.querySelector('#agStatus').textContent='loja fechada'},
+var AGORA={reset:function(p){var w=p.querySelector('.win');w.classList.remove('focus','detail');unsc(p);clearInterval(AGORA.t);p.querySelectorAll('.fila7 .dest').forEach(function(e){e.textContent=e.dataset.orig||(e.dataset.orig=e.textContent)});p.querySelectorAll('.fila7 li').forEach(function(li){li.classList.remove('in','set','ok-row','warn-row')});p.querySelector('#agSub').innerHTML='Chegaram com a loja fechada · <b id="agFora">0</b>';['agN','agR','agH','agFora'].forEach(function(id){p.querySelector('#'+id).textContent='0'});p.querySelector('#agTime').textContent='06:40:00';var c=p.querySelector('#agClock');c.classList.remove('open');p.querySelector('#agStatus').textContent='loja fechada'},
  t:null,
  clock:function(p,from,to,ms,done){clearInterval(AGORA.t);var el=p.querySelector('#agTime'),t0=performance.now();function two(x){return (x<10?'0':'')+x}AGORA.t=setInterval(function(){var q=Math.min(1,(performance.now()-t0)/ms);var sec=Math.round(from+(to-from)*q);el.textContent=two(Math.floor(sec/3600))+':'+two(Math.floor(sec%3600/60))+':'+two(sec%60);if(done)done(sec);if(q>=1)clearInterval(AGORA.t)},60)},
  list:[
