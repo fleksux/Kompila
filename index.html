@@ -1124,6 +1124,19 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cwrap .form .fr{flex:1;align-content:center}
 .cwrap .form .fsc{margin-top:0}
 .cwrap .res .fun{justify-content:space-between}
+/* ===== celular: calculadora numa caixa só, sliders, número fixo no topo ===== */
+.cwrap .form .rg{display:none}
+@media(max-width:700px){
+  .cwrap{gap:0;grid-template-columns:minmax(0,1fr)}.cwrap>*{min-width:0;max-width:100%}
+  .cwrap .cpot{position:sticky;top:64px;z-index:5;background:var(--carbon);color:#fff;border-radius:var(--r2) var(--r2) 0 0;padding:14px 20px 12px;box-shadow:0 10px 24px rgba(10,11,14,.18)}
+  .cwrap .cpot .pot small{display:block;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:#2fd67b}
+  .cwrap .cpot .pot b{display:block;font:700 36px var(--mono);letter-spacing:-.04em;color:#fff;line-height:1.05;margin-top:2px}
+  .cwrap .cpot .pot span{display:block;font-size:13px;color:var(--cmuted);margin-top:2px}.cwrap .cpot .pot em{font-style:normal;color:#fff}
+  .cwrap .form{border-radius:0;border-top:0}
+  .cwrap .res{border-radius:0 0 var(--r2) var(--r2)}
+  .cwrap .form .fr{grid-template-columns:1fr 104px;grid-template-areas:"t in" "rg rg";row-gap:4px}
+  .cwrap .form .fr input.rg{display:block;grid-area:rg;width:100%;height:32px;margin:0;padding:0;border:0;background:transparent;accent-color:var(--green);touch-action:pan-y}
+}
 /* ===== celular: vitrine 'Como funciona' (fim do CSS, vence o que está acima) ===== */
 @media(max-width:700px){
   /* kanban: a moldura interna (.zm) cortava as colunas 3 e 4 antes da câmera andar; quem corta é a janela (.win) */
@@ -1442,7 +1455,14 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 /* calculadora */
 (function(){var r=10,$=function(id){return document.getElementById(id)};function num(id){var v=String($(id).value).replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.');var n=parseFloat(v);return isNaN(n)?0:n}function fmt(n){return Math.round(n).toLocaleString('pt-BR')}function dec(n){return n>=10?String(Math.round(n)):n.toFixed(1).replace('.',',')}function money(n){if(n>=1e6)return 'R$ '+(n/1e6).toFixed(1).replace('.',',')+' mi';if(n>=1000)return 'R$ '+Math.round(n/1000)+' mil';return 'R$ '+Math.round(n)}
 function calc(){var L=num('cL'),P=num('cP')/100,C=num('cC')/100,V=num('cV');var parados=L*P,reat=parados*r/100,vendas=reat*C,m=vendas*V;$('rL').textContent=fmt(L);$('rP').textContent=fmt(parados);$('rR').textContent=fmt(reat);$('rV').textContent=dec(vendas);$('rM').textContent=money(m);$('rSl').textContent={5:'no cenário conservador',10:'no cenário provável',20:'no cenário potencial'}[r];var pct=function(x){return L?Math.max(1.5,x/L*100):0};$('bP').style.setProperty('--w',pct(parados)+'%');$('bR').style.setProperty('--w',pct(reat)+'%');$('bV').style.setProperty('--w',pct(vendas)+'%');[$('rM'),$('rV')].forEach(function(e){e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump')})}
-document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});calc()})();
+document.querySelectorAll('#cS button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#cS button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;calc()})});['cL','cP','cC','cV'].forEach(function(id){$(id).addEventListener('input',calc)});
+/* sliders: mesmo dado dos campos; arrastou, o campo e o número mudam juntos */
+var RG={cL:[100,20000,100],cP:[0,60,1],cC:[0.5,15,0.1],cV:[500,200000,500]};
+Object.keys(RG).forEach(function(id){var inp=$(id),fr=inp.closest('.fr');if(!fr)return;var rg=document.createElement('input');rg.type='range';rg.className='rg';rg.min=RG[id][0];rg.max=RG[id][1];rg.step=RG[id][2];rg.value=num(id);rg.setAttribute('aria-label',fr.querySelector('.ft b').textContent);fr.appendChild(rg);
+ rg.addEventListener('input',function(){var v=+rg.value;inp.value=id==='cC'?dec(v):fmt(v);calc()});
+ inp.addEventListener('input',function(){rg.value=num(id)})});
+if(matchMedia('(max-width:700px)').matches){var pot=document.querySelector('.cwrap .res .pot'),wrap=document.querySelector('.cwrap');if(pot&&wrap){var box=document.createElement('div');box.className='cpot';box.appendChild(pot);wrap.insertBefore(box,wrap.firstChild)}var sm=document.querySelector('.cwrap .form .sh small');if(sm)sm.textContent='arraste e veja o número mudar'}
+calc()})();
 /* chat roteirizado */
 (function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Diagnóstico.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
 </script>
