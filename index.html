@@ -1010,6 +1010,45 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .proof.live .st i.ok{background:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
 .proof .steps em{display:block;margin-top:10px;font:600 12px var(--sans);font-style:normal;color:var(--green)}
 @media(max-width:700px){.proof .num{padding:20px}.proof .num>span{min-height:0}}
+
+/* diagnóstico: linha do tempo + análise lendo o CRM */
+.cz ol.tl{position:relative}
+.cz ol.tl li{grid-template-columns:44px 1fr;gap:18px;padding:18px 0;border-top:0;position:relative}
+.cz ol.tl li:before{display:none}
+.cz ol.tl li i{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.06);color:var(--cmuted);font:700 13px var(--mono);font-style:normal;display:grid;place-items:center;position:relative;z-index:1;transition:background .4s,color .4s,box-shadow .4s}
+.cz ol.tl li:after{content:"";position:absolute;left:19px;top:58px;bottom:-18px;width:2px;background:var(--cline)}
+.cz ol.tl li:last-child:after{display:none}
+.cz.live ol.tl li i{background:#2fd67b;color:#0a0b0e;box-shadow:0 0 0 6px rgba(47,214,123,.14)}
+.cz.live ol.tl li:nth-child(1) i{transition-delay:.2s}.cz.live ol.tl li:nth-child(2) i{transition-delay:.9s}.cz.live ol.tl li:nth-child(3) i{transition-delay:1.6s}.cz.live ol.tl li:nth-child(4) i{transition-delay:2.3s}
+.cz ol.tl li:after{transform:scaleY(0);transform-origin:top;transition:transform .6s ease}
+.cz.live ol.tl li:after{transform:scaleY(1)}
+.cz.live ol.tl li:nth-child(1):after{transition-delay:.4s}.cz.live ol.tl li:nth-child(2):after{transition-delay:1.1s}.cz.live ol.tl li:nth-child(3):after{transition-delay:1.8s}
+.cz .side.scan{padding:22px 24px;position:relative;overflow:hidden}
+.cz .scan .sh{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.cz .scan .sh .ic{width:42px;height:42px;border-radius:50%;background:#2fd67b;display:grid;place-items:center}.cz .scan .sh .ic .ico{width:20px;height:20px;stroke:#0a0b0e}
+.cz .scan .sh b{display:block;color:#fff;font-size:17px}.cz .scan .sh small{color:var(--cmuted);font-size:13px}
+.cz .scan .live-dot{margin-left:auto;width:10px;height:10px;border-radius:50%;background:#2fd67b;box-shadow:0 0 0 4px rgba(47,214,123,.2);animation:pulse 1.2s infinite}
+.cz .scan .rows{margin:0;padding:0;list-style:none}
+.cz .scan .rows li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 12px;margin:6px 0;border:1px solid var(--cline);border-radius:12px;background:rgba(255,255,255,.03);opacity:1;transform:none;transition:border-color .4s,background .4s}
+.cz .scan .rows li:before{display:none}
+.cz .scan .rows li span{display:flex;align-items:center;gap:10px;color:#fff;font-size:14.5px}
+.cz .scan .rows li span .ico{width:18px;height:18px;stroke:var(--cmuted)}
+.cz .scan .rows li b{font:700 15px var(--mono);color:var(--cmuted);min-width:72px;text-align:right;padding:5px 10px;border-radius:8px;background:rgba(255,255,255,.05);transition:color .3s,background .3s}
+.cz .scan .rows li.done b{color:#fff;background:rgba(255,255,255,.09)}
+.cz .scan .rows li.warn.done{border-color:rgba(255,138,148,.4)}.cz .scan .rows li.warn.done b{color:#ff8a94}
+.cz .scan .rows li.good.done{border-color:rgba(47,214,123,.45);background:rgba(47,214,123,.08)}.cz .scan .rows li.good.done b{color:#2fd67b}
+.cz .scan .line{position:absolute;left:24px;right:24px;height:2px;background:linear-gradient(90deg,transparent,#2fd67b,transparent);opacity:0;top:80px;pointer-events:none}
+.cz .scan.go .line{animation:scan 4.2s linear forwards}
+@keyframes scan{0%{opacity:0;top:80px}8%{opacity:1}92%{opacity:1}100%{opacity:0;top:360px}}
+.cz .scan .out{margin-top:16px;padding-top:14px;border-top:1px solid var(--cline)}
+.cz .scan .out small{display:block;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--cmuted);margin-bottom:8px;text-align:left}
+.cz .scan .chips{display:flex;flex-wrap:wrap;gap:6px}
+.cz .scan .chips em{font:500 12.5px var(--sans);font-style:normal;color:#fff;padding:6px 10px;border-radius:999px;border:1px solid var(--cline);background:rgba(255,255,255,.04);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+.cz .scan.done .chips em{opacity:1;transform:none}
+.cz .scan.done .chips em:nth-child(1){transition-delay:.05s}.cz .scan.done .chips em:nth-child(2){transition-delay:.15s}.cz .scan.done .chips em:nth-child(3){transition-delay:.25s}.cz .scan.done .chips em:nth-child(4){transition-delay:.35s}.cz .scan.done .chips em:nth-child(5){transition-delay:.45s}.cz .scan.done .chips em:nth-child(6){transition-delay:.55s}
+.cz .scan .btn{margin-top:18px}
+.cz .scan .ft{margin-top:10px;text-align:center;font-size:12.5px;color:var(--cmuted)}
+@media(prefers-reduced-motion:reduce){.cz .scan .line{display:none}.cz .scan .chips em{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -1218,18 +1257,26 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
       <div class="rv">
         <h2>Primeiro encontramos o vazamento. Depois decidimos o que vale automatizar.</h2>
         <p class="lead" style="margin:14px 0 24px">O Diagnóstico é a leitura da jornada dos seus leads, feita dentro do seu CRM. Sem migração, sem mudar a rotina da equipe.</p>
-        <ol>
-          <li><div><b>Entender</b><span>Canais, equipe, CRM, regras de distribuição, prazos e etapas de venda.</span></div></li>
-          <li><div><b>Analisar</b><span>Um período autorizado do CRM: contatos sem resposta, sem responsável, sem próxima ação.</span></div></li>
-          <li><div><b>Identificar</b><span>Onde o lead entra, onde para e qual regra deveria impedir a perda.</span></div></li>
-          <li><div><b>Projetar</b><span>Regras, prioridades e o plano de recuperação.</span></div></li>
+        <ol class="tl">
+          <li><i>01</i><div><b>Entender</b><span>Canais, equipe, CRM, regras de distribuição, prazos e etapas de venda.</span></div></li>
+          <li><i>02</i><div><b>Analisar</b><span>Um período autorizado do CRM: contatos sem resposta, sem responsável, sem próxima ação.</span></div></li>
+          <li><i>03</i><div><b>Identificar</b><span>Onde o lead entra, onde para e qual regra deveria impedir a perda.</span></div></li>
+          <li><i>04</i><div><b>Projetar</b><span>Regras, prioridades e o plano de recuperação.</span></div></li>
         </ol>
       </div>
-      <div class="side rv">
-        <h3>Você sai com</h3>
-        <ul><li>Mapa da jornada atual</li><li>Onde está o vazamento</li><li>Cinco indicadores principais</li><li>Fila inicial de recuperação</li><li>Regras sugeridas de prazo</li><li>Estimativa financeira conservadora</li></ul>
+      <div class="side rv scan">
+        <div class="sh"><span class="ic"><svg class="ico"><use href="#i-chart"/></svg></span><div><b>Análise autorizada</b><small id="scanSt">Lendo dados do seu CRM…</small></div><em class="live-dot"></em></div>
+        <ul class="rows">
+          <li><span><svg class="ico"><use href="#i-chat"/></svg>Primeira resposta</span><b data-v="3 h 40">—</b></li>
+          <li><span><svg class="ico"><use href="#i-users"/></svg>Atendimento humano</span><b data-v="61%">—</b></li>
+          <li class="warn"><span><svg class="ico"><use href="#i-alert"/></svg>Leads sem responsável</span><b data-v="118">—</b></li>
+          <li><span><svg class="ico"><use href="#i-route"/></svg>Sem próxima ação</span><b data-v="342">—</b></li>
+          <li class="good"><span><svg class="ico"><use href="#i-undo"/></svg>Base recuperável</span><b data-v="761">—</b></li>
+        </ul>
+        <div class="line"></div>
+        <div class="out"><small>Você sai com</small><div class="chips"><em>Mapa da jornada</em><em>Onde está o vazamento</em><em>5 indicadores</em><em>Fila inicial de recuperação</em><em>Regras de prazo</em><em>Estimativa conservadora</em></div></div>
         <a class="btn green" href="#calc">Quero analisar minha operação</a>
-        <small>Primeiro medimos. Depois você decide.</small>
+        <small class="ft">Sem estimativa genérica. Usamos os dados reais da sua operação. Primeiro medimos, depois você decide.</small>
       </div>
     </div>
   </div>
@@ -1452,5 +1499,6 @@ dots.forEach(function(d,i){d.style.cursor='pointer';d.addEventListener('click',f
 })();
 </script>
 <script>(function(){var p=document.getElementById('prova');if(!p)return;new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersecting){p.classList.add('live');obs.unobserve(e.target)}})},{threshold:.25}).observe(p)})();</script>
+<script>(function(){var sc=document.querySelector('.scan');if(!sc)return;var rows=[].slice.call(sc.querySelectorAll('.rows li')),st=document.getElementById('scanSt'),done=false;function run(){if(done)return;done=true;sc.classList.add('go');rows.forEach(function(li,i){setTimeout(function(){var b=li.querySelector('b');b.textContent=b.dataset.v;li.classList.add('done')},700+i*650)});setTimeout(function(){sc.classList.add('done');st.textContent='Análise concluída · 12 semanas lidas'},700+rows.length*650+200)}if(matchMedia('(prefers-reduced-motion:reduce)').matches){rows.forEach(function(li){li.querySelector('b').textContent=li.querySelector('b').dataset.v;li.classList.add('done')});sc.classList.add('done');return}new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersecting){run();obs.unobserve(e.target)}})},{threshold:.35}).observe(sc)})();</script>
 </body>
 </html>
