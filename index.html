@@ -1120,6 +1120,11 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .cwrap .res .bump{animation:bump .45s cubic-bezier(.2,.8,.2,1)}
 @media(min-width:901px){.cwrap{grid-template-columns:1fr 1fr;gap:24px}.cwrap .res{position:static;top:auto}}
 @media(max-width:700px){.cwrap .form .fr{grid-template-columns:1fr 104px;grid-template-areas:"t in"}.cwrap .form .fi{display:none}.cwrap .form .fr .ft{grid-area:t}.cwrap .form .fr input{grid-area:in}}
+
+/* calculadora: linhas espalhadas até o pé do box */
+.cwrap .form .fr{flex:1;align-content:center}
+.cwrap .form .fsc{margin-top:0}
+.cwrap .res .fun{justify-content:space-between}
 </style>
 </head>
 <body>
