@@ -624,7 +624,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 @media(prefers-reduced-motion:reduce){.win .swap .v li{transition:none}.win .zm{transition:none}}
 
 /* fila: cards de pendência iguais ao CRM (PendRow) */
-.win ul.pend{padding:0 18px 12px;flex:1;min-height:0}
+.win ul.pend{padding:0 18px 6px;flex:none}
 .win ul.pend li.pd{display:block;padding:0;border-top:1px solid var(--line);transition:opacity .45s,transform .45s,max-height .5s cubic-bezier(.2,.8,.2,1);max-height:260px;overflow:hidden}
 .win ul.pend li.pd:first-child{border-top:0}
 .win ul.pend li.pd.gone{opacity:0;max-height:0;transform:translateX(24px);border-top:0}
@@ -736,7 +736,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 
 /* fila: segunda lista, aviso do guardião, ritmo */
 .win ul.cuida{padding:0 18px 8px}
-.win ul.cuida li{grid-template-columns:34px 1fr auto;padding:8px 0}
+.win ul.cuida li{grid-template-columns:34px 1fr auto;padding:7px 0}
 .win ul.cuida li img,.win ul.cuida li i{width:34px;height:34px}
 .win ul.cuida li b{font-size:13.5px}.win ul.cuida li span{font-size:12px}
 .win ul.cuida li em.ok.ia:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:6px;vertical-align:middle;animation:pulse 1.2s infinite}
@@ -745,7 +745,7 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .win .toast.in{opacity:1;transform:none}
 .win .toast .ico{width:20px;height:20px;stroke:#2fd67b;flex:none;margin-top:2px}
 .win .toast b{display:block;font-size:12.5px;color:#2fd67b}.win .toast span{display:block;font-size:12px;color:#c5cbd2;line-height:1.35}
-.win .zm{position:relative}
+.win .zm{position:relative;overflow:hidden}
 .win .swap .v li,.win li{transition-duration:.3s}
 .win .swap .v.on li:nth-child(1){transition-delay:.05s}.win .swap .v.on li:nth-child(2){transition-delay:.18s}.win .swap .v.on li:nth-child(3){transition-delay:.31s}.win .swap .v.on li:nth-child(4){transition-delay:.44s}
 .win.live li:nth-child(1){transition-delay:.03s}.win.live li:nth-child(2){transition-delay:.11s}.win.live li:nth-child(3){transition-delay:.19s}.win.live li:nth-child(4){transition-delay:.27s}.win.live li:nth-child(5){transition-delay:.35s}.win.live li:nth-child(6){transition-delay:.43s}.win.live li:nth-child(7){transition-delay:.51s}
