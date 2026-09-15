@@ -1167,7 +1167,7 @@ nav .panel a.pi i{margin-left:auto;font:600 10px var(--sans);font-style:normal;l
 /* ===== HOME v2: capítulos, inteligência, cases, promessa ===== */
 .build{padding:96px 0 0;background:#fff}
 .strip{padding:72px 0;background:#fff}.strip .dhead{margin:0}
-.build .dhead{margin-bottom:56px}
+.build .dhead{margin-bottom:48px}
 .cstrip{background:#fff;padding:34px 0}.cstrip .shell{display:grid;grid-template-columns:auto auto 1fr;gap:18px 24px;align-items:baseline}.cstrip .cn{font:600 12px var(--mono);color:var(--green);letter-spacing:.08em}.cstrip h3{font-size:clamp(22px,2.2vw,28px);font-weight:700;letter-spacing:-.03em;color:var(--ink)}.cstrip p{font-size:15px;color:var(--muted);justify-self:end;text-align:right;max-width:46ch}@media(max-width:900px){.cstrip .shell{grid-template-columns:auto 1fr}.cstrip p{grid-column:1/-1;justify-self:start;text-align:left}}
 .cap{position:relative;color:var(--off);overflow:hidden;padding:88px 0}
 .cap .cbg{position:absolute;inset:0;z-index:0}
@@ -1199,6 +1199,16 @@ nav .panel a.pi i{margin-left:auto;font:600 10px var(--sans);font-style:normal;l
 .cap:nth-of-type(even) .cbg:after{background:linear-gradient(270deg,rgba(10,11,14,.92) 0%,rgba(10,11,14,.72) 45%,rgba(10,11,14,.35) 100%)}
 .cap:nth-of-type(even) .win.second{justify-self:start;margin-right:0;margin-left:-24px}
 @media(max-width:900px){.cap{padding:64px 0}.cap .cgrid,.cap:nth-of-type(even) .cgrid{grid-template-columns:1fr;gap:32px}.cap:nth-of-type(even) .ctext{order:1}.cap:nth-of-type(even) .cshots{order:2}.cap .win.second{width:70%;margin-bottom:-20px}.cap .cbg:after,.cap:nth-of-type(even) .cbg:after{background:rgba(10,11,14,.8)}}
+
+.cap.light{background:var(--soft);color:var(--text)}
+.cap.light h3{color:var(--ink)}.cap.light h3 em{color:var(--green)}
+.cap.light p{color:var(--muted)}
+.cap.light .cn{color:var(--green)}.cap.light .ck{color:var(--muted)}
+.cap.light .pills em{border-color:rgba(21,151,84,.35);color:var(--green);background:var(--green-soft)}
+.cap.light .cs{color:var(--muted)}.cap.light .cs b{color:var(--ink)}
+.cap.light .win{background:#fff;border-color:var(--line);box-shadow:0 30px 70px rgba(10,11,14,.14)}
+.cap.light .wbar{background:var(--soft2);border-bottom-color:var(--line)}.cap.light .wbar i{background:#d3d6cf}
+.cap.light .win figcaption{background:rgba(10,11,14,.85)}
 /* inteligência */
 .intel{padding-top:72px}
 .icols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:64px}
@@ -1479,27 +1489,23 @@ nav .logo{font-size:20px}
 
 <section class="build" id="produtos">
   <div class="shell"><div class="dhead rv"><h2>O que a gente constrói.</h2><p class="lead">Três frentes, sete produtos, uma regra: tudo que sai daqui tem inteligência dentro e é medido depois que está no ar.</p></div></div>
-  <div class="cstrip"><div class="shell"><span class="cn">01</span><h3>Lojas inteligentes</h3><p>Loja online que vende como a loja física, com painel feito pra quem vende.</p></div></div>
   <article class="cap rv" id="cap-loja">
   <div class="cbg" aria-hidden="true"><img src="img/cap-loja.webp" alt=""></div>
   <div class="shell cgrid">
-    <div class="ctext"><h3>Uma loja que se monta <em>enquanto você fala.</em></h3><p>Vitrine, provador com hora marcada, entrega no mesmo dia e um painel feito pra quem vende roupa, não pra quem entende de WordPress. O dia da loja em uma tela: o que precisa de você agora.</p><div class="pills"><em>kompila loja</em><em>kompila design</em><em>kompila tráfego</em></div><small class="cs"><b>Case</b> Maslu Select · no ar em masluoficial.com.br</small></div>
+    <div class="ctext"><span class="cn">01</span><span class="ck">Lojas inteligentes</span><h3>Uma loja que se monta <em>enquanto você fala.</em></h3><p>Vitrine, provador com hora marcada, entrega no mesmo dia e um painel feito pra quem vende roupa, não pra quem entende de WordPress. O dia da loja em uma tela: o que precisa de você agora.</p><div class="pills"><em>kompila loja</em><em>kompila design</em><em>kompila tráfego</em></div><small class="cs"><b>Case</b> Maslu Select · no ar em masluoficial.com.br</small></div>
     <div class="cshots"><figure class="win"><div class="wbar"><i></i><i></i><i></i></div><img src="img/tela-maslu.webp" alt="" loading="lazy"><figcaption>A loja, como o cliente vê</figcaption></figure><figure class="win second"><div class="wbar"><i></i><i></i><i></i></div><img src="img/tela-maslu-painel.webp" alt="" loading="lazy"><figcaption>O painel, como a dona vê</figcaption></figure></div>
   </div>
 </article>
-  <div class="cstrip"><div class="shell"><span class="cn">02</span><h3>Sistemas inteligentes</h3><p>Orçamento, CRM e atendimento com IA operando e a equipe só fechando.</p></div></div>
-  <article class="cap rv" id="cap-sistema">
-  <div class="cbg" aria-hidden="true"><img src="img/cap-sistema.webp" alt=""></div>
+  <article class="cap light rv" id="cap-sistema">
   <div class="shell cgrid">
-    <div class="ctext"><h3>Um sistema que trabalha <em>enquanto a equipe vende.</em></h3><p>Criamos sistemas inteligentes pra operação de quem vende online. O Copiloto cota pela tabela da P1LED, monta a proposta e cobra a resposta. O Lead Recovery atende o lead em segundos e entrega pronto no WhatsApp do vendedor. O gestor vê tudo numa tela.</p><div class="pills"><em>kompila lead recovery</em><em>kompila online</em><em>kompila mensageria</em></div><small class="cs"><b>Case</b> P1LED · Copiloto, no ar em copiloto.p1led.com.br</small></div>
+    <div class="ctext"><span class="cn">02</span><span class="ck">Sistemas inteligentes</span><h3>Um sistema que trabalha <em>enquanto a equipe vende.</em></h3><p>Criamos sistemas inteligentes pra operação de quem vende online. O Copiloto cota pela tabela da P1LED, monta a proposta e cobra a resposta. O Lead Recovery atende o lead em segundos e entrega pronto no WhatsApp do vendedor. O gestor vê tudo numa tela.</p><div class="pills"><em>kompila lead recovery</em><em>kompila online</em><em>kompila mensageria</em></div><small class="cs"><b>Case</b> P1LED · Copiloto, no ar em copiloto.p1led.com.br</small></div>
     <div class="cshots"><figure class="win"><div class="wbar"><i></i><i></i><i></i></div><img src="img/tela-copiloto.webp" alt="" loading="lazy"><figcaption>Copiloto P1LED: cada proposta e o que depende de você</figcaption></figure><figure class="win second"><div class="wbar"><i></i><i></i><i></i></div><img src="img/tela-crm-agora.webp" alt="" loading="lazy"><figcaption>Lead Recovery: onde cada lead está, agora</figcaption></figure></div>
   </div>
 </article>
-  <div class="cstrip"><div class="shell"><span class="cn">03</span><h3>Sites e marcas</h3><p>WordPress, identidade e criativo com um trabalho só: converter.</p></div></div>
   <article class="cap rv" id="cap-design">
   <div class="cbg" aria-hidden="true"><img src="img/cap-design.webp" alt=""></div>
   <div class="shell cgrid">
-    <div class="ctext"><h3>Site, marca e criativo com <em>um trabalho só: converter.</em></h3><p>Do WordPress ao anúncio, tudo sai da mesma mão e fala a mesma língua. O formulário vira lead no CRM com origem gravada. O conteúdo sai com fonte. O anúncio recebe a conversão de volta.</p><div class="pills"><em>kompila design</em><em>kompila blog</em><em>kompila tráfego</em></div><small class="cs"><b>Case</b> P1LED · site em WordPress, cases em vídeo</small></div>
+    <div class="ctext"><span class="cn">03</span><span class="ck">Sites e marcas</span><h3>Site, marca e criativo com <em>um trabalho só: converter.</em></h3><p>Do WordPress ao anúncio, tudo sai da mesma mão e fala a mesma língua. O formulário vira lead no CRM com origem gravada. O conteúdo sai com fonte. O anúncio recebe a conversão de volta.</p><div class="pills"><em>kompila design</em><em>kompila blog</em><em>kompila tráfego</em></div><small class="cs"><b>Case</b> P1LED · site em WordPress, cases em vídeo</small></div>
     <div class="cshots"><figure class="win"><div class="wbar"><i></i><i></i><i></i></div><img src="img/tela-p1led.webp" alt="" loading="lazy"><figcaption>p1led.com.br, como está no ar</figcaption></figure></div>
   </div>
 </article>
