@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kompila · tecnologia que faz a sua venda andar sozinha</title>
+<meta name="description" content="Kompila: loja inteligente, CRM com IA, atendimento 24 h no WhatsApp, mensageria, tráfego pago e design. Do anúncio ao contrato, o trabalho repetitivo é nosso.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0b0e;--carbon:#0a0b0e;--carbon2:#11151a;--cline:#252c34;--off:#e9ebee;--cmuted:#949da7;--green:#2fd67b;--green-d:#159754;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;--gut:6%}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--off);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.shell{width:min(1240px,100% - 2*var(--gut));margin:0 auto}
+/* nav */
+nav{position:fixed;top:14px;left:0;right:0;z-index:20;display:flex;justify-content:center;pointer-events:none}
+nav .bar{pointer-events:auto;display:flex;align-items:center;gap:22px;padding:10px 12px 10px 18px;border-radius:999px;background:rgba(17,21,26,.72);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1)}
+nav .lg{font:600 15px var(--mono);color:#fff}nav .lg b{color:var(--green)}
+nav .links{display:flex;gap:18px;font-size:14px;color:var(--cmuted)}nav .links a:hover{color:#fff}
+nav .btn{padding:10px 16px;border-radius:999px;background:var(--green);color:#0a0b0e;font-weight:600;font-size:14px}
+@media(max-width:900px){nav .links{display:none}}
+/* hero */
+.hero{position:relative;min-height:100svh;overflow:hidden;display:grid;align-items:end}
+.hero .k{position:absolute;inset:0;pointer-events:none}
+.hero .k svg{position:absolute;left:50%;top:50%;width:min(92vw,1100px);height:auto;transform:translate(-50%,-52%)}
+.hero .k .l,.hero .k .r{fill:none;stroke:var(--green);stroke-width:1.5;opacity:.9}
+.hero .k .glow{fill:var(--green);opacity:.16;filter:blur(60px)}
+.hero .ph{position:absolute;left:55%;bottom:0;transform:translateX(-50%);height:min(94svh,980px);width:auto;display:grid;justify-items:center}
+.hero .ph img{grid-area:1/1;height:min(94svh,980px);width:auto;object-fit:contain;object-position:bottom;filter:grayscale(1) contrast(1.08);opacity:0;transition:opacity .9s ease;mask-image:linear-gradient(180deg,#000 78%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,#000 78%,transparent 100%)}
+.hero .ph img.on{opacity:1}
+.hero .copy{position:relative;z-index:3;padding:0 0 56px;display:grid;gap:18px;justify-items:start}
+.hero h1{margin:0;font-weight:800;font-size:clamp(52px,8.6vw,128px);line-height:.92;letter-spacing:-.05em;color:#fff;max-width:9ch}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hero .sub{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:end;width:100%}
+.hero .lead{margin:0;max-width:40ch;font-size:clamp(16px,1.4vw,20px);color:var(--cmuted);line-height:1.45}
+.hero .lead b{color:#fff;font-weight:600}
+.hero .tags{justify-self:end;display:flex;gap:8px;flex-wrap:wrap}
+.hero .tags span{font:600 11.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
+.hero .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
+.hero .ctas{display:flex;gap:10px;flex-wrap:wrap}
+.hero .btn{padding:16px 24px;border-radius:999px;font-weight:600;font-size:15px}
+.hero .btn.g{background:var(--green);color:#0a0b0e}.hero .btn.o{border:1px solid rgba(255,255,255,.2);color:#fff}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,14,.1),rgba(10,11,14,0) 40%,rgba(10,11,14,.75) 78%,var(--bg) 100%);pointer-events:none;z-index:2}
+.hero .who{position:absolute;right:var(--gut);top:110px;z-index:3;text-align:right;font:500 12px var(--mono);color:var(--cmuted);letter-spacing:.04em}
+.hero .who b{display:block;color:#fff;font:700 14px var(--sans);letter-spacing:0;margin-bottom:2px}
+@media(max-width:900px){.hero .ph{height:min(72svh,700px);bottom:200px}.hero h1{font-size:clamp(52px,16vw,92px)}.hero .sub{grid-template-columns:1fr}.hero .tags{justify-self:start}.hero .who{top:84px}.hero .k svg{width:150vw}}
+@media(prefers-reduced-motion:reduce){.hero .ph img{transition:none}}
+</style>
+</head>
+<body>
+<nav><div class="bar"><a class="lg" href="/"><b>[</b> kompila <b>]</b></a><div class="links"><a href="#produtos">Produtos</a><a href="#tudo">Tudo ligado</a><a href="#prova">Prova</a><a href="#equipe">Equipe</a><a href="#blog">Blog</a></div><a class="btn" href="#diagnostico">Falar com a Kompila</a></div></nav>
+
+<section class="hero" id="topo">
+  <div class="k" aria-hidden="true"><svg viewBox="0 0 1100 900"><ellipse class="glow" cx="550" cy="520" rx="330" ry="260"/><path class="l" d="M300 120 H210 V780 H300"/><path class="r" d="M800 120 H890 V780 H800"/></svg></div>
+  <div class="ph" aria-hidden="true"><img src="img/retrato-moda.webp" class="on" alt=""><img src="img/retrato-led.webp" alt=""><img src="img/retrato-contab.webp" alt=""></div>
+  <div class="veil"></div>
+  <div class="who" id="who"><b>Dona de marca de moda</b>coleção nova · pedidos no WhatsApp</div>
+  <div class="shell copy">
+    <h1>A sua venda andando <em>sozinha.</em></h1>
+    <div class="sub">
+      <p class="lead">Do anúncio ao contrato, a Kompila faz o trabalho repetitivo: <b>atende, qualifica, marca, cobra e registra</b>. A sua equipe só vende.</p>
+      <div class="tags" id="tags"><span class="on">moda</span><span>eventos e LED</span><span>escritórios de venda</span></div>
+    </div>
+    <div class="ctas"><a class="btn g" href="#produtos">Ver os produtos</a><a class="btn o" href="#diagnostico">Medir a minha operação</a></div>
+  </div>
+</section>
+
+<script>
+(function(){var im=[].slice.call(document.querySelectorAll('.hero .ph img')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=[['Dona de marca de moda','coleção nova · pedidos no WhatsApp'],['Produtor de eventos','painel de LED · orçamento em minutos'],['Sócia de escritório de vendas','leads do anúncio · fila sem fura']],i=0;
+if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+setInterval(function(){i=(i+1)%im.length;im.forEach(function(x,k){x.classList.toggle('on',k===i)});tg.forEach(function(x,k){x.classList.toggle('on',k===i)});who.innerHTML='<b>'+W[i][0]+'</b>'+W[i][1]},6000)})();
+</script>
+</body>
+</html>
