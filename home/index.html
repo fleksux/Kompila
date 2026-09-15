@@ -24,7 +24,8 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .bg{position:absolute;inset:0;display:grid}
 .hero .bg .slide{grid-area:1/1;position:relative;opacity:0;transition:opacity .9s ease}
 .hero .bg .slide.on{opacity:1}
-.hero .bg .fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:grayscale(1)}
+.hero .bg .fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:grayscale(1);transform:translate3d(calc(var(--mx,0) * -18px),calc(var(--my,0) * -12px + var(--sy,0) * .28px),0) scale(1.07);transition:transform .9s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.hero .bg .pessoa,.hero .target{transform-origin:center;translate:calc(var(--mx,0) * -6px) calc(var(--my,0) * -4px + var(--sy,0) * .12px);transition:translate .9s cubic-bezier(.2,.7,.2,1)}
 .hero .bg .pessoa{position:absolute;height:calc(16.5svh / var(--fh));width:auto;top:calc(34svh - var(--fy) * (16.5svh / var(--fh)));left:calc(71.5vw - var(--fx) * var(--r) * (16.5svh / var(--fh)));filter:drop-shadow(0 30px 60px rgba(0,0,0,.55))}
 .hero .bg .pessoa.bw{filter:grayscale(1) contrast(1.06) drop-shadow(0 30px 60px rgba(0,0,0,.55))}
 .hero .bg .pessoa.cor{opacity:0}
@@ -94,6 +95,7 @@ html.guias .hero .target{outline:1px solid #ff3b7a}
 </section>
 
 <script>
+(function(){var h=document.querySelector('.hero');if(!h||matchMedia('(prefers-reduced-motion:reduce)').matches)return;var mx=0,my=0,sy=0,raf=0;function paint(){raf=0;h.style.setProperty('--mx',mx.toFixed(3));h.style.setProperty('--my',my.toFixed(3));h.style.setProperty('--sy',sy.toFixed(1))}function ask(){if(!raf)raf=requestAnimationFrame(paint)}if(matchMedia('(hover:hover)').matches){h.addEventListener('mousemove',function(e){var r=h.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*2-1;my=(e.clientY-r.top)/r.height*2-1;ask()});h.addEventListener('mouseleave',function(){mx=0;my=0;ask()})}addEventListener('scroll',function(){sy=Math.min(scrollY,h.offsetHeight);ask()},{passive:true})})();
 (function(){var im=[].slice.call(document.querySelectorAll('.hero .bg .slide')),dots=[].slice.call(document.querySelectorAll('#dots i')),who=document.getElementById('who'),ol=document.getElementById('steps'),T=[];
 var S=[{q:'“Vendi de madrugada, sem ninguém acordado.”',f:[['Instagram','cliente pergunta 19h48'],['Loja','tamanho e estoque na hora'],['Atendente IA','responde e reserva'],['Pix','link gerado sozinho'],['Vendedor','confirma na abertura'],['Entrega','retira às 10h']]},
 {q:'“A cotação saiu em minutos. Fechei o evento no mesmo dia.”',f:[['Google Ads','pesquisa painel de LED'],['Lead no CRM','entra com origem e campanha'],['WhatsApp','resposta em 6 s'],['Cotação','por m², pela tabela'],['Proposta','enviada e cobrada'],['Contrato','aceite vira Fechado']]},
