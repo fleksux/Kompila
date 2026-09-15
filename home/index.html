@@ -20,22 +20,22 @@ nav .links{display:flex;gap:22px;font-size:16px;font-weight:500;color:var(--cmut
 nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a0b0e;font-weight:600;font-size:15px}
 @media(max-width:900px){nav .links{display:none}}
 /* hero: foto grande à direita, sumindo pra esquerda; a pessoa sempre no alvo dos colchetes */
-.hero{position:relative;min-height:100svh;display:grid;align-items:end;padding:120px 0 48px;overflow:hidden;background:var(--bg)}
+.hero{position:relative;height:100svh;min-height:600px;display:grid;align-items:center;padding:96px 0 40px;overflow:hidden;background:var(--bg)}
 .hero .bg{position:absolute;inset:0;display:grid}
 .hero .bg .slide{grid-area:1/1;position:relative;opacity:0;transition:opacity .9s ease}
 .hero .bg .slide.on{opacity:1}
-.hero .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.hero .bg img{position:absolute;left:0;top:0;width:100%;height:auto;max-width:none;mask-image:linear-gradient(180deg,transparent 0,#000 14%),linear-gradient(90deg,transparent 0,#000 14%);-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%),linear-gradient(90deg,transparent 0,#000 14%);mask-composite:intersect;-webkit-mask-composite:source-in}
 .hero .bg img.bw{filter:grayscale(1) contrast(1.06)}
 .hero .bg img.cor{opacity:0;transition:opacity 1.6s ease .5s}
 .hero .bg .slide.on img.cor{opacity:1}
 .hero .bg .slide.on img.cor{animation:acende 1.8s ease .5s both}
 @keyframes acende{0%{opacity:0;filter:brightness(1.35) saturate(1.3)}60%{opacity:1;filter:brightness(1.12) saturate(1.15)}100%{opacity:1;filter:none}}
 .hero .fade{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,rgba(10,11,14,.92) 30%,rgba(10,11,14,.35) 50%,rgba(10,11,14,0) 62%),linear-gradient(180deg,rgba(10,11,14,.55) 0%,rgba(10,11,14,0) 22%,rgba(10,11,14,0) 70%,var(--bg) 100%);pointer-events:none}
-.hero .target{position:absolute;left:71.5%;top:36%;transform:translate(-50%,-50%);width:min(22vw,380px);height:min(36svh,300px);display:flex;justify-content:space-between;color:var(--green);filter:drop-shadow(0 0 18px rgba(47,214,123,.45));pointer-events:none}
+.hero .target{position:absolute;left:71.5%;top:34%;transform:translate(-50%,-50%);width:min(22vw,380px);height:min(36svh,300px);display:flex;justify-content:space-between;color:var(--green);filter:drop-shadow(0 0 18px rgba(47,214,123,.45));pointer-events:none}
 .hero .target .br{width:38px;height:100%}
 .hgrid{position:relative;z-index:2;display:grid;grid-template-columns:1fr;gap:28px}
 .hero .copy{display:grid;gap:22px;justify-items:start;max-width:640px}
-.hero h1{margin:0;font-weight:800;font-size:clamp(52px,7.4vw,112px);line-height:.92;letter-spacing:-.05em;color:#fff}
+.hero h1{margin:0;font-weight:800;font-size:clamp(48px,min(7vw,11svh),104px);line-height:.92;letter-spacing:-.05em;color:#fff}
 .hero h1 em{font-style:normal;color:var(--green)}
 .hero .lead{margin:0;max-width:44ch;font-size:clamp(16px,1.35vw,19px);color:var(--cmuted);line-height:1.5}
 .hero .lead b{color:#fff;font-weight:600}
@@ -44,24 +44,20 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 .hero .btn.g{background:var(--green);color:#0a0b0e}.hero .btn.o{border:1px solid rgba(255,255,255,.2);color:#fff}
 .hero .meta{display:flex;justify-content:flex-start;align-items:flex-end;gap:14px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:16px}
 .hero .who{font:500 12px var(--mono);color:var(--cmuted);letter-spacing:.04em}
-.hero .who{position:absolute;z-index:3;left:71.5%;top:calc(36% + min(18svh,150px) + 26px);transform:translateX(-50%);width:min(30vw,440px);text-align:center;font:500 12.5px var(--mono);color:var(--cmuted);letter-spacing:.02em;line-height:1.45}.hero .who b{display:block;color:#fff;font:700 clamp(17px,1.5vw,22px) var(--sans);letter-spacing:-.02em;margin-bottom:6px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+.hero .who{position:absolute;z-index:3;left:71.5%;top:calc(34% + min(18svh,150px) + 18px);transform:translateX(-50%);width:min(32vw,460px);text-align:center;font:500 12.5px var(--mono);color:var(--cmuted);letter-spacing:.02em;line-height:1.45;padding:14px 18px;border-radius:14px;background:rgba(10,11,14,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08)}.hero .who b{display:block;color:#fff;font:700 clamp(17px,1.5vw,22px) var(--sans);letter-spacing:-.02em;margin-bottom:6px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
 .hero .tags{display:flex;gap:6px;flex-wrap:wrap}
 .hero .tags span{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--cmuted);transition:all .3s}
 .hero .tags span.on{background:var(--green);border-color:var(--green);color:#0a0b0e}
-@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:73%;top:24svh;transform:translate(-50%,-50%);width:min(60vw,260px);height:24svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .who{left:50%;top:calc(24svh + 12svh + 16px);width:80vw;font-size:12px}}
+@media(max-width:900px){.hero{padding:96px 0 32px;align-items:start}.hero .bg{height:58svh;bottom:auto}.hero .bg img{object-position:73% 20%}.hero .fade{background:linear-gradient(180deg,rgba(10,11,14,.3) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,.2) 45%,var(--bg) 60%)}.hero .target{right:auto;left:73%;top:24svh;transform:translate(-50%,-50%);width:min(60vw,260px);height:24svh}.hero .target .br{width:30px}.hgrid{padding-top:56svh}.hero h1{font-size:clamp(46px,13vw,80px)}.hero .who{left:50%;top:calc(24svh + 12svh + 16px);width:80vw;font-size:12px}.hero .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 20%}}
 @media(prefers-reduced-motion:reduce){.hero .bg .slide,.hero .bg img.cor{transition:none;animation:none;opacity:1}}
 
-/* cada cena com o rosto no mesmo ponto e tamanho */
-.hero .bg .slide:nth-child(1) img{object-position:50% 20%;transform:scale(1.02);transform-origin:71.5% 36%}
-.hero .bg .slide:nth-child(2) img{object-position:50% 14%;transform:scale(1.04);transform-origin:71.5% 36%}
-.hero .bg .slide:nth-child(3) img{object-position:50% 24%;transform:scale(.96);transform-origin:71.5% 36%}
 </style>
 </head>
 <body>
 <nav><div class="bar"><a class="lg" href="/"><b>[</b> kompila <b>]</b></a><div class="links"><a href="#produtos">Produtos</a><a href="#tudo">Tudo ligado</a><a href="#prova">Prova</a><a href="#equipe">Equipe</a><a href="#blog">Blog</a></div><a class="btn" href="#diagnostico">Falar com a Kompila</a></div></nav>
 
 <section class="hero" id="topo">
-  <div class="bg" aria-hidden="true"><div class="slide on"><img class="bw" src="img/hero-moda-bw.webp" alt=""><img class="cor" src="img/hero-moda.webp" alt=""></div><div class="slide"><img class="bw" src="img/hero-led-bw.webp" alt=""><img class="cor" src="img/hero-led.webp" alt=""></div><div class="slide"><img class="bw" src="img/hero-contab-bw.webp" alt=""><img class="cor" src="img/hero-contab.webp" alt=""></div></div>
+  <div class="bg" aria-hidden="true"><div class="slide on" data-fx=".72" data-fy=".24" data-fh=".14"><img class="bw" src="img/hero-moda-bw.webp" alt=""><img class="cor" src="img/hero-moda.webp" alt=""></div><div class="slide" data-fx=".71" data-fy=".17" data-fh=".19"><img class="bw" src="img/hero-led-bw.webp" alt=""><img class="cor" src="img/hero-led.webp" alt=""></div><div class="slide" data-fx=".72" data-fy=".22" data-fh=".18"><img class="bw" src="img/hero-contab-bw.webp" alt=""><img class="cor" src="img/hero-contab.webp" alt=""></div></div>
   <div class="fade" aria-hidden="true"></div>
   <div class="target" aria-hidden="true"><svg class="br l" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M60 2 H6 V98 H60" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg><svg class="br r" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M0 2 H54 V98 H0" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg></div>
   <div class="who" id="who"><b>Anúncio virando lead. Lead virando venda.</b>quem chama no anúncio recebe resposta em segundos e sai com hora marcada</div>
@@ -71,7 +67,7 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
       <p class="lead">Do anúncio ao contrato, a Kompila faz o trabalho repetitivo: <b>atende, qualifica, marca, cobra e registra</b>. A sua equipe só vende.</p>
       <div class="ctas"><a class="btn g" href="#produtos">Ver os produtos</a><a class="btn o" href="#diagnostico">Medir a minha operação</a></div>
     </div>
-    <div class="meta"><div class="tags" id="tags"><span class="on">anúncio → venda</span><span>orçamento → contrato</span><span>loja → faturamento</span></div></div>
+    
   </div>
 </section>
 
@@ -79,6 +75,13 @@ nav .btn{padding:12px 20px;border-radius:999px;background:var(--green);color:#0a
 (function(){var im=[].slice.call(document.querySelectorAll('.hero .bg .slide')),tg=[].slice.call(document.querySelectorAll('#tags span')),who=document.getElementById('who'),W=[['Anúncio virando lead. Lead virando venda.','quem chama no anúncio recebe resposta em segundos e sai com hora marcada'],['Orçamento virando contrato.','a cotação sai na hora, a proposta é cobrada sozinha e o aceite vira Fechado'],['Produto virando loja. Loja virando faturamento.','a loja se monta conversando, vende de madrugada e ativa quem já comprou']],i=0;
 if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
 setInterval(function(){i=(i+1)%im.length;im.forEach(function(x,k){x.classList.toggle('on',k===i)});tg.forEach(function(x,k){x.classList.toggle('on',k===i)});who.innerHTML='<b>'+W[i][0]+'</b>'+W[i][1]},6000)})();
+</script>
+
+<script>
+(function(){var hero=document.querySelector('.hero'),slides=[].slice.call(document.querySelectorAll('.hero .bg .slide'));var TX=.715,TY=.34,TH=.165,R=1.79;
+function fit(){var HW=hero.clientWidth,HH=hero.clientHeight;if(matchMedia('(max-width:900px)').matches){slides.forEach(function(sl){sl.querySelectorAll('img').forEach(function(im){im.style.cssText=''})});return}
+slides.forEach(function(sl){var fx=+sl.dataset.fx,fy=+sl.dataset.fy,fh=+sl.dataset.fh;var Hd=TH*HH/fh,Wd=Hd*R;if(Wd<HW*.8){Wd=HW*.8;Hd=Wd/R}var left=TX*HW-fx*Wd,top=TY*HH-fy*Hd;sl.querySelectorAll('img').forEach(function(im){im.style.width=Wd+'px';im.style.height=Hd+'px';im.style.left=left+'px';im.style.top=top+'px'})})}
+fit();addEventListener('resize',fit);addEventListener('load',fit)})();
 </script>
 </body>
 </html>
