@@ -1483,3 +1483,16 @@ br.mb{display:none}
 .intel .cl{text-align:center}.intel .ccap{text-align:center!important}
 }
 
+
+/* hero: play no lugar da pessoa (teste 16/09) */
+.hh .bg .pessoa,.hh .target{display:none}
+.hh .play{position:absolute;z-index:3;left:71.5%;top:46%;transform:translate(-50%,-50%);width:clamp(6.5rem,12vw,11rem);height:clamp(6.5rem,12vw,11rem);border:0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 30%,#5cf0a0 0%,#2fd67b 45%,#12803f 100%);color:#0a0b0e;display:grid;place-items:center;box-shadow:0 0 0 .5rem rgba(47,214,123,.18),0 0 3rem rgba(47,214,123,.55),0 0 9rem rgba(47,214,123,.35),0 1.5rem 3rem rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.hh .play svg{width:42%;height:42%;fill:currentColor;margin-left:6%}
+.hh .play i{position:absolute;inset:-.5rem;border-radius:50%;border:2px solid rgba(47,214,123,.6);animation:playpulse 2.2s ease-out infinite}
+@keyframes playpulse{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.55);opacity:0}}
+.hh .play:hover{transform:translate(-50%,-50%) scale(1.07);box-shadow:0 0 0 .5rem rgba(47,214,123,.25),0 0 4rem rgba(47,214,123,.75),0 0 12rem rgba(47,214,123,.45),0 1.5rem 3rem rgba(0,0,0,.45)}
+.vid{position:fixed;inset:0;z-index:100;background:rgba(10,11,14,.92);display:grid;place-items:center;padding:6%}
+.vid[hidden]{display:none}
+.vid video{width:min(100%,64rem);aspect-ratio:16/9;background:#000;border-radius:1rem;box-shadow:0 0 6rem rgba(47,214,123,.25)}
+.vid .x{position:absolute;top:1rem;right:1.25rem;width:2.75rem;height:2.75rem;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:1.5rem;cursor:pointer}
+@media(max-width:900px){.hh .play{left:50%;top:30svh;width:5.5rem;height:5.5rem}}
