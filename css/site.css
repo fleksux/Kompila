@@ -1496,3 +1496,4 @@ br.mb{display:none}
 .vid video{width:min(100%,64rem);aspect-ratio:16/9;background:#000;border-radius:1rem;box-shadow:0 0 6rem rgba(47,214,123,.25)}
 .vid .x{position:absolute;top:1rem;right:1.25rem;width:2.75rem;height:2.75rem;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:1.5rem;cursor:pointer}
 @media(max-width:900px){.hh .play{left:50%;top:30svh;width:5.5rem;height:5.5rem}}
+.hh .dots{display:none}
