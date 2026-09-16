@@ -1496,3 +1496,11 @@ br.mb{display:none}
 .vid .x{position:absolute;top:1rem;right:1.25rem;width:2.75rem;height:2.75rem;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:1.5rem;cursor:pointer}
 @media(max-width:900px){.hh .play{left:50%;top:30svh;width:5.5rem;height:5.5rem}}
 .hh .dots{display:none}
+/* depoimento sem fundo, dentro da cena */
+.hh .pv{position:absolute;z-index:1;height:64svh;width:auto;top:22svh;left:calc(71.5vw - 57svh);pointer-events:none;opacity:0;transition:opacity .4s}
+.hh .pv.on{opacity:1}
+.hh .fade{z-index:1}
+.hh .play{left:71.5vw;top:46%}
+.hh .play.som{left:calc(71.5vw + 7rem);top:66%;width:3.5rem;height:3.5rem}
+.hh .play.som svg{display:none}.hh .play.som:after{content:"";width:34%;height:34%;border-radius:.2rem;background:#0a0b0e}
+@media(max-width:900px){.hh .pv{display:none}}
