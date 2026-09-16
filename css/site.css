@@ -1497,7 +1497,7 @@ br.mb{display:none}
 @media(max-width:900px){.hh .play{left:50%;top:30svh;width:5.5rem;height:5.5rem}}
 .hh .dots{display:none}
 /* depoimento sem fundo, dentro da cena */
-.hh .pv{position:absolute;z-index:1;height:86svh;width:auto;bottom:0;left:calc(71.5vw - 76.5svh);pointer-events:none;opacity:0;transition:opacity .4s}
+.hh .pv{position:absolute;z-index:1;height:calc(86svh + 20px);width:auto;bottom:0;left:calc(71.5vw - 76.5svh - 17.8px);pointer-events:none;opacity:0;transition:opacity .4s;filter:saturate(.85)}
 .hh .pvfade{position:absolute;z-index:1;left:0;right:0;bottom:0;height:38svh;background:linear-gradient(180deg,rgba(10,11,14,0) 0%,rgba(10,11,14,.55) 45%,rgba(10,11,14,.92) 80%,var(--carbon) 100%);pointer-events:none}
 .hh .pv.on{opacity:1}
 .hh .fade{z-index:1}
