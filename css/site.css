@@ -1502,6 +1502,6 @@ br.mb{display:none}
 .hh .pv.on{opacity:1}
 .hh .fade{z-index:1}
 .hh .play{left:71.5vw;top:46%}
-.hh .play.som,.hh .play.mini{left:calc(71.5vw + 10rem);top:70%;width:3.25rem;height:3.25rem}
+.hh .play.mini{left:calc(71.5vw + 10rem);top:70%;width:3.25rem;height:3.25rem}
 .hh .play.som svg{display:none}.hh .play.som:after{content:"";width:34%;height:34%;border-radius:.2rem;background:#0a0b0e}
 @media(max-width:900px){.hh .pv{display:none}}
