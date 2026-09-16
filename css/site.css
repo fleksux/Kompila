@@ -1505,3 +1505,8 @@ br.mb{display:none}
 .hh .play.mini{left:calc(71.5vw + 10rem);top:70%;width:3.25rem;height:3.25rem}
 .hh .play.som svg{display:none}.hh .play.som:after{content:"";width:34%;height:34%;border-radius:.2rem;background:#0a0b0e}
 @media(max-width:900px){.hh .pv{display:none}}
+/* CTA verde: apaga enquanto ela fala, acende quando termina */
+.hh .ctas .btn.g{transition:background .5s,color .5s,box-shadow .5s,border-color .5s}
+.hh .ctas .btn.g.apaga{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.2)}
+.hh .ctas .btn.g.acende{background:#2fd67b;color:#0a0b0e;box-shadow:0 0 0 .35rem rgba(47,214,123,.22),0 0 2rem rgba(47,214,123,.65),0 0 5rem rgba(47,214,123,.35);animation:ctapulse 1.6s ease-in-out 3}
+@keyframes ctapulse{50%{box-shadow:0 0 0 .6rem rgba(47,214,123,.1),0 0 3rem rgba(47,214,123,.9),0 0 7rem rgba(47,214,123,.5)}}
