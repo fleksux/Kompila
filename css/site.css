@@ -1497,10 +1497,11 @@ br.mb{display:none}
 @media(max-width:900px){.hh .play{left:50%;top:30svh;width:5.5rem;height:5.5rem}}
 .hh .dots{display:none}
 /* depoimento sem fundo, dentro da cena */
-.hh .pv{position:absolute;z-index:1;height:64svh;width:auto;top:22svh;left:calc(71.5vw - 57svh);pointer-events:none;opacity:0;transition:opacity .4s}
+.hh .pv{position:absolute;z-index:1;height:86svh;width:auto;bottom:0;left:calc(71.5vw - 76.5svh);pointer-events:none;opacity:0;transition:opacity .4s}
+.hh .pvfade{position:absolute;z-index:1;left:0;right:0;bottom:0;height:38svh;background:linear-gradient(180deg,rgba(10,11,14,0) 0%,rgba(10,11,14,.55) 45%,rgba(10,11,14,.92) 80%,var(--carbon) 100%);pointer-events:none}
 .hh .pv.on{opacity:1}
 .hh .fade{z-index:1}
 .hh .play{left:71.5vw;top:46%}
-.hh .play.som{left:calc(71.5vw + 7rem);top:66%;width:3.5rem;height:3.5rem}
+.hh .play.som{left:calc(71.5vw + 10rem);top:70%;width:3.25rem;height:3.25rem}
 .hh .play.som svg{display:none}.hh .play.som:after{content:"";width:34%;height:34%;border-radius:.2rem;background:#0a0b0e}
 @media(max-width:900px){.hh .pv{display:none}}
