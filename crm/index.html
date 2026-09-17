@@ -374,14 +374,14 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 
 /* notificações soltas subindo no hero */
 .notif{position:absolute;z-index:2;right:6%;bottom:190px;width:min(38%,420px);height:min(52vh,520px);pointer-events:none}
-.ntf{position:absolute;left:0;bottom:0;width:100%;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:rgba(17,21,26,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 50px rgba(0,0,0,.35),0 0 30px rgba(47,214,123,.16),inset 0 1px 0 rgba(255,255,255,.12);color:#fff;opacity:0;animation:rise 6.5s cubic-bezier(.2,.7,.3,1) forwards}
+.ntf{position:absolute;left:0;bottom:0;width:100%;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:rgba(17,21,26,.86);border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 50px rgba(0,0,0,.35),0 0 30px rgba(47,214,123,.16),inset 0 1px 0 rgba(255,255,255,.12);color:#fff;opacity:0;animation:rise 6.5s cubic-bezier(.2,.7,.3,1) forwards}
 .ntf img,.ntf i{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:none}
 .ntf i{display:grid;place-items:center;background:#252c34;font:600 12px var(--sans);font-style:normal;color:#c5cbd2}
 .ntf b{display:block;font-size:14px;font-weight:600;line-height:1.2}
 .ntf span{display:block;font-size:13px;color:rgba(255,255,255,.78);line-height:1.35;margin-top:2px}
 .ntf>div{min-width:0;flex:1}
 .ntf small{display:inline-block;margin-top:8px;font:600 10px var(--mono);letter-spacing:.04em;color:#2fd67b;background:rgba(47,214,123,.14);padding:3px 8px;border-radius:999px;white-space:nowrap}
-@keyframes rise{0%{opacity:0;transform:translateY(30px) scale(.96)}12%{opacity:1;transform:translateY(0) scale(1)}70%{opacity:1}100%{opacity:0;transform:translateY(-320px) scale(.98)}}
+@keyframes rise{0%{opacity:0;transform:translateY(30px) scale(.96)}12%{opacity:1;transform:translateY(0) scale(1)}70%{opacity:1}100%{opacity:0;transform:translateY(-400px) scale(.98)}}
 @media(max-width:900px){.notif{display:none}}
 
 /* notificação morre no caminho */
@@ -1578,15 +1578,15 @@ new IntersectionObserver(function(es){es.forEach(function(e){visivel=e.isInterse
 /* notificações: caixas soltas aparecem, subem e somem antes do rosto */
 (function(){var box=document.getElementById('notif');if(!box||matchMedia('(max-width:900px)').matches||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
 var msgs=[
- ['img/lead-marcos.webp','Marcos Oliveira','Oi, vi o lançamento no Instagram. Tem 2 quartos que aceita FGTS?','sem responsável · 42 h'],
- ['img/lead-juliana.webp','Juliana Prado','Esse vestido verde tem no 42? Preciso pra sábado.','fora do horário · sem resposta'],
- ['img/lead-ricardo.webp','Ricardo Nunes','Quanto fica um painel de LED 6×3 m pra fachada? Tenho verba aprovada.','arquivado sem cotação'],
+ ['../img/lead-marcos.webp','Marcos Oliveira','Oi, vi o lançamento no Instagram. Tem 2 quartos que aceita FGTS?','sem responsável · 42 h'],
+ ['../img/lead-juliana.webp','Juliana Prado','Esse vestido verde tem no 42? Preciso pra sábado.','fora do horário · sem resposta'],
+ ['../img/lead-ricardo.webp','Ricardo Nunes','Quanto fica um painel de LED 6×3 m pra fachada? Tenho verba aprovada.','arquivado sem cotação'],
  [null,'AS','Ana Souza','Vocês ainda têm unidade disponível em Guarulhos?','vendedor desativado'],
  [null,'PL','Paulo Lima','Preciso de um orçamento de painel 4×2 pra semana que vem.','caiu no grupo · ninguém pegou'],
  [null,'CF','Carla Ferreira','Consigo visitar o decorado hoje à tarde?','fora do funil']
 ];
 var i=0;function spawn(){var m=msgs[i%msgs.length];i++;var d=document.createElement('div');d.className='ntf';var av=m[0]?'<img src="'+m[0]+'" alt="">':'<i>'+m[1]+'</i>';var name=m[0]?m[1]:m[2],txt=m[0]?m[2]:m[3],fail=m[m.length-1];d.innerHTML=av+'<div><b>'+name+'</b><span>'+txt+'</span><small>agora</small></div>';setTimeout(function(){var sm=d.querySelector('small');sm.textContent=fail;sm.classList.add('bad')},2200);setTimeout(function(){d.classList.add('dead')},4200);d.style.left=(2+Math.random()*8)+'%';d.style.width=(86+Math.random()*6)+'%';box.appendChild(d);setTimeout(function(){d.remove()},6600)}
-var t=null;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!t){spawn();t=setInterval(spawn,2300)}else if(!e.isIntersecting&&t){clearInterval(t);t=null}})},{threshold:.2}).observe(box.parentNode)})();
+var t=null;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!t){spawn();t=setInterval(spawn,3000)}else if(!e.isIntersecting&&t){clearInterval(t);t=null}})},{threshold:.2}).observe(box.parentNode)})();
 </script>
 <script>(function(){var cz=document.querySelector('.cz');if(!cz)return;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cz.classList.add('live')}})},{threshold:.05}).observe(cz);addEventListener('scroll',function(){var r=cz.getBoundingClientRect();if(r.top<innerHeight*.85&&r.bottom>0)cz.classList.add('live')},{passive:true})})();</script>
 
