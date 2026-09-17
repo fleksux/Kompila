@@ -60,7 +60,10 @@ nav .panel{display:none}
 
 /* hero: foto, título digitado */
 .hero{margin:12px;border-radius:32px;background:var(--carbon);color:#fff;height:calc(100svh - 24px);min-height:640px;position:relative;overflow:hidden;display:flex;align-items:flex-end}
-.hero .bgwrap{position:absolute;inset:0;z-index:1;will-change:transform}
+.hero .bgwrap{position:absolute;inset:0;z-index:1}
+@supports (animation-timeline:view()){.hero{view-timeline:--hero block}.hero .bgwrap{will-change:transform;animation:heroPara linear both;animation-timeline:--hero;animation-range:exit 0% exit 100%}}
+@keyframes heroPara{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,28%,0)}}
+@media(prefers-reduced-motion:reduce){.hero .bgwrap{animation:none}}
 .hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 30%;opacity:0}
 .hero.bgin img.bg{animation:heroIn 2.2s cubic-bezier(.2,.8,.2,1) forwards}
 @keyframes heroIn{from{opacity:0;transform:scale(1.14) translateY(6%)}to{opacity:1;transform:scale(1.06) translateY(3%)}}
@@ -76,7 +79,7 @@ nav .panel{display:none}
 .hero h1 .caret{display:inline-block;width:0;height:.9em;vertical-align:-.1em;box-shadow:.03em 0 0 .03em #2fd67b;animation:blink 1s steps(2) infinite}
 .hero h1 .g{color:#2fd67b}
 @keyframes blink{50%{opacity:.2}}
-/* parallax do hero: só JS (rAF), a versão CSS scroll-timeline travava o Chrome */
+/* parallax do hero: animação CSS dirigida pelo scroll (compositor), sem JS; navegador sem suporte fica parado */
 .shot{margin:56px auto 0;background:linear-gradient(160deg,#e9f5ee,#f2f3ef 60%,#e6ebe4);border-radius:var(--r);padding:clamp(14px,3vw,40px);max-width:1000px}
 .shot.red{background:linear-gradient(160deg,#fbeeee,#f5f1f0 60%,#efe6e6)}
 .shot.sun{background:linear-gradient(160deg,#fff3d6,#f6efe2 60%,#efe8dc)}
@@ -1466,7 +1469,7 @@ calc()})();
 /* chat roteirizado */
 (function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Diagnóstico.';wa.href='https://wa.me/5511962884399?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
 </script>
-<script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0,img=document.getElementById('heroBg');function show(){hero.classList.add('bgin')}if(img&&img.complete&&img.naturalWidth)show();else if(img){img.addEventListener('load',show);img.addEventListener('error',show)}var wrap=hero.querySelector('.bgwrap');if(wrap&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var t=false,h=hero.offsetHeight;addEventListener('resize',function(){h=hero.offsetHeight},{passive:true});addEventListener('scroll',function(){if(t)return;t=true;requestAnimationFrame(function(){t=false;var y=scrollY||0;if(y>h)y=h;wrap.style.transform='translate3d(0,'+Math.round(y*.28)+'px,0)'})},{passive:true})}addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
+<script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0,img=document.getElementById('heroBg');function show(){hero.classList.add('bgin')}if(img&&img.complete&&img.naturalWidth)show();else if(img){img.addEventListener('load',show);img.addEventListener('error',show)}addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
 <script>
 /* telas e conversas ganham vida quando entram na tela */
 (function(){
