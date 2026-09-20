@@ -155,6 +155,26 @@ h2{font-size:clamp(30px,3.6vw,50px);letter-spacing:-.035em;line-height:1.04;marg
 .lista li i{font-style:normal;color:var(--green);font-family:var(--mono)}
 .lista li.no i{color:#8A939C}
 
+/* acordeão dos planos */
+.plano{border-top:1px solid #252C34;border-bottom:0}
+.plano:last-of-type{border-bottom:1px solid #252C34}
+.plano summary{display:grid;grid-template-columns:1fr auto;grid-template-areas:"n p" "q p";gap:2px 16px;align-items:center;padding:18px 0;cursor:pointer;list-style:none;font-size:inherit;font-weight:inherit;letter-spacing:0}
+.plano summary::-webkit-details-marker{display:none}
+.plano summary::after,.plano[open] summary::after{content:none}
+.plano .pn{grid-area:n;font:700 20px var(--sans);letter-spacing:-.02em;color:#fff}
+.plano .pq{grid-area:q;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#8A939C}
+.plano .pp{grid-area:p;font:700 clamp(26px,2.6vw,36px) var(--mono);letter-spacing:-.05em;color:#B4BBC3;line-height:1;transition:color .3s}
+.plano .pp small{font-size:13px;color:#8A939C;letter-spacing:0;margin-left:4px;font-weight:500}
+.plano[open] .pp{color:var(--green)}
+.plano[open] .pn::after{content:"";display:inline-block;width:8px;height:8px;background:var(--green);margin-left:10px;vertical-align:middle}
+.plano .pd{padding:0 0 22px}
+.pnums{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:6px}
+.pnums div{border:1px solid #252C34;padding:12px 12px 10px}
+.pnums b{display:block;font:700 22px var(--mono);letter-spacing:-.04em;color:#fff;line-height:1}
+.pnums span{display:block;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#8A939C;margin-top:6px;line-height:1.3}
+@media(max-width:600px){.pnums{grid-template-columns:1fr 1fr}.plano summary{grid-template-columns:1fr;grid-template-areas:"n" "p" "q";gap:4px}.plano .pp{margin:4px 0}}
+.plano .lista li{opacity:1;transform:none;transition:none}
+
 /* ligamos */
 .liga{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
 @media(max-width:900px){.liga{grid-template-columns:1fr}}
@@ -353,17 +373,59 @@ footer .logo{color:var(--off)}
         <p>Salário, encargos, férias, turnover. Um lead por vez, e só no horário dele.</p>
       </div>
       <div class="pbox destaque rv d2">
-        <div class="t">A Liz, no kompila .crm</div>
-        <div class="v">R$ 990<small>a partir de · por mês</small></div>
-        <ul class="lista">
-          <li><i>+</i>Atendimento da Liz no primeiro minuto, 24 h</li>
-          <li><i>+</i>Fila, guardião e placar do gestor</li>
-          <li><i>+</i>Relatório mensal em três toques</li>
-          <li><i>+</i><span><span class="ph">14 dias</span> pra testar com a sua base, antes de pagar</span></li>
-          <li><i>+</i>Um vendedor a mais no plano, incluso</li>
-          <li><i>+</i>Widget da Liz no seu site, pra quem fecha o kompila .crm</li>
-          <li class="no"><i>−</i>Marketing, automação de e-mail, o que não vira número</li>
-        </ul>
+        <div class="t">A Liz, no kompila .crm · três planos pelo tamanho da operação</div>
+        <details class="plano" open>
+          <summary><span class="pn">Pequeno</span><span class="pp">R$ 990<small>/mês</small></span><span class="pq">1 a 3 vendedores</span></summary>
+          <div class="pd">
+            <div class="pnums"><div><b>1 a 3</b><span>vendedores</span></div><div><b>até 500</b><span>leads por mês</span></div><div><b>300</b><span>ativações da base antiga</span></div><div><b>1.000</b><span>conversas de IA</span></div></div>
+            <ul class="lista">
+              <li><i>+</i>Atendimento da Liz no primeiro minuto, 24 h</li>
+              <li><i>+</i>Follow-up automático em 1, 3, 7 e 14 dias</li>
+              <li><i>+</i>Fila, guardião e placar do gestor</li>
+              <li><i>+</i>Relatório mensal em três toques</li>
+              <li><i>+</i>Um vendedor a mais no plano, incluso</li>
+              <li><i>+</i>Widget da Liz no seu site</li>
+              <li><i>+</i>WhatsApp e IA inclusos, sem conta da Meta por fora</li>
+              <li><i>+</i><span><span class="ph">14 dias</span> pra testar com a sua base, antes de pagar</span></li>
+              <li class="no"><i>−</i>Marketing, automação de e-mail, o que não vira número</li>
+            </ul>
+          </div>
+        </details>
+        <details class="plano">
+          <summary><span class="pn">Médio</span><span class="pp">R$ 2.990<small>/mês</small></span><span class="pq">4 a 10 vendedores</span></summary>
+          <div class="pd">
+            <div class="pnums"><div><b>4 a 10</b><span>vendedores</span></div><div><b>até 2.000</b><span>leads por mês</span></div><div><b>1.000</b><span>ativações da base antiga</span></div><div><b>3.000</b><span>conversas de IA</span></div></div>
+            <ul class="lista">
+              <li><i>+</i>Atendimento da Liz no primeiro minuto, 24 h</li>
+              <li><i>+</i>Follow-up automático em 1, 3, 7 e 14 dias</li>
+              <li><i>+</i>Fila, guardião e placar do gestor</li>
+              <li><i>+</i>Relatório mensal em três toques</li>
+              <li><i>+</i>Um vendedor a mais no plano, incluso</li>
+              <li><i>+</i>Widget da Liz no seu site</li>
+              <li><i>+</i>WhatsApp e IA inclusos, sem conta da Meta por fora</li>
+              <li><i>+</i><span><span class="ph">14 dias</span> pra testar com a sua base, antes de pagar</span></li>
+              <li class="no"><i>−</i>Marketing, automação de e-mail, o que não vira número</li>
+            </ul>
+          </div>
+        </details>
+        <details class="plano">
+          <summary><span class="pn">Grande</span><span class="pp">R$ 4.990<small>/mês</small></span><span class="pq">10+ vendedores, multi-loja</span></summary>
+          <div class="pd">
+            <div class="pnums"><div><b>10+</b><span>vendedores</span></div><div><b>sem teto</b><span>leads por mês</span></div><div><b>3.000</b><span>ativações da base antiga</span></div><div><b>8.000</b><span>conversas de IA</span></div></div>
+            <ul class="lista">
+              <li><i>+</i>Atendimento da Liz no primeiro minuto, 24 h</li>
+              <li><i>+</i>Follow-up automático em 1, 3, 7 e 14 dias</li>
+              <li><i>+</i>Fila, guardião e placar do gestor</li>
+              <li><i>+</i>Relatório mensal em três toques</li>
+              <li><i>+</i>Um vendedor a mais no plano, incluso</li>
+              <li><i>+</i>Widget da Liz no seu site</li>
+              <li><i>+</i>WhatsApp e IA inclusos, sem conta da Meta por fora</li>
+              <li><i>+</i><span><span class="ph">14 dias</span> pra testar com a sua base, antes de pagar</span></li>
+              <li class="no"><i>−</i>Marketing, automação de e-mail, o que não vira número</li>
+            </ul>
+          </div>
+        </details>
+        <p>Sem fidelidade. Os seus leads e o histórico ficam com você. Excedente: R$ 1,50 por ativação, R$ 300 a cada mil conversas.</p>
         <p style="margin-top:20px"><a class="btn g" href="#comeca">Quero testar com a minha base</a></p>
       </div>
     </div>
@@ -374,7 +436,7 @@ footer .logo{color:var(--off)}
   <div class="wrap">
     <div class="k rv">O que ligamos na venda</div>
     <h2 class="rv d1">A mesma equipe liga a Liz na sua loja, no seu site e no seu anúncio.</h2>
-    <p class="sub rv d2">Não são produtos com nome. São <b>o que fazemos pra Liz ter onde atender.</b></p>
+    <p class="sub rv d2">A Liz atende no WhatsApp, no Instagram e no seu site. <b>Se você ainda não tem loja, site ou anúncio, a gente faz. A mesma equipe, ligada no mesmo CRM.</b></p>
     <div class="liga">
       <a href="../loja/"><div class="tela telaw rv"><img src="../img/home/tela-maslu.webp" alt="A loja da Maslu Select, como a cliente vê"></div><h3>Loja</h3><p>Loja em WooCommerce com painel feito pra quem vende roupa. A Maslu Select roda nela.</p><span class="num">5.900 pedidos · R$ 1,5 milhão em 12 meses · lidos da loja em 15/09/2026</span></a>
       <a href="../design/"><div class="tela telaw rv"><img src="../img/home/tela-p1led.webp" alt="O site da P1LED em WordPress, como está no ar"></div><h3>Site, marca e anúncio</h3><p>Site no seu domínio com formulário que vira lead com origem gravada. Meta e Google com a venda voltando como conversão.</p><span class="num">p1led.com.br · no ar em WordPress</span></a>
