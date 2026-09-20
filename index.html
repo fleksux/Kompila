@@ -270,6 +270,10 @@ footer .logo{color:var(--off)}
 @media(prefers-reduced-motion:reduce){.hero .hw > div > *{animation:none;opacity:1;transform:none}.hero .pessoa{animation:none;filter:none;opacity:1}.play .disco i{animation:none}.rv,.chips span,.regua div,.perguntas li,.gerente li,.lista li{opacity:1;transform:none;transition:none}.k::before{width:56px}}
 
 @media(min-width:901px){.preco .plano .ps{display:none}.preco .plano summary{pointer-events:none;grid-template-columns:1fr;grid-template-areas:"n" "p" "q";gap:4px;padding:22px 0 16px}.preco .plano .pp{margin:6px 0 2px;font-size:36px}.preco .plano.pbox,.preco .plano.pbox[open]{border-color:#252C34}.preco .plano.pbox.destaque{border-color:var(--green)}.preco .plano[open] .pn::after{content:none}.preco .plano .pp{color:var(--green)}.preco .pnums{grid-template-columns:1fr 1fr}}
+/* caixas amigáveis: 20px em tudo que é caixa */
+.tela,.tela img,.liza .foto,.liz .foto,.pbox,.plano.pbox,.pnums div,.vs span,.trilho img,.chips span,.stats,.big,.fecho .ctas a{border-radius:20px}
+.tela.telaw{overflow:hidden}
+@media(max-width:900px){.plano.pbox{border-radius:0}}
 /* vídeo */
 .vid{position:fixed;inset:0;background:rgba(10,11,14,.94);z-index:50;display:grid;place-items:center;padding:6%}
 .vid[hidden]{display:none}
