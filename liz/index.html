@@ -32,7 +32,9 @@ nav{position:sticky;top:0;z-index:20;background:rgba(10,11,14,.92);backdrop-filt
 nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
 nav .links{display:flex;gap:26px;font:500 14px var(--sans);color:#B4BBC3}
 nav .links a:hover{color:#fff}
-nav .btn{padding:11px 16px;font-size:14px}
+nav .btn{padding:11px 16px;font-size:14px;white-space:nowrap}
+nav .btn .sm{display:none}
+@media(max-width:600px){nav .btn .lg{display:none}nav .btn .sm{display:inline}}
 @media(max-width:900px){nav .links{display:none}}
 
 /* hero */
@@ -47,7 +49,7 @@ nav .btn{padding:11px 16px;font-size:14px}
 .hero .lead b{color:#fff;font-weight:600}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
 .hero .under{font:500 13px var(--mono);color:#8A939C;letter-spacing:.02em;line-height:1.7}
-.hero .under b{color:var(--green);font-weight:600}
+.hero .under b{color:var(--green);font-weight:600;white-space:nowrap}
 .play{position:absolute;right:calc(7% + 300px);bottom:30%;width:76px;height:76px;border-radius:50%;border:0;background:var(--green);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 0 rgba(47,214,123,.55);animation:glow 2.4s ease-out infinite}
 .play svg{width:28px;height:28px;fill:currentColor;margin-left:4px}
 .play span{position:absolute;top:86px;left:50%;transform:translateX(-50%);font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#C9CFD6;white-space:nowrap}
@@ -57,9 +59,13 @@ nav .btn{padding:11px 16px;font-size:14px}
   .hero{min-height:0}
   .hero .hw{grid-template-columns:1fr;min-height:0;padding-top:48px;padding-bottom:0}
   .hero .veil{background:linear-gradient(180deg,rgba(10,11,14,.97) 0%,rgba(10,11,14,.9) 55%,rgba(10,11,14,.3) 100%)}
-  .hero .pessoa{position:relative;right:auto;height:auto;width:62%;margin:28px auto 0;display:block}
+  .hero{display:flex;flex-direction:column}
+  .hero .hw{order:1}
+  .hero .pessoa{order:2;position:relative;right:auto;height:auto;width:68%;margin:24px auto 0;display:block}
   .hero h1{max-width:none}
-  .play{right:14%;bottom:30%;width:64px;height:64px}
+  .hero .under{margin-bottom:0}
+  .play{right:auto;left:6%;bottom:9%;width:64px;height:64px;z-index:2}
+  .play span{top:72px}
 }
 
 /* seções */
@@ -73,6 +79,7 @@ h2{font-size:clamp(30px,3.6vw,50px);letter-spacing:-.035em;line-height:1.04;marg
 .dark .k{color:var(--green)}.dark .k::before{background:var(--green)}
 .dark .sub{color:#B4BBC3}.dark .sub b{color:#fff}
 .tela{border:1px solid var(--line);background:#fff;box-shadow:0 30px 60px -30px rgba(10,11,14,.35)}
+@media(max-width:600px){img.tela{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:var(--pos,16% 0)}}
 .dark .tela{border-color:#252C34;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
 .cap{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-top:12px}
 
@@ -104,6 +111,7 @@ h2{font-size:clamp(30px,3.6vw,50px);letter-spacing:-.035em;line-height:1.04;marg
 @media(max-width:900px){.liz{grid-template-columns:1fr}}
 .liz .foto{background:#fff;border:1px solid var(--line);padding:24px}
 .liz .foto img{width:100%;height:auto}
+@media(max-width:600px){section{padding:64px 0}.liz .foto{padding:12px}.liz .foto img{aspect-ratio:1/1;object-fit:cover;object-position:center 40%}.hero .pessoa{width:62%}}
 .liz h2{max-width:none}
 .perguntas{list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--ink)}
 .perguntas li{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px;color:var(--ink2);align-items:baseline}
@@ -127,8 +135,8 @@ h2{font-size:clamp(30px,3.6vw,50px);letter-spacing:-.035em;line-height:1.04;marg
 .pbox .v{font:700 clamp(36px,4vw,56px) var(--mono);letter-spacing:-.05em;line-height:1;color:#fff}
 .pbox .v small{font-size:16px;color:#8A939C;letter-spacing:0;margin-left:8px;font-weight:500}
 .pbox p{font-size:15px;color:#B4BBC3;margin:14px 0 0}
-.pbox.k{border-color:var(--green)}
-.pbox.k .v{color:var(--green)}
+.pbox.destaque{border-color:var(--green)}
+.pbox.destaque .v{color:var(--green)}
 .ph{background:rgba(255,178,36,.18);border:1px dashed var(--amber);color:#FFD27A;padding:0 8px}
 .lista{list-style:none;margin:16px 0 0;padding:0}
 .lista li{padding:10px 0;border-top:1px solid #252C34;font-size:15px;color:#C9CFD6;display:grid;grid-template-columns:22px 1fr;gap:8px}
@@ -180,7 +188,7 @@ footer .logo{color:var(--off)}
   <div class="wrap">
     <a class="logo" href="../"><b>[ </b>kompila<b> ]</b></a>
     <div class="links"><a href="#como">Como funciona</a><a href="#liz">A Liz</a><a href="#quem">Pra quem</a><a href="#preco">O que custa</a><a href="#perguntas">Perguntas</a></div>
-    <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende." target="_blank" rel="noopener">Quero ver a Liz atendendo</a>
+    <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende." target="_blank" rel="noopener"><span class="lg">Quero ver a Liz atendendo</span><span class="sm">Ver a Liz atendendo</span></a>
   </div>
 </nav>
 
@@ -224,7 +232,7 @@ footer .logo{color:var(--off)}
           <h3>A Liz atende em segundos e faz o pré-atendimento.</h3>
           <p>As perguntas que o seu vendedor faria, na ordem: <b>nome, pra quem é, renda por alto, região.</b> Simula pela tabela da empresa. Marca a visita. Não inventa preço nem condição.</p>
         </div>
-        <div><img class="tela" src="../img/home/tela-crm-conversas.webp" alt="Tela do kompila .crm com a conversa da Liz com um lead e o resumo do que ela entendeu"><div class="cap">kompila .crm · a conversa e o que a Liz entendeu · demonstração</div></div>
+        <div><img class="tela" style="--pos:100% 0" src="../img/home/tela-crm-conversas.webp" alt="Tela do kompila .crm com a conversa da Liz com um lead e o resumo do que ela entendeu"><div class="cap">kompila .crm · a conversa e o que a Liz entendeu · demonstração</div></div>
       </div>
       <div class="passo">
         <div class="txt">
@@ -304,20 +312,20 @@ footer .logo{color:var(--off)}
     <div class="preco">
       <div class="pbox">
         <div class="t">Um pré-atendente</div>
-        <div class="v"><span class="ph">R$ X mil</span><small>por mês</small></div>
-        <p>Salário, encargos, 8 horas por dia, férias, turnover. Um lead por vez.</p>
+        <div class="v">8 h<small>por dia</small></div>
+        <p>Salário, encargos, férias, turnover. Um lead por vez, e só no horário dele.</p>
       </div>
-      <div class="pbox k">
+      <div class="pbox destaque">
         <div class="t">A Liz, no kompila .crm</div>
-        <div class="v"><span class="ph">R$ Y</span><small>por loja · por mês</small></div>
+        <div class="v">R$ 990<small>a partir de · por mês</small></div>
         <ul class="lista">
           <li><i>+</i>Atendimento da Liz no primeiro minuto, 24 h</li>
           <li><i>+</i>Fila, guardião e placar do gestor</li>
           <li><i>+</i>Relatório mensal em três toques</li>
-          <li><i>+</i><span class="ph">14 dias</span>&nbsp;pra testar com a sua base, antes de pagar</li>
+          <li><i>+</i><span><span class="ph">14 dias</span> pra testar com a sua base, antes de pagar</span></li>
           <li class="no"><i>−</i>Marketing, automação de e-mail, o que não vira número</li>
         </ul>
-        <p>Sem fidelidade. Os seus leads e o histórico ficam com você.</p>
+        <p>Três planos pelo tamanho da operação: R$ 990, R$ 2.990 e R$ 4.990 por mês, com WhatsApp e IA inclusos. Start a partir de R$ 3.000, uma vez, pra montar as suas regras. Sem fidelidade. Os seus leads e o histórico ficam com você.</p>
         <p style="margin-top:20px"><a class="btn g" href="#comeca">Quero testar com a minha base</a></p>
       </div>
     </div>
@@ -359,7 +367,7 @@ footer .logo{color:var(--off)}
     <details><summary>E se o vendedor não responder?</summary><p>Em 5 minutos o lead vai pro próximo da fila. Em 10, a Liz retoma e segura o lead. Passou 24 h, volta pra fila com o relógio zerado.</p></details>
     <details><summary>A Liz inventa preço ou condição?</summary><p>Não. Simulação e cotação saem da tabela aprovada pela empresa, com entrada e saída registradas na conversa. Valor sensível pode exigir aprovação de uma pessoa antes do envio.</p></details>
     <details><summary>Preciso trocar meu CRM?</summary><p>Não pra começar. O Diagnóstico lê a base que você tem. O kompila .crm vira a tela do gestor; o vendedor não abre CRM nenhum.</p></details>
-    <details><summary>Quanto custa?</summary><p><span class="reg g">R$ Y</span> por loja por mês, sem fidelidade, com 14 dias de teste na sua base. O valor exato sai do Diagnóstico.</p></details>
+    <details><summary>Quanto custa?</summary><p>A partir de <span class="reg g">R$ 990</span> por mês, com WhatsApp e IA inclusos, sem fidelidade e com 14 dias de teste na sua base. Três planos pelo tamanho da operação; o certo sai do Diagnóstico.</p></details>
   </div>
 </section>
 
