@@ -38,10 +38,17 @@ nav .btn .sm{display:none}
 @media(max-width:900px){nav .links{display:none}}
 
 /* hero: cenário com parallax atrás, pessoa recortada por cima posicionada pelo rosto (mesma régua da home) */
-.hero{position:relative;background:var(--carbon);color:var(--off);overflow:hidden;height:100svh;min-height:40rem;--r:0.3831;--fx:0.530;--fy:0.130;--fh:0.140;--face:16.5svh;--tx:71.5vw;--ty:34svh}
+.hero{position:relative;background:var(--carbon);color:var(--off);overflow:hidden;height:100svh;min-height:40rem;--r:0.3831;--fx:0.530;--fy:0.130;--fh:0.140;--face:22svh;--tx:71.5vw;--ty:34svh;--vh:calc(var(--face) / .27)}
+/* vídeo com alpha: mesma pessoa, entra no lugar do recorte e fala. Rosto no quadro: x .578, centro y .243, altura .27 (medido no frame) */
+.hero .pv{position:absolute;z-index:1;height:var(--vh);width:auto;top:calc(var(--ty) - .243 * var(--vh));left:calc(var(--tx) - .578 * var(--vh) * 16 / 9);pointer-events:none;opacity:0;transition:opacity .5s;filter:saturate(.9);-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 78%,transparent 100%)}
+.hero .pv.on{opacity:1}
+.hero.falando .pessoa{animation:none;filter:none;opacity:0;transition:opacity .5s}
+.hero.falando .play{opacity:1;animation:none}
+.hero.falando .play .ico-play{display:none}.hero .play .ico-pause{display:none}.hero.falando .play .ico-pause{display:block}
+.hero.falando .play i{animation:none;opacity:0}
 .hero .fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:grayscale(1);opacity:.9;transform:translate3d(calc(var(--mx,0) * -18px),calc(var(--my,0) * -12px + var(--sy,0) * .28px),0) scale(1.07);transition:transform .9s cubic-bezier(.2,.7,.2,1);will-change:transform}
 .hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,var(--carbon) 0%,rgba(10,11,14,.92) 28%,rgba(10,11,14,.55) 44%,rgba(10,11,14,.22) 58%,rgba(10,11,14,.06) 70%,rgba(10,11,14,0) 80%),linear-gradient(180deg,rgba(10,11,14,.6) 0%,rgba(10,11,14,0) 22%,rgba(10,11,14,0) 56%,rgba(10,11,14,.4) 72%,rgba(10,11,14,.85) 88%,var(--carbon) 100%);pointer-events:none}
-.hero .pessoa{position:absolute;height:calc(var(--face) / var(--fh));width:auto;top:calc(var(--ty) - var(--fy) * (var(--face) / var(--fh)));left:calc(var(--tx) - var(--fx) * var(--r) * (var(--face) / var(--fh)));translate:calc(var(--mx,0) * -6px) calc(var(--my,0) * -4px + var(--sy,0) * .12px);transition:translate .9s cubic-bezier(.2,.7,.2,1);filter:grayscale(1) contrast(1.06);animation:acende 1.8s ease .6s both}
+.hero .pessoa{position:absolute;z-index:1;height:calc(var(--face) / var(--fh));width:auto;top:calc(var(--ty) - var(--fy) * (var(--face) / var(--fh)));left:calc(var(--tx) - var(--fx) * var(--r) * (var(--face) / var(--fh)));translate:calc(var(--mx,0) * -6px) calc(var(--my,0) * -4px + var(--sy,0) * .12px);transition:translate .9s cubic-bezier(.2,.7,.2,1);filter:grayscale(1) contrast(1.06);animation:acende 1.8s ease .6s both}
 @keyframes acende{0%{filter:grayscale(1) contrast(1.06) brightness(1.2);opacity:0;transform:translateY(12px)}40%{opacity:1;transform:none}100%{filter:none;opacity:1}}
 .hero .hw{position:relative;z-index:2;height:100%;display:grid;align-content:end;padding-top:56px;padding-bottom:clamp(2.75rem,4svh + 1.25rem,3.75rem);max-width:none}
 .hero .hw > div{max-width:56%}
@@ -51,10 +58,10 @@ nav .btn .sm{display:none}
 .hero h1{font-size:clamp(38px,min(5.6vw,9svh),84px);line-height:.98;letter-spacing:-.04em;margin:0 0 18px;font-weight:700;max-width:11ch}
 .hero .lead{font-size:clamp(18px,1.7vw,24px);line-height:1.35;color:#C9CFD6;max-width:520px;margin:0 0 26px;letter-spacing:-.01em}
 .hero .lead b{color:#fff;font-weight:600}
-.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:0}
 .hero .under{font:500 13px var(--mono);color:#8A939C;letter-spacing:.02em;line-height:1.7}
 .hero .under b{color:var(--green);font-weight:600;white-space:nowrap}
-.play{position:absolute;z-index:3;left:calc(var(--tx) - 15vw);top:calc(var(--ty) + 14svh);transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#5cf0a0 0%,#2fd67b 45%,#12803f 100%);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 .4rem rgba(47,214,123,.18),0 0 2.5rem rgba(47,214,123,.5)}
+.play{position:absolute;z-index:3;left:calc(var(--tx) - 25vw);top:calc(var(--ty) + 26svh);transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#5cf0a0 0%,#2fd67b 45%,#12803f 100%);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 .4rem rgba(47,214,123,.18),0 0 2.5rem rgba(47,214,123,.5)}
 .play i{position:absolute;inset:-.4rem;border-radius:50%;border:2px solid rgba(47,214,123,.6);animation:playpulse 2.2s ease-out infinite}
 @keyframes playpulse{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.6);opacity:0}}
 .play svg{width:28px;height:28px;fill:currentColor;margin-left:4px}
@@ -62,7 +69,7 @@ nav .btn .sm{display:none}
 .play:hover{transform:translate(-50%,-50%) scale(1.07)}
 @media(max-width:1100px){.hero{--tx:74vw}.hero .hw > div{max-width:62%}}
 @media(max-width:900px){
-  .hero{height:auto;min-height:100svh;--face:12svh;--ty:22svh;--tx:66vw}
+  .hero{height:auto;min-height:100svh;--face:13svh;--ty:22svh;--tx:66vw}
   .hero .hw{padding-top:44svh;padding-bottom:1.75rem;min-height:100svh}
   .hero .hw > div{max-width:none}
   .hero h1{max-width:none;font-size:clamp(38px,12vw,72px)}
@@ -184,7 +191,7 @@ footer .logo{color:var(--off)}
 
 /* animação: entrada do hero e revelação por rolagem */
 .hero .hw > div > *{opacity:0;transform:translateY(18px);animation:sobe .7s cubic-bezier(.2,.7,.2,1) forwards}
-.hero .kicker{animation-delay:.05s}.hero h1{animation-delay:.15s}.hero .lead{animation-delay:.3s}.hero .ctas{animation-delay:.42s}.hero .under{animation-delay:.55s}
+.hero .kicker{animation-delay:.05s}.hero h1{animation-delay:.15s}.hero .lead{animation-delay:.3s}.hero .ctas{animation-delay:.42s}
 .play{opacity:0;animation:aparece .5s ease-out 1s forwards}
 @keyframes sobe{to{opacity:1;transform:none}}
 @keyframes aparece{to{opacity:1}}
@@ -227,7 +234,8 @@ footer .logo{color:var(--off)}
   <img class="fundo" src="../img/home/fundo-moda.webp" alt="" aria-hidden="true">
   <div class="veil" aria-hidden="true"></div>
   <img class="pessoa" src="../img/home/pessoa-moda.webp" alt="Dona de loja de moda, de braços cruzados, na loja dela">
-  <button class="play" id="hplay" type="button" aria-label="Ouvir o depoimento"><i></i><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>ouvir · 46 s</span></button>
+  <video class="pv" id="hpv" playsinline preload="metadata" aria-label="Depoimento da dona da loja"><source src="../video/moda_alpha.mov" type='video/mp4; codecs="hvc1"'><source src="../video/moda_alpha.webm" type="video/webm"></video>
+  <button class="play" id="hplay" type="button" aria-label="Ouvir o depoimento"><i></i><svg class="ico-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="ico-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg><span>ouvir · 30 s</span></button>
   <div class="wrap hw">
     <div>
       <div class="kicker"><span class="lg">[ 5 minutos ] · a régua do atendimento</span><span class="sm">[ 5 minutos ] · a régua</span></div>
@@ -236,11 +244,9 @@ footer .logo{color:var(--off)}
       <div class="ctas">
         <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende." target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>Quero ver a Liz atendendo</a>
       </div>
-      <div class="under">No ar desde <b>17 set 2026</b> · <b>+55 11 96288-4399</b></div>
     </div>
   </div>
 </header>
-<div class="vid" id="vid" hidden><button class="x" id="vidx" type="button" aria-label="Fechar">×</button><video id="vidv" src="../video/depoimento-moda.mp4" playsinline controls preload="none"></video></div>
 
 <section id="como">
   <div class="wrap">
@@ -420,12 +426,17 @@ footer .logo{color:var(--off)}
 
 <script>
 (function(){
-  var v=document.getElementById('vid'),p=document.getElementById('hplay'),x=document.getElementById('vidx'),m=document.getElementById('vidv');
-  p.addEventListener('click',function(){v.hidden=false;m.play()});
-  function close(){m.pause();v.hidden=true}
-  x.addEventListener('click',close);
-  v.addEventListener('click',function(e){if(e.target===v)close()});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!v.hidden)close()});
+  // play: a pessoa recortada some e o vídeo com alpha entra no mesmo lugar, falando
+  var hero=document.querySelector('.hero'),p=document.getElementById('hplay'),pv=document.getElementById('hpv');
+  var rot=p.querySelector('span');
+  function para(){pv.pause();hero.classList.remove('falando');pv.classList.remove('on');rot.textContent='ouvir · 30 s'}
+  p.addEventListener('click',function(){
+    if(!pv.paused){para();return}
+    if(pv.ended)pv.currentTime=0;
+    pv.classList.add('on');hero.classList.add('falando');rot.textContent='pausar';pv.play().catch(para)
+  });
+  pv.addEventListener('ended',function(){hero.classList.remove('falando');pv.classList.remove('on');rot.textContent='ouvir de novo'});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!pv.paused)para()});
   // parallax do hero (mouse e rolagem), mesma régua da home
   var h=document.querySelector('.hero');
   if(h&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var mx=0,my=0,sy=0,raf=0;
