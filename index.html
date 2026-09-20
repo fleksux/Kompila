@@ -158,8 +158,8 @@ h2{font-size:clamp(30px,3.6vw,50px);letter-spacing:-.035em;line-height:1.04;marg
 
 /* preço: faixa de comparação + 3 caixas no desktop, acordeão no celular */
 .vs{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-bottom:24px;font-size:15px;color:#B4BBC3}
-.vs span{border-top:1px solid #252C34;padding-top:12px}.vs b{color:#fff;font-weight:600;display:block;margin-bottom:2px}
-.vs span:last-child{border-color:var(--green)}.vs span:last-child b{color:var(--green)}
+.vs span{border:1px solid #252C34;padding:16px 18px}.vs b{color:#fff;font-weight:600;display:block;margin-bottom:4px}
+.vs span:last-child{border-color:var(--green);background:rgba(47,214,123,.06)}.vs span:last-child b{color:var(--green)}
 .preco{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);align-items:stretch}
 .plano.pbox{padding:0 24px;border:1px solid #252C34}
 .plano.pbox[open]{border-color:var(--green)}
@@ -208,7 +208,7 @@ h2{font-size:clamp(30px,3.6vw,50px);letter-spacing:-.035em;line-height:1.04;marg
 .seta{width:44px;height:44px;border-radius:50%;border:1px solid var(--ink);background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
 .seta:hover{background:var(--ink);color:var(--paper)}
 .seta svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:700px){.trilho figure{flex-basis:88%}.mq{margin:0 0 28px}.mq-track{gap:32px}.mq-track span{font-size:15px}}
+@media(max-width:700px){.trilho figure{flex-basis:88%}.mq{margin:0 0 28px}.mq-track{gap:32px}.mq-track span{font-size:15px}.setas{justify-content:flex-start}}
 .liga-links{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-top:34px}
 .liga-links a{display:block;border-top:1px solid var(--ink);padding:14px 0;font-size:15px;color:var(--ink);font-weight:500}
 .liga-links a i{font-style:normal;color:var(--gtext);margin-left:6px}
@@ -274,7 +274,7 @@ footer .logo{color:var(--off)}
 
 @media(min-width:901px){.preco .plano .ps{display:none}.preco .plano summary{pointer-events:none;grid-template-columns:1fr;grid-template-areas:"n" "p" "q";gap:4px;padding:22px 0 16px}.preco .plano .pp{margin:6px 0 2px;font-size:36px}.preco .plano.pbox,.preco .plano.pbox[open]{border-color:#252C34}.preco .plano.pbox.destaque{border-color:var(--green)}.preco .plano[open] .pn::after{content:none}.preco .plano .pp{color:var(--green)}.preco .pnums{grid-template-columns:1fr 1fr}}
 /* caixas e botões: 10px em tudo */
-.tela,.tela img,.liz .foto,.pbox,.plano.pbox,.pnums div,.vs span,.trilho img,.chips span,.stats,.big,.btn,.f button{border-radius:10px}
+.tela,.tela img,.liz .foto,.pbox,.plano.pbox,.pnums div,.vs span,.trilho img,.chips span,.btn,.f button,.seta{border-radius:10px}
 .tela.telaw{overflow:hidden}
 @media(max-width:900px){.plano.pbox{border-radius:0}}
 /* vídeo */
