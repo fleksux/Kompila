@@ -84,5 +84,6 @@
 (function(){var d=document.querySelector('nav .dd'),b=document.getElementById('ddb');if(!d)return;var t;function open(){clearTimeout(t);d.classList.add('open')}function close(){t=setTimeout(function(){d.classList.remove('open')},160)}d.addEventListener('mouseenter',open);d.addEventListener('mouseleave',close);b.addEventListener('click',function(){d.classList.contains('open')?(clearTimeout(t),d.classList.remove('open')):open()});document.addEventListener('click',function(e){if(!d.contains(e.target)){clearTimeout(t);d.classList.remove('open')}})})();
 (function(){var h=document.documentElement;if(/[?&]still/.test(location.search))h.classList.add('still');if(/[?&]guias/.test(location.search))h.classList.add('guias')})();
 </script>
+<script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
 </body>
 </html>
