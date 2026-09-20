@@ -184,7 +184,35 @@ h2{font-size:clamp(30px,3.6vw,50px);letter-spacing:-.035em;line-height:1.04;marg
 @media(max-width:600px){.pnums{grid-template-columns:1fr 1fr}.plano summary{grid-template-columns:1fr auto;grid-template-areas:"n s" "p s" "q s";gap:4px 12px}.plano .pp{margin:4px 0}}
 .plano .lista li{opacity:1;transform:none;transition:none}
 
-/* ligamos */
+/* portfólio: números, faixa de marcas, carrossel de cases */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);border-top:1px solid var(--ink);padding-top:18px;margin-bottom:34px}
+.stats b{display:block;font:700 clamp(24px,2.4vw,34px) var(--mono);letter-spacing:-.05em;color:var(--gtext);line-height:1}
+.stats span{display:block;font-size:14px;color:var(--ink2);margin-top:6px;line-height:1.35}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr;gap:18px 12px}}
+.mq{overflow:hidden;margin:0 6% 34px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mq-track{display:flex;gap:48px;width:max-content;animation:mqroll 80s linear infinite;will-change:transform}
+.mq-track span{font:700 18px var(--sans);letter-spacing:-.03em;color:var(--ink);white-space:nowrap;opacity:.85}
+@keyframes mqroll{to{transform:translateX(-50%)}}
+.carr{position:relative}
+.trilho{display:flex;gap:var(--gap);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.trilho::-webkit-scrollbar{display:none}
+.trilho figure{flex:0 0 calc(50% - var(--gap) / 2);scroll-snap-align:start;margin:0}
+.trilho img{width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--line);background:#0A0B0E}
+.trilho figcaption{display:flex;justify-content:space-between;gap:12px;margin-top:10px;font-size:14px;color:var(--ink2)}
+.trilho figcaption b{color:var(--ink);font-weight:600}
+.trilho figcaption span{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.setas{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.seta{width:44px;height:44px;border-radius:50%;border:1px solid var(--ink);background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
+.seta:hover{background:var(--ink);color:var(--paper)}
+.seta svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:700px){.trilho figure{flex-basis:88%}.mq{margin:0 0 28px}.mq-track{gap:32px}.mq-track span{font-size:15px}}
+.liga-links{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-top:34px}
+.liga-links a{display:block;border-top:1px solid var(--ink);padding:14px 0;font-size:15px;color:var(--ink);font-weight:500}
+.liga-links a i{font-style:normal;color:var(--gtext);margin-left:6px}
+@media(max-width:700px){.liga-links{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.mq-track{animation:none}}
+
+/* ligamos (antigo) */
 .liga{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
 @media(max-width:900px){.liga{grid-template-columns:1fr}}
 .liga a{display:block}
@@ -437,13 +465,33 @@ footer .logo{color:var(--off)}
 
 <section id="liga">
   <div class="wrap">
-    <div class="k rv">O que ligamos na venda</div>
-    <h2 class="rv d1">A mesma equipe liga a Liz na sua loja, no seu site e no seu anúncio.</h2>
-    <p class="sub rv d2">A Liz atende no WhatsApp, no Instagram e no seu site. <b>Se você ainda não tem loja, site ou anúncio, a gente faz. A mesma equipe, ligada no mesmo CRM.</b></p>
-    <div class="liga">
-      <a href="loja/"><div class="tela telaw rv"><img src="img/home/tela-maslu.webp" alt="A loja da Maslu Select, como a cliente vê"></div><h3>Loja</h3><p>Loja em WooCommerce com painel feito pra quem vende roupa. A Maslu Select roda nela.</p><span class="num">5.900 pedidos · R$ 1,5 milhão em 12 meses · lidos da loja em 15/09/2026</span></a>
-      <a href="design/"><div class="tela telaw rv"><img src="img/home/tela-p1led.webp" alt="O site da P1LED em WordPress, como está no ar"></div><h3>Site, marca e anúncio</h3><p>Site no seu domínio com formulário que vira lead com origem gravada. Meta e Google com a venda voltando como conversão.</p><span class="num">p1led.com.br · no ar em WordPress</span></a>
+    <div class="k rv">O que já fizemos</div>
+    <h2 class="rv d1">Marca, site, loja e campanha. Feitos por quem faz a Liz.</h2>
+    <p class="sub rv d2">A Liz atende no WhatsApp, no Instagram e no seu site. <b>Se você ainda não tem loja, site ou anúncio, a gente faz, ligado no mesmo CRM.</b></p>
+    <div class="stats rv"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><div><b>+25</b><span>marcas atendidas</span></div><div><b>R$ 500 mil</b><span>por mês administrados em mídia</span></div><div><b>Meta e Google</b><span>equipe certificada</span></div></div>
+  </div>
+  <div class="mq rv"><div class="mq-track"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy</span><span>AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Contingência Social</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Valuation Jurídico</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Elf Vape</span></div></div>
+  <div class="wrap">
+    <div class="carr rv" id="carr">
+      <div class="trilho" id="trilho">
+        <figure><img src="img/cases/case-01-p1led.webp" alt="P1LED: site em WordPress" loading="lazy"><figcaption><b>P1LED</b><span>site em WordPress</span></figcaption></figure>
+        <figure><img src="img/cases/case-03-aut.webp" alt="AUT Dskarb: design de rótulo" loading="lazy"><figcaption><b>AUT Dskarb</b><span>design de rótulo</span></figcaption></figure>
+        <figure><img src="img/cases/case-04-unisushi.webp" alt="Uni Premium Sushi: identidade visual" loading="lazy"><figcaption><b>Uni Premium Sushi</b><span>identidade visual</span></figcaption></figure>
+        <figure><img src="img/cases/case-05-brand1.webp" alt="Brand1: site" loading="lazy"><figcaption><b>Brand1</b><span>site</span></figcaption></figure>
+        <figure><img src="img/cases/case-maeda.webp" alt="Maeda Gastronomia: site" loading="lazy"><figcaption><b>Maeda Gastronomia</b><span>site</span></figcaption></figure>
+        <figure><img src="img/cases/case-07-maeda18.webp" alt="Maeda 18 anos: kit de evento" loading="lazy"><figcaption><b>Maeda 18 anos</b><span>kit de evento</span></figcaption></figure>
+        <figure><img src="img/cases/case-08-maeda-impressos.webp" alt="Maeda Gastronomia: materiais impressos" loading="lazy"><figcaption><b>Maeda Gastronomia</b><span>materiais impressos</span></figcaption></figure>
+        <figure><img src="img/cases/case-09-p1led-brandbook.webp" alt="P1LED: manual de identidade" loading="lazy"><figcaption><b>P1LED</b><span>manual de identidade</span></figcaption></figure>
+        <figure><img src="img/cases/case-10-p1led-fenix-ppt.webp" alt="P1LED + Fenix: apresentação comercial" loading="lazy"><figcaption><b>P1LED + Fenix</b><span>apresentação comercial</span></figcaption></figure>
+        <figure><img src="img/cases/case-13-neon-social.webp" alt="P1LED + Banco Neon: redes sociais" loading="lazy"><figcaption><b>P1LED + Banco Neon</b><span>redes sociais</span></figcaption></figure>
+        <figure><img src="img/cases/case-14-vivara-artbox-social.webp" alt="P1LED + Vivara Art:Box: redes sociais" loading="lazy"><figcaption><b>P1LED + Vivara Art:Box</b><span>redes sociais</span></figcaption></figure>
+        <figure><img src="img/cases/case-15-p1led-vx-bx-packaging.webp" alt="P1LED VX / BX Series: personagem e embalagens" loading="lazy"><figcaption><b>P1LED VX / BX Series</b><span>personagem e embalagens</span></figcaption></figure>
+        <figure><img src="img/cases/case-17-99-taxi-ai-environment.webp" alt="99 Táxi: ambiente de marca" loading="lazy"><figcaption><b>99 Táxi</b><span>ambiente de marca</span></figcaption></figure>
+        <figure><img src="img/cases/case-18-clinica-glutee-site-desktop-mobile.webp" alt="Clínica Glutee: site responsivo" loading="lazy"><figcaption><b>Clínica Glutee</b><span>site responsivo</span></figcaption></figure>
+      </div>
+      <div class="setas"><button type="button" class="seta" data-d="-1" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button type="button" class="seta" data-d="1" aria-label="Próximo"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
     </div>
+    <div class="liga-links rv"><a href="loja/">kompila loja: a Maslu Select vende R$ 1,5 milhão por ano nela <i>→</i></a><a href="design/">kompila design: marca, site e criativo <i>→</i></a></div>
   </div>
 </section>
 
@@ -515,6 +563,9 @@ footer .logo{color:var(--off)}
   function arma(){planos.forEach(function(d,i){d.open=mqd.matches||i===0})}
   arma();mqd.addEventListener('change',arma);
   planos.forEach(function(d){d.querySelector('summary').addEventListener('click',function(){if(mqd.matches)return;planos.forEach(function(o){if(o!==d)o.open=false})})});
+  // carrossel dos cases
+  var tr=document.getElementById('trilho');
+  if(tr){document.querySelectorAll('.seta').forEach(function(b){b.addEventListener('click',function(){var f=tr.querySelector('figure');var w=f?f.getBoundingClientRect().width+16:tr.clientWidth;tr.scrollBy({left:w*(+b.dataset.d),behavior:'smooth'})})})}
   // revelação por rolagem
   var els=document.querySelectorAll('.rv');
   if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){els.forEach(function(e){e.classList.add('on')});document.querySelectorAll('.big .num').forEach(function(n){n.textContent=n.closest('.big').dataset.conta});return}
