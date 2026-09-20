@@ -38,7 +38,7 @@ nav .btn .sm{display:none}
 @media(max-width:900px){nav .links{display:none}}
 
 /* hero: cenário com parallax atrás, pessoa recortada por cima posicionada pelo rosto (mesma régua da home) */
-.hero{position:relative;background:var(--carbon);color:var(--off);overflow:hidden;height:100svh;min-height:34rem;--r:0.3831;--fx:0.530;--fy:0.130;--fh:0.140;--face:22svh;--tx:71.5vw;--ty:34svh;--vh:calc(var(--face) / .27)}
+.hero{position:relative;background:var(--carbon);color:var(--off);overflow:hidden;height:calc(100svh - 64px);min-height:34rem;--r:0.3831;--fx:0.530;--fy:0.130;--fh:0.140;--face:22svh;--tx:71.5vw;--ty:34svh;--vh:calc(var(--face) / .27)}
 /* vídeo com alpha: mesma pessoa, entra no lugar do recorte e fala. Rosto no quadro: x .578, centro y .243, altura .27 (medido no frame) */
 .hero .pv{position:absolute;z-index:1;height:var(--vh);width:auto;top:calc(var(--ty) - .243 * var(--vh));left:calc(var(--tx) - .578 * var(--vh) * 16 / 9);pointer-events:none;opacity:0;transition:opacity .5s;filter:saturate(.9);-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 78%,transparent 100%)}
 .hero .pv.on{opacity:1}
@@ -49,7 +49,7 @@ nav .btn .sm{display:none}
 .hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,var(--carbon) 0%,rgba(10,11,14,.92) 28%,rgba(10,11,14,.55) 44%,rgba(10,11,14,.22) 58%,rgba(10,11,14,.06) 70%,rgba(10,11,14,0) 80%),linear-gradient(180deg,rgba(10,11,14,.6) 0%,rgba(10,11,14,0) 22%,rgba(10,11,14,0) 56%,rgba(10,11,14,.4) 72%,rgba(10,11,14,.85) 88%,var(--carbon) 100%);pointer-events:none}
 .hero .pessoa{position:absolute;z-index:1;height:calc(var(--face) / var(--fh));width:auto;top:calc(var(--ty) - var(--fy) * (var(--face) / var(--fh)));left:calc(var(--tx) - var(--fx) * var(--r) * (var(--face) / var(--fh)));translate:calc(var(--mx,0) * -6px) calc(var(--my,0) * -4px + var(--sy,0) * .12px);transition:translate .9s cubic-bezier(.2,.7,.2,1);filter:grayscale(1) contrast(1.06);animation:acende 1.8s ease .6s both}
 @keyframes acende{0%{filter:grayscale(1) contrast(1.06) brightness(1.2);opacity:0;transform:translateY(12px)}40%{opacity:1;transform:none}100%{filter:none;opacity:1}}
-.hero .hw{position:relative;z-index:2;height:100%;display:grid;align-content:center;padding-top:64px;padding-bottom:24px;max-width:none}
+.hero .hw{position:relative;z-index:2;height:100%;display:grid;align-content:center;padding-top:24px;padding-bottom:24px;max-width:none}
 .hero .hw > div{max-width:56%}
 .hero .kicker{font:600 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:22px}
 .hero .kicker .lg{display:inline}.hero .kicker .sm{display:none}
@@ -70,11 +70,14 @@ nav .btn .sm{display:none}
 .hero.falando .play .disco{width:32px;height:32px;box-shadow:0 0 0 .2rem rgba(47,214,123,.16)}
 @media(max-width:1100px){.hero{--tx:74vw}.hero .hw > div{max-width:62%}}
 @media(max-width:900px){
-  .hero{height:auto;min-height:100svh;--face:13svh;--ty:22svh;--tx:66vw}
-  .hero .hw{padding-top:44svh;padding-bottom:1.75rem;min-height:100svh}
+  .hero{height:calc(100svh - 64px);min-height:0;--face:11svh;--ty:14svh;--tx:64vw}
+  .hero .hw{padding-top:24svh;padding-bottom:5.25rem;min-height:0;align-content:end}
+  .hero .play{margin-bottom:10px}
+  .hero h1{margin-bottom:10px;font-size:clamp(30px,9.6vw,44px);line-height:1}
+  .hero .lead{margin-bottom:16px;font-size:16px;max-width:88%}
+  .hero .ctas{padding-right:0}
   .hero .hw > div{max-width:none}
-  .hero h1{max-width:none;font-size:clamp(38px,12vw,72px)}
-  .hero .veil{background:linear-gradient(180deg,rgba(10,11,14,.55) 0%,rgba(10,11,14,.1) 18%,rgba(10,11,14,0) 30%,rgba(10,11,14,.55) 44%,rgba(10,11,14,.92) 56%,var(--carbon) 70%)}
+  .hero .veil{background:linear-gradient(180deg,rgba(10,11,14,.55) 0%,rgba(10,11,14,.1) 14%,rgba(10,11,14,0) 24%,rgba(10,11,14,.5) 36%,rgba(10,11,14,.9) 48%,var(--carbon) 62%)}
 }
 
 /* seções */
