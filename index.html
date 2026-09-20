@@ -2,195 +2,521 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kompila · tecnologia que faz a sua venda andar sozinha</title>
-<meta name="description" content="Kompila: loja inteligente, CRM com IA, a Liz atendendo 24 h no WhatsApp, tráfego pago e design. Do anúncio ao contrato, o trabalho repetitivo é nosso.">
+<title>Kompila · ninguém espera resposta na sua empresa</title>
+<meta name="description" content="A Liz, a IA da Kompila, atende cada lead no WhatsApp em segundos, faz o pré-atendimento e marca. Seu vendedor recebe pronto e só fecha. A régua é 5 minutos.">
+<link rel="icon" href="img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F2F3EF;--white:#fff;--line:#E1E4DF;--line2:#C6CBC4;--mute:#8A939C;--ink2:#3F464E;--ink:#0A0B0E;--carbon:#0A0B0E;--green:#2FD67B;--gtext:#12803F;--amber:#FFB224;--off:#E9EBEE;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;--sans:"Inter",system-ui,sans-serif;--gap:16px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;font-size:17px;line-height:1.5}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{padding:0 6%}
+.mono{font-family:var(--mono);font-weight:600}
+.reg{font-family:var(--mono);font-weight:600;white-space:nowrap}
+.reg.g{color:var(--gtext)}.reg.n{color:var(--green)}
+.logo{font-family:var(--mono);font-weight:600;letter-spacing:-.06em;white-space:nowrap;line-height:1;font-size:22px}
+.logo b{font-weight:600;color:var(--green)}
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 15px var(--sans);padding:14px 20px;border:1px solid transparent;cursor:pointer;line-height:1;white-space:nowrap}
+.btn.g{background:var(--green);color:var(--ink)}
+.btn.dk{background:var(--carbon);color:var(--off)}
+.btn.o{background:transparent;color:var(--off);border-color:#3A424B}
+.btn.ok{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(10,11,14,.92);backdrop-filter:blur(8px);color:var(--off);border-bottom:1px solid #1E242B}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
+nav .links{display:flex;gap:26px;font:500 14px var(--sans);color:#B4BBC3}
+nav .links a:hover{color:#fff}
+nav .btn{padding:11px 16px;font-size:14px;white-space:nowrap}
+nav .btn .sm{display:none}
+@media(max-width:600px){nav .btn .lg{display:none}nav .btn .sm{display:inline}}
+@media(max-width:900px){nav .links{display:none}}
+
+/* hero: cenário com parallax atrás, pessoa recortada por cima posicionada pelo rosto (mesma régua da home) */
+.hero{position:relative;background:var(--carbon);color:var(--off);overflow:hidden;height:100svh;min-height:40rem;--r:0.3831;--fx:0.530;--fy:0.130;--fh:0.140;--face:22svh;--tx:71.5vw;--ty:34svh;--vh:calc(var(--face) / .27)}
+/* vídeo com alpha: mesma pessoa, entra no lugar do recorte e fala. Rosto no quadro: x .578, centro y .243, altura .27 (medido no frame) */
+.hero .pv{position:absolute;z-index:1;height:var(--vh);width:auto;top:calc(var(--ty) - .243 * var(--vh));left:calc(var(--tx) - .578 * var(--vh) * 16 / 9);pointer-events:none;opacity:0;transition:opacity .5s;filter:saturate(.9);-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 78%,transparent 100%)}
+.hero .pv.on{opacity:1}
+.hero.falando .pessoa{animation:none;filter:none;opacity:0;transition:opacity .5s}
+.hero.falando .play .ico-play{display:none}.hero .play .ico-pause{display:none}.hero.falando .play .ico-pause{display:block}
+.hero.falando .play .disco i{animation:none;opacity:0}
+.hero .fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:grayscale(1);opacity:.9;transform:translate3d(calc(var(--mx,0) * -18px),calc(var(--my,0) * -12px + var(--sy,0) * .28px),0) scale(1.07);transition:transform .9s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,var(--carbon) 0%,rgba(10,11,14,.92) 28%,rgba(10,11,14,.55) 44%,rgba(10,11,14,.22) 58%,rgba(10,11,14,.06) 70%,rgba(10,11,14,0) 80%),linear-gradient(180deg,rgba(10,11,14,.6) 0%,rgba(10,11,14,0) 22%,rgba(10,11,14,0) 56%,rgba(10,11,14,.4) 72%,rgba(10,11,14,.85) 88%,var(--carbon) 100%);pointer-events:none}
+.hero .pessoa{position:absolute;z-index:1;height:calc(var(--face) / var(--fh));width:auto;top:calc(var(--ty) - var(--fy) * (var(--face) / var(--fh)));left:calc(var(--tx) - var(--fx) * var(--r) * (var(--face) / var(--fh)));translate:calc(var(--mx,0) * -6px) calc(var(--my,0) * -4px + var(--sy,0) * .12px);transition:translate .9s cubic-bezier(.2,.7,.2,1);filter:grayscale(1) contrast(1.06);animation:acende 1.8s ease .6s both}
+@keyframes acende{0%{filter:grayscale(1) contrast(1.06) brightness(1.2);opacity:0;transform:translateY(12px)}40%{opacity:1;transform:none}100%{filter:none;opacity:1}}
+.hero .hw{position:relative;z-index:2;height:100%;display:grid;align-content:end;padding-top:56px;padding-bottom:clamp(2.75rem,4svh + 1.25rem,3.75rem);max-width:none}
+.hero .hw > div{max-width:56%}
+.hero .kicker{font:600 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:22px}
+.hero .kicker .lg{display:inline}.hero .kicker .sm{display:none}
+@media(max-width:600px){.hero .kicker .lg{display:none}.hero .kicker .sm{display:inline}}
+.hero h1{font-size:clamp(38px,min(5.6vw,9svh),84px);line-height:.98;letter-spacing:-.04em;margin:0 0 18px;font-weight:700;max-width:11ch}
+.hero .lead{font-size:clamp(18px,1.7vw,24px);line-height:1.35;color:#C9CFD6;max-width:520px;margin:0 0 26px;letter-spacing:-.01em}
+.hero .lead b{color:#fff;font-weight:600}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:0}
+.hero .under{font:500 13px var(--mono);color:#8A939C;letter-spacing:.02em;line-height:1.7}
+.hero .under b{color:var(--green);font-weight:600;white-space:nowrap}
+.play{display:inline-flex;align-items:center;gap:12px;background:transparent;border:0;padding:0;margin:0 0 20px;cursor:pointer;color:#C9CFD6;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.play .disco{position:relative;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#5cf0a0 0%,#2fd67b 45%,#12803f 100%);color:var(--ink);display:grid;place-items:center;box-shadow:0 0 0 .25rem rgba(47,214,123,.16),0 0 1.4rem rgba(47,214,123,.45);transition:width .3s,height .3s,transform .3s}
+.play .disco i{position:absolute;inset:-.3rem;border-radius:50%;border:2px solid rgba(47,214,123,.6);animation:playpulse 2.2s ease-out infinite}
+@keyframes playpulse{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.play svg{width:18px;height:18px;fill:currentColor;margin-left:2px}
+.play .ico-pause{margin-left:0;width:14px;height:14px}
+.play:hover .disco{transform:scale(1.08)}
+.hero.falando .play .disco{width:32px;height:32px;box-shadow:0 0 0 .2rem rgba(47,214,123,.16)}
+@media(max-width:1100px){.hero{--tx:74vw}.hero .hw > div{max-width:62%}}
+@media(max-width:900px){
+  .hero{height:auto;min-height:100svh;--face:13svh;--ty:22svh;--tx:66vw}
+  .hero .hw{padding-top:44svh;padding-bottom:1.75rem;min-height:100svh}
+  .hero .hw > div{max-width:none}
+  .hero h1{max-width:none;font-size:clamp(38px,12vw,72px)}
+  .hero .veil{background:linear-gradient(180deg,rgba(10,11,14,.55) 0%,rgba(10,11,14,.1) 18%,rgba(10,11,14,0) 30%,rgba(10,11,14,.55) 44%,rgba(10,11,14,.92) 56%,var(--carbon) 70%)}
+}
+
+/* seções */
+section{padding:88px 0}
+.k{font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gtext);margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.k::before{content:"";display:block;width:56px;height:10px;background:var(--gtext)}
+h2{font-size:clamp(30px,3.6vw,50px);letter-spacing:-.035em;line-height:1.04;margin:0 0 18px;font-weight:700;max-width:18ch}
+.sub{font-size:clamp(17px,1.4vw,20px);color:var(--ink2);max-width:640px;margin:0 0 40px;line-height:1.45}
+.sub b{color:var(--ink);font-weight:600}
+.dark{background:var(--carbon);color:var(--off)}
+.dark .k{color:var(--green)}.dark .k::before{background:var(--green)}
+.dark .sub{color:#B4BBC3}.dark .sub b{color:#fff}
+.tela{border:1px solid var(--line);background:#fff;box-shadow:0 30px 60px -30px rgba(10,11,14,.35)}
+@media(max-width:600px){img.tela{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:var(--pos,29% 0)}}
+.dark .tela{border-color:#252C34;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.cap{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-top:12px}
+
+/* passos */
+.passos{display:grid;gap:56px}
+.passo{display:grid;grid-template-columns:1fr 1.25fr;gap:var(--gap);align-items:center}
+.passo:nth-child(even){grid-template-columns:1.25fr 1fr}
+.passo:nth-child(even) .txt{order:2}
+.passo .n{font:700 clamp(48px,6vw,84px) var(--mono);letter-spacing:-.06em;color:var(--gtext);line-height:1;margin-bottom:10px}
+.passo h3{font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em;line-height:1.08;margin:0 0 12px;font-weight:700;max-width:16ch}
+.passo p{font-size:17px;color:var(--ink2);margin:0;max-width:480px}
+.passo p b{color:var(--ink);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chips span{font:600 12px var(--mono);letter-spacing:.06em;padding:8px 12px;border:1px solid var(--line2);color:var(--ink2)}
+.regua{margin-top:22px;border-top:1px solid var(--ink);padding-top:14px;display:grid;gap:10px;max-width:480px}
+.regua div{display:grid;grid-template-columns:132px 1fr;gap:12px;align-items:baseline;font-size:15px;color:var(--ink2)}
+.regua div b{font:600 15px var(--mono);color:var(--gtext);letter-spacing:-.02em}
+@media(max-width:900px){.passo,.passo:nth-child(even){grid-template-columns:1fr}.passo:nth-child(even) .txt{order:0}}
+
+/* gerente */
+.gerente{display:grid;grid-template-columns:1fr 2fr;gap:var(--gap);align-items:end}
+@media(max-width:900px){.gerente{grid-template-columns:1fr}}
+.gerente ul{list-style:none;margin:0;padding:0;border-top:1px solid #252C34}
+.gerente li{padding:14px 0;border-bottom:1px solid #252C34;font-size:16px;color:#C9CFD6;display:grid;grid-template-columns:110px 1fr;gap:12px}
+.gerente li b{font:600 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--green)}
+
+/* liz */
+.liz{display:grid;grid-template-columns:1fr 1.4fr;gap:var(--gap);align-items:center}
+@media(max-width:900px){.liz{grid-template-columns:1fr}}
+.liz .foto{background:#fff;border:1px solid var(--line);padding:24px}
+.liz .foto img{width:100%;height:auto}
+@media(max-width:600px){section{padding:64px 0}.liz .foto{padding:12px}.liz .foto img{aspect-ratio:1/1;object-fit:cover;object-position:center 40%}}
+.liz h2{max-width:none}
+.perguntas{list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--ink)}
+.perguntas li{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px;color:var(--ink2);align-items:baseline}
+.perguntas li b{font:600 15px var(--mono);color:var(--gtext)}
+.perguntas li em{font-style:normal;color:var(--ink);font-weight:600}
+.liznota{margin-top:18px;font-size:15px;color:var(--ink2);max-width:520px}
+
+/* pra quem */
+.quem{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.quem li{display:grid;grid-template-columns:1fr 1.6fr;gap:var(--gap);padding:28px 0;border-bottom:1px solid var(--line)}
+.quem li h3{font-size:clamp(20px,2vw,26px);letter-spacing:-.025em;margin:0;line-height:1.15;font-weight:700}
+.quem li small{display:block;font:500 12px var(--mono);color:var(--mute);letter-spacing:.06em;margin-top:8px;text-transform:uppercase}
+.quem li p{margin:0;font-size:17px;color:var(--ink2);max-width:560px}
+@media(max-width:900px){.quem li{grid-template-columns:1fr;gap:8px}}
+
+/* preço */
+.preco{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);align-items:start}
+@media(max-width:900px){.preco{grid-template-columns:1fr}}
+@media(max-width:600px){.pbox .v small{display:block;margin:8px 0 0}}
+.pbox{border:1px solid #252C34;padding:28px}
+.pbox .t{font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8A939C;margin-bottom:14px}
+.pbox .v{font:700 clamp(36px,4vw,56px) var(--mono);letter-spacing:-.05em;line-height:1;color:#fff}
+.pbox .v small{font-size:16px;color:#8A939C;letter-spacing:0;margin-left:8px;font-weight:500}
+.pbox p{font-size:15px;color:#B4BBC3;margin:14px 0 0}
+.pbox.destaque{border-color:var(--green)}
+.pbox.destaque .v{color:var(--green)}
+.ph{background:rgba(255,178,36,.18);border:1px dashed var(--amber);color:#FFD27A;padding:0 8px}
+.lista{list-style:none;margin:16px 0 0;padding:0}
+.lista li{padding:10px 0;border-top:1px solid #252C34;font-size:15px;color:#C9CFD6;display:grid;grid-template-columns:22px 1fr;gap:8px}
+.lista li i{font-style:normal;color:var(--green);font-family:var(--mono)}
+.lista li.no i{color:#8A939C}
+
+/* acordeão dos planos */
+.plano{border-top:1px solid #252C34;border-bottom:0}
+.plano:last-of-type{border-bottom:1px solid #252C34}
+.plano summary{display:grid;grid-template-columns:1fr auto auto;grid-template-areas:"n p s" "q p s";gap:2px 16px;align-items:center;padding:18px 0;cursor:pointer;list-style:none;font-size:inherit;font-weight:inherit;letter-spacing:0}
+.plano summary::-webkit-details-marker{display:none}
+.plano summary::after,.plano[open] summary::after{content:none}
+.plano .ps{grid-area:s;width:34px;height:34px;border:1px solid #3A424B;border-radius:50%;display:grid;place-items:center;color:var(--green);transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s}
+.plano .ps svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.plano[open] .ps{transform:rotate(180deg);border-color:var(--green)}
+.plano summary:hover .ps{border-color:var(--green)}
+.plano .pn{grid-area:n;font:700 20px var(--sans);letter-spacing:-.02em;color:#fff}
+.plano .pq{grid-area:q;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#8A939C}
+.plano .pp{grid-area:p;font:700 clamp(26px,2.6vw,36px) var(--mono);letter-spacing:-.05em;color:#B4BBC3;line-height:1;transition:color .3s}
+.plano .pp small{font-size:13px;color:#8A939C;letter-spacing:0;margin-left:4px;font-weight:500}
+.plano[open] .pp{color:var(--green)}
+.plano[open] .pn::after{content:"";display:inline-block;width:8px;height:8px;background:var(--green);margin-left:10px;vertical-align:middle}
+.plano .pd{padding:0 0 22px}
+.pnums{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:6px}
+.pnums div{border:1px solid #252C34;padding:12px 12px 10px}
+.pnums b{display:block;font:700 22px var(--mono);letter-spacing:-.04em;color:#fff;line-height:1}
+.pnums span{display:block;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#8A939C;margin-top:6px;line-height:1.3}
+@media(max-width:600px){.pnums{grid-template-columns:1fr 1fr}.plano summary{grid-template-columns:1fr auto;grid-template-areas:"n s" "p s" "q s";gap:4px 12px}.plano .pp{margin:4px 0}}
+.plano .lista li{opacity:1;transform:none;transition:none}
+
+/* ligamos */
+.liga{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+@media(max-width:900px){.liga{grid-template-columns:1fr}}
+.liga a{display:block}
+.liga h3{font-size:22px;letter-spacing:-.025em;margin:16px 0 6px;font-weight:700}
+.liga p{margin:0;font-size:16px;color:var(--ink2)}
+.liga .num{font:600 14px var(--mono);color:var(--gtext);margin-top:6px;display:block}
+.liga .telaw{aspect-ratio:16/10;overflow:hidden}
+.liga .telaw img{width:100%;height:100%;object-fit:cover;object-position:top}
+
+/* começa */
+.comeca{display:grid;grid-template-columns:1.2fr 1fr;gap:var(--gap);align-items:center}
+@media(max-width:900px){.comeca{grid-template-columns:1fr}}
+.big{font:700 clamp(56px,8vw,120px) var(--mono);letter-spacing:-.06em;line-height:.95;color:var(--gtext)}
+.big small{display:block;font:500 13px var(--mono);letter-spacing:.06em;color:var(--mute);margin-top:12px;text-transform:uppercase;line-height:1.5}
+
+/* faq */
+details{border-top:1px solid var(--line)}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;list-style:none;padding:20px 0;font-size:19px;font-weight:600;letter-spacing:-.015em;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:500 24px var(--mono);color:var(--gtext)}
+details[open] summary::after{content:"−"}
+details p{margin:0 0 20px;color:var(--ink2);max-width:680px;font-size:16px}
+
+/* fecho */
+.fecho{background:var(--carbon);color:var(--off);padding:96px 0}
+.fecho h2{max-width:22ch}
+.fecho .k{color:var(--green)}.fecho .k::before{background:var(--green)}.fecho .sub{color:#B4BBC3}.fecho .sub b{color:#fff}
+.fecho .ctas{display:flex;flex-wrap:wrap;gap:12px}
+footer{background:var(--carbon);color:#8A939C;padding:32px 0 48px;border-top:1px solid #1E242B;font:500 12px var(--mono);letter-spacing:.06em;line-height:1.9}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 40px;align-items:end}
+footer .logo{color:var(--off)}
+
+/* animação: entrada do hero e revelação por rolagem */
+.hero .hw > div > *{opacity:0;transform:translateY(18px);animation:sobe .7s cubic-bezier(.2,.7,.2,1) forwards}
+.hero .play{animation-delay:0s}.hero .kicker{animation-delay:.08s}.hero h1{animation-delay:.15s}.hero .lead{animation-delay:.3s}.hero .ctas{animation-delay:.42s}
+@keyframes sobe{to{opacity:1;transform:none}}
+@keyframes aparece{to{opacity:1}}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.on{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}.rv.d4{transition-delay:.4s}
+.tela.rv{transform:translateY(22px) scale(.985)}.tela.rv.on{transform:none}
+.chips span{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+.on .chips span{opacity:1;transform:none}
+.on .chips span:nth-child(2){transition-delay:.08s}.on .chips span:nth-child(3){transition-delay:.16s}.on .chips span:nth-child(4){transition-delay:.24s}.on .chips span:nth-child(5){transition-delay:.32s}
+.regua div{opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.on .regua div{opacity:1;transform:none}
+.on .regua div:nth-child(2){transition-delay:.25s}.on .regua div:nth-child(3){transition-delay:.5s}.on .regua div:nth-child(4){transition-delay:.75s}
+.perguntas li,.gerente li,.lista li{opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease}
+.perguntas.on li,.gerente .on li,.on .lista li{opacity:1;transform:none}
+:is(.perguntas.on,.gerente .on ul,.on .lista) li:nth-child(2){transition-delay:.1s}:is(.perguntas.on,.gerente .on ul,.on .lista) li:nth-child(3){transition-delay:.2s}:is(.perguntas.on,.gerente .on ul,.on .lista) li:nth-child(4){transition-delay:.3s}:is(.perguntas.on,.gerente .on ul,.on .lista) li:nth-child(5){transition-delay:.4s}
+.k::before{width:0;transition:width .6s cubic-bezier(.2,.7,.2,1) .1s}
+.k.on::before{width:56px}
+.pbox.destaque{transition:box-shadow .6s ease}.pbox.destaque.on{box-shadow:0 0 0 1px var(--green),0 30px 80px -30px rgba(47,214,123,.35)}
+@media(prefers-reduced-motion:reduce){.hero .hw > div > *{animation:none;opacity:1;transform:none}.hero .pessoa{animation:none;filter:none;opacity:1}.play .disco i{animation:none}.rv,.chips span,.regua div,.perguntas li,.gerente li,.lista li{opacity:1;transform:none;transition:none}.k::before{width:56px}}
+
+/* vídeo */
+.vid{position:fixed;inset:0;background:rgba(10,11,14,.94);z-index:50;display:grid;place-items:center;padding:6%}
+.vid[hidden]{display:none}
+.vid video{width:min(960px,100%);max-height:80vh;background:#000}
+.vid .x{position:absolute;top:18px;right:6%;background:transparent;border:0;color:#fff;font-size:34px;cursor:pointer}
+</style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
-  <symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></symbol>
-  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
-  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
-  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
-  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
-  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
-  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></symbol>
-  <symbol id="i-calc" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 6h8"/><path d="M16 14v4"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></symbol>
-  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></symbol>
-  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
-  <symbol id="i-swap" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></symbol>
-  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
-  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol>
-  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
-  <symbol id="i-cash" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></symbol>
-  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
-  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
-  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
-  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
-  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12.6 2.9 21 11.3a2 2 0 0 1 0 2.8l-6.9 6.9a2 2 0 0 1-2.8 0L2.9 12.6A2 2 0 0 1 2.3 11V4a2 2 0 0 1 2-2h7a2 2 0 0 1 1.3.6z"/><circle cx="7.5" cy="7.5" r=".5"/></symbol>
-  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 8.5 4.5L12 11 3.5 6.5z"/><path d="m3.5 12 8.5 4.5 8.5-4.5"/><path d="m3.5 17.5 8.5 4.5 8.5-4.5"/></symbol>
-  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></symbol>
-  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c1.7.7 2.1.6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z" fill="currentColor" stroke="none"/></symbol>
-</svg>
 
-<nav id="nav">
-  <div class="shell">
-    <div class="pill">
-      <a class="logo" href="./"><span><span class="b">[</span> kompila <span class="b">]</span></span></a>
-      <div class="links"><div class="dd"><button type="button" class="ddb" id="ddb" aria-expanded="false">Produtos <svg viewBox="0 0 24 24" class="chev"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="ddp" id="ddp"><a href="loja/"><b><em>kompila</em> loja</b><span>Você conversa, a loja se monta.</span><i class="on">disponível</i></a><a href="crm/"><b><em>kompila</em> lead recovery</b><span>A IA atende, qualifica e marca. O vendedor só fecha.</span><i class="on">disponível</i></a><a href="trafego/"><b><em>kompila</em> tráfego</b><span>Anúncio que sabe qual lead virou venda.</span><i class="on">disponível</i></a><a href="design/"><b><em>kompila</em> design</b><span>Marca, site e criativo feitos pra vender.</span><i class="on">disponível</i></a><a class="all" href="#produtos">Ver as três frentes →</a></div></div><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a></div>
-      <div class="nctas"><a class="btn ghost wa" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20conhecer%20os%20produtos." target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg>Falar no WhatsApp</a><a class="btn green" href="crm/#calc">Medir a minha operação</a></div>
-      <button type="button" class="menu" id="menuBtn" aria-label="menu"><svg class="ico io"><use href="#i-menu"/></svg><svg class="ico ic"><use href="#i-x"/></svg></button>
-    </div>
-    <div class="panel" id="menuPanel"><small class="ph">Produtos</small><a href="loja/" class="pi"><em>kompila</em> loja <i class="on">disponível</i></a><a href="crm/" class="pi"><em>kompila</em> lead recovery <i class="on">disponível</i></a><a href="trafego/" class="pi"><em>kompila</em> tráfego <i class="on">disponível</i></a><a href="design/" class="pi"><em>kompila</em> design <i class="on">disponível</i></a><a href="#cases">Cases</a><a href="#promessa">Como trabalhamos</a><a href="#faq">Perguntas</a><a class="btn green" href="crm/#calc">Medir a minha operação</a></div>
+<nav>
+  <div class="wrap">
+    <a class="logo" href="./"><b>[ </b>kompila<b> ]</b></a>
+    <div class="links"><a href="#como">Como funciona</a><a href="#liz">A Liz</a><a href="#quem">Pra quem</a><a href="#preco">O que custa</a><a href="#perguntas">Perguntas</a></div>
+    <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende." target="_blank" rel="noopener"><span class="lg">Quero ver a Liz atendendo</span><span class="sm">Ver a Liz atendendo</span></a>
   </div>
 </nav>
 
-<section class="hh" id="topo">
-  <div class="bg" aria-hidden="true"><div class="slide on" style="--r:0.3831;--fx:0.530;--fy:0.130;--fh:0.140"><img class="fundo" src="img/home/fundo-moda.webp" alt=""><img class="pessoa bw" src="img/home/pessoa-moda.webp" alt=""><img class="pessoa cor" src="img/home/pessoa-moda.webp" alt=""></div><div class="slide" style="--r:0.4810;--fx:0.450;--fy:0.120;--fh:0.155"><img class="fundo" src="img/home/fundo-led.webp" alt=""><img class="pessoa bw" src="img/home/pessoa-led.webp" alt=""><img class="pessoa cor" src="img/home/pessoa-led.webp" alt=""></div><div class="slide" style="--r:0.4750;--fx:0.500;--fy:0.115;--fh:0.155"><img class="fundo" src="img/home/fundo-contab.webp" alt=""><img class="pessoa bw" src="img/home/pessoa-contab.webp" alt=""><img class="pessoa cor" src="img/home/pessoa-contab.webp" alt=""></div></div>
-  <video class="pv" id="hpv" playsinline preload="auto" aria-hidden="true"><source src="video/moda_alpha.mov" type='video/mp4; codecs="hvc1"'><source src="video/moda_alpha.webm" type="video/webm"></video>
-  <div class="pvfade" aria-hidden="true"></div>
-  <div class="fade" aria-hidden="true"></div>
-  <div class="target" aria-hidden="true"><svg class="br l" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M60 3 H8 V97 H60" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg><svg class="br r" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M0 3 H52 V97 H0" fill="none" stroke="currentColor" stroke-width="9" vector-effect="non-scaling-stroke"/></svg></div>
-  <button class="play" id="hplay" type="button" aria-label="Ouvir o depoimento"><i></i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
-  <div class="shell hhwrap">
-    <div class="copy">
-      <h1 id="hh1">A sua loja<br class="mb"> vendendo <em>sozinha.</em></h1>
-      <p class="lead">Loja, marca, anúncio, atendimento e sistema, <b>feitos pela mesma equipe e ligados na mesma venda</b>. Você entra com o produto. A Kompila monta o resto e mede o que fechou.</p>
-      <div class="ctas"><a class="btn g" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20falar%20com%20um%20consultor." target="_blank" rel="noopener">Falar com um consultor Kompila</a><a class="btn o" href="crm/#calc">Medir a minha operação</a></div>
-    </div>
-    <div class="flow" id="flow">
-      <div class="fh"><span class="q" id="who">“Vendi de madrugada, sem ninguém acordado.”</span><span class="dots" id="dots"><i class="on"></i><i></i><i></i></span></div>
-      <ol class="steps" id="steps"></ol>
-      <ol class="msteps" aria-hidden="true"><li><i>1</i>Anúncio</li><li><i>2</i>IA atende</li><li><i>3</i>Vendedor fecha</li></ol>
+<header class="hero" id="topo">
+  <img class="fundo" src="img/home/fundo-moda.webp" alt="" aria-hidden="true">
+  <div class="veil" aria-hidden="true"></div>
+  <img class="pessoa" src="img/home/pessoa-moda.webp" alt="Dona de loja de moda, de braços cruzados, na loja dela">
+  <video class="pv" id="hpv" playsinline preload="metadata" aria-label="Depoimento da dona da loja"><source src="video/moda_alpha.mov" type='video/mp4; codecs="hvc1"'><source src="video/moda_alpha.webm" type="video/webm"></video>
+  <div class="wrap hw">
+    <div>
+      <button class="play" id="hplay" type="button" aria-label="Ver o depoimento"><i class="disco"><i></i><svg class="ico-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="ico-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></i><span>depoimento · 30 s</span></button>
+      <div class="kicker"><span class="lg">[ 5 minutos ] · a régua do atendimento</span><span class="sm">[ 5 minutos ] · a régua</span></div>
+      <h1>Você perde venda porque ninguém respondeu.</h1>
+      <p class="lead">A <b>Liz</b> atende cada lead em segundos. <b>Seu vendedor só fecha.</b></p>
+      <div class="ctas">
+        <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende." target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>Quero ver a Liz atendendo</a>
+      </div>
     </div>
   </div>
-</section>
-<div class="vid" id="vid" hidden><button class="x" id="vidx" type="button" aria-label="Fechar">×</button><video id="vidv" src="video/depoimento-moda.mp4" playsinline controls preload="none"></video></div>
+</header>
 
-<section class="build" id="produtos">
-  <div class="shell"><div class="dhead rv"><h2>Tudo que uma empresa precisa pra vender online, feito por uma equipe só.</h2><p class="lead">Três frentes, sete produtos, uma regra: tudo que sai daqui tem inteligência dentro e é medido depois que está no ar.</p></div></div>
-  <article class="cap rv" id="cap-loja">
-  <div class="cbg" aria-hidden="true"><img src="img/home/cap-loja.webp" alt=""></div>
-  <div class="shell cgrid">
-    <div class="ctext"><span class="cn">01</span><span class="ck">Lojas inteligentes</span><h3>Uma loja que se monta <em>enquanto você fala.</em></h3><p>Vitrine, provador com hora marcada, entrega no mesmo dia e um painel feito pra quem vende roupa, não pra quem entende de WordPress. O dia da loja em uma tela: o que precisa de você agora.</p><div class="pills"><em>kompila loja</em><em>kompila design</em><em>kompila tráfego</em></div><small class="cs"><b>Case</b> Maslu Select · 5.900 pedidos · R$ 1,5 mi em 12 meses · <a href="loja/" style="color:#2fd67b">ver kompila loja →</a></small></div>
-    <div class="cshots"><figure class="win"><div class="wbar"><i></i><i></i><i></i></div><img src="img/home/tela-maslu.webp" alt="" loading="lazy"><figcaption>A loja, como o cliente vê</figcaption></figure><figure class="win second"><div class="wbar"><i></i><i></i><i></i></div><img src="img/home/tela-maslu-painel.webp" alt="" loading="lazy"><figcaption>O painel, como a dona vê</figcaption></figure></div>
-  </div>
-</article>
-  <article class="cap light rv" id="cap-sistema">
-  <div class="shell cgrid">
-    <div class="ctext"><span class="cn">02</span><span class="ck">Sistemas inteligentes</span><h3>Um sistema que trabalha <em>enquanto a equipe vende.</em></h3><p>Criamos sistemas inteligentes pra operação de quem vende online. O Copiloto cota pela tabela da P1LED, monta a proposta e cobra a resposta. O Lead Recovery atende o lead em segundos e entrega pronto no WhatsApp do vendedor. O gestor vê tudo numa tela.</p><div class="pills"><em>kompila lead recovery</em><em>a Liz, 24 h</em></div><small class="cs"><b>Case</b> P1LED · Copiloto, no ar em copiloto.p1led.com.br</small></div>
-    <div class="cshots"><figure class="win"><div class="wbar"><i></i><i></i><i></i></div><img src="img/home/tela-copiloto.webp" alt="" loading="lazy"><figcaption>Copiloto P1LED: cada proposta e o que depende de você</figcaption></figure><figure class="win second"><div class="wbar"><i></i><i></i><i></i></div><img src="img/home/tela-crm-agora.webp" alt="" loading="lazy"><figcaption>Lead Recovery: onde cada lead está, agora</figcaption></figure></div>
-  </div>
-</article>
-  <article class="cap rv" id="cap-design">
-  <div class="cbg" aria-hidden="true"><img src="img/home/cap-design.webp" alt=""></div>
-  <div class="shell cgrid">
-    <div class="ctext"><span class="cn">03</span><span class="ck">Sites e marcas</span><h3>Site, marca e criativo com <em>um trabalho só: converter.</em></h3><p>Do WordPress ao anúncio, tudo sai da mesma mão e fala a mesma língua. O formulário vira lead no CRM com origem gravada. O conteúdo sai com fonte. O anúncio recebe a conversão de volta.</p><div class="pills"><em>kompila design</em><em>kompila blog</em><em>kompila tráfego</em></div><small class="cs"><b>Case</b> P1LED · site em WordPress, cases em vídeo</small></div>
-    <div class="cshots"><figure class="win"><div class="wbar"><i></i><i></i><i></i></div><img src="img/home/tela-p1led.webp" alt="" loading="lazy"><figcaption>p1led.com.br, como está no ar</figcaption></figure></div>
-  </div>
-</article>
-</section>
-
-<section class="strip" id="tudo">
-  <div class="shell"><div class="dhead rv"><h2>Nada aqui é vitrine parada. Cada peça atende, cota, cobra ou registra.</h2><p class="lead">Não é um chatbot colado na porta. A IA está na loja, no sistema e no site, fazendo o trabalho repetitivo que hoje trava a sua equipe.</p></div></div>
-</section>
-<section class="dark intel">
-  <div class="shell">
-    <div class="icols"><div class="icol rv"><i><svg class="ico"><use href="#i-tag"/></svg></i><b>Na loja</b><ul><li>Responde tamanho, estoque e prazo na hora, no WhatsApp e no Instagram.</li><li>Marca o provador e avisa a loja.</li><li>O painel diz o que precisa de você hoje, não um relatório de 40 abas.</li></ul></div><div class="icol rv"><i><svg class="ico"><use href="#i-db"/></svg></i><b>No sistema</b><ul><li>Primeira resposta em segundos, 24 h, com as regras da empresa.</li><li>Cotação pela tabela aprovada, não pela cabeça do vendedor.</li><li>Guardião: passou do prazo, avisa; dobrou, passa pra outro.</li></ul></div><div class="icol rv"><i><svg class="ico"><use href="#i-layers"/></svg></i><b>No site e no anúncio</b><ul><li>Formulário vira lead no CRM com origem e campanha.</li><li>Conteúdo sai com a fonte ao lado.</li><li>A venda volta pro Meta e pro Google como conversão.</li></ul></div></div>
-    <div class="chain rv" id="chain">
-      <p class="cl">E tudo ligado, num caminho só:</p>
-      <ol class="nodes"><li><i><svg class="ico"><use href="#i-zap"/></svg></i><b>Anúncio</b><small>kompila tráfego</small><span>Meta e Google, com origem e campanha gravadas.</span></li><li><i><svg class="ico"><use href="#i-layers"/></svg></i><b>Loja ou site</b><small>kompila loja · design</small><span>Catálogo, preço e vídeo. O lead já chega sabendo o que quer.</span></li><li><i><svg class="ico"><use href="#i-chat"/></svg></i><b>Atendente IA</b><small>a Liz</small><span>Responde em segundos, 24 h, e qualifica com as suas regras.</span></li><li><i><svg class="ico"><use href="#i-db"/></svg></i><b>CRM</b><small>kompila lead recovery</small><span>Etapa, prazo e responsável registrados sozinhos.</span></li><li><i><svg class="ico"><use href="#i-wa"/></svg></i><b>Vendedor</b><small>WhatsApp dele</small><span>Recebe o lead pronto no WhatsApp dele. Não abre o CRM.</span></li><li><i><svg class="ico"><use href="#i-check"/></svg></i><b>Venda registrada</b><small>fechado</small><span>Contrato assinado, pipeline em Fechado, sem digitar.</span></li></ol>
-      <svg class="ret" viewBox="0 0 1200 64" preserveAspectRatio="none" aria-hidden="true"><path class="bg" d="M1025 0 V38 Q1025 52 1011 52 H39 Q25 52 25 38 V10"/><path class="g" d="M1025 0 V38 Q1025 52 1011 52 H39 Q25 52 25 38 V10"/><path class="ah" d="M17 18 L25 8 L33 18"/></svg>
-      <div class="ccap"><span id="ccap">Onde o lead está agora</span></div>
+<section id="como">
+  <div class="wrap">
+    <div class="k rv">Como funciona</div>
+    <h2 class="rv d1">O lead chama. A Liz atende. O vendedor fecha.</h2>
+    <p class="sub rv d2">Três passos. <b>Nenhum deles exige que o vendedor abra um sistema.</b></p>
+    <div class="passos">
+      <div class="passo">
+        <div class="txt rv">
+          <div class="n">01</div>
+          <h3>O lead chama, a qualquer hora.</h3>
+          <p>Pelo anúncio, pelo site, pelo Instagram ou direto no WhatsApp da empresa. Às 23h de domingo, com a loja fechada, também.</p>
+          <div class="chips"><span>Meta Ads</span><span>Google Ads</span><span>Instagram</span><span>Site</span><span>WhatsApp</span></div>
+        </div>
+        <div><img class="tela rv d2" src="img/home/tela-crm-leads.webp" alt="Tela do kompila .crm com a lista de leads que chegaram, origem e hora"><div class="cap">kompila .crm · leads que chegaram · demonstração</div></div>
+      </div>
+      <div class="passo">
+        <div class="txt rv">
+          <div class="n">02</div>
+          <h3>A Liz atende em segundos e faz o pré-atendimento.</h3>
+          <p>As perguntas que o seu vendedor faria, na ordem: <b>nome, o que procura, pra quando, quanto cabe, onde.</b> Simula ou cota pela tabela da empresa. Marca o próximo passo. Não inventa preço nem condição.</p>
+        </div>
+        <div><img class="tela rv d2" style="--pos:100% 0" src="img/home/tela-crm-conversas.webp" alt="Tela do kompila .crm com a conversa da Liz com um lead e o resumo do que ela entendeu"><div class="cap">kompila .crm · a conversa e o que a Liz entendeu · demonstração</div></div>
+      </div>
+      <div class="passo">
+        <div class="txt rv">
+          <div class="n">03</div>
+          <h3>O vendedor da vez recebe pronto e fecha.</h3>
+          <p>No WhatsApp dele, com o resumo e a visita marcada. <b>Ninguém espera.</b></p>
+          <div class="regua">
+            <div><b>0 s</b>a Liz responde e começa o pré-atendimento</div>
+            <div><b>5 min</b>o vendedor não respondeu: vai pro próximo da fila</div>
+            <div><b>10 min</b>ninguém respondeu: a Liz retoma e segura o lead</div>
+            <div><b>1 · 3 · 7 · 14</b>dias de follow-up se o lead silenciar. Sozinha.</div>
+          </div>
+        </div>
+        <div><img class="tela rv d2" src="img/home/tela-crm-agora.webp" alt="Tela Hoje do kompila .crm: leads do dia, primeira resposta, o que está parado e com quem"><div class="cap">kompila .crm · o dia do gestor · demonstração</div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="cases" id="cases">
-  <div class="shell">
-    <div class="dhead rv"><h2>Feito, no ar e vendendo.</h2><p class="lead">Não temos slide de case. Temos a tela de verdade, o que foi pedido e o que foi entregue.</p></div>
-    <div class="cgrid3"><article class="case rv"><figure><img src="img/home/tela-maslu.webp" alt="" loading="lazy"><span class="st">No ar</span></figure><div class="cb"><b>Maslu Select</b><small>Alfaiataria e tricot feminino, Suzano, SP</small><p>Pediu: uma loja online que vendesse como a loja física vende, sem depender de agência pra cada mudança.</p><p class="del">Entregamos: loja com home, header e rodapé próprios, provador virtual e vídeo da peça na página, entrega no mesmo dia e o painel da loja feito pra dona. Mais de 5.900 pedidos e R$ 1,5 milhão vendidos nos últimos 12 meses.</p></div></article><article class="case rv"><figure><img src="img/home/tela-crm-agora.webp" alt="" loading="lazy"><span class="st">Disponível</span></figure><div class="cb"><b>Kompila Lead Recovery</b><small>Nosso produto, para incorporadoras, indústria e loja</small><p>Pediu: o mercado. 42 h de espera média por resposta e 761 leads sem contato numa base auditada.</p><p class="del">Entregamos: o CRM em que a IA opera e o vendedor só fecha. Pipeline, guardião de prazo, conversas e resultado numa tela. Começa pelo Diagnóstico na sua base.</p></div></article><article class="case rv"><figure><img src="img/home/tela-copiloto-login.webp" alt="" loading="lazy"><span class="st">Em uso pela equipe</span></figure><div class="cb"><b>P1LED</b><small>Painéis de LED para eventos e varejo, São Paulo</small><p>Pediu: parar de perder orçamento na mão do vendedor e ter um número de fechamento confiável.</p><p class="del">Entregamos: Copiloto, o sistema comercial da empresa (cotação pela tabela, obra por projeto, aprovação e devolução), o site novo em WordPress e o CRM com IA lendo a base de leads.</p></div></article></div>
-  </div>
-</section>
-
-<section class="promise" id="promessa">
-  <div class="shell">
-    <div class="dhead rv"><h2>Prometemos o que medimos.</h2><p class="lead">O jeito Kompila de trabalhar cabe em quatro passos. O primeiro é sempre medir.</p></div>
-    <div class="pgrid2">
-      <ol class="how rv"><li><i>01</i><div><b>Diagnóstico</b><span>Lemos um período autorizado da sua base. Saímos com o vazamento medido, não com opinião.</span></div></li><li><i>02</i><div><b>Escopo escrito</b><span>O que entra, o que não entra, quanto custa e a data. Antes de qualquer proposta.</span></div></li><li><i>03</i><div><b>Entrega no ar</b><span>Você usa a tela, não vê slide. Loja, sistema ou site, no seu domínio e no seu dado.</span></div></li><li><i>04</i><div><b>Medição</b><span>Número antes e número depois, do seu CRM, do seu Meta, da sua loja. Se não mexeu o número, não acabou.</span></div></li></ol>
-      <div class="rules rv"><div class="rule"><span class="br">[</span><div><b>Sem número inventado</b><span>Todo dado desta página tem fonte. Toda estimativa sai da sua base, não da nossa cabeça.</span></div><span class="br">]</span></div><div class="rule"><span class="br">[</span><div><b>Tela real, não mockup</b><span>O que mostramos é o que está no ar. Print de produto, não render.</span></div><span class="br">]</span></div><div class="rule"><span class="br">[</span><div><b>Seu dado fica onde está</b><span>Lemos e escrevemos no CRM, na loja e na conta de anúncios que você já tem. Nada é jogado fora.</span></div><span class="br">]</span></div></div>
+<section class="dark" id="gestor">
+  <div class="wrap">
+    <div class="k rv">O que o gerente vê</div>
+    <div class="gerente">
+      <div class="rv">
+        <h2 class="rv d1">Uma tela pro gerente. Nenhuma pro vendedor.</h2>
+        <p class="sub rv d2">O relatório do mês <b>começa pelo que você perdeu</b> e diz o que fazer pra recuperar.</p>
+        <ul>
+          <li><b>Hoje</b><span>Quantos chegaram, quantos a Liz resolveu, quantos esperam uma pessoa e há quanto tempo.</span></li>
+          <li><b>Fila</b><span>Tudo que espera gente, com prazo e sugestão. Três toques: aprovar, decidir, devolver.</span></li>
+          <li><b>Pipeline</b><span>As fases com o nome que a sua loja usa. A Liz move e registra quem moveu.</span></li>
+          <li><b>Resultado</b><span>Fechado × meta, por pessoa, de onde vem o lead bom, por que perde. PDF em três toques.</span></li>
+        </ul>
+      </div>
+      <div><img class="tela rv d2" src="img/mock-gerente.webp" alt="Tela Resultado do kompila .crm: fechado no mês, meta, por pessoa, origem e motivo de perda"><div class="cap">kompila .crm · resultado · demonstração com dados fictícios</div></div>
     </div>
   </div>
 </section>
 
-<section class="faq" id="faq">
-  <div class="shell">
-    <div class="dhead rv"><h2>Perguntas que todo mundo faz antes de começar.</h2><p class="lead">Respostas curtas. O que não estiver aqui, a gente responde no WhatsApp.</p></div>
-    <div class="rv faqlist"><details open><summary>O que é a Kompila?</summary><p>Uma empresa de tecnologia pra venda. Quatro produtos cobrem o caminho do anúncio ao contrato: loja, CRM com IA (lead recovery), tráfego e design. A Liz, a IA que atende 24 h no WhatsApp e no Instagram, entra em qualquer um deles.</p></details><details><summary>Preciso contratar tudo?</summary><p>Não. Cada produto funciona sozinho. O tráfego, por exemplo, roda na sua conta de anúncios; a loja fica no seu domínio.</p></details><details><summary>Funciona com o que eu já tenho?</summary><p>O Diagnóstico lê a base do CRM que você tem hoje (HubSpot, Salesforce, Kommo, Pipedrive, RD Station) e nada é jogado fora. Depois a Kompila vira o seu CRM: não faz sentido pagar dois. WhatsApp e Instagram são os canais de conversa. Meta e Google recebem a conversão de volta.</p></details><details><summary>O vendedor precisa aprender um sistema novo?</summary><p>Não. O vendedor atende no WhatsApp dele, como já faz. A Kompila registra, cobra prazo e move o pipeline. O CRM é do gestor.</p></details><details><summary>Por onde eu começo?</summary><p>Pelo Diagnóstico. Lemos um período autorizado da sua base de leads e mostramos onde está o vazamento, com números. Primeiro medimos, depois você decide.</p></details><details><summary>Quanto custa?</summary><p>CRM com a Liz a partir de R$ 990 por mês, WhatsApp e IA inclusos, sem fidelidade. Loja a partir de R$ 390 por mês, sem taxa por venda. Marca a partir de R$ 2.000 e site a partir de R$ 1.500. Tráfego R$ 1.500 por mês mais 5% das vendas, ou R$ 6.000 fixos. O plano certo sai do Diagnóstico.</p></details></div>
+<section id="liz">
+  <div class="wrap">
+    <div class="k rv">Quem atende</div>
+    <div class="liz">
+      <div class="foto rv"><img src="img/liz-pixar.webp" alt="A Liz, a IA da Kompila: uma robô branca segurando uma boneca de vestido verde"></div>
+      <div>
+        <h2 class="rv d1">Conheça a Liz.</h2>
+        <p class="sub rv d2">Ela faz <b>as cinco perguntas que o seu vendedor faria</b>, na ordem, sem pular nenhuma. E diz por que pergunta.</p>
+        <ol class="perguntas rv d2">
+          <li><b>01</b><span><em>Nome.</em> Pra chamar a pessoa pelo nome, sempre.</span></li>
+          <li><b>02</b><span><em>O que procura.</em> Produto, serviço, o problema que quer resolver.</span></li>
+          <li><b>03</b><span><em>Pra quando.</em> Hoje, esse mês, só pesquisando.</span></li>
+          <li><b>04</b><span><em>Quanto cabe.</em> Faixa de valor, sem constranger: "é pra eu ver o que encaixa".</span></li>
+          <li><b>05</b><span><em>Onde e como.</em> Região, entrega, visita ou reunião.</span></li>
+        </ol>
+        <p class="liznota rv d3">Aí simula pela tabela da sua empresa e marca o próximo passo. As perguntas exatas são as do seu negócio. Fala como a sua empresa fala: sem gíria, sem emoji, sem inventar. O que ela não sabe, passa pra uma pessoa. E se ninguém responder, ela não larga o lead.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="final" id="fim">
-  <div class="shell">
-    <h2 class="rv">A sua venda pode andar sozinha a partir do próximo lead.</h2>
-    <p class="lead rv">Comece pelo Diagnóstico: medimos a sua operação antes de qualquer proposta.</p>
-    <div class="ctas rv"><a class="btn green" href="crm/#calc">Medir a minha operação</a><a class="btn ghost" href="https://wa.me/5511962884399?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Kompila%20e%20quero%20conhecer%20os%20produtos." target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg>Falar no WhatsApp</a></div>
+<section id="quem">
+  <div class="wrap">
+    <div class="k rv">Pra quem</div>
+    <h2 class="rv d1">Pra quem vende por conversa e cada lead custa caro.</h2>
+    <ul class="quem">
+      <li class="rv"><div><h3>Incorporadora e imobiliária</h3><small>centenas de leads · equipe em rodízio</small></div><p>A Liz pergunta renda, FGTS e região, simula pela tabela da empresa e marca a visita ao decorado. Quem chama no domingo visita na terça.</p></li>
+      <li class="rv d1"><div><h3>Indústria e projeto</h3><small>orçamento de R$ 20 mil a R$ 300 mil</small></div><p>A Liz entende medida, uso e prazo, cota pela tabela e cobra o aceite. Um lead recuperado paga meses de operação.</p></li>
+      <li class="rv d2"><div><h3>Loja que atende no WhatsApp</h3><small>a cliente pergunta à noite, retira amanhã</small></div><p>A Liz confere o estoque, reserva e prepara o Pix às 19h48. O vendedor confirma na abertura com um ok.</p></li>
+    </ul>
   </div>
 </section>
 
-<div class="shell"><footer><span class="logo"><span class="b">[</span> kompila <span class="b">]</span></span><span>loja · lead recovery · tráfego · design · blog</span><span>@kompila.ai</span></footer></div>
+<section class="dark" id="preco">
+  <div class="wrap">
+    <div class="k rv">O que custa</div>
+    <h2 class="rv d1">Menos que um pré-atendente. Sem fidelidade.</h2>
+    <p class="sub rv d2">Um pré-atendente humano atende no horário dele e sai quando acha outro emprego. <b>A Liz atende 24 h e nunca deixa um lead passar de 5 minutos sem pessoa.</b></p>
+    <div class="preco">
+      <div class="pbox rv">
+        <div class="t">Um pré-atendente</div>
+        <div class="v">8 h<small>por dia</small></div>
+        <p>Salário, encargos, férias, turnover. Um lead por vez, e só no horário dele.</p>
+      </div>
+      <div class="pbox destaque rv d2">
+        <div class="t">A Liz, no kompila .crm · três planos pelo tamanho da operação</div>
+        <details class="plano" open>
+          <summary><span class="pn">Inicial</span><span class="pp">R$ 990<small>/mês</small></span><span class="pq">1 a 3 vendedores</span><span class="ps" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="pd">
+            <div class="pnums"><div><b>1 a 3</b><span>vendedores</span></div><div><b>até 500</b><span>leads por mês</span></div><div><b>300</b><span>ativações da base antiga</span></div><div><b>1.000</b><span>conversas de IA</span></div></div>
+            <ul class="lista">
+              <li><i>+</i>Atendimento da Liz no primeiro minuto, 24 h</li>
+              <li><i>+</i>Follow-up automático em 1, 3, 7 e 14 dias</li>
+              <li><i>+</i>Fila, guardião e placar do gestor</li>
+              <li><i>+</i>Relatório mensal em três toques</li>
+              <li><i>+</i>Um vendedor a mais no plano, incluso</li>
+              <li><i>+</i>Widget da Liz no seu site</li>
+              <li><i>+</i>WhatsApp e IA inclusos, sem conta da Meta por fora</li>
+              <li><i>+</i><span><span class="ph">14 dias</span> pra testar com a sua base, antes de pagar</span></li>
+              <li class="no"><i>−</i>Marketing, automação de e-mail, o que não vira número</li>
+            </ul>
+          </div>
+        </details>
+        <details class="plano">
+          <summary><span class="pn">Crescimento</span><span class="pp">R$ 2.990<small>/mês</small></span><span class="pq">4 a 10 vendedores</span><span class="ps" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="pd">
+            <div class="pnums"><div><b>4 a 10</b><span>vendedores</span></div><div><b>até 2.000</b><span>leads por mês</span></div><div><b>1.000</b><span>ativações da base antiga</span></div><div><b>3.000</b><span>conversas de IA</span></div></div>
+            <ul class="lista">
+              <li><i>+</i>Atendimento da Liz no primeiro minuto, 24 h</li>
+              <li><i>+</i>Follow-up automático em 1, 3, 7 e 14 dias</li>
+              <li><i>+</i>Fila, guardião e placar do gestor</li>
+              <li><i>+</i>Relatório mensal em três toques</li>
+              <li><i>+</i>Um vendedor a mais no plano, incluso</li>
+              <li><i>+</i>Widget da Liz no seu site</li>
+              <li><i>+</i>WhatsApp e IA inclusos, sem conta da Meta por fora</li>
+              <li><i>+</i><span><span class="ph">14 dias</span> pra testar com a sua base, antes de pagar</span></li>
+              <li class="no"><i>−</i>Marketing, automação de e-mail, o que não vira número</li>
+            </ul>
+          </div>
+        </details>
+        <details class="plano">
+          <summary><span class="pn">Escala</span><span class="pp">R$ 4.990<small>/mês</small></span><span class="pq">10+ vendedores, multi-loja</span><span class="ps" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="pd">
+            <div class="pnums"><div><b>10+</b><span>vendedores</span></div><div><b>sem teto</b><span>leads por mês</span></div><div><b>3.000</b><span>ativações da base antiga</span></div><div><b>8.000</b><span>conversas de IA</span></div></div>
+            <ul class="lista">
+              <li><i>+</i>Atendimento da Liz no primeiro minuto, 24 h</li>
+              <li><i>+</i>Follow-up automático em 1, 3, 7 e 14 dias</li>
+              <li><i>+</i>Fila, guardião e placar do gestor</li>
+              <li><i>+</i>Relatório mensal em três toques</li>
+              <li><i>+</i>Um vendedor a mais no plano, incluso</li>
+              <li><i>+</i>Widget da Liz no seu site</li>
+              <li><i>+</i>WhatsApp e IA inclusos, sem conta da Meta por fora</li>
+              <li><i>+</i><span><span class="ph">14 dias</span> pra testar com a sua base, antes de pagar</span></li>
+              <li class="no"><i>−</i>Marketing, automação de e-mail, o que não vira número</li>
+            </ul>
+          </div>
+        </details>
+        <p>Sem fidelidade. Os seus leads e o histórico ficam com você. Excedente: R$ 1,50 por ativação, R$ 300 a cada mil conversas.</p>
+        <p style="margin-top:20px"><a class="btn g" href="#comeca">Quero testar com a minha base</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="liga">
+  <div class="wrap">
+    <div class="k rv">O que ligamos na venda</div>
+    <h2 class="rv d1">A mesma equipe liga a Liz na sua loja, no seu site e no seu anúncio.</h2>
+    <p class="sub rv d2">A Liz atende no WhatsApp, no Instagram e no seu site. <b>Se você ainda não tem loja, site ou anúncio, a gente faz. A mesma equipe, ligada no mesmo CRM.</b></p>
+    <div class="liga">
+      <a href="loja/"><div class="tela telaw rv"><img src="img/home/tela-maslu.webp" alt="A loja da Maslu Select, como a cliente vê"></div><h3>Loja</h3><p>Loja em WooCommerce com painel feito pra quem vende roupa. A Maslu Select roda nela.</p><span class="num">5.900 pedidos · R$ 1,5 milhão em 12 meses · lidos da loja em 15/09/2026</span></a>
+      <a href="design/"><div class="tela telaw rv"><img src="img/home/tela-p1led.webp" alt="O site da P1LED em WordPress, como está no ar"></div><h3>Site, marca e anúncio</h3><p>Site no seu domínio com formulário que vira lead com origem gravada. Meta e Google com a venda voltando como conversão.</p><span class="num">p1led.com.br · no ar em WordPress</span></a>
+    </div>
+  </div>
+</section>
+
+<section id="comeca">
+  <div class="wrap">
+    <div class="k rv">Como começa</div>
+    <div class="comeca">
+      <div>
+        <h2 class="rv d1">Primeiro medimos. Depois você decide.</h2>
+        <p class="sub rv d2">Diagnóstico: lemos um período autorizado da sua base e saímos com o número. <b>Quantos leads ficaram sem resposta, sem responsável, sem próxima ação, e quantos dá pra recuperar.</b> Sem mudar a rotina da equipe.</p>
+        <p class="rv d3"><a class="btn dk" href="https://wa.me/5511962884399?text=Oi.%20Quero%20medir%20a%20minha%20opera%C3%A7%C3%A3o." target="_blank" rel="noopener">Medir a minha operação</a></p>
+      </div>
+      <div class="big rv d2" data-conta="761"><span class="num">0</span><small>de 2.614 leads criados em 12 semanas nunca receberam contato,<br>dentro de um CRM pago. Auditoria em HubSpot · set 2026</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="perguntas">
+  <div class="wrap">
+    <div class="k rv">Perguntas</div>
+    <h2 class="rv d1">Seis respostas curtas.</h2>
+    <details class="rv" open><summary>O que é a Kompila?</summary><p>A régua do atendimento. A Liz atende cada lead em segundos e nenhum fica mais que 5 minutos sem uma pessoa. O gerente vê tudo numa tela. O vendedor só fecha.</p></details>
+    <details class="rv"><summary>A Liz substitui o vendedor?</summary><p>Não. Ela faz o pré-atendimento, qualifica e marca. Fechar continua sendo trabalho de gente, com o contexto pronto no WhatsApp.</p></details>
+    <details class="rv"><summary>E se o vendedor não responder?</summary><p>Em 5 minutos o lead vai pro próximo da fila. Em 10, a Liz retoma e segura o lead. Passou 24 h, volta pra fila com o relógio zerado.</p></details>
+    <details class="rv"><summary>A Liz inventa preço ou condição?</summary><p>Não. Simulação e cotação saem da tabela aprovada pela empresa, com entrada e saída registradas na conversa. Valor sensível pode exigir aprovação de uma pessoa antes do envio.</p></details>
+    <details class="rv"><summary>Preciso trocar meu CRM?</summary><p>O Diagnóstico lê a base que você tem e nada é jogado fora. Depois o kompila .crm vira o CRM: não faz sentido pagar dois. Se quiser manter o seu, a gente lê e escreve nele por conector.</p></details>
+    <details class="rv"><summary>Quanto custa?</summary><p>A partir de <span class="reg g">R$ 990</span> por mês, com WhatsApp e IA inclusos, sem fidelidade e com 14 dias de teste na sua base. Três planos pelo tamanho da operação; o certo sai do Diagnóstico.</p></details>
+  </div>
+</section>
+
+<section class="fecho">
+  <div class="wrap">
+    <div class="k rv">Agora</div>
+    <h2 class="rv d1">O lead já custou dinheiro pra chegar até você. Descubra quantos estão esperando uma resposta.</h2>
+    <p class="sub rv d2">Ou manda um oi pra Liz e vê como ela atende. <b>Ela responde agora.</b></p>
+    <p class="ctas rv d3"><a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende." target="_blank" rel="noopener">Quero ver a Liz atendendo</a><a class="btn o" href="https://wa.me/5511962884399?text=Oi.%20Quero%20medir%20a%20minha%20opera%C3%A7%C3%A3o." target="_blank" rel="noopener">Medir a minha operação</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><span class="logo"><b>[ </b>kompila<b> ]</b></span><br>a régua do atendimento · [ 5 minutos ]</div>
+    <div>+55 11 96288-4399 · @kompila.ai · <a href="privacidade/">privacidade</a></div>
+  </div>
+</footer>
 
 <script>
-(function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});document.querySelectorAll('.rv').forEach(function(el){io.observe(el)})})();
-(function(){var n=document.getElementById('nav'),b=document.getElementById('menuBtn');b.addEventListener('click',function(){n.classList.toggle('open')});document.querySelectorAll('#menuPanel a').forEach(function(a){a.addEventListener('click',function(){n.classList.remove('open')})})})();
-</script>
-<script>(function(){var n=document.getElementById('nav'),last=0;addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
-<script>
-/* telas e conversas ganham vida quando entram na tela */
 (function(){
-var reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;io.unobserve(el);
- if(el.classList.contains('win')){el.classList.add('live');return}
- if(el.classList.contains('phone')){play(el);return}
- if(el.dataset.count!==undefined){count(el);return}
-})},{threshold:.35});
-document.querySelectorAll('.win,.phone,[data-count]').forEach(function(el){if(!el.closest('.showcase'))io.observe(el)});window.__playPhone=play;
-function play(ph){var body=ph.querySelector('.pb'),msgs=[].slice.call(body.querySelectorAll('.msg'));[].forEach.call(body.querySelectorAll('.typing'),function(t){t.remove()});msgs.forEach(function(m){m.classList.remove('on')});if(reduced){msgs.forEach(function(m){m.classList.add('on')});return}
- var t=0;msgs.forEach(function(m,i){var mine=m.classList.contains('k')||m.classList.contains('v')||m.classList.contains('brief');var ty=document.createElement('div');ty.className='typing'+(mine?' k':'');ty.innerHTML='<i></i><i></i><i></i>';body.insertBefore(ty,m);
-  setTimeout(function(){ty.classList.add('show')},t);t+=mine?1100:800;
-  setTimeout(function(){ty.remove();m.classList.add('on')},t);t+=500})}
-function count(el){var to=parseFloat(el.dataset.count),suf=el.dataset.suf||'',dec=(el.dataset.count.split('.')[1]||'').length,t0=performance.now(),d=1300;(function f(now){var p=Math.min(1,(now-t0)/d);p=1-Math.pow(1-p,3);var v=to*p;el.textContent=(dec?v.toFixed(dec):Math.round(v).toLocaleString('pt-BR'))+suf;if(p<1)requestAnimationFrame(f)})(t0)}
+  // play: a pessoa recortada some e o vídeo com alpha entra no mesmo lugar, falando
+  var hero=document.querySelector('.hero'),p=document.getElementById('hplay'),pv=document.getElementById('hpv');
+  var rot=p.querySelector('span');
+  function para(){pv.pause();hero.classList.remove('falando');pv.classList.remove('on');rot.textContent='depoimento · 30 s'}
+  p.addEventListener('click',function(){
+    if(!pv.paused){para();return}
+    if(pv.ended)pv.currentTime=0;
+    pv.classList.add('on');hero.classList.add('falando');rot.textContent='pausar';pv.play().catch(para)
+  });
+  pv.addEventListener('ended',function(){hero.classList.remove('falando');pv.classList.remove('on');rot.textContent='ver de novo'});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!pv.paused)para()});
+  // parallax do hero (mouse e rolagem), mesma régua da home
+  var h=document.querySelector('.hero');
+  if(h&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var mx=0,my=0,sy=0,raf=0;
+    function paint(){raf=0;h.style.setProperty('--mx',mx.toFixed(3));h.style.setProperty('--my',my.toFixed(3));h.style.setProperty('--sy',sy.toFixed(1))}
+    function ask(){if(!raf)raf=requestAnimationFrame(paint)}
+    if(matchMedia('(hover:hover)').matches){h.addEventListener('mousemove',function(e){var r=h.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*2-1;my=(e.clientY-r.top)/r.height*2-1;ask()});h.addEventListener('mouseleave',function(){mx=0;my=0;ask()})}
+    addEventListener('scroll',function(){sy=Math.min(scrollY,h.offsetHeight);ask()},{passive:true})}
+  // revelação por rolagem
+  var els=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){els.forEach(function(e){e.classList.add('on')});document.querySelectorAll('.big .num').forEach(function(n){n.textContent=n.closest('.big').dataset.conta});return}
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(!x.isIntersecting)return;x.target.classList.add('on');io.unobserve(x.target);
+    if(x.target.classList.contains('big')){var alvo=+x.target.dataset.conta,n=x.target.querySelector('.num'),t0=null;
+      function passo(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/1400);k=1-Math.pow(1-k,3);n.textContent=Math.round(alvo*k);if(k<1)requestAnimationFrame(passo)}requestAnimationFrame(passo)}
+  })},{rootMargin:'0px 0px -12% 0px',threshold:.15});
+  els.forEach(function(e){io.observe(e)});
 })();
 </script>
-
-
-
-
-<script>
-(function(){var c=document.getElementById('chain');if(!c)return;var li=[].slice.call(c.querySelectorAll('.nodes li')),cap=document.getElementById('ccap'),T=null,i=-1;
-var caps=['O anúncio traz o lead com origem e campanha gravadas.','A loja ou o site entrega catálogo, preço e vídeo. O lead chega sabendo o que quer.','O atendente IA responde em segundos, 24 h, e qualifica com as regras da empresa.','O CRM registra etapa, prazo e responsável. Ninguém digita.','O vendedor recebe o lead pronto no WhatsApp dele e só fecha.','A venda entra em Fechado, com contrato, sem ninguém abrir o sistema.','A conversão volta pro Meta e pro Google. O próximo anúncio já sabe quem compra.'];
-function step(){i++;if(i<li.length){c.classList.remove('back');li.forEach(function(l,k){l.classList.toggle('on',k===i);l.classList.toggle('done',k<i)});cap.textContent=caps[i];T=setTimeout(step,1500)}else{li[li.length-1].classList.add('done');c.classList.add('back');cap.textContent=caps[6];T=setTimeout(function(){i=-1;li.forEach(function(l){l.classList.remove('on','done')});step()},3200)}}
-if(matchMedia('(prefers-reduced-motion:reduce)').matches){li.forEach(function(l){l.classList.add('on','done')});c.classList.add('back');cap.textContent=caps[6];return}
-new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersecting){step();obs.unobserve(e.target)}})},{threshold:.3}).observe(c)})();
-</script>
-<script>
-(function(){var h=document.querySelector('.hh');if(!h||matchMedia('(prefers-reduced-motion:reduce)').matches)return;var mx=0,my=0,sy=0,raf=0;function paint(){raf=0;h.style.setProperty('--mx',mx.toFixed(3));h.style.setProperty('--my',my.toFixed(3));h.style.setProperty('--sy',sy.toFixed(1))}function ask(){if(!raf)raf=requestAnimationFrame(paint)}if(matchMedia('(hover:hover)').matches){h.addEventListener('mousemove',function(e){var r=h.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*2-1;my=(e.clientY-r.top)/r.height*2-1;ask()});h.addEventListener('mouseleave',function(){mx=0;my=0;ask()})}addEventListener('scroll',function(){sy=Math.min(scrollY,h.offsetHeight);ask()},{passive:true})})();
-(function(){var im=[].slice.call(document.querySelectorAll('.hh .bg .slide')),dots=[].slice.call(document.querySelectorAll('#dots i')),who=document.getElementById('who'),ol=document.getElementById('steps'),T=[];
-var S=[{t:'A sua loja<br class="mb"> vendendo <em>sozinha.</em>',q:'“Vendi de madrugada, sem ninguém acordado.”',f:[['Instagram','cliente chama às 23h'],['IA atende','tamanho, estoque, prazo'],['Provador','a IA marca a hora'],['CRM','pedido quase fechado'],['Dona','só confirma'],['Venda','de madrugada']]},
-{t:'O orçamento<br class="mb"> saindo <em>sozinho.</em>',q:'“A cotação saiu em minutos. Fechei o evento no mesmo dia.”',f:[['Google Ads','pesquisa painel de LED'],['Lead no CRM','entra com origem e campanha'],['WhatsApp','resposta em 6 s'],['Cotação','por m², pela tabela'],['Proposta','enviada e cobrada'],['Contrato','aceite vira Fechado']]},
-{t:'A sua venda<br class="mb"> andando <em>sozinha.</em>',q:'“Meu time só fala com quem já quer comprar.”',f:[['Meta Ads','campanha Painel Fachada'],['Lead no CRM','sem digitar nada'],['Atendente IA','qualifica e marca'],['Vendedor da vez','recebe pronto no WhatsApp'],['Visita','técnica, agendada'],['Venda','registrada e devolvida ao anúncio']]}];
-var i=0,timer=null;
-var h1=document.getElementById('hh1');function render(n){i=n;if(h1&&h1.dataset.n!==String(n)){h1.dataset.n=n;h1.classList.add('sw');setTimeout(function(){h1.innerHTML=S[n].t;h1.classList.remove('sw')},h1.dataset.first?350:0);h1.dataset.first=1}im.forEach(function(x,k){x.classList.toggle('on',k===n)});dots.forEach(function(x,k){x.classList.toggle('on',k===n)});if(ol.dataset.done)return;ol.dataset.done=1;who.textContent=S[0].q;T.forEach(clearTimeout);T=[];ol.innerHTML=S[0].f.map(function(st,k){return '<li'+(k===5?' class="last"':'')+'><i>'+(k+1)+'</i><div><b>'+st[0]+'</b><span>'+st[1]+'</span></div><em></em></li>'}).join('');var lis=[].slice.call(ol.children);var TS=[0.9,9.6,13.2,15.4,17.2,18.6],END=19.5,DUR=30;window.hhTick=function(t){lis.forEach(function(li,k){li.classList.toggle('on',t>=TS[k]);var e=li.lastElementChild;if(k<5){var f=Math.min(1,Math.max(0,(t-TS[k])/(TS[k+1]-TS[k])));e.style.setProperty('--f',f)}})};var t0=null;function clock(ts){if(!t0)t0=ts;if(!window.hhVideoLive){var t=((ts-t0)/1000)%(DUR+2);window.hhTick(t)}requestAnimationFrame(clock)}requestAnimationFrame(clock)}
-render(+(location.search.match(/cena=(\d)/)||[0,0])[1]%S.length);if(matchMedia('(prefers-reduced-motion:reduce)').matches){[].slice.call(ol.children).forEach(function(li){li.classList.add('on','done')});return}
-timer=setInterval(function(){render((i+1)%S.length)},7500)})();
-</script>
-<script>(function(){var h=document.documentElement;if(/[?&]guias/.test(location.search))h.classList.add('guias');if(/[?&]still/.test(location.search))h.classList.add('still');if(/[?&]dd/.test(location.search)){var q=document.querySelector('nav .dd');q&&q.classList.add('open')}addEventListener('keydown',function(e){if(e.key==='g'&&!/input|textarea/i.test(e.target.tagName))h.classList.toggle('guias')})})();</script>
-<script>(function(){var d=document.querySelector('nav .dd'),b=document.getElementById('ddb');if(!d)return;var t;function open(){clearTimeout(t);d.classList.add('open');b.setAttribute('aria-expanded','true')}function close(){t=setTimeout(function(){d.classList.remove('open');b.setAttribute('aria-expanded','false')},160)}d.addEventListener('mouseenter',open);d.addEventListener('mouseleave',close);b.addEventListener('click',function(){d.classList.contains('open')?(clearTimeout(t),d.classList.remove('open')):open()});document.addEventListener('click',function(e){if(!d.contains(e.target)){clearTimeout(t);d.classList.remove('open')}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){d.classList.remove('open')}});d.querySelectorAll('.ddp a').forEach(function(a){a.addEventListener('click',function(){d.classList.remove('open')})})})();</script>
-<script>(function(){var b=document.getElementById('hplay'),w=document.getElementById('vid'),v=document.getElementById('vidv'),x=document.getElementById('vidx');if(!b)return;var pv=document.getElementById('hpv');if(pv){pv.addEventListener('timeupdate',function(){if(window.hhTick&&w.hidden)window.hhTick(pv.currentTime)});pv.addEventListener('playing',function(){window.hhVideoLive=true});pv.addEventListener('ended',function(){window.hhVideoLive=false})}if(pv){var cta=document.querySelector('.hh .ctas .btn.g');pv.addEventListener('ended',function(){b.classList.remove('som');window.hhVideoLive=false;if(cta){cta.classList.remove('apaga');cta.classList.add('acende')}});pv.addEventListener('play',function(){if(cta){cta.classList.remove('acende');cta.classList.add('apaga')}})}function o(){if(pv&&!matchMedia('(max-width:900px)').matches){b.classList.add('mini');if(pv.paused){pv.classList.add('on');if(pv.ended)pv.currentTime=0;pv.play();b.classList.add('som')}else{pv.pause();b.classList.remove('som');window.hhVideoLive=false}return}w.hidden=false;document.body.style.overflow='hidden';v.currentTime=0;v.play()}function c(){v.pause();w.hidden=true;document.body.style.overflow='';window.hhVideoLive=false}v.addEventListener('play',function(){window.hhVideoLive=true});v.addEventListener('timeupdate',function(){if(window.hhTick&&!w.hidden)window.hhTick(v.currentTime)});b.addEventListener('click',o);x.addEventListener('click',c);w.addEventListener('click',function(e){if(e.target===w)c()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!w.hidden)c()});})();</script>
 </body>
 </html>
