@@ -229,8 +229,9 @@ footer .logo{color:#fff}
 
 /* voz: Liz com telefone atrás do chat; mensagens entram uma a uma */
 .palco-zap{position:relative;justify-self:end;width:100%;max-width:560px;padding-left:150px}
-.liz-fone{position:absolute;left:-120px;bottom:-56px;width:270px;height:auto;z-index:2;filter:drop-shadow(0 24px 34px rgba(10,11,14,.3))}
+.liz-fone{position:absolute;left:-120px;bottom:-56px;width:270px;height:auto;z-index:2;opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 24px 34px rgba(10,11,14,.3))}
 .palco-zap .zap{position:relative;z-index:1;max-width:none}
+.palco-zap.on .liz-fone{opacity:1;transform:none}
 .zap .zm>*{opacity:0;transform:translateY(14px);transition:opacity .4s,transform .45s cubic-bezier(.2,.8,.2,1)}
 .zap .zm>*.on{opacity:1;transform:none}
 .zap .audio i::before{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 0 rgba(31,168,85,.5)}
@@ -368,7 +369,7 @@ footer .base span{padding:0}
       <p class="prova">Conversa real do dia 21/09, no WhatsApp da Kompila.</p>
       <button type="button" class="btn quem" id="quemliz"><span class="av"><img src="img/liz-avatar.webp" alt=""></span>Quem é a Liz?</button>
     </div>
-    <div class="palco-zap"><img class="liz-fone" src="img/liz-fone.webp" alt="" width="540" height="900" loading="lazy">
+    <div class="palco-zap"><img class="liz-fone" src="img/liz-fone.webp" alt="" width="397" height="900">
     <div class="zap" id="zap" aria-label="Conversa real entre o gestor e a Liz">
       <div class="zt"><img src="img/liz-avatar.webp" alt=""><div><b>Liz · Kompila</b><span>online</span></div></div>
       <div class="zm"><div class="eu audio"><i></i><span>áudio · 0:06</span><small>18:13</small></div>
@@ -553,9 +554,9 @@ footer .base span{padding:0}
 <script>
 (function(){
   var zap=document.getElementById('zap');if(!zap)return;var itens=[].slice.call(zap.querySelectorAll('.zm>*')),feito=false;
-  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(!x.isIntersecting||feito)return;feito=true;io.disconnect();
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(!x.isIntersecting||feito)return;feito=true;io.disconnect();zap.parentNode.classList.add('on');
     itens.forEach(function(el,k){setTimeout(function(){el.classList.add('on')},350+k*(el.classList.contains('audio')?200:900))})})},{threshold:.4});
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){itens.forEach(function(el){el.classList.add('on')});return}
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){itens.forEach(function(el){el.classList.add('on')});zap.parentNode.classList.add('on');return}
   io.observe(zap);
 })();
 </script>
