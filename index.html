@@ -315,6 +315,16 @@ footer .base span{padding:0}
   .hero-m .fatos span{display:inline-flex;align-items:center;gap:6px}
   .hero-m .fatos span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green)}
 }
+
+/* preço: uma âncora e a conversa com a Liz */
+.preco2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:40px;align-items:center}
+.preco2 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.preco2 .nota{margin-top:16px}
+.preco-liz{position:relative;display:flex;justify-content:flex-end;align-items:flex-end;min-height:380px;padding-right:4%}
+.preco-liz img{width:min(250px,55%);height:auto;position:relative;z-index:1;filter:drop-shadow(0 24px 34px rgba(10,11,14,.22))}
+.preco-liz .pb{position:absolute;left:0;top:6%;z-index:2;max-width:270px;background:#fff;border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:14px 16px;font-size:15px;line-height:1.4;color:var(--ink);box-shadow:0 18px 40px rgba(10,11,14,.12)}
+.preco-liz .pb b{display:block;font:600 11px var(--mono);color:var(--gtext);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+@media(max-width:900px){.preco2{grid-template-columns:1fr}.preco-liz{min-height:0;margin-top:10px;flex-direction:column;align-items:stretch}.preco-liz .pb{position:static;max-width:none;margin-bottom:14px;border-radius:14px}.preco-liz img{align-self:center}}
 </style>
 </head>
 <body>
@@ -426,15 +436,15 @@ footer .base span{padding:0}
 
 <!-- Planos · fundo papel -->
 <section class="sec papel" id="preco">
-  <div class="wrap">
-    <div class="cab"><div class="kicker"><i></i><span>Planos</span></div><h2>Quatro planos. <em>A partir de R$ 587 por mês.</em></h2><p class="lead">WhatsApp e IA inclusos, sem conta da Meta por fora, sem fidelidade. Os leads e o histórico são seus.</p></div>
-    <div class="planos">
-      <div class="plano"><span class="n">Profissional</span><b>R$ 587<small>/mês</small></b><span class="pq">1 pessoa atendendo</span><ul><li>Liz 24 h no seu WhatsApp</li><li>qualificação e follow-up de quem some</li><li>agenda e painel simples</li><li>a partir de; o que entra sai na reunião</li></ul></div>
-      <div class="plano"><span class="n">Inicial</span><b>R$ 990<small>/mês</small></b><span class="pq">1 a 3 vendedores</span><ul><li>até 500 leads por mês</li><li>300 ativações da base antiga</li><li>1.000 conversas de IA</li><li>Liz no WhatsApp, CRM e follow-up de quem some</li></ul></div>
-      <div class="plano d"><span class="n">Crescimento</span><b>R$ 2.990<small>/mês</small></b><span class="pq">4 a 10 vendedores</span><ul><li>até 2.000 leads por mês</li><li>1.000 ativações da base antiga</li><li>3.000 conversas de IA</li><li>CRM inteligente, atendimento customizado e chat no site</li></ul></div>
-      <div class="plano"><span class="n">Escala</span><b>R$ 6.900<small>/mês</small></b><span class="pq">10+ vendedores, multi-loja</span><ul><li>leads sem teto</li><li>3.000 ativações da base antiga</li><li>8.000 conversas de IA</li><li>Tudo do Crescimento, dimensionado pela equipe</li></ul></div>
+  <div class="wrap preco2">
+    <div>
+      <div class="kicker"><i></i><span>Planos</span></div>
+      <h2>A partir de <em>R$ 587 por mês.</em></h2>
+      <p class="lead">O certo pro seu tamanho a Liz te diz em 1 minuto: de quem atende sozinho até operação com equipe e várias lojas. WhatsApp e IA inclusos, sem conta da Meta por fora, sem fidelidade. Os leads e o histórico são seus.</p>
+      <div class="ctas"><a class="btn dk" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20saber%20o%20plano%20pro%20meu%20caso."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Consultar com a Liz</a></div>
+      <p class="nota">Implantação, integrações e ampliações são levantadas numa reunião de 1 hora com a equipe de produto.</p>
     </div>
-    <p class="nota">Implantação, integrações e ampliações são levantadas numa reunião de 1 hora com a equipe de produto. Disparo de reativação é cobrado por mensagem (template oficial da Meta).</p>
+    <div class="preco-liz"><div class="pb"><b>Liz</b>Me conta o que a sua empresa faz e quantas pessoas atendem. Eu te digo o plano e o valor na hora, sem enrolar.</div><img src="tech/img/liz-fala.webp" alt="" width="700" height="900" loading="lazy"></div>
   </div>
 </section>
 
@@ -457,7 +467,7 @@ footer .base span{padding:0}
       <details><summary>E se o vendedor não responder?</summary><p>Em 5 minutos o lead vai pro próximo da fila. Em 10, a Liz retoma e segura o lead. Passou 24 h, volta pra fila com o relógio zerado.</p></details>
       <details><summary>A Liz inventa preço ou condição?</summary><p>Não. Preço e condição saem da tabela aprovada pela empresa. Valor sensível pode exigir aprovação de uma pessoa antes do envio.</p></details>
       <details><summary>Preciso trocar meu CRM?</summary><p>O kompila .crm vira o seu CRM. Se você usa HubSpot, a gente lê a sua base e traz os contatos parados pra reativar.</p></details>
-      <details><summary>Quanto custa?</summary><p>Profissional individual a partir de R$ 587 por mês; empresa a partir de R$ 990, com WhatsApp e IA inclusos e sem fidelidade. Quatro planos pelo tamanho da operação; o certo sai na reunião com a equipe de produto.</p></details>
+      <details><summary>Quanto custa?</summary><p>A partir de R$ 587 por mês, com WhatsApp e IA inclusos e sem fidelidade. O plano certo pro seu tamanho a Liz te diz no WhatsApp em 1 minuto; implantação e integrações saem na reunião com a equipe de produto.</p></details>
     </div>
   </div>
 </section>
