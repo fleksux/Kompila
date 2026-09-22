@@ -268,8 +268,9 @@ footer .base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
 footer .base span{padding:0}
 @media(max-width:900px){
   footer .ft{grid-template-columns:1fr 1fr}
-  .palco-zap{padding-left:0;padding-top:120px;max-width:none}
-  .liz-fone{left:auto;right:-8%;top:-20px;bottom:auto;width:180px;z-index:2}
+  .palco-zap{padding-left:0;max-width:none}
+  .liz-fone{left:auto;right:2%;top:0;bottom:auto;width:150px;z-index:2}
+  .palco-zap{padding-top:330px}
   .palco-f{height:300px;margin-top:10px}
   .palco-f .objf{right:-10%;width:120%}
   .palco-f .lizf{left:4%;bottom:-120px;width:240px}
@@ -324,7 +325,7 @@ footer .base span{padding:0}
 .preco-liz img{width:min(250px,55%);height:auto;position:relative;z-index:1;filter:drop-shadow(0 24px 34px rgba(10,11,14,.22))}
 .preco-liz .pb{position:absolute;left:0;top:6%;z-index:2;max-width:270px;background:#fff;border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:14px 16px;font-size:15px;line-height:1.4;color:var(--ink);box-shadow:0 18px 40px rgba(10,11,14,.12)}
 .preco-liz .pb b{display:block;font:600 11px var(--mono);color:var(--gtext);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-@media(max-width:900px){.preco2{grid-template-columns:1fr}.preco-liz{min-height:0;margin-top:10px;flex-direction:column;align-items:stretch}.preco-liz .pb{position:static;max-width:none;margin-bottom:14px;border-radius:14px}.preco-liz img{align-self:center}}
+@media(max-width:900px){.preco2{grid-template-columns:1fr}.preco-liz{min-height:0;margin-top:10px;flex-direction:column;align-items:stretch}.preco-liz .pb{position:static;max-width:none;margin-bottom:14px;border-radius:14px}.preco-liz img{align-self:center;width:200px}}
 </style>
 </head>
 <body>
@@ -451,7 +452,7 @@ footer .base span{padding:0}
 <!-- Quem faz · fundo carbono -->
 <section class="sec carb" id="liga">
   <div class="wrap grid2">
-    <div><div class="kicker"><i></i><span>Quem faz</span></div><h2>Feito por quem faz <em>marca, site, loja e campanha.</em></h2><p class="lead">A Liz atende no WhatsApp, no Instagram e no seu site. Se ainda falta loja, site ou anúncio, a gente faz, ligado no mesmo CRM.</p></div>
+    <div><div class="kicker"><i></i><span>Quem está do outro lado</span></div><h2>Não é uma ferramenta. <em>É um time que entra junto.</em></h2><p class="lead">Reunião de 1 hora com a equipe de produto, a Liz treinada no seu negócio, ajustes pelo WhatsApp e gente do outro lado quando precisar. Feito por quem faz marca, site, loja e campanha há 20 anos: se ainda falta alguma dessas, a gente faz, ligado no mesmo CRM.</p></div>
     <div class="nums3"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><div><b>+25</b><span>marcas atendidas</span></div><div><b>R$ 500 mil</b><span>por mês administrados em mídia Meta e Google</span></div></div>
   </div>
   <div class="logos" aria-label="Marcas atendidas"><div class="trilho"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span></div></div>
@@ -596,6 +597,7 @@ footer .base span{padding:0}
     if(i===0){card.style.opacity=0;setTimeout(function(){col.insertBefore(card,col.querySelector('.card,.vazia'));card.style.transform='';card.style.opacity=1;conta()},320)}
     else{col.insertBefore(card,col.querySelector('.card,.vazia'));var para=card.getBoundingClientRect();
       card.style.transition='none';card.style.transform='translate('+(de.left-para.left)+'px,'+(de.top-para.top)+'px)';void card.offsetWidth;card.style.transition='';card.style.transform='';conta()}
+    if(kb.scrollWidth>kb.clientWidth+4)kb.scrollTo({left:Math.max(0,col.offsetLeft-(kb.clientWidth-col.offsetWidth)/2),behavior:'smooth'});
     if(col.dataset.f==='Fechado')setTimeout(function(){col.classList.add('acende')},500);
     leg.innerHTML=falas[col.dataset.f];
     timer=setTimeout(passo,col.dataset.f==='Fechado'?3200:1900)}
