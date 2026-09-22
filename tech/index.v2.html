@@ -287,6 +287,28 @@ footer .base span{padding:0}
 .modal .ass{margin-top:18px;font:600 13px var(--mono);color:var(--ink)}
 .modal .mx{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.9);color:var(--ink);font-size:24px;line-height:1;cursor:pointer;z-index:2}
 @media(max-width:700px){.modal .mb{grid-template-columns:1fr}.modal .mb img{max-height:46vh;min-height:0}.modal .mt{padding:24px 22px 26px}}
+
+/* celular: primeiro a animação inteira, depois o título com o botão */
+.hero-m{display:none}
+@media(max-width:900px){
+  .story .txt{display:none}
+  .story{height:380svh}
+  .story .balao{left:6%;right:6%;top:auto;bottom:18%;max-width:none;font-size:15px}
+  .story .passos{left:6%;bottom:16px}
+  .hero-m{display:block;background:var(--carbon);color:var(--off);padding:44px 0 52px}
+  .hero-m .kicker{display:flex;align-items:center;gap:10px;font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:16px}
+  .hero-m .kicker i{width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .hero-m h1{font-size:clamp(30px,8.6vw,42px);line-height:1.02;letter-spacing:-.035em;margin:0 0 12px;font-weight:700}
+  .hero-m h1 em{font-style:normal;color:var(--green)}
+  .hero-m .lead{font-size:16px;line-height:1.45;color:#B4BBC3;margin:0 0 20px}
+  .hero-m .lead b{color:#fff;font-weight:600}
+  .hero-m .ctas{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+  .hero-m .ctas .btn{width:100%;justify-content:center}
+  .hero-m .fatos{display:flex;flex-wrap:wrap;gap:6px 14px;font:500 12px var(--mono);color:#8A939C}
+  .hero-m .fatos b{color:var(--off);font-weight:600}
+  .hero-m .fatos span{display:inline-flex;align-items:center;gap:6px}
+  .hero-m .fatos span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green)}
+}
 </style>
 </head>
 <body>
@@ -300,7 +322,7 @@ footer .base span{padding:0}
 <section class="story" id="topo" aria-label="A Liz sai do celular">
   <div class="fixa">
     <canvas id="tela" width="1280" height="720" aria-hidden="true"></canvas>
-    <img class="poster" src="img/q_poster.webp" alt="A Liz, robô da Kompila, em cima de uma mesa ao lado de um celular; ao fundo, o pipeline do CRM" width="1280" height="720">
+    <img class="poster" src="img/q_poster.webp" data-m="img/q9_poster.webp" alt="A Liz, robô da Kompila, em cima de uma mesa ao lado de um celular; ao fundo, o pipeline do CRM" width="1280" height="720">
     <div class="veu"></div>
     <div class="wrap txt">
       <div class="kicker"><i></i><span>IA de atendimento + CRM · WhatsApp oficial</span></div>
@@ -314,6 +336,19 @@ footer .base span{padding:0}
     </div>
     <div class="balao" id="balao" aria-hidden="true"><b>Liz</b>Opa, cheguei! Tudo bem?</div>
     <div class="passos" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="hero-m" aria-label="Chamada">
+  <div class="wrap">
+    <div class="kicker"><i></i><span>IA + CRM · WhatsApp oficial</span></div>
+    <h1>Se chega lead no seu WhatsApp, <em>a&nbsp;Liz já tem trabalho.</em></h1>
+    <p class="lead">Ela responde em segundos, qualifica, marca a reunião e move o pipeline. <b>Sua equipe entra pra fechar.</b></p>
+    <div class="ctas">
+      <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Quero ver a Liz atendendo</a>
+      <a class="btn o" href="#crm">Ver o CRM por dentro</a>
+    </div>
+    <div class="fatos"><span><b>8 s</b> resposta mediana</span><span><b>24 h</b> todos os dias</span><span><b>1 número</b> oficial</span><span>reunião <b>por áudio</b></span></div>
   </div>
 </section>
 
@@ -466,13 +501,14 @@ footer .base span{padding:0}
   var story=document.querySelector('.story'),fixa=story.querySelector('.fixa'),cv=document.getElementById('tela'),cx=cv.getContext('2d');
   var N=121,quadros=new Array(N),atual=-1,pedido=0,raf=0;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  function src(i){return 'img/q/'+String(i+1).padStart(3,'0')+'.webp'}
+  var PASTA=(innerWidth<=900&&innerHeight>innerWidth)?'img/q9/':'img/q/';
+  function src(i){return PASTA+String(i+1).padStart(3,'0')+'.webp'}
   function carrega(i,cb){if(quadros[i])return cb&&cb();var im=new Image();im.onload=function(){quadros[i]=im;cb&&cb()};im.onerror=function(){cb&&cb()};im.src=src(i)}
   function desenha(i){var im=quadros[i];if(!im){for(var k=i;k>=0;k--){if(quadros[k]){im=quadros[k];break}}}if(!im)return;
     var W=cv.width=fixa.clientWidth*Math.min(devicePixelRatio||1,2),H=cv.height=fixa.clientHeight*Math.min(devicePixelRatio||1,2);
     // sem zoom: o vídeo no tamanho natural (cover), deslocado pra direita; a faixa que sobra à esquerda é carbono, atrás do degradê
     var largo=W/H>1.15,r=Math.max(W/im.naturalWidth,H/im.naturalHeight),w=im.naturalWidth*r,h=im.naturalHeight*r;
-    var x=largo?Math.max(0,W*.72-w*.40):(W-w)*.58,y=(H-h)*.5;
+    var x=largo?Math.max(0,W*.72-w*.40):(W-w)*.5,y=(H-h)*.5;
     cx.fillStyle='#0A0B0E';cx.fillRect(0,0,W,H);cx.drawImage(im,x,y,w,h);atual=i}
   var passos=story.querySelectorAll('.passos i');
   function passo(){var r=story.getBoundingClientRect(),alt=story.offsetHeight-fixa.offsetHeight,p=Math.min(1,Math.max(0,(-r.top+64)/alt));
@@ -488,6 +524,7 @@ footer .base span{padding:0}
     if(balao){if(f[3]){if(balao.dataset.f!==f[3]){balao.dataset.f=f[3];balao.lastChild.nodeValue=f[3];balao.classList.remove('on');void balao.offsetWidth;balao.classList.add('on')}}else{balao.classList.remove('on');balao.dataset.f=''}}raf=0}
   function ask(){if(!raf)raf=requestAnimationFrame(passo)}
   // primeiro quadro na hora, o resto em segundo plano em ordem
+  try{var po=story.querySelector('.poster');if(po&&PASTA.indexOf('q9/')>-1&&po.dataset.m)po.src=po.dataset.m}catch(e){}
   carrega(0,function(){story.classList.add('pronta');desenha(0);var i=1;(function fila(){if(i>=N)return;carrega(i++,fila)})()});
   addEventListener('scroll',ask,{passive:true});addEventListener('resize',function(){atual=-1;ask()});
 })();
