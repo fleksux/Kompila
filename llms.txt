@@ -1,28 +1,30 @@
 # Kompila
 
-> A Kompila é um agente de IA que atende leads no WhatsApp em segundos, qualifica, marca visita e escreve no CRM que a empresa já usa (HubSpot, Salesforce, Kommo, Pipedrive). O vendedor recebe o lead pronto no WhatsApp dele; o CRM fica para o gestor. Brasil, em português.
+> A Kompila é IA de atendimento com CRM próprio. A Liz, a IA da Kompila, atende cada lead no WhatsApp oficial da empresa em segundos, 24 horas, qualifica, marca a reunião ou a visita e entrega o lead pronto para o vendedor fechar. O gestor vê tudo numa tela. Brasil, em português.
 
-## O que faz
-- Responde cada lead em segundos, 24 horas, inclusive com a loja fechada.
-- Qualifica com motores aprovados pela empresa (financiamento, cotação por m², estoque), sem inventar número.
-- Marca visita técnica e aciona o vendedor da vez no rodízio.
-- Guardião: se o vendedor não responde no prazo, avisa no celular; em 2× o prazo, segue a conversa e passa o lead para a fila de outro vendedor online.
-- Move o pipeline sozinho (visita marcada, proposta, contrato) e registra quem moveu.
-- Reabre a base antiga em 30, 60 ou 90 dias.
+## O que a Liz faz
+- Responde cada lead em segundos, 24 horas, inclusive com a loja fechada, pelo WhatsApp oficial (API da Meta).
+- Conversa em linguagem natural, entende áudio e responde só com o que a empresa aprovou; não inventa preço nem condição.
+- Qualifica, marca reunião ou visita e avisa o vendedor da vez, com o resumo da conversa.
+- Guardião: nenhum lead fica mais de 5 minutos sem uma pessoa; se o vendedor não responde, o lead vai para o próximo da fila e a Liz segura a conversa.
+- Retoma quem sumiu em 1, 3, 7 e 14 dias.
+- Move o pipeline e registra quem moveu; relatório para o gestor.
 - Devolve a conversão para Meta Ads e Google Ads.
-- Relatório em três toques para o gestor, em PDF.
+
+## Produtos
+- kompila .crm: a Liz atendendo + o CRM. https://kompila.com.br/crm/
+- kompila loja: loja virtual com painel próprio, sem taxa por venda. https://kompila.com.br/loja/
+- kompila design: marca, site e criativo. https://kompila.com.br/design/
+- kompila tráfego: anúncio com a conversão rastreada até a venda. https://kompila.com.br/trafego/
+
+## Preço
+- kompila .crm a partir de R$ 278 por mês no plano anual (com fidelidade) ou R$ 378 no mensal (sem fidelidade). WhatsApp e IA inclusos.
 
 ## Para quem
-- Incorporadoras e imobiliárias
-- Indústria técnica e projetos B2B (orçamentos de R$ 20 mil a R$ 300 mil)
-- Lojas online
-- Empresas que já têm CRM e não querem migrar
+- Qualquer empresa que recebe clientes pelo WhatsApp: imobiliárias e incorporadoras, clínicas, lojas, prestadores de serviço, indústria B2B.
 
 ## Como começa
-- Diagnóstico: leitura autorizada de 12 semanas do CRM (primeira resposta, atendimento humano, leads sem responsável, sem próxima ação, base recuperável). Sem migração. Primeiro medimos, depois o cliente decide.
-
-## Modelo comercial
-- Fixo mensal + variável por resultado confirmado (lead recuperado, visita marcada). Escopo definido no Diagnóstico.
+- Uma conversa com a Liz no WhatsApp, ou uma call de 30 minutos com a equipe de produto.
 
 ## Contato
 - Site: https://kompila.com.br/

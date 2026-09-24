@@ -3,8 +3,6 @@
   <url><loc>https://kompila.com.br/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
   <url><loc>https://kompila.com.br/crm/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://kompila.com.br/loja/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kompila.com.br/online/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kompila.com.br/mensageria/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://kompila.com.br/trafego/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://kompila.com.br/design/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://kompila.com.br/blog/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
