@@ -327,8 +327,8 @@ footer .base span{padding:0}
   .hero-m{display:block;background:var(--carbon);color:var(--off);padding:44px 0 52px}
   .hero-m .kicker{display:flex;align-items:center;gap:10px;font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:16px}
   .hero-m .kicker i{width:8px;height:8px;border-radius:50%;background:var(--green)}
-  .hero-m h1{font-size:clamp(30px,8.6vw,42px);line-height:1.02;letter-spacing:-.035em;margin:0 0 12px;font-weight:700}
-  .hero-m h1 em{font-style:normal;color:var(--green)}
+  .hero-m .h1m{font-size:clamp(30px,8.6vw,42px);line-height:1.02;letter-spacing:-.035em;margin:0 0 12px;font-weight:700}
+  .hero-m .h1m em{font-style:normal;color:var(--green)}
   .hero-m .lead{font-size:16px;line-height:1.45;color:#B4BBC3;margin:0 0 20px}
   .hero-m .lead b{color:#fff;font-weight:600}
   .hero-m .ctas{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
@@ -383,7 +383,7 @@ footer .base span{padding:0}
   <div class="wrap">
     <div class="hv"><video autoplay muted loop playsinline preload="metadata" poster="video/liz-responde-m.webp" aria-label="A Liz em cima da mesa respondendo leads no celular enquanto a dona da loja trabalha"><source src="video/liz-responde-m.mp4" type="video/mp4"></video><button type="button" class="som" data-som aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="w" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><span>ouvir</span></button></div>
     <div class="kicker"><i></i><span>IA + CRM · WhatsApp oficial</span></div>
-    <h1>Se chega lead no seu WhatsApp, <em>a&nbsp;Liz já tem trabalho.</em></h1>
+    <div class="h1m" role="heading" aria-level="1">Se chega lead no seu WhatsApp, <em>a&nbsp;Liz já tem trabalho.</em></div>
     <p class="lead">Ela responde em segundos, qualifica, marca a reunião e move o pipeline. <b>Sua equipe entra pra fechar.</b></p>
     <div class="ctas">
       <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Quero ver a Liz atendendo</a>
@@ -443,11 +443,11 @@ footer .base span{padding:0}
       <h2>Manda um áudio. <em>Ela marca, move e anota.</em></h2>
       <p class="lead">A Liz também atende a sua equipe, no mesmo WhatsApp. Reunião, lembrete, resultado: você fala como fala com gente, e o CRM fica em dia sozinho.</p>
       <p class="prova">Conversa real do dia 21/09, no WhatsApp da Kompila.</p>
-      <button type="button" class="btn quem" id="quemliz"><span class="av"><img src="tech/img/liz-avatar.webp" alt=""></span>Quem é a Liz?</button>
+      <button type="button" class="btn quem" id="quemliz"><span class="av"><img alt="" src="tech/img/liz-avatar.webp"></span>Quem é a Liz?</button>
     </div>
-    <div class="palco-zap"><img class="liz-fone" src="tech/img/liz-fone.webp" alt="" width="397" height="900">
+    <div class="palco-zap"><img alt="" class="liz-fone" src="tech/img/liz-fone.webp" width="397" height="900">
     <div class="zap" id="zap" aria-label="Conversa real entre o gestor e a Liz">
-      <div class="zt"><img src="tech/img/liz-avatar.webp" alt=""><div><b>Liz · Kompila</b><span>online</span></div></div>
+      <div class="zt"><img alt="" src="tech/img/liz-avatar.webp"><div><b>Liz · Kompila</b><span>online</span></div></div>
       <div class="zm"><div class="eu audio"><i></i><span>áudio · 0:06</span><small>18:13</small></div>
       <div class="eu">Oi Liz, tudo bem? Marca uma reunião comigo com o Manu às 8 horas hoje.<small>18:13</small></div>
       <div class="ela">Não consigo marcar hoje às 8h porque já passou. Qual outra data e hora?<small>18:13</small></div>
@@ -469,7 +469,7 @@ footer .base span{padding:0}
       <div class="ctas"><a class="btn dk" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20saber%20o%20plano%20pro%20meu%20caso."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Consultar com a Liz</a></div>
       <p class="nota">Ficou alguma dúvida? Uma call de 30 minutos com a equipe de produto, até as 21h.</p>
     </div>
-    <div class="preco-liz"><div class="pb"><b>Liz</b>Me conta o que a sua empresa faz. Eu te passo o valor na hora, sem enrolar.</div><img src="tech/img/liz-fala.webp" alt="" width="700" height="900" loading="lazy"></div>
+    <div class="preco-liz"><div class="pb"><b>Liz</b>Me conta o que a sua empresa faz. Eu te passo o valor na hora, sem enrolar.</div><img alt="" src="tech/img/liz-fala.webp" width="700" height="900" loading="lazy"></div>
   </div>
 </section>
 
@@ -502,7 +502,7 @@ footer .base span{padding:0}
   <div class="wrap grid2">
     <div><h2>Se chega lead no seu WhatsApp, <em>a Liz já tem trabalho.</em></h2><p class="lead">Manda um oi pra ela. Em segundos você vê como ela atende, e marca a reunião com a equipe se fizer sentido.</p>
       <div class="ctas"><a class="btn dk" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Falar com a Liz no WhatsApp</a></div></div>
-    <div class="palco-f"><img class="objf" src="tech/img/objeto-sem-fundo.webp" alt="" width="999" height="723" loading="lazy"><img class="lizf" src="tech/img/liz-oi.webp" alt="" width="436" height="640" loading="lazy"></div>
+    <div class="palco-f"><img alt="" class="objf" src="tech/img/objeto-sem-fundo.webp" width="999" height="723" loading="lazy"><img alt="" class="lizf" src="tech/img/liz-oi.webp" width="436" height="640" loading="lazy"></div>
   </div>
 </section>
 
@@ -574,7 +574,7 @@ footer .base span{padding:0}
 (function(){
   // feed que não para: um evento novo entra por cima a cada 2,2 s; os de baixo somem. Nomes de demonstração (os mesmos do site).
   var fita=document.getElementById('fita'); if(!fita)return;
-  var I={lead:'<svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>',liz:'<img src="tech/img/liz-avatar.webp" alt="">',cal:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',ok:'<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>',equipe:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',mic:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'};
+  var I={lead:'<svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>',liz:'<img alt="" src="tech/img/liz-avatar.webp">',cal:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',ok:'<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>',equipe:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',mic:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'};
   var E=[
     ['lead','','Marcos entrou pelo Google Ads','painel de LED pra fachada, 6 x 3'],
     ['liz','liz','Liz respondeu em 8 s','"Oi, Marcos. Fachada de loja ou de prédio?"'],
