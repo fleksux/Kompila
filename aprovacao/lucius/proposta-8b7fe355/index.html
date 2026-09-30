@@ -1,0 +1,357 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta name="robots" content="noindex, nofollow"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Proposta Kompila · Luciu's Lanches</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cb:#0A0B0E;--p1:#11151A;--p2:#171C22;--g3:#252C34;--g2:#5E6873;--g1:#949DA7;--ow:#E9EBEE;--pa:#F2F3EF;--vd:#2FD67B;--vdd:#12803F;--am:#FFB224;--vm:#FF6577}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:var(--ow);font-family:Inter,system-ui,sans-serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.slide{width:1600px;height:900px;background:var(--cb);position:absolute;transform-origin:center;display:none;padding:84px 110px;flex-direction:column;overflow:hidden}
+.slide.on{display:flex}
+.slide.pa{background:var(--pa);color:var(--cb)}
+.slide.vd{background:var(--vd);color:var(--cb)}
+.marca{position:absolute;right:110px;top:52px;font:600 24px "JetBrains Mono",monospace;color:var(--ow)}
+.marca b{color:var(--vd);font-weight:600}.marca i{font-style:normal;color:var(--am)}
+.pa .marca{color:var(--cb)}.pa .marca b{color:var(--vdd)}
+.vd .marca,.vd .marca b{color:var(--cb)}
+.rod{position:absolute;bottom:40px;right:110px;font:14px "JetBrains Mono",monospace;color:var(--g2)}
+.k{font:500 20px "JetBrains Mono",monospace;color:var(--vd);letter-spacing:.08em;text-transform:uppercase;margin-bottom:28px}
+.pa .k{color:var(--vdd)}.vd .k{color:var(--cb)}
+h1{font-size:112px;line-height:.98;margin:0 0 36px;letter-spacing:-.03em;font-weight:700}
+h2{font-size:56px;line-height:1.06;margin:0 0 40px;letter-spacing:-.02em;font-weight:700}
+p.lead{font-size:34px;line-height:1.35;color:var(--g1);margin:0;max-width:1100px}.pa p.lead{color:var(--g2)}
+.ct{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.big{font:600 150px/1 "JetBrains Mono",monospace;letter-spacing:-.04em;margin:0 0 36px}
+.big.txt{font-family:Inter;font-weight:700;font-size:124px;letter-spacing:-.035em;line-height:1}
+.big .c{color:var(--vd)}.pa .big .c{color:var(--vdd)}
+.liz{position:absolute;pointer-events:none}
+.fala{position:absolute;background:var(--ow);color:var(--cb);border-radius:18px;padding:22px 26px;font-size:24px;line-height:1.35;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.fala .t{font:600 13px "JetBrains Mono",monospace;letter-spacing:.1em;color:var(--vdd);margin-bottom:6px}
+.pa .fala{background:var(--cb);color:var(--ow)}.pa .fala .t{color:var(--vd)}
+/* pedidos dele */
+ol.tres{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+ol.tres li{background:#fff;border-top:6px solid var(--vdd);padding:40px 36px;min-height:330px;display:flex;flex-direction:column}
+ol.tres .n{font:600 72px/1 "JetBrains Mono",monospace;color:var(--vdd);margin-bottom:26px}
+ol.tres b{font-size:34px;line-height:1.2;letter-spacing:-.01em}ol.tres span{font-size:23px;color:var(--g2);margin-top:14px;line-height:1.45}
+/* duas portas */
+.portas{display:grid;grid-template-columns:1fr 160px 1fr;align-items:stretch;gap:0}.portas .seta{align-self:center}
+.porta{background:var(--p2);padding:40px;border-left:6px solid var(--vd);min-height:300px}
+.porta .t{font:600 18px "JetBrains Mono",monospace;letter-spacing:.1em;color:var(--vd);margin-bottom:20px}
+.porta b{display:block;font-size:40px;line-height:1.15;margin-bottom:16px}.porta span{font-size:24px;color:var(--g1);line-height:1.45}
+.seta{font:600 60px "JetBrains Mono",monospace;color:var(--vd);text-align:center}
+.cozinha{grid-column:1/-1;margin-top:34px;background:var(--vd);color:var(--cb);padding:30px 40px;display:flex;justify-content:space-between;align-items:center}
+.cozinha b{font-size:40px}.cozinha span{font:600 22px "JetBrains Mono",monospace;white-space:nowrap;margin-left:40px}
+/* whatsapp */
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.zap{background:#0B141A;border-radius:28px;padding:26px 24px;width:520px;justify-self:center;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.zap .top{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid #1f2c33;margin-bottom:18px;color:#E9EDEF;font-size:21px;font-weight:600}
+.zap .top img{width:44px;height:44px;border-radius:50%;background:#1f2c33;object-fit:cover;object-position:top}
+.zap .top small{display:block;font-size:14px;color:#8696A0;font-weight:400}
+.m{max-width:82%;padding:12px 16px;border-radius:12px;font-size:20px;line-height:1.4;margin-bottom:10px;color:#E9EDEF}
+.m.eu{background:#005C4B;margin-left:auto;border-top-right-radius:2px}.m.ela{background:#202C33;border-top-left-radius:2px}
+.lista{list-style:none;margin:0;padding:0}.lista li{display:grid;grid-template-columns:60px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--g3);font-size:28px;line-height:1.3}
+.pa .lista li{border-color:#d8dbd4}
+.lista li .n{font:600 26px "JetBrains Mono",monospace;color:var(--vd)}.pa .lista li .n{color:var(--vdd)}
+.lista li span{display:block;font-size:21px;color:var(--g1);margin-top:6px}.pa .lista li span{color:var(--g2)}
+/* mesas */
+.salao{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;width:680px}
+.mesa{aspect-ratio:1.25;border-radius:14px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;background:#fff;border:2px solid #d8dbd4}
+.mesa .nm{font:700 34px "JetBrains Mono",monospace}.mesa .st{font:600 14px "JetBrains Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--g2)}
+.mesa.oc{background:var(--cb);color:var(--ow);border-color:var(--cb)}.mesa.oc .st{color:var(--vd)}
+.mesa.ct2{background:var(--am);border-color:var(--am)}.mesa.ct2 .st{color:var(--cb)}
+.leg{display:flex;gap:28px;margin-top:22px;font:500 17px "JetBrains Mono",monospace;color:var(--g2)}
+.leg i{display:inline-block;width:16px;height:16px;border-radius:4px;vertical-align:-2px;margin-right:8px;border:2px solid #d8dbd4;background:#fff}
+.leg i.oc{background:var(--cb);border-color:var(--cb)}.leg i.ct2{background:var(--am);border-color:var(--am)}
+.ex{font:500 15px "JetBrains Mono",monospace;color:var(--g2);margin-top:14px}
+/* comandas */
+.comandas{margin:auto 0;display:flex;gap:40px;justify-content:center;align-items:stretch}
+.cup{display:flex;flex-direction:column;width:420px;clip-path:polygon(0 0,100% 0,100.000% calc(100% - 12px),97.619% 100%,95.238% calc(100% - 12px),92.857% 100%,90.476% calc(100% - 12px),88.095% 100%,85.714% calc(100% - 12px),83.333% 100%,80.952% calc(100% - 12px),78.571% 100%,76.190% calc(100% - 12px),73.810% 100%,71.429% calc(100% - 12px),69.048% 100%,66.667% calc(100% - 12px),64.286% 100%,61.905% calc(100% - 12px),59.524% 100%,57.143% calc(100% - 12px),54.762% 100%,52.381% calc(100% - 12px),50.000% 100%,47.619% calc(100% - 12px),45.238% 100%,42.857% calc(100% - 12px),40.476% 100%,38.095% calc(100% - 12px),35.714% 100%,33.333% calc(100% - 12px),30.952% 100%,28.571% calc(100% - 12px),26.190% 100%,23.810% calc(100% - 12px),21.429% 100%,19.048% calc(100% - 12px),16.667% 100%,14.286% calc(100% - 12px),11.905% 100%,9.524% calc(100% - 12px),7.143% 100%,4.762% calc(100% - 12px),2.381% 100%,0 calc(100% - 12px));padding-bottom:52px!important;background:#fff;color:#111;font-family:"JetBrains Mono",monospace;padding:34px 30px 40px;position:relative;font-size:23px;line-height:1.5}
+
+.cup .hd{text-align:center;font-size:15px;color:#555;border-bottom:2px dashed #999;padding-bottom:12px;margin-bottom:14px}
+.cup .dest{font-size:56px;font-weight:700;text-align:center;margin:6px 0 4px;letter-spacing:-.02em}
+.cup .sub{text-align:center;font-size:16px;margin-bottom:14px}
+.cup .it{border-top:2px dashed #999;padding-top:12px}.cup .it div{display:flex;gap:12px}.cup .obs{font-size:16px;margin-top:10px}.cup .it{margin-bottom:14px}
+.cup .ft{border-top:2px dashed #999;margin-top:auto;padding-top:10px;font-size:15px;color:#555;text-align:center}
+/* fluxo */
+.fluxo{display:grid;grid-template-columns:1fr 90px 1fr 90px 1fr;align-items:stretch}
+.fx{background:#fff;padding:36px 32px;border-top:6px solid var(--vdd)}.fx .t{font:600 16px "JetBrains Mono",monospace;letter-spacing:.1em;color:var(--vdd);margin-bottom:18px}
+.fx b{display:block;font-size:32px;line-height:1.2;margin-bottom:12px}.fx span{font-size:22px;color:var(--g2);line-height:1.45}
+.fl{display:flex;align-items:center;justify-content:center;font:600 50px "JetBrains Mono",monospace;color:var(--vdd)}
+/* etapas */
+.req{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:10px}
+.req div{background:var(--p2);padding:32px;border-left:5px solid var(--am)}.req b{display:block;font-size:30px;margin-bottom:12px}.req span{font-size:21px;color:var(--g1);line-height:1.45}
+/* notas */
+.notas{display:none;position:absolute;left:0;right:0;bottom:0;background:var(--ow);color:var(--cb);padding:24px 110px;font-size:22px;line-height:1.5;border-top:5px solid var(--vd);z-index:5}
+body.leitura .notas{display:block}
+#barra{position:fixed;left:24px;bottom:18px;display:flex;align-items:center;gap:10px;z-index:9;background:#11151A;border:1px solid #252C34;border-radius:999px;padding:8px 10px}
+#barra button{background:transparent;border:0;color:#E9EBEE;font:600 18px Inter,system-ui;width:44px;height:44px;border-radius:999px;cursor:pointer}#barra button:hover{background:#252C34}
+#barra #pos{font:14px "JetBrains Mono",monospace;color:#949DA7;min-width:70px;text-align:center}
+#barra #bnot{width:auto;padding:0 18px;border:1px solid #2FD67B;color:#2FD67B;font-size:15px;margin-left:6px}#barra #bnot.on,#barra #bnot:hover{background:#2FD67B;color:#0A0B0E}
+@media print{@page{size:1600px 900px;margin:0}html,body{background:var(--cb)}#deck{position:static;display:block}.slide{display:flex!important;position:relative;transform:none!important;page-break-after:always}#barra{display:none}}
+
+/* PROPOSTA LUCIU'S (30/09): capa no tema do cliente (#F75C21, #F8BF51, #171717), o resto no pitch aprovado */
+.capa{background:#171717!important;padding:0!important}
+.capa .foto{position:absolute;right:0;top:0;bottom:0;width:48%;background:url(img/lucius_lanche.jpg) center 35%/cover}
+.capa .foto::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#171717 0%,rgba(23,23,23,.55) 28%,rgba(23,23,23,0) 60%)}
+.capa .esq{position:relative;z-index:2;padding:70px 0 0 110px;width:52%;height:100%;display:flex;flex-direction:column}
+.capa .lg{height:250px;width:auto;align-self:flex-start;margin-left:-14px}
+.capa .kc{margin-top:34px;font:600 18px "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:#F8BF51}
+.capa h1{font-size:76px;margin:18px 0 22px;color:#fff}
+.capa h1 span{color:#F75C21}
+.capa .lead{font-size:26px;color:#B9B9B9;max-width:640px}
+.capa .pe{margin-top:auto;margin-bottom:58px;display:flex;align-items:center;gap:22px;font:600 20px "JetBrains Mono",monospace;color:#E9EBEE}
+.capa .pe b{color:var(--vd);font-weight:600}.capa .pe .x{color:#F75C21}.capa .pe small{font-weight:500;color:#8A8A8A;margin-left:14px;font-size:16px}
+.capa .faixa{position:absolute;left:0;right:0;bottom:0;height:10px;background:linear-gradient(90deg,#F75C21,#F8BF51)}
+.inv{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:1120px}
+.inv .b{background:#fff;padding:40px 42px;border-top:6px solid var(--vdd)}
+.inv .t{font:600 16px "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--g2)}
+.inv .v{font:600 70px/1 "JetBrains Mono",monospace;letter-spacing:-.03em;white-space:nowrap;margin:18px 0 18px;color:var(--cb)}
+.inv .v i{font-style:normal;color:var(--vdd)}.inv .v em{font:500 28px Inter;font-style:normal;color:var(--g2);letter-spacing:0}
+.inv p{margin:0;font-size:22px;line-height:1.45;color:var(--g2)}.inv p b{color:var(--cb)}.inv p+p{margin-top:12px}
+.cond2{display:flex;gap:40px;margin-top:30px;max-width:1150px;font-size:20px;color:var(--g2)}
+.cond2 div{flex:1;border-top:2px solid #d8dbd4;padding-top:14px}.cond2 b{display:block;color:var(--cb);font-size:21px;margin-bottom:4px}
+.foto-lado{position:absolute;right:0;top:0;bottom:0;width:34%;background-size:cover;background-position:center}
+.passos3{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1150px}
+.passos3 li{background:rgba(10,11,14,.1);padding:26px 28px;font-size:23px;line-height:1.4}
+.passos3 li b{display:block;font:600 40px "JetBrains Mono",monospace;margin-bottom:10px}
+</style></head><body>
+<div id="deck">
+
+<!-- 1 capa -->
+<section class="slide capa">
+<div class="foto"></div>
+<div class="esq">
+<img class="lg" src="img/LUCIUS_logo_vetor_branco.svg" alt="Luciu's Lanches">
+<div class="kc">Proposta · 30 de setembro de 2026</div>
+<h1>O pedido sai da conversa e cai na <span>cozinha</span>.</h1>
+<p class="lead">Salão, entrega e retirada no mesmo sistema. A comanda imprime sozinha.</p>
+<div class="pe"><b>[</b> kompila <b>]</b><span class="x">×</span>LUCIU'S LANCHES<small>para Jorge</small></div>
+</div>
+<img class="liz" src="img/liz_acena.png" style="right:3%;bottom:-30px;height:440px;z-index:3">
+<div class="faixa"></div>
+<div class="notas">Jorge, essa é a proposta do que a gente conversou pro Luciu's: o que a Kompila vai fazer, quanto custa e o que eu preciso de você pra começar.</div>
+</section>
+
+<!-- 2 o que ouvi -->
+<section class="slide pa">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="k">O que você me pediu</div>
+<h2>Três coisas. Uma cozinha só.</h2>
+<ol class="tres">
+<li><div class="n">01</div><b>O robô anota o pedido</b><span>O cliente pede no WhatsApp e o pedido entra no sistema, sem ninguém digitar de novo.</span></li>
+<li><div class="n">02</div><b>A comanda sai na impressora</b><span>Direto na impressora de nota da cozinha, escrito se é mesa ou entrega.</span></li>
+<li><div class="n">03</div><b>O salão sob controle</b><span>Cada mesa com o que pediu e em que pé está, no mesmo lugar do delivery.</span></li>
+</ol>
+</div>
+<div class="notas">Antes de mostrar qualquer coisa, deixa eu confirmar se eu entendi direito. Você me pediu três coisas: o robô registrar o pedido, a comanda sair na impressora da cozinha e controlar as mesas do salão. Tudo no mesmo sistema. É isso? (Espera ele responder. Se tiver uma quarta coisa, anota.)</div>
+</section>
+
+<!-- 3 afirmação -->
+<section class="slide">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="k">A ideia</div>
+<div class="big txt" style="max-width:1050px">Duas portas de entrada.<br><span class="c">Uma cozinha.</span></div>
+<p class="lead" style="max-width:950px">O pedido pode vir da mesa ou do WhatsApp. Pra cozinha, é só uma comanda com o destino escrito em cima.</p>
+</div>
+<img class="liz" src="img/liz_fala.png" style="right:70px;bottom:-40px;height:520px">
+<div class="notas">A ideia é simples: não importa de onde o pedido vem. Veio do salão, veio do WhatsApp, pra cozinha é a mesma comanda. O que muda é o que está escrito em cima: MESA 7 ou ENTREGA.</div>
+</section>
+
+<!-- 4 duas portas -->
+<section class="slide">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="k">Como funciona</div>
+<div class="portas">
+<div class="porta"><div class="t">SALÃO</div><b>O garçom lança pelo celular</b><span>Ou o cliente lê o QR code da mesa e pede pelo WhatsApp, com o número da mesa já junto.</span></div>
+<div class="seta">→</div>
+<div class="porta"><div class="t">DELIVERY</div><b>A Liz atende no WhatsApp</b><span>Anota os itens, confere com o seu cardápio, pega nome e endereço e confirma com o cliente.</span></div>
+<div class="cozinha"><b>Tudo cai no mesmo sistema e sai na cozinha</b><span>MESA 7 · ENTREGA</span></div>
+</div>
+</div>
+<div class="notas">No salão, o garçom lança o pedido pelo celular. Se você quiser, dá pra ter um QR code em cada mesa: o cliente lê, abre o WhatsApp e já vai com o número da mesa. No delivery, quem atende é a Liz, a nossa IA. As duas portas caem no mesmo lugar e saem na mesma impressora.</div>
+</section>
+
+<!-- 5 delivery -->
+<section class="slide pa">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="dois">
+<div class="zap">
+<div class="top"><img src="img/liz_acena.png" alt=""><div>Liz<small>pedido pelo WhatsApp</small></div></div>
+<div class="m eu">Boa noite, quero 1 parmegiana e 1 refri 2 litros</div>
+<div class="m ela">Boa noite! Anotei: 1 parmegiana e 1 refrigerante 2 L. Qual o sabor do refri?</div>
+<div class="m eu">Guaraná</div>
+<div class="m ela">Fechado. Me passa o endereço de entrega?</div>
+<div class="m eu">Rua das Flores, 120, ap 32</div>
+<div class="m ela">Confirmado. Seu pedido já foi pra cozinha. Te aviso quando sair pra entrega.</div>
+</div>
+<div>
+<div class="k">Delivery</div>
+<h2>A Liz anota, confere e manda pra cozinha.</h2>
+<ul class="lista">
+<li><span class="n">01</span><div>Só vende o que está no cardápio<span>Item que não existe, ela avisa e oferece o que tem.</span></div></li>
+<li><span class="n">02</span><div>O preço sai do cardápio, não da IA<span>A conta é feita pelo sistema. A IA nunca inventa valor.</span></div></li>
+<li><span class="n">03</span><div>Confirma antes de mandar<span>Só vai pra cozinha depois do "confirmado".</span></div></li>
+</ul>
+<p class="ex">Conversa de exemplo. Os itens serão os do seu cardápio.</p>
+</div>
+</div>
+</div>
+<div class="notas">Isso aqui é um exemplo, os itens vão ser os do seu cardápio. O ponto importante: a Liz só vende o que está cadastrado, e o preço quem calcula é o sistema, não a IA. Ela nunca inventa valor. E só manda pra cozinha depois que o cliente confirma.</div>
+</section>
+
+<!-- 6 mesas -->
+<section class="slide pa">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="dois" style="grid-template-columns:auto 1fr">
+<div>
+<div class="salao">
+<div class="mesa oc"><span class="nm">01</span><span class="st">ocupada · 3 itens</span></div>
+<div class="mesa"><span class="nm">02</span><span class="st">livre</span></div>
+<div class="mesa ct2"><span class="nm">03</span><span class="st">pediu a conta</span></div>
+<div class="mesa"><span class="nm">04</span><span class="st">livre</span></div>
+<div class="mesa oc"><span class="nm">05</span><span class="st">ocupada · 5 itens</span></div>
+<div class="mesa oc"><span class="nm">06</span><span class="st">ocupada · 2 itens</span></div>
+<div class="mesa"><span class="nm">07</span><span class="st">livre</span></div>
+<div class="mesa oc"><span class="nm">08</span><span class="st">ocupada · 4 itens</span></div>
+</div>
+<div class="leg"><span><i></i>livre</span><span><i class="oc"></i>ocupada</span><span><i class="ct2"></i>pediu a conta</span></div>
+<p class="ex">Mapa de exemplo. O seu vai ter as suas mesas.</p>
+</div>
+<div>
+<div class="k">Salão</div>
+<h2>Você olha e sabe como está o salão.</h2>
+<ul class="lista">
+<li><span class="n">01</span><div>Cada mesa com o que já pediu<span>Tocou na mesa, vê os itens e o total até agora.</span></div></li>
+<li><span class="n">02</span><div>Pediu mais? Nova comanda<span>Só o que foi acrescentado sai na cozinha.</span></div></li>
+<li><span class="n">03</span><div>Fechou a conta, a mesa libera<span>E o dia fica registrado: mesas, pedidos, total.</span></div></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="notas">Aqui é o salão. Cada quadrado é uma mesa: livre, ocupada ou pedindo a conta. Tocou na mesa, você vê o que ela já pediu e quanto está dando. Se pedir mais uma bebida, sai uma comanda só com a bebida. Fechou a conta, a mesa volta a ficar livre. Esse mapa é exemplo, o seu vai ter o desenho do seu salão.</div>
+</section>
+
+<!-- 7 comandas -->
+<section class="slide">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="k">A comanda na cozinha</div>
+<h2 style="margin-bottom:34px">A cozinha só precisa ler a primeira linha.</h2>
+<div class="comandas">
+<div class="cup"><div class="hd">COZINHA · PEDIDO 0142 · 20:14</div><div class="dest">MESA 07</div><div class="sub">garçom: Ana</div>
+<div class="it"><div><b>1x</b> Parmegiana</div><div><b>2x</b> Arroz branco</div><div><b>1x</b> Suco de laranja</div><div class="obs">OBS: parmegiana sem cebola</div></div>
+<div class="ft">salão</div></div>
+<div class="cup"><div class="hd">COZINHA · PEDIDO 0143 · 20:16</div><div class="dest">ENTREGA</div><div class="sub">Carla · Rua das Flores, 120 ap 32</div>
+<div class="it"><div><b>1x</b> Parmegiana</div><div><b>1x</b> Refri 2 L guaraná</div><div class="obs">OBS: sem observação</div></div>
+<div class="ft">pedido pelo WhatsApp · Liz</div></div>
+<div class="cup"><div class="hd">COZINHA · PEDIDO 0144 · 20:19</div><div class="dest">RETIRADA</div><div class="sub">Marcos · retira às 20:45</div>
+<div class="it"><div><b>2x</b> Parmegiana</div><div><b>1x</b> Arroz branco</div><div class="obs">OBS: embalar pra viagem</div></div>
+<div class="ft">pedido pelo WhatsApp · Liz</div></div>
+</div>
+<div class="notas">É isso que sai na impressora. Em cima, bem grande, o destino: MESA 07, ENTREGA ou RETIRADA. Na retirada vai o nome de quem busca e o horário que ele combinou com a Liz. Embaixo os itens e a observação. O cozinheiro não precisa perguntar nada pra ninguém. O modelo é exemplo; a gente ajusta o que aparece do jeito que a sua cozinha trabalha.</div>
+</section>
+
+<!-- 8 impressão -->
+<section class="slide pa">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="k">Impressão</div>
+<h2>Ninguém clica em imprimir.</h2>
+<div class="fluxo">
+<div class="fx"><div class="t">01 · SISTEMA</div><b>O pedido é confirmado</b><span>Pela Liz no WhatsApp ou pelo garçom no salão.</span></div>
+<div class="fl">→</div>
+<div class="fx"><div class="t">02 · NO RESTAURANTE</div><b>Um programa no computador do caixa</b><span>Fica ligado, recebe o pedido na hora.</span></div>
+<div class="fl">→</div>
+<div class="fx"><div class="t">03 · COZINHA</div><b>A impressora térmica solta a comanda</b><span>A mesma impressora de nota que você já usa, se for térmica.</span></div>
+</div>
+</div>
+<div class="notas">A impressão é automática. Fica um programinha rodando no computador do caixa, ligado na impressora. Confirmou o pedido, ele imprime. Uma pergunta pra você: qual é a marca e o modelo da sua impressora de nota? Se for térmica, que é a comum em restaurante, a gente usa ela mesmo.</div>
+</section>
+
+<!-- 9 nota fiscal -->
+<section class="slide">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="k">Etapa 2 · nota fiscal</div>
+<h2>Depois, a nota fiscal sai pelo mesmo sistema.</h2>
+<p class="lead" style="margin-bottom:40px">Fechou a conta ou o delivery, o sistema emite a NFC-e por API e a impressora solta o cupom com o QR code.</p>
+<div class="req">
+<div><b>Certificado digital A1</b><span>Do CNPJ do restaurante.</span></div>
+<div><b>Código CSC</b><span>Gerado por você no site da Secretaria da Fazenda do estado.</span></div>
+<div><b>Seu contador</b><span>Passa os dados fiscais de cada item do cardápio. Nisso a gente não mexe.</span></div>
+</div>
+</div>
+<div class="notas">A nota fiscal eu separei de propósito. Dá pra fazer, sai pelo mesmo sistema, mas depende de três coisas suas: o certificado digital, um código que você gera na Fazenda e o seu contador passando os dados fiscais do cardápio. Minha sugestão: primeiro a gente põe o pedido, a comanda e as mesas pra rodar. Depois liga a nota por cima.</div>
+</section>
+
+<!-- 9b investimento -->
+<section class="slide pa">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="k">Investimento</div>
+<h2>Quanto custa.</h2>
+<div class="inv">
+<div class="b"><div class="t">Implantação · uma vez</div><div class="v"><i>[</i> R$ 5.000 <i>]</i></div>
+<p>Cardápio no sistema, a Liz, o mapa de mesas e a impressão na cozinha, tudo testado no restaurante.</p>
+<p><b>Pix à vista ou cartão em até 6x.</b> As taxas do parcelamento são da operadora e ficam por conta de quem paga.</p></div>
+<div class="b"><div class="t">Mensalidade</div><div class="v"><i>[</i> R$ 578 <i>]</i> <em>/mês</em></div>
+<p>Sistema no ar, a Liz atendendo e o suporte da Kompila.</p>
+<p><b>Primeira mensalidade em 28/02/2027.</b> Até lá, 5 meses sem mensalidade. Pix ou boleto.</p></div>
+</div>
+<div class="cond2"><div><b>WhatsApp oficial</b>O custo das conversas cobrado pela Meta vai direto no cartão do restaurante.</div><div><b>Equipamento</b>A impressora térmica e o computador do caixa são do restaurante.</div><div><b>Nota fiscal</b>Fica pra etapa 2, com orçamento à parte.</div></div>
+</div>
+<img class="liz" src="img/liz_aponta.png" style="right:40px;bottom:-30px;height:430px;transform:scaleX(-1)">
+<div class="notas">Implantação de cinco mil, à vista no Pix ou em até seis vezes no cartão. Mensalidade de quinhentos e setenta e oito, e a primeira só em fevereiro: cinco meses sem pagar mensalidade.</div>
+</section>
+
+<!-- 10 o que preciso -->
+<section class="slide pa">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct">
+<div class="k">Pra começar</div>
+<h2>O que eu preciso de você.</h2>
+<ul class="lista" style="max-width:1100px">
+<li><span class="n">01</span><div>Cardápio com preço<span>Itens, variações (tamanho, sabor) e adicionais.</span></div></li>
+<li><span class="n">02</span><div>Marca e modelo da impressora<span>E se ela liga por cabo de rede ou USB.</span></div></li>
+<li><span class="n">03</span><div>Quantas mesas e como o salão é dividido<span>Pra desenhar o seu mapa.</span></div></li>
+<li><span class="n">04</span><div>O WhatsApp do restaurante e o horário<span>O número onde a Liz vai atender e a área de entrega.</span></div></li>
+</ul>
+</div>
+<img class="liz" src="img/liz_aponta.png" style="right:40px;bottom:-30px;height:520px;transform:scaleX(-1)">
+<div class="notas">Pra começar eu preciso de quatro coisas: o cardápio com preço, o modelo da impressora, quantas mesas você tem e o WhatsApp do restaurante com o horário e a área de entrega. Com isso eu monto e te mostro funcionando.</div>
+</section>
+
+<!-- 11 fechamento -->
+<section class="slide vd">
+<div class="marca"><b>[</b> kompila <b>]</b></div>
+<div class="ct" style="max-width:1080px">
+<div class="k">Próximo passo</div>
+<div class="big txt" style="font-size:92px">Você me manda o cardápio. Eu te mostro a comanda saindo.</div>
+<ol class="passos3">
+<li><b>01</b>Você aprova esta proposta.</li>
+<li><b>02</b>Eu te mando o link de pagamento e o link dos dados do contrato.</li>
+<li><b>03</b>Com o cardápio e a impressora, eu te mostro um pedido saindo na comanda.</li>
+</ol>
+</div>
+<img class="liz" src="img/liz_acena.png" style="right:60px;bottom:-30px;height:560px">
+<div class="notas">Aprovou, eu te mando o link de pagamento e o link pra preencher os dados do contrato. Você me manda o cardápio e o modelo da impressora, e eu te mostro um pedido saindo na comanda.</div>
+</section>
+
+
+
+</div>
+<div id="barra"><button id="bant" aria-label="Anterior">←</button><span id="pos">1 / 12</span><button id="bprox" aria-label="Próximo">→</button><button id="bnot">Roteiro</button></div>
+<script>
+const S=[...document.querySelectorAll('.slide')];let i=0;
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);S.forEach(x=>x.style.transform='scale('+s+')')}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));S.forEach((x,k)=>x.classList.toggle('on',k===i));document.getElementById('pos').textContent=(i+1)+' / '+S.length;try{history.replaceState(null,'','#'+(i+1))}catch(e){}}
+document.getElementById('bant').onclick=()=>go(i-1);document.getElementById('bprox').onclick=()=>go(i+1);
+document.getElementById('bnot').onclick=e=>{document.body.classList.toggle('leitura');e.currentTarget.classList.toggle('on')};
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key))go(i+1);if(['ArrowLeft','PageUp'].includes(e.key))go(i-1);if(e.key==='r'||e.key==='R')document.getElementById('bnot').click()});
+addEventListener('resize',fit);fit();go((parseInt(location.hash.slice(1))||1)-1);
+</script>
+</body></html>
