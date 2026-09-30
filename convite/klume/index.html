@@ -60,7 +60,14 @@ h1{font-weight:900;font-size:clamp(40px,6.4vw,92px);line-height:.95;letter-spaci
 h1 em{font-style:normal;color:var(--laranja);text-shadow:0 0 38px rgba(255,80,1,.55)}
 .msg{margin-top:26px;font-size:clamp(15px,1.3vw,18px);line-height:1.6;color:#d6d6d6;max-width:560px;border-left:2px solid var(--laranja);padding-left:18px}
 
-.dados{margin-top:40px;display:grid;grid-template-columns:repeat(3,auto);gap:0;max-width:720px;border-top:1px solid rgba(255,255,255,.14)}
+.agenda{margin-top:34px;max-width:640px}
+.agenda__rot{font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--cinza);margin-bottom:14px}
+.palestra{position:relative;display:grid;grid-template-columns:86px 1fr;gap:18px;align-items:start;padding:16px 18px;margin-top:10px;border-radius:12px;
+  background:linear-gradient(90deg,rgba(255,80,1,.14),rgba(255,255,255,.02) 60%);border:1px solid rgba(255,80,1,.28);box-shadow:0 0 30px -12px rgba(255,80,1,.6)}
+.palestra time{font:600 20px 'JetBrains Mono',monospace;color:var(--laranja);text-shadow:0 0 16px rgba(255,80,1,.7);line-height:1.2}
+.palestra b{display:block;font-weight:800;font-size:clamp(14px,1.3vw,17px);text-transform:uppercase;color:#fff;line-height:1.25}
+.palestra span{display:block;margin-top:4px;font-size:14px;color:var(--cinza);line-height:1.4}
+.dados{margin-top:30px;display:grid;grid-template-columns:repeat(2,auto);gap:0;max-width:720px;border-top:1px solid rgba(255,255,255,.14)}
 .dado{padding:18px 28px 0 0}
 .dado + .dado{padding-left:28px;border-left:1px solid rgba(255,255,255,.14)}
 .dado small{display:block;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--cinza);margin-bottom:6px}
@@ -116,6 +123,7 @@ footer .regua{flex:1;min-width:60px;height:1px;align-self:center;background:line
   h1{font-size:42px}
   .msg{margin-top:20px}.dados{margin-top:28px}.cta{margin-top:28px}
   .dados{grid-template-columns:1fr;border-top:0}
+  .palestra{grid-template-columns:1fr;gap:6px}
   .dado,.dado + .dado{padding:14px 0;border-left:0;border-top:1px solid rgba(255,255,255,.14)}
   .btn{width:100%;justify-content:center}
   .parc{grid-template-columns:1fr;gap:28px}
@@ -138,22 +146,26 @@ footer .regua{flex:1;min-width:60px;height:1px;align-self:center;background:line
   </header>
 
   <div class="hero__body">
-    <div class="eyebrow in d1" data-f="rotulo">Você foi convidado</div>
+    <div class="eyebrow in d1" data-f="rotulo">Patrocinadora master</div>
     <p class="saud in d2">Olá, <b data-f="nome">convidado</b>.</p>
     <h1 class="in d3" data-f="titulo_html">#ABX<em>26</em></h1>
     <p class="sub in d3">Automotive Business Experience</p>
-    <p class="msg in d4" data-f="mensagem">A K.LUME convida você para o #ABX26: todo o ecossistema de negócios do setor automotivo e da mobilidade em um só lugar.</p>
+    <p class="msg in d4" data-f="mensagem">A K.LUME é a patrocinadora master do ABX26.</p>
+
+    <div class="agenda in d5">
+      <p class="agenda__rot">E estaremos presentes:</p>
+      <div class="palestra"><time>15h10</time><div><b>Mercado dos veículos chineses no Brasil e no mundo</b><span>O novo centro de poder da indústria automobilística</span></div></div>
+      <div class="palestra"><time>15h50</time><div><b>K.LUME ONE by AIDDA</b><span>Inteligência Integrada do Mercado Automobilístico</span></div></div>
+    </div>
 
     <div class="dados in d5">
-      <div class="dado"><small>Data</small><span data-f="data">01/10/2026</span></div>
-      <div class="dado"><small>Horário</small><span data-f="horario">8h às 18h</span></div>
-      <div class="dado"><small>Local</small><span data-f="local">São Paulo Expo</span></div>
+      <div class="dado"><small>Data</small><span data-f="data">1º de outubro de 2026</span></div>
+      <div class="dado"><small>Local</small><span data-f="local">São Paulo Expo | São Paulo</span></div>
     </div>
 
     <div class="cta in d5">
-      <a class="btn" data-href="link_inscricao" href="https://lets.4.events/abx26-C24668E4" target="_blank" rel="noopener">Fazer minha inscrição
+      <a class="btn" data-href="link_inscricao" href="https://lets.4.events/abx26-C24668E4" target="_blank" rel="noopener">Garanta sua inscrição
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <p data-f="vagas">13 arenas · 200+ palestrantes · 4 mil profissionais</p>
     </div>
   </div>
   <div class="seta"></div>
@@ -183,7 +195,7 @@ footer .regua{flex:1;min-width:60px;height:1px;align-self:center;background:line
 const q = new URLSearchParams(location.search);
 const nome = (q.get('n') || '').trim();
 const msg = (q.get('m') || '').trim();
-if (nome) document.querySelectorAll('[data-f="nome"]').forEach(el => el.textContent = nome.split(' ')[0]);
+if (nome) document.querySelectorAll('[data-f="nome"]').forEach(el => el.textContent = nome);
 if (msg) document.querySelectorAll('[data-f="mensagem"]').forEach(el => el.textContent = msg);
 if (nome) document.title = nome.split(' ')[0] + ', você foi convidado · K.LUME';
 </script>
