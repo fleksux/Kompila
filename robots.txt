@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /aprovacao/
 
 Sitemap: https://kompila.com.br/sitemap.xml
-
-Disallow: /aprovacao/
