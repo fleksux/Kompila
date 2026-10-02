@@ -17,9 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://kompila.com.br/#org", "name": "Kompila", "url": "https://kompila.com.br/", "logo": "https://kompila.com.br/favicon.ico", "contactPoint": {"@type": "ContactPoint", "telephone": "+55-11-96288-4399", "contactType": "sales", "areaServed": "BR", "availableLanguage": "Portuguese"}}, {"@type": "WebSite", "@id": "https://kompila.com.br/#site", "url": "https://kompila.com.br/", "name": "Kompila", "inLanguage": "pt-BR", "publisher": {"@id": "https://kompila.com.br/#org"}}, {"@type": "SoftwareApplication", "name": "Kompila · Liz, IA de atendimento com CRM", "applicationCategory": "BusinessApplication", "operatingSystem": "Web, WhatsApp", "offers": [{"@type": "Offer", "price": "278", "priceCurrency": "BRL", "description": "Plano anual, com fidelidade, por mês"}, {"@type": "Offer", "price": "378", "priceCurrency": "BRL", "description": "Plano mensal, sem fidelidade"}], "publisher": {"@id": "https://kompila.com.br/#org"}}]}</script>
 <script>
-(function(){try{var q=new URLSearchParams(location.search),f=q.get('ab');if(f){localStorage.setItem('kmp_ab',f==='humana'?'humana':'tech');if(f==='humana'){location.replace('/humana/?ab=humana');return}}
-var v=localStorage.getItem('kmp_ab');if(!v){v=Math.random()<.5?'humana':'tech';localStorage.setItem('kmp_ab',v)}
-if(v==='humana'&&!/[?&]ab=tech/.test(location.search)){location.replace('/humana/?ab=humana')}}catch(e){}})();
+/* 02/10: o teste A/B (metade pra /humana/) era da home antiga; aqui é a página do CRM, sem redirecionar */
 </script>
 
 <style>
@@ -353,7 +351,7 @@ footer .base span{padding:0}
 <body>
 
 <nav><div class="wrap">
-  <a class="logo" href=""><b>[ </b>kompila<b> ]</b></a>
+  <a class="logo" href="../"><b>[ </b>kompila<b> ]</b></a>
   <div class="links"><a href="#como">Como funciona</a><a href="#liz">A Liz</a><a href="#crm">O CRM</a><a href="#preco">Planos</a><a href="#perguntas">Perguntas</a></div>
   <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende.">Falar com a Liz</a>
 </div></nav>
@@ -361,7 +359,7 @@ footer .base span{padding:0}
 <section class="story" id="topo" aria-label="A Liz sai do celular">
   <div class="fixa">
     <canvas id="tela" width="1280" height="720" aria-hidden="true"></canvas>
-    <img class="poster" src="../tech/img/q_poster.webp" data-m="tech/img/q9_poster.webp" alt="A Liz, robô da Kompila, em cima de uma mesa ao lado de um celular; ao fundo, o pipeline do CRM" width="1280" height="720">
+    <img class="poster" src="../tech/img/q_poster.webp" data-m="../tech/img/q9_poster.webp" alt="A Liz, robô da Kompila, em cima de uma mesa ao lado de um celular; ao fundo, o pipeline do CRM" width="1280" height="720">
     <div class="veu"></div>
     <div class="wrap txt">
       <div class="kicker"><i></i><span>IA de atendimento + CRM · WhatsApp oficial</span></div>
@@ -381,7 +379,7 @@ footer .base span{padding:0}
 
 <section class="hero-m" aria-label="Chamada">
   <div class="wrap">
-    <div class="hv"><video autoplay muted loop playsinline preload="metadata" poster="video/liz-responde-m.webp" aria-label="A Liz em cima da mesa respondendo leads no celular enquanto a dona da loja trabalha"><source src="../video/liz-responde-m.mp4" type="video/mp4"></video><button type="button" class="som" data-som aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="w" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><span>ouvir</span></button></div>
+    <div class="hv"><video autoplay muted loop playsinline preload="metadata" poster="../video/liz-responde-m.webp" aria-label="A Liz em cima da mesa respondendo leads no celular enquanto a dona da loja trabalha"><source src="../video/liz-responde-m.mp4" type="video/mp4"></video><button type="button" class="som" data-som aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="w" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><span>ouvir</span></button></div>
     <div class="kicker"><i></i><span>IA + CRM · WhatsApp oficial</span></div>
     <div class="h1m" role="heading" aria-level="1">Se chega lead no seu WhatsApp, <em>a&nbsp;Liz já tem trabalho.</em></div>
     <p class="lead">Ela responde em segundos, qualifica, marca a reunião e move o pipeline. <b>Sua equipe entra pra fechar.</b></p>
@@ -542,7 +540,7 @@ footer .base span{padding:0}
   var story=document.querySelector('.story'),fixa=story.querySelector('.fixa'),cv=document.getElementById('tela'),cx=cv.getContext('2d');
   var N=121,quadros=new Array(N),atual=-1,pedido=0,raf=0;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  var PASTA=(innerWidth<=900&&innerHeight>innerWidth)?'tech/img/q9/':'tech/img/q/';
+  var PASTA=(innerWidth<=900&&innerHeight>innerWidth)?'../tech/img/q9/':'../tech/img/q/';
   function src(i){return PASTA+String(i+1).padStart(3,'0')+'.webp'}
   function carrega(i,cb){if(quadros[i])return cb&&cb();var im=new Image();im.onload=function(){quadros[i]=im;cb&&cb()};im.onerror=function(){cb&&cb()};im.src=src(i)}
   function desenha(i){var im=quadros[i];if(!im){for(var k=i;k>=0;k--){if(quadros[k]){im=quadros[k];break}}}if(!im)return;
