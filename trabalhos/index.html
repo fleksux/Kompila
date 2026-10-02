@@ -211,6 +211,11 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 .it .play::after{content:"";width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.92) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7l9 5-9 5z' fill='%230A0B0E'/%3E%3C/svg%3E") center/28px no-repeat;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .it.tocando .play{display:none}
 .it.some{display:none}
+.grade-trab{columns:unset;display:grid;grid-template-columns:repeat(2,1fr);gap:22px;padding:20px 0 40px}
+.grade-trab.vids{grid-template-columns:repeat(3,1fr)}
+.it{margin:0}
+.sec{font-size:clamp(26px,3vw,40px);font-weight:800;margin:40px 0 0}
+@media(max-width:800px){.grade-trab,.grade-trab.vids{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -258,44 +263,64 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
   <div class="box">
     <div class="regua"><span class="ri"><svg><use href="#i-pincel"/></svg></span><span>trabalhos</span></div>
     <h1>O que a gente já <span class="mk">criou.</span></h1>
-    <p class="sub">Vídeos, embalagens, marcas, Instagram, sites e lojas feitos pra empresas reais.</p>
-    <div class="filtros"><button class="f on" data-c="todos">Todos <i>32</i></button><button class="f" data-c="videos">Vídeos <i>6</i></button><button class="f" data-c="embalagens">Embalagens <i>6</i></button><button class="f" data-c="marca">Marca e logo <i>9</i></button><button class="f" data-c="instagram">Instagram <i>5</i></button><button class="f" data-c="sites">Sites <i>2</i></button><button class="f" data-c="lojas">Lojas <i>2</i></button><button class="f" data-c="impressos">Impressos <i>2</i></button></div>
+    <p class="sub">Marcas, embalagens, sites, sistemas, campanhas e vídeos feitos pra empresas reais.</p>
+    <div class="filtros"><button class="f on" data-c="todos">Todos <i>49</i></button><button class="f" data-c="pranchas">Projetos <i>37</i></button><button class="f" data-c="videos">Vídeos <i>12</i></button></div>
   </div>
 </section>
 <section>
   <div class="box"><div class="grade-trab">
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/01_maeda_site.webp" alt="Maeda Gastronomia: Site e marca" loading="lazy"></div><figcaption><b>Maeda Gastronomia</b><span>Site e marca</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/02_p1led_marca.webp" alt="P1LED: Identidade de marca" loading="lazy"></div><figcaption><b>P1LED</b><span>Identidade de marca</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/03_p1led_embalagens.webp" alt="P1LED: Embalagens VX e BX" loading="lazy"></div><figcaption><b>P1LED</b><span>Embalagens VX e BX</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/04_p1led_app.webp" alt="P1LED: App P1Play, animação" loading="lazy"></div><figcaption><b>P1LED</b><span>App P1Play, animação</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/05_p1led_insta.webp" alt="P1LED: Instagram" loading="lazy"></div><figcaption><b>P1LED</b><span>Instagram</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/06_p1led_comercial.webp" alt="P1LED: Material comercial" loading="lazy"></div><figcaption><b>P1LED</b><span>Material comercial</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/07_p1led_site_copiloto.webp" alt="P1LED: Site e sistema Copiloto" loading="lazy"></div><figcaption><b>P1LED</b><span>Site e sistema Copiloto</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/08_p1led_filme.webp" alt="P1LED: Filme Fim de Semana" loading="lazy"></div><figcaption><b>P1LED</b><span>Filme Fim de Semana</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/09_kompila_social.webp" alt="Kompila: Campanha" loading="lazy"></div><figcaption><b>Kompila</b><span>Campanha</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/09b_logotipos_1.webp" alt="Logotipos: Brand design" loading="lazy"></div><figcaption><b>Logotipos</b><span>Brand design</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/09c_logotipos_2.webp" alt="Logotipos: Brand design" loading="lazy"></div><figcaption><b>Logotipos</b><span>Brand design</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/10_aut_diesel_bact.webp" alt="AUT: Diesel Fuel Bact, embalagem" loading="lazy"></div><figcaption><b>AUT</b><span>Diesel Fuel Bact, embalagem</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/10a_bagy.webp" alt="bagy: Branding" loading="lazy"></div><figcaption><b>bagy</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/11_foryuu.webp" alt="Foryuu: Marca e embalagem" loading="lazy"></div><figcaption><b>Foryuu</b><span>Marca e embalagem</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/11a_next-level-run.webp" alt="Next Level .Run: Branding" loading="lazy"></div><figcaption><b>Next Level .Run</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/12_maslu.webp" alt="Maslu Select: Marca e loja" loading="lazy"></div><figcaption><b>Maslu Select</b><span>Marca e loja</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/12a_caixa-do-bem.webp" alt="Caixa do Bem: Branding" loading="lazy"></div><figcaption><b>Caixa do Bem</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/13_burnpixel.webp" alt="BurnPixel: Marca" loading="lazy"></div><figcaption><b>BurnPixel</b><span>Marca</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/13a_contingencia-social.webp" alt="Contingência Social: Branding" loading="lazy"></div><figcaption><b>Contingência Social</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/14_lechic.webp" alt="Le Chic: Marca e embalagem" loading="lazy"></div><figcaption><b>Le Chic</b><span>Marca e embalagem</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/14a_squad.webp" alt="Squad: Branding" loading="lazy"></div><figcaption><b>Squad</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/15_neosushi.webp" alt="Neo Tokyo: Marca e cardápio" loading="lazy"></div><figcaption><b>Neo Tokyo</b><span>Marca e cardápio</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/15a_netfly.webp" alt="Netfly: Branding" loading="lazy"></div><figcaption><b>Netfly</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/16_soul.webp" alt="Soul Synergy: Marca e manual" loading="lazy"></div><figcaption><b>Soul Synergy</b><span>Marca e manual</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/16a_ngx.webp" alt="Grupo ngx: Branding" loading="lazy"></div><figcaption><b>Grupo ngx</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/17_aut_dskarb.webp" alt="AUT: Dskarb, embalagem e evento" loading="lazy"></div><figcaption><b>AUT</b><span>Dskarb, embalagem e evento</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/17a_ame-remocoes.webp" alt="ame remoções: Branding" loading="lazy"></div><figcaption><b>ame remoções</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/18_aut_sparta_dot4.webp" alt="AUT: Sparta e Dot 4" loading="lazy"></div><figcaption><b>AUT</b><span>Sparta e Dot 4</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/18a_azure.webp" alt="Azure: Branding" loading="lazy"></div><figcaption><b>Azure</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/19_coleve.webp" alt="Coleve: Marca" loading="lazy"></div><figcaption><b>Coleve</b><span>Marca</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/19a_uni-sushi.webp" alt="UNI Premium Sushi: Branding" loading="lazy"></div><figcaption><b>UNI Premium Sushi</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/20_guiche.webp" alt="Guichê Online: Marca" loading="lazy"></div><figcaption><b>Guichê Online</b><span>Marca</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/20a_nudes-club.webp" alt="Nudes.club: Branding" loading="lazy"></div><figcaption><b>Nudes.club</b><span>Branding</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/21_audacia.webp" alt="Audácia Digital: Marca" loading="lazy"></div><figcaption><b>Audácia Digital</b><span>Marca</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/22_hydrocore.webp" alt="Hydrocore: Marca" loading="lazy"></div><figcaption><b>Hydrocore</b><span>Marca</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/23_lucius.webp" alt="Luciu's Lanches: Pedido no WhatsApp" loading="lazy"></div><figcaption><b>Luciu's Lanches</b><span>Pedido no WhatsApp</span></figcaption></figure>
+    <figure class="it pr" data-c="pranchas"><div class="m"><img src="pranchas/24_klume_convite.webp" alt="K.LUME: Convite ABX26" loading="lazy"></div><figcaption><b>K.LUME</b><span>Convite ABX26</span></figcaption></figure>
+  </div>
+  <h2 class="sec">Vídeos</h2>
+  <div class="grade-trab vids">
     <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-fim-de-semana.mp4" poster="img/p1led-fim-de-semana.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>Filme de fim de semana</span></figcaption></figure>
-    <figure class="it" data-c="embalagens"><div class="m"><img src="img/aut-bact-cena.webp" alt="AUT: Diesel Fuel Bact, apresentação do frasco" loading="lazy"></div><figcaption><b>AUT</b><span>Diesel Fuel Bact, apresentação do frasco</span></figcaption></figure>
     <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-renatinha.mp4" poster="img/p1led-renatinha.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>Renatinha, campanha</span></figcaption></figure>
-    <figure class="it" data-c="impressos"><div class="m"><img src="img/klume-convite.webp" alt="K.LUME: Convite do ABX26" loading="lazy"></div><figcaption><b>K.LUME</b><span>Convite do ABX26</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/foryuu.webp" alt="Foryuu: Marca e embalagem" loading="lazy"></div><figcaption><b>Foryuu</b><span>Marca e embalagem</span></figcaption></figure>
-    <figure class="it" data-c="embalagens"><div class="m"><img src="img/boostcaps.webp" alt="BoostCaps: Rótulo e caixa" loading="lazy"></div><figcaption><b>BoostCaps</b><span>Rótulo e caixa</span></figcaption></figure>
-    <figure class="it" data-c="instagram"><div class="m"><img src="img/swift-01.webp" alt="P1LED: Carrossel do case Swift, +200 painéis em +120 lojas" loading="lazy"></div><figcaption><b>P1LED</b><span>Carrossel do case Swift, +200 painéis em +120 lojas</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/dubai.webp" alt="Dubai Brasileira: Marca" loading="lazy"></div><figcaption><b>Dubai Brasileira</b><span>Marca</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/hydrocore.webp" alt="Hydrocore: Marca e aplicações" loading="lazy"></div><figcaption><b>Hydrocore</b><span>Marca e aplicações</span></figcaption></figure>
+    <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-app-1.mp4" poster="img/p1led-app-1.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>P1Play, animação de lançamento do app pro painel</span></figcaption></figure>
+    <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-app-2.mp4" poster="img/p1led-app-2.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>P1Play, animação do app pro painel</span></figcaption></figure>
     <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-renatinha-copa.mp4" poster="img/p1led-renatinha-copa.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>Renatinha, Copa do Mundo</span></figcaption></figure>
-    <figure class="it" data-c="lojas"><div class="m"><img src="img/site-maslu.webp" alt="Maslu Select: Loja própria em masluoficial.com.br" loading="lazy"></div><figcaption><b>Maslu Select</b><span>Loja própria em masluoficial.com.br</span></figcaption></figure>
-    <figure class="it" data-c="embalagens"><div class="m"><img src="img/aut-bact-20l.webp" alt="AUT: Diesel Fuel Bact 20 litros" loading="lazy"></div><figcaption><b>AUT</b><span>Diesel Fuel Bact 20 litros</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/guiche.webp" alt="Guichê Online: Marca" loading="lazy"></div><figcaption><b>Guichê Online</b><span>Marca</span></figcaption></figure>
-    <figure class="it" data-c="instagram"><div class="m"><img src="img/swift-02.webp" alt="P1LED: Carrossel do case Swift" loading="lazy"></div><figcaption><b>P1LED</b><span>Carrossel do case Swift</span></figcaption></figure>
-    <figure class="it" data-c="sites"><div class="m"><img src="img/site-p1led.webp" alt="P1LED: Site com 74 páginas no ar" loading="lazy"></div><figcaption><b>P1LED</b><span>Site com 74 páginas no ar</span></figcaption></figure>
-    <figure class="it" data-c="embalagens"><div class="m"><img src="img/aut-expositor.webp" alt="AUT: Expositor da linha Diesel" loading="lazy"></div><figcaption><b>AUT</b><span>Expositor da linha Diesel</span></figcaption></figure>
+    <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-case-99.mp4" poster="img/p1led-case-99.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>Case 99</span></figcaption></figure>
+    <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-lamborghini.mp4" poster="img/p1led-lamborghini.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>Lamborghini Velocitta</span></figcaption></figure>
     <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-renatinha-marcas.mp4" poster="img/p1led-renatinha-marcas.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>Renatinha, marcas</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/loveroll.webp" alt="Loveroll: Marca de sorvete artesanal" loading="lazy"></div><figcaption><b>Loveroll</b><span>Marca de sorvete artesanal</span></figcaption></figure>
-    <figure class="it" data-c="sites"><div class="m"><img src="img/site-maeda.webp" alt="Maeda Gastronomia: Site com pedido de rotisserie" loading="lazy"></div><figcaption><b>Maeda Gastronomia</b><span>Site com pedido de rotisserie</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/mestria.webp" alt="Grupo Mestria: Marca e aplicações" loading="lazy"></div><figcaption><b>Grupo Mestria</b><span>Marca e aplicações</span></figcaption></figure>
-    <figure class="it" data-c="embalagens"><div class="m"><img src="img/aut-display-diesel.webp" alt="AUT: Display da linha Diesel" loading="lazy"></div><figcaption><b>AUT</b><span>Display da linha Diesel</span></figcaption></figure>
-    <figure class="it" data-c="instagram"><div class="m"><img src="img/swift-03.webp" alt="P1LED: Carrossel do case Swift" loading="lazy"></div><figcaption><b>P1LED</b><span>Carrossel do case Swift</span></figcaption></figure>
-    <figure class="it" data-c="impressos"><div class="m"><img src="img/neotokyo.webp" alt="Neo Tokyo: Cardápio" loading="lazy"></div><figcaption><b>Neo Tokyo</b><span>Cardápio</span></figcaption></figure>
+    <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-absen.mp4" poster="img/p1led-absen.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>P1LED na Absen</span></figcaption></figure>
     <figure class="it" data-c="videos"><div class="m"><video src="img/klume-abx.mp4" poster="img/klume-abx.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>K.LUME</b><span>Vídeo do ABX26</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/guiche-app.webp" alt="Guichê Online: Aplicação no app" loading="lazy"></div><figcaption><b>Guichê Online</b><span>Aplicação no app</span></figcaption></figure>
-    <figure class="it" data-c="embalagens"><div class="m"><img src="img/boostcaps-pote.webp" alt="BoostCaps: Pote" loading="lazy"></div><figcaption><b>BoostCaps</b><span>Pote</span></figcaption></figure>
+    <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-manifesto.mp4" poster="img/p1led-manifesto.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>Manifesto</span></figcaption></figure>
     <figure class="it" data-c="videos"><div class="m"><video src="img/p1led-renatinha-apresentacao.mp4" poster="img/p1led-renatinha-apresentacao.webp" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>P1LED</b><span>Renatinha, apresentação</span></figcaption></figure>
-    <figure class="it" data-c="lojas"><div class="m"><img src="../img/loja/tela-produto.webp" alt="Maslu Select: Página de produto com cor, tamanho e medidas" loading="lazy"></div><figcaption><b>Maslu Select</b><span>Página de produto com cor, tamanho e medidas</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/dubai-2.webp" alt="Dubai Brasileira: Aplicação da marca" loading="lazy"></div><figcaption><b>Dubai Brasileira</b><span>Aplicação da marca</span></figcaption></figure>
-    <figure class="it" data-c="marca"><div class="m"><img src="img/loveroll-bike.webp" alt="Loveroll: Bike de venda" loading="lazy"></div><figcaption><b>Loveroll</b><span>Bike de venda</span></figcaption></figure>
-    <figure class="it" data-c="instagram"><div class="m"><img src="../img/cases/social-post-nf1.webp" alt="P1LED: Carrossel sobre produção virtual" loading="lazy"></div><figcaption><b>P1LED</b><span>Carrossel sobre produção virtual</span></figcaption></figure>
-    <figure class="it" data-c="instagram"><div class="m"><img src="../img/cases/social-post-projetamos.webp" alt="P1LED: Post institucional" loading="lazy"></div><figcaption><b>P1LED</b><span>Post institucional</span></figcaption></figure>
   </div></div>
 </section>
 <section class="fecho verde">
@@ -332,7 +357,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 </footer>
 <script>
 const fs=document.querySelectorAll('.f'),its=document.querySelectorAll('.it');
-fs.forEach(b=>b.onclick=()=>{fs.forEach(x=>x.classList.toggle('on',x===b));its.forEach(i=>i.classList.toggle('some',b.dataset.c!=='todos'&&i.dataset.c!==b.dataset.c))});
+fs.forEach(b=>b.onclick=()=>{fs.forEach(x=>x.classList.toggle('on',x===b));its.forEach(i=>i.classList.toggle('some',b.dataset.c!=='todos'&&i.dataset.c!==b.dataset.c));document.querySelector('.sec').style.display=b.dataset.c==='pranchas'?'none':''});
 document.querySelectorAll('.it video').forEach(v=>{const f=v.closest('.it');f.onclick=()=>{if(v.paused){v.play();f.classList.add('tocando')}else{v.pause();f.classList.remove('tocando')}};f.style.cursor='pointer'});
 </script>
 </body>

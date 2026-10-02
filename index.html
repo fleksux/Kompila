@@ -1,672 +1,538 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kompila · a Liz atende, marca e move o pipeline</title>
-<meta name="description" content="Se chega lead no seu WhatsApp, a Liz já tem trabalho: responde em segundos, qualifica, marca a reunião e move o pipeline. Sua equipe entra pra fechar.">
-<link rel="icon" href="img/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-<meta name="theme-color" content="#0A0B0E">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kompila · IA sob medida pra pequena e média empresa</title>
+<meta name="description" content="A IA assume o trabalho repetitivo da sua empresa, sua equipe vai pro que dá lucro e todo mês você vê quanto economizou. Design, marketing, vendas e atendimento num time só. Sem precisar entender de IA.">
 <link rel="canonical" href="https://kompila.com.br/">
-<meta property="og:title" content="Kompila · a Liz atende, marca e move o pipeline">
-<meta property="og:description" content="Se chega lead no seu WhatsApp, a Liz já tem trabalho: responde em segundos, qualifica, marca a reunião e move o pipeline.">
-<meta property="og:image" content="https://kompila.com.br/img/og-image.jpg">
-<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta property="og:type" content="website"><meta property="og:url" content="https://kompila.com.br/"><meta property="og:locale" content="pt_BR"><meta property="og:site_name" content="Kompila">
-<meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://kompila.com.br/#org", "name": "Kompila", "url": "https://kompila.com.br/", "logo": "https://kompila.com.br/favicon.ico", "contactPoint": {"@type": "ContactPoint", "telephone": "+55-11-96288-4399", "contactType": "sales", "areaServed": "BR", "availableLanguage": "Portuguese"}}, {"@type": "WebSite", "@id": "https://kompila.com.br/#site", "url": "https://kompila.com.br/", "name": "Kompila", "inLanguage": "pt-BR", "publisher": {"@id": "https://kompila.com.br/#org"}}, {"@type": "SoftwareApplication", "name": "Kompila · Liz, IA de atendimento com CRM", "applicationCategory": "BusinessApplication", "operatingSystem": "Web, WhatsApp", "offers": [{"@type": "Offer", "price": "278", "priceCurrency": "BRL", "description": "Plano anual, com fidelidade, por mês"}, {"@type": "Offer", "price": "378", "priceCurrency": "BRL", "description": "Plano mensal, sem fidelidade"}], "publisher": {"@id": "https://kompila.com.br/#org"}}]}</script>
-<script>
-(function(){try{var q=new URLSearchParams(location.search),f=q.get('ab');if(f){localStorage.setItem('kmp_ab',f==='humana'?'humana':'tech');if(f==='humana'){location.replace('/humana/?ab=humana');return}}
-var v=localStorage.getItem('kmp_ab');if(!v){v=Math.random()<.5?'humana':'tech';localStorage.setItem('kmp_ab',v)}
-if(v==='humana'&&!/[?&]ab=tech/.test(location.search)){location.replace('/humana/?ab=humana')}}catch(e){}})();
-</script>
-
+<meta property="og:type" content="website"><meta property="og:url" content="https://kompila.com.br/"><meta property="og:image" content="https://kompila.com.br/img/og-image.jpg"><meta property="og:locale" content="pt_BR"><meta property="og:site_name" content="Kompila">
+<link rel="icon" href="img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#F2F3EF;--white:#fff;--line:#E1E4DF;--line2:#C6CBC4;--mute:#8A939C;--ink2:#3F464E;--ink:#0A0B0E;--carbon:#0A0B0E;--green:#2FD67B;--gtext:#12803F;--amber:#FFB224;--off:#E9EBEE;--mono:"JetBrains Mono",ui-monospace,monospace;--sans:Inter,system-ui,-apple-system,sans-serif}
-*{box-sizing:border-box}
+:root{--verde:#2FD67B;--verde-e:#12803F;--verde-claro:#DDF7E8;--carbono:#0A0B0E;--texto:#1E2328;--off:#F5F6F2;--cinza:#5E6873;--linha:#E4E7E1;--w:1200px}
+*{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-html,body{overflow-x:clip}
-body{margin:0;background:var(--carbon);color:var(--off);font-family:var(--sans);-webkit-font-smoothing:antialiased;font-size:17px;line-height:1.5}
+body{font-family:Inter,system-ui,sans-serif;color:var(--texto);background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-.wrap{padding:0 6%}
-.logo{font-family:var(--mono);font-weight:600;letter-spacing:-.06em;white-space:nowrap;line-height:1;font-size:22px}
-.logo b{font-weight:600;color:var(--green)}
-.btn{display:inline-flex;align-items:center;gap:10px;font:600 15px var(--sans);padding:14px 20px;border:1px solid transparent;cursor:pointer;line-height:1;white-space:nowrap;border-radius:10px;touch-action:manipulation}
-.btn.g{background:var(--green);color:var(--ink)}
-.btn.o{background:transparent;color:var(--off);border-color:#3A424B}
-.btn.dk{background:var(--carbon);color:var(--off)}
-.btn.o:hover{border-color:#6b737c}
-.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-:where(a,button):focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.box{max-width:var(--w);margin:0 auto;padding:0 6%}
+@media(min-width:1300px){.box{padding:0}}
+section{position:relative}
+.off{background:var(--off)} .verde{background:var(--verde)} .escuro{background:var(--carbono);color:#E9EBEE}
 
-/* nav */
-nav{position:sticky;top:0;z-index:20;background:rgba(10,11,14,.92);backdrop-filter:blur(8px);color:var(--off);border-bottom:1px solid #1E242B}
-nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
-nav .links{display:flex;gap:26px;font:500 14px var(--sans);color:#B4BBC3}
-nav .links a:hover{color:#fff}
-nav .btn{padding:11px 16px;font-size:14px}
-@media(max-width:900px){nav .links{display:none}}
+/* topo */
+.nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--linha)}
+.nav .box{display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px}
+.logo{font:700 22px 'JetBrains Mono',monospace;color:var(--carbono);white-space:nowrap}
+.logo b{color:var(--verde-e)}
+.nav ul{display:flex;gap:28px;list-style:none;font-size:15px;font-weight:600;color:#3a424b}
+.nav ul a:hover{color:var(--verde-e)}
+.btn{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 26px;border-radius:12px;font-weight:700;font-size:17px;background:var(--carbono);color:#fff;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.verde{background:var(--verde);color:var(--carbono)}
+.btn.branco{background:#fff;color:var(--carbono);box-shadow:0 6px 20px rgba(10,40,25,.12)}
+.btn.branco:hover{box-shadow:0 10px 28px rgba(10,40,25,.16)}
+.btn.peq{height:42px;padding:0 18px;font-size:15px;border-radius:8px}
+@media(max-width:900px){.nav ul{display:none}}
 
-/* história com scroll: o vídeo "a Liz sai do celular" quebrado em 121 quadros; o scroll escolhe o quadro */
-.story{position:relative;height:520svh;background:var(--carbon)}
-.story .fixa{position:sticky;top:64px;height:calc(100svh - 64px);overflow:hidden;background:var(--carbon)}
-.story canvas,.story .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:78% 60%}
-.story canvas{display:none}.story.pronta canvas{display:block}.story.pronta .poster{display:none}
-.story .veu{position:absolute;inset:0;background:linear-gradient(90deg,#0A0B0E 0%,#0A0B0E 26%,rgba(10,11,14,.85) 40%,rgba(10,11,14,.3) 54%,rgba(10,11,14,0) 66%),linear-gradient(0deg,rgba(10,11,14,.7) 0%,rgba(10,11,14,0) 35%)}
-.story .txt{position:absolute;inset:0;z-index:2;display:grid;align-content:center;padding-top:24px;padding-bottom:24px}
-.story .txt>*{max-width:600px}
-.story .kicker{display:flex;align-items:center;gap:10px;font:600 12.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:22px}
-.story .kicker i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(47,214,123,.2);animation:pulsa 2s infinite}
-@keyframes pulsa{0%,100%{box-shadow:0 0 0 4px rgba(47,214,123,.2)}50%{box-shadow:0 0 0 8px rgba(47,214,123,.06)}}
-.story h1{font-size:clamp(32px,3.6vw,54px);line-height:1.02;letter-spacing:-.035em;margin:0 0 8px;font-weight:700;max-width:13ch}
-.story h1 em{font-style:normal;color:var(--green)}
-.story .lead{font-size:clamp(17px,1.4vw,20px);line-height:1.45;color:#B4BBC3;max-width:460px;margin:0;letter-spacing:-.01em}
-.story .ctas{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 24px}
-.story .fatos{display:flex;flex-wrap:wrap;gap:8px 22px;font:500 13px var(--mono);color:#8A939C}
-.story .fatos b{color:var(--off);font-weight:600}
-.story .fatos span{display:inline-flex;align-items:center;gap:8px}
-.story .fatos span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green)}
-.story .dica{margin-top:26px;display:inline-flex;align-items:center;gap:10px;font:500 12.5px var(--mono);color:#6b737c;transition:opacity .3s}
-.story .dica i{width:18px;height:28px;border:1.5px solid #3A424B;border-radius:10px;position:relative}
-.story .dica i::after{content:"";position:absolute;left:50%;top:5px;width:3px;height:6px;margin-left:-1.5px;border-radius:2px;background:var(--green);animation:rola 1.6s infinite}
-@keyframes rola{0%{transform:translateY(0);opacity:1}70%{transform:translateY(10px);opacity:0}100%{opacity:0}}
-.story.rolou .dica{opacity:0}
-.story .balao{position:absolute;left:52%;top:20%;z-index:3;background:#fff;color:var(--ink);border-radius:16px 16px 4px 16px;padding:12px 16px;font:500 15px var(--sans);line-height:1.35;max-width:280px;box-shadow:0 18px 40px rgba(0,0,0,.5);opacity:0;transform:translateY(10px) scale(.96);transition:opacity .35s,transform .35s;pointer-events:none}
-.story .balao b{display:block;font:600 11px var(--mono);color:var(--gtext);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
-.story .balao.on{opacity:1;transform:none}
-.story .passos{position:absolute;left:6%;bottom:22px;z-index:2;display:flex;gap:6px}
-.story .passos i{width:26px;height:3px;border-radius:2px;background:#2a3038;transition:background .3s}
-.story .passos i.on{background:var(--green)}
-@media(prefers-reduced-motion:reduce){.story{height:auto}.story .fixa{position:relative;height:calc(100svh - 64px)}.story canvas{display:none!important}.story .poster{display:block!important}.story .dica,.story .passos,.story .kicker i{display:none}}
-@media(max-width:900px){
-  .story{height:460svh}
-  .story canvas,.story .poster{object-position:58% 50%}
-  .story .veu{background:linear-gradient(0deg,rgba(10,11,14,.96) 0%,rgba(10,11,14,.88) 42%,rgba(10,11,14,.25) 70%,rgba(10,11,14,0) 100%)}
-  .story .txt{align-content:end;padding-bottom:44px}
-  .story h1{font-size:clamp(28px,8vw,40px);max-width:14ch}
-  .story .lead{font-size:15.5px}
-  .story .ctas{margin:14px 0 14px}.story .ctas .btn{width:100%;justify-content:center}
-  .story .fatos{gap:6px 14px;font-size:11.5px}
-  .story .dica{margin-top:14px}
-  .story .passos{right:auto;left:6%;bottom:14px}
-  .story .balao{left:6%;right:6%;top:12%;max-width:none;font-size:14px}
-}
+/* régua */
+.regua{display:flex;align-items:center;gap:16px;font:600 15px 'JetBrains Mono',monospace;color:var(--carbono);margin-bottom:28px}
+.regua::after{content:"";flex:1;height:2px;background:currentColor;opacity:.16;order:1}
+.regua span:last-child{order:2}
+.regua b{color:var(--verde-e)} .verde .regua b{color:var(--carbono)} .escuro .regua{color:#E9EBEE} .escuro .regua b{color:var(--verde)}
 
+.regua .ri{width:38px;height:38px;border-radius:11px;background:var(--verde-claro);display:grid;place-items:center}
+.regua .ri svg{width:21px;height:21px;stroke:var(--verde-e);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.verde .regua .ri{background:rgba(255,255,255,.5)} .verde .regua .ri svg{stroke:var(--carbono)}
+h1{font-size:clamp(38px,4.6vw,64px);line-height:1.02;font-weight:900;letter-spacing:-.035em;color:var(--carbono)}
+h2{font-size:clamp(32px,4.4vw,56px);line-height:1.06;font-weight:800;letter-spacing:-.028em;color:var(--carbono)}
+.escuro h2{color:#fff}
+h2 em,h1 em{font-style:normal;color:var(--verde-e)}
+.verde h1 em,.verde h2 em{color:#fff}
+.escuro h2 em{color:var(--verde)}
+.mk{background:var(--carbono);color:#fff;padding:.02em .14em;line-height:1.28;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.sub{font-size:clamp(18px,1.6vw,21px);line-height:1.55;color:#48505a;margin-top:20px;max-width:640px}
+.verde .sub{color:#0d3a20} .escuro .sub{color:#AEB5BD}
+.num{font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+.num i{font-style:normal;color:var(--verde-e)}
+.escuro .num i{color:var(--verde)}
 
-/* tudo automático: feed de eventos que não para, contadores que sobem quando entram na tela */
-.auto{background:var(--carbon);color:var(--off);padding:96px 0;border-top:1px solid #15191f;overflow:hidden}
-.auto .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
-.auto .kicker{display:flex;align-items:center;gap:10px;font:600 12.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:18px}
-.auto .kicker i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(47,214,123,.2);animation:pulsa 2s infinite}
-.auto h2{font-size:clamp(32px,3.8vw,54px);line-height:1;letter-spacing:-.035em;margin:0 0 16px;font-weight:700;max-width:14ch}
-.auto h2 em{font-style:normal;color:var(--green)}
-.auto .lead{font-size:clamp(16px,1.3vw,19px);line-height:1.5;color:#B4BBC3;max-width:480px;margin:0 0 28px}
-.auto .nums{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:480px}
-.auto .nums div{border:1px solid #1E242B;border-radius:12px;padding:16px 18px;background:#0e1116}
-.auto .nums b{display:block;font:600 clamp(26px,2.6vw,36px)/1 var(--mono);letter-spacing:-.03em;color:#fff}
-.auto .nums span{display:block;margin-top:6px;font-size:13px;color:#8A939C}
-.auto .nota{margin:18px 0 0;font:500 12px var(--mono);color:#6b737c}
-.auto .feed{position:relative;height:520px;overflow:hidden;border-radius:16px;border:1px solid #1E242B;background:linear-gradient(180deg,#0e1116,#0a0b0e)}
-.auto .fita{position:absolute;left:0;right:0;top:0;padding:16px;display:flex;flex-direction:column;gap:10px;will-change:transform}
-.auto .ev{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;background:#12161c;border:1px solid #1f252d;border-radius:12px;padding:12px 14px;opacity:0;transform:translateY(-8px);animation:entra .4s forwards}
-@keyframes entra{to{opacity:1;transform:none}}
-.auto .ev .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:#1a2a20;color:var(--green)}
-.auto .ev .ic.a{background:#2a2312;color:var(--amber)}.auto .ev .ic.w{background:#1c2430;color:#8fb4ff}.auto .ev .ic.liz{background:#fff;padding:0;overflow:hidden}
-.auto .ev .ic img{width:100%;height:100%;object-fit:cover}
-.auto .ev .ic svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.auto .ev b{display:block;font-size:14px;font-weight:600;color:#fff}
-.auto .ev span{display:block;font-size:12.5px;color:#8A939C;margin-top:2px}
-.auto .ev .t{font:500 11.5px var(--mono);color:#6b737c;align-self:start}
-.auto .ev .v{font:600 13px var(--mono);color:var(--green);align-self:start}
-.auto .sombra{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(10,11,14,0) 0%,rgba(10,11,14,0) 70%,rgba(10,11,14,.95) 100%)}
-@media(max-width:900px){.auto{padding:64px 0}.auto .grid{grid-template-columns:1fr;gap:28px}.auto .feed{height:380px}.auto .nums{max-width:none}}
-/* o chat da Liz (liz.js) só aparece no cantinho quando a pessoa começa a rolar */
-#kompila-liz{opacity:0!important;pointer-events:none!important;transition:opacity .45s!important}
-body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
-@media(min-width:901px){#kompila-liz{zoom:1.25}}
+/* hero */
+.hero{padding:0}
+.hero .grade{display:grid;grid-template-columns:1.05fr 1fr;min-height:calc(100vh - 68px);max-height:860px}
+.hero .txt{padding:72px 6% 64px max(6%,calc((100vw - var(--w))/2));display:flex;flex-direction:column;justify-content:center}
+.hero .foto{position:relative;overflow:hidden}
+.hero .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.hero .rot{font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--carbono);margin-bottom:22px}
+.hero .acoes{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.hero .sem{margin-top:26px;font-size:16px;font-weight:700;color:var(--carbono)}
+@media(max-width:900px){.hero .grade{grid-template-columns:1fr;max-height:none}.hero .foto{height:62vw;min-height:300px;order:-1}.hero .txt{padding:48px 6% 56px}}
 
-/* ---- páginas seguintes: papel, verde, carbono ---- */
-.sec{padding:96px 0}
-.sec.papel{background:var(--paper);color:var(--ink)}
-.sec.verde{background:var(--green);color:var(--ink)}
-.sec.carb{background:var(--carbon);color:var(--off)}
-.sec .kicker{display:flex;align-items:center;gap:10px;font:600 12.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gtext);margin-bottom:18px}
-.sec .kicker i{width:8px;height:8px;border-radius:50%;background:var(--gtext)}
-.sec.carb .kicker{color:var(--green)}.sec.carb .kicker i{background:var(--green)}
-.sec.verde .kicker{color:var(--ink)}.sec.verde .kicker i{background:var(--ink)}
-.sec h2{font-size:clamp(32px,3.8vw,54px);line-height:1;letter-spacing:-.035em;margin:0 0 16px;font-weight:700;max-width:16ch}
-.sec h2 em{font-style:normal;color:var(--gtext)}
-.sec.carb h2 em{color:var(--green)}
-.sec.verde h2 em{color:#fff}
-.sec .lead{font-size:clamp(16px,1.3vw,19px);line-height:1.5;max-width:560px;margin:0 0 28px;color:var(--ink2)}
-.sec.carb .lead{color:#B4BBC3}.sec.verde .lead{color:#0f3d24}
-.sec .cab{max-width:760px;margin-bottom:36px}
-.sec .cab .lead{margin-bottom:0}
-.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
-/* CRM */
-.sec .tela{border-radius:14px;overflow:hidden;border:1px solid var(--line2);box-shadow:0 30px 70px rgba(10,11,14,.18);background:#fff}
-.sec .tela img{width:100%;height:auto;display:block}
-.sec .tela .barra{display:flex;align-items:center;gap:6px;height:30px;padding:0 12px;background:#0f1216;border-bottom:1px solid #1E242B}
-.sec .tela .barra i{width:9px;height:9px;border-radius:50%;background:#2a3038}
-.sec .tela .barra span{margin-left:8px;font:500 11px var(--mono);color:#6b737c}
-.tres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}
-.tres>div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 22px 18px}
-.tres b{display:block;font-size:17px;letter-spacing:-.01em;margin-bottom:8px}
-.tres p{margin:0;font-size:14.5px;line-height:1.5;color:var(--ink2)}
-/* WhatsApp real */
-.prova{font:500 12.5px var(--mono);color:#0f3d24;margin:0}
-.zap{background:#e9e4dc;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px rgba(10,11,14,.25);max-width:420px;justify-self:end;width:100%}
-.zap .zt{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#0b141a;color:#fff}
-.zap .zt img{width:40px;height:40px;border-radius:50%;background:#fff;object-fit:cover}
-.zap .zt b{display:block;font-size:15px}.zap .zt span{font-size:12px;color:#8fd3a8}
-.zap .zm{padding:16px 12px;display:flex;flex-direction:column;gap:8px;background:#efeae2 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='20' cy='20' r='1' fill='%23d8d1c4'/%3E%3C/svg%3E")}
-.zap .eu,.zap .ela{position:relative;max-width:84%;padding:8px 44px 8px 12px;border-radius:12px;font-size:14px;line-height:1.4;color:#111}
-.zap .eu{align-self:flex-end;background:#d9fdd3;border-top-right-radius:4px}
-.zap .ela{align-self:flex-start;background:#fff;border-top-left-radius:4px}
-.zap small{position:absolute;right:10px;bottom:5px;font-size:10.5px;color:#7a8a80}
-.zap .audio{display:flex;align-items:center;gap:10px;min-width:210px}
-.zap .audio i{width:28px;height:28px;border-radius:50%;background:#1fa855;position:relative;flex:none}
-.zap .audio i::after{content:"";position:absolute;left:11px;top:8px;border-left:9px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent}
-.zap .audio span{font-size:12.5px;color:#4b5a52;flex:1;border-bottom:2px solid #9fb8a8;padding-bottom:4px}
-/* planos */
-.planos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-@media(max-width:1100px){.planos{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.plano{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 24px 22px}
-.plano.d{background:var(--carbon);color:var(--off);border-color:var(--carbon)}
-.plano .n{display:block;font:600 12.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gtext);margin-bottom:10px}
-.plano.d .n{color:var(--green)}
-.plano b{display:block;font-size:clamp(30px,3vw,40px);letter-spacing:-.035em;line-height:1}
-.plano b small{font-size:14px;letter-spacing:0;font-weight:500;color:var(--mute);margin-left:2px}
-.plano .pq{display:block;margin:10px 0 16px;font-size:14px;color:var(--ink2)}
-.plano.d .pq{color:#B4BBC3}
-.plano ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14.5px}
-.plano li{padding-left:20px;position:relative}
-.plano li::before{content:"";position:absolute;left:0;top:8px;width:9px;height:9px;border-radius:50%;background:var(--green)}
-.sec .nota{margin:22px 0 0;font:500 12.5px var(--mono);color:var(--mute);max-width:820px;line-height:1.5}
-/* quem faz */
-.nums3{display:grid;grid-template-columns:1fr;gap:14px}
-.nums3>div{border:1px solid #1E242B;border-radius:14px;padding:18px 20px;background:#0e1116}
-.nums3 b{display:block;font:600 clamp(28px,2.8vw,40px)/1 var(--mono);letter-spacing:-.03em;color:#fff}
-.nums3 span{display:block;margin-top:6px;font-size:13.5px;color:#8A939C}
-.logos{margin-top:56px;overflow:hidden;border-top:1px solid #1E242B;border-bottom:1px solid #1E242B;padding:18px 0;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
-.logos .trilho{display:flex;gap:44px;width:max-content;animation:trilho 60s linear infinite;font:600 15px var(--mono);color:#9aa1aa;white-space:nowrap}
-@keyframes trilho{to{transform:translateX(-50%)}}
-@media(prefers-reduced-motion:reduce){.logos .trilho{animation:none}}
-/* faq */
-.faq{max-width:820px}
-.faq details{border-top:1px solid var(--line2);padding:6px 0}
-.faq details:last-child{border-bottom:1px solid var(--line2)}
-.faq summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;font-size:18px;font-weight:600;letter-spacing:-.01em}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font:500 22px var(--mono);color:var(--gtext);transition:transform .2s}
-.faq details[open] summary::after{transform:rotate(45deg)}
-.faq p{margin:0 0 14px;font-size:15.5px;line-height:1.55;color:var(--ink2);max-width:680px}
+.bloco{padding:110px 0}
+@media(max-width:700px){.bloco{padding:72px 0}}
+
+/* cards */
+.cards{display:grid;gap:22px;margin-top:52px}
+.c4{grid-template-columns:repeat(4,1fr)} .c3{grid-template-columns:repeat(3,1fr)} .c2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1000px){.c4{grid-template-columns:repeat(2,1fr)}.c3{grid-template-columns:1fr}}
+@media(max-width:620px){.c4,.c2{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:28px;padding:32px;box-shadow:0 10px 36px rgba(20,40,30,.08);display:flex;flex-direction:column}
+.card h3{font-size:23px;line-height:1.2;font-weight:800;color:var(--carbono);margin-bottom:10px}
+.card p{font-size:17px;line-height:1.55;color:#4a525b}
+.card .tag{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--verde-e);margin-bottom:10px}
+.ico{width:56px;height:56px;border-radius:16px;background:var(--verde-claro);display:grid;place-items:center;margin-bottom:22px;flex:none}
+.ico svg{width:30px;height:30px;stroke:var(--verde-e);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.card.cheio{background:var(--verde);box-shadow:none}.card.cheio p{color:#0d3a20}.card.cheio .ico{background:rgba(255,255,255,.5)}.card.cheio .ico svg{stroke:var(--carbono)}.card.cheio .tag{color:var(--carbono)}
+.card ul{list-style:none;margin-top:14px}
+.card li{font-size:16px;line-height:1.45;color:#3a424b;padding:7px 0 7px 28px;position:relative}
+.card li::before{content:"";position:absolute;left:0;top:10px;width:18px;height:18px;border-radius:50%;background:var(--verde) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230A0B0E' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12l4 4 8-9'/%3E%3C/svg%3E") center/11px no-repeat}
+
+/* lado a lado com foto */
+.lado{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.lado.inv .caixa{order:-1}
+.caixa{border-radius:32px;overflow:hidden;box-shadow:0 18px 50px rgba(20,40,30,.14);aspect-ratio:4/5}
+.caixa img{width:100%;height:100%;object-fit:cover}
+@media(max-width:900px){.lado{grid-template-columns:1fr;gap:40px}.lado.inv .caixa{order:0}.caixa{aspect-ratio:4/3}}
+
+/* time */
+.conta{margin-top:56px;background:#fff;border-radius:28px;box-shadow:0 10px 36px rgba(20,40,30,.08);overflow:hidden;display:grid;grid-template-columns:1.2fr 1fr}
+.conta .esq{padding:40px}
+.conta .dir{background:var(--carbono);color:#E9EBEE;padding:40px;display:flex;flex-direction:column;justify-content:center}
+.conta table{width:100%;border-collapse:collapse;font-size:17px}
+.conta td{padding:12px 0;border-bottom:1px solid var(--linha)}
+.conta td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600;white-space:nowrap}
+.conta tr:last-child td{border-bottom:0}
+.conta .tit{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--verde-e);margin-bottom:8px}
+.conta .dir .tit{color:var(--verde)}
+.conta .grande{font-size:clamp(40px,4.6vw,60px);margin:6px 0 4px;color:#fff}
+.conta .grande i{color:var(--verde);font-style:normal}
+.conta .dir p{font-size:17px;line-height:1.55;color:#AEB5BD;margin-top:14px}
+.conta .dir p b{color:#fff}
+.fonte{font-size:13px;line-height:1.5;color:var(--cinza);margin-top:18px}
+@media(max-width:900px){.conta{grid-template-columns:1fr}.conta .esq,.conta .dir{padding:30px 24px}}
+
+/* passos */
+.passo .n{font:700 15px 'JetBrains Mono',monospace;color:var(--verde-e);margin-bottom:16px}
+.passo h3{font-size:28px}
+
+/* casos */
+.caso .status{display:inline-block;align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:8px;background:var(--verde-claro);color:var(--verde-e);margin-bottom:18px}
+.caso .status.no-ar{background:var(--verde);color:var(--carbono)}
+.caso dl{margin-top:14px}
+.caso dt{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--cinza);margin-top:14px}
+.caso dd{font-size:16px;line-height:1.5;color:#3a424b;margin-top:4px}
+
+/* liz */
+.liz-cena{position:relative;border-radius:32px;background:var(--verde);aspect-ratio:1/1;display:grid;place-items:end center;overflow:hidden}
+.liz-cena img{width:78%;margin-bottom:-2%}
+.liz-cena .colchete{position:absolute;font:700 520px/1 'JetBrains Mono',monospace;color:rgba(255,255,255,.28);top:50%;transform:translateY(-54%)}
+.liz-cena .colchete.e{left:-90px}.liz-cena .colchete.d{right:-90px}
+
 /* fecho */
-.fecho .grid2{align-items:end}
-.fecho h2{max-width:14ch}
-.fecho .ctas{display:flex;gap:12px;flex-wrap:wrap}
-footer .logo{color:#fff}
-@media(max-width:900px){
-  .sec{padding:64px 0}
-  .grid2{grid-template-columns:1fr;gap:28px}
-  .tres,.planos{grid-template-columns:1fr}
-  .zap{justify-self:stretch;max-width:none}
-  .sec h2{max-width:none}
-}
+.fecho{text-align:center;padding:120px 0}
+.fecho h2{max-width:900px;margin:0 auto}
+.fecho .sub{margin:22px auto 0}
+.fecho .acoes{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:38px}
 
-/* pipeline em código, animado: um card anda de Novo até Fechado */
-.kb{display:flex;gap:10px;padding:14px;background:#F2F3EF;overflow:hidden;font-family:var(--sans)}
-.kb .col{flex:1 0 0;min-width:0;min-height:300px;border-radius:12px;padding:10px;background:linear-gradient(180deg,#e9ece7 0%,#f2f4f0 45%,rgba(247,248,246,.35) 100%);position:relative}
-.kb .col.p1{background:linear-gradient(180deg,#e3ebf7 0%,#eef3fa 45%,rgba(238,243,250,.35) 100%)}
-.kb .col.p2{background:linear-gradient(180deg,#f7ecd6 0%,#fbf4e6 45%,rgba(251,244,230,.35) 100%)}
-.kb .col.p3{background:linear-gradient(180deg,#e2f3e8 0%,#eef8f1 45%,rgba(238,248,241,.35) 100%)}
-.kb .col.won{background:linear-gradient(180deg,#d6f2e1 0%,#ebf7ef 45%,rgba(235,247,239,.35) 100%)}
-.kb .col.lost{background:linear-gradient(180deg,#f9dde2 0%,#fbeef0 45%,rgba(251,238,240,.35) 100%)}
-.kb .col.won.acende{box-shadow:inset 0 0 0 2px var(--green),0 0 0 6px rgba(47,214,123,.18);transition:box-shadow .4s}
-.kb h4{margin:0;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;padding:2px 4px;color:#0A0B0E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kb .col.p1 h4{color:#1f4fa3}.kb .col.p2 h4{color:#9a5b00}.kb .col.p3 h4{color:#12803F}.kb .col.won h4{color:#12803F}.kb .col.lost h4{color:#c9203a}
-.kb h4 i{margin-left:auto;font-style:normal;font-weight:500;color:#8A939C;font-size:11px}
-.kb .sum{display:block;font:600 13px var(--mono);color:#0A0B0E;padding:0 4px 8px}
-.kb .card{background:#fff;border:1px solid #e6e8e3;border-radius:9px;padding:8px 10px;margin-bottom:7px;font-size:12px;color:#0A0B0E;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .3s}
-.kb .card strong{display:block;font-size:12px;font-weight:600}
-.kb .card span{display:block;color:#3F464E;font-size:11px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kb .card em{display:block;font-style:normal;font:500 10.5px var(--mono);color:#8A939C;margin-top:6px}
-.kb .card.hum{border-left:3px solid #c9203a}
-.kb .card.anda{border-color:var(--green);box-shadow:0 8px 20px rgba(10,11,14,.12)}
-.kb .card.anda.won{background:#e6f7ec;border-color:#12803F}
-.kb .vazia{border:1px dashed #d5d9d2;border-radius:9px;padding:12px 8px;text-align:center;font-size:11px;color:#8A939C}
-.legenda{padding:12px 16px;background:#fff;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink2)}
-.legenda b{color:var(--ink)}
-@media(max-width:900px){.kb{overflow-x:auto}.kb .col{flex:0 0 150px}}
+footer{background:var(--carbono);color:#8E959D;padding:56px 0;font-size:15px}
+footer .logo{color:#E9EBEE}
+footer .logo b{color:var(--verde)}
+footer a:hover{color:#fff}
 
-/* voz: Liz com telefone atrás do chat; mensagens entram uma a uma */
-.palco-zap{position:relative;justify-self:end;width:100%;max-width:560px;padding-left:150px}
-.liz-fone{position:absolute;left:-120px;bottom:-56px;width:270px;height:auto;z-index:2;opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 24px 34px rgba(10,11,14,.3))}
-.palco-zap .zap{position:relative;z-index:1;max-width:none}
-.palco-zap.on .liz-fone{opacity:1;transform:none}
-.zap .zm>*{opacity:0;transform:translateY(14px);transition:opacity .4s,transform .45s cubic-bezier(.2,.8,.2,1)}
-.zap .zm>*.on{opacity:1;transform:none}
-.zap .audio i::before{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 0 rgba(31,168,85,.5)}
-.zap .audio.on i::before{animation:onda 1.4s 2}
-@keyframes onda{to{box-shadow:0 0 0 12px rgba(31,168,85,0)}}
-.zap .audio span{position:relative}
-.zap .audio span::after{content:"";position:absolute;left:0;bottom:-2px;height:2px;width:0;background:#1fa855}
-.zap .audio.on span::after{animation:barra 2.4s .3s forwards}
-@keyframes barra{to{width:100%}}
-/* fecho: objeto tech atrás, Liz um pouco pra esquerda */
-.palco-f{position:relative;height:460px}
-.fecho{overflow-x:clip}
-.palco-f .objf{position:absolute;right:-6%;bottom:-8%;width:min(620px,110%);height:auto;opacity:.95;mix-blend-mode:normal}
-.palco-f .lizf{position:absolute;left:0;bottom:-170px;width:min(378px,70%);height:auto;z-index:3;filter:drop-shadow(0 30px 40px rgba(10,11,14,.35));will-change:transform}
-.fecho{overflow:visible;position:relative;z-index:2}
-footer{position:relative;z-index:1}
-/* rodapé */
-footer{background:var(--carbon);color:#B4BBC3;padding:56px 0 24px;font-size:14px}
-footer .ft{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;align-items:start}
-footer .marca p{margin:12px 0 18px;max-width:320px;line-height:1.5;color:#8A939C}
-footer .social{display:flex;gap:8px;flex-wrap:wrap}
-footer .social a{width:38px;height:38px;border-radius:10px;border:1px solid #232830;display:grid;place-items:center;color:#B4BBC3;transition:border-color .15s,color .15s}
-footer .social a:hover{border-color:var(--green);color:#fff}
-footer .social svg{width:18px;height:18px;fill:currentColor}
-footer .col{display:flex;flex-direction:column;gap:10px}
-footer .col b{color:#fff;font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-family:var(--mono);margin-bottom:4px}
-footer .col a:hover{color:#fff}
-footer .base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:40px;padding-top:18px;border-top:1px solid #1E242B;font:500 12px var(--mono);color:#6b737c}
-footer .base span{padding:0}
-@media(max-width:900px){
-  footer .ft{grid-template-columns:1fr 1fr}
-  .palco-zap{padding-left:0;max-width:none}
-  .liz-fone{left:auto;right:2%;top:0;bottom:auto;width:150px;z-index:2}
-  .palco-zap{padding-top:330px}
-  .palco-f{height:300px;margin-top:10px}
-  .palco-f .objf{right:-10%;width:120%}
-  .palco-f .lizf{left:4%;bottom:-120px;width:240px}
-  footer{padding-top:120px}
-}
+footer .rodape{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:40px}
+footer .marca p{margin-top:12px;line-height:1.5}
+footer .slogan{font-family:'JetBrains Mono',monospace;color:var(--verde)}
+footer h4{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#E9EBEE;margin-bottom:16px}
+footer .col a{display:block;padding:6px 0;white-space:nowrap}
+footer .base{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:48px;padding-top:24px;border-top:1px solid #23262b;font-size:14px}
+@media(max-width:1000px){footer .rodape{grid-template-columns:1fr 1fr}footer .marca{grid-column:1/-1}}
+@media(max-width:560px){footer .rodape{grid-template-columns:1fr}}
 
-/* Quem é a Liz: botãozinho e a janela com a foto */
-.btn.quem{margin-top:22px;height:44px;padding:0 16px 0 6px;gap:10px;background:#0f3d24;color:#fff;border-color:transparent;font-size:14px}
-.btn.quem .av{width:32px;height:32px;border-radius:50%;background:#fff;overflow:hidden;display:grid;place-items:center}
-.btn.quem .av img{width:100%;height:100%;object-fit:cover}
-.btn.quem:hover{background:var(--carbon)}
-.modal{position:fixed;inset:0;z-index:2147483001;background:rgba(10,11,14,.72);display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
-.modal[hidden]{display:none}
-.modal .mb{position:relative;width:min(880px,100%);max-height:calc(100dvh - 40px);overflow:auto;background:var(--paper);color:var(--ink);border-radius:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);box-shadow:0 40px 90px rgba(0,0,0,.5);animation:sobe .35s both}
-.modal .mb img{width:100%;height:100%;object-fit:cover;display:block;min-height:360px}
-.modal .mt{padding:36px 36px 32px}
-.modal .mt .kicker{display:inline-flex;align-items:center;gap:8px;font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gtext);margin-bottom:14px}
-.modal .mt .kicker i{width:7px;height:7px;border-radius:50%;background:var(--gtext)}
-.modal h3{font-size:clamp(26px,3vw,36px);letter-spacing:-.03em;line-height:1.05;margin:0 0 14px}
-.modal p{margin:0 0 12px;font-size:16px;line-height:1.55;color:var(--ink2)}
-.modal .ass{margin-top:18px;font:600 13px var(--mono);color:var(--ink)}
-.modal .mx{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.9);color:var(--ink);font-size:24px;line-height:1;cursor:pointer;z-index:2}
-@media(max-width:700px){.modal .mb{grid-template-columns:1fr}.modal .mb img{max-height:46vh;min-height:0}.modal .mt{padding:24px 22px 26px}}
 
-/* som da Liz (teclado e pings do celular): botão no palco; toca só depois do primeiro toque e só com o hero na tela */
-.som{position:absolute;right:18px;bottom:18px;z-index:6;display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px 0 10px;border-radius:19px;border:1px solid rgba(255,255,255,.22);background:rgba(10,11,14,.55);color:#fff;font:600 12.5px var(--mono);letter-spacing:.02em;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.som svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.som svg path:first-child{fill:currentColor;stroke:none}
-.som .w{opacity:.35}
-.som[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
-.som[aria-pressed="true"] .w{opacity:1;animation:onda2 1.2s ease-in-out infinite}
-@keyframes onda2{0%,100%{opacity:.4}50%{opacity:1}}
-.hero-m .som{right:12px;bottom:12px}
+/* banner coleve */
+.banner{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:center;background:var(--carbono);color:#E9EBEE;border-radius:28px;padding:36px 44px;margin-top:64px}
+.banner .lg{background:#fff;border-radius:20px;width:200px;height:96px;display:grid;place-items:center;padding:18px}
+.banner .lg img{max-height:100%;width:auto}
+.banner .tag{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--verde);margin-bottom:8px}
+.banner h3{font-size:clamp(22px,2.4vw,30px);line-height:1.2;font-weight:800;color:#fff}
+.banner p{font-size:16px;line-height:1.5;color:#AEB5BD;margin-top:8px}
+@media(max-width:900px){.banner{grid-template-columns:1fr;gap:22px;padding:28px 24px}}
+/* parceiros */
+.parc .lg{height:120px;border-radius:20px;background:var(--off);display:grid;place-items:center;margin-bottom:24px;overflow:hidden}
+.parc .lg img{max-height:70px;max-width:62%}
+.parc .lg img.quad{max-height:150px;max-width:none;mix-blend-mode:multiply}
+.parc a.link{margin-top:auto;padding-top:20px;font-weight:700;color:var(--verde-e);font-size:16px}
 
-/* celular: primeiro a animação inteira, depois o título com o botão */
-.hero-m{display:none}
-@media(max-width:900px){
-  .story{display:none}
-  .hero-m .hv{position:relative;margin:0 0 22px;border-radius:18px;overflow:hidden;aspect-ratio:4/5;background:#0d0f13;box-shadow:0 20px 50px rgba(0,0,0,.45)}
-  .hero-m .hv video{display:block;width:100%;height:100%;object-fit:cover}
-  .story .txt{display:none}
-  .story{height:380svh}
-  .story .balao{left:6%;right:6%;top:auto;bottom:18%;max-width:none;font-size:15px}
-  .story .passos{left:6%;bottom:16px}
-  .hero-m{display:block;background:var(--carbon);color:var(--off);padding:44px 0 52px}
-  .hero-m .kicker{display:flex;align-items:center;gap:10px;font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:16px}
-  .hero-m .kicker i{width:8px;height:8px;border-radius:50%;background:var(--green)}
-  .hero-m .h1m{font-size:clamp(30px,8.6vw,42px);line-height:1.02;letter-spacing:-.035em;margin:0 0 12px;font-weight:700}
-  .hero-m .h1m em{font-style:normal;color:var(--green)}
-  .hero-m .lead{font-size:16px;line-height:1.45;color:#B4BBC3;margin:0 0 20px}
-  .hero-m .lead b{color:#fff;font-weight:600}
-  .hero-m .ctas{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
-  .hero-m .ctas .btn{width:100%;justify-content:center}
-  .hero-m .fatos{display:flex;flex-wrap:wrap;gap:6px 14px;font:500 12px var(--mono);color:#8A939C}
-  .hero-m .fatos b{color:var(--off);font-weight:600}
-  .hero-m .fatos span{display:inline-flex;align-items:center;gap:6px}
-  .hero-m .fatos span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green)}
-}
+/* slider de cases */
+.slider{margin-top:52px}
+.trilho{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 4px 30px;margin:0 -4px;scrollbar-width:none}
+.trilho::-webkit-scrollbar{display:none}
+.trilho .card{flex:0 0 calc((100% - 66px)/3.3);scroll-snap-align:start;min-width:270px}
+@media(max-width:900px){.trilho .card{flex-basis:78%}}
+.setas{display:flex;gap:12px;justify-content:flex-end}
+.seta{width:52px;height:52px;border-radius:50%;border:0;background:var(--carbono);cursor:pointer;display:grid;place-items:center}
+.seta svg{stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.seta:hover{background:var(--verde-e)}
 
-/* preço: uma âncora e a conversa com a Liz */
-.preco2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:40px;align-items:center}
-.preco2 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-.preco2 .nota{margin-top:16px}
-.preco-liz{position:relative;display:flex;justify-content:flex-end;align-items:flex-end;min-height:380px;padding-right:4%}
-.preco-liz img{width:min(250px,55%);height:auto;position:relative;z-index:1;filter:drop-shadow(0 24px 34px rgba(10,11,14,.22))}
-.preco-liz .pb{position:absolute;left:0;top:6%;z-index:2;max-width:270px;background:#fff;border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:14px 16px;font-size:15px;line-height:1.4;color:var(--ink);box-shadow:0 18px 40px rgba(10,11,14,.12)}
-.preco-liz .pb b{display:block;font:600 11px var(--mono);color:var(--gtext);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-@media(max-width:900px){.preco2{grid-template-columns:1fr}.preco-liz{min-height:0;margin-top:10px;flex-direction:column;align-items:stretch}.preco-liz .pb{position:static;max-width:none;margin-bottom:14px;border-radius:14px}.preco-liz img{align-self:center;width:200px}}
+/* menu produtos */
+.drop{position:relative}
+.drop .v{font-size:11px;opacity:.6}
+.drop .menu{position:absolute;top:100%;left:-18px;padding-top:14px;display:none;min-width:330px}
+.drop:hover .menu,.drop:focus-within .menu{display:block}
+.drop .menu::before{content:"";position:absolute;inset:14px 0 0;background:#fff;border-radius:12px;box-shadow:0 18px 50px rgba(20,40,30,.16)}
+.drop .menu a{position:relative;display:block;padding:12px 18px}
+.drop .menu a:first-child{padding-top:16px}.drop .menu a:last-child{padding-bottom:16px}
+.drop .menu b{display:block;font-size:15px;color:var(--carbono)}
+.drop .menu span{display:block;font-size:13px;font-weight:500;color:var(--cinza);margin-top:2px}
+.drop .menu a:hover b{color:var(--verde-e)}
+/* cards com link */
+a.card{transition:transform .2s,box-shadow .2s}
+a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14)}
+.card .ir{margin-top:auto;padding-top:20px;font-weight:700;font-size:15px;color:var(--verde-e)}
+.card.cheio .ir{color:var(--carbono)}
+
+/* galeria */
+.gal-topo{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+.gal-topo h2{max-width:760px}
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.bento .b{position:relative;border-radius:22px;overflow:hidden;background:#15181c;display:block;aspect-ratio:16/9}
+.bento .b img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.bento .b:hover img{transform:scale(1.04)}
+.bento .b1{grid-column:1/3;grid-row:1/3}
+.bento .leg{position:absolute;left:0;right:0;bottom:0;padding:40px 20px 16px;background:linear-gradient(transparent,rgba(0,0,0,.72));color:#fff;font-size:14px}
+.bento .leg b{display:block;font-size:17px}
+@media(max-width:900px){.bento{grid-template-columns:1fr 1fr}.bento .b1{grid-column:1/3;grid-row:auto}}
+@media(max-width:560px){.bento{grid-template-columns:1fr}.bento .b1{grid-column:auto}}
+.aparece{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.aparece.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.aparece{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
 
-<nav><div class="wrap">
-  <a class="logo" href=""><b>[ </b>kompila<b> ]</b></a>
-  <div class="links"><a href="#como">Como funciona</a><a href="#liz">A Liz</a><a href="#crm">O CRM</a><a href="#preco">Planos</a><a href="#perguntas">Perguntas</a></div>
-  <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende.">Falar com a Liz</a>
-</div></nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></symbol>
+  <symbol id="i-flow" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H14a4 4 0 0 1 4 4v5.5"/></symbol>
+  <symbol id="i-pincel" viewBox="0 0 24 24"><path d="M14 4l6 6-9 9H5v-6z"/><path d="M12 6l6 6"/></symbol>
+  <symbol id="i-mega" viewBox="0 0 24 24"><path d="M4 10v4h3l7 4V6L7 10z"/><path d="M18 9a4 4 0 0 1 0 6"/></symbol>
+  <symbol id="i-alvo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 12l7-7"/></symbol>
+  <symbol id="i-liz" viewBox="0 0 24 24"><rect x="5" y="7" width="14" height="11" rx="5"/><circle cx="10" cy="12.5" r="1"/><circle cx="14" cy="12.5" r="1"/><path d="M10 7c0-2 1-3 2-4M14 7c0-2-1-3-2-4"/></symbol>
+  <symbol id="i-loja" viewBox="0 0 24 24"><path d="M4 9l2-5h12l2 5"/><path d="M5 9v11h14V9"/><path d="M4 9h16M10 20v-6h4v6"/></symbol>
+  <symbol id="i-prato" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M5 4v6M3 4v4a2 2 0 0 0 4 0V4M19 4v16"/></symbol>
+  <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h1M12 12h1M8 16h1M12 16h1"/></symbol>
+  <symbol id="i-cabide" viewBox="0 0 24 24"><path d="M12 7a2 2 0 1 1 2-2c0 1.5-2 2-2 3.5V9L3 16h18l-9-7"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M10 9l5 3-5 3z"/></symbol>
+  <symbol id="i-seta" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-engrenagem" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></symbol>
+  <symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="13" rx="2"/><path d="M18 6v13M21 8v9"/></symbol>
+  <symbol id="i-indica" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M14 19c0-2 1.5-4 3-4s3 2 3 4"/></symbol>
+  <symbol id="i-faisca" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></symbol>
+</svg>
 
-<section class="story" id="topo" aria-label="A Liz sai do celular">
-  <div class="fixa">
-    <canvas id="tela" width="1280" height="720" aria-hidden="true"></canvas>
-    <img class="poster" src="tech/img/q_poster.webp" data-m="tech/img/q9_poster.webp" alt="A Liz, robô da Kompila, em cima de uma mesa ao lado de um celular; ao fundo, o pipeline do CRM" width="1280" height="720">
-    <div class="veu"></div>
-    <div class="wrap txt">
-      <div class="kicker"><i></i><span>IA de atendimento + CRM · WhatsApp oficial</span></div>
-      <h1>Se chega lead no seu WhatsApp, <em>a&nbsp;Liz já tem trabalho.</em></h1>
-            <div class="ctas">
-        <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Quero ver a Liz atendendo</a>
-        <a class="btn o" href="#crm">Ver o CRM por dentro</a>
-      </div>
-      <div class="fatos"><span><b>8 s</b> resposta mediana</span><span><b>24 h</b> todos os dias</span><span><b>1 número</b> oficial</span><span>reunião <b>por áudio</b></span></div>
-      <div class="dica" aria-hidden="true"><i></i>role pra ver ela trabalhar</div>
-    </div>
-    <div class="balao" id="balao" aria-hidden="true"><b>Liz</b>Opa, cheguei! Tudo bem?</div>
-    <div class="passos" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+<header class="nav">
+  <div class="box">
+    <a class="logo" href="#topo"><b>[</b> kompila <b>]</b></a>
+    <ul>
+      <li class="drop"><a href="#produtos">Produtos <span class="v">▾</span></a>
+        <div class="menu">
+          <a href="crm/"><b>kompila .crm</b><span>Atendimento e vendas num lugar só</span></a>
+          <a href="liz/"><b>Liz</b><span>A IA que atende no WhatsApp e no Instagram</span></a>
+          <a href="loja/"><b>kompila loja</b><span>Loja própria, sem taxa por venda</span></a>
+          <a href="design/"><b>kompila design</b><span>Marca, site e criativo</span></a>
+          <a href="trafego/"><b>kompila tráfego</b><span>Anúncio que sabe qual lead virou venda</span></a>
+        </div>
+      </li>
+      <li><a href="#como">Como funciona</a></li>
+      <li><a href="#clientes">Clientes</a></li>
+      <li><a href="#trabalhos">Trabalhos</a></li>
+      </ul>
+    <a class="btn peq" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20entender%20o%20que%20a%20IA%20pode%20fazer%20na%20minha%20empresa." target="_blank" rel="noopener">Falar com a Kompila</a>
   </div>
-</section>
-<audio id="lizsom" src="video/liz-som.mp3" loop preload="none"></audio>
+</header>
 
-<section class="hero-m" aria-label="Chamada">
-  <div class="wrap">
-    <div class="hv"><video autoplay muted loop playsinline preload="metadata" poster="video/liz-responde-m.webp" aria-label="A Liz em cima da mesa respondendo leads no celular enquanto a dona da loja trabalha"><source src="video/liz-responde-m.mp4" type="video/mp4"></video><button type="button" class="som" data-som aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="w" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><span>ouvir</span></button></div>
-    <div class="kicker"><i></i><span>IA + CRM · WhatsApp oficial</span></div>
-    <div class="h1m" role="heading" aria-level="1">Se chega lead no seu WhatsApp, <em>a&nbsp;Liz já tem trabalho.</em></div>
-    <p class="lead">Ela responde em segundos, qualifica, marca a reunião e move o pipeline. <b>Sua equipe entra pra fechar.</b></p>
-    <div class="ctas">
-      <a class="btn g" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Quero ver a Liz atendendo</a>
-      <a class="btn o" href="#crm">Ver o CRM por dentro</a>
-    </div>
-    <div class="fatos"><span><b>8 s</b> resposta mediana</span><span><b>24 h</b> todos os dias</span><span><b>1 número</b> oficial</span><span>reunião <b>por áudio</b></span></div>
-  </div>
-</section>
-
-<section class="auto" id="como">
-  <div class="wrap grid">
+<!-- HERO -->
+<section class="hero verde" id="topo">
+  <div class="grade">
     <div class="txt">
-      <div class="kicker"><i></i><span>Enquanto isso, na sua operação</span></div>
-      <h2>Tudo isso acontece <em>sem ninguém apertar nada.</em></h2>
-      <p class="lead">Lead entra, a Liz responde, qualifica, marca, avisa a equipe e move o pipeline. Você abre o CRM e está feito.</p>
-      <div class="nums">
-        <div><b data-n="14" data-s="">0</b><span>leads hoje</span></div>
-        <div><b data-n="8" data-s=" s">0</b><span>resposta mediana</span></div>
-        <div><b data-n="3" data-s="">0</b><span>reuniões marcadas</span></div>
-        <div><b data-n="128" data-p="R$ " data-s=" mil">0</b><span>em proposta</span></div>
+      <div class="regua"><span class="ri"><svg><use href="#i-faisca"/></svg></span><span>IA sob medida pra pequena e média empresa</span></div>
+      <h1>A IA assume o trabalho repetitivo. Sua equipe vai <span class="mk">pro que dá lucro.</span></h1>
+      <p class="sub">A Kompila monta, opera e mede a IA dentro do seu negócio. Design, marketing, vendas e atendimento num time só, e todo mês você vê quanto economizou.</p>
+      <div class="acoes">
+        <a class="btn" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20entender%20o%20que%20a%20IA%20pode%20fazer%20na%20minha%20empresa." target="_blank" rel="noopener">Quero ver o que a IA faz na minha empresa</a>
+        <a class="btn branco" href="#o-que-faz">Como funciona</a>
       </div>
-      <p class="nota">Cenário de demonstração. Os números do seu CRM são os seus.</p>
+      <p class="sem">Sem precisar entender de IA.</p>
     </div>
-    <div class="feed" aria-hidden="true"><div class="fita" id="fita"></div><div class="sombra"></div></div>
+    <div class="foto"><img src="img/k_socios.webp" alt="Dois sócios comemorando no escritório com a Liz, a IA da Kompila, sobre a mesa"></div>
   </div>
 </section>
 
-<!-- CRM · fundo papel -->
-<section class="sec papel" id="crm">
-  <div class="wrap">
-    <div class="cab"><div class="kicker"><i></i><span>O CRM</span></div><h2>O CRM que <em>ela move.</em></h2><p class="lead">Pipeline, agenda, fila e equipe numa tela só. Quem arrasta o card é a Liz, por conversa ou por voz; você abre e está feito.</p></div>
-    <div class="tela"><div class="barra"><i></i><i></i><i></i><span>crm.kompila.com.br/pipeline</span></div>
-      <div class="kb" id="kb" aria-label="Pipeline do CRM: um lead andando de Novo até Fechado">
-        <div class="col p0" data-f="Novo"><h4>Novo<i>2</i></h4><b class="sum">R$ 3,0k</b><div class="card"><strong>Mariana Souza</strong><span>painel de LED pra fachada</span><em>IA · R$ 2,0k</em></div><div class="card"><strong>Carlos Lima</strong><span>quero um orçamento</span><em>IA · R$ 1,0k</em></div></div>
-        <div class="col p1" data-f="Em contato"><h4>Em contato<i>1</i></h4><b class="sum">R$ 2,9k</b><div class="card"><strong>Gisele Ramos</strong><span>CRM pra equipe de 4</span><em>Alex · R$ 2,9k</em></div></div>
-        <div class="col p2" data-f="Reunião marcada"><h4>Reunião marcada<i>1</i></h4><b class="sum">R$ 4,0k</b><div class="card hum"><strong>Silvestre</strong><span>reunião dia 02/10 às 10h</span><em>Alex · R$ 4,0k</em></div></div>
-        <div class="col p3" data-f="Proposta"><h4>Proposta<i>0</i></h4><b class="sum">&nbsp;</b><div class="vazia">nenhum lead aqui</div></div>
-        <div class="col p3" data-f="Fechamento"><h4>Fechamento<i>0</i></h4><b class="sum">&nbsp;</b><div class="vazia">nenhum lead aqui</div></div>
-        <div class="col won" data-f="Fechado"><h4>Fechado<i>1</i></h4><b class="sum">R$ 1,0k</b><div class="card"><strong>Emmanuel</strong><span>projeto fechado</span><em>Alex · R$ 1,0k</em></div></div>
-        <div class="col lost" data-f="Perdido"><h4>Perdido<i>1</i></h4><b class="sum">&nbsp;</b><div class="card"><strong>Zé</strong><span>comprou em outra</span><em>IA</em></div></div>
+<!-- O QUE A IA FAZ -->
+<section class="bloco off" id="o-que-faz">
+  <div class="box">
+    <div class="regua"><span class="ri"><svg><use href="#i-engrenagem"/></svg></span><span>01 · o que a IA faz pela sua empresa</span></div>
+    <h2>Atender é só uma das coisas. <em>A IA faz o que toma o dia da sua equipe.</em></h2>
+    <p class="sub">A gente olha onde as pessoas perdem tempo e coloca a IA pra fazer essa parte. Elas ficam com o que precisa de gente.</p>
+    <div class="cards c4">
+      <a class="card aparece" href="crm/">
+        <div class="ico"><svg><use href="#i-doc"/></svg></div>
+        <h3>Faz as tarefas repetitivas</h3>
+        <p>Pedido, cadastro, conferência de documento, lançamento no financeiro, relatório. O que alguém faz igual todo dia.</p>
+        <span class="ir">Ver no kompila .crm →</span>
+      </a>
+      <a class="card aparece" href="liz/">
+        <div class="ico"><svg><use href="#i-chat"/></svg></div>
+        <h3>Atende e vende na conversa</h3>
+        <p>Responde no WhatsApp e no Instagram na hora, inclusive às 23h, anota o que o cliente pediu e avisa o vendedor.</p>
+        <span class="ir">Ver a Liz atendendo →</span>
+      </a>
+      <a class="card aparece" href="crm/">
+        <div class="ico"><svg><use href="#i-flow"/></svg></div>
+        <h3>Organiza o fluxo de trabalho</h3>
+        <p>Cada pedido, cliente e tarefa num lugar só, com quem é o responsável e o que falta. Nada some no meio do caminho.</p>
+        <span class="ir">Ver no kompila .crm →</span>
+      </a>
+      <a class="card aparece" href="trafego/">
+        <div class="ico"><svg><use href="#i-chart"/></svg></div>
+        <h3>Mostra o número pra decidir</h3>
+        <p>De onde vem o cliente que compra, quanto tempo a resposta leva, quanto você economizou no mês. Sem planilha.</p>
+        <span class="ir">Ver no kompila tráfego →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- O TIME -->
+<section class="bloco" id="produtos">
+  <div class="box">
+    <div class="regua"><span class="ri"><svg><use href="#i-cards"/></svg></span><span>02 · produtos · um time inteiro pela sua empresa</span></div>
+    <div class="lado">
+      <div>
+        <h2>Design, marketing, vendas e atendimento. <em>Sem você montar um time.</em></h2>
+        <p class="sub">Pessoas da Kompila cuidam da marca, das campanhas e do Instagram. A IA faz o atendimento e o trabalho repetitivo. Você acompanha tudo numa tela.</p>
       </div>
-      <div class="legenda" id="kbleg"><b>Marcos</b> entrou pelo Google Ads. A Liz atende, qualifica e marca; o card anda sozinho.</div>
+      <div class="caixa" style="aspect-ratio:5/4"><img src="img/k_contadora.webp" alt="Empresária analisando resultados no notebook com a Liz ao lado" style="object-position:45% 40%"></div>
     </div>
-    <div class="tres">
-      <div><b>Pipeline</b><p>Novo, Em contato, Reunião marcada, Proposta, Fechamento, Fechado. A Liz move conforme a conversa anda. Fechado verde, perdido vermelho, calado há 3 dias fica marcado.</p></div>
-      <div><b>Fila de 5 minutos</b><p>Lead qualificado vai pro vendedor. Não respondeu em 5 minutos, vai pro próximo. Em 10, a Liz retoma e segura o lead até alguém entrar.</p></div>
-      <div><b>Agenda</b><p>Reunião marcada por conversa ou por áudio entra na agenda com o vendedor certo. Aviso pra você uma hora antes, no WhatsApp.</p></div>
+
+    <div class="cards c4">
+      <a class="card aparece" href="design/">
+        <div class="tag">Design</div>
+        <div class="ico"><svg><use href="#i-pincel"/></svg></div>
+        <h3>Marca, site e loja</h3>
+        <p>Identidade, site que vende e loja própria, ligados ao que entra de cliente.</p>
+        <span class="ir">Ver kompila design →</span>
+      </a>
+      <a class="card aparece" href="trafego/">
+        <div class="tag">Marketing</div>
+        <div class="ico"><svg><use href="#i-mega"/></svg></div>
+        <h3>Campanha e Instagram</h3>
+        <p>Anúncio no Meta e no Google, posts e calendário aprovados por você antes de sair.</p>
+        <span class="ir">Ver kompila tráfego →</span>
+      </a>
+      <a class="card aparece" href="crm/">
+        <div class="tag">Vendas</div>
+        <div class="ico"><svg><use href="#i-alvo"/></svg></div>
+        <h3>Ninguém fica sem retorno</h3>
+        <p>Cada contato entra no CRM com origem, fase e dono. Quem sumiu recebe uma nova mensagem.</p>
+        <span class="ir">Ver kompila .crm →</span>
+      </a>
+      <a class="card cheio aparece" href="liz/">
+        <div class="tag">Atendimento</div>
+        <div class="ico"><svg><use href="#i-liz"/></svg></div>
+        <h3>A Liz, 24 horas</h3>
+        <p>A IA da Kompila atende, tira dúvida, agenda e passa pronto pra sua equipe.</p>
+        <span class="ir">Ver a Liz →</span>
+      </a>
     </div>
-  </div>
-</section>
 
-<!-- Voz · fundo verde -->
-<section class="sec verde" id="liz">
-  <div class="wrap grid2">
-    <div>
-      <div class="kicker"><i></i><span>Você fala. Ela faz.</span></div>
-      <h2>Manda um áudio. <em>Ela marca, move e anota.</em></h2>
-      <p class="lead">A Liz também atende a sua equipe, no mesmo WhatsApp. Reunião, lembrete, resultado: você fala como fala com gente, e o CRM fica em dia sozinho.</p>
-      <p class="prova">Conversa real do dia 21/09, no WhatsApp da Kompila.</p>
-      <button type="button" class="btn quem" id="quemliz"><span class="av"><img alt="" src="tech/img/liz-avatar.webp"></span>Quem é a Liz?</button>
-    </div>
-    <div class="palco-zap"><img alt="" class="liz-fone" src="tech/img/liz-fone.webp" width="397" height="900">
-    <div class="zap" id="zap" aria-label="Conversa real entre o gestor e a Liz">
-      <div class="zt"><img alt="" src="tech/img/liz-avatar.webp"><div><b>Liz · Kompila</b><span>online</span></div></div>
-      <div class="zm"><div class="eu audio"><i></i><span>áudio · 0:06</span><small>18:13</small></div>
-      <div class="eu">Oi Liz, tudo bem? Marca uma reunião comigo com o Manu às 8 horas hoje.<small>18:13</small></div>
-      <div class="ela">Não consigo marcar hoje às 8h porque já passou. Qual outra data e hora?<small>18:13</small></div>
-      <div class="eu">Ô Liz, marca pra mim às 20 horas. Desculpa, eu falei o horário errado.<small>18:13</small></div>
-      <div class="ela">Reunião marcada com Emmanuel para hoje às 20h.<small>18:13</small></div>
-      <div class="eu">Emmanuel projeto fechado. 1000 reais dia 22/09.<small>22:04</small></div>
-      <div class="ela">Emmanuel fechou projeto de 1000 reais no dia 22/09. Anotado.<small>22:04</small></div></div>
-    </div></div>
-  </div>
-</section>
-
-<!-- Planos · fundo papel -->
-<section class="sec papel" id="preco">
-  <div class="wrap preco2">
-    <div>
-      <div class="kicker"><i></i><span>Planos</span></div>
-      <h2>A partir de <em>R$ 278 por mês.</em></h2>
-      <p class="lead">R$ 278 por mês no plano anual, com fidelidade, ou R$ 378 no mensal, sem fidelidade. WhatsApp e IA inclusos, sem conta da Meta por fora. Os leads e o histórico são seus.</p>
-      <div class="ctas"><a class="btn dk" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20saber%20o%20plano%20pro%20meu%20caso."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Consultar com a Liz</a></div>
-      <p class="nota">Ficou alguma dúvida? Uma call de 30 minutos com a equipe de produto, até as 21h.</p>
-    </div>
-    <div class="preco-liz"><div class="pb"><b>Liz</b>Me conta o que a sua empresa faz. Eu te passo o valor na hora, sem enrolar.</div><img alt="" src="tech/img/liz-fala.webp" width="700" height="900" loading="lazy"></div>
-  </div>
-</section>
-
-<!-- Quem faz · fundo carbono -->
-<section class="sec carb" id="liga">
-  <div class="wrap grid2">
-    <div><div class="kicker"><i></i><span>Quem está do outro lado</span></div><h2>Não é uma ferramenta. <em>É um time que entra junto.</em></h2><p class="lead">Call de 30 minutos com a equipe de produto, a Liz treinada no seu negócio, ajustes pelo WhatsApp e gente do outro lado quando precisar. Feito por quem faz marca, site, loja e campanha há 20 anos: se ainda falta alguma dessas, a gente faz, ligado no mesmo CRM.</p></div>
-    <div class="nums3"><div><b>20 anos</b><span>de vendas online e geração de leads</span></div><div><b>+25</b><span>marcas atendidas</span></div><div><b>R$ 500 mil</b><span>por mês administrados em mídia Meta e Google</span></div></div>
-  </div>
-  <div class="logos" aria-label="Marcas atendidas"><div class="trilho"><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span><span>Burnpixel</span><span>Maslu Select</span><span>P1LED</span><span>Sinergy AUT</span><span>Analu</span><span>Bravus Sport</span><span>Piuka</span><span>Kaisan</span><span>Elo Rocket</span><span>Kit Escolar SP</span><span>Vesti</span><span>Brand1</span><span>Conecta Mobile</span><span>Everlight</span><span>Peach Up</span><span>Viki Saúde</span><span>Trevo Lácteos</span><span>Ehrmann</span><span>Redde.ai</span><span>Net Vistos</span><span>Via Motorista</span></div></div>
-</section>
-
-<!-- Perguntas · fundo papel -->
-<section class="sec papel" id="perguntas">
-  <div class="wrap">
-    <div class="cab"><div class="kicker"><i></i><span>Perguntas</span></div><h2>Seis respostas <em>curtas.</em></h2></div>
-    <div class="faq">
-      <details open><summary>O que é a Kompila?</summary><p>IA de atendimento com CRM próprio. A Liz atende cada lead em segundos e nenhum fica mais de 5 minutos sem uma pessoa. O gerente vê tudo numa tela. O vendedor só fecha.</p></details>
-      <details><summary>A Liz substitui o vendedor?</summary><p>Não. Ela faz o pré-atendimento, qualifica e marca. Fechar continua sendo trabalho de gente, com o contexto pronto no WhatsApp.</p></details>
-      <details><summary>E se o vendedor não responder?</summary><p>Em 5 minutos o lead vai pro próximo da fila. Em 10, a Liz retoma e segura o lead. Passou 24 h, volta pra fila com o relógio zerado.</p></details>
-      <details><summary>A Liz inventa preço ou condição?</summary><p>Não. Preço e condição saem da tabela aprovada pela empresa. Valor sensível pode exigir aprovação de uma pessoa antes do envio.</p></details>
-      <details><summary>Preciso trocar meu CRM?</summary><p>O kompila .crm vira o seu CRM. Se você usa HubSpot, a gente lê a sua base e traz os contatos parados pra reativar.</p></details>
-      <details><summary>Quanto custa?</summary><p>R$ 278 por mês no plano anual, com fidelidade, ou R$ 378 no mensal, sem fidelidade. WhatsApp e IA inclusos. Qualquer dúvida a Liz responde no WhatsApp, ou a equipe de produto numa call de 30 minutos.</p></details>
+    <div class="conta aparece">
+      <div class="esq">
+        <div class="tit">Quanto custa montar esse time</div>
+        <table>
+          <tr><td>Analista de marketing</td><td>R$ 4.914</td></tr>
+          <tr><td>Designer gráfico</td><td>R$ 3.768</td></tr>
+          <tr><td>Social media</td><td>R$ 2.873</td></tr>
+          <tr><td>Vendedor interno</td><td>R$ 1.937</td></tr>
+          <tr><td>Atendente</td><td>R$ 1.858</td></tr>
+        </table>
+        <p class="fonte">Salário médio CLT no Brasil, Portal Salário com dados do CAGED, ago/2025 a jul/2026. Custo pra empresa = salário × 1,27 (encargos no Simples Nacional, o cálculo mais baixo). Sem vale-transporte, refeição, computador nem gestor.</p>
+      </div>
+      <div class="dir">
+        <div class="tit">Time contratado</div>
+        <div class="num grande"><i>[</i> R$ 19.494 <i>]</i></div>
+        <div style="font-size:17px;color:#AEB5BD">por mês · R$ 233.928 por ano</div>
+        <p><b>Com a Kompila, uma fração disso.</b> E todo mês você recebe a conta do que a IA fez e de quanto você economizou.</p>
+        <a class="btn verde" style="margin-top:26px;align-self:flex-start" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20ver%20a%20conta%20da%20minha%20empresa." target="_blank" rel="noopener">Quero ver a conta da minha empresa</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Fecho · fundo verde -->
-<section class="sec verde fecho" id="fecho">
-  <div class="wrap grid2">
-    <div><h2>Se chega lead no seu WhatsApp, <em>a Liz já tem trabalho.</em></h2><p class="lead">Manda um oi pra ela. Em segundos você vê como ela atende, e marca a reunião com a equipe se fizer sentido.</p>
-      <div class="ctas"><a class="btn dk" href="https://wa.me/5511962884399?text=Oi%2C%20Liz.%20Quero%20ver%20como%20voc%C3%AA%20atende."><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>Falar com a Liz no WhatsApp</a></div></div>
-    <div class="palco-f"><img alt="" class="objf" src="tech/img/objeto-sem-fundo.webp" width="999" height="723" loading="lazy"><img alt="" class="lizf" src="tech/img/liz-oi.webp" width="436" height="640" loading="lazy"></div>
+<!-- COMO FUNCIONA -->
+<section class="bloco off" id="como">
+  <div class="box">
+    <div class="regua"><span class="ri"><svg><use href="#i-flow"/></svg></span><span>03 · como funciona</span></div>
+    <h2>Você não aprende nem configura nada. <em>A gente monta, opera e mede.</em></h2>
+    <div class="cards c3">
+      <div class="card passo aparece">
+        <div class="n">[ 01 ] monta</div>
+        <h3>Entende o seu negócio</h3>
+        <p>Numa conversa de 30 minutos a gente vê onde sua equipe perde tempo e escreve o que a IA vai fazer. Você aprova antes.</p>
+        <a class="ir" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20marcar%20a%20conversa%20de%2030%20minutos." target="_blank" rel="noopener">Marcar a conversa →</a>
+      </div>
+      <div class="card passo aparece">
+        <div class="n">[ 02 ] opera</div>
+        <h3>Coloca pra rodar</h3>
+        <p>A IA entra no WhatsApp, no Instagram e no sistema que a sua empresa já usa. Quem cuida dela é a Kompila.</p>
+      </div>
+      <div class="card passo cheio aparece">
+        <div class="n" style="color:var(--carbono)">[ 03 ] mede</div>
+        <h3>Mostra quanto rendeu</h3>
+        <p>Todo mês você vê o que a IA fez, quanto tempo a equipe ganhou e quanto você economizou.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-
-<div class="modal" id="mliz" hidden>
-  <div class="mb" role="dialog" aria-modal="true" aria-labelledby="mliz-t">
-    <button type="button" class="mx" aria-label="Fechar">×</button>
-    <img src="tech/img/ale-e-liz.webp" alt="Alexsandro, fundador da Kompila, e a filha Liz" width="900" height="1200">
-    <div class="mt">
-      <span class="kicker"><i></i>Quem é a Liz</span>
-      <h3 id="mliz-t">A Liz tem nome de gente.</h3>
-      <p>Liz é a filha do fundador da Kompila. Ela é autista não verbal, ama bonecas e vive por aí com ele e a boneca preferida dela.</p>
-      <p>A IA é uma homenagem a ela. Por isso a nossa Liz anda sempre com uma bonequinha no braço.</p>
-      <p class="ass">Alexsandro Reges, fundador</p>
+<!-- CLIENTES -->
+<section class="bloco" id="clientes">
+  <div class="box">
+    <div class="regua"><span class="ri"><svg><use href="#i-indica"/></svg></span><span>04 · quem já trabalha com a gente</span></div>
+    <h2>Cada empresa pediu uma coisa. <em>A IA entrou onde doía.</em></h2>
+    <div class="slider">
+      <div class="trilho">
+      <div class="card caso">
+        <span class="status no-ar">No ar</span>
+        <div class="ico"><svg><use href="#i-chart"/></svg></div>
+        <h3>P1LED</h3>
+        <p>Painéis de LED, São Paulo</p>
+        <dl><dt>Pediu</dt><dd>Saber onde o dinheiro dos anúncios virava venda.</dd>
+        <dt>Entregamos</dt><dd>12 meses de Google Ads analisados, R$ 209 mil investidos: as capitais levavam 39% da verba e traziam 78% da venda. Mais site, sistema comercial e CRM lendo 3.438 contatos do HubSpot.</dd></dl>
+        <a class="ir" href="trafego/">Ver kompila tráfego →</a>
+      </div>
+      <div class="card caso">
+        <span class="status no-ar">No ar</span>
+        <div class="ico"><svg><use href="#i-cabide"/></svg></div>
+        <h3>Maslu Select</h3>
+        <p>Moda feminina</p>
+        <dl><dt>Pediu</dt><dd>Uma loja online com a cara da marca.</dd>
+        <dt>Entregamos</dt><dd>A loja em <a href="https://masluoficial.com.br" target="_blank" rel="noopener" style="color:var(--verde-e);font-weight:700">masluoficial.com.br</a>, com vitrine, lookbook e seções que a dona edita sozinha.</dd></dl>
+        <a class="ir" href="loja/">Ver kompila loja →</a>
+      </div>
+      <div class="card caso">
+        <span class="status">Em implantação</span>
+        <div class="ico"><svg><use href="#i-calc"/></svg></div>
+        <h3>Coleve</h3>
+        <p>Contabilidade digital, São Paulo</p>
+        <dl><dt>Pediu</dt><dd>Atender os alunos no WhatsApp e organizar a jornada de cada um.</dd>
+        <dt>Estamos entregando</dt><dd>A Liz atendendo os alunos no WhatsApp e a jornada de cada aluno organizada numa tela pra equipe.</dd></dl>
+        <a class="ir" href="liz/">Ver a Liz →</a>
+      </div>
+      <div class="card caso">
+        <span class="status">Em implantação</span>
+        <div class="ico"><svg><use href="#i-prato"/></svg></div>
+        <h3>Luciu's Lanches</h3>
+        <p>Restaurante</p>
+        <dl><dt>Pediu</dt><dd>Receber pedido de mesa, entrega e retirada sem ninguém anotar à mão.</dd>
+        <dt>Estamos entregando</dt><dd>Pedido pelo WhatsApp conferido com o cardápio, mapa de mesas e comanda que imprime sozinha na cozinha.</dd></dl>
+        <a class="ir" href="crm/">Ver kompila .crm →</a>
+      </div>
+      <div class="card caso">
+        <span class="status">Em implantação</span>
+        <div class="ico"><svg><use href="#i-play"/></svg></div>
+        <h3>Animar</h3>
+        <p>E-commerce, 90 mil vendas na Shopee</p>
+        <dl><dt>Pediu</dt><dd>Vender também no TikTok Shop.</dd>
+        <dt>Estamos entregando</dt><dd>O processo de e-commerce no TikTok Shop montado do zero.</dd></dl>
+        <a class="ir" href="loja/">Ver kompila loja →</a>
+      </div>
+      </div>
+      <div class="setas"><button class="seta" data-d="-1" aria-label="Anterior"><svg width="22" height="22" style="transform:scaleX(-1)"><use href="#i-seta"/></svg></button><button class="seta" data-d="1" aria-label="Próximo"><svg width="22" height="22"><use href="#i-seta"/></svg></button></div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- GALERIA -->
+<section class="bloco escuro" id="trabalhos">
+  <div class="box">
+    <div class="regua"><span class="ri"><svg><use href="#i-pincel"/></svg></span><span>trabalhos</span></div>
+    <div class="gal-topo">
+      <h2>Marca, embalagem, site e loja. <em>Feitos pra vender.</em></h2>
+      <a class="btn verde" href="trabalhos/">Ver todos os trabalhos →</a>
+    </div>
+    <div class="bento">
+      <a class="b b1" href="trabalhos/"><img src="trabalhos/pranchas/19_coleve.webp" alt="Coleve: Marca" loading="lazy"><span class="leg"><b>Coleve</b>Marca</span></a>
+      <a class="b b2" href="trabalhos/"><img src="trabalhos/pranchas/02_p1led_marca.webp" alt="P1LED: Identidade de marca" loading="lazy"><span class="leg"><b>P1LED</b>Identidade de marca</span></a>
+      <a class="b b3" href="trabalhos/"><img src="trabalhos/pranchas/19a_uni-sushi.webp" alt="UNI Premium Sushi: Branding" loading="lazy"><span class="leg"><b>UNI Premium Sushi</b>Branding</span></a>
+      <a class="b b4" href="trabalhos/"><img src="trabalhos/pranchas/03_p1led_embalagens.webp" alt="P1LED: Embalagens VX e BX" loading="lazy"><span class="leg"><b>P1LED</b>Embalagens VX e BX</span></a>
+      <a class="b b5" href="trabalhos/"><img src="trabalhos/pranchas/12_maslu.webp" alt="Maslu Select: Marca e loja" loading="lazy"><span class="leg"><b>Maslu Select</b>Marca e loja</span></a>
+      <a class="b b6" href="trabalhos/"><img src="trabalhos/pranchas/16_soul.webp" alt="Soul Synergy: Marca e manual" loading="lazy"><span class="leg"><b>Soul Synergy</b>Marca e manual</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- LIZ -->
+<section class="bloco off" id="liz">
+  <div class="box">
+    <div class="lado">
+      <div class="liz-cena"><img src="img/liz_09_mostrando_celular.webp" alt="A Liz, a IA da Kompila, segurando um celular e uma boneca"></div>
+      <div>
+        <div class="regua"><span class="ri"><svg><use href="#i-liz"/></svg></span><span>05 · a liz</span></div>
+        <h2>Quem atende na sua empresa às 23h? <em>A Liz.</em></h2>
+        <p class="sub">É a IA de atendimento da Kompila. Responde no WhatsApp e no Instagram na hora, entende o que o cliente quer, agenda e passa pronto pro seu vendedor.</p>
+        <p class="sub" style="font-size:17px">O nome vem da filha do fundador.</p>
+        <div style="margin-top:32px"><a class="btn" href="liz/">Ver a Liz atendendo <svg width="20" height="20" style="stroke:currentColor;fill:none;stroke-width:2.4"><use href="#i-seta"/></svg></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FECHO -->
+<section class="fecho verde">
+  <div class="box">
+    <h2>Sua equipe no que dá lucro. <span class="mk">A IA no resto.</span></h2>
+    <p class="sub">Conta pra gente o que toma o dia da sua empresa. Em 30 minutos você sai sabendo o que a IA pode fazer e quanto dá pra economizar.</p>
+    <div class="acoes">
+      <a class="btn" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20entender%20o%20que%20a%20IA%20pode%20fazer%20na%20minha%20empresa." target="_blank" rel="noopener">Falar com a Kompila no WhatsApp</a>
+    </div>
+  </div>
+</section>
+
 <footer>
-  <div class="wrap ft">
-    <div class="marca"><span class="logo"><b>[ </b>kompila<b> ]</b></span><p>IA de atendimento + CRM. A Liz atende no WhatsApp, no Instagram e no seu site; a equipe só fecha.</p>
-      <div class="social"><a href="https://www.instagram.com/kompila.ai" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM21.9 8c-.1-1.6-.4-3-1.6-4.2S17.6 2.2 16 2.1C14.4 2 9.6 2 8 2.1 6.4 2.2 5 2.5 3.8 3.7S2.2 6.4 2.1 8C2 9.6 2 14.4 2.1 16c.1 1.6.4 3 1.6 4.2s2.6 1.5 4.2 1.6c1.6.1 6.4.1 8 0 1.6-.1 3-.4 4.2-1.6s1.5-2.6 1.6-4.2c.1-1.6.1-6.4.1-8zm-2.1 9.7a3.3 3.3 0 0 1-1.9 1.9c-1.3.5-4.4.4-5.9.4s-4.6.1-5.9-.4a3.3 3.3 0 0 1-1.9-1.9c-.5-1.3-.4-4.4-.4-5.9s-.1-4.6.4-5.9A3.3 3.3 0 0 1 6.1 4c1.3-.5 4.4-.4 5.9-.4s4.6-.1 5.9.4a3.3 3.3 0 0 1 1.9 1.9c.5 1.3.4 4.4.4 5.9s.1 4.6-.4 5.9z"/></svg></a>
-      <a href="#" aria-label="Facebook" data-falta="facebook"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg></a>
-      <a href="#" aria-label="LinkedIn" data-falta="linkedin"><svg viewBox="0 0 24 24"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5V9h3v10zM6.5 7.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.9c0-1.2 0-2.7-1.6-2.7s-1.9 1.3-1.9 2.6V19h-3V9h2.9v1.4a3.2 3.2 0 0 1 2.9-1.6c3 0 3.6 2 3.6 4.6V19z"/></svg></a>
-      <a href="#" aria-label="YouTube" data-falta="youtube"><svg viewBox="0 0 24 24"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1c.4-1.6.5-3.2.5-4.8s-.1-3.2-.5-4.8zM9.7 15.1V8.9l6.1 3.1-6.1 3.1z"/></svg></a>
-      <a href="#" aria-label="TikTok" data-falta="tiktok"><svg viewBox="0 0 24 24"><path d="M16.5 2h-3.2v13.1a2.8 2.8 0 1 1-2.8-2.8c.3 0 .6 0 .8.1V9.1a6 6 0 1 0 5.2 6V8.6a7.4 7.4 0 0 0 4.3 1.4V6.8A4.3 4.3 0 0 1 16.5 2z"/></svg></a>
-      <a href="https://wa.me/5511962884399" aria-label="WhatsApp" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7.5-.1 1.5-.6 1.7-1.2s.2-1.1.2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg></a></div>
+  <div class="box rodape">
+    <div class="marca">
+      <div class="logo"><b>[</b> kompila <b>]</b></div>
+      <p>IA sob medida pra pequena e média empresa.</p>
+      <a class="btn verde peq" style="margin-top:20px" href="https://wa.me/5511962884399" target="_blank" rel="noopener">Falar com a Kompila</a>
     </div>
-    <div class="col"><b>Produto</b><a href="#como">Como funciona</a><a href="#liz">A Liz</a><a href="#crm">O CRM</a><a href="#preco">Planos</a><a href="#perguntas">Perguntas</a></div>
-    <div class="col"><b>Kompila</b><a href="loja/">kompila loja</a><a href="design/">kompila design</a><a href="trafego/">kompila tráfego</a><a href="blog/">Blog</a><a href="#" id="quemliz2">Quem é a Liz?</a><a href="privacidade/">Privacidade</a></div>
-    <div class="col"><b>Fale com a gente</b><a href="https://wa.me/5511962884399">+55 11 96288-4399</a><a href="https://www.instagram.com/kompila.ai">@kompila.ai</a><a href="https://crm.kompila.com.br">Entrar no CRM</a></div>
+    <div class="col"><h4>Produtos</h4>
+      <a href="crm/">kompila .crm</a><a href="liz/">Liz</a><a href="loja/">kompila loja</a><a href="design/">kompila design</a><a href="trafego/">kompila tráfego</a>
+    </div>
+    <div class="col"><h4>Kompila</h4>
+      <a href="#o-que-faz">O que a IA faz</a><a href="#como">Como funciona</a><a href="#clientes">Clientes</a><a href="trabalhos/">Trabalhos</a><a href="#liz">A Liz</a><a href="blog/">Blog</a>
+    </div>
+    <div class="col"><h4>Parceiros</h4>
+      <a href="https://coleve.com.br" target="_blank" rel="noopener">Coleve · contabilidade</a><a href="https://p1led.com.br" target="_blank" rel="noopener">P1LED · painéis de LED</a>
+    </div>
+    <div class="col"><h4>Contato</h4>
+      <a href="https://wa.me/5511962884399" target="_blank" rel="noopener">WhatsApp (11) 96288-4399</a><a href="https://instagram.com/kompila.ai" target="_blank" rel="noopener">Instagram @kompila.ai</a><a href="https://crm.kompila.com.br">Entrar no CRM</a>
+    </div>
   </div>
-  <div class="wrap base"><span>© 2026 Kompila. Todos os direitos reservados.</span><span>São Paulo, SP</span></div>
+  <div class="box base">
+    <span>Kompila · CNPJ 65.907.771/0001-02 · Mogi das Cruzes/SP</span>
+    <a href="privacidade/">Política de privacidade</a>
+  </div>
 </footer>
 
 <script>
-(function(){
-  var story=document.querySelector('.story'),fixa=story.querySelector('.fixa'),cv=document.getElementById('tela'),cx=cv.getContext('2d');
-  var N=121,quadros=new Array(N),atual=-1,pedido=0,raf=0;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  var PASTA=(innerWidth<=900&&innerHeight>innerWidth)?'tech/img/q9/':'tech/img/q/';
-  function src(i){return PASTA+String(i+1).padStart(3,'0')+'.webp'}
-  function carrega(i,cb){if(quadros[i])return cb&&cb();var im=new Image();im.onload=function(){quadros[i]=im;cb&&cb()};im.onerror=function(){cb&&cb()};im.src=src(i)}
-  function desenha(i){var im=quadros[i];if(!im){for(var k=i;k>=0;k--){if(quadros[k]){im=quadros[k];break}}}if(!im)return;
-    var W=cv.width=fixa.clientWidth*Math.min(devicePixelRatio||1,2),H=cv.height=fixa.clientHeight*Math.min(devicePixelRatio||1,2);
-    // sem zoom: o vídeo no tamanho natural (cover), deslocado pra direita; a faixa que sobra à esquerda é carbono, atrás do degradê
-    var largo=W/H>1.15,r=Math.max(W/im.naturalWidth,H/im.naturalHeight),w=im.naturalWidth*r,h=im.naturalHeight*r;
-    var x=largo?Math.max(0,W*.72-w*.40):(W-w)*.5,y=(H-h)*.5;
-    cx.fillStyle='#0A0B0E';cx.fillRect(0,0,W,H);cx.drawImage(im,x,y,w,h);atual=i}
-  var passos=story.querySelectorAll('.passos i');
-  function passo(){var r=story.getBoundingClientRect(),alt=story.offsetHeight-fixa.offsetHeight,p=Math.min(1,Math.max(0,(-r.top+64)/alt));
-    var i=Math.round(p*(N-1));if(i!==atual)desenha(i);
-    // ROTEIRO (quadros medidos no vídeo). Começo: lead chega (q0-30), ela sai do celular (q30-38) e olha pra frente (q38-46).
-    // Meio: toca o celular e conversa com o lead (q50-70), calendário (q74-96), pipeline acende (q96-108). Fim: acena (q108-120).
-    var R=[[0,.33,0,''],[.33,.42,1,'Opa, cheguei! Tudo bem?'],[.42,.50,1,'Sou a Liz, seu chatbot inteligente com CRM exclusivo.'],
-           [.50,.62,2,'Chegou um lead. Deixa comigo.'],[.62,.78,3,'Reunião marcada. Te aviso uma hora antes.'],[.78,.92,4,'Fechou! Já avisei a equipe.'],[.92,1.01,4,'Quer isso na sua empresa? Me chama.']];
-    var f=R[0];for(var q=0;q<R.length;q++){if(p>=R[q][0]&&p<R[q][1]){f=R[q];break}}
-    var seg=f[2];passos.forEach(function(c,k){c.classList.toggle('on',k<=seg)});
-    story.classList.toggle('rolou',p>.03);if(p>.03)document.body.classList.add('rolou');
-    var balao=document.getElementById('balao');
-    if(balao){if(f[3]){if(balao.dataset.f!==f[3]){balao.dataset.f=f[3];balao.lastChild.nodeValue=f[3];balao.classList.remove('on');void balao.offsetWidth;balao.classList.add('on')}}else{balao.classList.remove('on');balao.dataset.f=''}}raf=0}
-  function ask(){if(!raf)raf=requestAnimationFrame(passo)}
-  // primeiro quadro na hora, o resto em segundo plano em ordem
-  try{var po=story.querySelector('.poster');if(po&&PASTA.indexOf('q9/')>-1&&po.dataset.m)po.src=po.dataset.m}catch(e){}
-  carrega(0,function(){story.classList.add('pronta');desenha(0);var i=1;(function fila(){if(i>=N)return;carrega(i++,fila)})()});
-  addEventListener('scroll',ask,{passive:true});addEventListener('resize',function(){atual=-1;ask()});
-})();
-</script>
-<script>
-(function(){
-  // feed que não para: um evento novo entra por cima a cada 2,2 s; os de baixo somem. Nomes de demonstração (os mesmos do site).
-  var fita=document.getElementById('fita'); if(!fita)return;
-  var I={lead:'<svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg>',liz:'<img alt="" src="tech/img/liz-avatar.webp">',cal:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',ok:'<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>',equipe:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',mic:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'};
-  var E=[
-    ['lead','','Marcos entrou pelo Google Ads','painel de LED pra fachada, 6 x 3'],
-    ['liz','liz','Liz respondeu em 8 s','"Oi, Marcos. Fachada de loja ou de prédio?"'],
-    ['lead','','Ana entrou pelo Instagram','quer orçamento de letreiro'],
-    ['liz','liz','Liz qualificou a Ana','loja de rua, precisa pra 15/10'],
-    ['cal','','Reunião marcada com Marcos','qui., 16:00 · aviso pra você 1 h antes'],
-    ['equipe','w','Carlos assumiu a Ana','vendedor da fila, respondeu em 4 min'],
-    ['mic','a','Áudio do gerente','"Liz, o Marcos fechou, 12 mil"'],
-    ['ok','','Marcos · Fechado','movido no pipeline, equipe avisada','R$ 12k'],
-    ['lead','','Renata entrou pelo site','veio do anúncio de painel retrátil'],
-    ['liz','liz','Liz respondeu em 6 s','fora do horário; ninguém ficou esperando'],
-    ['cal','','Reunião marcada com Renata','ter., 10:00 · confirmada por botão'],
-    ['ok','','Ricardo · Fechado','proposta aceita no WhatsApp','R$ 8,4k']
-  ];
-  var k=0,agora=new Date();
-  function hora(){var d=new Date(agora.getTime()-k*0);return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
-  function poe(){var e=E[k%E.length];k++;var d=document.createElement('div');d.className='ev';
-    d.innerHTML='<div class="ic '+(e[1]||'')+'">'+I[e[0]]+'</div><div><b>'+e[2]+'</b><span>'+e[3]+'</span></div>'+(e[4]?'<div class="v">'+e[4]+'</div>':'<div class="t">'+hora()+'</div>');
-    fita.insertBefore(d,fita.firstChild);while(fita.children.length>9)fita.removeChild(fita.lastChild)}
-  for(var i=0;i<6;i++)poe();
-  var vivo=true;document.addEventListener('visibilitychange',function(){vivo=!document.hidden});
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(function(){if(vivo)poe()},2200);
-  // contadores sobem quando entram na tela
-  var nums=document.querySelectorAll('.auto .nums b');
-  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(!x.isIntersecting)return;io.unobserve(x.target);var el=x.target,n=+el.dataset.n,p=el.dataset.p||'',sf=el.dataset.s||'',t0=performance.now();
-    (function tick(t){var f=Math.min(1,(t-t0)/1100);f=1-Math.pow(1-f,3);el.textContent=p+Math.round(n*f)+sf;if(f<1)requestAnimationFrame(tick)})(t0)})},{threshold:.4});
-  nums.forEach(function(el){io.observe(el)});
-})();
-</script>
-<script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
-<script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
-<script>
-(function(){
-  // o card do Marcos anda pelo pipeline enquanto a tela está visível; volta pro começo e repete
-  var kb=document.getElementById('kb'),leg=document.getElementById('kbleg');if(!kb)return;
-  var cols=[].slice.call(kb.querySelectorAll('.col')).filter(function(c){return c.dataset.f!=='Perdido'});
-  var falas={'Novo':'<b>Marcos</b> entrou pelo Google Ads: painel de LED pra fachada.','Em contato':'A Liz respondeu em 8 s e qualificou: loja de rua, precisa pra 15/10.','Reunião marcada':'Reunião marcada pra quinta às 16h. Alex recebe o aviso 1 h antes.','Proposta':'Reunião feita. Proposta enviada no WhatsApp.','Fechamento':'Marcos confirmou. Só falta o contrato.','Fechado':'<b>Fechado, R$ 12k.</b> A Liz moveu o card e avisou a equipe.'};
-  var card=document.createElement('div');card.className='card anda';card.innerHTML='<strong>Marcos</strong><span>painel de LED pra fachada, 6 x 3</span><em>IA · R$ 12k</em>';
-  var i=-1,timer=null,rodando=false;
-  function conta(){cols.forEach(function(c){var n=c.querySelectorAll('.card').length;c.querySelector('h4 i').textContent=n;var v=c.querySelector('.vazia');if(v)v.style.display=n?'none':''})}
-  function passo(){
-    var de=card.getBoundingClientRect();i=(i+1)%cols.length;var col=cols[i];
-    card.classList.toggle('won',col.dataset.f==='Fechado');cols.forEach(function(c){c.classList.remove('acende')});
-    if(i===0){card.style.opacity=0;setTimeout(function(){col.insertBefore(card,col.querySelector('.card,.vazia'));card.style.transform='';card.style.opacity=1;conta()},320)}
-    else{col.insertBefore(card,col.querySelector('.card,.vazia'));var para=card.getBoundingClientRect();
-      card.style.transition='none';card.style.transform='translate('+(de.left-para.left)+'px,'+(de.top-para.top)+'px)';void card.offsetWidth;card.style.transition='';card.style.transform='';conta()}
-    if(kb.scrollWidth>kb.clientWidth+4)kb.scrollTo({left:Math.max(0,col.offsetLeft-(kb.clientWidth-col.offsetWidth)/2),behavior:'smooth'});
-    if(col.dataset.f==='Fechado')setTimeout(function(){col.classList.add('acende')},500);
-    leg.innerHTML=falas[col.dataset.f];
-    timer=setTimeout(passo,col.dataset.f==='Fechado'?3200:1900)}
-  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting&&!rodando){rodando=true;passo()}else if(!x.isIntersecting&&rodando){rodando=false;clearTimeout(timer)}})},{threshold:.35});
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){i=4;cols[5].insertBefore(card,cols[5].querySelector('.card'));card.classList.add('won');conta();leg.innerHTML=falas['Fechado'];return}
-  io.observe(kb);
-})();
-</script>
-<script>
-(function(){
-  var zap=document.getElementById('zap');if(!zap)return;var itens=[].slice.call(zap.querySelectorAll('.zm>*')),feito=false;
-  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(!x.isIntersecting||feito)return;feito=true;io.disconnect();zap.parentNode.classList.add('on');
-    itens.forEach(function(el,k){setTimeout(function(){el.classList.add('on')},350+k*(el.classList.contains('audio')?200:900))})})},{threshold:.4});
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){itens.forEach(function(el){el.classList.add('on')});zap.parentNode.classList.add('on');return}
-  io.observe(zap);
-})();
-</script>
-<script>
-(function(){
-  var liz=document.querySelector('.palco-f .lizf');if(!liz||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  var raf=0;function paint(){raf=0;var r=liz.parentNode.getBoundingClientRect(),vh=innerHeight,p=(vh-r.top)/(vh+r.height);p=Math.min(1,Math.max(0,p));liz.style.transform='translateY('+((0.5-p)*90).toFixed(1)+'px) rotate('+((p-0.5)*4).toFixed(2)+'deg)'}
-  addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(paint)},{passive:true});paint();
-})();
-</script>
-<script>
-(function(){
-  var m=document.getElementById('mliz');if(!m)return;var ult=null;
-  function abre(e){if(e)e.preventDefault();ult=document.activeElement;m.hidden=false;document.body.style.overflow='hidden';m.querySelector('.mx').focus()}
-  function fecha(){m.hidden=true;document.body.style.overflow='';if(ult&&ult.focus)ult.focus()}
-  ['quemliz','quemliz2'].forEach(function(id){var b=document.getElementById(id);if(b)b.addEventListener('click',abre)});
-  m.querySelector('.mx').addEventListener('click',fecha);m.addEventListener('click',function(e){if(e.target===m)fecha()});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)fecha()});
-})();
-</script>
-<script>
-(function(){var a=document.getElementById('lizsom');if(!a)return;var bs=[].slice.call(document.querySelectorAll('[data-som]'));a.volume=.4;var querendo=false;
-function estado(on){bs.forEach(function(b){b.setAttribute('aria-pressed',on?'true':'false');b.querySelector('span').textContent=on?'som ligado':(b.closest('.hero-m')?'ouvir':'ouvir a Liz')})}
-function liga(){querendo=true;a.play().then(function(){estado(true)}).catch(function(){estado(false)})}
-function desliga(){querendo=false;a.pause();estado(false)}
-bs.forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();a.paused?liga():desliga()})});
-try{localStorage.getItem('kmp_som')==='0'||document.addEventListener('pointerdown',function f(){document.removeEventListener('pointerdown',f);if(a.paused&&!querendo&&visivel)liga()},{once:true})}catch(e){}
-var visivel=true,alvo=document.querySelector('.story')&&getComputedStyle(document.querySelector('.story')).display!=='none'?document.querySelector('.story'):document.querySelector('.hero-m');
-if(alvo&&'IntersectionObserver' in window){new IntersectionObserver(function(en){visivel=en[0].isIntersecting;if(!visivel&&!a.paused){a.pause()}else if(visivel&&querendo&&a.paused){a.play().catch(function(){})}},{threshold:.15}).observe(alvo)}
-bs.forEach(function(b){b.addEventListener('click',function(){try{localStorage.setItem('kmp_som',a.paused?'0':'1')}catch(e){}})});
-})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.aparece').forEach(el=>io.observe(el));
+document.querySelectorAll('.slider').forEach(sl=>{const t=sl.querySelector('.trilho');sl.querySelectorAll('.seta').forEach(b=>b.onclick=()=>t.scrollBy({left:+b.dataset.d*(t.querySelector('.card').offsetWidth+22),behavior:'smooth'}))});
 </script>
 </body>
 </html>
