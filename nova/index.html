@@ -165,6 +165,23 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
 .seta{width:52px;height:52px;border-radius:50%;border:0;background:var(--carbono);cursor:pointer;display:grid;place-items:center}
 .seta svg{stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .seta:hover{background:var(--verde-e)}
+
+/* menu produtos */
+.drop{position:relative}
+.drop .v{font-size:11px;opacity:.6}
+.drop .menu{position:absolute;top:100%;left:-18px;padding-top:14px;display:none;min-width:330px}
+.drop:hover .menu,.drop:focus-within .menu{display:block}
+.drop .menu::before{content:"";position:absolute;inset:14px 0 0;background:#fff;border-radius:12px;box-shadow:0 18px 50px rgba(20,40,30,.16)}
+.drop .menu a{position:relative;display:block;padding:12px 18px}
+.drop .menu a:first-child{padding-top:16px}.drop .menu a:last-child{padding-bottom:16px}
+.drop .menu b{display:block;font-size:15px;color:var(--carbono)}
+.drop .menu span{display:block;font-size:13px;font-weight:500;color:var(--cinza);margin-top:2px}
+.drop .menu a:hover b{color:var(--verde-e)}
+/* cards com link */
+a.card{transition:transform .2s,box-shadow .2s}
+a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14)}
+.card .ir{margin-top:auto;padding-top:20px;font-weight:700;font-size:15px;color:var(--verde-e)}
+.card.cheio .ir{color:var(--carbono)}
 .aparece{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .aparece.on{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.aparece{opacity:1;transform:none;transition:none}}
@@ -193,13 +210,19 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
   <div class="box">
     <a class="logo" href="#topo"><b>[</b> kompila <b>]</b></a>
     <ul>
-      <li><a href="#o-que-faz">O que a IA faz</a></li>
-      <li><a href="#time">O time</a></li>
+      <li class="drop"><a href="#produtos">Produtos <span class="v">▾</span></a>
+        <div class="menu">
+          <a href="../crm/"><b>kompila .crm</b><span>Atendimento e vendas num lugar só</span></a>
+          <a href="../liz/"><b>Liz</b><span>A IA que atende no WhatsApp e no Instagram</span></a>
+          <a href="../loja/"><b>kompila loja</b><span>Loja própria, sem taxa por venda</span></a>
+          <a href="../design/"><b>kompila design</b><span>Marca, site e criativo</span></a>
+          <a href="../trafego/"><b>kompila tráfego</b><span>Anúncio que sabe qual lead virou venda</span></a>
+        </div>
+      </li>
       <li><a href="#como">Como funciona</a></li>
       <li><a href="#clientes">Clientes</a></li>
       <li><a href="#parceiros">Parceiros</a></li>
-      <li><a href="../liz/">A Liz</a></li>
-    </ul>
+      </ul>
     <a class="btn peq" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20entender%20o%20que%20a%20IA%20pode%20fazer%20na%20minha%20empresa." target="_blank" rel="noopener">Falar com a Kompila</a>
   </div>
 </header>
@@ -253,9 +276,9 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
 </section>
 
 <!-- O TIME -->
-<section class="bloco" id="time">
+<section class="bloco" id="produtos">
   <div class="box">
-    <div class="regua"><span><b>[k]</b></span><span>02 · um time inteiro trabalhando pela sua empresa</span></div>
+    <div class="regua"><span><b>[k]</b></span><span>02 · produtos · um time inteiro pela sua empresa</span></div>
     <div class="lado">
       <div>
         <h2>Design, marketing, vendas e atendimento. <em>Sem você montar um time.</em></h2>
@@ -265,30 +288,34 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
     </div>
 
     <div class="cards c4">
-      <div class="card aparece">
+      <a class="card aparece" href="../design/">
         <div class="tag">Design</div>
         <div class="ico"><svg><use href="#i-pincel"/></svg></div>
         <h3>Marca, site e loja</h3>
         <p>Identidade, site que vende e loja própria, ligados ao que entra de cliente.</p>
-      </div>
-      <div class="card aparece">
+        <span class="ir">Ver kompila design →</span>
+      </a>
+      <a class="card aparece" href="../trafego/">
         <div class="tag">Marketing</div>
         <div class="ico"><svg><use href="#i-mega"/></svg></div>
         <h3>Campanha e Instagram</h3>
         <p>Anúncio no Meta e no Google, posts e calendário aprovados por você antes de sair.</p>
-      </div>
-      <div class="card aparece">
+        <span class="ir">Ver kompila tráfego →</span>
+      </a>
+      <a class="card aparece" href="../crm/">
         <div class="tag">Vendas</div>
         <div class="ico"><svg><use href="#i-alvo"/></svg></div>
         <h3>Ninguém fica sem retorno</h3>
         <p>Cada contato entra no CRM com origem, fase e dono. Quem sumiu recebe uma nova mensagem.</p>
-      </div>
-      <div class="card cheio aparece">
+        <span class="ir">Ver kompila .crm →</span>
+      </a>
+      <a class="card cheio aparece" href="../liz/">
         <div class="tag">Atendimento</div>
         <div class="ico"><svg><use href="#i-liz"/></svg></div>
         <h3>A Liz, 24 horas</h3>
         <p>A IA da Kompila atende, tira dúvida, agenda e passa pronto pra sua equipe.</p>
-      </div>
+        <span class="ir">Ver a Liz →</span>
+      </a>
     </div>
 
     <div class="conta aparece">
