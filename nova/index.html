@@ -43,6 +43,9 @@ section{position:relative}
 .regua span:last-child{order:2}
 .regua b{color:var(--verde-e)} .verde .regua b{color:var(--carbono)} .escuro .regua{color:#E9EBEE} .escuro .regua b{color:var(--verde)}
 
+.regua .ri{width:38px;height:38px;border-radius:11px;background:var(--verde-claro);display:grid;place-items:center}
+.regua .ri svg{width:21px;height:21px;stroke:var(--verde-e);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.verde .regua .ri{background:rgba(255,255,255,.5)} .verde .regua .ri svg{stroke:var(--carbono)}
 h1{font-size:clamp(38px,4.6vw,64px);line-height:1.02;font-weight:900;letter-spacing:-.035em;color:var(--carbono)}
 h2{font-size:clamp(32px,4.4vw,56px);line-height:1.06;font-weight:800;letter-spacing:-.028em;color:var(--carbono)}
 .escuro h2{color:#fff}
@@ -211,6 +214,10 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
   <symbol id="i-cabide" viewBox="0 0 24 24"><path d="M12 7a2 2 0 1 1 2-2c0 1.5-2 2-2 3.5V9L3 16h18l-9-7"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M10 9l5 3-5 3z"/></symbol>
   <symbol id="i-seta" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-engrenagem" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></symbol>
+  <symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="13" rx="2"/><path d="M18 6v13M21 8v9"/></symbol>
+  <symbol id="i-indica" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M14 19c0-2 1.5-4 3-4s3 2 3 4"/></symbol>
+  <symbol id="i-faisca" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></symbol>
 </svg>
 
 <header class="nav">
@@ -237,7 +244,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 <section class="hero verde" id="topo">
   <div class="grade">
     <div class="txt">
-      <div class="regua"><span><b>[k]</b></span><span>IA sob medida pra pequena e média empresa</span></div>
+      <div class="regua"><span class="ri"><svg><use href="#i-faisca"/></svg></span><span>IA sob medida pra pequena e média empresa</span></div>
       <h1>A IA assume o trabalho repetitivo. Sua equipe vai <span class="mk">pro que dá lucro.</span></h1>
       <p class="sub">A Kompila monta, opera e mede a IA dentro do seu negócio. Design, marketing, vendas e atendimento num time só, e todo mês você vê quanto economizou.</p>
       <div class="acoes">
@@ -253,7 +260,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 <!-- O QUE A IA FAZ -->
 <section class="bloco off" id="o-que-faz">
   <div class="box">
-    <div class="regua"><span><b>[k]</b></span><span>01 · o que a IA faz pela sua empresa</span></div>
+    <div class="regua"><span class="ri"><svg><use href="#i-engrenagem"/></svg></span><span>01 · o que a IA faz pela sua empresa</span></div>
     <h2>Atender é só uma das coisas. <em>A IA faz o que toma o dia da sua equipe.</em></h2>
     <p class="sub">A gente olha onde as pessoas perdem tempo e coloca a IA pra fazer essa parte. Elas ficam com o que precisa de gente.</p>
     <div class="cards c4">
@@ -288,7 +295,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 <!-- O TIME -->
 <section class="bloco" id="produtos">
   <div class="box">
-    <div class="regua"><span><b>[k]</b></span><span>02 · produtos · um time inteiro pela sua empresa</span></div>
+    <div class="regua"><span class="ri"><svg><use href="#i-cards"/></svg></span><span>02 · produtos · um time inteiro pela sua empresa</span></div>
     <div class="lado">
       <div>
         <h2>Design, marketing, vendas e atendimento. <em>Sem você montar um time.</em></h2>
@@ -354,7 +361,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 <!-- COMO FUNCIONA -->
 <section class="bloco off" id="como">
   <div class="box">
-    <div class="regua"><span><b>[k]</b></span><span>03 · como funciona</span></div>
+    <div class="regua"><span class="ri"><svg><use href="#i-flow"/></svg></span><span>03 · como funciona</span></div>
     <h2>Você não aprende nem configura nada. <em>A gente monta, opera e mede.</em></h2>
     <div class="cards c3">
       <div class="card passo aparece">
@@ -380,7 +387,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 <!-- CLIENTES -->
 <section class="bloco" id="clientes">
   <div class="box">
-    <div class="regua"><span><b>[k]</b></span><span>04 · quem já trabalha com a gente</span></div>
+    <div class="regua"><span class="ri"><svg><use href="#i-indica"/></svg></span><span>04 · quem já trabalha com a gente</span></div>
     <h2>Cada empresa pediu uma coisa. <em>A IA entrou onde doía.</em></h2>
     <div class="slider">
       <div class="trilho">
@@ -441,7 +448,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
     <div class="lado">
       <div class="liz-cena"><img src="img/liz_09_mostrando_celular.webp" alt="A Liz, a IA da Kompila, segurando um celular e uma boneca"></div>
       <div>
-        <div class="regua"><span><b>[k]</b></span><span>05 · a liz</span></div>
+        <div class="regua"><span class="ri"><svg><use href="#i-liz"/></svg></span><span>05 · a liz</span></div>
         <h2>Quem atende na sua empresa às 23h? <em>A Liz.</em></h2>
         <p class="sub">É a IA de atendimento da Kompila. Responde no WhatsApp e no Instagram na hora, entende o que o cliente quer, agenda e passa pronto pro seu vendedor.</p>
         <p class="sub" style="font-size:17px">O nome vem da filha do fundador.</p>
