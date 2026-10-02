@@ -3,12 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kompila · IA sob medida pra pequena e média empresa</title>
-<meta name="description" content="A IA assume o trabalho repetitivo da sua empresa, sua equipe vai pro que dá lucro e todo mês você vê quanto economizou. Design, marketing, vendas e atendimento num time só. Sem precisar entender de IA.">
+<title>Trabalhos · Kompila</title>
+<meta name="description" content="Instagram, sites, lojas, marcas, embalagens, anúncios e vídeos feitos pela Kompila pra empresas reais.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="../img/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--verde:#2FD67B;--verde-e:#12803F;--verde-claro:#DDF7E8;--carbono:#0A0B0E;--texto:#1E2328;--off:#F5F6F2;--cinza:#5E6873;--linha:#E4E7E1;--w:1200px}
@@ -195,10 +194,26 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 .aparece{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .aparece.on{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.aparece{opacity:1;transform:none;transition:none}}
+
+.topo-trab{padding:72px 0 30px}
+.filtros{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;position:sticky;top:68px;z-index:5;background:#fff;padding:14px 0}
+.f{height:40px;padding:0 16px;border-radius:8px;border:0;background:var(--off);font:600 15px Inter,sans-serif;color:#3a424b;cursor:pointer}
+.f i{font:600 12px 'JetBrains Mono',monospace;font-style:normal;color:var(--cinza);margin-left:4px}
+.f.on{background:var(--carbono);color:#fff}.f.on i{color:var(--verde)}
+.grade-trab{columns:3 320px;column-gap:22px;padding:20px 0 110px}
+.it{break-inside:avoid;margin:0 0 22px;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(20,40,30,.08)}
+.it .m{position:relative;background:var(--off)}
+.it img,.it video{display:block;width:100%;height:auto}
+.it figcaption{padding:16px 20px 18px}
+.it b{display:block;font-size:16px;color:var(--carbono)}
+.it figcaption span{display:block;font-size:14px;color:var(--cinza);margin-top:3px}
+.it .play{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.it .play::after{content:"";width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.92) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7l9 5-9 5z' fill='%230A0B0E'/%3E%3C/svg%3E") center/28px no-repeat;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.it.tocando .play{display:none}
+.it.some{display:none}
 </style>
 </head>
 <body>
-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></symbol>
   <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></symbol>
@@ -219,12 +234,11 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
   <symbol id="i-indica" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M14 19c0-2 1.5-4 3-4s3 2 3 4"/></symbol>
   <symbol id="i-faisca" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></symbol>
 </svg>
-
 <header class="nav">
   <div class="box">
-    <a class="logo" href="#topo"><b>[</b> kompila <b>]</b></a>
+    <a class="logo" href="../nova/#topo"><b>[</b> kompila <b>]</b></a>
     <ul>
-      <li class="drop"><a href="#produtos">Produtos <span class="v">▾</span></a>
+      <li class="drop"><a href="../nova/#produtos">Produtos <span class="v">▾</span></a>
         <div class="menu">
           <a href="../crm/"><b>kompila .crm</b><span>Atendimento e vendas num lugar só</span></a>
           <a href="../liz/"><b>Liz</b><span>A IA que atende no WhatsApp e no Instagram</span></a>
@@ -233,243 +247,67 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
           <a href="../trafego/"><b>kompila tráfego</b><span>Anúncio que sabe qual lead virou venda</span></a>
         </div>
       </li>
-      <li><a href="#como">Como funciona</a></li>
-      <li><a href="#clientes">Clientes</a></li>
-      <li><a href="../trabalhos/">Trabalhos</a></li>
+      <li><a href="../nova/#como">Como funciona</a></li>
+      <li><a href="../nova/#clientes">Clientes</a></li>
+      <li><a href="./" style="color:var(--verde-e)">Trabalhos</a></li>
       </ul>
     <a class="btn peq" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20entender%20o%20que%20a%20IA%20pode%20fazer%20na%20minha%20empresa." target="_blank" rel="noopener">Falar com a Kompila</a>
   </div>
 </header>
-
-<!-- HERO -->
-<section class="hero verde" id="topo">
-  <div class="grade">
-    <div class="txt">
-      <div class="regua"><span class="ri"><svg><use href="#i-faisca"/></svg></span><span>IA sob medida pra pequena e média empresa</span></div>
-      <h1>A IA assume o trabalho repetitivo. Sua equipe vai <span class="mk">pro que dá lucro.</span></h1>
-      <p class="sub">A Kompila monta, opera e mede a IA dentro do seu negócio. Design, marketing, vendas e atendimento num time só, e todo mês você vê quanto economizou.</p>
-      <div class="acoes">
-        <a class="btn" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20entender%20o%20que%20a%20IA%20pode%20fazer%20na%20minha%20empresa." target="_blank" rel="noopener">Quero ver o que a IA faz na minha empresa</a>
-        <a class="btn branco" href="#o-que-faz">Como funciona</a>
-      </div>
-      <p class="sem">Sem precisar entender de IA.</p>
-    </div>
-    <div class="foto"><img src="img/k_socios.webp" alt="Dois sócios comemorando no escritório com a Liz, a IA da Kompila, sobre a mesa"></div>
-  </div>
-</section>
-
-<!-- O QUE A IA FAZ -->
-<section class="bloco off" id="o-que-faz">
+<section class="topo-trab">
   <div class="box">
-    <div class="regua"><span class="ri"><svg><use href="#i-engrenagem"/></svg></span><span>01 · o que a IA faz pela sua empresa</span></div>
-    <h2>Atender é só uma das coisas. <em>A IA faz o que toma o dia da sua equipe.</em></h2>
-    <p class="sub">A gente olha onde as pessoas perdem tempo e coloca a IA pra fazer essa parte. Elas ficam com o que precisa de gente.</p>
-    <div class="cards c4">
-      <a class="card aparece" href="../crm/">
-        <div class="ico"><svg><use href="#i-doc"/></svg></div>
-        <h3>Faz as tarefas repetitivas</h3>
-        <p>Pedido, cadastro, conferência de documento, lançamento no financeiro, relatório. O que alguém faz igual todo dia.</p>
-        <span class="ir">Ver no kompila .crm →</span>
-      </a>
-      <a class="card aparece" href="../liz/">
-        <div class="ico"><svg><use href="#i-chat"/></svg></div>
-        <h3>Atende e vende na conversa</h3>
-        <p>Responde no WhatsApp e no Instagram na hora, inclusive às 23h, anota o que o cliente pediu e avisa o vendedor.</p>
-        <span class="ir">Ver a Liz atendendo →</span>
-      </a>
-      <a class="card aparece" href="../crm/">
-        <div class="ico"><svg><use href="#i-flow"/></svg></div>
-        <h3>Organiza o fluxo de trabalho</h3>
-        <p>Cada pedido, cliente e tarefa num lugar só, com quem é o responsável e o que falta. Nada some no meio do caminho.</p>
-        <span class="ir">Ver no kompila .crm →</span>
-      </a>
-      <a class="card aparece" href="../trafego/">
-        <div class="ico"><svg><use href="#i-chart"/></svg></div>
-        <h3>Mostra o número pra decidir</h3>
-        <p>De onde vem o cliente que compra, quanto tempo a resposta leva, quanto você economizou no mês. Sem planilha.</p>
-        <span class="ir">Ver no kompila tráfego →</span>
-      </a>
-    </div>
+    <div class="regua"><span class="ri"><svg><use href="#i-pincel"/></svg></span><span>trabalhos</span></div>
+    <h1>O que a gente já <span class="mk">criou.</span></h1>
+    <p class="sub">Instagram, sites, lojas, marcas, embalagens, anúncios e vídeos feitos pra empresas reais.</p>
+    <div class="filtros"><button class="f on" data-c="todos">Todos <i>35</i></button><button class="f" data-c="instagram">Instagram <i>12</i></button><button class="f" data-c="sites">Sites <i>4</i></button><button class="f" data-c="lojas">Lojas <i>3</i></button><button class="f" data-c="marca">Marca e logo <i>3</i></button><button class="f" data-c="embalagens">Embalagens <i>2</i></button><button class="f" data-c="anuncios">Anúncios <i>6</i></button><button class="f" data-c="videos">Vídeos <i>2</i></button><button class="f" data-c="impressos">Impressos <i>3</i></button></div>
   </div>
 </section>
-
-<!-- O TIME -->
-<section class="bloco" id="produtos">
-  <div class="box">
-    <div class="regua"><span class="ri"><svg><use href="#i-cards"/></svg></span><span>02 · produtos · um time inteiro pela sua empresa</span></div>
-    <div class="lado">
-      <div>
-        <h2>Design, marketing, vendas e atendimento. <em>Sem você montar um time.</em></h2>
-        <p class="sub">Pessoas da Kompila cuidam da marca, das campanhas e do Instagram. A IA faz o atendimento e o trabalho repetitivo. Você acompanha tudo numa tela.</p>
-      </div>
-      <div class="caixa" style="aspect-ratio:5/4"><img src="img/k_contadora.webp" alt="Empresária analisando resultados no notebook com a Liz ao lado" style="object-position:45% 40%"></div>
-    </div>
-
-    <div class="cards c4">
-      <a class="card aparece" href="../design/">
-        <div class="tag">Design</div>
-        <div class="ico"><svg><use href="#i-pincel"/></svg></div>
-        <h3>Marca, site e loja</h3>
-        <p>Identidade, site que vende e loja própria, ligados ao que entra de cliente.</p>
-        <span class="ir">Ver kompila design →</span>
-      </a>
-      <a class="card aparece" href="../trafego/">
-        <div class="tag">Marketing</div>
-        <div class="ico"><svg><use href="#i-mega"/></svg></div>
-        <h3>Campanha e Instagram</h3>
-        <p>Anúncio no Meta e no Google, posts e calendário aprovados por você antes de sair.</p>
-        <span class="ir">Ver kompila tráfego →</span>
-      </a>
-      <a class="card aparece" href="../crm/">
-        <div class="tag">Vendas</div>
-        <div class="ico"><svg><use href="#i-alvo"/></svg></div>
-        <h3>Ninguém fica sem retorno</h3>
-        <p>Cada contato entra no CRM com origem, fase e dono. Quem sumiu recebe uma nova mensagem.</p>
-        <span class="ir">Ver kompila .crm →</span>
-      </a>
-      <a class="card cheio aparece" href="../liz/">
-        <div class="tag">Atendimento</div>
-        <div class="ico"><svg><use href="#i-liz"/></svg></div>
-        <h3>A Liz, 24 horas</h3>
-        <p>A IA da Kompila atende, tira dúvida, agenda e passa pronto pra sua equipe.</p>
-        <span class="ir">Ver a Liz →</span>
-      </a>
-    </div>
-
-    <div class="conta aparece">
-      <div class="esq">
-        <div class="tit">Quanto custa montar esse time</div>
-        <table>
-          <tr><td>Analista de marketing</td><td>R$ 4.914</td></tr>
-          <tr><td>Designer gráfico</td><td>R$ 3.768</td></tr>
-          <tr><td>Social media</td><td>R$ 2.873</td></tr>
-          <tr><td>Vendedor interno</td><td>R$ 1.937</td></tr>
-          <tr><td>Atendente</td><td>R$ 1.858</td></tr>
-        </table>
-        <p class="fonte">Salário médio CLT no Brasil, Portal Salário com dados do CAGED, ago/2025 a jul/2026. Custo pra empresa = salário × 1,27 (encargos no Simples Nacional, o cálculo mais baixo). Sem vale-transporte, refeição, computador nem gestor.</p>
-      </div>
-      <div class="dir">
-        <div class="tit">Time contratado</div>
-        <div class="num grande"><i>[</i> R$ 19.494 <i>]</i></div>
-        <div style="font-size:17px;color:#AEB5BD">por mês · R$ 233.928 por ano</div>
-        <p><b>Com a Kompila, uma fração disso.</b> E todo mês você recebe a conta do que a IA fez e de quanto você economizou.</p>
-        <a class="btn verde" style="margin-top:26px;align-self:flex-start" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20ver%20a%20conta%20da%20minha%20empresa." target="_blank" rel="noopener">Quero ver a conta da minha empresa</a>
-      </div>
-    </div>
-  </div>
+<section>
+  <div class="box"><div class="grade-trab">
+    <figure class="it r45" data-c="instagram"><div class="m"><img src="img/swift-01.webp" alt="P1LED: Carrossel do case Swift, +200 painéis em +120 lojas" loading="lazy"></div><figcaption><b>P1LED</b><span>Carrossel do case Swift, +200 painéis em +120 lojas</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="img/swift-02.webp" alt="P1LED: Carrossel do case Swift" loading="lazy"></div><figcaption><b>P1LED</b><span>Carrossel do case Swift</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="img/swift-03.webp" alt="P1LED: Carrossel do case Swift" loading="lazy"></div><figcaption><b>P1LED</b><span>Carrossel do case Swift</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="img/kompila-ig-00.webp" alt="Kompila: Post do Instagram @kompila.ai" loading="lazy"></div><figcaption><b>Kompila</b><span>Post do Instagram @kompila.ai</span></figcaption></figure>
+<figure class="it r169" data-c="videos"><div class="m"><video src="img/klume-abx.mp4" poster="img/klume-abx.jpg" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>K.LUME</b><span>Vídeo do evento ABX 2026</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="img/kompila-ig-02.webp" alt="Kompila: Post do Instagram @kompila.ai" loading="lazy"></div><figcaption><b>Kompila</b><span>Post do Instagram @kompila.ai</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="img/kompila-ig-06.webp" alt="Kompila: Post do Instagram @kompila.ai" loading="lazy"></div><figcaption><b>Kompila</b><span>Post do Instagram @kompila.ai</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="img/kompila-ig-14.webp" alt="Kompila: Post do Instagram @kompila.ai" loading="lazy"></div><figcaption><b>Kompila</b><span>Post do Instagram @kompila.ai</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="../img/cases/social-post-nf1.webp" alt="P1LED: Carrossel sobre produção virtual" loading="lazy"></div><figcaption><b>P1LED</b><span>Carrossel sobre produção virtual</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="../img/cases/social-post-historia.webp" alt="P1LED: Post de campanha" loading="lazy"></div><figcaption><b>P1LED</b><span>Post de campanha</span></figcaption></figure>
+<figure class="it r45" data-c="instagram"><div class="m"><img src="../img/cases/social-post-projetamos.webp" alt="P1LED: Post institucional" loading="lazy"></div><figcaption><b>P1LED</b><span>Post institucional</span></figcaption></figure>
+<figure class="it r43" data-c="instagram"><div class="m"><img src="../img/cases/case-13-neon-social.webp" alt="P1LED + Banco Neon: Redes sociais" loading="lazy"></div><figcaption><b>P1LED + Banco Neon</b><span>Redes sociais</span></figcaption></figure>
+<figure class="it r43" data-c="instagram"><div class="m"><img src="../img/cases/case-14-vivara-artbox-social.webp" alt="P1LED + Vivara Art:Box: Redes sociais" loading="lazy"></div><figcaption><b>P1LED + Vivara Art:Box</b><span>Redes sociais</span></figcaption></figure>
+<figure class="it r916" data-c="videos"><div class="m"><video src="../img/loja/video-tweed.mp4" poster="../img/loja/video-tweed-poster.jpg" muted loop playsinline preload="none"></video><span class="play"></span></div><figcaption><b>Maslu Select</b><span>Vídeo de produto da loja</span></figcaption></figure>
+<figure class="it r43" data-c="sites"><div class="m"><img src="../img/cases/case-01-p1led.webp" alt="P1LED: Site em WordPress, 74 páginas no ar" loading="lazy"></div><figcaption><b>P1LED</b><span>Site em WordPress, 74 páginas no ar</span></figcaption></figure>
+<figure class="it r43" data-c="sites"><div class="m"><img src="../img/cases/case-maeda.webp" alt="Maeda Gastronomia: Site com pedido de rotisserie" loading="lazy"></div><figcaption><b>Maeda Gastronomia</b><span>Site com pedido de rotisserie</span></figcaption></figure>
+<figure class="it r43" data-c="sites"><div class="m"><img src="../img/cases/case-05-brand1.webp" alt="Brand1: Site" loading="lazy"></div><figcaption><b>Brand1</b><span>Site</span></figcaption></figure>
+<figure class="it r43" data-c="sites"><div class="m"><img src="../img/cases/case-18-clinica-glutee-site-desktop-mobile.webp" alt="Clínica Glutee: Site responsivo" loading="lazy"></div><figcaption><b>Clínica Glutee</b><span>Site responsivo</span></figcaption></figure>
+<figure class="it r43" data-c="lojas"><div class="m"><img src="../img/loja/tela-home.webp" alt="Maslu Select: Loja própria em masluoficial.com.br" loading="lazy"></div><figcaption><b>Maslu Select</b><span>Loja própria em masluoficial.com.br</span></figcaption></figure>
+<figure class="it r43" data-c="lojas"><div class="m"><img src="../img/loja/tela-produto.webp" alt="Maslu Select: Página de produto com cor, tamanho e medidas" loading="lazy"></div><figcaption><b>Maslu Select</b><span>Página de produto com cor, tamanho e medidas</span></figcaption></figure>
+<figure class="it r43" data-c="lojas"><div class="m"><img src="../img/loja/tela-painel.webp" alt="Maslu Select: Painel da loja, feito pra quem vende" loading="lazy"></div><figcaption><b>Maslu Select</b><span>Painel da loja, feito pra quem vende</span></figcaption></figure>
+<figure class="it r43" data-c="marca"><div class="m"><img src="../img/cases/case-04-unisushi.webp" alt="Uni Premium Sushi: Identidade visual" loading="lazy"></div><figcaption><b>Uni Premium Sushi</b><span>Identidade visual</span></figcaption></figure>
+<figure class="it r43" data-c="marca"><div class="m"><img src="../img/cases/case-09-p1led-brandbook.webp" alt="P1LED: Manual de identidade" loading="lazy"></div><figcaption><b>P1LED</b><span>Manual de identidade</span></figcaption></figure>
+<figure class="it r43" data-c="marca"><div class="m"><img src="../img/cases/case-17-99-taxi-ai-environment.webp" alt="99 Táxi: Ambiente de marca" loading="lazy"></div><figcaption><b>99 Táxi</b><span>Ambiente de marca</span></figcaption></figure>
+<figure class="it r43" data-c="embalagens"><div class="m"><img src="../img/cases/case-15-p1led-vx-bx-packaging.webp" alt="P1LED VX / BX Series: Personagem e embalagens" loading="lazy"></div><figcaption><b>P1LED VX / BX Series</b><span>Personagem e embalagens</span></figcaption></figure>
+<figure class="it r43" data-c="embalagens"><div class="m"><img src="../img/cases/case-03-aut.webp" alt="AUT Dskarb: Design de rótulo" loading="lazy"></div><figcaption><b>AUT Dskarb</b><span>Design de rótulo</span></figcaption></figure>
+<figure class="it r45" data-c="anuncios"><div class="m"><img src="img/p1led-anuncio-01.webp" alt="P1LED: Quadro de anúncio" loading="lazy"></div><figcaption><b>P1LED</b><span>Quadro de anúncio</span></figcaption></figure>
+<figure class="it r45" data-c="anuncios"><div class="m"><img src="img/p1led-anuncio-02.webp" alt="P1LED: Quadro de anúncio" loading="lazy"></div><figcaption><b>P1LED</b><span>Quadro de anúncio</span></figcaption></figure>
+<figure class="it r45" data-c="anuncios"><div class="m"><img src="img/p1led-anuncio-03.webp" alt="P1LED: Quadro de anúncio" loading="lazy"></div><figcaption><b>P1LED</b><span>Quadro de anúncio</span></figcaption></figure>
+<figure class="it r45" data-c="anuncios"><div class="m"><img src="img/p1led-anuncio-04.webp" alt="P1LED: Quadro de anúncio" loading="lazy"></div><figcaption><b>P1LED</b><span>Quadro de anúncio</span></figcaption></figure>
+<figure class="it r45" data-c="anuncios"><div class="m"><img src="img/p1led-anuncio-05.webp" alt="P1LED: Quadro de anúncio" loading="lazy"></div><figcaption><b>P1LED</b><span>Quadro de anúncio</span></figcaption></figure>
+<figure class="it r45" data-c="anuncios"><div class="m"><img src="img/p1led-anuncio-06.webp" alt="P1LED: Quadro de anúncio" loading="lazy"></div><figcaption><b>P1LED</b><span>Quadro de anúncio</span></figcaption></figure>
+<figure class="it r43" data-c="impressos"><div class="m"><img src="../img/cases/case-07-maeda18.webp" alt="Maeda 18 anos: Kit de evento" loading="lazy"></div><figcaption><b>Maeda 18 anos</b><span>Kit de evento</span></figcaption></figure>
+<figure class="it r43" data-c="impressos"><div class="m"><img src="../img/cases/case-08-maeda-impressos.webp" alt="Maeda Gastronomia: Materiais impressos" loading="lazy"></div><figcaption><b>Maeda Gastronomia</b><span>Materiais impressos</span></figcaption></figure>
+<figure class="it r43" data-c="impressos"><div class="m"><img src="../img/cases/case-10-p1led-fenix-ppt.webp" alt="P1LED + Fenix: Apresentação comercial" loading="lazy"></div><figcaption><b>P1LED + Fenix</b><span>Apresentação comercial</span></figcaption></figure>
+  </div></div>
 </section>
-
-<!-- COMO FUNCIONA -->
-<section class="bloco off" id="como">
-  <div class="box">
-    <div class="regua"><span class="ri"><svg><use href="#i-flow"/></svg></span><span>03 · como funciona</span></div>
-    <h2>Você não aprende nem configura nada. <em>A gente monta, opera e mede.</em></h2>
-    <div class="cards c3">
-      <div class="card passo aparece">
-        <div class="n">[ 01 ] monta</div>
-        <h3>Entende o seu negócio</h3>
-        <p>Numa conversa de 30 minutos a gente vê onde sua equipe perde tempo e escreve o que a IA vai fazer. Você aprova antes.</p>
-        <a class="ir" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20marcar%20a%20conversa%20de%2030%20minutos." target="_blank" rel="noopener">Marcar a conversa →</a>
-      </div>
-      <div class="card passo aparece">
-        <div class="n">[ 02 ] opera</div>
-        <h3>Coloca pra rodar</h3>
-        <p>A IA entra no WhatsApp, no Instagram e no sistema que a sua empresa já usa. Quem cuida dela é a Kompila.</p>
-      </div>
-      <div class="card passo cheio aparece">
-        <div class="n" style="color:var(--carbono)">[ 03 ] mede</div>
-        <h3>Mostra quanto rendeu</h3>
-        <p>Todo mês você vê o que a IA fez, quanto tempo a equipe ganhou e quanto você economizou.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CLIENTES -->
-<section class="bloco" id="clientes">
-  <div class="box">
-    <div class="regua"><span class="ri"><svg><use href="#i-indica"/></svg></span><span>04 · quem já trabalha com a gente</span></div>
-    <h2>Cada empresa pediu uma coisa. <em>A IA entrou onde doía.</em></h2>
-    <div class="slider">
-      <div class="trilho">
-      <div class="card caso">
-        <span class="status no-ar">No ar</span>
-        <div class="ico"><svg><use href="#i-chart"/></svg></div>
-        <h3>P1LED</h3>
-        <p>Painéis de LED, São Paulo</p>
-        <dl><dt>Pediu</dt><dd>Saber onde o dinheiro dos anúncios virava venda.</dd>
-        <dt>Entregamos</dt><dd>12 meses de Google Ads analisados, R$ 209 mil investidos: as capitais levavam 39% da verba e traziam 78% da venda. Mais site, sistema comercial e CRM lendo 3.438 contatos do HubSpot.</dd></dl>
-        <a class="ir" href="../trafego/">Ver kompila tráfego →</a>
-      </div>
-      <div class="card caso">
-        <span class="status no-ar">No ar</span>
-        <div class="ico"><svg><use href="#i-cabide"/></svg></div>
-        <h3>Maslu Select</h3>
-        <p>Moda feminina</p>
-        <dl><dt>Pediu</dt><dd>Uma loja online com a cara da marca.</dd>
-        <dt>Entregamos</dt><dd>A loja em <a href="https://masluoficial.com.br" target="_blank" rel="noopener" style="color:var(--verde-e);font-weight:700">masluoficial.com.br</a>, com vitrine, lookbook e seções que a dona edita sozinha.</dd></dl>
-        <a class="ir" href="../loja/">Ver kompila loja →</a>
-      </div>
-      <div class="card caso">
-        <span class="status">Em implantação</span>
-        <div class="ico"><svg><use href="#i-calc"/></svg></div>
-        <h3>Coleve</h3>
-        <p>Contabilidade digital, São Paulo</p>
-        <dl><dt>Pediu</dt><dd>Atender os alunos no WhatsApp e organizar a jornada de cada um.</dd>
-        <dt>Estamos entregando</dt><dd>A Liz atendendo os alunos no WhatsApp e a jornada de cada aluno organizada numa tela pra equipe.</dd></dl>
-        <a class="ir" href="../liz/">Ver a Liz →</a>
-      </div>
-      <div class="card caso">
-        <span class="status">Em implantação</span>
-        <div class="ico"><svg><use href="#i-prato"/></svg></div>
-        <h3>Luciu's Lanches</h3>
-        <p>Restaurante</p>
-        <dl><dt>Pediu</dt><dd>Receber pedido de mesa, entrega e retirada sem ninguém anotar à mão.</dd>
-        <dt>Estamos entregando</dt><dd>Pedido pelo WhatsApp conferido com o cardápio, mapa de mesas e comanda que imprime sozinha na cozinha.</dd></dl>
-        <a class="ir" href="../crm/">Ver kompila .crm →</a>
-      </div>
-      <div class="card caso">
-        <span class="status">Em implantação</span>
-        <div class="ico"><svg><use href="#i-play"/></svg></div>
-        <h3>Animar</h3>
-        <p>E-commerce, 90 mil vendas na Shopee</p>
-        <dl><dt>Pediu</dt><dd>Vender também no TikTok Shop.</dd>
-        <dt>Estamos entregando</dt><dd>O processo de e-commerce no TikTok Shop montado do zero.</dd></dl>
-        <a class="ir" href="../loja/">Ver kompila loja →</a>
-      </div>
-      </div>
-      <div class="setas"><button class="seta" data-d="-1" aria-label="Anterior"><svg width="22" height="22" style="transform:scaleX(-1)"><use href="#i-seta"/></svg></button><button class="seta" data-d="1" aria-label="Próximo"><svg width="22" height="22"><use href="#i-seta"/></svg></button></div>
-    </div>
-  </div>
-</section>
-
-<!-- LIZ -->
-<section class="bloco off" id="liz">
-  <div class="box">
-    <div class="lado">
-      <div class="liz-cena"><img src="img/liz_09_mostrando_celular.webp" alt="A Liz, a IA da Kompila, segurando um celular e uma boneca"></div>
-      <div>
-        <div class="regua"><span class="ri"><svg><use href="#i-liz"/></svg></span><span>05 · a liz</span></div>
-        <h2>Quem atende na sua empresa às 23h? <em>A Liz.</em></h2>
-        <p class="sub">É a IA de atendimento da Kompila. Responde no WhatsApp e no Instagram na hora, entende o que o cliente quer, agenda e passa pronto pro seu vendedor.</p>
-        <p class="sub" style="font-size:17px">O nome vem da filha do fundador.</p>
-        <div style="margin-top:32px"><a class="btn" href="../liz/">Ver a Liz atendendo <svg width="20" height="20" style="stroke:currentColor;fill:none;stroke-width:2.4"><use href="#i-seta"/></svg></a></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FECHO -->
 <section class="fecho verde">
   <div class="box">
-    <h2>Sua equipe no que dá lucro. <span class="mk">A IA no resto.</span></h2>
-    <p class="sub">Conta pra gente o que toma o dia da sua empresa. Em 30 minutos você sai sabendo o que a IA pode fazer e quanto dá pra economizar.</p>
-    <div class="acoes">
-      <a class="btn" href="https://wa.me/5511962884399?text=Oi%2C%20quero%20entender%20o%20que%20a%20IA%20pode%20fazer%20na%20minha%20empresa." target="_blank" rel="noopener">Falar com a Kompila no WhatsApp</a>
-    </div>
+    <h2>Quer algo assim <span class="mk">pra sua empresa?</span></h2>
+    <p class="sub">Conta o que você precisa. A gente mostra o caminho e o prazo numa conversa de 30 minutos.</p>
+    <div class="acoes"><a class="btn" href="https://wa.me/5511962884399?text=Oi%2C%20vi%20os%20trabalhos%20no%20site%20e%20quero%20conversar." target="_blank" rel="noopener">Falar com a Kompila no WhatsApp</a></div>
   </div>
 </section>
-
 <footer>
   <div class="box rodape">
     <div class="marca">
@@ -481,7 +319,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
       <a href="../crm/">kompila .crm</a><a href="../liz/">Liz</a><a href="../loja/">kompila loja</a><a href="../design/">kompila design</a><a href="../trafego/">kompila tráfego</a>
     </div>
     <div class="col"><h4>Kompila</h4>
-      <a href="#o-que-faz">O que a IA faz</a><a href="#como">Como funciona</a><a href="#clientes">Clientes</a><a href="../trabalhos/">Trabalhos</a><a href="#liz">A Liz</a><a href="../blog/">Blog</a>
+      <a href="../nova/#o-que-faz">O que a IA faz</a><a href="../nova/#como">Como funciona</a><a href="../nova/#clientes">Clientes</a><a href="./">Trabalhos</a><a href="../nova/#liz">A Liz</a><a href="../blog/">Blog</a>
     </div>
     <div class="col"><h4>Parceiros</h4>
       <a href="https://coleve.com.br" target="_blank" rel="noopener">Coleve · contabilidade</a><a href="https://p1led.com.br" target="_blank" rel="noopener">P1LED · painéis de LED</a>
@@ -495,11 +333,10 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
     <a href="../privacidade/">Política de privacidade</a>
   </div>
 </footer>
-
 <script>
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
-document.querySelectorAll('.aparece').forEach(el=>io.observe(el));
-document.querySelectorAll('.slider').forEach(sl=>{const t=sl.querySelector('.trilho');sl.querySelectorAll('.seta').forEach(b=>b.onclick=()=>t.scrollBy({left:+b.dataset.d*(t.querySelector('.card').offsetWidth+22),behavior:'smooth'}))});
+const fs=document.querySelectorAll('.f'),its=document.querySelectorAll('.it');
+fs.forEach(b=>b.onclick=()=>{fs.forEach(x=>x.classList.toggle('on',x===b));its.forEach(i=>i.classList.toggle('some',b.dataset.c!=='todos'&&i.dataset.c!==b.dataset.c))});
+document.querySelectorAll('.it video').forEach(v=>{const f=v.closest('.it');f.onclick=()=>{if(v.paused){v.play();f.classList.add('tocando')}else{v.pause();f.classList.remove('tocando')}};f.style.cursor='pointer'});
 </script>
 </body>
 </html>
