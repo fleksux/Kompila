@@ -217,6 +217,9 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 .sec{font-size:clamp(26px,3vw,40px);font-weight:800;margin:40px 0 0}
 @media(max-width:800px){.grade-trab,.grade-trab.vids{grid-template-columns:1fr}}
 /*nav-nowrap*/.nav ul a,.nav .btn{white-space:nowrap}@media(max-width:1200px){.nav ul{gap:18px;font-size:14px}}
+/* chat da Liz aparece quando a pessoa começa a rolar */
+#kompila-liz{opacity:0!important;pointer-events:none!important;transition:opacity .45s!important}
+body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
 </style>
 </head>
 <body>
@@ -361,5 +364,8 @@ const fs=document.querySelectorAll('.f'),its=document.querySelectorAll('.it');
 fs.forEach(b=>b.onclick=()=>{fs.forEach(x=>x.classList.toggle('on',x===b));its.forEach(i=>i.classList.toggle('some',b.dataset.c!=='todos'&&i.dataset.c!==b.dataset.c));document.querySelector('.sec').style.display=b.dataset.c==='pranchas'?'none':''});
 document.querySelectorAll('.it video').forEach(v=>{const f=v.closest('.it');f.onclick=()=>{if(v.paused){v.play();f.classList.add('tocando')}else{v.pause();f.classList.remove('tocando')}};f.style.cursor='pointer'});
 </script>
+<script>addEventListener("scroll",function f(){if(scrollY>120){document.body.classList.add("rolou");removeEventListener("scroll",f)}},{passive:true})</script>
+<script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
+<script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
 </body>
 </html>

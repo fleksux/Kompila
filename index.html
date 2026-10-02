@@ -210,6 +210,9 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 .aparece.on{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.aparece{opacity:1;transform:none;transition:none}}
 /*nav-nowrap*/.nav ul a,.nav .btn{white-space:nowrap}@media(max-width:1200px){.nav ul{gap:18px;font-size:14px}}
+/* chat da Liz aparece quando a pessoa começa a rolar */
+#kompila-liz{opacity:0!important;pointer-events:none!important;transition:opacity .45s!important}
+body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
 </style>
 </head>
 <body>
@@ -537,5 +540,8 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
 document.querySelectorAll('.aparece').forEach(el=>io.observe(el));
 document.querySelectorAll('.slider').forEach(sl=>{const t=sl.querySelector('.trilho');sl.querySelectorAll('.seta').forEach(b=>b.onclick=()=>t.scrollBy({left:+b.dataset.d*(t.querySelector('.card').offsetWidth+22),behavior:'smooth'}))});
 </script>
+<script>addEventListener("scroll",function f(){if(scrollY>120){document.body.classList.add("rolou");removeEventListener("scroll",f)}},{passive:true})</script>
+<script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
+<script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
 </body>
 </html>
