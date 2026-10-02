@@ -1,0 +1,50 @@
+/* RÉGUA DO SITE (02/10/2026, Alex: "um tamanho só"). A home é o molde: largura 1.200 px, título 64, texto 16,
+   o mesmo menu e o mesmo rodapé em todas as páginas. Carregado por último; vale só com <body class="kr">. */
+body.kr{font-size:16px}
+body.kr>nav:not(.kr-nav),body.kr nav#nav,body.kr .kr-velho{display:none!important}
+body.kr .shell,body.kr .wrap{max-width:1200px;margin-left:auto;margin-right:auto}
+body.kr h1{font-size:clamp(38px,4.6vw,64px)!important;line-height:1.02!important;font-weight:900!important;letter-spacing:-.035em!important}
+body.kr h2{font-size:clamp(30px,4vw,52px)!important;line-height:1.06!important;font-weight:800!important;letter-spacing:-.028em!important}
+body.kr h1 em,body.kr h2 em{font-style:normal}
+
+/* menu (igual ao da home) */
+.kr-nav{position:sticky;top:0;z-index:999;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #E4E7E1;font-family:Inter,system-ui,sans-serif}
+.kr-nav *{box-sizing:border-box;margin:0;padding:0}
+.kr-nav a{color:inherit;text-decoration:none}
+.kr-nav .kr-box{max-width:1200px;margin:0 auto;padding:0 6%;display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px}
+.kr-nav .kr-logo{font:700 22px 'JetBrains Mono',monospace;color:#0A0B0E;white-space:nowrap}
+.kr-nav .kr-logo b{color:#12803F}
+.kr-nav ul{display:flex;gap:28px;list-style:none;font-size:15px;font-weight:600;color:#3a424b}
+.kr-nav ul a,.kr-nav .kr-btn{white-space:nowrap}
+.kr-nav ul a:hover{color:#12803F}
+.kr-nav .kr-btn{display:inline-flex;align-items:center;height:42px;padding:0 18px;border-radius:8px;font-weight:700;font-size:15px;background:#0A0B0E;color:#fff}
+.kr-nav .kr-drop{position:relative}
+.kr-nav .kr-drop .v{font-size:11px;opacity:.6}
+.kr-nav .kr-drop .kr-menu{position:absolute;top:100%;left:-18px;padding-top:14px;display:none;min-width:330px}
+.kr-nav .kr-drop:hover .kr-menu,.kr-nav .kr-drop:focus-within .kr-menu{display:block}
+.kr-nav .kr-drop .kr-menu::before{content:"";position:absolute;inset:14px 0 0;background:#fff;border-radius:12px;box-shadow:0 18px 50px rgba(20,40,30,.16)}
+.kr-nav .kr-drop .kr-menu a{position:relative;display:block;padding:12px 18px}
+.kr-nav .kr-drop .kr-menu a:first-child{padding-top:16px}.kr-nav .kr-drop .kr-menu a:last-child{padding-bottom:16px}
+.kr-nav .kr-drop .kr-menu b{display:block;font-size:15px;color:#0A0B0E}
+.kr-nav .kr-drop .kr-menu span{display:block;font-size:13px;font-weight:500;color:#5E6873;margin-top:2px}
+.kr-nav .kr-drop .kr-menu a:hover b{color:#12803F}
+@media(max-width:1200px){.kr-nav ul{gap:18px;font-size:14px}}
+@media(max-width:900px){.kr-nav ul{display:none}}
+
+/* rodapé (igual ao da home) */
+.kr-foot{background:#0A0B0E;color:#8E959D;padding:56px 0;font:15px Inter,system-ui,sans-serif}
+.kr-foot *{box-sizing:border-box;margin:0;padding:0}
+.kr-foot a{color:inherit;text-decoration:none}
+.kr-foot a:hover{color:#fff}
+.kr-foot .kr-box{max-width:1200px;margin:0 auto;padding:0 6%}
+.kr-foot .kr-logo{font:700 22px 'JetBrains Mono',monospace;color:#E9EBEE}
+.kr-foot .kr-logo b{color:#2FD67B}
+.kr-foot .kr-rodape{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:40px}
+.kr-foot .kr-marca p{margin-top:12px;line-height:1.5}
+.kr-foot .kr-marca .kr-btn{display:inline-flex;align-items:center;height:42px;padding:0 18px;border-radius:8px;font-weight:700;font-size:15px;background:#2FD67B;color:#0A0B0E;margin-top:20px}
+.kr-foot h4{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#E9EBEE;margin-bottom:16px}
+.kr-foot .kr-col a{display:block;padding:6px 0;white-space:nowrap}
+.kr-foot .kr-base{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:48px;padding-top:24px;border-top:1px solid #23262b;font-size:14px}
+@media(max-width:900px){.kr-foot .kr-rodape{grid-template-columns:1fr 1fr}.kr-foot .kr-marca{grid-column:1/-1}}
+/* página de texto (privacidade): subtítulo continua subtítulo */
+body.kr.kr-texto h2{font-size:22px!important;line-height:1.25!important;font-weight:700!important;letter-spacing:-.01em!important}
