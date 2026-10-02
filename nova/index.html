@@ -153,6 +153,17 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
 .parc .lg img{max-height:70px;max-width:62%}
 .parc .lg img.quad{max-height:150px;max-width:none;mix-blend-mode:multiply}
 .parc a.link{margin-top:auto;padding-top:20px;font-weight:700;color:var(--verde-e);font-size:16px}
+
+/* slider de cases */
+.slider{margin-top:52px}
+.trilho{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 4px 30px;margin:0 -4px;scrollbar-width:none}
+.trilho::-webkit-scrollbar{display:none}
+.trilho .card{flex:0 0 calc((100% - 66px)/3.3);scroll-snap-align:start;min-width:270px}
+@media(max-width:900px){.trilho .card{flex-basis:78%}}
+.setas{display:flex;gap:12px;justify-content:flex-end}
+.seta{width:52px;height:52px;border-radius:50%;border:0;background:var(--carbono);cursor:pointer;display:grid;place-items:center}
+.seta svg{stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.seta:hover{background:var(--verde-e)}
 .aparece{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .aparece.on{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.aparece{opacity:1;transform:none;transition:none}}
@@ -332,24 +343,9 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
   <div class="box">
     <div class="regua"><span><b>[k]</b></span><span>04 · quem já trabalha com a gente</span></div>
     <h2>Cada empresa pediu uma coisa. <em>A IA entrou onde doía.</em></h2>
-    <div class="cards c4">
-      <div class="card caso aparece">
-        <span class="status">Em implantação</span>
-        <div class="ico"><svg><use href="#i-calc"/></svg></div>
-        <h3>Coleve</h3>
-        <p>Contabilidade digital, São Paulo</p>
-        <dl><dt>Pediu</dt><dd>Atender os alunos no WhatsApp e organizar a jornada de cada um.</dd>
-        <dt>Estamos entregando</dt><dd>A Liz atendendo os alunos no WhatsApp e a jornada de cada aluno organizada numa tela pra equipe.</dd></dl>
-      </div>
-      <div class="card caso aparece">
-        <span class="status">Em implantação</span>
-        <div class="ico"><svg><use href="#i-prato"/></svg></div>
-        <h3>Luciu's Lanches</h3>
-        <p>Restaurante</p>
-        <dl><dt>Pediu</dt><dd>Receber pedido de mesa, entrega e retirada sem ninguém anotar à mão.</dd>
-        <dt>Estamos entregando</dt><dd>Pedido pelo WhatsApp conferido com o cardápio, mapa de mesas e comanda que imprime sozinha na cozinha.</dd></dl>
-      </div>
-      <div class="card caso aparece">
+    <div class="slider">
+      <div class="trilho">
+      <div class="card caso">
         <span class="status no-ar">No ar</span>
         <div class="ico"><svg><use href="#i-chart"/></svg></div>
         <h3>P1LED</h3>
@@ -357,7 +353,7 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
         <dl><dt>Pediu</dt><dd>Saber onde o dinheiro dos anúncios virava venda.</dd>
         <dt>Entregamos</dt><dd>12 meses de Google Ads analisados, R$ 209 mil investidos: as capitais levavam 39% da verba e traziam 78% da venda. Mais site, sistema comercial e CRM lendo 3.438 contatos do HubSpot.</dd></dl>
       </div>
-      <div class="card caso aparece">
+      <div class="card caso">
         <span class="status no-ar">No ar</span>
         <div class="ico"><svg><use href="#i-cabide"/></svg></div>
         <h3>Maslu Select</h3>
@@ -365,6 +361,32 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
         <dl><dt>Pediu</dt><dd>Uma loja online com a cara da marca.</dd>
         <dt>Entregamos</dt><dd>A loja em masluoficial.com.br, com vitrine, lookbook e seções que a dona edita sozinha.</dd></dl>
       </div>
+      <div class="card caso">
+        <span class="status">Em implantação</span>
+        <div class="ico"><svg><use href="#i-calc"/></svg></div>
+        <h3>Coleve</h3>
+        <p>Contabilidade digital, São Paulo</p>
+        <dl><dt>Pediu</dt><dd>Atender os alunos no WhatsApp e organizar a jornada de cada um.</dd>
+        <dt>Estamos entregando</dt><dd>A Liz atendendo os alunos no WhatsApp e a jornada de cada aluno organizada numa tela pra equipe.</dd></dl>
+      </div>
+      <div class="card caso">
+        <span class="status">Em implantação</span>
+        <div class="ico"><svg><use href="#i-prato"/></svg></div>
+        <h3>Luciu's Lanches</h3>
+        <p>Restaurante</p>
+        <dl><dt>Pediu</dt><dd>Receber pedido de mesa, entrega e retirada sem ninguém anotar à mão.</dd>
+        <dt>Estamos entregando</dt><dd>Pedido pelo WhatsApp conferido com o cardápio, mapa de mesas e comanda que imprime sozinha na cozinha.</dd></dl>
+      </div>
+      <div class="card caso">
+        <span class="status">Em implantação</span>
+        <div class="ico"><svg><use href="#i-play"/></svg></div>
+        <h3>Animar</h3>
+        <p>E-commerce, 90 mil vendas na Shopee</p>
+        <dl><dt>Pediu</dt><dd>Vender também no TikTok Shop.</dd>
+        <dt>Estamos entregando</dt><dd>O processo de e-commerce no TikTok Shop montado do zero.</dd></dl>
+      </div>
+      </div>
+      <div class="setas"><button class="seta" data-d="-1" aria-label="Anterior"><svg width="22" height="22" style="transform:scaleX(-1)"><use href="#i-seta"/></svg></button><button class="seta" data-d="1" aria-label="Próximo"><svg width="22" height="22"><use href="#i-seta"/></svg></button></div>
     </div>
     <div class="banner aparece">
       <div class="lg"><img src="img/coleve.svg" alt="Coleve"></div>
@@ -451,6 +473,7 @@ footer nav{display:flex;gap:24px;flex-wrap:wrap}
 <script>
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.aparece').forEach(el=>io.observe(el));
+document.querySelectorAll('.slider').forEach(sl=>{const t=sl.querySelector('.trilho');sl.querySelectorAll('.seta').forEach(b=>b.onclick=()=>t.scrollBy({left:+b.dataset.d*(t.querySelector('.card').offsetWidth+22),behavior:'smooth'}))});
 </script>
 </body>
 </html>
