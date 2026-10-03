@@ -11,6 +11,8 @@
     '.kmv-on .kmv-w{opacity:1;transform:none;filter:none}',
     '.kmv-in{opacity:0;transform:translateY(46px) scale(.965);transition:opacity .85s cubic-bezier(.2,.7,.2,1),transform .85s cubic-bezier(.2,.7,.2,1)}',
     '.kmv-in.kmv-on{opacity:1;transform:none}',
+    '.bento .kmv-in{transform:translateY(24px)}.bento .kmv-in.kmv-on{transform:none}',
+    '.kmv-in.kmv-pronto{transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}',
     '.kmv-zoom{overflow:hidden}.kmv-zoom img,.kmv-zoom video{animation:kmvKen 18s ease-in-out infinite alternate}',
     '@keyframes kmvKen{from{transform:scale(1)}to{transform:scale(1.09)}}',
     '.kmv-hov{transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}',
@@ -33,7 +35,9 @@
 
   var jaAnima = function (el) { return el.closest('.aparece,.rv,.kmv-in,#kompila-liz,.kr-nav,header.nav,nav,footer,.faixa-anda,.cap-trilho'); };
   var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('kmv-on'); io.unobserve(e.target); } });
+    es.forEach(function (e) { if (e.isIntersecting) { var el = e.target; el.classList.add('kmv-on'); io.unobserve(el);
+      // depois que entrou, o atraso da sequência sai: senão o hover fica atrasado e a peça pula
+      if (el.classList.contains('kmv-in')) setTimeout(function () { el.style.transitionDelay = ''; el.classList.add('kmv-pronto'); }, 1000 + (parseFloat(el.style.transitionDelay) || 0)); } });
   }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
 
   // títulos: palavra por palavra (mantém <em>, <span>, <br>)
@@ -60,7 +64,9 @@
     if (jaAnima(el) || el.closest('.kmv-in') || el.classList.contains('cap')) return;
     var irmaos = Array.prototype.filter.call(el.parentElement.children, function (x) { return x.classList.contains('kmv-in'); }).length;
     el.classList.add('kmv-in'); el.style.transitionDelay = Math.min(irmaos, 6) * 90 + 'ms'; io.observe(el);
-    if (/^(A|ARTICLE)$/.test(el.tagName) || el.classList.contains('card') || el.classList.contains('b') || el.classList.contains('case')) el.classList.add('kmv-hov');
+    // peça que a página já anima no mouse (galeria .b da home) não ganha o segundo efeito
+    if (el.classList.contains('b') || el.closest('.bento')) return;
+    if (/^(A|ARTICLE)$/.test(el.tagName) || el.classList.contains('card') || el.classList.contains('case')) el.classList.add('kmv-hov');
   });
 
   // foto do topo: zoom lento
