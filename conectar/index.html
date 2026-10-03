@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Kompila · Conectar WhatsApp</title>
+<link rel="icon" href="/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --papel:#F5F2EA; --carbono:#1A1A1A; --verde:#1F9D55; --linha:#E6E2D8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--papel); color:var(--carbono); font-family:Inter,Arial,sans-serif; }
+  main { max-width:560px; margin:0 auto; padding:48px 16px; }
+  h1 { font-size:30px; line-height:1.15; margin:0 0 12px; }
+  p { font-size:16px; line-height:1.5; margin:0 0 12px; }
+  .cartao { background:#fff; border:1px solid var(--linha); border-radius:12px; padding:20px; margin:20px 0; }
+  ol { padding-left:20px; margin:0; } li { margin:6px 0; line-height:1.45; }
+  button { width:100%; height:52px; border:0; border-radius:12px; background:var(--verde); color:#fff; font:600 17px Inter,Arial,sans-serif; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:wait; }
+  #resultado { display:none; }
+  #resultado.ok { display:block; border-color:var(--verde); background:#E9F6EE; }
+  #resultado.erro { display:block; border-color:#C0392B; background:#FDECEA; }
+  code { font-size:13px; word-break:break-all; }
+  small { color:#777; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Conectar o WhatsApp Business à Kompila</h1>
+  <p>O número continua no seu celular. A Liz passa a atender pelo mesmo número, e você vê tudo no app.</p>
+  <div class="cartao">
+    <ol>
+      <li>Deixe o <b>WhatsApp Business</b> aberto no celular.</li>
+      <li>Clique no botão abaixo e entre com o Facebook da empresa.</li>
+      <li>Escolha <b>conectar o app WhatsApp Business existente</b> e o seu número.</li>
+      <li>Leia o QR code com o WhatsApp Business (Configurações › Aparelhos conectados) e escolha compartilhar o histórico.</li>
+    </ol>
+  </div>
+  <button id="conectar" disabled>Carregando…</button>
+  <div id="resultado" class="cartao"></div>
+  <p><small>Conexão oficial da Meta (Cadastro incorporado). A Kompila não vê nem guarda sua senha.</small></p>
+</main>
+<script>
+  var APP = '2248152579306460', CONFIG = '1084583623978524';
+  var res = document.getElementById('resultado'), btn = document.getElementById('conectar');
+  var sessao = {};
+  function mostra(classe, html) { res.className = 'cartao ' + classe; res.innerHTML = html; }
+
+  window.addEventListener('message', function (ev) {
+    if (!/facebook\.com$/.test(new URL(ev.origin).hostname)) return;
+    try {
+      var d = JSON.parse(ev.data);
+      if (d.type !== 'WA_EMBEDDED_SIGNUP') return;
+      sessao = d.data || {};
+      if (/FINISH/.test(d.event)) {
+        mostra('ok', '<p><b>Conectado.</b> Avise a Kompila. Dados da conexão:</p>' +
+          '<p><code>WABA: ' + (sessao.waba_id || '-') + '<br>Número (ID): ' + (sessao.phone_number_id || '-') + '<br>Evento: ' + d.event + '</code></p>');
+      } else if (d.event === 'CANCEL') {
+        mostra('erro', '<p>Conexão interrompida na etapa: <code>' + (sessao.current_step || '-') + '</code>. Pode tentar de novo.</p>');
+      } else if (d.event === 'ERROR') {
+        mostra('erro', '<p>A Meta devolveu um erro: <code>' + (sessao.error_message || JSON.stringify(sessao)) + '</code></p>');
+      }
+    } catch (e) {}
+  });
+
+  window.fbAsyncInit = function () {
+    FB.init({ appId: APP, autoLogAppEvents: true, xfbml: false, version: 'v21.0' });
+    btn.disabled = false; btn.textContent = 'Conectar meu WhatsApp Business';
+  };
+
+  btn.addEventListener('click', function () {
+    btn.disabled = true;
+    FB.login(function (r) {
+      btn.disabled = false;
+      if (!r.authResponse && !res.className.includes('ok')) mostra('erro', '<p>Login não concluído. Pode tentar de novo.</p>');
+    }, {
+      config_id: CONFIG,
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: { setup: {}, featureType: 'whatsapp_business_app_onboarding', sessionInfoVersion: '3' }
+    });
+  });
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js"></script>
+</body>
+</html>
