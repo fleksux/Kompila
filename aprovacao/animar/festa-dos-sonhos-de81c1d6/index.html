@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A festa dos sonhos · Kompila para a Animar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+:root{--creme:#FBF6F0;--papel:#F4ECE3;--branco:#FFFDFB;--cacau:#2E201B;--tx:#2A1D18;--tx2:#5A463D;--linha:#EADDD2;--blush:#E9C2BA;--blush2:#F6E1DB;--champ:#E8D6B8;--mocha:#6E4B3B;--salvia:#9DB09A;--salvia2:#E3EBDF;--ouro:#7E5F25;--rosa:#A04E3C;--r:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--creme);color:var(--tx);font:16px/1.6 'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:lining-nums}*{font-variant-numeric:lining-nums}
+.serif{font-family:'Archivo',sans-serif}
+a{color:var(--rosa)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+/* capa */
+.hero{position:relative;min-height:min(92vh,880px);display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--cacau)}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(40,26,20,.15) 0%,rgba(40,26,20,.05) 35%,rgba(40,26,20,.82) 100%),linear-gradient(90deg,rgba(40,26,20,.45),transparent 60%)}
+.hero .wrap{position:relative;z-index:2;padding-bottom:56px;width:100%}
+.kick{font:500 12.5px 'Archivo',sans-serif;letter-spacing:.22em;text-transform:uppercase;opacity:.9}
+.kick b{font-weight:700}
+.hero h1{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(50px,7.2vw,104px);line-height:.95;letter-spacing:-.02em;margin:18px 0 20px;max-width:1120px}
+.hero h1 em{font-style:italic;color:var(--blush)}
+.hero p.lead{font-size:19px;max-width:640px;opacity:.92}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:40px}
+.kpis div{background:rgba(255,253,251,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:16px 16px 14px}
+.kpis b{display:block;white-space:nowrap;font:600 34px 'Archivo',sans-serif;letter-spacing:-.01em}
+.kpis small{font-size:12.5px;opacity:.85;line-height:1.35;display:block;margin-top:4px}
+.hero .data{margin-top:16px;font-size:12px;opacity:.7;letter-spacing:.08em}
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(251,246,240,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--linha)}
+nav .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav a{flex:none;padding:15px 12px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;border-bottom:2px solid transparent}
+nav a:hover{color:var(--tx);border-color:var(--blush)}
+/* faixa de imagem de capítulo */
+.banda{position:relative;height:clamp(300px,46vw,560px);overflow:hidden;margin-top:96px}
+.banda img{width:100%;height:100%;object-fit:cover;display:block}
+.banda figcaption{position:absolute;left:0;right:0;bottom:0;padding:80px 0 30px;background:linear-gradient(180deg,transparent,rgba(40,26,20,.7));color:#fff}
+.banda figcaption .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.banda .cap-n{font:500 15px 'Archivo',sans-serif;font-style:italic;opacity:.9}
+.banda .cap-t{font:500 clamp(32px,4.6vw,60px)/1.02 'Archivo',sans-serif;letter-spacing:-.01em;max-width:760px}
+.banda .cap-t em{font-style:italic;color:var(--blush)}
+/* seções */
+section.s{padding:64px 0 8px}
+.s-h{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+.s-h .num{font:500 18px 'Archivo',sans-serif;font-style:italic;color:var(--rosa)}
+.s-h h2{font:500 clamp(36px,4.6vw,58px)/1.02 'Archivo',sans-serif;letter-spacing:-.015em}
+.s-h h2 em{font-style:italic;color:var(--mocha)}
+.s-sub{color:var(--tx2);max-width:780px;margin-bottom:30px;font-size:17.5px}
+mark{background:linear-gradient(transparent 58%,var(--blush) 58%);color:inherit;padding:0 2px}
+/* achados */
+.achados{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}.ach{grid-column:span 2}.ach:nth-child(n+4){grid-column:span 3}
+.ach{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:26px;display:flex;flex-direction:column;gap:8px}
+.ach .n{font:600 46px 'Archivo',sans-serif;color:var(--rosa);letter-spacing:-.02em;line-height:1}
+.ach:nth-child(2) .n{color:var(--mocha)}.ach:nth-child(3) .n{color:#3F5A3C}.ach:nth-child(4) .n{color:var(--ouro)}.ach:nth-child(5) .n{color:var(--cacau)}
+.ach h3{font-size:17px;line-height:1.3;font-weight:700}
+.ach p{font-size:14.5px;color:var(--tx2)}
+.ach .src{margin-top:auto;font-size:11.5px;color:#6F5D54;letter-spacing:.02em}
+/* vaga */
+.vaga-split{display:grid;grid-template-columns:1.1fr 1fr;gap:0;border-radius:var(--r);overflow:hidden;background:var(--cacau);color:#F6EDE6;margin-bottom:14px}
+.vaga-split img{width:100%;height:100%;object-fit:cover;display:block;min-height:380px}
+.vaga-split .txt{padding:44px 42px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.vaga-split .tag2{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--blush)}
+.vaga-split h3{font:500 40px/1.05 'Archivo',sans-serif}
+.vaga-split h3 em{font-style:italic;color:var(--blush)}
+.vaga-split p{color:#D9C9BF;font-size:15.5px}
+.vaga-split .preco{font:500 54px 'Archivo',sans-serif;color:#fff;line-height:1}
+.regua{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:28px}
+.trilho{display:grid;grid-template-columns:1fr 1.15fr 1fr 1fr;gap:10px;align-items:stretch}
+.pt{border-radius:14px;padding:18px;background:var(--papel);display:flex;flex-direction:column;gap:6px}
+.pt .v{font:600 30px 'Archivo',sans-serif;letter-spacing:-.01em}
+.pt h4{font-size:15px}
+.pt p{font-size:13.5px;color:var(--tx2)}
+.pt .who{font-size:11.5px;color:#6F5D54;margin-top:auto;letter-spacing:.02em}
+.pt.vaga{background:var(--blush2);outline:2px solid var(--blush)}
+.pt.vaga .v{color:var(--rosa)}
+.pt.vaga .who{color:var(--rosa);font-weight:700}
+.eixo{display:flex;justify-content:space-between;font-size:11.5px;color:#6F5D54;margin-top:14px;border-top:1px dashed var(--linha);padding-top:10px;letter-spacing:.04em}
+.leio{margin-top:18px;font-size:14px;color:var(--tx2);background:var(--salvia2);border-radius:12px;padding:12px 16px}
+.leio b{color:#3F5A3C}
+/* fichas */
+.filtro{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.filtro button{font:500 14px 'Archivo',sans-serif;border:1px solid var(--linha);background:var(--branco);border-radius:999px;height:36px;padding:0 16px;cursor:pointer;color:var(--tx2)}
+.filtro button.on{background:var(--cacau);color:#fff;border-color:var(--cacau)}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;align-items:start}
+.ref{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:0 0 20px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.ref>*:not(.galeria){margin:0 20px}
+.ref-h{display:flex;gap:12px;align-items:flex-start;margin-top:18px!important}
+.rank{font:500 22px 'Archivo',sans-serif;font-style:italic;color:var(--rosa);flex:none;line-height:1.1}
+.ref-h h3{font:600 27px/1.1 'Archivo',sans-serif;letter-spacing:-.01em}
+.where{font-size:13px;color:var(--tx2)}
+.tag{margin-left:auto;flex:none;font:700 10.5px 'Archivo',sans-serif;border-radius:999px;padding:4px 9px;text-transform:uppercase;letter-spacing:.08em}
+.tag.fundo{background:var(--salvia2);color:#3F5A3C}
+.tag.raso{background:#F7EBDD;color:#74491A}
+.galeria{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:3px;aspect-ratio:3/2;background:var(--papel)}
+.galeria a{display:block;overflow:hidden;position:relative;min-height:0;min-width:0}
+.galeria img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.galeria a:hover img{transform:scale(1.04)}
+.galeria a:first-child{grid-row:1/3}
+.galeria.g1{grid-template-columns:1fr;grid-template-rows:1fr}
+.galeria.g2{grid-template-columns:1fr 1fr;grid-template-rows:1fr}.galeria.g2 a:first-child{grid-row:auto}
+.galeria.g3{grid-template-columns:2fr 1fr}
+.galeria.g4{grid-template-columns:1fr 1fr}.galeria.g4 a:first-child{grid-row:auto}
+.galeria .mais{position:absolute;right:8px;bottom:8px;background:rgba(58,42,36,.75);color:#fff;font-size:11px;border-radius:999px;padding:3px 8px}
+.semfoto{aspect-ratio:3/2;background:url(img/07_textura_baloes_cinematic.jpg) center/cover;display:flex;align-items:flex-end}
+.semfoto span{background:rgba(255,253,251,.9);font-size:12px;color:var(--tx2);margin:12px;padding:6px 10px;border-radius:999px}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nums div{background:var(--papel);border-radius:12px;padding:10px 12px}
+.nums b{font:600 25px 'Archivo',sans-serif;display:block;letter-spacing:-.01em}
+.nums b.nc2{font:500 13px 'Archivo',sans-serif;color:#6F5D54;padding:5px 0}
+.nums small{font-size:12px;color:var(--tx2)}
+details summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--rosa);list-style:none;display:flex;align-items:center;gap:8px}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:'';width:24px;height:24px;border-radius:50%;border:1px solid var(--linha);background:var(--branco) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 3.5l3 3 3-3' fill='none' stroke='%23C9877A' stroke-width='1.6'/%3E%3C/svg%3E") center no-repeat;transition:transform .2s}
+details[open] summary::before{transform:rotate(180deg)}
+details section{margin-top:16px}
+details h4{font:500 15px 'Archivo',sans-serif;font-style:italic;color:var(--mocha);margin-bottom:6px}
+details p{font-size:14px;margin-bottom:6px}
+.price{font-size:13.5px!important;background:var(--papel);border-radius:10px;padding:9px 11px}
+.quotes{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.quotes li{font:italic 400 14.5px 'Archivo',sans-serif;color:#5b4840;border-left:2px solid var(--blush);padding-left:10px}
+.lbl{display:inline-block;font:700 10px 'Archivo',sans-serif;text-transform:uppercase;letter-spacing:.08em;border-radius:999px;padding:2px 8px;margin-right:7px;background:var(--papel);color:var(--tx2)}
+.lbl.ok{background:var(--salvia2);color:#3F5A3C}
+.lbl.ko{background:var(--blush2);color:#8A3A2C}
+.nc{font-size:13px;color:#6F5D54}
+.fontes{font-size:12px!important;color:#6F5D54;margin-top:12px}
+.fontes a{color:var(--tx2)}
+.tirar{background:var(--blush2);border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.5;margin-top:auto}
+.tirar span{display:block;font:italic 400 14px 'Archivo',sans-serif;color:var(--rosa);margin-bottom:4px}
+/* padrões */
+.padroes{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:30px}
+.pad{border-radius:var(--r);padding:20px;color:var(--cacau)}
+.pad:nth-child(1){background:var(--blush2)}.pad:nth-child(2){background:#F1E6D3}.pad:nth-child(3){background:var(--salvia2)}.pad:nth-child(4){background:#EADBD2}.pad:nth-child(5){background:#F3EDE4}
+.pad b{font:italic 400 14px 'Archivo',sans-serif;color:var(--rosa)}
+.pad h4{font:600 23px/1.15 'Archivo',sans-serif;margin:6px 0 8px}
+.pad p{font-size:13px;color:var(--tx2)}
+/* tabelas */
+.tw{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);overflow:auto}
+table.grade{width:100%;border-collapse:collapse;font-size:14px}
+table.grade th{text-align:left;font:700 10.5px 'Archivo',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--tx2);background:var(--papel);padding:12px 14px;border-bottom:1px solid var(--linha);white-space:nowrap}
+table.grade td{padding:11px 14px;border-bottom:1px solid #F1E7DE;vertical-align:top}
+table.grade tr:last-child td{border-bottom:0}
+table.grade td.r,table.grade th.r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+table.grade tr.hl td{background:var(--blush2)}
+table.grade tr.top td{background:#FCF4F1}
+.star{font:700 10px 'Archivo',sans-serif;background:var(--rosa);color:#fff;border-radius:999px;padding:2px 8px;margin-left:6px;text-transform:uppercase;letter-spacing:.06em}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.precos3{display:grid;grid-template-columns:.8fr 1fr 1fr;gap:14px;align-items:stretch}
+.foto-lado{border-radius:var(--r);overflow:hidden;position:relative;min-height:420px}
+.foto-lado img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.foto-lado figcaption{position:absolute;left:12px;right:12px;bottom:12px;background:rgba(255,253,251,.92);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--tx2)}
+.foto-lado figcaption b{display:block;font:500 22px 'Archivo',sans-serif;color:var(--cacau)}
+.box{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:24px}
+.box h3{font:600 26px/1.15 'Archivo',sans-serif;margin-bottom:16px}
+.bar{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;margin-bottom:16px;font-size:13.5px}
+.bl{font-size:13px;color:var(--tx)}
+.bt{height:14px;background:var(--papel);border-radius:999px;overflow:hidden}
+.bt i{display:block;height:100%;background:var(--champ);border-radius:999px}
+.bar.hl .bt i{background:linear-gradient(90deg,var(--blush),var(--rosa))}
+.bv{font-size:12.5px;text-align:right;color:var(--tx2);font-variant-numeric:tabular-nums}
+.motor{display:flex;flex-direction:column;gap:10px}
+.motor div{border:1px solid var(--linha);border-radius:14px;padding:14px 16px}
+.motor b{font:600 34px 'Archivo',sans-serif;color:var(--rosa)}
+.motor h4{font-size:15px;margin:2px 0 4px}
+.motor p{font-size:13.5px;color:var(--tx2)}
+/* movimentos */
+.movs{display:flex;flex-direction:column;gap:12px}
+.mov{display:grid;grid-template-columns:64px 1fr 300px;gap:20px;background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:24px 26px;align-items:start}
+.mov .mn{font:italic 400 48px 'Archivo',sans-serif;color:var(--blush);line-height:.9}
+.mov h3{font:600 27px/1.15 'Archivo',sans-serif;margin-bottom:6px;letter-spacing:-.01em}
+.mov p{font-size:14.5px;color:var(--tx2)}
+.mov .prova{font-size:12px;color:#6F5D54;margin-top:8px}
+.mov .antes{background:var(--salvia2);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.mov .antes span{display:block;font:italic 400 14px 'Archivo',sans-serif;color:#3F5A3C;margin-bottom:4px}
+.falta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.falta div{background:var(--branco);border:1px dashed #D9C6B8;border-radius:14px;padding:16px}
+.falta b{font:500 18px 'Archivo',sans-serif;display:block;margin-bottom:4px}
+.falta p{font-size:13.5px;color:var(--tx2)}
+footer{margin-top:96px;position:relative;color:#fff;padding:120px 0 44px;font-size:13px;background:url(img/07_textura_baloes_cinematic.jpg) center/cover}
+footer::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(58,42,36,.15),rgba(58,42,36,.85))}
+footer .wrap{position:relative}
+footer .sig{font:600 30px 'Archivo',sans-serif}
+footer .sig i{font-style:italic;color:var(--blush)}
+footer p{margin-top:8px;max-width:820px;opacity:.9}
+.kpis b,.ach .n,.nums b:not(.nc2),.pt .v,.vaga-split .preco,.motor b,.foto-lado figcaption b,.mov .mn{font-family:'Archivo',sans-serif!important;font-weight:300!important;letter-spacing:-.02em!important}.rank,.s-h .num{font-family:'Archivo',sans-serif!important;font-style:normal!important;font-weight:400!important;font-size:13px!important;letter-spacing:.12em!important}.s-h .num{align-self:center}.mov .mn{font-size:40px!important;font-style:normal!important}.kpis b{font-size:30px!important}.ach .n{font-size:36px!important}
+/* Archivo: quadrada, só bold, light e normal, sem itálico */
+em,i{font-style:normal!important}
+.hero h1,.s-h h2,.banda .cap-t,.vaga-split h3,.ref-h h3,.box h3,.pad h4,.mov h3,.falta b{font-weight:800!important;font-stretch:118%;letter-spacing:-.025em!important}
+.hero h1 em,.s-h h2 em,.banda .cap-t em,.vaga-split h3 em{font-weight:200!important}
+.hero h1{line-height:.92!important;font-size:clamp(46px,6.6vw,96px)!important}
+.s-h h2{font-size:clamp(30px,3.8vw,48px)!important;line-height:1.02!important}
+.banda .cap-t{font-size:clamp(28px,3.8vw,50px)!important}
+.vaga-split h3{font-size:30px!important;line-height:1.05!important}
+.ref-h h3{font-size:20px!important;line-height:1.15!important}
+.box h3,.mov h3{font-size:20px!important}.pad h4{font-size:17px!important}.falta b{font-size:16px!important}
+.kpis b,.ach .n,.nums b:not(.nc2),.pt .v,.vaga-split .preco,.motor b,.foto-lado figcaption b,.mov .mn{font-weight:200!important;font-stretch:112%}
+.tirar span,details h4,.pad b,.mov .antes span,.cap-n,.quotes li{font-family:'Archivo',sans-serif!important;font-style:normal!important}
+.tirar span,details h4,.pad b,.mov .antes span,.cap-n{font-size:10.5px!important;font-weight:700!important;text-transform:uppercase;letter-spacing:.14em!important}
+.quotes li{font-size:14px!important;font-weight:300!important}
+.kick,.rank,.s-h .num{font-weight:700!important}
+
+/* contraste e quebra */
+h1,h2,h3,h4,.cap-t,.ach .n,.pt .v{text-wrap:balance}
+p,li,td,.tirar,figcaption{text-wrap:pretty}
+.ach .n,.pt .v,.vaga-split .preco,.kpis b,.nums b,td.r,.price{white-space:nowrap}
+.hero h1 em,.s-h h2 em,.banda .cap-t em,.vaga-split h3 em{font-weight:300!important}
+.s-h h2 em{color:var(--mocha)!important}
+.kpis b,.ach .n,.nums b:not(.nc2),.pt .v,.vaga-split .preco,.motor b,.foto-lado figcaption b,.mov .mn{font-weight:300!important}
+.hero::after{background:linear-gradient(180deg,rgba(25,16,12,.35) 0%,rgba(25,16,12,.25) 30%,rgba(25,16,12,.88) 100%),linear-gradient(90deg,rgba(25,16,12,.6),rgba(25,16,12,0) 65%)!important}
+.hero h1 em{color:#F7D3CA!important}
+.hero p.lead{opacity:1!important;max-width:600px}
+.kpis div{background:rgba(25,16,12,.5)!important;border-color:rgba(255,255,255,.28)!important}
+.kpis small{opacity:1!important;color:#EFE4DD}
+.hero .data{opacity:.9!important}
+.banda figcaption{background:linear-gradient(180deg,transparent,rgba(25,16,12,.85))!important}
+.banda .cap-t em{color:#F7D3CA!important}
+.vaga-split p{color:#E9DDD5!important}
+.vaga-split .tag2{color:#F2C3B8!important}
+.vaga-split h3 em{color:#F7D3CA!important}
+.tirar span,.pt.vaga .who,.star{color:#8A3A2C}
+.star{background:#A04E3C!important;color:#fff!important}
+.pt.vaga .v{color:#A04E3C!important}
+.lbl{color:#4A3830!important}
+details summary{color:#A04E3C!important}
+.bv,.eixo,.pt .who,.ach .src,.mov .prova,.fontes,.fontes a,.nc,.nums small,.where{color:#5F4D44!important}
+.leio{color:#3B3029!important}
+.leio b{color:#2F4A2C!important}
+.nums b.nc2{color:#6F5D54!important}.hero{padding-top:clamp(140px,22vh,240px)!important;min-height:auto!important}.hero .wrap{padding-bottom:72px!important}.hero h1{font-size:clamp(44px,5.8vw,84px)!important;margin:22px 0 24px!important}.kpis{margin-top:44px!important}.banda .cap-t{max-width:none!important}.precos3 td:first-child{min-width:120px}.ref{position:relative}.ref .tag{position:absolute;top:12px;right:12px;margin:0!important;z-index:2;box-shadow:0 0 0 2px rgba(255,253,251,.9)}.ref .tag.fundo{background:#E3EBDF}.ref .tag.raso{background:#F7EBDD}.ref-h h3{font-stretch:100%!important;font-size:21px!important}.pad b{color:#7A3326!important}.mov .mn{color:#A04E3C!important}
+footer::before{background:linear-gradient(180deg,rgba(25,16,12,.35),rgba(25,16,12,.9))!important}
+nav a{color:#4A3830!important}
+.semfoto span{color:#2A1D18!important}
+
+@media (max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.achados{grid-template-columns:1fr 1fr}.ach,.ach:nth-child(n+4){grid-column:auto}.trilho{grid-template-columns:1fr 1fr}.padroes{grid-template-columns:1fr 1fr}.cols2,.vaga-split{grid-template-columns:1fr}.precos3{grid-template-columns:1fr 1fr}.foto-lado{grid-column:1/-1;min-height:360px}.mov{grid-template-columns:44px 1fr}.mov .antes{grid-column:2}}
+@media (max-width:600px){.falta{grid-template-columns:1fr}.wrap{padding:0 16px}.kpis{grid-template-columns:1fr 1fr}.achados,.trilho,.padroes,.precos3{grid-template-columns:1fr}.refs{grid-template-columns:1fr}.bar{grid-template-columns:118px 1fr 58px}.hero{min-height:min(88vh,760px)}.vaga-split .txt{padding:28px 22px}.banda figcaption .wrap{flex-direction:column;align-items:flex-start;gap:4px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="img/01_capa_festa_sala_cinematic.jpg" alt="Menina correndo para a mesa do bolo decorada com arco de balões">
+  <div class="wrap">
+    <div class="kick"><b>Kompila</b> &nbsp;·&nbsp; apresentação para a Animar</div>
+    <h1>Vender<br><em>a festa dos sonhos</em>,<br>não a bexiga.</h1>
+    <p class="lead">O que as 20 maiores referências do mundo fazem, quanto o mercado brasileiro cobra, como se vende no TikTok e no Instagram, e o espaço que ninguém ocupa no Brasil.</p>
+    <div class="kpis">
+      <div><b>20</b><small>referências medidas, 15 de fora e 5 do Brasil</small></div>
+      <div><b>39</b><small>produtos com preço por balão</small></div>
+      <div><b>45</b><small>vídeos do TikTok com números</small></div>
+      <div><b>22</b><small>creators para parceria</small></div>
+      <div><b>13</b><small>anunciantes na Meta</small></div>
+      <div><b>R$ 21,6 bi</b><small>lojas de festa em 2024 (ASBRAFE)</small></div>
+    </div>
+    <div class="data">Levantado em 03/10/2026.</div>
+  </div>
+</header>
+
+<nav><div class="wrap">
+  <a href="#achados">Achados</a><a href="#vaga">A vaga</a><a href="#referencias">12 referências</a><a href="#precos">Preços</a><a href="#redes">Redes</a><a href="#creators">Creators</a><a href="#anuncios">Anúncios</a><a href="#movimentos">Movimentos</a>
+</div></nav>
+
+<main class="wrap">
+
+<section class="s" id="achados">
+  <div class="s-h"><span class="num">01</span><h2>Cinco <em>achados</em></h2></div>
+  <p class="s-sub">O que os números mostram antes de qualquer opinião.</p>
+  <div class="achados">
+    <div class="ach"><span class="n">US$ 146 a 184</span><h3>Quem vende bem lá fora vende a ocasião em caixa.</h3><p>A Ellie's Party vende a "Party Box" por esse valor. O balão avulso da mesma loja custa US$ 10.</p><span class="src">elliesparty.com · 03/10/2026</span></div>
+    <div class="ach"><span class="n">R$ 0,90 → R$ 150</span><h3>O mesmo bubble 24" vale 160 vezes mais quando vira presente pronto.</h3><p>No pacote de 50, ele sai a R$ 0,90. Com adesivo de nome, R$ 19 a 39. Cheio e entregue em SP, R$ 75 a 150.</p><span class="src">Mercado Livre e lojas de SP · 03/10/2026</span></div>
+    <div class="ach"><span class="n">116x</span><h3>A ocasião tem cem vezes mais busca do que o produto.</h3><p>No Instagram, #festainfantil soma 16,3 milhões de posts e #festaemcasa, 5 milhões. Já #arcodebaloes fica em 141 mil.</p><span class="src">busca do Instagram · 03/10/2026</span></div>
+    <div class="ach"><span class="n">12x</span><h3>A festa de um rosto famoso multiplica o alcance.</h3><p>O vídeo da festa da filha da Khloé Kardashian deu à Balloon &amp; Paper 12 vezes as views do segundo melhor. No Brasil, a Vero Festas cresceu com as festas da Virginia.</p><span class="src">TikTok @balloonandpaper · 03/10/2026</span></div>
+    <div class="ach"><span class="n">0</span><h3>Nenhuma marca brasileira anuncia kit temático pronto para a mãe.</h3><p>A São Roque é quem mais anuncia, com 102 anúncios ativos, mas fala com o decorador. O resto anuncia "pegue e monte" local, com contato pelo WhatsApp.</p><span class="src">Biblioteca de Anúncios da Meta · 03/10/2026</span></div>
+  </div>
+</section>
+
+<section class="s" id="vaga">
+  <div class="s-h"><span class="num">02</span><h2>A vaga <em>vazia</em></h2></div>
+  <p class="s-sub">O mercado brasileiro está dividido em polos e <mark>ninguém ocupa o meio</mark>: uma marca nacional, assinada por uma decoradora, que manda a festa pelo correio.</p>
+  <div class="vaga-split"><img src="img/03_festa_em_caixa_cinematic.jpg" alt="Mãe e filha abrindo uma caixa com balões separados por cor" loading="lazy"><div class="txt"><span class="tag2">a vaga</span><h3>A festa chega pelo correio,<br><em>assinada por quem entende.</em></h3><span class="preco">R$ 150 a 400</span><p>Paleta desenhada pela decoradora, balões na quantidade certa, bubble com o nome, fita, cartão com QR para o vídeo de montagem. Monta em casa em 30 minutos. Hoje ninguém no Brasil vende isso.</p></div></div>
+  <div class="regua">
+    <div class="trilho">
+      <div class="pt"><span class="v">R$ 20 a 70</span><h4>Kit genérico</h4><p>Arco para montar, pacote de balão. Vende no Brasil todo, sem marca, brigando por centavos: o 9" sai de R$ 0,28 a 0,44 por balão.</p><span class="who">Shopee · Mercado Livre · TikTok Shop</span></div>
+      <div class="pt vaga"><span class="v">R$ 150 a 400</span><h4>Festa em caixa assinada</h4><p>Paleta desenhada pela decoradora, quantidade certa por tamanho, bubble com nome, vídeo de montagem e embalagem de presente. Chega pelo correio em todo o país.</p><span class="who">ninguém no Brasil</span></div>
+      <div class="pt"><span class="v">R$ 75 a 600</span><h4>Pronto, só local</h4><p>Bubble cheio, buquê, balloon cake, festa na caixa. Só entrega na própria cidade, porque o balão vai cheio.</p><span class="who">Ateliê Balonê · Bam Festas · Festine</span></div>
+      <div class="pt"><span class="v">R$ 700 mil+</span><h4>A festa da celebridade</h4><p>Cenografia de 60 mil balões. É o imaginário que o Brasil inteiro já viu. A cifra é estimativa da imprensa.</p><span class="who">Vero Festas · festas da Virginia</span></div>
+    </div>
+    <div class="eixo"><span>mais barato, sem marca</span><span>mais caro, só presencial</span></div>
+    <p class="leio"><b>Por que aqui.</b> Três levantamentos feitos separadamente (preço, redes e anúncios) chegaram ao mesmo lugar.</p>
+  </div>
+</section>
+
+<section class="s" id="referencias">
+  <div class="s-h"><span class="num">03</span><h2>As 12 <em>referências</em></h2></div>
+  <p class="s-sub">Das 20 marcas estudadas, as 12 que mais importam para o projeto, em ordem. Cada ficha tem posicionamento, produtos e preços, como a marca fala e a identidade. </p>
+  <div class="filtro"><button class="on" data-f="todos">Todas</button><button data-f="Exterior">Exterior</button><button data-f="Brasil">Brasil</button><button data-f="abrir">Abrir todas as fichas</button></div>
+  <div class="refs">
+<article class="ref" data-grupo="Exterior" id="ref1">
+  <div class="galeria g4"><a href="img/refs/01_ellies_1.jpg" target="_blank"><img src="img/refs/01_ellies_1.jpg" alt="Ellie&#x27;s Party Supply" loading="lazy"></a><a href="img/refs/01_ellies_2.jpg" target="_blank"><img src="img/refs/01_ellies_2.jpg" alt="Ellie&#x27;s Party Supply" loading="lazy"></a><a href="img/refs/01_ellies_3.jpg" target="_blank"><img src="img/refs/01_ellies_3.jpg" alt="Ellie&#x27;s Party Supply" loading="lazy"></a><a href="img/refs/01_ellies_4.jpg" target="_blank"><img src="img/refs/01_ellies_4.jpg" alt="Ellie&#x27;s Party Supply" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">01</span>
+    <div><h3>Ellie&#x27;s Party Supply</h3><p class="where">EUA, Jacksonville (Flórida)</p></div>
+  </header>
+  <div class="nums"><div><b>8.318</b><small>Instagram</small></div><div><b>3.383</b><small>TikTok</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Kit de balão moderno que qualquer pessoa monta em menos de 30 minutos.</p>
+      <p>produto exatamente na ponte entre &#x27;bexiga&#x27; e &#x27;festa&#x27;; kit com promessa de tempo (&#x27;menos de 30 minutos&#x27;); ticket 2 a 3 vezes o do balão avulso.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Kit DIY de guirlanda de balões e &#x27;Party Box&#x27; (kit de balão + mesa de bolo + louça descartável). Atendimento local em Jacksonville citado em vídeo. 747 produtos na loja Shopify.</p><p class="price">Arco/guirlanda 8 ft: US$ 65,95 a 87,95. Party Box 15 a 20 ft: US$ 145,95 a 183,95. Kits temáticos de Halloween: US$ 50,00 a 68,80. (loja, products.json, 03/10/2026)</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Modern Balloon Kits (bio do TikTok)</li><li>START HERE 🎈 If you can make one cluster, you can make a full balloon... (TikTok)</li><li>If you can tie a balloon, you can make these. Seriously. (TikTok)</li></ul><p><span class="lbl">engaja</span>tutorial de entrada &#x27;START HERE&#x27; fez 26,5 mil views e 1.340 curtidas; os outros 39 recentes ficam abaixo de 1,8 mil. o vídeo que tira o medo de montar é o que vende o kit.</p></section>
+    <section><h4>04 Identidade</h4><p>paleta curada com nomes de moda (blush, mocha, rose gold; kit &#x27;Merlot &amp; Mingle&#x27;); configurador de cor &#x27;Balloon Arch Genie Builder&#x27;.</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>O formato de produto mais próximo do que a nova marca pode lançar já: Party Box por tema com promessa de montagem em 30 min e um vídeo &#x27;comece aqui&#x27; fixado.</div>
+</article>
+<article class="ref" data-grupo="Exterior" id="ref2">
+  <div class="galeria g4"><a href="img/refs/02_balloonandpaper_1.jpg" target="_blank"><img src="img/refs/02_balloonandpaper_1.jpg" alt="Balloon &amp; Paper" loading="lazy"></a><a href="img/refs/02_balloonandpaper_2.jpg" target="_blank"><img src="img/refs/02_balloonandpaper_2.jpg" alt="Balloon &amp; Paper" loading="lazy"></a><a href="img/refs/02_balloonandpaper_3.jpg" target="_blank"><img src="img/refs/02_balloonandpaper_3.jpg" alt="Balloon &amp; Paper" loading="lazy"></a><a href="img/refs/02_balloonandpaper_4.jpg" target="_blank"><img src="img/refs/02_balloonandpaper_4.jpg" alt="Balloon &amp; Paper" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">02</span>
+    <div><h3>Balloon &amp; Paper</h3><p class="where">EUA, Los Angeles</p></div>
+  </header>
+  <div class="nums"><div><b>130 mil</b><small>Instagram</small></div><div><b>25 mil</b><small>TikTok</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Cenário de balão, papel e flor para quem quer festa de celebridade em LA.</p>
+      <p>a celebridade é o motor de alcance e de preço; mistura balão, papel e flor, ou seja, vende cenário e não bexiga.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Design de evento, instalação de balões, aluguel de peças, flores, presentes, ativação de marca. Estúdio só com agendamento.</p><p class="price">Aluguel: LED Marquee US$ 150/dia; guarda-sol de franja US$ 60/dia (site, 03/10/2026). Instalações: não publicado.</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Let us create memorable moments (site)</li><li>Creativity from the leading balloon artist in CA (site)</li><li>Creating memorable moments for True. Thank you @Khloé Kardashian!! (TikTok)</li></ul><p><span class="lbl">engaja</span>vídeo da festa da True (filha de Khloé Kardashian) = 428,2 mil views; segundo lugar (Sia e Dolce &amp; Gabbana) = 36,4 mil. Terceiro: árvores de cerejeira para a Chicago (filha de Kim Kardashian) 31,1 mil.</p><p><span class="lbl">parcerias</span>Kardashians (marcações no TikTok); LA Mag e EIN Presswire citam Drake, Lizzo, Jessica Alba e a planner Mindy Weiss como porta de entrada.</p></section>
+    <section><h4>04 Identidade</h4><p>logos de marcas na home (Sony, Too Faced, Stella McCartney, Maybelline, Disney, Bloomingdale&#x27;s).</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>Um único post com cliente famoso rendeu 12 vezes o segundo melhor. A parceria com a decoradora de SP precisa de 1 ou 2 festas de rosto conhecido logo no lançamento.</div>
+</article>
+<article class="ref" data-grupo="Brasil" id="ref3">
+  <div class="galeria g2"><a href="img/refs/03_verofestas_1.jpg" target="_blank"><img src="img/refs/03_verofestas_1.jpg" alt="Vero Festas (Tana Lobo)" loading="lazy"></a><a href="img/refs/03_verofestas_2.jpg" target="_blank"><img src="img/refs/03_verofestas_2.jpg" alt="Vero Festas (Tana Lobo)" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">03</span>
+    <div><h3>Vero Festas (Tana Lobo)</h3><p class="where">Brasil, Goiânia (GO)</p></div>
+  </header>
+  <div class="nums"><div><b>394 mil</b><small>Instagram</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>A decoradora das megafestas de celebridade do Brasil.</p>
+      <p>é a prova brasileira de que &#x27;festa dos sonhos&#x27; com balão vira notícia nacional; a sócia tem audiência maior que a empresa.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Decoração e cenografia de festas de alto padrão, com uso massivo de balões. Empresa da família (mãe Liliane Lobo; irmãs Tana e Cristal).</p><p class="price">Não publicado. Imprensa: festa de 4 anos da Maria Alice com mais de 60 mil balões; produções desse porte estimadas pela imprensa entre R$ 700 mil e R$ 1 milhão (estimativa de mercado, não preço da Vero).</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>&#x27;Está um sonho&#x27; (Tana Lobo sobre a festa da Maria Alice, Folha PE)</li></ul><p><span class="lbl">parcerias</span>decora a maior parte das grandes festas de Virginia Fonseca; participou do reality &#x27;Poderosas do Cerrado&#x27; (GNT/Globoplay).</p></section>
+    
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>O sonho brasileiro já tem rosto (festas da Virginia). A nova marca pode vender a versão acessível desse imaginário, com a decoradora parceira no papel de &#x27;Tana&#x27; da marca.</div>
+</article>
+<article class="ref" data-grupo="Exterior" id="ref4">
+  <div class="galeria g4"><a href="img/refs/04_bonjourfete_1.jpg" target="_blank"><img src="img/refs/04_bonjourfete_1.jpg" alt="Bonjour Fête" loading="lazy"></a><a href="img/refs/04_bonjourfete_2.jpg" target="_blank"><img src="img/refs/04_bonjourfete_2.jpg" alt="Bonjour Fête" loading="lazy"></a><a href="img/refs/04_bonjourfete_3.jpg" target="_blank"><img src="img/refs/04_bonjourfete_3.jpg" alt="Bonjour Fête" loading="lazy"></a><a href="img/refs/04_bonjourfete_4.jpg" target="_blank"><img src="img/refs/04_bonjourfete_4.jpg" alt="Bonjour Fête" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">04</span>
+    <div><h3>Bonjour Fête</h3><p class="where">EUA, Los Angeles (Studio City e Palisades Village); fundada em Montreal em 2014</p></div>
+  </header>
+  <div class="nums"><div><b>106 mil</b><small>Instagram</small></div><div><b>1.618</b><small>TikTok</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Loja de festa com curadoria de inspiração francesa.</p>
+      <p>curadoria por tema transforma balão em parte de uma mesa completa; a marca saiu da loja de bairro para o varejo nacional.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Loja de artigos de festa com curadoria (balão, louça, decoração, presentes), 2 lojas físicas, instalações com balões e franjas, e linha licenciada vendida na Target.</p><p class="price">Loja própria: 1.247 produtos, mediana US$ 28, de US$ 5,50 a 455; balões foil temáticos US$ 10 a 16,50. Na Target: pacote 20 balões de formatura US$ 4,99 (03/10/2026).</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Modern Party Supplies (nome no Instagram)</li><li>Inspired by the French, Designed in America (embalagem na Target)</li><li>Consider this your sign to host this spring ✨ (TikTok)</li></ul><p><span class="lbl">engaja</span>carrosséis &#x27;swipe through&#x27; de temas são os mais vistos (2.916 views), mas TikTok é fraco no geral. a força dela é Instagram e loja, não vídeo.</p><p><span class="lbl">parcerias</span>linha própria na Target.</p></section>
+    <section><h4>04 Identidade</h4><p>tom francês (&#x27;fête&#x27;), temas por estação e por filme.</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>Vender por tema e por ocasião, não por item. Uma linha licenciada em varejo grande pode vir depois que a marca existir.</div>
+</article>
+<article class="ref" data-grupo="Exterior" id="ref5">
+  <div class="galeria g4"><a href="img/refs/05_xofetti_1.jpg" target="_blank"><img src="img/refs/05_xofetti_1.jpg" alt="xo, Fetti" loading="lazy"></a><a href="img/refs/05_xofetti_2.jpg" target="_blank"><img src="img/refs/05_xofetti_2.jpg" alt="xo, Fetti" loading="lazy"></a><a href="img/refs/05_xofetti_3.jpg" target="_blank"><img src="img/refs/05_xofetti_3.jpg" alt="xo, Fetti" loading="lazy"></a><a href="img/refs/05_xofetti_4.jpg" target="_blank"><img src="img/refs/05_xofetti_4.jpg" alt="xo, Fetti" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">05</span>
+    <div><h3>xo, Fetti</h3><p class="where">EUA, Filadélfia; desde 2018</p></div>
+  </header>
+  <div class="nums"><div><b>21 mil</b><small>Instagram</small></div><div><b>18,6 mil</b><small>TikTok</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Tudo de festa para a despedida de solteira, com estética pop.</p>
+      <p>nicho de ocasião bem escolhido (solteira) e 356 &#x27;bundles&#x27;, o que sobe o ticket.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Artigos de festa com foco em despedida de solteira (bachelorette): pacotes de balão, kits completos, bundles. 1.250 produtos.</p><p class="price">Pacote 24 balões: US$ 12; kit &#x27;Last Disco Megapack&#x27;: US$ 59; loja de US$ 7 a 210, mediana US$ 24 (03/10/2026).</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Bachelorette party supplies + other cute stuff 💕 (bio TikTok)</li><li>A little black bow to keep the party chic and classic! (TikTok)</li><li>Here comes the bride!!! (TikTok)</li></ul><p><span class="lbl">engaja</span>green screen com tendência (20,3 mil views) e vídeo de noiva marcada (5 mil). volume altíssimo de postagem (1.056 vídeos) com alcance médio baixo.</p><p><span class="lbl">parcerias</span>marca noivas e creators nos vídeos (ex.: @kyliecopeland0).</p></section>
+    <section><h4>04 Identidade</h4><p>nomes de coleção de cultura pop (Disco, Y2K, Little Black Bow, Lover).</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>Escolher uma ocasião de entrada (ex.: chá revelação ou 1 aninho) e dominá-la com bundles, antes de abrir para tudo.</div>
+</article>
+<article class="ref" data-grupo="Exterior" id="ref6">
+  <div class="galeria g4"><a href="img/refs/06_bubblegum_1.jpg" target="_blank"><img src="img/refs/06_bubblegum_1.jpg" alt="Bubblegum Balloons" loading="lazy"></a><a href="img/refs/06_bubblegum_2.jpg" target="_blank"><img src="img/refs/06_bubblegum_2.jpg" alt="Bubblegum Balloons" loading="lazy"></a><a href="img/refs/06_bubblegum_3.jpg" target="_blank"><img src="img/refs/06_bubblegum_3.jpg" alt="Bubblegum Balloons" loading="lazy"></a><a href="img/refs/06_bubblegum_4.jpg" target="_blank"><img src="img/refs/06_bubblegum_4.jpg" alt="Bubblegum Balloons" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">06</span>
+    <div><h3>Bubblegum Balloons</h3><p class="where">Reino Unido (cidade não confirmada)</p></div>
+  </header>
+  <div class="nums"><div><b>205 mil</b><small>Instagram</small></div><div><b>2.634</b><small>TikTok</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Balão de presente e instalação de luxo no Reino Unido, com látex natural.</p>
+      <p>produto de presente entregável + serviço + atacado + ensino; marca virou referência que dá palestra no setor.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Balão de confete em caixa entregue pelo correio (primeiro do Reino Unido, segundo a NABAS), instalações, arcos, kits infantis, personalizados corporativos, atacado (desde 2023).</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>When love is literally in the air…🎈 (TikTok)</li><li>Hop into Spring with a unique Bunny Balloon Arch! (TikTok)</li><li>This gold chrome balloon spider is taking Halloween decor to the next... (TikTok)</li></ul><p><span class="lbl">engaja</span>&#x27;Balloon Games&#x27; (desafio de não piscar quando estoura) 11,2 mil views; humor de escritório 6,4 mil; peças de produto ficam entre 4 e 5 mil.</p><p><span class="lbl">parcerias</span>clientes Mercedes, Nike, Claridges, OXO Tower.</p></section>
+    <section><h4>04 Identidade</h4><p>balão de látex natural biodegradável como argumento (SheerLuxe).</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>O &#x27;balão em caixa&#x27; é o produto de presente que leva a marca pelo correio para o Brasil inteiro, sem montador.</div>
+</article>
+<article class="ref" data-grupo="Brasil" id="ref7">
+  <div class="galeria g4"><a href="img/refs/07_saoroque_1.jpg" target="_blank"><img src="img/refs/07_saoroque_1.jpg" alt="Balões São Roque" loading="lazy"></a><a href="img/refs/07_saoroque_2.jpg" target="_blank"><img src="img/refs/07_saoroque_2.jpg" alt="Balões São Roque" loading="lazy"></a><a href="img/refs/07_saoroque_3.jpg" target="_blank"><img src="img/refs/07_saoroque_3.jpg" alt="Balões São Roque" loading="lazy"></a><a href="img/refs/07_saoroque_4.jpg" target="_blank"><img src="img/refs/07_saoroque_4.jpg" alt="Balões São Roque" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">07</span>
+    <div><h3>Balões São Roque</h3><p class="where">Brasil, São Roque (SP); CNPJ desde 2004</p></div>
+  </header>
+  <div class="nums"><div><b>240 mil</b><small>Instagram</small></div><div><b>64,4 mil</b><small>TikTok</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Fabricante que ensina o decorador a fazer festa.</p>
+      <p>é o maior perfil brasileiro de balão que medi e prova que tutorial e presente de data comemorativa funcionam no TikTok daqui.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Fabricante: balão de látex (Lisos, Metallic, Candy Colors, Neon, Cintilante, Bolha, Formatos Especiais), personalizados (Balões Promo); biblioteca de conteúdo e manual de marca para decoradores parceiros.</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Sua vida cheia de festa. 🎈 (bio TikTok)</li><li>O presente ideal para surpreender no Dia dos Pais! (TikTok)</li><li>Arco orgânico rosa: destaque e volumetria! (TikTok)</li></ul><p><span class="lbl">engaja</span>arranjo de presente do Dia dos Pais 157,5 mil views; &#x27;Como criar uma coluna orgânica com letras metalizadas&#x27; 101,6 mil; composição em roxo 58,8 mil.</p><p><span class="lbl">parcerias</span>programa para decoradores (conteúdo e manual).</p></section>
+    <section><h4>04 Identidade</h4><p>emoji por cor no texto (💙 💜 🎀) e nome de linha em inglês (Metallic, Candy).</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>Os dois formatos que mais rendem no Brasil hoje são &#x27;presente para data&#x27; e &#x27;como montar&#x27;. Começar o calendário de conteúdo por eles.</div>
+</article>
+<article class="ref" data-grupo="Exterior" id="ref8">
+  <div class="galeria g2"><a href="img/refs/08_geronimo_1.jpg" target="_blank"><img src="img/refs/08_geronimo_1.jpg" alt="Geronimo (Jihan Zencirli)" loading="lazy"></a><a href="img/refs/08_geronimo_2.jpg" target="_blank"><img src="img/refs/08_geronimo_2.jpg" alt="Geronimo (Jihan Zencirli)" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">08</span>
+    <div><h3>Geronimo (Jihan Zencirli)</h3><p class="where">EUA, Los Angeles (nasceu em Seattle, 2010)</p></div>
+  </header>
+  <div class="nums"><div><b>94 mil</b><small>Instagram</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Um balão só, feito à mão, como objeto de autor.</p>
+      <p>maior prova de que um balão pode custar 75 a 5.000 dólares se virar objeto de autor.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Balão único de 36 polegadas decorado à mão (papel cortado, fita, franja) vendido como objeto de presente; encomendas personalizadas.</p><p class="price">Cadette US$ 75; Ambassador US$ 125; Certified US$ 5.000 (com ouro 24k e cristal) (BizBash, data da matéria não confirmada).</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Nomes de produto militares e lúdicos: &#x27;Balloon Trooper&#x27;, &#x27;Cadette&#x27;, &#x27;Ambassador&#x27; (BizBash)</li></ul></section>
+    <section><h4>04 Identidade</h4><p>Pela imprensa: fita fina, chapelaria vintage, papel cortado à mão.</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>Um balão-assinatura de presente (um só, grande, acabado à mão) como produto de topo da marca.</div>
+</article>
+<article class="ref" data-grupo="Exterior" id="ref9">
+  <div class="galeria g4"><a href="img/refs/09_merimeri_1.jpg" target="_blank"><img src="img/refs/09_merimeri_1.jpg" alt="Meri Meri" loading="lazy"></a><a href="img/refs/09_merimeri_2.jpg" target="_blank"><img src="img/refs/09_merimeri_2.jpg" alt="Meri Meri" loading="lazy"></a><a href="img/refs/09_merimeri_3.jpg" target="_blank"><img src="img/refs/09_merimeri_3.jpg" alt="Meri Meri" loading="lazy"></a><a href="img/refs/09_merimeri_4.jpg" target="_blank"><img src="img/refs/09_merimeri_4.jpg" alt="Meri Meri" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">09</span>
+    <div><h3>Meri Meri</h3><p class="where">EUA e Reino Unido; fundada em 1985 em San Francisco</p></div>
+  </header>
+  <div class="nums"><div><b>652 mil</b><small>Instagram</small></div><div><b>28,4 mil</b><small>TikTok</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Design de festa e infância com 40 anos de marca.</p>
+      <p>40 anos de marca, assinatura de design, vende em boutique do mundo todo.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Artigos de festa de design (balões, louça, decoração), presentes infantis, fantasias. Vende em 80 países e mais de 5.000 lojas (site da marca).</p><p class="price">Na Bonjour Fête: kit guirlanda Meri Meri x John Derian US$ 55 (03/10/2026). Site próprio bloqueou coleta.</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Transform your table into a giant birthday cake! (TikTok)</li><li>Reusable party decorations for every occasion! (TikTok)</li><li>Coastal summer fun! Host a lobster-themed dinner in style. (TikTok)</li></ul><p><span class="lbl">engaja</span>mesa transformada em bolo gigante 8,2 mil views; &#x27;Doodle Cake&#x27; 6,1 mil. o produto é a cena montada, não o item.</p><p><span class="lbl">parcerias</span>John Derian (designer).</p></section>
+    <section><h4>04 Identidade</h4><p>colaboração com o designer John Derian.</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>Colaboração assinada (decoradora x marca) é um formato que a Meri Meri usa com designer conhecido; serve de molde para a parceria de SP.</div>
+</article>
+<article class="ref" data-grupo="Exterior" id="ref10">
+  <div class="galeria g4"><a href="img/refs/10_jpdevents_1.jpg" target="_blank"><img src="img/refs/10_jpdevents_1.jpg" alt="Jenee&#x27; Peets-Dockery (JPD Events)" loading="lazy"></a><a href="img/refs/10_jpdevents_2.jpg" target="_blank"><img src="img/refs/10_jpdevents_2.jpg" alt="Jenee&#x27; Peets-Dockery (JPD Events)" loading="lazy"></a><a href="img/refs/10_jpdevents_3.jpg" target="_blank"><img src="img/refs/10_jpdevents_3.jpg" alt="Jenee&#x27; Peets-Dockery (JPD Events)" loading="lazy"></a><a href="img/refs/10_jpdevents_4.jpg" target="_blank"><img src="img/refs/10_jpdevents_4.jpg" alt="Jenee&#x27; Peets-Dockery (JPD Events)" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">10</span>
+    <div><h3>Jenee&#x27; Peets-Dockery (JPD Events)</h3><p class="where">EUA (aulas citadas em Houston, TX, base não confirmada)</p></div>
+  </header>
+  <div class="nums"><div><b>314 mil</b><small>Instagram</small></div><div><b>29 mil</b><small>TikTok</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Professora que transforma quem assiste em decoradora.</p>
+      <p>314 mil seguidores com só 102 posts; vende transformação de vida (virar decoradora), não festa.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Aulas de design orgânico de balões (em grupo e individuais), mentoria; decoração.</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Organic Balloon Design Artist | Teacher | Mentor 🎈 (bio TikTok)</li><li>Your sign to stop watching and start investing in yourself. (TikTok)</li><li>I hope to inspire someone new everyday ‼️❤️ (TikTok)</li></ul><p><span class="lbl">engaja</span>chamada para curso &#x27;stop watching and start investing in yourself&#x27; = 1 milhão de views; &#x27;THIS IS YOUR SIGN&#x27; 179,3 mil.</p></section>
+    
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>Público paralelo valioso: decoradoras iniciantes. Um curso da parceira de SP pode virar segunda receita e gerador de UGC.</div>
+</article>
+<article class="ref" data-grupo="Brasil" id="ref11">
+  <div class="galeria g1"><a href="img/refs/11_sonhar_1.jpg" target="_blank"><img src="img/refs/11_sonhar_1.jpg" alt="Sonhar Balões e Festas (Giulia Rolim)" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">11</span>
+    <div><h3>Sonhar Balões e Festas (Giulia Rolim)</h3><p class="where">Brasil, Belo Horizonte (bairro União)</p></div>
+  </header>
+  <div class="nums"><div><b>39 mil</b><small>Instagram</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>Decoradora regional de BH que vende &#x27;sonho&#x27; com o nome da dona.</p>
+      <p>fatura cerca de R$ 70 mil por mês só com balão, já usa a palavra &#x27;sonhar&#x27; e o nome da dona.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Arranjos e decoração com balões; bouquets e torres de hélio.</p><p class="price">Bouquets unitários de R$ 20 a R$ 500 em média (O Tempo/Asbrafe, 02/01/2025). Faturamento citado: média de R$ 70 mil por mês só com balões.</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>Sonhar Balões e Festas® | Por Giulia Rolim | BH (nome no Instagram)</li><li>&#x27;Graças a Deus, hoje eu sustento a minha casa, minha família, meus pais&#x27; (fala dela à imprensa)</li></ul></section>
+    
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>&#x27;Sonho&#x27; já está sendo usado por decoradora regional; a nova marca precisa de um nome que não caia no genérico &#x27;sonho&#x27;.</div>
+</article>
+<article class="ref" data-grupo="Exterior" id="ref12">
+  <div class="galeria g3"><a href="img/refs/12_balloonsaloon_1.jpg" target="_blank"><img src="img/refs/12_balloonsaloon_1.jpg" alt="Balloon Saloon" loading="lazy"></a><a href="img/refs/12_balloonsaloon_2.jpg" target="_blank"><img src="img/refs/12_balloonsaloon_2.jpg" alt="Balloon Saloon" loading="lazy"></a><a href="img/refs/12_balloonsaloon_3.jpg" target="_blank"><img src="img/refs/12_balloonsaloon_3.jpg" alt="Balloon Saloon" loading="lazy"></a></div>
+  <header class="ref-h">
+    <span class="rank">12</span>
+    <div><h3>Balloon Saloon</h3><p class="where">EUA, Nova York (Tribeca); desde 1981</p></div>
+  </header>
+  <div class="nums"><div><b>15 mil</b><small>Instagram</small></div></div>
+  <details>
+    <summary>Ver a ficha</summary>
+    <section><h4>01 Posicionamento</h4><p>A loja de balão de Nova York que entrega felicidade no mesmo dia.</p>
+      <p>45 anos, entrega no mesmo dia e prova social de famosos na home.</p></section>
+    <section><h4>02 Produtos e preços</h4><p>Entrega de bouquet de balões no mesmo dia, decoração (arcos, paredes, colunas, esculturas), artigos de festa, brinquedos e doces.</p></section>
+    <section><h4>03 Como fala</h4><ul class="quotes"><li>We Bring The Happy® (site)</li><li>Same Day Balloon Delivery NYC &amp; Professional Balloon Decorating (site)</li><li>Established in 1981 Balloon Saloon has been providing exceptional service (site)</li></ul><p><span class="lbl">parcerias</span>Chloë Moretz (Sweet 16), Rihanna, Usher, Jessica Alba; marcas J.Crew, H&amp;M, Marni, Disney, Bloomingdale&#x27;s, Macy&#x27;s.</p></section>
+    <section><h4>04 Identidade</h4><p>imagem de guirlanda branca e prata no og:image do site.</p></section>
+  </details>
+  <div class="tirar"><span>O que a gente tira daqui</span>Slogan curto registrado que vende emoção (&#x27;We Bring The Happy&#x27;) e entrega rápida como promessa central.</div>
+</article>
+</div>
+  <div class="padroes">
+    <div class="pad"><b>padrão 1</b><h4>Vendem a ocasião, não o balão</h4><p>Party Box, bundle, loja organizada por tema.</p></div>
+    <div class="pad"><b>padrão 2</b><h4>O rosto famoso é o pico</h4><p>Kardashians, Virginia, Rihanna na home.</p></div>
+    <div class="pad"><b>padrão 3</b><h4>O tutorial tira o medo e vende o kit</h4><p>"START HERE" e "como criar uma coluna".</p></div>
+    <div class="pad"><b>padrão 4</b><h4>Paleta com nome de moda</h4><p>Blush, mocha, "Merlot &amp; Mingle". A cor se compra como batom.</p></div>
+    <div class="pad"><b>padrão 5</b><h4>Escada de receita</h4><p>Produto, depois serviço, depois ensino ou atacado.</p></div>
+  </div>
+</section>
+
+<section class="s" id="precos">
+  <div class="s-h"><span class="num">04</span><h2>Preços no <em>Brasil</em></h2></div>
+  <p class="s-sub">Todo kit foi dividido pela quantidade do pacote, e a comparação é sempre entre balões do mesmo tamanho. Os preços vêm do Mercado Livre e de sites próprios, coletados em 03/10/2026.</p>
+  <div class="precos3">
+    <figure class="foto-lado"><img src="img/04_bubble_alice_nanobananapro.jpg" alt="Bubble transparente com o nome Alice em dourado" loading="lazy"><figcaption><b>R$ 0,90 → R$ 150</b>o mesmo bubble 24", vazio no pacote e pronto com nome</figcaption></figure>
+    <div class="tw"><table class="grade">
+      <thead><tr><th>Tamanho</th><th class="r">R$ por balão</th><th>Exemplo</th></tr></thead>
+      <tbody>
+        <tr><td>5" látex</td><td class="r">0,35</td><td>São Roque, 50 un</td></tr>
+        <tr><td>9" liso genérico</td><td class="r">0,28 a 0,44</td><td>LOJAFESTDAY, 2º mais vendido</td></tr>
+        <tr><td>9" liso de marca</td><td class="r">0,52 a 0,57</td><td>São Roque, Art-Latex, Pic Pic</td></tr>
+        <tr><td>9" a 10" metalizado</td><td class="r">0,38 a 0,48</td><td>DUIMIX, Color Company</td></tr>
+        <tr><td>11" látex</td><td class="r">0,75 a 1,08</td><td>São Roque</td></tr>
+        <tr><td>16" látex</td><td class="r">2,12 a 2,37</td><td>Pic Pic, Fest Ball</td></tr>
+        <tr><td>Bubble 18"</td><td class="r">0,63 a 1,09</td><td>1º mais vendido da categoria</td></tr>
+        <tr><td>Bubble 24"</td><td class="r">0,81 a 0,90</td><td>Luma Festas, I Love Pen</td></tr>
+        <tr><td>Número metalizado 80 cm</td><td class="r">11,20</td><td>unidade</td></tr>
+      </tbody></table></div>
+    <div class="tw"><table class="grade">
+      <thead><tr><th>Produto pronto</th><th class="r">Preço</th><th>Alcance</th></tr></thead>
+      <tbody>
+        <tr><td>Kit arco para montar</td><td class="r">R$ 41 a 70</td><td>nacional</td></tr>
+        <tr><td>Bubble com nome, vai vazio</td><td class="r">R$ 19 a 39</td><td>nacional</td></tr>
+        <tr><td>Bubble pronto, cheio</td><td class="r">R$ 75 a 150</td><td>só SP</td></tr>
+        <tr><td>Arranjo ou buquê pronto</td><td class="r">R$ 99,90 a 259</td><td>só SP</td></tr>
+        <tr><td>Caixa presente com balão</td><td class="r">R$ 189,90 a 199</td><td>só SP</td></tr>
+        <tr><td>Pegue e monte (locação)</td><td class="r">R$ 299,90 a 689,90</td><td>local</td></tr>
+        <tr class="hl"><td><b>Festa na caixa</b></td><td class="r"><b>R$ 179 a 600</b></td><td>nacional, sem assinatura</td></tr>
+      </tbody></table></div>
+  </div>
+  
+</section>
+
+</main><figure class="banda"><img src="img/02_cha_revelacao_cinematic.jpg" alt="Casal estourando o balão do chá revelação" loading="lazy"><figcaption><div class="wrap"><span class="cap-t">O que viraliza é <em>o momento</em>,<br>não o balão.</span><span class="cap-n">capítulo 05</span></div></figcaption></figure><main class="wrap">
+<section class="s" id="redes">
+  <div class="s-h"><span class="num">05</span><h2>Como se vende no TikTok e no Instagram</h2></div>
+  <p class="s-sub">Foram 45 vídeos medidos com views, curtidas e compartilhamentos. O vídeo pesa mais que o tamanho do perfil: um perfil de 9,6 mil seguidores fez 2,4 milhões de views.</p>
+  <div class="cols2">
+    <div class="box"><h3>Três formatos que funcionam</h3>
+      <div class="motor">
+        <div><b>3,5 mi</b><h4>Tutorial de arco com o preço na tela</h4><p>"Arco desconstruído gastando apenas R$ 11,50" (@kellyfestass). É o formato que mais se compartilha: até 1,75% das views.</p></div>
+        <div><b>6,3 mi</b><h4>O momento: reveal e chá revelação</h4><p>Evento pronto (@estacaodobalao) e estouro do balão (@gabi.mercurio, 7,5% de curtidas). É o formato que mais se curte.</p></div>
+        <div><b>1,7 mi</b><h4>Festa em casa barata</h4><p>Festa de 30 anos em casa (@camila.bernieri) e painel DIY (1,4 mi).</p></div>
+      </div>
+      <p class="leio" style="margin-top:14px"><b>Leitura.</b> Nenhuma marca de kit ocupa ao mesmo tempo o formato que mais se compartilha e o que mais se curte. No TikTok Shop só tem afiliado com kit genérico (0,1% a 0,7% de curtidas) e nenhuma live de balão.</p>
+    </div>
+    <div class="box"><h3>A ocasião é maior que o produto · posts no Instagram</h3><div class="bar hl"><span class="bl">#festainfantil</span><span class="bt"><i style="width:100.0%"></i></span><span class="bv">16,3 mi</span></div><div class="bar hl"><span class="bl">#festaemcasa</span><span class="bt"><i style="width:31.0%"></i></span><span class="bv">5,1 mi</span></div><div class="bar hl"><span class="bl">#chadebebe</span><span class="bt"><i style="width:21.5%"></i></span><span class="bv">3,5 mi</span></div><div class="bar hl"><span class="bl">#charevelacao</span><span class="bt"><i style="width:13.0%"></i></span><span class="bv">2,1 mi</span></div><div class="bar"><span class="bl">#pegueemonte</span><span class="bt"><i style="width:11.1%"></i></span><span class="bv">1,8 mi</span></div><div class="bar"><span class="bl">#decoracaodefesta</span><span class="bt"><i style="width:7.5%"></i></span><span class="bv">1,2 mi</span></div><div class="bar"><span class="bl">#baloes</span><span class="bt"><i style="width:6.2%"></i></span><span class="bv">1,0 mi</span></div><div class="bar"><span class="bl">#arcodebaloes</span><span class="bt"><i style="width:1.2%"></i></span><span class="bv">142 mil</span></div><div class="bar"><span class="bl">#decoracaocombaloes</span><span class="bt"><i style="width:1.2%"></i></span><span class="bv">141 mil</span></div>
+      <p style="font-size:13px;color:var(--tx2);margin-top:12px">Em rosa, as hashtags de ocasião; em bege, as de produto. O volume de hashtag no TikTok não aparece na web.</p></div>
+  </div>
+  <div class="tw" style="margin-top:14px"><table class="grade">
+    <thead><tr><th>Vídeo</th><th>Formato</th><th class="r">Views</th><th class="r">Compart.</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://www.tiktok.com/@chercandoit/video/7541101413762338103" target="_blank">@chercandoit</a> "All you need is ribbon and a bag of balloons" (EUA)</td><td>DIY arco com fita</td><td class="r">18,3 mi</td><td class="r">0,69%</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@estacaodobalao/video/7611987653906418965" target="_blank">@estacaodobalao</a> "O Clássico mostrando que é lindo"</td><td>evento pronto</td><td class="r">6,3 mi</td><td class="r">0,63%</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@gabi.mercurio/video/7351107325945482501" target="_blank">@gabi.mercurio</a> "o trabalho que esse balão deu para estourar"</td><td>chá revelação</td><td class="r">6,3 mi</td><td class="r">0,13%</td></tr>
+      <tr class="hl"><td><a href="https://www.tiktok.com/@kellyfestass/video/7348065869144083717" target="_blank">@kellyfestass</a> "Arco desconstruído usando somente 2 numerações"</td><td>tutorial</td><td class="r">3,5 mi</td><td class="r">1,75%</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@kellyfestass/video/7268404152538025221" target="_blank">@kellyfestass</a> "Arco desconstruído gastando apenas R$ 11,50"</td><td>tutorial com preço</td><td class="r">3,4 mi</td><td class="r">0,98%</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@vivafestaebaloes/video/7539939585418120453" target="_blank">@vivafestaebaloes</a> "E o baby do Buquê Revelação é…"</td><td>chá revelação</td><td class="r">2,4 mi</td><td class="r">1,65%</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@camila.bernieri/video/7336927766387936517" target="_blank">@camila.bernieri</a> "Vocês curtiram a decoração?"</td><td>festa em casa</td><td class="r">1,7 mi</td><td class="r">0,37%</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@facavocemesmo1106/video/7496213961327578423" target="_blank">@facavocemesmo1106</a> "Duvido que vai continuar pagando caro por decoração"</td><td>DIY painel</td><td class="r">1,4 mi</td><td class="r">0,65%</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@baloes.saoroque/video/7470145444887252279" target="_blank">@baloes.saoroque</a> "Se você acha que arco dá trabalho, vem ver esse"</td><td>tutorial de marca</td><td class="r">766,8 mil</td><td class="r">1,00%</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@patricia.machado256/video/7656011750785191186" target="_blank">@patricia.machado256</a> "Procurando um kit de balões…"</td><td>afiliado TikTok Shop</td><td class="r">418,6 mil</td><td class="r">0,10%</td></tr>
+    </tbody></table></div>
+</section>
+
+</main><figure class="banda"><img src="img/05_creator_gravando_cinematic.jpg" alt="Creator montando arco de balões e gravando com o celular" loading="lazy"><figcaption><div class="wrap"><span class="cap-t">Quem ensina<br><em>faz a mãe comprar.</em></span><span class="cap-n">capítulo 06</span></div></figcaption></figure><main class="wrap">
+<section class="s" id="creators">
+  <div class="s-h"><span class="num">06</span><h2>Creators para <em>parceria</em></h2></div>
+  <p class="s-sub">São 19 nomes, em três grupos. Os seguidores do TikTok foram medidos. Nenhum creator publica o cachê; a faixa de mercado para micro (10 a 50 mil seguidores) é de R$ 500 a R$ 3 mil por campanha, segundo Shopify BR e influee.</p>
+  <div class="tw"><table class="grade">
+    <thead><tr><th>Creator</th><th>Grupo</th><th class="r">Seguidores TikTok</th><th class="r">Melhor vídeo</th><th>Nicho</th></tr></thead>
+    <tbody><tr class="top"><td><b>@inspiresuafestaoficial</b> <span class="star">top 5</span></td><td>Mães e festa infantil</td><td class="r">146.400</td><td class="r">58.800</td><td>festa infantil e tutorial de arco (Ana Novais)</td></tr><tr class=""><td><b>@flaviacalina</b></td><td>Mães e festa infantil</td><td class="r">708.300</td><td class="r">·</td><td>maternidade</td></tr><tr class=""><td><b>@festa.la.em.casa</b></td><td>Mães e festa infantil</td><td class="r">18.600</td><td class="r">·</td><td>festa em casa</td></tr><tr class=""><td><b>@dicasdami7</b></td><td>Mães e festa infantil</td><td class="r">42.700</td><td class="r">496.500</td><td>achados e dicas de festa</td></tr><tr class=""><td><b>@mamaeanine</b></td><td>Mães e festa infantil</td><td class="r">5.006</td><td class="r">150.200</td><td>mãe e festa do filho</td></tr><tr class=""><td><b>@achadosdagrazy1</b></td><td>Mães e festa infantil</td><td class="r">10.900</td><td class="r">242.900</td><td>achadinhos e festa</td></tr><tr class="top"><td><b>@casadebamba101</b> <span class="star">top 5</span></td><td>Decoração e DIY</td><td class="r">27.200</td><td class="r">·</td><td>decoração acessível de casa (Mah Laranjeiras)</td></tr><tr class=""><td><b>@dicadadebora</b></td><td>Decoração e DIY</td><td class="r">41.600</td><td class="r">113.600</td><td>inspiração de decoração de festa</td></tr><tr class=""><td><b>@facavocemesmo1106</b></td><td>Decoração e DIY</td><td class="r">73.200</td><td class="r">1.400.000</td><td>DIY</td></tr><tr class=""><td><b>@camila.bernieri</b></td><td>Decoração e DIY</td><td class="r">4.496</td><td class="r">1.700.000</td><td>festa em casa e DIY</td></tr><tr class=""><td><b>@dicasdalambrine</b></td><td>Decoração e DIY</td><td class="r">3.721</td><td class="r">453.700</td><td>dicas de decoração</td></tr><tr class="top"><td><b>@estacaodobalao</b> <span class="star">top 5</span></td><td>Eventos, casamento e chá</td><td class="r">128.600</td><td class="r">6.300.000</td><td>eventos com balão (Tunico Oliveira e Cris Toledo)</td></tr><tr class="top"><td><b>@kellyfestass</b> <span class="star">top 5</span></td><td>Eventos, casamento e chá</td><td class="r">98.400</td><td class="r">3.500.000</td><td>tutorial de arco barato</td></tr><tr class="top"><td><b>@vivafestaebaloes</b> <span class="star">top 5</span></td><td>Eventos, casamento e chá</td><td class="r">9.643</td><td class="r">2.400.000</td><td>chá revelação e buquê revelação</td></tr><tr class=""><td><b>@gabi.mercurio</b></td><td>Eventos, casamento e chá</td><td class="r">12.200</td><td class="r">6.300.000</td><td>chá revelação</td></tr><tr class=""><td><b>@constancezahn</b></td><td>Eventos, casamento e chá</td><td class="r">1.159</td><td class="r">·</td><td>casamento</td></tr><tr class=""><td><b>@festadafabrica</b></td><td>Eventos, casamento e chá</td><td class="r">34.100</td><td class="r">14.800</td><td>decoração de festa (Marcelo)</td></tr><tr class=""><td><b>@canaltudoparasuafesta</b></td><td>Eventos, casamento e chá</td><td class="r">52.600</td><td class="r">570.300</td><td>tutorial de festa</td></tr><tr class=""><td><b>@redefestasdecoracoes</b></td><td>Eventos, casamento e chá</td><td class="r">27.000</td><td class="r">371.900</td><td>aula de arco</td></tr></tbody></table></div>
+</section>
+
+<section class="s" id="anuncios">
+  <div class="s-h"><span class="num">07</span><h2>Quem anuncia e <em>o que promete</em></h2></div>
+  <p class="s-sub">Busca na Biblioteca de Anúncios da Meta, feita anunciante por anunciante, só com anúncios ativos.</p>
+  <div class="tw"><table class="grade">
+    <thead><tr><th>Anunciante</th><th class="r">Ativos</th><th>Fala com</th><th>Promessa (texto real)</th></tr></thead>
+    <tbody>
+      <tr><td><b>Balões São Roque</b></td><td class="r">102</td><td>decorador</td><td>"Alerta de tendência chegando!", "Festa em casa sem perder o charme", repost de decorador</td></tr>
+      <tr><td><b>Balões Art-Latex</b></td><td class="r">25</td><td>decorador</td><td>"A obra de arte é sua, balão é Art-Latex!" (só vídeo)</td></tr>
+      <tr><td>Vivian Festas</td><td class="r">19</td><td>varejo e confeitaria</td><td>"Tudo para o seu Natal numa só loja"</td></tr>
+      <tr><td>Fábrica de Balões</td><td class="r">13</td><td>local e empresas</td><td>"TOTEM PERSONALIZADO POR R$ 109,90!"</td></tr>
+      <tr><td>Mix Peguemonte</td><td class="r">8</td><td>consumidor local</td><td>"Kit por apenas R$ 299,90" a R$ 689,90</td></tr>
+      <tr><td>Clube do Balão</td><td class="r">4</td><td>quem quer ser decorador</td><td>curso: "mais de R$10.000,00 por mês"</td></tr>
+      <tr class="hl"><td><b>Sempertex</b> (Colômbia)</td><td class="r">70</td><td>consumidor final</td><td>"10% OFF en el Kit HBD Azul", "El momento de anunciar niño o niña no se repite"</td></tr>
+      <tr class="hl"><td><b>Bubblegum Balloons</b> (Reino Unido)</td><td class="r">11</td><td>consumidor final</td><td>"Make any occasion special! Next day delivery for the perfect pop!"</td></tr>
+    </tbody></table></div>
+  <p class="leio"><b>O vazio.</b> Lá fora já se anuncia kit temático pronto, com desconto, para o consumidor final (linhas em rosa). No Brasil, nenhuma marca faz isso. Na busca "kit arco de balões" aparecem 556 anúncios, quase todos de locadora local com contato pelo WhatsApp.</p>
+</section>
+
+</main><figure class="banda"><img src="img/06_decoradora_atelie_cinematic.jpg" alt="Decoradora escolhendo cores de balão no ateliê" loading="lazy"><figcaption><div class="wrap"><span class="cap-t">A decoradora assina.<br><em>A marca leva para o Brasil.</em></span><span class="cap-n">capítulo 08</span></div></figcaption></figure><main class="wrap">
+<section class="s" id="movimentos">
+  <div class="s-h"><span class="num">08</span><h2>Movimentos com <em>o que já existe</em></h2></div>
+  <p class="s-sub">A Animar já tem fornecedor de balão, operação de envio que gira R$ 150 mil na Shopee e uma decoradora parceira em SP. Nada abaixo depende de fábrica nova.</p>
+  <div class="movs">
+    <div class="mov"><span class="mn">1</span><div><h3>Festa em caixa assinada pela decoradora, começando por uma ocasião só</h3><p>Três paletas com nome, quantidade certa de cada tamanho, fita, bubble com o nome da criança e cartão com QR para o vídeo de montagem. A primeira ocasião pode ser chá revelação ou primeiro aninho. Só depois abrir para outras.</p><p class="prova">base: Ellie's Party Box US$ 146 a 184 · xo, Fetti com 356 kits fechados · vaga de R$ 150 a 400 no Brasil</p></div><div class="antes"><span>por onde começar</span>A decoradora desenhar as 3 paletas, o custo do kit montado e a embalagem. Depois, testar o preço com o público dela.</div></div>
+    <div class="mov"><span class="mn">2</span><div><h3>Um vídeo "comece aqui" e tutorial com o tempo na tela</h3><p>Um vídeo fixado no perfil que mostra a mãe montando a festa inteira, com "30 minutos" escrito na tela. É o formato que mais se compartilha, mas mostrando a festa pronta e não o preço baixo.</p><p class="prova">base: "START HERE" da Ellie's 15 vezes os outros vídeos · @kellyfestass 3,5 mi e 1,75% de compartilhamento</p></div><div class="antes"><span>por onde começar</span>Uma diária de gravação com a decoradora e o kit número 1 pronto.</div></div>
+    <div class="mov"><span class="mn">3</span><div><h3>Festas de rosto conhecido logo no lançamento</h3><p>Uma ou duas festas de alguém conhecido feitas pela decoradora, filmadas como "o momento" (a criança entrando, o reveal). Essas festas viram a vitrine da marca.</p><p class="prova">base: Balloon &amp; Paper 12 vezes com a festa da filha da Khloé · Vero Festas com as festas da Virginia</p></div><div class="antes"><span>por onde começar</span>Saber quem está na carteira da decoradora e se ela pode filmar e marcar.</div></div>
+    <div class="mov"><span class="mn">4</span><div><h3>Cinco creators, misturando os dois motores</h3><p>@kellyfestass e @inspiresuafestaoficial para o tutorial. @estacaodobalao e @vivafestaebaloes para o momento. @casadebamba101 para levar o balão para quem cuida da casa. Começar pelos menores, que custam menos e viralizam igual.</p><p class="prova">base: @vivafestaebaloes, com 9,6 mil seguidores, fez 2,4 mi de views</p></div><div class="antes"><span>por onde começar</span>Cotação com cada um, porque nenhum publica o cachê.</div></div>
+    <div class="mov"><span class="mn">5</span><div><h3>TikTok Shop com marca e live "montando a festa"</h3><p>Hoje o TikTok Shop de balão só tem afiliado com kit genérico, sem rosto. Ninguém faz live. Uma live semanal com a decoradora montando o kit, com o carrinho aberto, ocupa esse espaço.</p><p class="prova">base: 16 lives na busca "balões" em 03/10, nenhuma de venda</p></div><div class="antes"><span>por onde começar</span>Abrir ou ligar a conta do TikTok Shop e ver no app os preços dos kits que já estão lá.</div></div>
+    <div class="mov"><span class="mn">6</span><div><h3>Anúncio na Meta de kit temático com preço, para a mãe</h3><p>No Brasil ninguém anuncia isso. É o modelo da Sempertex, com kit HBD e chá revelação com desconto, falando com quem dá a festa e não com quem decora.</p><p class="prova">base: Sempertex com 70 anúncios ativos · 0 marcas brasileiras com esse formato</p></div><div class="antes"><span>por onde começar</span>Kit 1 com foto e vídeo, loja própria no ar e pixel instalado.</div></div>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <div class="sig">Kompila <i>· a festa dos sonhos</i></div>
+  <p>Levantamento feito pela Kompila em 03/10/2026, com dados públicos de lojas, redes sociais e da Biblioteca de Anúncios da Meta.</p>
+</div></footer>
+
+<script>
+document.querySelectorAll('.filtro button').forEach(b=>b.addEventListener('click',()=>{
+  const f=b.dataset.f;
+  if(f==='abrir'){const open=b.textContent.startsWith('Abrir');document.querySelectorAll('.ref details').forEach(d=>d.open=open);b.textContent=open?'Fechar todas as fichas':'Abrir todas as fichas';return}
+  document.querySelectorAll('.filtro button:not([data-f=abrir])').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.ref').forEach(r=>r.style.display=(f==='todos'||r.dataset.grupo===f)?'':'none');
+}));
+</script>
+</body>
+</html>
