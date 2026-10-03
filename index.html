@@ -120,7 +120,8 @@ h2 em,h1 em{font-style:normal;color:var(--verde-e)}
 
 /* casos */
 .caso .status{display:inline-block;align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:8px;background:var(--verde-claro);color:var(--verde-e);margin-bottom:18px}
-.caso .status.no-ar{background:var(--verde);color:var(--carbono)}
+.caso .status.parceiro{background:var(--carbono);color:var(--verde)}
+.status.no-ar{background:var(--verde);color:var(--carbono)}
 .caso dl{margin-top:14px}
 .caso dt{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--cinza);margin-top:14px}
 .caso dd{font-size:16px;line-height:1.5;color:#3a424b;margin-top:4px}
@@ -213,6 +214,7 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,40,30,.14
 /* chat da Liz aparece quando a pessoa começa a rolar */
 #kompila-liz{opacity:0!important;pointer-events:none!important;transition:opacity .45s!important}
 body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
+body.rolou.no-rodape #kompila-liz{opacity:0!important;pointer-events:none!important}
 .pergs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}.perg{background:var(--off);border-radius:16px;padding:28px}.perg h3{font-size:21px;font-weight:800;color:var(--carbono)}.perg p{margin-top:10px;font-size:17px;line-height:1.55;color:#48505a}@media(max-width:800px){.pergs{grid-template-columns:1fr}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://kompila.com.br/#org", "name": "Kompila", "url": "https://kompila.com.br/", "logo": "https://kompila.com.br/img/compartilhar.jpg", "description": "IA sob medida pra pequena e média empresa: a IA assume o trabalho repetitivo, a equipe vai pro que dá lucro e todo mês o dono vê quanto economizou.", "taxID": "65.907.771/0001-02", "address": {"@type": "PostalAddress", "addressLocality": "Mogi das Cruzes", "addressRegion": "SP", "addressCountry": "BR"}, "sameAs": ["https://instagram.com/kompila.ai"], "contactPoint": {"@type": "ContactPoint", "telephone": "+55-11-96288-4399", "contactType": "sales", "areaServed": "BR", "availableLanguage": "Portuguese"}}, {"@type": "WebSite", "@id": "https://kompila.com.br/#site", "url": "https://kompila.com.br/", "name": "Kompila", "inLanguage": "pt-BR", "publisher": {"@id": "https://kompila.com.br/#org"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "O que é a Kompila?", "acceptedAnswer": {"@type": "Answer", "text": "A Kompila é uma empresa de IA sob medida pra pequena e média empresa. A gente coloca a IA pra fazer o trabalho repetitivo dentro do seu negócio: sua equipe vai pro que dá lucro e todo mês você vê quanto economizou. Design, marketing, vendas e atendimento num time só, sem precisar entender de IA."}}, {"@type": "Question", "name": "Quanto custa?", "acceptedAnswer": {"@type": "Answer", "text": "Pra MEI, a partir de R$ 278 por mês no plano anual ou R$ 378 no mensal. Pra microempresa, a partir de R$ 578 por mês. WhatsApp e IA já estão dentro da mensalidade. O valor exato do seu caso a equipe passa numa conversa de 30 minutos."}}, {"@type": "Question", "name": "Pra quem é?", "acceptedAnswer": {"@type": "Answer", "text": "Pra dono de pequena e média empresa que tem gente fazendo trabalho repetitivo: responder cliente, cadastrar pedido, conferir, montar relatório. Clínica, loja, imobiliária, restaurante, contabilidade e quem vende por WhatsApp."}}, {"@type": "Question", "name": "Preciso entender de IA?", "acceptedAnswer": {"@type": "Answer", "text": "Não. A Kompila monta, opera e mede por você. Você acompanha o resultado e, todo mês, vê quanto economizou."}}]}]}</script>
@@ -416,6 +418,15 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
     <div class="slider">
       <div class="trilho">
       <div class="card caso">
+        <span class="status parceiro">Parceira</span>
+        <div class="ico"><svg><use href="#i-calc"/></svg></div>
+        <h3>Coleve</h3>
+        <p>Contabilidade especializada em eletromobilidade, São Paulo</p>
+        <dl><dt>Pediu</dt><dd>Atender os alunos da Blev no WhatsApp e organizar a jornada de cada um.</dd>
+        <dt>Estamos entregando</dt><dd>A Liz atendendo os alunos da Blev no WhatsApp e a jornada de cada aluno organizada numa tela pra equipe.</dd></dl>
+        <a class="ir" href="liz/">Ver a Liz →</a>
+      </div>
+      <div class="card caso">
         <span class="status no-ar">No ar</span>
         <div class="ico"><svg><use href="#i-chart"/></svg></div>
         <h3>P1LED</h3>
@@ -432,15 +443,6 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
         <dl><dt>Pediu</dt><dd>Uma loja online com a cara da marca.</dd>
         <dt>Entregamos</dt><dd>A loja em <a href="https://masluoficial.com.br" target="_blank" rel="noopener" style="color:var(--verde-e);font-weight:700">masluoficial.com.br</a>, com vitrine, lookbook e seções que a dona edita sozinha.</dd></dl>
         <a class="ir" href="loja/">Ver kompila loja →</a>
-      </div>
-      <div class="card caso">
-        <span class="status">Em implantação</span>
-        <div class="ico"><svg><use href="#i-calc"/></svg></div>
-        <h3>Coleve</h3>
-        <p>Contabilidade digital, São Paulo</p>
-        <dl><dt>Pediu</dt><dd>Atender os alunos no WhatsApp e organizar a jornada de cada um.</dd>
-        <dt>Estamos entregando</dt><dd>A Liz atendendo os alunos no WhatsApp e a jornada de cada aluno organizada numa tela pra equipe.</dd></dl>
-        <a class="ir" href="liz/">Ver a Liz →</a>
       </div>
       <div class="card caso">
         <span class="status">Em implantação</span>
@@ -469,7 +471,7 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
 <!-- GALERIA -->
 <section class="bloco escuro" id="trabalhos">
   <div class="box">
-    <div class="regua"><span class="ri"><svg><use href="#i-pincel"/></svg></span><span>trabalhos</span></div>
+    <div class="regua"><span class="ri"><svg><use href="#i-pincel"/></svg></span><span>05 · trabalhos</span></div>
     <div class="gal-topo">
       <h2>Marca, embalagem, site e loja. <em>Feitos pra vender.</em></h2>
       <a class="btn verde" href="trabalhos/">Ver todos os trabalhos →</a>
@@ -491,8 +493,8 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
     <div class="lado">
       <div class="liz-cena"><img src="img/liz_09_mostrando_celular.webp" alt="A Liz, a IA da Kompila, segurando um celular e uma boneca"></div>
       <div>
-        <div class="regua"><span class="ri"><svg><use href="#i-liz"/></svg></span><span>05 · a liz</span></div>
-        <h2>Quem atende na sua empresa às 23h? <em>A Liz.</em></h2>
+        <div class="regua"><span class="ri"><svg><use href="#i-liz"/></svg></span><span>06 · a liz</span></div>
+        <h2>Quem atende na sua empresa às 23h? <em style="white-space:nowrap">A Liz.</em></h2>
         <p class="sub">É a IA de atendimento da Kompila. Responde no WhatsApp e no Instagram na hora, entende o que o cliente quer, agenda e passa pronto pro seu vendedor.</p>
         <p class="sub" style="font-size:17px">O nome vem da filha do fundador.</p>
         <div style="margin-top:32px"><a class="btn" href="liz/">Ver a Liz atendendo <svg width="20" height="20" style="stroke:currentColor;fill:none;stroke-width:2.4"><use href="#i-seta"/></svg></a></div>
@@ -504,7 +506,7 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
 <!-- PERGUNTAS -->
 <section class="bloco" id="perguntas">
   <div class="box">
-    <div class="regua"><span class="ri"><svg><use href="#i-chat"/></svg></span><span>06 · perguntas</span></div>
+    <div class="regua"><span class="ri"><svg><use href="#i-chat"/></svg></span><span>07 · perguntas</span></div>
     <h2>O que todo dono pergunta <em>antes de começar.</em></h2>
     <div class="pergs"><div class="perg"><h3>O que é a Kompila?</h3><p>A Kompila é uma empresa de IA sob medida pra pequena e média empresa. A gente coloca a IA pra fazer o trabalho repetitivo dentro do seu negócio: sua equipe vai pro que dá lucro e todo mês você vê quanto economizou. Design, marketing, vendas e atendimento num time só, sem precisar entender de IA.</p></div><div class="perg"><h3>Quanto custa?</h3><p>Pra MEI, a partir de R$ 278 por mês no plano anual ou R$ 378 no mensal. Pra microempresa, a partir de R$ 578 por mês. WhatsApp e IA já estão dentro da mensalidade. O valor exato do seu caso a equipe passa numa conversa de 30 minutos.</p></div><div class="perg"><h3>Pra quem é?</h3><p>Pra dono de pequena e média empresa que tem gente fazendo trabalho repetitivo: responder cliente, cadastrar pedido, conferir, montar relatório. Clínica, loja, imobiliária, restaurante, contabilidade e quem vende por WhatsApp.</p></div><div class="perg"><h3>Preciso entender de IA?</h3><p>Não. A Kompila monta, opera e mede por você. Você acompanha o resultado e, todo mês, vê quanto economizou.</p></div></div>
   </div>
@@ -529,7 +531,7 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
       <a data-liz class="btn verde peq" style="margin-top:20px" href="https://wa.me/5511962884399" target="_blank" rel="noopener">Falar com a Kompila</a>
     </div>
     <div class="col"><h4>Produtos</h4>
-      <a href="crm/">kompila .crm</a><a href="liz/">Liz</a><a href="loja/">kompila loja</a><a href="design/">kompila design</a><a href="trafego/">kompila tráfego</a>
+      <a href="chatbot/">IA de atendimento e CRM</a><a href="crm/">kompila .crm</a><a href="liz/">Liz</a><a href="loja/">kompila loja</a><a href="design/">kompila design</a><a href="trafego/">kompila tráfego</a>
     </div>
     <div class="col"><h4>Kompila</h4>
       <a href="#o-que-faz">O que a IA faz</a><a href="#como">Como funciona</a><a href="#clientes">Clientes</a><a href="trabalhos/">Trabalhos</a><a href="#liz">A Liz</a><a href="blog/">Blog</a>
@@ -552,7 +554,7 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
 document.querySelectorAll('.aparece').forEach(el=>io.observe(el));
 document.querySelectorAll('.slider').forEach(sl=>{const t=sl.querySelector('.trilho');sl.querySelectorAll('.seta').forEach(b=>b.onclick=()=>t.scrollBy({left:+b.dataset.d*(t.querySelector('.card').offsetWidth+22),behavior:'smooth'}))});
 </script>
-<script>addEventListener("click",function(e){if(e.target.closest&&e.target.closest("[data-liz]"))document.body.classList.add("rolou")},true);addEventListener("scroll",function f(){if(scrollY>120){document.body.classList.add("rolou");removeEventListener("scroll",f)}},{passive:true})</script>
+<script>(function(){var f=document.querySelector("footer");if(f&&"IntersectionObserver" in window)new IntersectionObserver(function(e){document.body.classList.toggle("no-rodape",e[0].isIntersecting)},{threshold:0.15}).observe(f)})();addEventListener("click",function(e){if(e.target.closest&&e.target.closest("[data-liz]"))document.body.classList.add("rolou")},true);addEventListener("scroll",function f(){if(scrollY>120){document.body.classList.add("rolou");removeEventListener("scroll",f)}},{passive:true})</script>
 <script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
 <script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
 </body>
