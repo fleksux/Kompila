@@ -1,6 +1,6 @@
 # Kompila
 
-> A Kompila é IA de atendimento com CRM próprio. A Liz, a IA da Kompila, atende cada lead no WhatsApp oficial da empresa em segundos, 24 horas, qualifica, marca a reunião ou a visita e entrega o lead pronto para o vendedor fechar. O gestor vê tudo numa tela. Brasil, em português.
+> A Kompila é IA sob medida pra pequena e média empresa. A IA assume o trabalho repetitivo da empresa, a equipe vai pro que dá lucro e todo mês o dono vê quanto economizou, sem precisar entender de IA. Design, marketing, vendas e atendimento num time só. A Liz, a IA de atendimento da Kompila, atende no WhatsApp oficial e no Instagram. Mogi das Cruzes/SP, Brasil, em português.
 
 ## O que a Liz faz
 - Responde cada lead em segundos, 24 horas, inclusive com a loja fechada, pelo WhatsApp oficial (API da Meta).
@@ -12,16 +12,20 @@
 - Devolve a conversão para Meta Ads e Google Ads.
 
 ## Produtos
+- IA de atendimento e CRM: a Liz atende, qualifica e move o pipeline. https://kompila.com.br/chatbot/
 - kompila .crm: a Liz atendendo + o CRM. https://kompila.com.br/crm/
 - kompila loja: loja virtual com painel próprio, sem taxa por venda. https://kompila.com.br/loja/
 - kompila design: marca, site e criativo. https://kompila.com.br/design/
 - kompila tráfego: anúncio com a conversão rastreada até a venda. https://kompila.com.br/trafego/
+- Trabalhos: marcas, embalagens, sites, sistemas, campanhas e vídeos feitos pra empresas reais. https://kompila.com.br/trabalhos/
 
-## Preço
-- kompila .crm a partir de R$ 278 por mês no plano anual (com fidelidade) ou R$ 378 no mensal (sem fidelidade). WhatsApp e IA inclusos.
+## Planos
+- MEI: a partir de R$ 278 por mês no plano anual (com fidelidade) ou R$ 378 no mensal (sem fidelidade).
+- Microempresa: a partir de R$ 578 por mês.
+- WhatsApp e IA inclusos na mensalidade. O valor exato sai de uma conversa de 30 minutos com a equipe.
 
 ## Para quem
-- Qualquer empresa que recebe clientes pelo WhatsApp: imobiliárias e incorporadoras, clínicas, lojas, prestadores de serviço, indústria B2B.
+- Dono de pequena e média empresa que tem gente fazendo trabalho repetitivo (responder cliente, cadastrar pedido, conferir, montar relatório) e ainda não sabe como usar a IA: clínica, loja, imobiliária, restaurante, contabilidade, prestador de serviço e quem vende por WhatsApp.
 
 ## Como começa
 - Uma conversa com a Liz no WhatsApp, ou uma call de 30 minutos com a equipe de produto.
