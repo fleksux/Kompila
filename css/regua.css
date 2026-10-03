@@ -61,3 +61,4 @@ html:has(body.kr),body.kr{overflow-x:clip}
 /* ícone do Instagram (03/10) */
 .k-ig{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:10px;color:#0A0B0E;transition:background .2s,color .2s}.k-ig:hover{background:#DDF7E8;color:#12803F}.k-ig-f{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:10px;background:#1a1d22;color:#E9EBEE;margin-top:16px;transition:background .2s}.k-ig-f:hover{background:#2FD67B;color:#0A0B0E}.k-dir{display:flex;align-items:center;gap:8px}
 .kr-foot .k-ig-f{display:grid;width:42px}
+.k-acoes{display:flex;align-items:center;gap:10px;margin-top:20px}.k-acoes .k-ig-f{margin:0;width:42px;height:42px;display:grid}.k-acoes .btn,.k-acoes .kr-btn{margin:0!important;height:42px}
