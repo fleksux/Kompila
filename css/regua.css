@@ -48,3 +48,12 @@ body.kr h1 em,body.kr h2 em{font-style:normal}
 @media(max-width:900px){.kr-foot .kr-rodape{grid-template-columns:1fr 1fr}.kr-foot .kr-marca{grid-column:1/-1}}
 /* página de texto (privacidade): subtítulo continua subtítulo */
 body.kr.kr-texto h2{font-size:22px!important;line-height:1.25!important;font-weight:700!important;letter-spacing:-.01em!important}
+/* igual à home: a partir de 1.300 px o conteúdo usa os 1.200 px inteiros (sem a margem de 6%) */
+@media(min-width:1300px){
+  .kr-nav .kr-box,.kr-foot .kr-box{padding-left:0;padding-right:0}
+  body.kr .shell,body.kr .wrap{padding-left:0!important;padding-right:0!important}
+}
+/* as páginas de produto usam .shell com width:min(--shell, ...): a régua troca pra 1.200 */
+body.kr .shell{width:min(1200px,100% - 2*var(--gut,24px))!important;max-width:none}
+@media(max-width:1299px){body.kr .shell{width:min(1200px,88%)!important}}
+html:has(body.kr),body.kr{overflow-x:clip}
