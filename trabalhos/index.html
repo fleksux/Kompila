@@ -224,6 +224,7 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
 .k-ig{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:10px;color:#0A0B0E;transition:background .2s,color .2s}.k-ig:hover{background:#DDF7E8;color:#12803F}.k-ig-f{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:10px;background:#1a1d22;color:#E9EBEE;margin-top:16px;transition:background .2s}.k-ig-f:hover{background:#2FD67B;color:#0A0B0E}.k-dir{display:flex;align-items:center;gap:8px}
 .k-acoes{display:flex;align-items:center;gap:10px;margin-top:20px}.k-acoes .k-ig-f{margin:0;width:42px;height:42px;display:grid}.k-acoes .btn,.k-acoes .kr-btn{margin:0!important;height:42px}
 </style>
+<link rel="stylesheet" href="../css/regua.css">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -246,27 +247,27 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
   <symbol id="i-indica" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M14 19c0-2 1.5-4 3-4s3 2 3 4"/></symbol>
   <symbol id="i-faisca" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></symbol>
 </svg>
-<header class="nav">
-  <div class="box">
-    <a class="logo" href="../"><b>[</b> kompila <b>]</b></a>
-    <ul>
-      <li class="drop"><a href="../#produtos">Produtos <span class="v">▾</span></a>
-        <div class="menu">
-          <a href="../chatbot/"><b>IA de atendimento e CRM</b><span>A Liz atende, qualifica e move o pipeline</span></a>
-          <a href="../crm/"><b>kompila .crm</b><span>Atendimento e vendas num lugar só</span></a>
-          <a href="../loja/"><b>kompila loja</b><span>Loja própria, sem taxa por venda</span></a>
-          <a href="../design/"><b>kompila design</b><span>Marca, site e criativo</span></a>
-          <a href="../trafego/"><b>kompila tráfego</b><span>Anúncio que sabe qual lead virou venda</span></a>
-        </div>
-      </li>
-      <li><a href="../chatbot/">IA de atendimento e CRM</a></li>
-      <li><a href="../#como">Como funciona</a></li>
-      <li><a href="../#clientes">Clientes</a></li>
-      <li><a href="./" style="color:var(--verde-e)">Trabalhos</a></li>
-      </ul>
-    <div class="k-dir"><a class="k-ig" href="https://instagram.com/kompila.ai" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila.ai"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a data-liz class="btn peq" href="#liz">Falar com a Kompila</a></div>
-  </div>
-</header>
+<!-- partes:menu (não edite aqui: partes/menu.html + scripts/montar_site.py) -->
+<header class="kr-nav"><div class="kr-box">
+  <a class="kr-logo" href="../"><b>[</b> kompila <b>]</b></a>
+  <ul>
+    <li class="kr-drop"><a href="../#produtos">Produtos <span class="v">▾</span></a>
+      <div class="kr-menu">
+        <a href="../chatbot/"><b>IA de atendimento e CRM</b><span>A Liz atende, qualifica e move o pipeline</span></a>
+        <a href="../crm/"><b>kompila .crm</b><span>Atendimento e vendas num lugar só</span></a>
+        <a href="../loja/"><b>kompila loja</b><span>Loja própria, sem taxa por venda</span></a>
+        <a href="../design/"><b>kompila design</b><span>Marca, site e criativo</span></a>
+        <a href="../trafego/"><b>kompila tráfego</b><span>Anúncio que sabe qual lead virou venda</span></a>
+      </div>
+    </li>
+    <li><a href="../chatbot/">IA de atendimento e CRM</a></li>
+    <li><a href="../#como">Como funciona</a></li>
+    <li><a href="../#clientes">Clientes</a></li>
+    <li><a href="../trabalhos/">Trabalhos</a></li>
+  </ul>
+  <div class="k-dir"><a class="k-ig" href="https://instagram.com/kompila.ai" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila.ai"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a data-liz class="kr-btn" href="#liz">Falar com a Kompila</a></div>
+</div></header>
+<!-- /partes:menu -->
 <section class="topo-trab">
   <div class="box">
     <div class="regua"><span class="ri"><svg><use href="#i-pincel"/></svg></span><span>trabalhos</span></div>
@@ -336,30 +337,32 @@ body.rolou #kompila-liz{opacity:1!important;pointer-events:auto!important}
     <div class="acoes"><a data-liz class="btn" href="#liz">Falar com a Kompila</a><a class="btn branco" href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">Falar direto com um consultor</a></div>
   </div>
 </section>
-<footer>
-  <div class="box rodape">
-    <div class="marca">
-      <div class="logo"><b>[</b> kompila <b>]</b></div>
-      <p>IA sob medida pra pequena e média empresa.</p><div class="k-acoes"><a class="k-ig-f" href="https://instagram.com/kompila.ai" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila.ai"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a data-liz class="btn verde peq" href="#liz">Falar com a Kompila</a></div>
+<!-- partes:rodape (não edite aqui: partes/rodape.html + scripts/montar_site.py) -->
+<footer class="kr-foot">
+  <div class="kr-box kr-rodape">
+    <div class="kr-marca">
+      <div class="kr-logo"><b>[</b> kompila <b>]</b></div>
+      <p>IA sob medida pra pequena e média empresa.</p><div class="k-acoes"><a class="k-ig-f" href="https://instagram.com/kompila.ai" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila.ai"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a class="kr-btn" href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">Falar direto com um consultor</a></div>
     </div>
-    <div class="col"><h4>Produtos</h4>
+    <div class="kr-col"><h4>Produtos</h4>
       <a href="../chatbot/">IA de atendimento e CRM</a><a href="../crm/">kompila .crm</a><a href="../loja/">kompila loja</a><a href="../design/">kompila design</a><a href="../trafego/">kompila tráfego</a>
     </div>
-    <div class="col"><h4>Kompila</h4>
-      <a href="../#o-que-faz">O que a IA faz</a><a href="../#como">Como funciona</a><a href="../#clientes">Clientes</a><a href="./">Trabalhos</a><a href="../#liz">A Liz</a><a href="../blog/">Blog</a>
+    <div class="kr-col"><h4>Kompila</h4>
+      <a href="../#o-que-faz">O que a IA faz</a><a href="../#como">Como funciona</a><a href="../#clientes">Clientes</a><a href="../trabalhos/">Trabalhos</a><a href="../blog/">Blog</a>
     </div>
-    <div class="col"><h4>Parceiros</h4>
+    <div class="kr-col"><h4>Parceiros</h4>
       <a href="https://coleve.com.br" target="_blank" rel="noopener">Coleve · contabilidade</a><a href="https://p1led.com.br" target="_blank" rel="noopener">P1LED · painéis de LED</a>
     </div>
-    <div class="col"><h4>Contato</h4>
+    <div class="kr-col"><h4>Contato</h4>
       <a href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">WhatsApp (11) 96734-2512</a><a href="https://instagram.com/kompila.ai" target="_blank" rel="noopener">Instagram @kompila.ai</a><a href="https://crm.kompila.com.br">Entrar no CRM</a>
     </div>
   </div>
-  <div class="box base">
+  <div class="kr-box kr-base">
     <span>Kompila · CNPJ 65.907.771/0001-02 · Mogi das Cruzes/SP</span>
     <a href="../privacidade/">Política de privacidade</a>
   </div>
 </footer>
+<!-- /partes:rodape -->
 <script>
 const fs=document.querySelectorAll('.f'),its=document.querySelectorAll('.it');
 fs.forEach(b=>b.onclick=()=>{fs.forEach(x=>x.classList.toggle('on',x===b));its.forEach(i=>i.classList.toggle('some',b.dataset.c!=='todos'&&i.dataset.c!==b.dataset.c));document.querySelector('.sec').style.display=b.dataset.c==='pranchas'?'none':''});
