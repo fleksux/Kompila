@@ -25,6 +25,15 @@
     }
   }, true);
 
+  // leu a página: rolou até a metade ou ficou 30 s (separa quem só abriu de quem se interessou)
+  var pagina = location.pathname.replace(/index\.html$/, '') || '/';
+  function leu() { uma('leu', function () { fbq('track', 'ViewContent', { content_name: pagina }); }); }
+  setTimeout(leu, 30000);
+  window.addEventListener('scroll', function () {
+    var h = document.documentElement;
+    if ((h.scrollTop + innerHeight) / h.scrollHeight >= 0.5) leu();
+  }, { passive: true });
+
   document.addEventListener('submit', function (ev) {
     var nome = (ev.target && (ev.target.getAttribute('name') || ev.target.id)) || 'formulario';
     fbq('track', 'Lead', { content_name: nome });
