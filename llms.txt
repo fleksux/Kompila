@@ -1,6 +1,6 @@
 # Kompila
 
-> A Kompila é IA sob medida pra pequena e média empresa. A IA assume o trabalho repetitivo da empresa, a equipe vai pro que dá lucro e todo mês o dono vê quanto economizou, sem precisar entender de IA. Design, marketing, vendas e atendimento num time só. A Liz, a IA de atendimento da Kompila, atende no WhatsApp oficial e no Instagram. Mogi das Cruzes/SP, Brasil, em português.
+> A Kompila é IA sob medida pra pequena e média empresa. A IA assume o trabalho repetitivo da empresa, a equipe vai pro que dá lucro e todo mês o dono vê quanto economizou, sem precisar entender de IA. Design, marketing, vendas e atendimento num time só. A Liz, a IA de atendimento da Kompila, atende no WhatsApp oficial e no chat do site. Mogi das Cruzes/SP, Brasil, em português.
 
 ## O que a Liz faz
 - Responde cada lead em segundos, 24 horas, inclusive com a loja fechada, pelo WhatsApp oficial (API da Meta).
@@ -22,7 +22,7 @@
 ## Planos
 - MEI: a partir de R$ 278 por mês no plano anual (com fidelidade) ou R$ 378 no mensal (sem fidelidade).
 - Microempresa: a partir de R$ 578 por mês.
-- WhatsApp e IA inclusos na mensalidade. O valor exato sai de uma conversa de 30 minutos com a equipe.
+- IA e atendimento no WhatsApp inclusos na mensalidade; disparo em massa a Meta cobra direto no cartão da empresa. O valor exato sai de uma conversa de 30 minutos com a equipe.
 
 ## Para quem
 - Dono de pequena e média empresa que tem gente fazendo trabalho repetitivo (responder cliente, cadastrar pedido, conferir, montar relatório) e ainda não sabe como usar a IA: clínica, loja, imobiliária, restaurante, contabilidade, prestador de serviço e quem vende por WhatsApp.
