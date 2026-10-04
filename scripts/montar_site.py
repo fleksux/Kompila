@@ -22,6 +22,8 @@ PAGINAS = {
     'trafego/index.html': ('../', '../'),
     'blog/index.html': ('../', '../'),
     'privacidade/index.html': ('../', '../'),
+    'termos/index.html': ('../', '../'),
+    'exclusao-de-dados/index.html': ('../', '../'),
 }
 PARTES = {'menu': 'partes/menu.html', 'rodape': 'partes/rodape.html'}
 
