@@ -95,8 +95,8 @@ JS = r"""<script>
     if (tel.length < 10 || tel.length > 13) return mostrar('WhatsApp com DDD, ex.: 11 99999-9999.');
     if (neg.length < 2) return mostrar('Qual é o seu negócio?');
     bt.disabled = true; bt.textContent = 'Liberando o guia...';
-    var s = sessao(), base = { chave: CHAVE, sessao: s, url: location.href, utm: utm() };
-    post(Object.assign({ nome: nome, telefone: tel }, base))
+    var s = sessao(), base = { chave: CHAVE, sessao: s, url: location.href, utm: utm() }, ig = new URLSearchParams(location.search).get('ig');
+    post(Object.assign({ nome: nome, telefone: tel, guia: f.dataset.seg }, ig ? { ref: ig } : {}, base))
       .then(function () { return post(Object.assign({ texto: 'Peguei o guia ' + f.dataset.palavra + ' na era da IA. Meu negócio: ' + neg }, base)).catch(function () { return null }) })
       .then(function (j) {
         document.getElementById('passo1').style.display = 'none';
@@ -140,7 +140,7 @@ def pagina(seg, d):
       <label for="negocio">Seu negócio</label><input id="negocio" name="negocio" placeholder="Ex.: Barbearia do João">
       <button type="submit" class="kmv-btn">Quero o guia</button>
       <p class="erro" id="erro"></p>
-      <p class="priv">Seus dados ficam com a Kompila e servem pra gente conversar com você. Nada de spam. <a href="/privacidade/">Privacidade</a></p>
+      <p class="priv">Ao pedir o guia, você aceita receber o guia e mensagens da Kompila no seu WhatsApp. Nada de spam, e você pode pedir pra parar quando quiser. <a href="/privacidade/">Privacidade</a></p>
     </form>
   </div>
   <div id="passo2" class="ok">
