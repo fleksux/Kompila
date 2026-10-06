@@ -202,7 +202,7 @@ def pagina(seg, D, todos):
     <p class="bg-rot">Quem escreveu</p>
     <h2>A Kompila funciona exatamente assim.</h2>
     <p>Somos uma empresa de implementação de IA pra pequena e média empresa. A própria Kompila roda desse jeito: o dono e a IA, sem funcionário, cuidando de atendimento, vendas, financeiro e conteúdo. A gente monta, liga nos sistemas que você já usa e opera todo mês por você.</p>
-    <div class="bg-ctas"><a class="bg-btn" data-liz href="#liz">Conversar com a Liz</a><a class="bg-btn bg-ghost" href="{CONSULTOR}" target="_blank" rel="noopener">Falar com um consultor</a><a class="bg-link" href="../pdf/{slug(seg)}.pdf" download>Baixar o guia em PDF</a></div>
+    <div class="bg-ctas"><a class="bg-btn" data-liz href="#liz">Conversar com a Liz</a><a class="bg-btn bg-ghost" href="{CONSULTOR}" target="_blank" rel="noopener">Falar com um consultor</a><a class="bg-link" href="../../guia/{seg}/?utm_source=blog&utm_medium=artigo&utm_campaign=guia_ia_{seg}">Receber o guia em PDF</a></div>
   </section>
 
   <h2>Perguntas frequentes</h2>
