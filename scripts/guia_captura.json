@@ -1,0 +1,233 @@
+{
+ "barbearia": {
+  "palavra": "barbearia",
+  "art": "uma",
+  "num": "41,9%",
+  "num_frase": "dos negócios de beleza anotam os custos em agenda ou caderno.",
+  "fonte": "Sebrae, Beleza & Estética, 980 negócios",
+  "tres": [
+   [
+    "A agenda de cada barbeiro conectada",
+    "O cliente pede o horário com o João e a IA marca, enquanto você corta."
+   ],
+   [
+    "Quem sumiu há 30 dias recebe chamada",
+    "Com o horário livre do barbeiro de sempre."
+   ],
+   [
+    "A comissão calculada sozinha",
+    "Na sexta, cada barbeiro recebe o extrato dele."
+   ]
+  ]
+ },
+ "clinica": {
+  "palavra": "clínica",
+  "art": "uma",
+  "num": "33%",
+  "num_frase": "dos agendamentos em clínica são feitos fora do horário comercial.",
+  "fonte": "Doctoralia, Perfil Paciente Digital 2025",
+  "tres": [
+   [
+    "Confirmação e encaixe no horário que vagou",
+    "Desmarcou, a vaga vai na hora para a lista de espera."
+   ],
+   [
+    "Recepção de plantão à noite e no fim de semana",
+    "O paciente marca às 22h e a consulta já entra na agenda."
+   ],
+   [
+    "Orçamento parado cobrado com jeito",
+    "Depois de 3, 7 e 15 dias, com opção de parcelar."
+   ]
+  ]
+ },
+ "studio": {
+  "palavra": "studio",
+  "art": "um",
+  "num": "28,9%",
+  "num_frase": "dos agendamentos de beleza são feitos fora do horário comercial.",
+  "fonte": "Gendo, dado do fornecedor",
+  "tres": [
+   [
+    "A vaga que abriu vai para a lista de espera",
+    "Os 3 primeiros da fila são avisados na hora."
+   ],
+   [
+    "Aluno que faltou 2 vezes recebe contato",
+    "Antes de pensar em cancelar o plano."
+   ],
+   [
+    "Manutenção lembrada no dia certo",
+    "Cílios, unha e sobrancelha, com a mesma profissional."
+   ]
+  ]
+ },
+ "restaurante": {
+  "palavra": "restaurante",
+  "art": "um",
+  "num": "42%",
+  "num_frase": "dos bares e restaurantes tiveram lucro em julho de 2026.",
+  "fonte": "Abrasel, set/2026",
+  "tres": [
+   [
+    "O pedido do WhatsApp cai direto na comanda",
+    "A IA confirma itens e endereço e a cozinha imprime."
+   ],
+   [
+    "Pedido direto, sem taxa de aplicativo",
+    "Quem já pediu recebe o seu cardápio próprio."
+   ],
+   [
+    "As vendas de todos os canais somadas",
+    "Salão, iFood, WhatsApp e maquininha num número só."
+   ]
+  ]
+ },
+ "imobiliaria": {
+  "palavra": "imobiliária",
+  "art": "uma",
+  "num": "51%",
+  "num_frase": "dos leads imobiliários chegam fora do horário comercial.",
+  "fonte": "DataLais, mai/2026",
+  "tres": [
+   [
+    "Lead do portal respondido em segundos",
+    "Até às 23h, com as fotos do imóvel."
+   ],
+   [
+    "Visita marcada sozinha",
+    "Confirmada na véspera, com a localização."
+   ],
+   [
+    "Corretor cobrado se não retornou",
+    "E o lead passa para outro se ficar parado."
+   ]
+  ]
+ },
+ "loja": {
+  "palavra": "loja",
+  "art": "uma",
+  "num": "82%",
+  "num_frase": "dos pequenos negócios vendem pelo WhatsApp.",
+  "fonte": "Sebrae, Pulso dos Pequenos Negócios 2026",
+  "tres": [
+   [
+    "Estoque igual em todos os canais",
+    "Vendeu num, baixa em todos."
+   ],
+   [
+    "Produto cadastrado a partir da foto",
+    "A IA escreve e publica em todos os canais."
+   ],
+   [
+    "Carrinho abandonado recuperado",
+    "Com o frete já calculado, no WhatsApp."
+   ]
+  ]
+ },
+ "oficina": {
+  "palavra": "oficina",
+  "art": "uma",
+  "num": "72,3%",
+  "num_frase": "das compras de peças das oficinas são feitas por WhatsApp ou telefone.",
+  "fonte": "Oficina Brasil, 2025",
+  "tres": [
+   [
+    "Orçamento com foto, aprovado com registro",
+    "O aceite fica guardado com data e hora."
+   ],
+   [
+    "Peça cotada em 3 fornecedores",
+    "O mecânico escolhe com um toque."
+   ],
+   [
+    "Revisão lembrada por data e quilometragem",
+    "O cliente volta antes de quebrar."
+   ]
+  ]
+ },
+ "contabilidade": {
+  "palavra": "contabilidade",
+  "art": "uma",
+  "num": "34%",
+  "num_frase": "dos contadores dizem que o retrabalho manual é o maior desafio.",
+  "fonte": "IOB, CFC e Fenacon, 2026",
+  "tres": [
+   [
+    "Cobrador de documento",
+    "Todo dia 1º, cobra no WhatsApp quem não mandou."
+   ],
+   [
+    "Guia entregue com confirmação",
+    "E conferida se foi paga."
+   ],
+   [
+    "Prospecção de empresa recém-aberta",
+    "Direto da base aberta da Receita."
+   ]
+  ]
+ },
+ "academia": {
+  "palavra": "academia",
+  "art": "uma",
+  "num": "40 a 60%",
+  "num_frase": "dos alunos de academia saem em um ano.",
+  "fonte": "ACAD Brasil, jul/2026",
+  "tres": [
+   [
+    "Sumiu da catraca, recebe mensagem",
+    "Depois de 7 dias sem entrar."
+   ],
+   [
+    "Os primeiros 90 dias acompanhados",
+    "Quando a maioria desiste."
+   ],
+   [
+    "Cartão recusado recuperado",
+    "Antes de o aluno ser bloqueado."
+   ]
+  ]
+ },
+ "ecommerce": {
+  "palavra": "e-commerce",
+  "art": "um",
+  "num": "28%",
+  "num_frase": "é o que a Shopee fica num produto de R$ 50.",
+  "fonte": "tabela de comissão Shopee, mar/2026",
+  "tres": [
+   [
+    "Margem real por pedido",
+    "Depois de comissão, frete e anúncio."
+   ],
+   [
+    "Anúncio pausado quando a margem some",
+    "Antes de vender no prejuízo."
+   ],
+   [
+    "Reputação vigiada antes de cair",
+    "Com os pedidos que puxaram pra baixo."
+   ]
+  ]
+ },
+ "roupas": {
+  "palavra": "loja de roupas",
+  "art": "uma",
+  "num": "+74%",
+  "num_frase": "de remessas internacionais em agosto, depois do fim da \"taxa das blusinhas\".",
+  "fonte": "ABIT, set/2026",
+  "tres": [
+   [
+    "\"Tem no M?\" respondido na hora",
+    "Olhando o estoque real por cor e tamanho."
+   ],
+   [
+    "Peça nova avisada só pra quem usa aquele estilo",
+    "No tamanho dela."
+   ],
+   [
+    "Estoque parado vira oferta",
+    "Antes da liquidação."
+   ]
+  ]
+ }
+}
