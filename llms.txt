@@ -31,3 +31,16 @@
 ## Contato
 - Site: https://kompila.com.br/
 - WhatsApp: +55 11 96288-4399
+
+## Guias: o que a IA já faz em cada tipo de negócio
+- Barbearia na era da IA: 10 coisas que já rodam sozinhas numa barbearia, com dados do Sebrae e fonte. https://kompila.com.br/blog/barbearia-na-era-da-ia/
+- Studio na era da IA: 10 coisas que já rodam sozinhas num studio, com dados do Sebrae e fonte. https://kompila.com.br/blog/studio-na-era-da-ia/
+- Clínica na era da IA: 10 coisas que já rodam sozinhas numa clínica, com dados do Sebrae e fonte. https://kompila.com.br/blog/clinica-na-era-da-ia/
+- Restaurante na era da IA: 10 coisas que já rodam sozinhas num restaurante, com dados do Sebrae e fonte. https://kompila.com.br/blog/restaurante-na-era-da-ia/
+- Loja na era da IA: 10 coisas que já rodam sozinhas numa loja, com dados do Sebrae e fonte. https://kompila.com.br/blog/loja-na-era-da-ia/
+- Loja de roupas na era da IA: 10 coisas que já rodam sozinhas numa loja de roupas, com dados do Sebrae e fonte. https://kompila.com.br/blog/roupas-na-era-da-ia/
+- Oficina na era da IA: 10 coisas que já rodam sozinhas numa oficina, com dados do Sebrae e fonte. https://kompila.com.br/blog/oficina-na-era-da-ia/
+- Imobiliária na era da IA: 10 coisas que já rodam sozinhas numa imobiliária, com dados do Sebrae e fonte. https://kompila.com.br/blog/imobiliaria-na-era-da-ia/
+- Contabilidade na era da IA: 10 coisas que já rodam sozinhas num escritório contábil, com dados do Sebrae e fonte. https://kompila.com.br/blog/contabilidade-na-era-da-ia/
+- Academia na era da IA: 10 coisas que já rodam sozinhas numa academia, com dados do Sebrae e fonte. https://kompila.com.br/blog/academia-na-era-da-ia/
+- E-commerce na era da IA: 10 coisas que já rodam sozinhas num e-commerce, com dados do Sebrae e fonte. https://kompila.com.br/blog/ecommerce-na-era-da-ia/

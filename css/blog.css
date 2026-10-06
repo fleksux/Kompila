@@ -1,0 +1,92 @@
+/* BLOG · guias "<segmento> na era da IA" (05/10/2026). Visual claro da home: papel, branco, verde de destaque, carbono no texto.
+   Usado pelas páginas geradas por scripts/gerar_blog_guias.py e pelo bloco de guias do blog/index.html. */
+:root{--bg-verde:#2FD67B;--bg-verde-e:#12803F;--bg-verde-c:#DDF7E8;--bg-carbono:#0A0B0E;--bg-texto:#1E2328;--bg-off:#F5F6F2;--bg-cinza:#5E6873;--bg-linha:#E4E7E1;--bg-ambar:#FFF3DF;--bg-ambar-t:#7A3B12}
+.bg-pag{margin:0;background:#fff;color:var(--bg-texto);font:17px/1.7 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.bg-pag *{box-sizing:border-box}
+.bg-pag main a{color:var(--bg-verde-e)}
+.bg-box{max-width:1200px;margin:0 auto;padding:0 6%}
+.bg-rot{font:600 12px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--bg-verde-e);margin:0 0 12px}
+.bg-pag em{font-style:normal;color:var(--bg-verde-e)}
+
+/* topo */
+.bg-topo{background:var(--bg-off);border-bottom:1px solid var(--bg-linha)}
+.bg-hero>*{min-width:0}
+.bg-hero{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;padding-top:56px;padding-bottom:64px}
+.bg-trilha{font-size:14px;color:var(--bg-cinza);margin-bottom:28px}.bg-trilha a{color:var(--bg-cinza);text-decoration:none}.bg-trilha a:hover{color:var(--bg-verde-e)}
+.bg-hero h1,body.kr.bg-pag .bg-hero h1{font-size:clamp(34px,4.4vw,60px)!important;overflow-wrap:break-word;line-height:1.04;font-weight:900;letter-spacing:-.035em;color:var(--bg-carbono);margin:0}
+.bg-lead{font-size:20px;line-height:1.55;color:var(--bg-cinza);margin:22px 0 0}
+.bg-meta{font-size:14px;color:var(--bg-cinza);margin:26px 0 0}.bg-meta b{color:var(--bg-texto)}
+.bg-hfoto img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:24px}
+
+/* corpo */
+.bg-corpo{padding-top:56px;padding-bottom:40px}
+.bg-texto{max-width:760px;margin:0 auto}
+.bg-pag .bg-texto h2,body.kr.bg-pag .bg-texto h2{font-size:clamp(28px,3.2vw,40px)!important;line-height:1.12;font-weight:800;letter-spacing:-.025em;color:var(--bg-carbono);margin:72px 0 18px}
+.bg-texto p{margin:0 0 18px}
+.bg-forte{font-size:21px;line-height:1.5;font-weight:700;color:var(--bg-carbono)}
+.bg-fonte{font-size:13px;line-height:1.55;color:var(--bg-cinza)}
+.bg-curta{background:var(--bg-verde-c);border-radius:20px;padding:28px 30px}
+.bg-curta p:last-child{margin:0;font-size:18px;line-height:1.6;color:var(--bg-carbono)}
+.bg-dupla{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:26px 0 12px}
+.bg-dupla div,.bg-stat{background:var(--bg-off);border-radius:18px;padding:24px}
+.bg-dupla b,.bg-stat b{display:block;font:800 40px/1 Inter,sans-serif;letter-spacing:-.03em;color:var(--bg-verde-e);margin-bottom:10px}
+.bg-dupla span,.bg-stat span{display:block;font-size:16px;line-height:1.45;font-weight:600;color:var(--bg-carbono)}
+.bg-stat small{display:block;font-size:14px;line-height:1.5;color:var(--bg-cinza);margin-top:8px}
+.bg-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 14px}
+.bg-chips{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 24px}
+.bg-chip{font-size:15px;font-weight:700;padding:10px 16px;border-radius:999px;background:#fff;border:1.5px dashed #C9CFC6;color:var(--bg-carbono)}
+.bg-chip small{font-weight:500;color:var(--bg-cinza)}
+.bg-sumario{background:var(--bg-off);border-radius:18px;padding:22px 26px 22px 20px;margin:0 0 28px}
+.bg-sumario ol{margin:0;padding-left:28px;columns:2;column-gap:28px;font-size:15px;line-height:1.5}
+.bg-sumario li{break-inside:avoid;margin:0 0 8px}.bg-sumario a{color:var(--bg-texto);text-decoration:none}.bg-sumario a:hover{color:var(--bg-verde-e)}
+.bg-fig{margin:0 0 12px}.bg-fig img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:20px}
+.bg-bh{font:600 13px 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--bg-verde-e);margin:44px 0 6px}
+.bg-bh em{color:inherit}
+.bg-item{display:grid;grid-template-columns:64px 1fr;gap:4px 18px;padding:26px 0;border-bottom:1px solid var(--bg-linha);scroll-margin-top:90px}
+.bg-n{font:700 30px/1.1 'JetBrains Mono',monospace;color:var(--bg-verde-e)}
+.bg-item h3{font-size:22px;line-height:1.25;font-weight:800;color:var(--bg-carbono);margin:0 0 10px}
+.bg-item p{margin:0 0 10px;color:#3e464f}
+.bg-dor{display:inline-block;background:var(--bg-ambar);color:var(--bg-ambar-t)!important;border-radius:10px;padding:6px 12px;font-size:15px;line-height:1.5}
+.bg-liga{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--bg-cinza)!important;margin:4px 0 0!important}
+.bg-zap{max-width:440px;background:#ECE5DD;border-radius:22px;overflow:hidden;border:1px solid var(--bg-linha);margin:8px 0 10px}
+.bg-zhd{background:#0B5C4A;color:#fff;padding:16px 18px;font-size:15px;font-weight:700;display:flex;gap:12px;align-items:center}
+.bg-zhd i{width:36px;height:36px;border-radius:50%;background:var(--bg-verde);color:var(--bg-carbono);display:grid;place-items:center;font:700 13px 'JetBrains Mono',monospace;font-style:normal}
+.bg-zhd small{display:block;font-size:12px;font-weight:500;opacity:.8}
+.bg-bolha{margin:18px 16px;background:#fff;border-radius:4px 16px 16px 16px;padding:16px 18px;font-size:15px;line-height:1.55;white-space:pre-line;color:#1d2226}
+.bg-bolha span{display:block;text-align:right;font-size:11px;color:#8a9098}
+.bg-kompila{background:var(--bg-off);border:1px solid var(--bg-linha);border-radius:24px;padding:34px 32px;margin:72px 0 0}
+.bg-kompila h2{margin:0 0 14px!important}
+.bg-ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:22px}
+.bg-btn{display:inline-flex;align-items:center;height:50px;padding:0 24px;border-radius:999px;background:var(--bg-verde);color:var(--bg-carbono)!important;font-weight:800;font-size:16px;text-decoration:none}
+.bg-btn.bg-ghost{background:#fff;border:1.5px solid var(--bg-linha)}
+.bg-link{font-weight:700;font-size:15px}
+.bg-faq details{border-bottom:1px solid var(--bg-linha);padding:18px 0}
+.bg-faq summary{cursor:pointer;font-weight:800;font-size:18px;color:var(--bg-carbono);list-style:none}
+.bg-faq summary::-webkit-details-marker{display:none}
+.bg-faq summary::after{content:"+";float:right;color:var(--bg-verde-e);font-weight:700}
+.bg-faq details[open] summary::after{content:"−"}
+.bg-faq p{margin:12px 0 0;color:#3e464f}
+.bg-fontes{font-size:14px;line-height:1.55;color:var(--bg-cinza);padding-left:20px}.bg-fontes li{margin:0 0 8px}.bg-fontes a{word-break:break-word}
+.bg-outros{background:var(--bg-off);border-top:1px solid var(--bg-linha);padding:64px 0 80px;margin-top:56px}
+.bg-outros h2,body.kr.bg-pag .bg-outros h2{font-size:32px!important;font-weight:800;letter-spacing:-.02em;color:var(--bg-carbono);margin:0 0 24px}
+.bg-ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.bg-outro{display:block;background:#fff;border:1px solid var(--bg-linha);border-radius:16px;overflow:hidden;text-decoration:none;color:var(--bg-carbono)!important;font-weight:700;font-size:15px;transition:transform .25s}
+.bg-outro:hover{transform:translateY(-3px)}
+.bg-outro img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}.bg-outro span{display:block;padding:12px 14px}
+
+/* bloco de guias no índice do blog */
+.bg-guias{padding:72px 0 24px}
+.bg-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px}
+.bg-card{display:flex;flex-direction:column;background:#fff;border:1px solid #E4E7E1;border-radius:20px;overflow:hidden;text-decoration:none;color:#0A0B0E;transition:transform .25s}
+.bg-card:hover{transform:translateY(-4px)}
+.bg-card img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.bg-card .bg-rot{margin:18px 20px 6px}.bg-card b{font-size:21px;line-height:1.25;margin:0 20px}.bg-card small{font-size:14px;color:#5E6873;margin:8px 20px 20px}
+.bg-card:first-child{grid-column:span 2;grid-row:span 2}.bg-card:first-child img{flex:1;aspect-ratio:auto;min-height:0}.bg-card:first-child b{font-size:30px}
+
+@media (max-width:900px){
+  .bg-hero{grid-template-columns:1fr;gap:28px;padding-top:28px}
+  .bg-stats,.bg-dupla{grid-template-columns:1fr}
+  .bg-sumario ol{columns:1}
+  .bg-cards{grid-template-columns:1fr}.bg-card:first-child{grid-column:auto;grid-row:auto}
+  .bg-item{grid-template-columns:44px 1fr}.bg-n{font-size:22px}
+}
