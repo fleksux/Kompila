@@ -134,7 +134,7 @@ def pagina(seg, d):
   <div id="passo1">
     <h2>Recebe o guia agora</h2>
     <p class="p">Deixa seu nome e WhatsApp. O PDF abre na hora.</p>
-    <form id="form-guia" name="guia_{seg}" data-seg="{seg}" data-palavra="{pal}" data-pdf="{pdf}" novalidate>
+    <form id="form-guia" data-sem-acessos name="guia_{seg}" data-seg="{seg}" data-palavra="{pal}" data-pdf="{pdf}" novalidate>
       <label for="nome">Seu nome</label><input id="nome" name="nome" autocomplete="given-name" placeholder="Como você se chama">
       <label for="whatsapp">WhatsApp</label><input id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="11 99999-9999">
       <label for="negocio">Seu negócio</label><input id="negocio" name="negocio" placeholder="Ex.: Barbearia do João">
