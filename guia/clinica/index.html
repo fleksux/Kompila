@@ -19,7 +19,7 @@ a{color:inherit}
 .logo{font:700 22px 'JetBrains Mono',monospace;text-decoration:none;color:var(--carbono);white-space:nowrap} .logo b{color:var(--verde-e)}
 .topo small{font-size:14px;color:var(--cinza)}
 .palco{max-width:1200px;margin:0 auto;padding:12px 24px 60px;display:grid;grid-template-columns:1.05fr .95fr;grid-template-areas:'cab form' 'resto form';gap:0 48px;align-items:start}
-.cab{grid-area:cab}.resto{grid-area:resto}.form-col{grid-area:form}
+.cab{grid-area:cab}.resto{grid-area:resto}.form-col{grid-area:form;align-self:stretch}
 .tag{display:inline-block;font:700 14px 'JetBrains Mono',monospace;color:var(--verde-e);background:var(--menta);padding:8px 14px;border-radius:999px}
 h1{font-size:clamp(36px,5vw,60px);line-height:1.03;font-weight:800;letter-spacing:-.035em;color:var(--carbono);margin:18px 0 16px}
 h1 .mk{background:var(--verde);padding:0 .1em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
