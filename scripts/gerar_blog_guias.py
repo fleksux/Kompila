@@ -223,8 +223,28 @@ def pagina(seg, D, todos):
 
 
 def indice(todos):
-    cards = ''.join(f'<a class="bg-card rv" href="{slug(s)}/"><img src="img/{s}-capa.webp" alt="{e(nome(d))} na era da IA" loading="lazy" width="800" height="450"><span class="bg-rot">Guia · {e(nome(d))}</span><b>{e(nome(d))} na era da IA</b><small>10 coisas que já rodam sozinhas {e(artigo_de(d))}</small></a>' for s, d in todos)
-    return f'<!-- guias:inicio (gerado por scripts/gerar_blog_guias.py) -->\n<section class="bg-guias" id="guias"><div class="shell"><div class="dhead rv"><h1>O que eu faria se tivesse um negócio <em>na era da IA.</em></h1><p class="lead">Um guia por ramo, com 10 coisas que já dá pra deixar rodando sozinhas. Dados do Sebrae, com a fonte ao lado.</p></div><div class="bg-cards">{cards}</div></div></section>\n<!-- guias:fim -->'
+    # GRID EDITORIAL (Alex 06/10: "não dá pra fazer um grid no blog mais criativo?"): mosaico em 6 colunas com peças de tamanhos
+    # diferentes (destaque, alta, número, foto, larga, faixa) e um fecho; o número de cada ramo vem de scripts/guia_captura.json.
+    import json as _j
+    nums = _j.loads((RAIZ / 'scripts' / 'guia_captura.json').read_text(encoding='utf-8'))
+    tipos = ['hero', 'alto', 'num', 'foto', 'foto', 'largo', 'largo', 'alto', 'faixa', 'num', 'foto']
+    cards = ''
+    for i, (s, d) in enumerate(todos):
+        t = tipos[i % len(tipos)]; n = nums.get(s, {})
+        tit = f'{e(nome(d))} na era da IA'; sub = f'10 coisas que já rodam sozinhas {e(artigo_de(d))}'
+        if t == 'num':
+            cards += (f'<a class="bg-t bg-t-num rv" href="{slug(s)}/"><span class="bg-rot">Guia · {e(nome(d))}</span>'
+                      f'<strong><i>[</i> {e(n.get("num", ""))} <i>]</i></strong><p>{e(n.get("num_frase", ""))}</p><b>{tit} →</b></a>')
+        elif t == 'largo':
+            cards += (f'<a class="bg-t bg-t-largo rv" href="{slug(s)}/"><img src="img/{s}-dentro.webp" alt="{tit}" loading="lazy">'
+                      f'<span class="bg-txt"><span class="bg-rot">Guia · {e(nome(d))}</span><b>{tit}</b><small>{sub}</small><em>Ler o guia →</em></span></a>')
+        else:
+            img = 'capa' if t in ('hero', 'alto') else 'dentro'
+            cards += (f'<a class="bg-t bg-t-{t} rv" href="{slug(s)}/"><img src="img/{s}-{img}.webp" alt="{tit}" loading="lazy">'
+                      f'<span class="bg-sobre"><span class="bg-rot">Guia · {e(nome(d))}</span><b>{tit}</b>{f"<small>{sub}</small>" if t in ("hero", "faixa") else ""}</span></a>')
+    fecho = ('<div class="bg-t bg-t-cta rv"><div><span class="bg-rot">Não achou o seu ramo?</span><b>A Liz monta a lista do seu negócio com você.</b></div>'
+              '<a class="bg-btn" data-liz href="#liz">Conversar com a Liz</a></div>')
+    return f'<!-- guias:inicio (gerado por scripts/gerar_blog_guias.py) -->\n<section class="bg-guias" id="guias"><div class="shell"><div class="dhead rv"><h1>O que eu faria se tivesse um negócio <em>na era da IA.</em></h1><p class="lead">Um guia por ramo, com 10 coisas que já dá pra deixar rodando sozinhas. Dados do Sebrae, com a fonte ao lado.</p></div><div class="bg-mosaico">{cards}</div>{fecho}</div></section>\n<!-- guias:fim -->'
 
 
 def main():
