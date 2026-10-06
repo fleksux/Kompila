@@ -224,7 +224,7 @@ def pagina(seg, D, todos):
 
 def indice(todos):
     cards = ''.join(f'<a class="bg-card rv" href="{slug(s)}/"><img src="img/{s}-capa.webp" alt="{e(nome(d))} na era da IA" loading="lazy" width="800" height="450"><span class="bg-rot">Guia · {e(nome(d))}</span><b>{e(nome(d))} na era da IA</b><small>10 coisas que já rodam sozinhas {e(artigo_de(d))}</small></a>' for s, d in todos)
-    return f'<!-- guias:inicio (gerado por scripts/gerar_blog_guias.py) -->\n<section class="bg-guias" id="guias"><div class="shell"><div class="dhead rv"><h2>O que eu faria se tivesse um negócio <em>na era da IA.</em></h2><p class="lead">Um guia por ramo, com 10 coisas que já dá pra deixar rodando sozinhas. Dados do Sebrae, com a fonte ao lado.</p></div><div class="bg-cards">{cards}</div></div></section>\n<!-- guias:fim -->'
+    return f'<!-- guias:inicio (gerado por scripts/gerar_blog_guias.py) -->\n<section class="bg-guias" id="guias"><div class="shell"><div class="dhead rv"><h1>O que eu faria se tivesse um negócio <em>na era da IA.</em></h1><p class="lead">Um guia por ramo, com 10 coisas que já dá pra deixar rodando sozinhas. Dados do Sebrae, com a fonte ao lado.</p></div><div class="bg-cards">{cards}</div></div></section>\n<!-- guias:fim -->'
 
 
 def main():
