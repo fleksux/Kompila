@@ -11,19 +11,21 @@
 h1{font-size:26px;line-height:1.2;margin:0 0 10px;letter-spacing:-.02em}p{color:#555;margin:0 0 22px}
 input{width:100%;height:46px;border:1px solid #CCC;border-radius:10px;padding:0 14px;font:inherit;margin-bottom:12px}
 button{width:100%;height:48px;border:0;border-radius:10px;background:var(--carbono);color:#fff;font:700 16px Inter;cursor:pointer}button:disabled{opacity:.5}
-.ok{display:none}.ok b{display:block;font-size:40px;color:var(--verde2);margin-bottom:6px}small{display:block;color:#888;margin-top:16px;font-size:13px}
+.x{display:none;margin:14px 0 0;font-size:14px;color:#8a4b00}.ok{display:none}.ok b{display:block;font-size:40px;color:var(--verde2);margin-bottom:6px}small{display:block;color:#888;margin-top:16px;font-size:13px}
 </style></head><body>
 <div class="c">
   <div class="m"><i>[</i> kompila <i>]</i></div>
   <div id="form"><h1>Não quer mais receber nossos e-mails?</h1><p>Confirme o seu e-mail e a gente tira você da lista na hora. Você não recebe mais nada da Kompila por e-mail.</p>
-    <input id="e" type="email" placeholder="seu@email.com" autocomplete="email"><button id="b">Sair da lista</button></div>
+    <input id="e" type="email" placeholder="seu@email.com" autocomplete="email"><button id="b">Sair da lista</button>
+    <p class="x" id="x">Não conseguimos confirmar pelo link. Abra o link <b>Sair da lista</b> do próprio e-mail que você recebeu, ou responda esse e-mail escrevendo "sair" que a gente tira você na mão.</p></div>
   <div class="ok" id="ok"><b>✓</b><h1>Pronto, você saiu da lista.</h1><p>Não vai mais receber e-mails da Kompila. Desculpe o incômodo.</p></div>
   <small>Kompila · CNPJ 65.907.771/0001-02 · Mogi das Cruzes/SP</small>
 </div>
 <script>
-const U='https://fmbxnfebumfhrviumkbu.supabase.co',K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtYnhuZmVidW1maHJ2aXVta2J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0ODM2MjgsImV4cCI6MjEwNTA1OTYyOH0.eKrTJSHwztIdXwGT0_kkCUkD379f-eZ4iXcWM-jJQ58';const q=new URLSearchParams(location.search).get('e');const e=document.getElementById('e'),b=document.getElementById('b');if(q)e.value=q
-b.onclick=async()=>{const v=e.value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){e.focus();return}b.disabled=true;b.textContent='Saindo…'
-try{const r=await fetch(U+'/rest/v1/rpc/descadastrar_email',{method:'POST',headers:{apikey:K,'Content-Type':'application/json'},body:JSON.stringify({e:v})});const j=await r.json();if(j.ok){document.getElementById('form').style.display='none';document.getElementById('ok').style.display='block'}else{b.disabled=false;b.textContent='Sair da lista';e.focus()}}catch{b.disabled=false;b.textContent='Tentar de novo'}}
+const U='https://fmbxnfebumfhrviumkbu.supabase.co',K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtYnhuZmVidW1maHJ2aXVta2J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0ODM2MjgsImV4cCI6MjEwNTA1OTYyOH0.eKrTJSHwztIdXwGT0_kkCUkD379f-eZ4iXcWM-jJQ58';const P=new URLSearchParams(location.search),q=P.get('e'),t=P.get('t');const e=document.getElementById('e'),b=document.getElementById('b'),x=document.getElementById('x');if(q)e.value=q
+// 08/10: só descadastra com o código que vem no link do e-mail (t); sem ele, quem não recebeu o e-mail não tira ninguém da lista
+b.onclick=async()=>{const v=e.value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){e.focus();return}b.disabled=true;b.textContent='Saindo…';x.style.display='none'
+try{const r=await fetch(U+'/rest/v1/rpc/descadastrar_email',{method:'POST',headers:{apikey:K,'Content-Type':'application/json'},body:JSON.stringify({e:v,tk:t})});const j=await r.json();if(j.ok){document.getElementById('form').style.display='none';document.getElementById('ok').style.display='block'}else{b.disabled=false;b.textContent='Sair da lista';if(j.motivo==='link')x.style.display='block';else e.focus()}}catch{b.disabled=false;b.textContent='Tentar de novo'}}
 </script>
 <script src="/js/anima.js" defer></script>
 </body></html>
