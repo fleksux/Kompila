@@ -1,0 +1,87 @@
+/*
+Theme Name: Glowbos
+Author: Kompila
+Description: Tema da loja Glowbos. A página inicial é a home aprovada (home.html); as páginas da loja usam o mesmo cabeçalho e rodapé.
+Version: 1.0.1
+Text Domain: glowbos
+*/
+:root{--forte:#FF1F7A;--bebe:#FFF2F6;--vinho:#1d1a1f;--vinho2:#5f5a63}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--vinho);font:16px/1.6 Inter,system-ui,sans-serif}
+a{color:inherit}
+.gb-barra{background:var(--forte);color:#fff;text-align:center;font:800 14px Inter;padding:10px 12px}
+.gb-head{background:#fff;border-bottom:1px solid #f1e6ea;position:sticky;top:0;z-index:30}
+.gb-hd{max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:28px;height:84px}
+.gb-logo{align-self:flex-start;margin-top:6px;margin-bottom:-30px;position:relative;z-index:5}
+.gb-logo img{height:100px;display:block;filter:drop-shadow(0 8px 16px rgba(255,31,122,.22))}
+.gb-nav{display:flex;gap:6px;flex:1;justify-content:center}
+.gb-nav a{font:600 14.5px Inter;padding:9px 16px;border-radius:10px;text-decoration:none}
+.gb-nav a:hover{background:var(--bebe)}
+.gb-cart{margin-left:auto;text-decoration:none;background:var(--bebe);border-radius:10px;padding:10px 16px;font-weight:700}
+.gb-main{max-width:1240px;margin:0 auto;padding:70px 24px 90px;min-height:50vh}
+.gb-main h1,.gb-main .page-title{font:800 clamp(30px,4vw,46px)/1.05 "Inter Tight";letter-spacing:-.035em;margin:0 0 24px}
+.gb-foot{background:#141216;color:#fff;padding:50px 24px;text-align:center}
+.gb-foot img{width:64px;border-radius:12px}
+.gb-foot p{opacity:.7;font-size:14px}
+/* WooCommerce no tom da marca */
+.woocommerce a.button,.woocommerce button.button,.woocommerce input.button,.woocommerce #respond input#submit,.woocommerce a.button.alt,.woocommerce button.button.alt,.wc-block-components-button{background:var(--forte)!important;color:#fff!important;border-radius:10px!important;font-weight:700!important}
+.woocommerce ul.products li.product .price,.woocommerce div.product p.price,.woocommerce div.product span.price{color:var(--forte)!important;font-weight:800}
+.woocommerce-store-notice,p.demo_store{background:var(--forte)!important}
+@media (max-width:760px){.gb-nav{display:none}.gb-logo img{height:68px}.gb-hd{height:68px;padding:0 16px}.gb-main{padding:50px 16px 70px}}
+
+/* rodapé completo */
+.gb-foot{text-align:left;padding:64px 24px 34px}
+.gb-ft{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}
+.gb-ft img{width:70px;border-radius:12px;margin-bottom:12px}
+.gb-ft p{opacity:.75;max-width:290px;margin:0;font-size:14.5px}
+.gb-ft h5{font:700 17px "Inter Tight";margin:0 0 12px}
+.gb-ft a{display:block;color:#fff;opacity:.75;text-decoration:none;margin:7px 0;font-size:14.5px}
+.gb-ft a:hover{opacity:1;color:#ff7fb3}
+.gb-nota{max-width:1240px;margin:34px auto 0;opacity:.5;font-size:12px}
+/* páginas de texto */
+.page .gb-main,.gb-main{font-size:17px}
+.gb-main>h1{max-width:820px}
+.gb-main .gb-lead{font-size:20px;color:var(--vinho);font-weight:600;max-width:820px;background:var(--bebe);border-left:4px solid var(--forte);padding:18px 22px;border-radius:0 12px 12px 0}
+.gb-main h2{font:800 24px/1.2 "Inter Tight";letter-spacing:-.02em;margin:36px 0 10px;max-width:820px}
+.gb-main p,.gb-main ul,.gb-main ol{max-width:820px;color:var(--vinho2)}
+.gb-main li{margin:6px 0}
+.gb-main a{color:var(--forte);font-weight:600}
+.gb-main em{color:#b0889a}
+.gb-meta{font-size:13px;opacity:.7}
+.gb-contato{list-style:none;padding:0}.gb-contato li{background:var(--bebe);border-radius:12px;padding:14px 18px;margin:10px 0}
+/* produto */
+.woocommerce div.product{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.woocommerce div.product .woocommerce-product-gallery,.woocommerce div.product .summary{width:auto!important;float:none!important;margin:0!important}
+.woocommerce div.product .woocommerce-product-gallery img{border-radius:16px;background:var(--bebe)}
+.woocommerce div.product .product_title{font:800 clamp(28px,3.4vw,42px)/1.05 "Inter Tight";letter-spacing:-.035em;margin:0 0 12px}
+.woocommerce div.product p.price{font:800 30px "Inter Tight"!important;margin:0 0 18px}
+.woocommerce div.product form.cart{display:flex;gap:10px;align-items:center;margin:22px 0}
+.woocommerce div.product form.cart .qty{height:52px;width:72px;border-radius:10px;border:1.5px solid #ecdde3;font-size:17px;text-align:center}
+.woocommerce div.product form.cart .button{height:52px;padding:0 30px!important;font-size:16px!important;flex:1}
+.woocommerce div.product .woocommerce-tabs,.woocommerce div.product .related,.woocommerce div.product .up-sells{grid-column:1/-1}
+.woocommerce div.product .woocommerce-tabs ul.tabs{padding:0!important}
+.woocommerce div.product .woocommerce-tabs ul.tabs li{border-radius:10px 10px 0 0!important;background:var(--bebe)!important;border-color:#f1e4e9!important}
+.gb-pdp{display:grid;gap:10px;margin:8px 0 20px}
+.gb-pdp div{display:flex;gap:12px;align-items:center;background:var(--bebe);border-radius:12px;padding:12px 16px;font-size:14.5px;color:var(--vinho2)}
+.gb-pdp div.gb-hoje{background:var(--forte);color:#fff}
+.gb-pdp b{display:block;color:inherit;font:700 15.5px "Inter Tight"}
+.gb-pdp div:not(.gb-hoje) b{color:var(--vinho)}
+.gb-pdp span.i{font-size:22px}
+.gb-cep{display:flex;gap:8px;margin-top:6px}.gb-cep input{flex:1;height:44px;border-radius:10px;border:1.5px solid #ecdde3;padding:0 12px;font-size:15px}.gb-cep button{height:44px;border:0;border-radius:10px;background:var(--vinho);color:#fff;font-weight:700;padding:0 16px;cursor:pointer}
+.gb-cepr{font-size:14px;font-weight:700;margin-top:6px}
+.woocommerce ul.products li.product{background:#fff;border:1.5px solid #f1e4e9;border-radius:16px;padding:12px!important;text-align:left}
+.woocommerce ul.products li.product img{border-radius:12px;background:var(--bebe)}
+.woocommerce ul.products li.product .woocommerce-loop-product__title{font:700 16px/1.25 "Inter Tight"!important}
+@media (max-width:760px){.gb-ft{grid-template-columns:1fr 1fr}.woocommerce div.product{grid-template-columns:1fr;gap:24px}}
+/* grade da loja cheia */
+.woocommerce ul.products{display:grid!important;grid-template-columns:repeat(4,1fr);gap:18px;margin:24px 0!important}
+.woocommerce ul.products:before,.woocommerce ul.products:after{display:none!important}
+.woocommerce ul.products li.product{width:auto!important;float:none!important;margin:0!important;display:flex;flex-direction:column}
+.woocommerce ul.products li.product .button{margin-top:auto!important;text-align:center}
+.woocommerce .woocommerce-result-count,.woocommerce .woocommerce-ordering{margin-bottom:8px}
+.woocommerce .woocommerce-ordering select{height:40px;border-radius:10px;border:1.5px solid #ecdde3;padding:0 10px}
+.posted_in a{color:var(--forte)}
+@media (max-width:980px){.woocommerce ul.products{grid-template-columns:repeat(2,1fr);gap:12px}}
+.gb-main ul.products{max-width:none!important}
+.woocommerce ul.products li.product a{color:var(--vinho)!important;font-weight:inherit}
+.woocommerce ul.products li.product .button{color:#fff!important}

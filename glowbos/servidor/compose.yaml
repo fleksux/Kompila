@@ -1,0 +1,53 @@
+# Loja Glowbos (WordPress + WooCommerce). Provisório em glowbos.191-101-18-206.sslip.io; glowbos.com.br entra quando o DNS responder. 09/10/2026.
+services:
+  db:
+    image: mariadb:11
+    container_name: glowbos-db
+    restart: always
+    environment:
+      MARIADB_DATABASE: glowbos
+      MARIADB_USER: glowbos
+      MARIADB_PASSWORD: <ver .env>
+      MARIADB_ROOT_PASSWORD: <ver .env>
+    volumes: [./db:/var/lib/mysql]
+    networks: [glowbos]
+  wp:
+    image: wordpress:php8.3-apache
+    container_name: glowbos-wp
+    restart: always
+    depends_on: [db]
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: glowbos
+      WORDPRESS_DB_USER: glowbos
+      WORDPRESS_DB_PASSWORD: <ver .env>
+      WORDPRESS_TABLE_PREFIX: gb_
+      WORDPRESS_CONFIG_EXTRA: |
+        if (isset($$_SERVER["HTTP_X_FORWARDED_PROTO"]) && $$_SERVER["HTTP_X_FORWARDED_PROTO"] === "https") { $$_SERVER["HTTPS"] = "on"; }
+        define("WP_MEMORY_LIMIT", "512M");
+        define("DISALLOW_FILE_EDIT", false);
+    volumes:
+      - ./wp:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+    networks: [glowbos, coolify]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=coolify
+      - traefik.http.routers.glowbos-tmp.rule=Host(`glowbos.191-101-18-206.sslip.io`)
+      - traefik.http.routers.glowbos-tmp.entrypoints=https
+      - traefik.http.routers.glowbos-tmp.tls.certresolver=letsencrypt
+      - traefik.http.routers.glowbos.rule=Host(`glowbos.com.br`) || Host(`www.glowbos.com.br`)
+      - traefik.http.routers.glowbos.entrypoints=https
+      - traefik.http.routers.glowbos.tls.certresolver=letsencrypt
+      - traefik.http.routers.glowbos.service=glowbos
+      - traefik.http.routers.glowbos-tmp.service=glowbos
+      - traefik.http.middlewares.gb-https.redirectscheme.scheme=https
+      - traefik.http.routers.glowbos-http.rule=Host(`glowbos.com.br`) || Host(`www.glowbos.com.br`)
+      - traefik.http.routers.glowbos-http.entrypoints=http
+      - traefik.http.routers.glowbos-http.middlewares=gb-https
+      - traefik.http.routers.glowbos-http.service=glowbos
+      - traefik.http.services.glowbos.loadbalancer.server.port=80
+networks:
+  glowbos: {}
+  coolify:
+    external: true

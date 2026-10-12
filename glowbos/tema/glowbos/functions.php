@@ -1,0 +1,153 @@
+<?php
+// Tema Glowbos: home aprovada como página inicial + WooCommerce no tom da marca.
+
+add_action( 'after_setup_theme', function () {
+	add_theme_support( 'title-tag' );
+	add_theme_support( 'woocommerce' );
+	add_theme_support( 'wc-product-gallery-zoom' );
+	add_theme_support( 'wc-product-gallery-lightbox' );
+	add_theme_support( 'wc-product-gallery-slider' );
+} );
+
+add_action( 'wp_enqueue_scripts', function () {
+	wp_enqueue_style( 'glowbos-fontes', 'https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap', array(), null );
+	wp_enqueue_style( 'glowbos', get_stylesheet_uri(), array(), wp_get_theme()->get( 'Version' ) );
+} );
+
+// IDs dos produtos usados pela home (gravados pelo script de instalação).
+function glowbos_ids() {
+	return get_option( 'glowbos_produtos', array() );
+}
+
+// A paleta escolhida no "Monte seu arco" vai junto com o item do carrinho e aparece no pedido.
+add_filter( 'woocommerce_add_cart_item_data', function ( $data, $product_id ) {
+	if ( ! empty( $_POST['paleta'] ) ) {
+		$data['glowbos_paleta'] = sanitize_text_field( wp_unslash( $_POST['paleta'] ) );
+	}
+	return $data;
+}, 10, 2 );
+
+add_filter( 'woocommerce_get_item_data', function ( $itens, $cart_item ) {
+	if ( ! empty( $cart_item['glowbos_paleta'] ) ) {
+		$itens[] = array( 'key' => 'Cores', 'value' => $cart_item['glowbos_paleta'] );
+	}
+	return $itens;
+}, 10, 2 );
+
+add_action( 'woocommerce_checkout_create_order_line_item', function ( $item, $key, $values ) {
+	if ( ! empty( $values['glowbos_paleta'] ) ) {
+		$item->add_meta_data( 'Cores', $values['glowbos_paleta'] );
+	}
+}, 10, 3 );
+
+// O carrinho da home vira o carrinho do WooCommerce na hora de finalizar.
+// Recebe [{k: chave do produto, q: quantidade, paleta: nome}] e devolve o link do checkout.
+add_action( 'wc_ajax_glowbos_sync', function () {
+	$itens = json_decode( wp_unslash( $_POST['itens'] ?? '[]' ), true );
+	$ids   = glowbos_ids();
+	if ( ! is_array( $itens ) || ! WC()->cart ) {
+		wp_send_json_error();
+	}
+	if ( WC()->session && ! WC()->session->has_session() ) {
+		WC()->session->set_customer_session_cookie( true );
+	}
+	WC()->cart->empty_cart();
+	foreach ( $itens as $it ) {
+		$k = sanitize_key( $it['k'] ?? '' );
+		$q = max( 1, min( 99, (int) ( $it['q'] ?? 1 ) ) );
+		if ( empty( $ids[ $k ] ) ) {
+			continue;
+		}
+		$extra = array();
+		if ( ! empty( $it['paleta'] ) ) {
+			$extra['glowbos_paleta'] = sanitize_text_field( $it['paleta'] );
+		}
+		if ( ! empty( $it['img'] ) ) {
+			$foto = glowbos_salva_foto( $it['img'] );
+			if ( $foto ) {
+				$extra['glowbos_img'] = $foto;
+			}
+		}
+		WC()->cart->add_to_cart( (int) $ids[ $k ], $q, 0, array(), $extra );
+	}
+	WC()->cart->calculate_totals();
+	WC()->cart->set_session();
+	WC()->cart->maybe_set_cart_cookies();
+	wp_send_json_success( array( 'checkout' => wc_get_checkout_url(), 'itens' => WC()->cart->get_cart_contents_count() ) );
+} );
+
+// Página do produto: entrega no mesmo dia, CEP e garantias logo abaixo do botão de comprar.
+add_action( 'woocommerce_single_product_summary', function () {
+	?>
+	<div class="gb-pdp">
+		<div class="gb-hoje"><span class="i">🚚</span><span><b>Chega hoje em São Paulo e Grande SP</b>Pedido aprovado até o horário de corte sai no mesmo dia.</span></div>
+		<div><span class="i">📍</span><span style="flex:1"><b>Ver prazo pro seu CEP</b>
+			<span class="gb-cep"><input inputmode="numeric" maxlength="9" placeholder="00000-000" id="gbcep"><button type="button" id="gbcepb">Ver</button></span>
+			<span class="gb-cepr" id="gbcepr"></span></span></div>
+		<div><span class="i">⭐</span><span><b>Nota 4,9 na Shopee</b>67 mil avaliações de quem já fez festa.</span></div>
+		<div><span class="i">↩️</span><span><b>Troca fácil</b>7 dias pra se arrepender. <a href="/trocas-e-devolucoes/">Ver regras</a></span></div>
+	</div>
+	<script>
+	(function(){var i=document.getElementById('gbcep'),b=document.getElementById('gbcepb'),r=document.getElementById('gbcepr');
+	i.addEventListener('input',function(){i.value=i.value.replace(/\D/g,'').replace(/^(\d{5})(\d)/,'$1-$2')});
+	b.onclick=function(){var d=i.value.replace(/\D/g,'');if(d.length!==8){r.textContent='Digite os 8 números do CEP.';return}var n=+d;
+	r.textContent=(n>=1000000&&n<=9999999)?'🎉 Chega hoje! Esse CEP tem entrega no mesmo dia.':'📦 Enviamos pro seu CEP. O prazo aparece no carrinho.'};})();
+	</script>
+	<?php
+}, 35 );
+
+// Foto da montagem: o JPEG gerado na home é salvo em uploads e acompanha o item até o pedido.
+function glowbos_salva_foto( $data_url ) {
+	if ( ! is_string( $data_url ) || strpos( $data_url, 'data:image/jpeg;base64,' ) !== 0 || strlen( $data_url ) > 400000 ) {
+		return '';
+	}
+	$bin = base64_decode( substr( $data_url, 23 ), true );
+	if ( ! $bin || substr( $bin, 0, 3 ) !== "\xFF\xD8\xFF" ) {
+		return '';
+	}
+	$up  = wp_upload_dir();
+	$dir = trailingslashit( $up['basedir'] ) . 'glowbos-montagens';
+	wp_mkdir_p( $dir );
+	$nome = md5( $bin ) . '.jpg';
+	if ( ! file_exists( "$dir/$nome" ) ) {
+		file_put_contents( "$dir/$nome", $bin );
+	}
+	return trailingslashit( $up['baseurl'] ) . 'glowbos-montagens/' . $nome;
+}
+
+add_filter( 'woocommerce_cart_item_thumbnail', function ( $thumb, $item ) {
+	if ( ! empty( $item['glowbos_img'] ) ) {
+		return '<img src="' . esc_url( $item['glowbos_img'] ) . '" alt="Sua montagem" width="300" height="300" style="border-radius:10px">';
+	}
+	return $thumb;
+}, 10, 2 );
+
+add_action( 'woocommerce_checkout_create_order_line_item', function ( $item, $key, $values ) {
+	if ( ! empty( $values['glowbos_img'] ) ) {
+		$item->add_meta_data( 'Foto da montagem', esc_url_raw( $values['glowbos_img'] ) );
+	}
+}, 11, 3 );
+
+add_filter( 'woocommerce_order_item_display_meta_value', function ( $valor, $meta ) {
+	if ( 'Foto da montagem' === $meta->key ) {
+		return '<a href="' . esc_url( $meta->value ) . '" target="_blank"><img src="' . esc_url( $meta->value ) . '" alt="" style="width:120px;border-radius:8px;display:block"></a>';
+	}
+	return $valor;
+}, 10, 2 );
+
+// Carrinho e checkout em blocos (Store API) também mostram a foto da montagem.
+add_filter( 'woocommerce_store_api_cart_item_images', function ( $imagens, $cart_item ) {
+	if ( empty( $cart_item['glowbos_img'] ) ) {
+		return $imagens;
+	}
+	$url = esc_url_raw( $cart_item['glowbos_img'] );
+	return array( (object) array(
+		'id'        => 0,
+		'src'       => $url,
+		'thumbnail' => $url,
+		'srcset'    => '',
+		'sizes'     => '',
+		'name'      => 'Sua montagem',
+		'alt'       => 'Sua montagem',
+	) );
+}, 10, 2 );

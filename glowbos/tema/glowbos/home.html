@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowbos · home D · Chiclete</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chi:#1d1a1f;--forte:#FF1F7A;--bebe:#FFF2F6;--bebe2:#FFFFFF;--logo:#FFFFFF;--vinho:#1d1a1f;--vinho2:#5f5a63;--esc:#141216;
+  --r:14px;--rb:10px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--vinho);font:16px/1.6 Inter,system-ui,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font-family:inherit}
+.w{max-width:1240px;margin:0 auto;padding:0 24px}
+.troca{background:#222;color:#fff;font:600 12px/1 system-ui;display:flex;gap:6px;justify-content:center;padding:8px;flex-wrap:wrap}
+.troca a{padding:6px 10px;border-radius:6px;opacity:.6}.troca a.on{background:#fff;color:#111;opacity:1}
+.barra{background:var(--forte);color:#fff;text-align:center;font-weight:800;font-size:14px;padding:10px 12px}
+header{background:#fff;position:sticky;top:0;z-index:30;border-bottom:1px solid #ececea}
+.hd{display:flex;align-items:center;gap:28px;height:86px}
+.logo img{height:66px;width:auto}
+nav{display:flex;gap:6px;flex:1;justify-content:center}
+nav a{font:600 14.5px Inter;padding:9px 16px;border-radius:var(--rb);transition:.2s}
+nav a:hover{background:var(--bebe);color:var(--vinho)}
+.ic{display:flex;gap:10px;margin-left:auto}
+.ic a{width:44px;height:44px;border-radius:10px;background:var(--bebe);display:grid;place-items:center;position:relative;box-shadow:none}
+.ic svg{width:21px;height:21px}
+.qt{position:absolute;top:-5px;right:-5px;min-width:21px;height:21px;border-radius:99px;background:var(--forte);color:#fff;font:800 11px/1 Inter;display:none;place-items:center;padding:0 5px;font-style:normal}
+.inf{font-family:"Inter Tight";font-weight:800;letter-spacing:-.03em;color:var(--vinho)}
+.tt{font:800 clamp(32px,4vw,52px)/1.04 "Inter Tight";letter-spacing:-.035em;margin:0 0 12px}
+.sub{color:var(--vinho2);font-size:18px;margin:0 0 30px;max-width:620px;font-weight:600}
+.eyebrow{display:inline-block;font:700 12px Inter;letter-spacing:.16em;text-transform:uppercase;color:var(--forte);margin-bottom:14px}
+.ctr{text-align:center}.ctr .sub{margin-left:auto;margin-right:auto}
+main,header,.barra,.troca,footer{position:relative;z-index:1}
+header{z-index:30;position:sticky!important;top:0}
+.hero{padding:0}
+.janela{position:relative;overflow:hidden;width:100%;height:calc(100svh - 126px);min-height:560px;background:#fff}
+.sl{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;pointer-events:none}
+.sl.on{opacity:1;pointer-events:auto}
+.sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right top;transform:scale(1.04);transform-origin:right top;transition:transform 7s ease}
+.sl.on img{transform:scale(1)}
+.sl:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(255,255,255,.94) 0,rgba(255,255,255,.82) 28%,rgba(255,255,255,.4) 46%,transparent 62%)}
+.sl.esc:before{background:linear-gradient(90deg,rgba(20,18,22,.9) 0,rgba(20,18,22,.72) 28%,rgba(20,18,22,.3) 46%,transparent 62%)}
+.sl .tx{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 0 40px max(24px,calc((100vw - 1240px)/2 + 24px));max-width:calc(max(24px,calc((100vw - 1240px)/2 + 24px)) + 640px)}
+.sl h1{color:var(--vinho);letter-spacing:-.04em;font-size:clamp(42px,4.8vw,68px);line-height:1.02;margin:0 0 18px}
+.sl p{font-size:19px;margin:0 0 26px;color:var(--vinho2);max-width:440px;font-weight:700}
+
+.cep{background:#fff;border-radius:var(--rb);padding:7px 7px 7px 20px;display:flex;gap:8px;align-items:center;width:100%;max-width:440px;box-shadow:0 18px 40px rgba(255,31,122,.14);border:1.5px solid #ffd3e3}
+.cep span{font-size:20px}
+.cep input{flex:1;min-width:0;border:0;outline:0;font:700 17px Inter;color:var(--vinho);background:transparent}
+.cep button{border:0;background:var(--forte);color:#fff;font:700 16px "Inter Tight";border-radius:var(--rb);height:50px;padding:0 22px;cursor:pointer;flex:none}
+.cepr{min-height:26px;margin:12px 0 0 10px;font-weight:800;font-size:15.5px}
+.cepr{color:var(--vinho)}.cepr.ok{color:var(--forte)}
+.sl.esc h1,.sl.esc .cepr{color:#fff}.sl.esc p{color:rgba(255,255,255,.85)}
+.sl.esc .cepr.ok{color:#ff7fb3}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:54px;padding:0 28px;border-radius:var(--rb);font:700 16px Inter;border:0;cursor:pointer;transition:transform .15s}
+.btn:active{transform:translateY(3px)}
+.btn.pri{background:var(--forte);color:#fff;box-shadow:0 10px 24px rgba(255,31,122,.25)}
+.dots{position:absolute;z-index:3;left:max(24px,calc((100vw - 1240px)/2 + 24px));bottom:34px;display:flex;gap:8px;align-items:center}
+.dot{width:34px;height:4px;border:0;cursor:pointer;padding:0;border-radius:2px;background:rgba(29,26,31,.22);transition:.3s}
+
+.dot.on{background:var(--forte);width:56px}
+.selos{display:flex;justify-content:center;gap:0;flex-wrap:wrap;margin:0;padding:22px 0;border-bottom:1px solid #ececea}
+.selos{display:grid!important;grid-template-columns:repeat(4,1fr);padding:26px 0!important}.selos div{display:flex;align-items:center;gap:14px;padding:4px 24px;border-left:1px solid #f0e3e8;font-weight:600;font-size:14.5px;color:var(--vinho2);line-height:1.3}.selos div:first-child{border-left:0}.selos i{flex:none;width:48px;height:48px;border-radius:50%;background:var(--bebe);color:var(--forte);display:grid;place-items:center}.selos i svg{width:24px;height:24px}.selos b{display:block;color:var(--vinho)!important}
+.selos b{font-family:"Inter Tight";font-size:18px}
+.sec{padding:110px 0 0}
+
+
+.bloco{background:var(--bebe);padding:100px 0;margin-top:110px;position:relative;z-index:1;color:var(--vinho)}.bloco .tt{color:var(--vinho)}.bloco .sub{color:var(--vinho2)}.bloco .pm .cap{color:var(--vinho)}
+.festas{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;align-items:end;margin-top:20px}
+.fb{position:relative;display:block;text-align:left}
+.fb .bl{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;box-shadow:0 18px 40px rgba(0,0,0,.12);transition:transform .4s}
+.festas{align-items:start}
+.fb .bl img{width:100%;height:100%;object-fit:cover;object-position:72% 45%}
+
+.fb .no{display:block;width:16px;height:12px;margin:6px auto 0;background:#fff;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.fb .fio{display:block;width:2px;height:34px;margin:0 auto;background:linear-gradient(#fff,var(--chi))}
+.fb b{display:block;font:800 21px "Inter Tight";letter-spacing:-.02em;margin-top:14px}
+.fb small{color:var(--vinho2);font-weight:700}
+.fb:hover .bl{transform:translateY(-6px)}
+.prem{display:grid;grid-template-columns:1.25fr 1fr;gap:22px;margin-top:20px}
+.pcol{display:grid;gap:22px;grid-template-rows:auto 1fr}
+.pm{position:relative;border-radius:var(--r);overflow:hidden;background:#fff;box-shadow:0 18px 40px rgba(0,0,0,.16)}
+.pm img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+.pm:hover img{transform:scale(1.05)}
+.pm.big{aspect-ratio:4/5}
+.pm.lar{aspect-ratio:16/10}
+.pm .cap{position:absolute;left:16px;right:16px;bottom:16px;background:rgba(255,255,255,.95);border-radius:12px;padding:14px 16px 14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pm .cap b{display:block;font:700 20px/1.15 "Inter Tight"}
+.pm .cap small{color:var(--vinho2);font-weight:700;font-size:13.5px}
+.pm .cap a{flex:none;background:var(--forte);color:#fff;border-radius:var(--rb);padding:11px 16px;font:700 14px "Inter Tight";box-shadow:none}
+.prem2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.prem2 .pm .cap{flex-direction:column;align-items:flex-start;gap:8px}
+.nums{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:center;margin-top:24px}
+.nfoto{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;box-shadow:0 26px 50px rgba(0,0,0,.2)}
+.nfoto img{width:100%;height:100%;object-fit:cover;transition:opacity .3s}
+.nbig{position:absolute;right:16px;top:16px;width:64px;height:64px;border-radius:12px;background:#fff;color:var(--vinho);display:grid;place-items:center;font:800 34px "Inter Tight"}
+.ncfg h3{font:700 21px "Inter Tight";margin:22px 0 12px}
+.bolhas{display:flex;flex-wrap:wrap;gap:10px}
+.bo{width:54px;height:54px;border:0;cursor:pointer;border-radius:12px;font:800 22px "Inter Tight";color:var(--vinho);background:#fff;box-shadow:inset 0 0 0 1.5px #dcdcd9;transition:.2s}
+.bo:hover{transform:translateY(-4px)}
+.bo.on{background:var(--forte);color:#fff;box-shadow:none}
+.estilos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.es{border:3px solid transparent;background:#fff;border-radius:12px;padding:6px 6px 10px;cursor:pointer;font:700 15px "Inter Tight";color:var(--vinho);transition:.2s}
+.es img{width:100%;aspect-ratio:1;object-fit:cover;object-position:center 15%;border-radius:18px;margin-bottom:6px}
+.es.on{border-color:var(--forte)}
+.nbuy,.mbuy{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:26px}
+.nbuy{background:var(--bebe);border-radius:var(--r);padding:16px 16px 16px 24px;box-shadow:none}
+.nbuy small,.mbuy small{display:block;color:var(--vinho2);font-weight:800}
+.nbuy b{font:700 24px "Inter Tight"}
+.monte{display:grid;grid-template-columns:1fr 1.15fr;gap:44px;background:var(--bebe);border-radius:var(--r);padding:40px;box-shadow:none;margin-top:20px}
+.mprev{position:sticky;top:120px;align-self:start}
+.mprev img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--r);transition:opacity .25s}
+.mtag{position:absolute;left:18px;bottom:18px;background:var(--forte);color:#fff;border-radius:var(--rb);padding:9px 18px;font:700 16px "Inter Tight";box-shadow:none}
+.mcfg{min-width:0}
+.mst{display:flex;align-items:center;gap:10px;font:700 19px "Inter Tight";margin:20px 0 12px}
+.mst:first-child{margin-top:0}
+.mst i{font-style:normal;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--forte);color:#fff;font-size:16px}
+.sws{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px}
+.sw{border:2px solid transparent;background:#fff;border-radius:12px;padding:5px 5px 8px;cursor:pointer;font:800 12.5px Inter;color:var(--vinho);transition:.2s}
+.sw img{width:100%;aspect-ratio:1;object-fit:cover;object-position:center 30%;border-radius:17px}
+.sw span{display:block;margin-top:5px}
+.sw.on{border-color:var(--forte)}
+.tams{display:grid;gap:12px}
+.tam{display:flex;align-items:center;gap:14px;background:#fff;border:2px solid #e4e4e1;border-radius:12px;padding:16px 20px;cursor:pointer;transition:.2s}
+.tam:has(input:checked){border-color:var(--forte)}
+.tam input{accent-color:var(--forte);width:20px;height:20px;flex:none}
+.tam span{flex:1}.tam b{display:block;font:700 18px "Inter Tight"}.tam small{color:var(--vinho2);font-weight:700}
+.tam em{font:800 19px "Inter Tight";font-style:normal;color:var(--vinho);white-space:nowrap}
+.mbuy{padding-top:20px;border-top:1px solid #dcdcd9}
+.mbuy b{font:700 34px "Inter Tight"}
+.mnote{margin:14px 0 0;font-weight:800;color:var(--vinho2)}
+.prova{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;margin-top:10px}
+.pnums{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pn{background:var(--bebe);border-radius:var(--r);padding:22px 24px;box-shadow:none}
+.pn b{display:block;font:800 clamp(34px,3.8vw,48px)/1 "Inter Tight";letter-spacing:-.04em;color:var(--forte);margin-bottom:6px}
+.pn span{font-weight:800;color:var(--vinho2);font-size:14.5px}
+.mapa{background:var(--bebe);border-radius:var(--r);padding:22px 26px;margin-top:16px;box-shadow:none}
+.mapa h4{margin:0 0 12px;font:700 20px "Inter Tight"}
+.uf{display:grid;grid-template-columns:62px 1fr 52px;gap:10px;align-items:center;margin:7px 0;font-weight:800;font-size:14px}
+.uf span{height:10px;border-radius:99px;background:#ececea;overflow:hidden}
+.uf i{display:block;height:100%;border-radius:99px;background:var(--forte)}
+.uf em{font-style:normal;text-align:right;color:var(--vinho2)}
+.caixa{position:relative}
+.caixa img{border-radius:var(--r);box-shadow:0 26px 60px rgba(0,0,0,.2);width:100%}
+.caixa .tag{position:absolute;left:18px;bottom:18px;background:#fff;color:var(--vinho);font:700 15px Inter;border-radius:10px;padding:10px 14px;box-shadow:none}
+.packs{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:20px}
+.pk{background:var(--bebe);border-radius:var(--r);padding:12px 12px 16px;display:flex;flex-direction:column}
+.pk img{border-radius:12px;aspect-ratio:1;object-fit:cover}
+.pk h4{margin:12px 6px 2px;font:700 17px/1.2 "Inter Tight"}
+.pk small{margin:0 6px;color:var(--vinho2);font-weight:800}
+.pk .pp{display:flex;align-items:center;justify-content:space-between;margin:12px 6px 0;gap:8px;margin-top:auto;padding-top:12px}
+.pk .pp b{font:700 22px "Inter Tight";white-space:nowrap}
+.pk button{border:0;background:var(--forte);color:#fff;border-radius:var(--rb);height:42px;padding:0 16px;font:700 14.5px "Inter Tight";cursor:pointer;box-shadow:none}
+footer{background:var(--esc);color:#fff;margin-top:120px;padding:70px 0 40px}
+.ft{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}.ft a:hover{opacity:1;color:#ff7fb3}
+.ft h5{font:700 18px "Inter Tight";margin:0 0 12px}
+.ft a{display:block;opacity:.75;margin:7px 0;font-size:14.5px}
+.ft .ico{width:78px;border-radius:12px;margin-bottom:14px}
+.nota{opacity:.5;font-size:12px;margin-top:34px}
+.vel{position:fixed;inset:0;background:rgba(74,35,64,.45);opacity:0;pointer-events:none;transition:.3s;z-index:60}
+.gav{position:fixed;top:0;right:0;bottom:0;width:min(430px,100%);background:#fff;z-index:61;transform:translateX(105%);transition:.38s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.gaberta .vel{opacity:1;pointer-events:auto}.gaberta .gav{transform:none}
+.gh{display:flex;justify-content:space-between;align-items:center;padding:24px 24px 18px;font:700 24px "Inter Tight"}
+.gh button{border:0;background:var(--bebe);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;color:var(--vinho)}
+.gl{flex:1;overflow:auto;padding:0 24px}
+.it{display:grid;grid-template-columns:70px 1fr;gap:14px;padding:12px 0;border-bottom:2px dashed var(--bebe)}
+.it img{width:70px;height:70px;object-fit:cover;border-radius:18px}
+.it b{display:block;font-size:14.5px}.it span{font-weight:800;color:var(--vinho2);font-size:14px}
+.qq{display:flex;align-items:center;gap:10px;margin-top:6px}
+.qq button{width:30px;height:30px;border-radius:50%;border:0;background:var(--bebe);color:var(--forte);font-weight:800;cursor:pointer}
+.qq em{font-style:normal;font-weight:800}
+.vz{text-align:center;color:var(--vinho2);margin-top:50px;font-weight:800}
+.gf{padding:18px 24px 24px}
+.xs{display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;background:var(--bebe2);border-radius:12px;padding:10px;margin-bottom:12px}
+.xs img{width:56px;height:56px;object-fit:contain;border-radius:14px;background:#fff}
+.xs small{display:block;color:var(--forte);font:700 11px "Inter Tight";letter-spacing:.08em;text-transform:uppercase}
+.xs b{display:block;font-size:14px}.xs span{font-size:13px;color:var(--vinho2);font-weight:800}
+.xs button{border:0;background:var(--vinho);color:#fff;border-radius:99px;padding:9px 13px;font:700 12.5px "Inter Tight";cursor:pointer}
+.md{background:var(--bebe);border-radius:10px;padding:11px 14px;font-weight:700;font-size:14px;margin-bottom:14px;color:var(--vinho)}
+.tot{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font:700 20px "Inter Tight"}
+.gf .btn{width:100%}
+.toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,20px);background:var(--vinho);color:#fff;padding:13px 20px;border-radius:99px;font-weight:800;font-size:14px;opacity:0;transition:.3s;z-index:70;pointer-events:none;max-width:92vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.wpp{position:fixed;right:22px;bottom:22px;z-index:50;display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;border-radius:99px;padding:12px 20px 12px 12px;font:700 14.5px "Inter Tight";box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.wpp svg{width:30px;height:30px}
+.mbar{display:none}
+.conf{position:fixed;width:10px;height:14px;z-index:80;pointer-events:none;border-radius:3px;animation:caiu 1.2s ease-out forwards}
+@keyframes caiu{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rt));opacity:0}}
+@media (max-width:980px){
+  nav{display:none}
+  .festas{grid-template-columns:1fr 1fr;gap:26px 16px}
+  .prem,.nums,.monte,.prova{grid-template-columns:1fr}
+  .packs{grid-template-columns:1fr 1fr}
+  .ft{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .w{padding:0 16px}
+  .barra{font-size:12.5px;padding:9px 8px}
+  .hd{height:70px}.logo img{height:52px}
+  .janela{height:88svh;min-height:520px}
+  .sl img{object-position:74% top}
+  .sl:before{background:linear-gradient(0deg,rgba(255,255,255,.97) 0,rgba(255,255,255,.88) 32%,rgba(255,255,255,.4) 52%,transparent 66%)}.sl.esc:before{background:linear-gradient(0deg,rgba(20,18,22,.95) 0,rgba(20,18,22,.85) 30%,rgba(20,18,22,.4) 50%,transparent 66%)}
+  .sl .tx{justify-content:flex-end;padding:0 18px 64px;max-width:none}
+  .sl h1{letter-spacing:-.04em;font-size:38px;margin-bottom:10px}
+  .sl p{font-size:15.5px;margin-bottom:16px}
+  .dots{bottom:30px;left:18px}
+  .sl .tx{padding-bottom:96px}
+  .selos{grid-template-columns:1fr 1fr!important;gap:18px 0}.selos div{padding:0 10px;font-size:12.5px;gap:10px}.selos div:nth-child(3){border-left:0}.selos i{width:40px;height:40px}.selos i svg{width:20px;height:20px}.selos b{font-size:15px}
+  .cep{padding-left:14px}.cep button{padding:0 16px;height:46px;font-size:15px}
+  .sec{padding-top:80px}
+  
+  .tt{font-size:34px}
+  .sub{font-size:16.5px}
+  .prem2{gap:12px}.pm.lar{aspect-ratio:4/5}.prem2 .pm{aspect-ratio:3/4}.prem2 .pm .cap b{font-size:15px}
+  .pm .cap{left:10px;right:10px;bottom:10px;padding:12px;flex-direction:column;align-items:flex-start;gap:8px}
+  .pm .cap b{font-size:17px}
+  .prem2 .pm .cap small{display:none}
+  .prem2 .pm .cap a{padding:8px 12px;font-size:13px}
+  .estilos{grid-template-columns:repeat(2,1fr)}
+  .bo{width:50px;height:56px;font-size:22px}
+
+  .monte{padding:16px;border-radius:var(--r);gap:20px}
+  .mprev{position:relative;top:0}.mprev img{aspect-ratio:1}
+  .sws{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:84px;overflow-x:auto;padding-bottom:6px}
+  .tam{padding:14px}
+  .mbuy,.nbuy{flex-direction:column;align-items:stretch}
+  .packs{gap:12px}
+  .pk .pp{flex-direction:column;align-items:stretch}
+  .pk .pp b{font-size:20px}
+  .ft{grid-template-columns:1fr}
+  .caixa .tag{right:6px;font-size:15px}
+  .wpp{bottom:70px;right:12px;padding:12px}.wpp span{display:none}
+  .mbar{display:block;position:fixed;left:0;right:0;bottom:0;z-index:45;background:var(--forte);color:#fff;text-align:center;padding:14px 10px calc(14px + env(safe-area-inset-bottom));font:700 14.5px "Inter Tight"}
+  body{padding-bottom:52px}
+}
+
+/* selos refinados */
+.selos{display:grid!important;grid-template-columns:1.35fr 1fr 1fr 1fr!important;gap:14px!important;padding:22px 0 0!important;border-bottom:0!important;margin:0}
+.selos div{display:flex!important;align-items:center;gap:14px;padding:16px 18px!important;border:1px solid #f1e4e9!important;border-radius:14px;background:#fff;font-weight:500!important;font-size:13.5px!important;color:var(--vinho2);line-height:1.35}
+.selos i{flex:none;width:46px!important;height:46px!important;border-radius:12px!important;background:var(--bebe);color:var(--forte);display:grid;place-items:center}
+.selos i svg{width:23px!important;height:23px!important}
+.selos b{display:block;font:700 16px/1.2 "Inter Tight"!important;color:var(--vinho)!important;letter-spacing:-.01em;margin-bottom:2px}
+.selos .sl0{background:var(--forte);border-color:var(--forte)!important;color:rgba(255,255,255,.9);box-shadow:0 14px 30px rgba(255,31,122,.25)}
+.selos .sl0 i{background:rgba(255,255,255,.18);color:#fff}
+.selos .sl0 b{color:#fff!important;font-size:17.5px!important}
+.bolhas{display:grid;grid-template-columns:repeat(10,1fr);gap:8px}.bo{width:auto!important}
+.sws{grid-template-columns:repeat(7,1fr)}
+@media (max-width:980px){.selos{grid-template-columns:1fr 1fr!important}.selos .sl0{grid-column:1/-1}}
+@media (max-width:640px){.selos{gap:10px!important;padding-top:14px!important}.selos div{padding:12px!important;gap:10px;font-size:12px!important}.selos i{width:38px!important;height:38px!important}.selos i svg{width:19px!important;height:19px!important}.selos b{font-size:14px!important}.selos .sl0 b{font-size:16px!important}
+.bolhas{grid-template-columns:repeat(5,1fr)}.bo{height:52px!important}.sws{grid-template-columns:none}}
+
+/* cabeçalho que acompanha + logo vazando */
+header{transition:box-shadow .3s,background .3s}
+.hd{transition:height .3s}
+.logo{position:relative;z-index:3;align-self:flex-start;margin-top:10px;transition:margin .3s}
+.logo img{height:118px!important;filter:drop-shadow(0 10px 18px rgba(255,31,122,.25));transition:height .3s}
+.rolou header{box-shadow:0 8px 30px rgba(29,26,31,.08);background:rgba(255,255,255,.96);backdrop-filter:blur(10px)}
+.rolou .hd{height:72px}
+.rolou .logo{margin-top:6px}.rolou .logo img{height:60px!important;filter:none}
+nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";position:absolute;left:16px;right:16px;bottom:2px;height:2px;border-radius:2px;background:var(--forte)}
+.tg{display:none;width:44px;height:44px;border:0;border-radius:10px;background:var(--bebe);cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:5px}
+.tg span{display:block;width:20px;height:2px;border-radius:2px;background:var(--vinho);transition:.3s}
+.mvel{position:fixed;inset:0;background:rgba(29,26,31,.4);opacity:0;pointer-events:none;transition:.3s;z-index:62}
+.mmenu{position:fixed;top:0;left:0;bottom:0;width:min(380px,88vw);background:#fff;z-index:63;transform:translateX(-105%);transition:.38s cubic-bezier(.2,.8,.2,1);padding:20px 22px;display:flex;flex-direction:column;gap:18px;overflow:auto}
+.mabre .mvel{opacity:1;pointer-events:auto}.mabre .mmenu{transform:none}
+.mmh{display:flex;justify-content:space-between;align-items:center}.mmh img{height:64px}.mmh button{border:0;background:var(--bebe);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:16px}
+.mml{display:flex!important;flex-direction:column;gap:2px}.mml a{display:block;font:700 22px/1.2 "Inter Tight";padding:14px 4px;border-bottom:1px solid #f3e7ec;border-radius:0}.mml a small{display:block;font:500 13px Inter;color:var(--vinho2);margin-top:3px}
+.mmd{background:var(--bebe);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--vinho2)}.mmd b{display:block;color:var(--vinho);font:700 16px "Inter Tight";margin-bottom:2px}
+.wpp{opacity:0;transform:translateY(16px);pointer-events:none;transition:.35s}.mostra-wpp .wpp{opacity:1;transform:none;pointer-events:auto}
+@media (max-width:980px){.tg{display:flex}.logo img{height:92px!important}.rolou .logo img{height:50px!important}}
+@media (max-width:640px){.logo{margin-top:6px}.logo img{height:78px!important}.hd{gap:12px}
+.selos{grid-template-columns:repeat(3,1fr)!important}.selos .sl0{grid-column:1/-1}.selos div:not(.sl0){flex-direction:column;align-items:flex-start;gap:8px;padding:12px 10px!important}.selos div:not(.sl0) b{font-size:13px!important}}
+
+.prova{align-items:stretch!important}
+.marca{display:grid;grid-template-rows:1fr auto;gap:16px;min-height:100%}
+.mfoto{position:relative;border-radius:var(--r);overflow:hidden;min-height:300px;box-shadow:0 22px 50px rgba(255,31,122,.16)}
+.mfoto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%}
+.mfoto .tag{position:absolute;left:18px;bottom:18px;background:#fff;color:var(--vinho);font:700 15px Inter;border-radius:10px;padding:10px 14px}
+.mcard{position:relative;overflow:hidden;background:var(--forte);color:#fff;border-radius:var(--r);padding:26px 28px}
+.mcard:after{content:"★";position:absolute;right:-14px;top:-40px;font-size:190px;line-height:1;color:rgba(255,255,255,.12);transform:rotate(14deg);pointer-events:none}
+.mtopo{display:flex;align-items:center;gap:14px}
+.mico{width:58px;height:58px;border-radius:14px;box-shadow:0 8px 20px rgba(0,0,0,.15)}
+.mtopo b{display:block;font:800 26px/1 "Inter Tight";letter-spacing:-.03em}
+.mtopo span{font-weight:600;opacity:.9}
+.mcard p{margin:16px 0 18px;font-size:15.5px;line-height:1.55;opacity:.92;max-width:460px;position:relative;z-index:1}
+.mval{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;position:relative;z-index:1}
+.mval li{background:rgba(255,255,255,.14);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;line-height:1.35}
+.mval i{font-style:normal;font-size:20px}
+.mval b{display:block;font:700 14.5px "Inter Tight"}
+@media (max-width:640px){.mval{grid-template-columns:1fr}.mval li{flex-direction:row;align-items:center;gap:12px}.mcard{padding:22px 18px}.mfoto{min-height:260px}}
+
+.sec{padding-top:86px!important}.bloco{margin-top:0!important;padding:86px 0!important}footer{margin-top:96px!important}
+.sl:before{background:linear-gradient(90deg,rgba(255,255,255,.9) 0,rgba(255,255,255,.72) 26%,rgba(255,255,255,.25) 44%,transparent 58%)!important}
+.hprova{display:flex;align-items:center;gap:14px;margin-top:6px;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border-radius:14px;padding:10px 16px 10px 10px;width:max-content;max-width:100%;box-shadow:0 10px 30px rgba(29,26,31,.08)}
+.sl:not(.on) .hprova{display:none}
+.hmini{display:flex}.hmini img{position:static!important;inset:auto!important;transform:none!important;width:40px;height:40px;border-radius:10px;object-fit:cover;border:2px solid #fff;margin-left:-10px;box-shadow:0 4px 10px rgba(0,0,0,.12)}.hmini img:first-child{margin-left:0}
+.hprova span{font-size:13px;color:var(--vinho2);font-weight:600;line-height:1.3}.hprova b{display:block;color:var(--forte);font:800 15px "Inter Tight";letter-spacing:.02em}
+.faixa{background:var(--forte);color:#fff;overflow:hidden;padding:16px 0;margin-top:86px;white-space:nowrap}
+.fxi{display:inline-flex;animation:fx 38s linear infinite}.fxi span{font:700 18px "Inter Tight";letter-spacing:-.01em;padding-right:0}
+@keyframes fx{to{transform:translateX(-50%)}}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:14px;margin-top:10px}
+.gal a{border-radius:var(--r);overflow:hidden;display:block}.gal img{width:100%;height:100%;object-fit:cover;transition:transform .6s}.gal a:hover img{transform:scale(1.06)}
+.gal .g0{grid-row:span 2}.gal .g4{grid-column:span 2}.gal .g5{grid-row:span 2}
+@media (max-width:640px){.hprova{padding:8px 12px 8px 8px}.hmini img{width:32px;height:32px}.hprova span{font-size:11.5px}
+.gal{grid-template-columns:1fr 1fr;grid-auto-rows:150px;gap:10px}.gal .g4{grid-column:span 2}.faixa{margin-top:64px;padding:12px 0}.fxi span{font-size:15px}.sec{padding-top:64px!important}.bloco{padding:64px 0!important}}
+
+/* logo grande, sem caixa, passando da borda */
+.logo{align-self:flex-start!important;margin-top:6px!important;background:none!important;padding:0!important;box-shadow:none!important;border-radius:0!important;position:relative;z-index:5;margin-bottom:-34px}
+.logo:before{display:none}
+.logo img{height:116px!important;filter:drop-shadow(0 8px 16px rgba(255,31,122,.22))!important}
+.rolou .logo{margin-top:4px!important}.rolou .logo img{height:88px!important}
+@media (max-width:980px){.logo img{height:92px!important}.rolou .logo img{height:72px!important}}
+@media (max-width:640px){.logo{margin-bottom:-24px}.logo img{height:74px!important}.rolou .logo img{height:62px!important}}
+
+/* monte seu pacote */
+.mp{display:grid;grid-template-columns:.95fr 1.15fr;gap:40px;background:var(--bebe);border-radius:var(--r);padding:36px;margin-top:20px}
+.mpv{position:relative;background:#fff;border-radius:var(--r);aspect-ratio:1;display:grid;place-items:center;align-self:start;position:sticky;top:120px}
+.mpv svg{width:88%;height:88%}
+.mptag{position:absolute;left:16px;bottom:16px;background:var(--forte);color:#fff;border-radius:10px;padding:8px 14px;font:700 14px "Inter Tight";max-width:calc(100% - 32px)}
+.mpc{min-width:0}
+.mpt{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mpt button{border:2px solid #ecdde3;background:#fff;border-radius:12px;padding:12px 8px;cursor:pointer;text-align:center;color:var(--vinho);transition:.2s;font-family:Inter}
+.mpt b{display:block;font:800 28px/1 "Inter Tight";letter-spacing:-.03em}
+.mpt span{display:block;font-size:12px;color:var(--vinho2)}
+.mpt small{display:inline-block;margin:8px 0 4px;background:var(--bebe);border-radius:99px;padding:2px 10px;font-weight:700;font-size:12px}
+.mpt em{display:block;font:700 14px "Inter Tight";font-style:normal;color:var(--forte)}
+.mpt button.on{border-color:var(--forte);box-shadow:0 10px 24px rgba(255,31,122,.15)}
+.mst small{font:600 13px Inter;color:var(--vinho2);margin-left:6px}
+.mps{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.slot{width:64px;height:76px;border-radius:12px;border:2px dashed #e5cfd8;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;font:700 11px Inter;color:var(--vinho2);position:relative}
+.slot i{font-style:normal;position:absolute;top:4px;left:7px;font-size:11px;color:#c9b3bc}
+.slot.cheio{border-style:solid;border-color:#f0e3e8}
+.slot.cheio:hover:after{content:"✕";position:absolute;top:2px;right:6px;color:var(--forte);font-size:12px}
+.mpcores{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.cor{border:0;background:#fff;border-radius:12px;padding:8px 4px 6px;cursor:pointer;font:600 11px/1.15 Inter;color:var(--vinho);display:flex;flex-direction:column;align-items:center;gap:4px;transition:.15s;box-shadow:inset 0 0 0 1.5px #f0e3e8}
+.cor:hover{transform:translateY(-3px)}
+.cor.usada{opacity:.35;pointer-events:none}
+#mpadd:disabled{opacity:.5;cursor:not-allowed}
+@media (max-width:980px){.mp{grid-template-columns:1fr}.mpv{position:relative;top:0;max-width:420px;width:100%;margin:0 auto}}
+@media (max-width:640px){.mp{padding:16px;gap:20px}.mpt{grid-template-columns:repeat(2,1fr)}.mpcores{grid-template-columns:repeat(5,1fr)}.slot{width:54px;height:66px}}
+
+.tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:6px 0 22px}
+.tabs button{border:0;background:var(--bebe);color:var(--vinho);border-radius:99px;padding:11px 20px;font:700 15px "Inter Tight";cursor:pointer;transition:.2s}
+.tabs button.on{background:var(--vinho);color:#fff}
+.temas{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tema{background:#fff;border:1.5px solid #f1e4e9;border-radius:var(--r);padding:16px;cursor:pointer;text-align:left;font-family:Inter;color:var(--vinho);transition:.2s;display:flex;flex-direction:column;gap:10px}
+.tema:hover{transform:translateY(-4px);border-color:var(--forte);box-shadow:0 16px 34px rgba(255,31,122,.12)}
+.tema svg{width:100%;height:120px;background:var(--bebe);border-radius:12px}
+.tema b{font:800 18px/1.15 "Inter Tight";letter-spacing:-.02em}
+.tema .tc{display:flex;gap:4px}.tema .tc i{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.tema small{color:var(--vinho2);font-size:13px;line-height:1.35}
+.tema em{font:700 13.5px "Inter Tight";font-style:normal;color:var(--forte)}
+@media (max-width:980px){.temas{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.tabs{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px}.tabs button{flex:none;padding:10px 16px;font-size:14px}.temas{gap:10px}.tema{padding:10px}.tema svg{height:90px}.tema b{font-size:15px}}
+
+/* cacho fotográfico */
+.cacho{position:relative;width:100%;height:100%;background:#F7F3EA;border-radius:inherit;overflow:hidden}
+.cc-b{position:absolute;width:auto;filter:drop-shadow(0 6px 10px rgba(0,0,0,.10))}
+.cc-sombra{position:absolute;left:30%;right:30%;bottom:6%;height:5%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.18),rgba(0,0,0,0))}
+.cacho.vazio .cc-b{opacity:.35;filter:grayscale(1) drop-shadow(0 6px 10px rgba(0,0,0,.08))}
+.cc-vazio{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;z-index:2}
+.cc-vazio b{display:block;background:var(--forte);color:#fff;font:800 clamp(20px,2.2vw,28px)/1.15 "Inter Tight";letter-spacing:-.02em;padding:18px 26px;border-radius:16px;box-shadow:0 18px 40px rgba(255,31,122,.3);animation:chama 1.6s ease-in-out infinite}
+.cc-vazio b i{font-style:normal;display:inline-block;margin-right:8px;animation:aponta 1.2s ease-in-out infinite}
+.cc-vazio small{background:#fff;color:var(--vinho);font-weight:700;font-size:13px;padding:6px 12px;border-radius:99px}
+@keyframes chama{50%{transform:scale(1.04)}}
+@keyframes aponta{50%{transform:translateX(6px)}}
+.cc-vazio .vm{display:none}@media (max-width:980px){.cc-vazio .vd{display:none}.cc-vazio .vm{display:inline-block}}
+.bimg{display:block;height:34px;width:auto;margin:0 auto}
+.slot .bimg{height:32px}
+.mpv .cacho{position:absolute;inset:0}
+.tema .tcacho{height:140px;border-radius:12px}
+@media (max-width:640px){.tema .tcacho{height:110px}}
+
+/* banner no celular: foto em cima, texto embaixo em fundo limpo */
+@media (max-width:640px){
+  .janela{height:calc(min(48vh,420px) + 330px)!important;min-height:0!important;background:#fff}
+  .sl img{inset:0 0 auto 0!important;height:min(48vh,420px)!important;object-position:78% 22%!important;transform:none!important}
+  .sl:before,.sl.esc:before{display:none!important}
+  .sl .tx{position:absolute!important;left:0;right:0;bottom:0;top:min(48vh,420px);height:auto!important;justify-content:flex-start!important;padding:22px 18px 48px!important;background:#fff;max-width:none!important}
+  .sl h1,.sl.esc h1{color:var(--vinho)!important;font-size:34px!important;line-height:1.02;margin:0 0 8px!important}
+  .sl p,.sl.esc p{color:var(--vinho2)!important;font-size:15px!important;margin:0 0 14px!important}
+  .sl .eyebrow{margin-bottom:8px!important}
+  .sl.esc .cepr{color:var(--vinho)!important}
+  .hprova{display:none!important}
+  .dots{top:calc(min(48vh,420px) - 26px)!important;bottom:auto!important;left:18px!important}
+  .dot{background:rgba(255,255,255,.6)!important}.dot.on{background:#fff!important}
+  .cep{max-width:none!important;box-shadow:0 10px 24px rgba(255,31,122,.12)!important}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<div class="troca"><a href="home_A.html">A · Pop de bolinha</a><a href="home_B.html">B · Ponto final</a><a href="home_C.html">C · Selo g.</a><a href="home_D.html" class="on">D · Chiclete</a></div>
+<div class="barra">🚚 Chega hoje em São Paulo e Grande SP</div>
+
+<header><div class="w hd">
+  <a class="logo" href="#"><img src="img/D_logo_crop.png" alt="Glowbos"></a>
+  <nav><a href="#festas">Festas</a><a href="#premium">Premium</a><a href="#numeros">Números</a><a href="#monte">Monte seu arco</a><a href="#temas">Temas</a><a href="#pacotes">Pacotes</a></nav>
+  <div class="ic">
+    <button class="tg" id="tg" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <a href="#" aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
+    <a href="#" aria-label="Carrinho" id="cartBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><em class="qt" id="qt">0</em></a>
+  </div>
+</div></header>
+<div class="mvel" id="mvel"></div>
+<aside class="mmenu" id="mmenu" aria-hidden="true">
+  <div class="mmh"><img src="img/D_logo_crop.png" alt="Glowbos"><button id="mfecha" aria-label="Fechar menu">✕</button></div>
+  <nav class="mml"><a href="#festas">Festas <small>aniversário, halloween, chá revelação</small></a><a href="#premium">Linha premium <small>painel, gigante, cromado</small></a><a href="#temas">Temas <small>torcidas, halloween, natal, heróis</small></a><a href="#numeros">Números <small>de 0 a 9, no seu estilo</small></a><a href="#monte">Monte seu arco <small>a partir de R$ 35,99</small></a><a href="#pacotes">Pacotes <small>75 balões, R$ 25,99</small></a></nav>
+  <div class="mmd"><b>🚚 Entrega no mesmo dia</b>em São Paulo e Grande SP</div>
+  <a class="btn pri" href="#" style="width:100%">Falar no WhatsApp</a>
+</aside>
+
+<main>
+<section class="hero">
+  <div class="janela" id="janela">
+    <div class="sl on" style="--g:#141216">
+      <img src="img/hero_entrega_2.webp" alt="Mulher recebendo balões na porta de casa">
+      <div class="tx">
+        <span class="eyebrow">Entrega no mesmo dia</span>
+        <h1 class="inf">Pediu hoje,<br>a festa chega hoje!</h1>
+        <p>Em São Paulo e Grande SP, seus balões batem na porta no mesmo dia.</p>
+        <form class="cep" onsubmit="vePrazo(this);return false"><span>📍</span><input class="cepi" inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP"><button>Ver prazo</button></form>
+        <div class="cepr" id="cepr"></div>
+        <div class="hprova"><div class="hmini"><img src="img/premium_1_arco_painel.webp" alt=""><img src="img/numero_5_rose.webp" alt=""><img src="img/premium_3_gigante.webp" alt=""><img src="img/arco_09_candy_algodao.webp" alt=""></div><span><b>★★★★★ 4,9</b>67 mil avaliações de quem já fez festa</span></div>
+      </div>
+    </div>
+    <div class="sl" style="--g:#141216">
+      <img src="img/hero_crianca_2.webp" alt="Crianças felizes em festa com número 5 dourado">
+      <div class="tx">
+        <span class="eyebrow">Festa de criança</span>
+        <h1 class="inf">O número dela,<br>do tamanho do sonho.</h1>
+        <p>Arco, número gigante e as cores que ela escolheu. Em SP, chega no mesmo dia.</p>
+        <a class="btn pri" href="#numeros">Escolher o número</a>
+      </div>
+    </div>
+    <div class="sl esc" style="--g:#4a2340">
+      <img src="img/hero_halloween_2.webp" alt="Crianças fantasiadas em festa de Halloween">
+      <div class="tx">
+        <span class="eyebrow">Halloween</span>
+        <h1 class="inf">Doces, sustos<br>e balões.</h1>
+        <p>Arco de Halloween em preto, laranja e roxo. Entregue hoje em SP e Grande SP.</p>
+        <a class="btn pri" href="#festas">Ver Halloween</a>
+      </div>
+    </div>
+    <div class="dots" id="dots"><button class="dot on" aria-label="Slide 1"></button><button class="dot" aria-label="Slide 2"></button><button class="dot" aria-label="Slide 3"></button></div>
+  </div>
+  <div class="w"><div class="selos">
+    <div class="sl0"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></i><span><b>Entrega no mesmo dia</b>em São Paulo e Grande SP</span></div>
+    <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></i><span><b>Nota 4,9</b>na Shopee</span></div>
+    <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4Z"/><path d="M8 9.5h8M8 12.5h5"/></svg></i><span><b>67 mil avaliações</b>de quem já fez festa</span></div>
+    <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></svg></i><span><b>121 mil+ vendidos</b>pra todo o Brasil</span></div>
+  </div></div>
+</section>
+
+<section class="sec" id="festas"><div class="w ctr">
+  <span class="eyebrow">Escolha o sonho</span>
+  <h2 class="tt inf">Qual é a festa?</h2>
+  <p class="sub">Comece pelo momento. A gente leva o resto.</p>
+  <div class="festas">
+    <a class="fb" href="#numeros"><div class="bl"><img src="img/hero_crianca_1.webp" alt="Aniversário infantil"></div><b>Aniversário infantil</b><small>Número gigante e arco</small></a>
+    <a class="fb" href="#premium"><div class="bl"><img src="img/hero_halloween_1.webp" alt="Halloween"></div><b>Halloween</b><small>Preto, laranja e roxo</small></a>
+    <a class="fb" href="#premium"><div class="bl"><img src="img/cena_02_cha_revelacao.webp" alt="Chá revelação"></div><b>Chá revelação</b><small>Rosa ou azul no céu</small></a>
+    <a class="fb" href="#premium"><div class="bl"><img src="img/premium_6_preto_ouro.webp" alt="Festa adulta preto e ouro"></div><b>Adulto preto e ouro</b><small>Elegante do jeito certo</small></a>
+  </div>
+</div></section>
+
+<div class="faixa"><div class="fxi"><span>Chega hoje em SP e Grande SP ★ Arco pronto na caixa ★ Número gigante ★ Balão com nome ★ Halloween ★ Chá revelação ★ Linha premium ★ 13 paletas que combinam ★ </span><span>Chega hoje em SP e Grande SP ★ Arco pronto na caixa ★ Número gigante ★ Balão com nome ★ Halloween ★ Chá revelação ★ Linha premium ★ 13 paletas que combinam ★ </span></div></div>
+<section class="bloco" id="premium"><div class="w">
+  <div class="ctr"><span class="eyebrow">Linha premium</span><h2 class="tt inf">Pra festa que ninguém esquece</h2><p class="sub">Montado com a cor e o nome da sua festa. Em SP e Grande SP, entregue no mesmo dia.</p></div>
+  <div class="prem">
+    <article class="pm big"><img src="img/premium_1_arco_painel.webp" alt="Arco com painel e nome"><div class="cap"><div><b>Arco com painel e nome</b><small>O arco sobe pelo painel com o nome da festa.</small></div><a href="#">Pedir orçamento</a></div></article>
+    <div class="pcol">
+      <article class="pm lar"><img src="img/premium_3_gigante.webp" alt="Balão gigante com nome" style="object-position:center 22%"><div class="cap"><div><b>Balão gigante com nome</b><small>36 polegadas com frase e borla.</small></div><a href="#">Pedir orçamento</a></div></article>
+      <div class="prem2">
+        <article class="pm"><img src="img/premium_4_cromado.webp" alt="Cromado pendurado"><div class="cap"><div><b>Cromado pendurado</b><small>Prata e rosa com laço de cetim.</small></div><a href="#">Orçamento</a></div></article>
+        <article class="pm"><img src="img/premium_5_futebol.webp" alt="Tema da festa"><div class="cap"><div><b>Tema da festa</b><small>Futebol, safári, ursinho.</small></div><a href="#">Orçamento</a></div></article>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="numeros" style="padding-top:60px"><div class="w">
+  <div class="nums">
+    <div class="nfoto"><img id="nimg" src="img/num_rose_5.webp" alt="Coluna de número 5 rosé"></div>
+    <div class="ncfg">
+      <span class="eyebrow">Linha de números</span>
+      <h2 class="tt inf">Quantos aninhos?</h2>
+      <p class="sub" style="margin-bottom:6px">Número metalizado gigante sobre uma coluna de balões, no estilo que você escolher.</p>
+      <h3>1 · O número</h3>
+      <div class="bolhas" id="bolhas"></div>
+      <h3>2 · O estilo</h3>
+      <div class="estilos">
+        <button class="es on" data-e="rose" data-n="Rosé"><img src="img/num_rose_5.webp" alt="">Rosé</button>
+        <button class="es" data-e="ouro" data-n="Ouro e preto"><img src="img/num_ouro_5.webp" alt="">Ouro e preto</button>
+        <button class="es" data-e="lilas" data-n="Candy"><img src="img/num_lilas_5.webp" alt="">Candy</button>
+        <button class="es" data-e="azul" data-n="Azul"><img src="img/num_azul_5.webp" alt="">Azul</button>
+      </div>
+      <div class="nbuy"><div><small id="nsel">Número 5 · Rosé</small><b>Sob consulta</b></div><a class="btn pri" href="#">Pedir orçamento</a></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="monte"><div class="w">
+  <div class="ctr"><span class="eyebrow">Monte seu arco</span><h2 class="tt inf">Escolha a cor, a gente manda o arco</h2></div>
+  <div class="monte">
+    <div class="mprev"><img id="mimg" src="img/arco_10_candy_morango.webp" alt="Prévia do arco"><span class="mtag" id="mtag">Morango</span></div>
+    <div class="mcfg">
+      <div class="mst"><i>1</i> A paleta</div>
+      <div class="sws" id="sws"></div>
+      <div class="mst"><i>2</i> O tamanho</div>
+      <div class="tams">
+        <label class="tam"><input type="radio" name="tam" value="60" data-p="35.99" checked><span><b>Kit 60 peças</b><small>balões de 12 e 9 polegadas · ★ 5,0</small></span><em>R$ 35,99</em></label>
+        <label class="tam"><input type="radio" name="tam" value="100" data-p="52.99"><span><b>Kit 100 peças desconstruído</b><small>16, 12, 9 e 5 polegadas + dupla face</small></span><em>R$ 52,99</em></label>
+      </div>
+      <div class="mbuy"><div><small>Seu arco</small><b id="mtot">R$ 35,99</b></div><button class="btn pri" id="addKit">Colocar no carrinho</button></div>
+      <p class="mnote">🚚 Em São Paulo e Grande SP chega no mesmo dia.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="w">
+  <div class="prova">
+    <div>
+      <span class="eyebrow">Quem já fez festa com a gente</span>
+      <h2 class="tt inf">Festa de verdade, em todo canto</h2>
+      <div class="pnums">
+        <div class="pn"><b>4,9★</b><span>nota média na Shopee</span></div>
+        <div class="pn"><b>67 mil</b><span>avaliações de clientes</span></div>
+        <div class="pn"><b>121 mil+</b><span>pacotes vendidos</span></div>
+        <div class="pn"><b>4.478</b><span>pedidos nos últimos 30 dias</span></div>
+      </div>
+      <div class="mapa"><h4>Onde já tem festa nossa</h4><div id="ufs"></div></div>
+    </div>
+    <div class="marca">
+      <div class="mfoto"><img src="img/D_aplicado.webp" alt="Caixa e sacola Glowbos"><span class="tag">Abre e a festa sai de dentro</span></div>
+      <div class="mcard">
+        <div class="mtopo"><img class="mico" src="img/D_icone.webp" alt=""><div><b>Glowbos</b><span>Festa pronta, na caixa.</span></div></div>
+        <p>A gente escolhe as cores que combinam, separa tudo e entrega. Você só abre, monta e vive a festa.</p>
+        <ul class="mval">
+          <li><i>🚚</i><span><b>Chega hoje</b>SP e Grande SP</span></li>
+          <li><i>🎈</i><span><b>Cor que combina</b>13 paletas prontas</span></li>
+          <li><i>✨</i><span><b>Do pacote ao premium</b>de R$ 19,87 ao sob medida</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="pacotes"><div class="w">
+  <div class="ctr" id="temas"><span class="eyebrow">Temas prontos</span><h2 class="tt inf">A cor da sua festa já vem combinada</h2><p class="sub">Escolha o tema e a gente monta o pacote com as cores certas. Dá pra trocar depois.</p></div>
+  <div class="tabs" id="tabs"><button class="on" data-g="torcida">⚽ Torcidas</button><button data-g="datas">🎃 Datas</button><button data-g="herois">🦸 Heróis</button><button data-g="festas">🎉 Festas</button></div>
+  <div class="temas" id="temasg"></div>
+  <div class="ctr" style="margin-top:80px"><span class="eyebrow">Pra encher em casa</span><h2 class="tt inf">Monte seu pacote de balões</h2><p class="sub">Balões de 8 polegadas. Escolha o tamanho e a sequência das cores.</p></div>
+  <div class="mp">
+    <div class="mpv"><div class="cacho" id="mpsvg" aria-label="Prévia das cores"></div><span class="mptag" id="mptag">Escolha as cores</span></div>
+    <div class="mpc">
+      <p class="mst"><i>1</i> O tamanho</p>
+      <div class="mpt" id="mpt">
+        <button data-q="50" data-c="2" data-p="19.87"><b>50</b><span>balões</span><small>2 cores</small><em>R$ 19,87</em></button>
+        <button class="on" data-q="75" data-c="3" data-p="25.99"><b>75</b><span>balões</span><small>3 cores</small><em>R$ 25,99</em></button>
+        <button data-q="100" data-c="4" data-p="32.99"><b>100</b><span>balões</span><small>4 cores</small><em>R$ 32,99</em></button>
+        <button data-q="125" data-c="5" data-p="36.99"><b>125</b><span>balões</span><small>5 cores</small><em>R$ 36,99</em></button>
+      </div>
+      <p class="mst"><i>2</i> A sequência das cores <small id="mpcount"></small></p>
+      <div class="mps" id="mps"></div>
+      <div class="mpcores" id="mpcores"></div>
+      <div class="mbuy"><div><small id="mpsel">75 balões · 3 cores</small><b id="mptot">R$ 25,99</b></div><button class="btn pri" id="mpadd" disabled>Escolha as 3 cores</button></div>
+    </div>
+  </div>
+  <div class="ctr" style="margin-top:56px"><h3 class="tt" style="font-size:28px">Ou leve um pronto</h3></div>
+  <div class="packs" id="packs"></div>
+</div></section>
+</main>
+
+<section class="sec" id="galeria"><div class="w"><div class="ctr"><span class="eyebrow">#festaglowbos</span><h2 class="tt">Cada festa vira lembrança</h2><p class="sub">Arco, número, cromado, tema. Escolha a sua e a gente monta o sonho.</p></div>
+<div class="gal"><a href="#" class="g0"><img src="img/premium_1_arco_painel.webp" alt="" loading="lazy"></a><a href="#" class="g1"><img src="img/hero_crianca_1.webp" alt="" loading="lazy"></a><a href="#" class="g2"><img src="img/premium_4_cromado.webp" alt="" loading="lazy"></a><a href="#" class="g3"><img src="img/numero_3_ouro.webp" alt="" loading="lazy"></a><a href="#" class="g4"><img src="img/hero_halloween_1.webp" alt="" loading="lazy"></a><a href="#" class="g5"><img src="img/premium_6_preto_ouro.webp" alt="" loading="lazy"></a><a href="#" class="g6"><img src="img/numero_7_lilas.webp" alt="" loading="lazy"></a><a href="#" class="g7"><img src="img/premium_5_futebol.webp" alt="" loading="lazy"></a></div></div></section>
+<footer><div class="w">
+  <div class="ft">
+    <div><img class="ico" src="img/D_icone.webp" alt=""><p style="opacity:.8;max-width:290px;margin:0">Balões e festa com cara de sonho. Em São Paulo e Grande SP, chega no mesmo dia.</p></div>
+    <div><h5>Loja</h5><a href="/#festas">Festas</a><a href="/#premium">Linha premium</a><a href="/#numeros">Números</a><a href="/#monte">Monte seu arco</a><a href="/#temas">Temas</a><a href="/#pacotes">Pacotes</a><a href="/loja/">Todos os produtos</a></div>
+    <div><h5>Ajuda</h5><a href="/como-montar/">Como montar seu arco</a><a href="/entrega-e-frete/">Entrega e frete</a><a href="/trocas-e-devolucoes/">Trocas e devoluções</a><a href="/perguntas-frequentes/">Perguntas frequentes</a><a href="/minha-conta/">Minha conta</a></div>
+    <div><h5>Glowbos</h5><a href="/sobre/">Sobre a Glowbos</a><a href="/contato/">Contato</a><a href="/politica-de-privacidade/">Política de privacidade</a><a href="/termos-de-uso/">Termos de uso</a></div>
+  </div>
+  <p class="nota">© 2026 Glowbos · CNPJ a confirmar · Pagamento seguro</p>
+</div></footer>
+
+<div class="vel" id="vel"></div>
+<aside class="gav" id="gav" aria-label="Carrinho">
+  <div class="gh"><span>Seu carrinho</span><button id="fecha" aria-label="Fechar">✕</button></div>
+  <div class="gl" id="gl"></div>
+  <div class="gf">
+    <div class="xs" id="xs"><img src="img/fita_105.webp" alt=""><div><small>Combina com seu arco</small><b>Fita 5 m + dupla face</b><span>R$ 11,98</span></div><button id="addFita">+ Adicionar</button></div>
+    <div class="md">🚚 Em SP e Grande SP chega hoje</div>
+    <div class="tot"><span>Total</span><b id="tot">R$ 0,00</b></div>
+    <a class="btn pri" href="#">Finalizar compra</a>
+  </div>
+</aside>
+<div class="toast" id="toast"></div>
+<a class="wpp" href="#" title="WhatsApp (número a confirmar)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.2 1.3Z"/></svg><span>Ajuda pra montar sua festa</span></a>
+<a class="mbar" href="#monte">🚚 Chega hoje em SP e Grande SP</a>
+
+<script>
+(function(){const b=document.body,tg=document.getElementById('tg');
+const abre=v=>{b.classList.toggle('mabre',v);tg.setAttribute('aria-expanded',v);document.getElementById('mmenu').setAttribute('aria-hidden',!v)};
+tg.onclick=()=>abre(true);document.getElementById('mfecha').onclick=()=>abre(false);document.getElementById('mvel').onclick=()=>abre(false);
+document.querySelectorAll('.mml a,.mmenu .btn').forEach(a=>a.addEventListener('click',()=>abre(false)));
+const secs=['festas','premium','numeros','monte','temas','pacotes'].map(i=>document.getElementById(i)).filter(Boolean),links=[...document.querySelectorAll('header nav a')];
+const hero=document.querySelector('.janela');
+const rola=()=>{const y=scrollY;b.classList.toggle('rolou',y>60);b.classList.toggle('mostra-wpp',hero?y>hero.offsetHeight*.8:y>500);
+let at='';secs.forEach(s=>{if(s.getBoundingClientRect().top<160)at=s.id});links.forEach(a=>a.classList.toggle('at',a.getAttribute('href')==='#'+at))};
+addEventListener('scroll',rola,{passive:true});rola();})();
+</script>
+<script>
+(function(){
+const reduz=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const R=v=>'R$ '+v.toFixed(2).replace('.',',');
+const $=s=>document.querySelector(s);
+
+const sls=[...document.querySelectorAll('.sl')],ds=[...document.querySelectorAll('.dot')];let hi=0,ht;
+function vai(i){sls[hi].classList.remove('on');ds[hi].classList.remove('on');hi=(i+sls.length)%sls.length;sls[hi].classList.add('on');ds[hi].classList.add('on')}
+function tic(){clearInterval(ht);if(!reduz)ht=setInterval(()=>vai(hi+1),6000)}
+ds.forEach((d,i)=>d.onclick=()=>{vai(i);tic()});tic();
+$('#janela').addEventListener('mouseenter',()=>clearInterval(ht));$('#janela').addEventListener('mouseleave',tic);
+document.querySelectorAll('.cepi').forEach(i=>{i.addEventListener('input',()=>{i.value=i.value.replace(/\D/g,'').replace(/^(\d{5})(\d)/,'$1-$2')});i.addEventListener('focus',()=>clearInterval(ht))});
+window.vePrazo=function(f){const d=f.querySelector('input').value.replace(/\D/g,''),r=$('#cepr');clearInterval(ht);
+ if(d.length!==8){r.className='cepr';r.textContent='Digite os 8 números do CEP.';return}
+ const n=+d;if(n>=1000000&&n<=9999999){r.className='cepr ok';r.textContent='Chega hoje! 🎉 Seu CEP tem entrega no mesmo dia.'}else{r.className='cepr';r.textContent='📦 Enviamos pro seu CEP. O prazo aparece no carrinho.'}};
+
+const bol=$('#bolhas');let NUM='5',EST='Rosé';
+for(let k=0;k<10;k++){const b=document.createElement('button');b.className='bo'+(k===5?' on':'');b.textContent=k;b.setAttribute('aria-label','Número '+k);b.onclick=()=>{bol.querySelectorAll('.bo').forEach(x=>x.classList.remove('on'));b.classList.add('on');NUM=String(k);nfoto()};bol.appendChild(b)}
+let ESTK='rose';document.querySelectorAll('.es').forEach(e=>e.onclick=()=>{document.querySelectorAll('.es').forEach(x=>x.classList.remove('on'));e.classList.add('on');EST=e.dataset.n;ESTK=e.dataset.e;nfoto()});
+function nfoto(){const im=$('#nimg');im.style.opacity=.3;setTimeout(()=>{im.src='img/num_'+ESTK+'_'+NUM+'.webp';im.alt='Coluna de número '+NUM+' '+EST;im.style.opacity=1},140);document.querySelectorAll('.es img').forEach(i=>{i.src='img/num_'+i.parentNode.dataset.e+'_'+NUM+'.webp'});nsel()}
+addEventListener('load',()=>setTimeout(()=>[0,1,2,3,4,5,6,7,8,9].forEach(k=>['rose','ouro','lilas','azul'].forEach(e=>{const i=new Image();i.src='img/num_'+e+'_'+k+'.webp'})),3500));
+function nsel(){$('#nsel').textContent='Número '+NUM+' · '+EST}
+
+const PAL=[['01_vivo_arco-iris','Arco-íris'],['02_vivo_primarias','Primárias'],['03_vivo_joias','Joias'],['04_analoga_quente','Pêssego'],['05_analoga_fria','Menta e céu'],['06_analoga_lilas','Lilás'],['07_pastel_neutro','Nude'],['08_pastel_bebe','Chá de bebê'],['09_candy_algodao','Algodão-doce'],['10_candy_morango','Morango'],['14_vermelho_preto_amarelo','Herói'],['15_preto_e_branco','Preto e branco'],['16_verde_e_branco','Verde e branco']];
+let COR={f:'10_candy_morango',n:'Morango'};
+$('#sws').innerHTML=PAL.map(([f,n])=>`<button class="sw${f===COR.f?' on':''}" data-f="${f}" data-n="${n}"><img src="img/arco_${f}.webp" alt=""><span>${n}</span></button>`).join('');
+document.querySelectorAll('.sw').forEach(b=>b.onclick=()=>{document.querySelectorAll('.sw').forEach(x=>x.classList.remove('on'));b.classList.add('on');COR={f:b.dataset.f,n:b.dataset.n};const i=$('#mimg');i.style.opacity=.3;setTimeout(()=>{i.src='img/arco_'+COR.f+'.webp';i.style.opacity=1},150);$('#mtag').textContent=COR.n});
+const tam=()=>document.querySelector('input[name=tam]:checked');
+document.querySelectorAll('input[name=tam]').forEach(r=>r.onchange=()=>$('#mtot').textContent=R(+tam().dataset.p));
+
+const PK=[['pack_azul_verm_amar','Azul, vermelho e amarelo'],['pack_preto_verm_amar','Vermelho, preto e amarelo'],['pack_lar_marrom_verde','Laranja, marrom e verde'],['pack_candy','Candy: rosa, lilás e azul']];
+$('#packs').innerHTML=PK.map(([i,n])=>`<article class="pk"><img src="img/${i}.webp" alt="${n}"><h4>${n}</h4><small>75 balões · 8 polegadas</small><div class="pp"><b>R$ 25,99</b><button data-n="${n}" data-p="25.99" data-i="img/${i}.webp">Comprar</button></div></article>`).join('');
+
+$('#ufs').innerHTML=[['SP',32.5],['MG',16.4],['RJ',10.1],['RS',8.6],['PR',8.0],['SC',5.5],['BA',4.9],['Outros',14.0]].map(([u,v])=>`<div class="uf"><b>${u}</b><span><i style="width:${(v/32.5*100).toFixed(0)}%"></i></span><em>${v.toFixed(1).replace('.',',')}%</em></div>`).join('');
+
+let C=[];try{C=JSON.parse(localStorage.getItem('glowbos_cart_D'))||[]}catch(e){}
+const salva=()=>{try{localStorage.setItem('glowbos_cart_D',JSON.stringify(C))}catch(e){}};
+function pinta(){const q=C.reduce((a,c)=>a+c.q,0);$('#qt').textContent=q;$('#qt').style.display=q?'grid':'none';
+ $('#gl').innerHTML=C.length?C.map((c,i)=>`<div class="it"><img src="${c.i}" alt=""><div><b>${c.n}</b><span>${R(c.p)}</span><div class="qq"><button data-i="${i}" data-d="-1" aria-label="Menos">−</button><em>${c.q}</em><button data-i="${i}" data-d="1" aria-label="Mais">+</button></div></div></div>`).join(''):'<p class="vz">Seu carrinho está vazio.<br>Escolha as cores da sua festa.</p>';
+ $('#tot').textContent=R(C.reduce((a,c)=>a+c.p*c.q,0));
+ $('#xs').style.display=(!C.length||C.find(c=>c.n==='Fita 5 m + dupla face'))?'none':'grid'}
+function poe(n,p,i){const e=C.find(c=>c.n===n);e?e.q++:C.push({n,p,i,q:1});salva();pinta()}
+window.gbPoe=(n,p,i)=>{poe(n,p,i);toast('✓ '+n+' no carrinho');setTimeout(abre,450)};
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
+function confete(){}
+const abre=()=>document.body.classList.add('gaberta'),fecha=()=>document.body.classList.remove('gaberta');
+$('#cartBtn').onclick=e=>{e.preventDefault();abre()};$('#fecha').onclick=fecha;$('#vel').onclick=fecha;
+addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
+$('#gl').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;const i=+b.dataset.i;C[i].q+=+b.dataset.d;if(C[i].q<1)C.splice(i,1);salva();pinta()});
+$('#packs').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;poe(b.dataset.n,+b.dataset.p,b.dataset.i);const r=b.getBoundingClientRect();confete(r.left+r.width/2,r.top);toast('✓ '+b.dataset.n+' no carrinho');b.textContent='✓ Adicionado';setTimeout(()=>b.textContent='Comprar',1400)});
+$('#addKit').onclick=e=>{const r=tam();const n=(r.value==='60'?'Kit arco 60 peças':'Kit arco 100 peças desconstruído')+' · '+COR.n;poe(n,+r.dataset.p,'img/arco_'+COR.f+'.webp');const b=e.currentTarget.getBoundingClientRect();confete(b.left+b.width/2,b.top);toast('✓ '+n+' no carrinho');setTimeout(abre,450)};
+$('#addFita').onclick=()=>{poe('Fita 5 m + dupla face',11.98,'img/fita_105.webp');toast('✓ Fita adicionada')};
+pinta();
+})();
+</script>
+<script>
+window.GB_ARQ=['branco','preto','vermelho','amarelo','laranja','pink','rosa','lilas','roxo','azul_cobalto','azul_royal','azul_celeste','azul_baby','tiffany','verde_agua','verde_bandeira','verde_citrus','marrom','bege','cinza','dourado'];
+window.gbCacho=function(cs,P){const A=window.GB_ARQ;P=P||[[50,22,30,-3],[34,30,29,9],[66,29,29,-8],[42,40,31,4],[60,42,30,-5],[25,48,28,11],[75,48,28,-11],[50,54,31,1],[36,62,29,7],[64,63,29,-6],[50,72,30,2],[22,66,26,13],[78,66,26,-13]];
+ const ord=P.map((p,i)=>[p,i]).sort((a,b)=>a[0][1]-b[0][1]);
+ return '<span class="cc-sombra"></span>'+ord.map(([p,i])=>{const k=cs[i%cs.length];return `<img class="cc-b" src="img/b_${A[k]}.webp" alt="" style="left:${p[0]}%;top:${p[1]}%;height:${p[2]}%;transform:translate(-50%,-50%) rotate(${p[3]}deg)">`}).join('')};
+
+// foto da montagem: desenha o cacho num canvas e devolve um JPEG (vai pro carrinho e pro pedido)
+window.gbFoto=function(cs){return new Promise(res=>{try{const A=window.GB_ARQ,S=480,c=document.createElement('canvas');c.width=c.height=S;const x=c.getContext('2d');
+ x.fillStyle='#F7F3EA';x.fillRect(0,0,S,S);const g=x.createRadialGradient(S/2,S*.93,4,S/2,S*.93,S*.22);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,S*.85,S,S*.15);
+ const P=[[50,22,30,-3],[34,30,29,9],[66,29,29,-8],[42,40,31,4],[60,42,30,-5],[25,48,28,11],[75,48,28,-11],[50,54,31,1],[36,62,29,7],[64,63,29,-6],[50,72,30,2],[22,66,26,13],[78,66,26,-13]];
+ const ord=P.map((p,i)=>[p,i]).sort((a,b)=>a[0][1]-b[0][1]);let falta=ord.length;const imgs=[];
+ ord.forEach(([p,i],j)=>{const im=new Image();im.onload=im.onerror=()=>{if(--falta===0){try{ord.forEach(([p],j)=>{const m=imgs[j];if(!m.naturalWidth)return;const h=S*p[2]/100,w=m.naturalWidth*h/m.naturalHeight;x.save();x.translate(S*p[0]/100,S*p[1]/100);x.rotate(p[3]*Math.PI/180);x.shadowColor='rgba(0,0,0,.12)';x.shadowBlur=12;x.shadowOffsetY=6;x.drawImage(m,-w/2,-h/2,w,h);x.restore()});res(c.toDataURL('image/jpeg',.82))}catch(e){res(null)}}};imgs[j]=im;im.src=document.querySelector('.cc-b')?new URL('img/b_'+A[cs[i%cs.length]]+'.webp',document.querySelector('.cc-b').src).href:'img/b_'+A[cs[i%cs.length]]+'.webp'});
+}catch(e){res(null)}})};
+// monte seu pacote: tamanho define quantas cores; a sequência pinta a prévia
+(function(){
+const $=s=>document.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',',');
+const CORES=[['Branco','#F6F5F2'],['Preto','#1c1b1d'],['Vermelho','#D7262E'],['Amarelo','#FFCF2A'],['Laranja','#FF7A1A'],['Pink','#FF2E93'],['Rosa','#F6A9C6'],['Lilás','#C3A6E8'],['Roxo','#6A2FB5'],['Azul Cobalto','#1F4FCF'],['Azul Royal','#1C3F94'],['Azul Celeste','#4FB3F0'],['Azul Baby','#A9D8F5'],['Tiffany','#4CC9C0'],['Verde Água','#7FDCC6'],['Verde Bandeira','#12813B'],['Verde Citrus','#9BCB2E'],['Marrom','#6B3E26'],['Bege','#E6CFAE'],['Cinza','#A7A9AC'],['Dourado','#C9A24A']];
+let T={q:75,c:3,p:25.99},SEQ=[],TEMA='';window.GB_CORES=CORES;
+const svg=$('#mpsvg');
+// posições do cacho (x,y,raio)
+const POS=[[200,150,58],[135,190,54],[265,190,54],[165,110,48],[240,105,50],[200,235,52],[110,130,44],[290,135,46],[150,260,46],[255,265,48],[200,70,44],[95,225,42],[305,230,42],[200,300,40],[135,60,36],[270,55,38]];
+function pinta(){
+ svg.innerHTML=SEQ.length?window.gbCacho(SEQ):window.gbCacho([0,19,0,18])+'<div class="cc-vazio"><b><i class="vd">👉</i><i class="vm">👇</i>Escolha suas cores<br><span class="vd">ao lado</span><span class="vm">aqui embaixo</span></b><small>'+T.c+' cores pro pacote de '+T.q+' balões</small></div>';
+ svg.classList.toggle('vazio',!SEQ.length);
+ $('#mps').innerHTML=Array.from({length:T.c},(_,i)=>{const k=SEQ[i];return k===undefined?`<div class="slot"><i>${i+1}</i>escolha</div>`:`<div class="slot cheio" data-s="${i}" title="Tirar ${CORES[k][0]}"><i>${i+1}</i><img class="bimg" src="img/b_${window.GB_ARQ[k]}.webp" alt="">${CORES[k][0]}</div>`}).join('');
+ document.querySelectorAll('.cor').forEach(b=>b.classList.toggle('usada',SEQ.includes(+b.dataset.k)||SEQ.length>=T.c));
+ const falta=T.c-SEQ.length,nomes=SEQ.map(i=>CORES[i][0]);
+ $('#mpcount').textContent=SEQ.length+' de '+T.c;
+ $('#mptag').textContent=nomes.length?(TEMA?TEMA+': ':'')+nomes.join(' · '):'Escolha as cores';
+ $('#mpsel').textContent=T.q+' balões · '+T.c+' cores';
+ $('#mptot').textContent=T.p?R(T.p):'Sob consulta';
+ const b=$('#mpadd');b.disabled=falta>0;b.textContent=falta>0?('Escolha '+(falta===1?'mais 1 cor':'mais '+falta+' cores')):(T.p?'Colocar no carrinho':'Pedir orçamento');
+}
+$('#mpcores').innerHTML=CORES.map(([n,c],k)=>`<button class="cor" data-k="${k}"><img class="bimg" src="img/b_${window.GB_ARQ[k]}.webp" alt="">${n}</button>`).join('');
+$('#mpcores').addEventListener('click',e=>{const b=e.target.closest('.cor');if(!b||SEQ.length>=T.c)return;SEQ.push(+b.dataset.k);TEMA='';pinta()});
+$('#mps').addEventListener('click',e=>{const s=e.target.closest('.slot.cheio');if(!s)return;SEQ.splice(+s.dataset.s,1);pinta()});
+document.querySelectorAll('#mpt button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mpt button').forEach(x=>x.classList.remove('on'));b.classList.add('on');T={q:+b.dataset.q,c:+b.dataset.c,p:+b.dataset.p};SEQ=SEQ.slice(0,T.c);pinta()});
+window.gbTema=(cs,nome)=>{const b=document.querySelector('#mpt button[data-c="'+cs.length+'"]');document.querySelectorAll('#mpt button').forEach(x=>x.classList.remove('on'));b.classList.add('on');T={q:+b.dataset.q,c:+b.dataset.c,p:+b.dataset.p};SEQ=cs.slice();TEMA=nome;pinta();document.querySelector('.mp').scrollIntoView({behavior:'smooth',block:'start'})};
+$('#mpadd').onclick=()=>{if(!T.p){location.href='#';return}const n='Pacote '+T.q+' balões'+(TEMA?' · '+TEMA:'')+' · '+SEQ.map(i=>CORES[i][0]).join(', ');const b=$('#mpadd'),t=b.textContent;b.textContent='Montando a foto...';window.gbFoto(SEQ).then(d=>{b.textContent=t;window.gbPoe&&window.gbPoe(n,T.p,d||'img/pack_candy.webp')});};
+pinta();
+})();
+</script>
+<script>
+// temas: cada um é uma sequência de cores pronta que preenche o montador
+(function(){
+const $=s=>document.querySelector(s);
+const C=window.GB_CORES;if(!C)return;
+const T={
+ torcida:[['Torcida Alviverde',[15,0]],['Torcida Alvinegra',[1,0]],['Torcida Rubro-negra',[2,1]],['Torcida Tricolor',[2,0,1]],['Torcida Celeste',[10,0]],['Torcida Colorada',[2,0]],['Tricolor Gaúcho',[11,1,0]],['Seleção',[3,15,10]]],
+ datas:[['Halloween',[1,4,8,16]],['Natal',[2,15,0,20]],['Ano Novo',[0,20,19]],['Festa Junina',[2,3,10,15]],['Dia das Crianças',[2,3,9,15,4]],['Páscoa',[12,6,7,14]],['Carnaval',[5,3,13,8]],['Dia dos Namorados',[2,5,0]]],
+ herois:[['Herói clássico',[2,10,3]],['Cavaleiro da noite',[1,3,19]],['Teia vermelha',[2,1,10]],['Força verde',[15,8,1]],['Heroína',[2,3,10,20]],['Herói do raio',[2,3,0]]],
+ festas:[['Chá revelação',[12,6,0]],['Chá de bebê',[12,18,0]],['Unicórnio',[6,7,13,3]],['Safári',[17,18,15]],['Fundo do mar',[11,13,9,14]],['Princesa',[6,7,20]],['Fazendinha',[2,15,3,17]],['Neon',[5,16,3,13,8]]]
+};
+const PRECO={2:'R$ 19,87 · 50 balões',3:'R$ 25,99 · 75 balões',4:'R$ 32,99 · 100 balões',5:'R$ 36,99 · 125 balões'};
+const P=[[61,50,21],[38,58,19],[84,58,19],[48,31,17],[74,30,17],[61,76,18],[24,38,14],[98,38,14],[30,80,14],[92,80,14]];
+function mini_old(cs){return `<svg viewBox="4 6 114 94" preserveAspectRatio="xMidYMid meet"><defs><radialGradient id="g" cx="32%" cy="28%" r="60%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".3" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>${P.slice().sort((a,b)=>a[1]-b[1]).map((p,i)=>{const c=C[cs[i%cs.length]][1];return `<ellipse cx="${p[0]}" cy="${p[1]}" rx="${p[2]*.9}" ry="${p[2]}" fill="${c}"/><ellipse cx="${p[0]}" cy="${p[1]}" rx="${p[2]*.9}" ry="${p[2]}" fill="url(#g)"/>`}).join('')}</svg>`}
+function mini(cs){return '<div class="cacho tcacho">'+window.gbCacho(cs,[[50,28,50,-3],[34,38,48,9],[66,37,48,-8],[43,54,50,4],[58,55,50,-5],[50,70,48,1],[24,58,44,12],[76,58,44,-12]])+'</div>'}
+function mostra(g){$('#temasg').innerHTML=T[g].map(([n,cs],i)=>`<button class="tema" data-g="${g}" data-i="${i}">${mini(cs)}<b>${n}</b><span class="tc">${cs.map(k=>`<i style="background:${C[k][1]}"></i>`).join('')}</span><small>${cs.map(k=>C[k][0]).join(', ')}</small><em>${PRECO[cs.length]}</em></button>`).join('')}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mostra(b.dataset.g)});
+$('#temasg').addEventListener('click',e=>{const t=e.target.closest('.tema');if(!t)return;const [n,cs]=T[t.dataset.g][+t.dataset.i];window.gbTema&&window.gbTema(cs,n)});
+mostra('torcida');
+})();
+</script>
+</body>
+</html>
