@@ -46,7 +46,7 @@ header{z-index:30;position:sticky!important;top:0}
 .sl:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(255,255,255,.94) 0,rgba(255,255,255,.82) 28%,rgba(255,255,255,.4) 46%,transparent 62%)}
 .sl.esc:before{background:linear-gradient(90deg,rgba(20,18,22,.9) 0,rgba(20,18,22,.72) 28%,rgba(20,18,22,.3) 46%,transparent 62%)}
 .sl .tx{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 0 40px max(24px,calc((100vw - 1240px)/2 + 24px));max-width:calc(max(24px,calc((100vw - 1240px)/2 + 24px)) + 640px)}
-.sl h1{color:var(--vinho);letter-spacing:-.04em;font-size:clamp(42px,4.8vw,68px);line-height:1.02;margin:0 0 18px}
+.sl h1,.sl h2{color:var(--vinho);letter-spacing:-.04em;font-size:clamp(42px,4.8vw,68px);line-height:1.02;margin:0 0 18px}
 .sl p{font-size:19px;margin:0 0 26px;color:var(--vinho2);max-width:440px;font-weight:700}
 
 .cep{background:#fff;border-radius:var(--rb);padding:7px 7px 7px 20px;display:flex;gap:8px;align-items:center;width:100%;max-width:440px;box-shadow:0 18px 40px rgba(255,31,122,.14);border:1.5px solid #ffd3e3}
@@ -55,7 +55,7 @@ header{z-index:30;position:sticky!important;top:0}
 .cep button{border:0;background:var(--forte);color:#fff;font:700 16px "Inter Tight";border-radius:var(--rb);height:50px;padding:0 22px;cursor:pointer;flex:none}
 .cepr{min-height:26px;margin:12px 0 0 10px;font-weight:800;font-size:15.5px}
 .cepr{color:var(--vinho)}.cepr.ok{color:var(--forte)}
-.sl.esc h1,.sl.esc .cepr{color:#fff}.sl.esc p{color:rgba(255,255,255,.85)}
+.sl.esc h1,.sl.esc h2,.sl.esc .cepr{color:#fff}.sl.esc p{color:rgba(255,255,255,.85)}
 .sl.esc .cepr.ok{color:#ff7fb3}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:54px;padding:0 28px;border-radius:var(--rb);font:700 16px Inter;border:0;cursor:pointer;transition:transform .15s}
 .btn:active{transform:translateY(3px)}
@@ -206,7 +206,7 @@ footer{background:var(--esc);color:#fff;margin-top:120px;padding:70px 0 40px}
   .sl img{object-position:74% top}
   .sl:before{background:linear-gradient(0deg,rgba(255,255,255,.97) 0,rgba(255,255,255,.88) 32%,rgba(255,255,255,.4) 52%,transparent 66%)}.sl.esc:before{background:linear-gradient(0deg,rgba(20,18,22,.95) 0,rgba(20,18,22,.85) 30%,rgba(20,18,22,.4) 50%,transparent 66%)}
   .sl .tx{justify-content:flex-end;padding:0 18px 64px;max-width:none}
-  .sl h1{letter-spacing:-.04em;font-size:38px;margin-bottom:10px}
+  .sl h1,.sl h2{letter-spacing:-.04em;font-size:38px;margin-bottom:10px}
   .sl p{font-size:15.5px;margin-bottom:16px}
   .dots{bottom:30px;left:18px}
   .sl .tx{padding-bottom:96px}
@@ -382,7 +382,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   .sl img{inset:0 0 auto 0!important;height:min(48vh,420px)!important;object-position:50% 30%!important;transform:none!important}
   .sl:before,.sl.esc:before{display:none!important}
   .sl .tx{position:absolute!important;left:0;right:0;bottom:0;top:min(48vh,420px);height:auto!important;justify-content:flex-start!important;padding:22px 18px 48px!important;background:#fff;max-width:none!important}
-  .sl h1,.sl.esc h1{color:var(--vinho)!important;font-size:34px!important;line-height:1.02;margin:0 0 8px!important}
+  .sl h1,.sl.esc h1,.sl h2,.sl.esc h2{color:var(--vinho)!important;font-size:34px!important;line-height:1.02;margin:0 0 8px!important}
   .sl p,.sl.esc p{color:var(--vinho2)!important;font-size:15px!important;margin:0 0 14px!important}
   .sl .eyebrow{margin-bottom:8px!important}
   .sl.esc .cepr{color:var(--vinho)!important}
@@ -429,14 +429,14 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
         <p>Em São Paulo e Grande SP, seus balões batem na porta no mesmo dia.</p>
         <form class="cep" onsubmit="vePrazo(this);return false"><input class="cepi" inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP"><button>Ver prazo</button></form>
         <div class="cepr" id="cepr"></div>
-        <div class="hprova"><div class="hmini"><img src="img/premium_1_arco_painel.webp" alt=""><img src="img/numero_5_rose.webp" alt=""><img src="img/premium_3_gigante.webp" alt=""><img src="img/arco_09_candy_algodao.webp" alt=""></div><span><b>★★★★★ 4,9</b>67 mil avaliações de quem já fez festa</span></div>
+        <div class="hprova"><div class="hmini"><img src="img/premium_1_arco_painel.webp" alt="Arco de balões com painel"><img src="img/numero_5_rose.webp" alt="Balão número 5 rosé gigante"><img src="img/premium_3_gigante.webp" alt="Decoração com balões gigantes"><img src="img/arco_09_candy_algodao.webp" alt="Arco de balões em tons candy"></div><span><b>★★★★★ 4,9</b>67 mil avaliações de quem já fez festa</span></div>
       </div>
     </div>
     <div class="sl" style="--g:#141216">
       <picture><source media="(max-width:640px)" srcset="img/hero_crianca_2_m.webp"><img src="img/hero_crianca_2.webp" alt="Crianças felizes em festa com número 5 dourado"></picture>
       <div class="tx">
         <span class="eyebrow">Festa de criança</span>
-        <h1 class="inf">O número dela,<br>do tamanho do sonho.</h1>
+        <h2 class="inf">O número dela,<br>do tamanho do sonho.</h2>
         <p>Arco, número gigante e as cores que ela escolheu. Em SP, chega no mesmo dia.</p>
         <a class="btn pri" href="#numeros">Escolher o número</a>
       </div>
@@ -445,7 +445,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
       <picture><source media="(max-width:640px)" srcset="img/hero_halloween_2_m.webp"><img src="img/hero_halloween_2.webp" alt="Crianças fantasiadas em festa de Halloween"></picture>
       <div class="tx">
         <span class="eyebrow">Halloween</span>
-        <h1 class="inf">Doces, sustos<br>e balões.</h1>
+        <h2 class="inf">Doces, sustos<br>e balões.</h2>
         <p>Arco de Halloween em preto, laranja e roxo. Entregue hoje em SP e Grande SP.</p>
         <a class="btn pri" href="#festas">Ver Halloween</a>
       </div>
@@ -498,10 +498,10 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
       <div class="bolhas" id="bolhas"></div>
       <h3>2 · O estilo</h3>
       <div class="estilos">
-        <button class="es on" data-e="rose" data-n="Rosé"><img src="img/num_rose_5.webp" alt="">Rosé</button>
-        <button class="es" data-e="ouro" data-n="Ouro e preto"><img src="img/num_ouro_5.webp" alt="">Ouro e preto</button>
-        <button class="es" data-e="lilas" data-n="Candy"><img src="img/num_lilas_5.webp" alt="">Candy</button>
-        <button class="es" data-e="azul" data-n="Azul"><img src="img/num_azul_5.webp" alt="">Azul</button>
+        <button class="es on" data-e="rose" data-n="Rosé"><img src="img/num_rose_5.webp" alt="Número 5 rosé">Rosé</button>
+        <button class="es" data-e="ouro" data-n="Ouro e preto"><img src="img/num_ouro_5.webp" alt="Número 5 dourado">Ouro e preto</button>
+        <button class="es" data-e="lilas" data-n="Candy"><img src="img/num_lilas_5.webp" alt="Número 5 lilás">Candy</button>
+        <button class="es" data-e="azul" data-n="Azul"><img src="img/num_azul_5.webp" alt="Número 5 azul">Azul</button>
       </div>
       <div class="nbuy"><div><small id="nsel">Número 5 · Rosé</small><b>Sob consulta</b></div><a class="btn pri" href="#">Pedir orçamento</a></div>
     </div>
@@ -581,7 +581,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 </main>
 
 <section class="sec" id="galeria"><div class="w"><div class="ctr"><span class="eyebrow">#festaglowbos</span><h2 class="tt">Cada festa vira lembrança</h2><p class="sub">Arco, número, cromado, tema. Escolha a sua e a gente monta o sonho.</p></div>
-<div class="gal"><a href="#" class="g0"><img src="img/premium_1_arco_painel.webp" alt="" loading="lazy"></a><a href="#" class="g1"><img src="img/hero_crianca_1.webp" alt="" loading="lazy"></a><a href="#" class="g2"><img src="img/premium_4_cromado.webp" alt="" loading="lazy"></a><a href="#" class="g3"><img src="img/numero_3_ouro.webp" alt="" loading="lazy"></a><a href="#" class="g4"><img src="img/hero_halloween_1.webp" alt="" loading="lazy"></a><a href="#" class="g5"><img src="img/premium_6_preto_ouro.webp" alt="" loading="lazy"></a><a href="#" class="g6"><img src="img/numero_7_lilas.webp" alt="" loading="lazy"></a><a href="#" class="g7"><img src="img/premium_5_futebol.webp" alt="" loading="lazy"></a></div></div></section>
+<div class="gal"><a href="#" class="g0"><img src="img/premium_1_arco_painel.webp" alt="Arco de balões com painel" loading="lazy"></a><a href="#" class="g1"><img src="img/hero_crianca_1.webp" alt="Aniversário infantil com arco de balões e número gigante" loading="lazy"></a><a href="#" class="g2"><img src="img/premium_4_cromado.webp" alt="Arco de balões cromados" loading="lazy"></a><a href="#" class="g3"><img src="img/numero_3_ouro.webp" alt="Balão número 3 dourado gigante" loading="lazy"></a><a href="#" class="g4"><img src="img/hero_halloween_1.webp" alt="Festa de Halloween com arco de balões preto, laranja e roxo" loading="lazy"></a><a href="#" class="g5"><img src="img/premium_6_preto_ouro.webp" alt="Arco de balões preto e dourado" loading="lazy"></a><a href="#" class="g6"><img src="img/numero_7_lilas.webp" alt="Balão número 7 lilás gigante" loading="lazy"></a><a href="#" class="g7"><img src="img/premium_5_futebol.webp" alt="Decoração de balões com tema de futebol" loading="lazy"></a></div></div></section>
 <footer><div class="w">
   <div class="ft">
     <div><img class="ico" src="img/D_icone.webp" alt=""><p style="opacity:.8;max-width:290px;margin:0">Balões e festa com cara de sonho. Em São Paulo e Grande SP, chega no mesmo dia.</p></div>
@@ -597,7 +597,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   <div class="gh"><span>Seu carrinho</span><button id="fecha" aria-label="Fechar">✕</button></div>
   <div class="gl" id="gl"></div>
   <div class="gf">
-    <div class="xs" id="xs"><img src="img/fita_105.webp" alt=""><div><small>Combina com seu arco</small><b>Fita 5 m + dupla face</b><span>R$ 11,98</span></div><button id="addFita">+ Adicionar</button></div>
+    <div class="xs" id="xs"><img src="img/fita_105.webp" alt="Fita para arco 5 m e dupla face"><div><small>Combina com seu arco</small><b>Fita 5 m + dupla face</b><span>R$ 11,98</span></div><button id="addFita">+ Adicionar</button></div>
     <div class="md">🚚 Em SP e Grande SP chega hoje</div>
     <div class="tot"><span>Total</span><b id="tot">R$ 0,00</b></div>
     <a class="btn pri" href="#">Finalizar compra</a>

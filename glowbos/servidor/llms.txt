@@ -1,0 +1,25 @@
+# Glowbos
+
+> Loja online de balões e kits de festa. Entrega no mesmo dia em São Paulo e Grande SP e envio para todo o Brasil. Nota 4,9 na Shopee, com 67 mil avaliações e mais de 121 mil produtos vendidos.
+
+A Glowbos vende pacotes de balões em cores que combinam, kits de arco prontos para montar, números gigantes e uma linha premium para festas (aniversário infantil, Halloween, chá revelação, torcidas). No site dá para montar o arco escolhendo as cores e ver o prazo de entrega pelo CEP.
+
+## Pacotes de balões
+- [Pacote 50 balões, 2 cores à escolha](https://glowbos.com.br/produto/pacote-50-baloes-2-cores-a-escolha/): R$ 19,87
+- [Pacote 75 balões, 3 cores à escolha](https://glowbos.com.br/produto/pacote-75-baloes-3-cores-a-escolha/): R$ 25,99
+- [Pacote 100 balões, 4 cores à escolha](https://glowbos.com.br/produto/pacote-100-baloes-4-cores-a-escolha/): R$ 32,99
+- [Pacote 125 balões, 5 cores à escolha](https://glowbos.com.br/produto/pacote-125-baloes-5-cores-a-escolha/): R$ 36,99
+- [Pacote 75 balões Candy: rosa, lilás e azul](https://glowbos.com.br/produto/pacote-75-baloes-candy-rosa-lilas-e-azul/): R$ 25,99
+- [Pacote 75 balões laranja, marrom e verde](https://glowbos.com.br/produto/pacote-75-baloes-laranja-marrom-e-verde/): R$ 25,99
+- [Pacote 75 balões vermelho, preto e amarelo](https://glowbos.com.br/produto/pacote-75-baloes-vermelho-preto-e-amarelo/): R$ 25,99
+- [Pacote 75 balões azul, vermelho e amarelo](https://glowbos.com.br/produto/pacote-75-baloes-azul-vermelho-e-amarelo/): R$ 25,99
+
+## Kits de arco e acessórios
+- [Kit arco 60 peças](https://glowbos.com.br/produto/kit-arco-60-pecas/): R$ 35,99
+- [Kit arco 100 peças desconstruído](https://glowbos.com.br/produto/kit-arco-100-pecas-desconstruido/): R$ 52,99
+- [Fita para arco 5 m + dupla face](https://glowbos.com.br/produto/fita-para-arco-5-m-dupla-face/): R$ 11,98
+
+## Categorias
+- [Pacotes de balões](https://glowbos.com.br/categoria/pacotes/)
+- [Kits de arco](https://glowbos.com.br/categoria/kits-de-arco/)
+- [Acessórios](https://glowbos.com.br/categoria/acessorios/)

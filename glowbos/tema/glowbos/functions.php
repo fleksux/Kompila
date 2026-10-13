@@ -183,3 +183,45 @@ add_action( 'wp_head', function () {
 // Sem o script de emoji do WordPress: ele trocava os emojis por imagem e soltava fora do lugar na home.
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
+// Ícone da loja (o G com a estrela) na aba do navegador e no atalho do celular.
+add_action( 'wp_head', function () {
+	$i = get_template_directory_uri() . '/img/';
+	echo '<link rel="icon" href="' . esc_url( $i . 'fav_32.png' ) . '" sizes="32x32" type="image/png">' . "\n";
+	echo '<link rel="icon" href="' . esc_url( $i . 'fav_192.png' ) . '" sizes="192x192" type="image/png">' . "\n";
+	echo '<link rel="apple-touch-icon" href="' . esc_url( $i . 'fav_180.png' ) . '">' . "\n";
+}, 2 );
+
+// Dados da loja pra Google e IAs entenderem quem é a Glowbos (só na home).
+add_action( 'wp_head', function () {
+	if ( ! is_front_page() ) {
+		return;
+	}
+	$i    = get_template_directory_uri() . '/img/';
+	$casa = home_url( '/' );
+	$dados = array(
+		'@context' => 'https://schema.org',
+		'@graph'   => array(
+			array(
+				'@type'       => 'OnlineStore',
+				'@id'         => $casa . '#loja',
+				'name'        => 'Glowbos',
+				'url'         => $casa,
+				'logo'        => $i . 'D_logo_crop.png',
+				'image'       => $i . 'og_glowbos.jpg',
+				'description' => 'Loja online de balões e kits de festa: pacotes de balões, kits de arco, números gigantes e linha premium. Entrega no mesmo dia em São Paulo e Grande SP e envio para todo o Brasil.',
+				'areaServed'  => array( 'São Paulo', 'Grande São Paulo', 'Brasil' ),
+				'currenciesAccepted' => 'BRL',
+			),
+			array(
+				'@type'      => 'WebSite',
+				'@id'        => $casa . '#site',
+				'name'       => 'Glowbos',
+				'url'        => $casa,
+				'inLanguage' => 'pt-BR',
+				'publisher'  => array( '@id' => $casa . '#loja' ),
+			),
+		),
+	);
+	echo '<script type="application/ld+json">' . wp_json_encode( $dados, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
+}, 3 );
