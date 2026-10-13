@@ -179,3 +179,7 @@ add_action( 'wp_head', function () {
 	printf( '<meta property="og:image" content="%s">' . "\n", esc_url( $img ) );
 	printf( '<meta name="twitter:card" content="summary_large_image">' . "\n" );
 }, 1 );
+
+// Sem o script de emoji do WordPress: ele trocava os emojis por imagem e soltava fora do lugar na home.
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );

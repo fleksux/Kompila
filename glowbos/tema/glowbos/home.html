@@ -379,7 +379,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 /* banner no celular: foto em cima, texto embaixo em fundo limpo */
 @media (max-width:640px){
   .janela{height:calc(min(48vh,420px) + 330px)!important;min-height:0!important;background:#fff}
-  .sl img{inset:0 0 auto 0!important;height:min(48vh,420px)!important;object-position:78% 22%!important;transform:none!important}
+  .sl img{inset:0 0 auto 0!important;height:min(48vh,420px)!important;object-position:50% 30%!important;transform:none!important}
   .sl:before,.sl.esc:before{display:none!important}
   .sl .tx{position:absolute!important;left:0;right:0;bottom:0;top:min(48vh,420px);height:auto!important;justify-content:flex-start!important;padding:22px 18px 48px!important;background:#fff;max-width:none!important}
   .sl h1,.sl.esc h1{color:var(--vinho)!important;font-size:34px!important;line-height:1.02;margin:0 0 8px!important}
@@ -422,18 +422,18 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 <section class="hero">
   <div class="janela" id="janela">
     <div class="sl on" style="--g:#141216">
-      <img src="img/hero_entrega_2.webp" alt="Mulher recebendo balões na porta de casa">
+      <picture><source media="(max-width:640px)" srcset="img/hero_entrega_2_m.webp"><img src="img/hero_entrega_2.webp" alt="Mulher recebendo balões na porta de casa"></picture>
       <div class="tx">
         <span class="eyebrow">Entrega no mesmo dia</span>
         <h1 class="inf">Pediu hoje,<br>a festa chega hoje!</h1>
         <p>Em São Paulo e Grande SP, seus balões batem na porta no mesmo dia.</p>
-        <form class="cep" onsubmit="vePrazo(this);return false"><span>📍</span><input class="cepi" inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP"><button>Ver prazo</button></form>
+        <form class="cep" onsubmit="vePrazo(this);return false"><input class="cepi" inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP"><button>Ver prazo</button></form>
         <div class="cepr" id="cepr"></div>
         <div class="hprova"><div class="hmini"><img src="img/premium_1_arco_painel.webp" alt=""><img src="img/numero_5_rose.webp" alt=""><img src="img/premium_3_gigante.webp" alt=""><img src="img/arco_09_candy_algodao.webp" alt=""></div><span><b>★★★★★ 4,9</b>67 mil avaliações de quem já fez festa</span></div>
       </div>
     </div>
     <div class="sl" style="--g:#141216">
-      <img src="img/hero_crianca_2.webp" alt="Crianças felizes em festa com número 5 dourado">
+      <picture><source media="(max-width:640px)" srcset="img/hero_crianca_2_m.webp"><img src="img/hero_crianca_2.webp" alt="Crianças felizes em festa com número 5 dourado"></picture>
       <div class="tx">
         <span class="eyebrow">Festa de criança</span>
         <h1 class="inf">O número dela,<br>do tamanho do sonho.</h1>
@@ -442,7 +442,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
       </div>
     </div>
     <div class="sl esc" style="--g:#4a2340">
-      <img src="img/hero_halloween_2.webp" alt="Crianças fantasiadas em festa de Halloween">
+      <picture><source media="(max-width:640px)" srcset="img/hero_halloween_2_m.webp"><img src="img/hero_halloween_2.webp" alt="Crianças fantasiadas em festa de Halloween"></picture>
       <div class="tx">
         <span class="eyebrow">Halloween</span>
         <h1 class="inf">Doces, sustos<br>e balões.</h1>
