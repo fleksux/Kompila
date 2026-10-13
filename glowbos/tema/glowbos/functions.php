@@ -151,3 +151,31 @@ add_filter( 'woocommerce_store_api_cart_item_images', function ( $imagens, $cart
 		'alt'       => 'Sua montagem',
 	) );
 }, 10, 2 );
+
+// Prévia de link (WhatsApp, Instagram, Facebook): título, descrição e imagem.
+add_action( 'wp_head', function () {
+	$titulo = 'Glowbos · Balões e festa';
+	$desc   = 'Balões e kits de festa com entrega no mesmo dia em São Paulo e Grande SP.';
+	$img    = get_template_directory_uri() . '/img/og_glowbos.jpg';
+	$url    = home_url( '/' );
+	if ( is_singular( 'product' ) ) {
+		$titulo = get_the_title() . ' · Glowbos';
+		$resumo = wp_strip_all_tags( get_the_excerpt() );
+		if ( $resumo ) {
+			$desc = wp_trim_words( $resumo, 30 );
+		}
+		if ( has_post_thumbnail() ) {
+			$img = get_the_post_thumbnail_url( null, 'large' );
+		}
+		$url = get_permalink();
+	}
+	printf( '<meta name="description" content="%s">' . "\n", esc_attr( $desc ) );
+	printf( '<meta property="og:type" content="website">' . "\n" );
+	printf( '<meta property="og:site_name" content="Glowbos">' . "\n" );
+	printf( '<meta property="og:locale" content="pt_BR">' . "\n" );
+	printf( '<meta property="og:title" content="%s">' . "\n", esc_attr( $titulo ) );
+	printf( '<meta property="og:description" content="%s">' . "\n", esc_attr( $desc ) );
+	printf( '<meta property="og:url" content="%s">' . "\n", esc_url( $url ) );
+	printf( '<meta property="og:image" content="%s">' . "\n", esc_url( $img ) );
+	printf( '<meta name="twitter:card" content="summary_large_image">' . "\n" );
+}, 1 );

@@ -5,6 +5,9 @@ $uri  = get_template_directory_uri();
 $html = file_get_contents( __DIR__ . '/home.html' );
 $html = preg_replace( '#(["\'`(=])img/#', '$1' . $uri . '/img/', $html );
 
+// Some o título do protótipo: quem dá título e prévia de link é o wp_head.
+$html = preg_replace( '#<title>.*?</title>\s*#s', '', $html, 1 );
+
 // Some a faixa de troca de versões do protótipo.
 $html = preg_replace( '#<div class="troca">.*?</div>\s*#s', '', $html, 1 );
 
