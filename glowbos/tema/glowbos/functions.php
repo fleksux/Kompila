@@ -70,6 +70,14 @@ add_action( 'wc_ajax_glowbos_sync', function () {
 		}
 		WC()->cart->add_to_cart( (int) $ids[ $k ], $q, 0, array(), $extra );
 	}
+	// CEP digitado no Ver prazo já entra no checkout.
+	$cep = preg_replace( '/\\D/', '', wp_unslash( $_POST['cep'] ?? '' ) );
+	if ( 8 === strlen( $cep ) && WC()->customer ) {
+		$cep = substr( $cep, 0, 5 ) . '-' . substr( $cep, 5 );
+		WC()->customer->set_shipping_postcode( $cep );
+		WC()->customer->set_billing_postcode( $cep );
+		WC()->customer->save();
+	}
 	WC()->cart->calculate_totals();
 	WC()->cart->set_session();
 	WC()->cart->maybe_set_cart_cookies();
@@ -225,3 +233,35 @@ add_action( 'wp_head', function () {
 	);
 	echo '<script type="application/ld+json">' . wp_json_encode( $dados, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
 }, 3 );
+
+// Orçamentos de balão personalizado (gaveta Ver prazo da home): ficam no painel em "Orçamentos".
+add_action( 'init', function () {
+	register_post_type( 'glowbos_orcamento', array(
+		'labels'       => array( 'name' => 'Orçamentos', 'singular_name' => 'Orçamento' ),
+		'public'       => false,
+		'show_ui'      => true,
+		'menu_icon'    => 'dashicons-format-chat',
+		'supports'     => array( 'title', 'editor' ),
+		'capabilities' => array( 'create_posts' => 'do_not_allow' ),
+		'map_meta_cap' => true,
+	) );
+} );
+
+add_action( 'wc_ajax_glowbos_orcamento', function () {
+	$campo = function ( $k ) {
+		return sanitize_text_field( wp_unslash( $_POST[ $k ] ?? '' ) );
+	};
+	$wpp = preg_replace( '/\\D/', '', $campo( 'wpp' ) );
+	if ( strlen( $wpp ) < 10 ) {
+		wp_send_json_error();
+	}
+	$tipo  = $campo( 'tipo' ) ?: 'Balão personalizado';
+	$texto = sprintf( "Tipo: %s\nNome ou frase: %s\nData da festa: %s\nWhatsApp: %s\nCEP: %s", $tipo, $campo( 'nome' ), $campo( 'data' ), $wpp, $campo( 'cep' ) );
+	$id    = wp_insert_post( array(
+		'post_type'    => 'glowbos_orcamento',
+		'post_status'  => 'private',
+		'post_title'   => $tipo . ' · ' . $wpp,
+		'post_content' => $texto,
+	) );
+	$id ? wp_send_json_success() : wp_send_json_error();
+} );

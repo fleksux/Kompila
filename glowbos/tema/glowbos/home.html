@@ -62,7 +62,7 @@ header{z-index:30;position:sticky!important;top:0}
 .acoes{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .btn.lin{background:var(--vinho);color:#fff;border:0;box-shadow:0 10px 24px rgba(29,26,31,.22)}.btn.lin:hover{background:#000}
 .sl.esc .btn.lin{background:#fff;color:var(--vinho)}
-.acoes{flex-wrap:nowrap}.ac1{width:100%;max-width:640px}.ac1 .cep{flex:1 1 0;min-width:0;max-width:none}.ac1 .btn{height:64px;flex:none}.cepr:empty{display:none}
+.acoes{flex-wrap:nowrap}.sl .acoes .btn{height:58px;padding:0 26px}.ac1{width:100%;max-width:560px}.ac1 .cep{flex:1 1 0;min-width:0;max-width:none;height:58px;padding:5px 5px 5px 18px;border:1.5px solid #e6e1e4;box-shadow:none}.ac1 .cep button{height:46px;background:var(--vinho);font-size:15px;padding:0 16px}.ac1 .cep:focus-within{border-color:var(--forte)}.cepr:empty{display:none}
 .btn.pri{background:var(--forte);color:#fff;box-shadow:0 10px 24px rgba(255,31,122,.25)}
 .dots{position:absolute;z-index:3;left:max(24px,calc((100vw - 1240px)/2 + 24px));bottom:34px;display:flex;gap:8px;align-items:center}
 .dot{width:34px;height:4px;border:0;cursor:pointer;padding:0;border-radius:2px;background:rgba(29,26,31,.22);transition:.3s}
@@ -392,12 +392,41 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   .sl.esc .cepr{color:var(--vinho)!important}
   .sl.esc .btn.lin{background:var(--vinho)!important;color:#fff!important}
   .acoes .btn{height:48px;padding:0 20px;font-size:15px}
-  .acoes{gap:8px}.acoes .btn{padding:0 16px;font-size:14.5px}.ac1 .btn{height:56px;padding:0 14px}.ac1 .cep{padding:5px 5px 5px 12px}.ac1 .cep input{font-size:15px;width:100%}.ac1 .cep button{height:46px;padding:0 12px;font-size:14px}
+  .acoes{gap:8px}.acoes .btn{padding:0 16px;font-size:14.5px}.sl .acoes .btn{height:52px;padding:0 16px}.ac1 .cep{height:52px}.ac1 .cep{padding:5px 5px 5px 12px}.ac1 .cep input{font-size:15px;width:100%}.ac1 .cep button{height:40px;padding:0 12px;font-size:14px}
   .hprova{display:none!important}
   .dots{top:calc(min(43vh,380px) - 26px)!important;bottom:auto!important;left:18px!important}
   .dot{background:rgba(255,255,255,.6)!important}.dot.on{background:#fff!important}
   .cep{max-width:none!important;box-shadow:0 10px 24px rgba(255,31,122,.12)!important}
 }
+
+/* gaveta Ver prazo: CEP, o que procura e compra direta */
+.pzv{position:fixed;inset:0;background:rgba(29,26,31,.45);opacity:0;pointer-events:none;transition:.3s;z-index:64}
+.pz{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:#fff;z-index:65;transform:translateX(105%);transition:.38s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.pz-on .pzv{opacity:1;pointer-events:auto}.pz-on .pz{transform:none}
+.pzh{display:flex;justify-content:space-between;align-items:center;padding:22px 24px 14px;font:800 24px "Inter Tight";letter-spacing:-.02em}
+.pzh button{width:40px;height:40px;border:0;border-radius:10px;background:var(--bebe);font-size:18px;cursor:pointer}
+.pzb{flex:1;overflow:auto;padding:0 24px 28px}
+.pzb .cep{max-width:none;box-shadow:none;border:1.5px solid #e6e1e4}.pzb .cep:focus-within{border-color:var(--forte)}
+.pzr{margin:12px 0 0;font-weight:800;font-size:15.5px;min-height:22px}.pzr.ok{color:var(--forte)}
+.pzq{margin:22px 0 12px;font:800 18px "Inter Tight"}
+.pzc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pzc button{border:1.5px solid #ece7ea;background:#fff;border-radius:12px;padding:8px;cursor:pointer;text-align:left;font:700 13.5px/1.25 Inter;color:var(--vinho);transition:.2s}
+.pzc button img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block}
+.pzc button.on{border-color:var(--forte);box-shadow:0 0 0 3px #ffd3e3}
+.pzf{margin-top:18px}.pzf[hidden]{display:none}
+.pzl{font:700 13px Inter;color:var(--vinho2);margin:16px 0 8px}
+.pzp{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pzp button{border:1.5px solid #ece7ea;background:#fff;border-radius:10px;padding:5px;cursor:pointer;font:600 11.5px/1.2 Inter;color:var(--vinho)}
+.pzp button img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;display:block;margin-bottom:4px}
+.pzp button.on{border-color:var(--forte);box-shadow:0 0 0 2px #ffd3e3}
+.pzt{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.pzt.q4{grid-template-columns:repeat(4,1fr)}
+.pzt button{border:1.5px solid #ece7ea;background:#fff;border-radius:10px;padding:10px 8px;cursor:pointer;font:600 12px/1.3 Inter;color:var(--vinho2);text-align:center}
+.pzt button b{display:block;font:800 17px "Inter Tight";color:var(--vinho)}.pzt button em{display:block;font-style:normal;font-weight:800;color:var(--forte);margin-top:2px}
+.pzt button.on{border-color:var(--forte);box-shadow:0 0 0 2px #ffd3e3}
+.pzi{width:100%;height:48px;border:1.5px solid #e6e1e4;border-radius:10px;padding:0 14px;font:600 15px Inter;color:var(--vinho);margin-bottom:8px;outline:0}.pzi:focus{border-color:var(--forte)}
+.pzgo{width:100%;margin-top:18px}.pzgo[disabled]{opacity:.5;cursor:default}
+.pzn{font-size:13px;color:var(--vinho2);margin:10px 0 0;font-weight:600}
+@media (max-width:640px){.pz{top:auto;left:0;width:100%;max-height:92svh;border-radius:18px 18px 0 0;transform:translateY(105%)}.pzh{padding:18px 18px 10px;font-size:21px}.pzb{padding:0 18px 24px}.pzc{gap:8px}.pzc button{font-size:12.5px;padding:6px}}
 @media (prefers-reduced-motion:reduce){
   *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -434,9 +463,8 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
         <span class="eyebrow">Entrega no mesmo dia</span>
         <h1 class="inf">Pediu hoje,<br>a festa chega hoje!</h1>
         <p>Em São Paulo e Grande SP, seus balões batem na porta no mesmo dia.</p>
-        <div class="acoes ac1"><form class="cep" onsubmit="vePrazo(this);return false"><input class="cepi" inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP"><button>Ver prazo</button></form><a class="btn lin" href="#pacotes">Comprar balões</a></div>
+        <div class="acoes"><a class="btn pri" href="#pacotes">Comprar balões</a><button type="button" class="btn lin" data-prazo>Ver prazo</button></div>
         <div class="cepr" id="cepr"></div>
-        <div class="hprova"><div class="hmini"><img src="img/premium_1_arco_painel.webp" alt="Arco de balões com painel"><img src="img/numero_5_rose.webp" alt="Balão número 5 rosé gigante"><img src="img/premium_3_gigante.webp" alt="Decoração com balões gigantes"><img src="img/arco_09_candy_algodao.webp" alt="Arco de balões em tons candy"></div><span><b>★★★★★ 4,9</b>67 mil avaliações de quem já fez festa</span></div>
       </div>
     </div>
     <div class="sl" style="--g:#141216">
@@ -744,6 +772,79 @@ function mostra(g){$('#temasg').innerHTML=T[g].map(([n,cs],i)=>`<button class="t
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mostra(b.dataset.g)});
 $('#temasg').addEventListener('click',e=>{const t=e.target.closest('.tema');if(!t)return;const [n,cs]=T[t.dataset.g][+t.dataset.i];window.gbTema&&window.gbTema(cs,n)});
 mostra('torcida');
+})();
+</script>
+
+<div class="pzv" id="pzv"></div>
+<aside class="pz" id="pz" aria-label="Ver prazo e comprar" aria-hidden="true">
+  <div class="pzh"><span>Ver prazo</span><button type="button" id="pzx" aria-label="Fechar">✕</button></div>
+  <div class="pzb">
+    <form class="cep" id="pzcep"><input inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP"><button>Ver prazo</button></form>
+    <p class="pzr" id="pzr"></p>
+    <p class="pzq">O que você está buscando?</p>
+    <div class="pzc" id="pzc">
+      <button type="button" data-o="arco"><img src="img/arco_10_candy_morango.webp" alt="">Arcos</button>
+      <button type="button" data-o="sort"><img src="img/pack_azul_verm_amar.webp" alt="">Balões sortidos</button>
+      <button type="button" data-o="pers"><img src="img/premium_1_arco_painel.webp" alt="">Balões personalizados</button>
+    </div>
+    <div class="pzf" id="pzf-arco" hidden>
+      <p class="pzl">1. A paleta</p><div class="pzp" id="pzpal"></div>
+      <p class="pzl">2. O tamanho</p>
+      <div class="pzt" id="pzkit"><button type="button" class="on" data-k="kit60" data-p="35.99"><b>60 peças</b>12 e 9 polegadas<em>R$ 35,99</em></button><button type="button" data-k="kit100" data-p="52.99"><b>100 peças</b>desconstruído + dupla face<em>R$ 52,99</em></button></div>
+      <button type="button" class="btn pri pzgo" data-go="arco">Comprar agora · R$ 35,99</button>
+    </div>
+    <div class="pzf" id="pzf-sort" hidden>
+      <p class="pzl">Quantos balões? Balões de 8 polegadas em cores sortidas.</p>
+      <div class="pzt q4" id="pzpct"><button type="button" data-k="pct50" data-p="19.87"><b>50</b><em>R$ 19,87</em></button><button type="button" class="on" data-k="pct75" data-p="25.99"><b>75</b><em>R$ 25,99</em></button><button type="button" data-k="pct100" data-p="32.99"><b>100</b><em>R$ 32,99</em></button><button type="button" data-k="pct125" data-p="36.99"><b>125</b><em>R$ 36,99</em></button></div>
+      <button type="button" class="btn pri pzgo" data-go="sort">Comprar agora · R$ 25,99</button>
+      <p class="pzn">Quer escolher as cores? <a href="#pacotes" data-fecha style="color:var(--forte);font-weight:800">Monte seu pacote</a></p>
+    </div>
+    <div class="pzf" id="pzf-pers" hidden>
+      <p class="pzl">1. O que você quer</p>
+      <div class="pzt" id="pzpers"><button type="button" class="on" data-v="Balão gigante com nome"><b>Gigante</b>com nome ou frase</button><button type="button" data-v="Arco com painel e nome"><b>Arco</b>com painel e nome</button><button type="button" data-v="Número gigante"><b>Número</b>metalizado gigante</button><button type="button" data-v="Tema da festa"><b>Tema</b>futebol, safári, ursinho</button></div>
+      <p class="pzl">2. Detalhes</p>
+      <input class="pzi" id="pznome" placeholder="Nome ou frase no balão">
+      <input class="pzi" id="pzdata" placeholder="Data da festa">
+      <input class="pzi" id="pzwpp" inputmode="tel" placeholder="Seu WhatsApp com DDD">
+      <button type="button" class="btn pri pzgo" data-go="pers">Pedir orçamento</button>
+      <p class="pzn" id="pzmsg"></p>
+    </div>
+  </div>
+</aside>
+<script>
+(function(){
+ const pz=document.getElementById('pz'),q=s=>pz.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',',');
+ const PAL=[['10_candy_morango','Morango'],['09_candy_algodao','Algodão-doce'],['01_vivo_arco-iris','Arco-íris'],['02_vivo_primarias','Primárias'],['07_pastel_neutro','Nude'],['08_pastel_bebe','Chá de bebê'],['06_analoga_lilas','Lilás'],['05_analoga_fria','Menta e céu'],['04_analoga_quente','Pêssego'],['03_vivo_joias','Joias'],['15_preto_e_branco','Preto e branco'],['14_vermelho_preto_amarelo','Herói']];
+ let cep='',pal=PAL[0][1];
+ q('#pzpal').innerHTML=PAL.map((p,i)=>`<button type="button"${i?'':' class="on"'} data-n="${p[1]}"><img src="${(window.GB&&GB.img)||'img/'}arco_${p[0]}.webp" alt="">${p[1]}</button>`).join('');
+ const abre=()=>{document.body.classList.add('pz-on');pz.setAttribute('aria-hidden','false');setTimeout(()=>q('#pzcep input').focus(),350)};
+ const fecha=()=>{document.body.classList.remove('pz-on');pz.setAttribute('aria-hidden','true')};
+ document.querySelectorAll('[data-prazo]').forEach(b=>b.addEventListener('click',abre));
+ document.getElementById('pzv').onclick=fecha;q('#pzx').onclick=fecha;
+ pz.querySelectorAll('[data-fecha]').forEach(a=>a.addEventListener('click',fecha));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
+ const inp=q('#pzcep input');
+ inp.addEventListener('input',()=>{let d=inp.value.replace(/\D/g,'').slice(0,8);inp.value=d.length>5?d.slice(0,5)+'-'+d.slice(5):d});
+ q('#pzcep').onsubmit=e=>{e.preventDefault();const d=inp.value.replace(/\D/g,''),r=q('#pzr');
+  if(d.length!==8){r.className='pzr';r.textContent='Digite os 8 números do CEP.';return}
+  cep=d;const n=+d;if(n>=1000000&&n<=9999999){r.className='pzr ok';r.textContent='Chega hoje! Seu CEP tem entrega no mesmo dia.'}else{r.className='pzr';r.textContent='Enviamos pro seu CEP. O frete aparece no pagamento.'}};
+ const marca=(box,b)=>{box.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))};
+ q('#pzc').onclick=e=>{const b=e.target.closest('button');if(!b)return;marca(q('#pzc'),b);pz.querySelectorAll('.pzf').forEach(f=>f.hidden=f.id!=='pzf-'+b.dataset.o);q('#pzf-'+b.dataset.o).scrollIntoView({behavior:'smooth',block:'nearest'})};
+ q('#pzpal').onclick=e=>{const b=e.target.closest('button');if(!b)return;marca(q('#pzpal'),b);pal=b.dataset.n};
+ const preco=(box,go)=>{box.onclick=e=>{const b=e.target.closest('button');if(!b)return;marca(box,b);q('[data-go="'+go+'"]').textContent='Comprar agora · '+R(+b.dataset.p)}};
+ preco(q('#pzkit'),'arco');preco(q('#pzpct'),'sort');
+ q('#pzpers').onclick=e=>{const b=e.target.closest('button');if(b)marca(q('#pzpers'),b)};
+ const compra=(itens,btn)=>{if(!window.GB)return;const t=btn.textContent;btn.disabled=true;btn.textContent='Indo pro pagamento...';
+  const fd=new FormData();fd.append('itens',JSON.stringify(itens));fd.append('cep',cep);
+  fetch(GB.sync,{method:'POST',body:fd,credentials:'same-origin'}).then(r=>r.json()).then(j=>{if(j&&j.success)location.href=j.data.checkout;else{btn.disabled=false;btn.textContent=t}}).catch(()=>{btn.disabled=false;btn.textContent=t})};
+ pz.querySelectorAll('[data-go]').forEach(btn=>btn.onclick=()=>{const go=btn.dataset.go;
+  if(go==='arco')return compra([{k:q('#pzkit .on').dataset.k,q:1,paleta:pal}],btn);
+  if(go==='sort')return compra([{k:q('#pzpct .on').dataset.k,q:1,paleta:'Sortidas'}],btn);
+  const w=q('#pzwpp').value.replace(/\D/g,''),m=q('#pzmsg');
+  if(w.length<10){m.textContent='Coloque seu WhatsApp com DDD pra gente te mandar o valor.';q('#pzwpp').focus();return}
+  const fd=new FormData();fd.append('tipo',q('#pzpers .on').dataset.v);fd.append('nome',q('#pznome').value);fd.append('data',q('#pzdata').value);fd.append('wpp',w);fd.append('cep',cep);
+  btn.disabled=true;btn.textContent='Enviando...';
+  fetch(GB.orc,{method:'POST',body:fd,credentials:'same-origin'}).then(r=>r.json()).then(j=>{if(j&&j.success){btn.textContent='Pedido enviado';m.textContent='Recebemos! A gente te chama no WhatsApp com o valor.'}else{btn.disabled=false;btn.textContent='Pedir orçamento';m.textContent='Não deu certo, tenta de novo.'}}).catch(()=>{btn.disabled=false;btn.textContent='Pedir orçamento'})});
 })();
 </script>
 </body>

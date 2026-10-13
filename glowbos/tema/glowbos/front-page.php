@@ -14,6 +14,7 @@ $html = preg_replace( '#<div class="troca">.*?</div>\s*#s', '', $html, 1 );
 $gb = array(
 	'sync' => esc_url_raw( add_query_arg( 'wc-ajax', 'glowbos_sync', home_url( '/' ) ) ),
 	'img'  => $uri . '/img/',
+	'orc'  => esc_url_raw( add_query_arg( 'wc-ajax', 'glowbos_orcamento', home_url( '/' ) ) ),
 );
 $ponte = '<script>window.GB=' . wp_json_encode( $gb ) . ';</script>';
 
