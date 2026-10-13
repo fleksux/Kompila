@@ -59,6 +59,10 @@ header{z-index:30;position:sticky!important;top:0}
 .sl.esc .cepr.ok{color:#ff7fb3}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:54px;padding:0 28px;border-radius:var(--rb);font:700 16px Inter;border:0;cursor:pointer;transition:transform .15s}
 .btn:active{transform:translateY(3px)}
+.acoes{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn.lin{background:transparent;color:var(--vinho);border:1.5px solid rgba(29,26,31,.28);box-shadow:none}.btn.lin:hover{border-color:var(--forte);color:var(--forte)}
+.sl.esc .btn.lin{color:#fff;border-color:rgba(255,255,255,.55)}
+.sl .tx>.btn.lin{margin:14px 0 22px}.cepr:empty{display:none}
 .btn.pri{background:var(--forte);color:#fff;box-shadow:0 10px 24px rgba(255,31,122,.25)}
 .dots{position:absolute;z-index:3;left:max(24px,calc((100vw - 1240px)/2 + 24px));bottom:34px;display:flex;gap:8px;align-items:center}
 .dot{width:34px;height:4px;border:0;cursor:pointer;padding:0;border-radius:2px;background:rgba(29,26,31,.22);transition:.3s}
@@ -303,7 +307,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .faixa{background:var(--forte);color:#fff;overflow:hidden;padding:16px 0;margin-top:86px;white-space:nowrap}
 .fxi{display:inline-flex;animation:fx 38s linear infinite}.fxi span{font:700 18px "Inter Tight";letter-spacing:-.01em;padding-right:0}
 @keyframes fx{to{transform:translateX(-50%)}}
-.gal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:14px;margin-top:10px}
+.gal{display:grid;grid-auto-flow:dense;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:14px;margin-top:10px}
 .gal a{border-radius:var(--r);overflow:hidden;display:block}.gal img{width:100%;height:100%;object-fit:cover;transition:transform .6s}.gal a:hover img{transform:scale(1.06)}
 .gal .g0{grid-row:span 2}.gal .g4{grid-column:span 2}.gal .g5{grid-row:span 2}
 @media (max-width:640px){.hprova{padding:8px 12px 8px 8px}.hmini img{width:32px;height:32px}.hprova span{font-size:11.5px}
@@ -378,16 +382,19 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 
 /* banner no celular: foto em cima, texto embaixo em fundo limpo */
 @media (max-width:640px){
-  .janela{height:calc(min(48vh,420px) + 330px)!important;min-height:0!important;background:#fff}
-  .sl img{inset:0 0 auto 0!important;height:min(48vh,420px)!important;object-position:50% 30%!important;transform:none!important}
+  .janela{height:calc(min(43vh,380px) + 380px)!important;min-height:0!important;background:#fff}
+  .sl img{inset:0 0 auto 0!important;height:min(43vh,380px)!important;object-position:50% 30%!important;transform:none!important}
   .sl:before,.sl.esc:before{display:none!important}
-  .sl .tx{position:absolute!important;left:0;right:0;bottom:0;top:min(48vh,420px);height:auto!important;justify-content:flex-start!important;padding:22px 18px 48px!important;background:#fff;max-width:none!important}
+  .sl .tx{position:absolute!important;left:0;right:0;bottom:0;top:min(43vh,380px);height:auto!important;justify-content:flex-start!important;padding:22px 18px 48px!important;background:#fff;max-width:none!important}
   .sl h1,.sl.esc h1,.sl h2,.sl.esc h2{color:var(--vinho)!important;font-size:34px!important;line-height:1.02;margin:0 0 8px!important}
   .sl p,.sl.esc p{color:var(--vinho2)!important;font-size:15px!important;margin:0 0 14px!important}
   .sl .eyebrow{margin-bottom:8px!important}
   .sl.esc .cepr{color:var(--vinho)!important}
+  .sl.esc .btn.lin{color:var(--vinho)!important;border-color:rgba(29,26,31,.28)!important}
+  .acoes .btn{height:48px;padding:0 20px;font-size:15px}
+  .sl .tx>.btn.lin{height:44px;margin:12px 0 0}
   .hprova{display:none!important}
-  .dots{top:calc(min(48vh,420px) - 26px)!important;bottom:auto!important;left:18px!important}
+  .dots{top:calc(min(43vh,380px) - 26px)!important;bottom:auto!important;left:18px!important}
   .dot{background:rgba(255,255,255,.6)!important}.dot.on{background:#fff!important}
   .cep{max-width:none!important;box-shadow:0 10px 24px rgba(255,31,122,.12)!important}
 }
@@ -429,6 +436,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
         <p>Em São Paulo e Grande SP, seus balões batem na porta no mesmo dia.</p>
         <form class="cep" onsubmit="vePrazo(this);return false"><input class="cepi" inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP"><button>Ver prazo</button></form>
         <div class="cepr" id="cepr"></div>
+        <a class="btn lin" href="#pacotes">Saiba mais</a>
         <div class="hprova"><div class="hmini"><img src="img/premium_1_arco_painel.webp" alt="Arco de balões com painel"><img src="img/numero_5_rose.webp" alt="Balão número 5 rosé gigante"><img src="img/premium_3_gigante.webp" alt="Decoração com balões gigantes"><img src="img/arco_09_candy_algodao.webp" alt="Arco de balões em tons candy"></div><span><b>★★★★★ 4,9</b>67 mil avaliações de quem já fez festa</span></div>
       </div>
     </div>
@@ -438,7 +446,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
         <span class="eyebrow">Festa de criança</span>
         <h2 class="inf">O número dela,<br>do tamanho do sonho.</h2>
         <p>Arco, número gigante e as cores que ela escolheu. Em SP, chega no mesmo dia.</p>
-        <a class="btn pri" href="#numeros">Escolher o número</a>
+        <div class="acoes"><a class="btn pri" href="#numeros">Escolher o número</a><a class="btn lin" href="#numeros">Saiba mais</a></div>
       </div>
     </div>
     <div class="sl esc" style="--g:#4a2340">
@@ -447,7 +455,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
         <span class="eyebrow">Halloween</span>
         <h2 class="inf">Doces, sustos<br>e balões.</h2>
         <p>Arco de Halloween em preto, laranja e roxo. Entregue hoje em SP e Grande SP.</p>
-        <a class="btn pri" href="#festas">Ver Halloween</a>
+        <div class="acoes"><a class="btn pri" href="#festas">Ver Halloween</a><a class="btn lin" href="#premium">Saiba mais</a></div>
       </div>
     </div>
     <div class="dots" id="dots"><button class="dot on" aria-label="Slide 1"></button><button class="dot" aria-label="Slide 2"></button><button class="dot" aria-label="Slide 3"></button></div>
@@ -584,7 +592,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 </main>
 
 <section class="sec" id="galeria"><div class="w"><div class="ctr"><span class="eyebrow">#festaglowbos</span><h2 class="tt">Cada festa vira lembrança</h2><p class="sub">Arco, número, cromado, tema. Escolha a sua e a gente monta o sonho.</p></div>
-<div class="gal"><a href="#" class="g0"><img src="img/premium_1_arco_painel.webp" alt="Arco de balões com painel" loading="lazy"></a><a href="#" class="g1"><img src="img/hero_crianca_1.webp" alt="Aniversário infantil com arco de balões e número gigante" loading="lazy"></a><a href="#" class="g2"><img src="img/premium_4_cromado.webp" alt="Arco de balões cromados" loading="lazy"></a><a href="#" class="g3"><img src="img/numero_3_ouro.webp" alt="Balão número 3 dourado gigante" loading="lazy"></a><a href="#" class="g4"><img src="img/hero_halloween_1.webp" alt="Festa de Halloween com arco de balões preto, laranja e roxo" loading="lazy"></a><a href="#" class="g5"><img src="img/premium_6_preto_ouro.webp" alt="Arco de balões preto e dourado" loading="lazy"></a><a href="#" class="g6"><img src="img/numero_7_lilas.webp" alt="Balão número 7 lilás gigante" loading="lazy"></a><a href="#" class="g7"><img src="img/premium_5_futebol.webp" alt="Decoração de balões com tema de futebol" loading="lazy"></a></div></div></section>
+<div class="gal"><a href="#" class="g0"><img src="img/premium_1_arco_painel.webp" alt="Arco de balões com painel" loading="lazy"></a><a href="#" class="g1"><img src="img/hero_crianca_1.webp" alt="Aniversário infantil com arco de balões e número gigante" loading="lazy"></a><a href="#" class="g2"><img src="img/premium_4_cromado.webp" alt="Arco de balões cromados" loading="lazy"></a><a href="#" class="g3"><img src="img/numero_3_ouro.webp" alt="Balão número 3 dourado gigante" loading="lazy"></a><a href="#" class="g4"><img src="img/hero_halloween_1.webp" alt="Festa de Halloween com arco de balões preto, laranja e roxo" loading="lazy"></a><a href="#" class="g5"><img src="img/premium_6_preto_ouro.webp" alt="Arco de balões preto e dourado" loading="lazy"></a><a href="#" class="g6"><img src="img/numero_7_lilas.webp" alt="Balão número 7 lilás gigante" loading="lazy"></a><a href="#" class="g7"><img src="img/premium_5_futebol.webp" alt="Decoração de balões com tema de futebol" loading="lazy"></a><a href="#" class="g8"><img src="img/cena_02_cha_revelacao.webp" alt="Chá revelação com balões" loading="lazy"></a></div></div></section>
 <footer><div class="w">
   <div class="ft">
     <div><img class="ico" src="img/D_icone.webp" alt=""><p style="opacity:.8;max-width:290px;margin:0">Balões e festa com cara de sonho. Em São Paulo e Grande SP, chega no mesmo dia.</p></div>
