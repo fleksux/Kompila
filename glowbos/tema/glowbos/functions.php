@@ -516,6 +516,9 @@ function glowbos_app_config( $pid ) {
 		'pct12_25' => array( 'quantidade', 0, 'lisos', '25 balões de 12"' ), 'pct16_12' => array( 'quantidade', 0, 'lisos', '12 balões de 16"' ),
 		'metal5_25' => array( 'quantidade', 0, 'metal', '25 balões metalizados de 5"' ),
 		'numero' => array( 'numero', 0, '', 'coluna com número' ),
+		// 16/10: sets prontos sob encomenda, mesmo orçamento do número (WhatsApp + data + CEP).
+		'set_carros_4anos' => array( 'numero', 0, '', 'set pronto Carros, número 4' ), 'set_menina_5anos' => array( 'numero', 0, '', 'set pronto Borboleta Rosê, número 5' ),
+		'set_safari_1ano' => array( 'numero', 0, '', 'set pronto Safári, número 1' ), 'set_cha_revelacao' => array( 'numero', 0, '', 'set pronto Chá Revelação' ),
 		'bubble' => array( 'bubble', 3, 'lisos', 'bubble personalizado' ),
 	);
 	return $c[ $k ] ?? null;
@@ -585,6 +588,7 @@ function glowbos_departamentos() {
 		'bubbles'          => array( 'Bubbles', 'Balão transparente com o nome da festa e balõezinhos coloridos dentro.', 'cena_04_bubble_alice.webp' ),
 		'cromados'         => array( 'Cromados e metalizados', 'O brilho que dá acabamento de festa profissional.', 'banner_cromados.webp' ),
 		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'banner_numeros.webp' ),
+		'sets-prontos'     => array( 'Sets prontos', 'Número, base de balões, figuras e buquê montados no estilo da festa. Escolha o tema e a idade.', 'banner_sets.webp' ),
 		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'cena_07_textura_baloes.webp' ),
 	);
 }
@@ -719,7 +723,7 @@ function glowbos_mega_html() {
 		$card = sprintf( '<a class="gm-dest" href="%s"><span class="gm-tag">Mais vendido</span><img src="%s" alt=""><b>%s</b><small>Você escolhe 3 cores e a sequência</small><span class="gm-pr">%s <em>Montar →</em></span></a>', esc_url( $dest->get_permalink() ), esc_url( wp_get_attachment_image_url( $dest->get_image_id(), 'medium' ) ), esc_html( $dest->get_name() ), wp_kses_post( $dest->get_price_html() ) );
 	}
 	$links = '';
-	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'numeros' => 'Números' ) as $s => $n ) {
+	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'numeros' => 'Números', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
 		$on     = function_exists( 'is_product_category' ) && is_product_category( $s );
 		$links .= sprintf( '<a class="gm-l%s" href="%s">%s</a>', $on ? ' on' : '', esc_url( home_url( '/categoria/' . $s . '/' ) ), $n );
 	}
@@ -942,7 +946,7 @@ function glowbos_rodape_html() {
 		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $d . '</svg>';
 	};
 	$cats = '';
-	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits de arco', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'cromados' => 'Cromados', 'numeros' => 'Números', 'bubbles' => 'Bubbles' ) as $s => $n ) {
+	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits de arco', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'cromados' => 'Cromados', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
 		$cats .= '<a href="' . esc_url( home_url( '/categoria/' . $s . '/' ) ) . '">' . esc_html( $n ) . '</a>';
 	}
 	$selos = array(
@@ -1184,3 +1188,34 @@ add_action( 'send_headers', function () {
 		header( 'Strict-Transport-Security: max-age=15552000' );
 	}
 } );
+
+// 16/10: seção "Sets prontos" na home, logo depois de "Os mais vendidos". Lê os produtos da
+// categoria sets-prontos (sob encomenda, sem preço), então set novo entra sozinho.
+function glowbos_sets_html() {
+	$ps = wc_get_products( array( 'category' => array( 'sets-prontos' ), 'status' => 'publish', 'limit' => 8, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
+	if ( ! $ps ) {
+		return '';
+	}
+	$c = '';
+	foreach ( $ps as $p ) {
+		$c .= sprintf( '<a class="sp-c" href="%s"><img src="%s" alt="%s" loading="lazy"><span><b>%s</b><em>Sob encomenda · chega montado</em><i>Pedir orçamento</i></span></a>', esc_url( $p->get_permalink() ), esc_url( wp_get_attachment_image_url( $p->get_image_id(), 'large' ) ), esc_attr( $p->get_name() ), esc_html( $p->get_name() ) );
+	}
+	return '<style>
+.sp{padding:64px 0 10px}
+.sp-w{max-width:1240px;margin:0 auto;padding:0 24px}
+.sp-h{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:22px}
+.sp-h small{display:block;font:700 12px Inter;letter-spacing:.16em;text-transform:uppercase;color:#C2185B;margin-bottom:8px}
+.sp-h b{display:block;font:800 34px/1.05 "Inter Tight";letter-spacing:-.03em;color:#1d1a1f}
+.sp-h p{margin:8px 0 0;color:#5b5560;font-size:15px;line-height:1.45;max-width:560px}
+.sp-h a{flex:none;font:700 14px Inter;color:#C2185B;text-decoration:none}
+.sp-l{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.sp-c{display:flex;flex-direction:column;background:#fff;border-radius:16px;overflow:hidden;text-decoration:none;color:#1d1a1f;border:1px solid #f1e3e8;transition:transform .2s}
+.sp-c:hover{transform:translateY(-4px)}
+.sp-c img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#f3ece4;display:block}
+.sp-c span{display:flex;flex-direction:column;gap:4px;padding:14px 14px 16px}
+.sp-c b{font:700 15px/1.25 Inter}
+.sp-c em{font-style:normal;font:600 12.5px Inter;color:#7a6c74}
+.sp-c i{font-style:normal;margin-top:8px;align-self:flex-start;height:36px;line-height:36px;padding:0 14px;border-radius:10px;background:linear-gradient(135deg,#5E0B2E,#8E1446 55%,#B0124F);color:#fff;font:700 13px/36px Inter}
+@media (max-width:768px){.sp{padding:44px 0 0}.sp-h{flex-direction:column;align-items:flex-start}.sp-h b{font-size:26px}.sp-l{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sp-c span{padding:10px 10px 12px}.sp-c b{font-size:13.5px}.sp-c em{font-size:11.5px}.sp-c i{height:32px;font-size:12px;line-height:32px;padding:0 10px}}
+</style><section class="sp" id="sets"><div class="sp-w"><div class="sp-h"><div><small>Sets prontos</small><b>A festa montada, do jeito do tema</b><p>Número, base de balões, figuras e buquê no estilo da festa. Escolha o tema e a idade, a gente monta.</p></div><a href="' . esc_url( home_url( '/categoria/sets-prontos/' ) ) . '">Ver todos os sets →</a></div><div class="sp-l">' . $c . '</div></div></section>';
+}
