@@ -5,6 +5,7 @@
 // a Meta não contar a mesma compra duas vezes.
 
 const GLOWBOS_PIXEL = '2329466134467831';
+const GLOWBOS_TIKTOK = 'DB96BRRC77UAEK319QHG'; // pixel TikTok "Glowbos", conta de anúncios Animar Balões
 const GLOWBOS_GA4   = 'G-11H893WBQ3'; // Google Analytics, conta Glowbos no Google do fleks.ux
 
 function glowbos_px_valor( $v ) {
@@ -240,15 +241,23 @@ add_action( 'wp_head', function () {
 			$ga['transaction_id'] = $e['data']['order_id'] ?? $e['id'];
 		}
 		$js .= sprintf( "gtag('event',%s,%s);\n", wp_json_encode( $ga_nome[ $e['ev'] ] ), wp_json_encode( $ga ) );
+		$tt = array(
+			'contents'     => array_map( function ( $i ) { return array( 'content_id' => $i['item_id'], 'content_name' => $i['item_name'], 'price' => $i['price'], 'quantity' => 1 ); }, $itens ),
+			'content_type' => 'product',
+			'value'        => $e['data']['value'] ?? 0,
+			'currency'     => 'BRL',
+		);
+		$js .= sprintf( "ttq.track(%s,%s,{event_id:%s});\n", wp_json_encode( 'Purchase' === $e['ev'] ? 'CompletePayment' : $e['ev'] ), wp_json_encode( $tt ), wp_json_encode( $e['id'] ) );
 	}
 	?>
-<!-- Google Analytics e Meta Pixel: Glowbos -->
+<!-- Google Analytics, Meta Pixel e TikTok Pixel: Glowbos -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( GLOWBOS_GA4 ); ?>"></script>
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?php echo esc_js( GLOWBOS_GA4 ); ?>');
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 fbq('init','<?php echo esc_js( GLOWBOS_PIXEL ); ?>');
 fbq('track','PageView');
+!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};ttq.load('<?php echo esc_js( GLOWBOS_TIKTOK ); ?>');ttq.page();}(window,document,'ttq');
 <?php echo $js; // phpcs:ignore -- montado com wp_json_encode ?>
 </script>
 <noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=<?php echo esc_attr( GLOWBOS_PIXEL ); ?>&ev=PageView&noscript=1"></noscript>
