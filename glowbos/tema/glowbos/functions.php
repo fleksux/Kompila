@@ -481,7 +481,11 @@ add_action( 'wp_footer', function () {
 		if(!app)return;
 		var instalado=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 		var fechou=false;try{fechou=localStorage.getItem('gb_app_x')==='1'}catch(e){}
-		if(instalado||fechou||/finalizar-compra|carrinho/.test(location.pathname))return;
+		// 16/10: na primeira visita o aviso cobria os números de confiança; agora só a partir da 2ª visita
+		// (uma visita = uma sessão do navegador) ou na página de pedido recebido, depois de comprar.
+		var visitas=1;try{visitas=+localStorage.getItem('gb_visitas')||0;if(!sessionStorage.getItem('gb_v')){visitas++;localStorage.setItem('gb_visitas',visitas);sessionStorage.setItem('gb_v','1')}}catch(e){}
+		var comprou=/order-received|pedido-recebido/.test(location.href);
+		if(instalado||fechou||(/finalizar-compra|carrinho/.test(location.pathname)&&!comprou)||(visitas<2&&!comprou))return;
 		var ev=null,ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
 		function mostra(){setTimeout(function(){app.hidden=false},2500)}
 		addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;mostra();});
