@@ -124,7 +124,7 @@ a{color:inherit}
 .gb-f a.on{background:var(--forte);color:#fff}
 .gb-f a.limpa{background:none;text-decoration:underline;color:#a39ca6}
 .gb-nav a.on{color:var(--forte)}
-@media (max-width:640px){.gb-dep-banner{min-height:150px;padding:20px;background:linear-gradient(0deg,#fff 0,rgba(255,255,255,.92) 55%,rgba(255,255,255,.2) 100%),var(--img) center/cover no-repeat}.gb-dep-banner p{font-size:14px}}
+@media (max-width:640px){.gb-dep-banner{min-height:0;padding:132px 18px 18px;background:linear-gradient(0deg,#fff 0,#fff calc(100% - 120px),rgba(255,255,255,.25) calc(100% - 120px),rgba(255,255,255,0) 100%),var(--img) right top/auto 120px no-repeat #fff;border:1px solid #f1ecef}.gb-dep-banner p{font-size:14px}}
 .woocommerce ul.products li.product .button.gb-escolher{background:#fff!important;color:var(--vinho)!important;border:1.5px solid var(--vinho)!important}
 .woocommerce ul.products li.product .button.gb-escolher:hover{background:var(--vinho)!important;color:#fff!important}
 @media (max-width:760px){.gb-nav{display:flex!important;position:absolute;left:0;right:0;top:100%;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;background:#fff;border-bottom:1px solid #f1eef0;padding:6px 12px;gap:2px}.gb-nav::-webkit-scrollbar{display:none}.gb-nav a{flex:none;font-size:13.5px;padding:7px 11px}.gb-main{padding-top:66px!important}}
