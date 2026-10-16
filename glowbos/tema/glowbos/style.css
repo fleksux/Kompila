@@ -2,7 +2,7 @@
 Theme Name: Glowbos
 Author: Kompila
 Description: Tema da loja Glowbos. A página inicial é a home aprovada (home.html); as páginas da loja usam o mesmo cabeçalho e rodapé.
-Version: 1.0.1
+Version: 1.0.2
 Text Domain: glowbos
 */
 :root{--forte:#FF1F7A;--bebe:#FFF2F6;--vinho:#1d1a1f;--vinho2:#5f5a63}
@@ -66,7 +66,9 @@ a{color:inherit}
 .gb-pdp div.gb-hoje{background:var(--forte);color:#fff}
 .gb-pdp b{display:block;color:inherit;font:700 15.5px "Inter Tight"}
 .gb-pdp div:not(.gb-hoje) b{color:var(--vinho)}
-.gb-pdp span.i{font-size:22px}
+.gb-pdp span.i{width:38px;height:38px;border-radius:50%;background:#fff;color:var(--forte);display:grid;place-items:center;flex:none}
+.gb-pdp span.i svg{width:20px;height:20px}
+.gb-pdp div.gb-hoje span.i{background:rgba(255,255,255,.18);color:#fff}
 .gb-cep{display:flex;gap:8px;margin-top:6px}.gb-cep input{flex:1;height:44px;border-radius:10px;border:1.5px solid #ecdde3;padding:0 12px;font-size:15px}.gb-cep button{height:44px;border:0;border-radius:10px;background:var(--vinho);color:#fff;font-weight:700;padding:0 16px;cursor:pointer}
 .gb-cepr{font-size:14px;font-weight:700;margin-top:6px}
 .woocommerce ul.products li.product{background:#fff;border:1.5px solid #f1e4e9;border-radius:16px;padding:12px!important;text-align:left}

@@ -79,7 +79,9 @@ form.woocommerce-checkout #order_review{grid-column:2;grid-row:2;position:sticky
 #place_order{width:100%;height:58px;border-radius:12px!important;font:800 18px Inter!important;background:var(--forte)!important;color:#fff!important;box-shadow:0 10px 24px rgba(255,31,122,.28);float:none!important;margin-top:6px}
 #place_order:hover{background:#e80f68!important}
 .gb-selos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-.gb-selos div{background:#f7f6f8;border-radius:10px;padding:10px;font-size:12px;line-height:1.3;color:var(--vinho2);text-align:center}
+.gb-selos div{background:#f7f6f8;border-radius:12px;padding:12px 8px;font-size:12px;line-height:1.3;color:var(--vinho2);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.gb-selos i{width:34px;height:34px;border-radius:50%;background:#fff;color:var(--forte);display:grid;place-items:center;flex:none}
+.gb-selos i svg{width:18px;height:18px}
 .gb-selos b{display:block;color:var(--vinho);font-size:13px;margin-bottom:2px}
 
 @media (max-width:900px){
