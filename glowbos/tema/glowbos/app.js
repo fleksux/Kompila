@@ -41,14 +41,14 @@
 
 	if (D.tipo === 'sequencia') {
 		var N = +D.cores, SEQ = [];
-		box.innerHTML = '<p class="gb-st"><i>1</i> Escolha ' + N + ' cores, na ordem do cacho <small id="gbCnt"></small></p><div class="gb-slots" id="gbSlots"></div><div class="gb-cores" id="gbCores"></div>' +
+		box.innerHTML = '<p class="gb-st"><i>1</i> Escolha até ' + N + ' cores, na ordem do cacho <small id="gbCnt"></small></p><div class="gb-slots" id="gbSlots"></div><div class="gb-cores" id="gbCores"></div>' +
 			'<div class="gb-buy"><div><small>' + D.resumo + '</small><b>' + R(preco) + '</b></div><button type="button" class="gb-btn" id="gbAdd" disabled></button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje.</p>';
 		$('#gbCores').innerHTML = PAL.map(function (c, i) { return '<button type="button" class="gb-cor" data-i="' + i + '"><img src="' + IMG + 'b_' + ARQ[c[1]] + '.webp" alt="">' + c[0] + '</button>'; }).join('');
 		var pinta = function () {
-			$('#gbSlots').innerHTML = Array.from({ length: N }, function (_, i) { var k = SEQ[i]; return k === undefined ? '<div class="gb-slot"><i>' + (i + 1) + '</i>escolha</div>' : '<button type="button" class="gb-slot cheio" data-s="' + i + '" title="Tirar"><i>' + (i + 1) + '</i><img src="' + IMG + 'b_' + ARQ[PAL[k][1]] + '.webp" alt="">' + PAL[k][0] + ' <span>×</span></button>'; }).join('');
+			$('#gbSlots').innerHTML = Array.from({ length: N }, function (_, i) { var k = SEQ[i]; return k === undefined ? '<div class="gb-slot"><i>' + (i + 1) + '</i>' + (i ? 'opcional' : 'escolha') + '</div>' : '<button type="button" class="gb-slot cheio" data-s="' + i + '" title="Tirar"><i>' + (i + 1) + '</i><img src="' + IMG + 'b_' + ARQ[PAL[k][1]] + '.webp" alt="">' + PAL[k][0] + ' <span>×</span></button>'; }).join('');
 			box.querySelectorAll('.gb-cor').forEach(function (b) { b.classList.toggle('usada', SEQ.indexOf(+b.dataset.i) > -1 || SEQ.length >= N); });
-			$('#gbCnt').textContent = SEQ.length + ' de ' + N;
-			var falta = N - SEQ.length, b = $('#gbAdd'); b.disabled = falta > 0; b.textContent = falta > 0 ? 'Escolha ' + (falta === 1 ? 'mais 1 cor' : 'mais ' + falta + ' cores') : 'Colocar no carrinho';
+			$('#gbCnt').textContent = 'até ' + N + ' · ' + SEQ.length + (SEQ.length === 1 ? ' escolhida' : ' escolhidas');
+			var b = $('#gbAdd'); b.disabled = !SEQ.length; b.textContent = SEQ.length ? 'Colocar no carrinho' : 'Escolha pelo menos 1 cor';
 			if (prev) { prev.innerHTML = '<div class="cacho' + (SEQ.length ? '' : ' vazio') + '">' + (SEQ.length ? cacho(SEQ.map(function (k) { return PAL[k][1]; })) : '<img class="cc-foto" src="' + IMG + 'pack_branco.webp?v=2" alt="">') + (SEQ.length ? '<span class="gb-tag">' + SEQ.map(function (k) { return PAL[k][0]; }).join(' · ') + '</span>' : '<div class="gb-vazio"><b>Escolha suas cores<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg></b></div>') + '</div>'; }
 		};
 		$('#gbCores').addEventListener('click', function (e) { var b = e.target.closest('.gb-cor'); if (!b || SEQ.length >= N || SEQ.indexOf(+b.dataset.i) > -1) return; SEQ.push(+b.dataset.i); pinta(); });
