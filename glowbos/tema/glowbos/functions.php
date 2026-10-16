@@ -459,7 +459,7 @@ function glowbos_app_config( $pid ) {
 }
 add_action( 'wp_enqueue_scripts', function () {
 	if ( function_exists( 'is_product' ) && is_product() && glowbos_app_config( get_queried_object_id() ) ) {
-		$v = wp_get_theme()->get( 'Version' ) . '.7';
+		$v = wp_get_theme()->get( 'Version' ) . '.10';
 		wp_enqueue_style( 'glowbos-app', get_template_directory_uri() . '/app.css', array( 'glowbos' ), $v );
 		wp_enqueue_script( 'glowbos-app', get_template_directory_uri() . '/app.js', array(), $v, true );
 	}
