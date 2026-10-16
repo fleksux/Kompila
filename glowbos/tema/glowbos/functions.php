@@ -74,6 +74,8 @@ add_action( 'wc_ajax_glowbos_sync', function () {
 	$cep = preg_replace( '/\\D/', '', wp_unslash( $_POST['cep'] ?? '' ) );
 	if ( 8 === strlen( $cep ) && WC()->customer ) {
 		$cep = substr( $cep, 0, 5 ) . '-' . substr( $cep, 5 );
+		WC()->customer->set_shipping_country( 'BR' );
+		WC()->customer->set_billing_country( 'BR' );
 		WC()->customer->set_shipping_postcode( $cep );
 		WC()->customer->set_billing_postcode( $cep );
 		WC()->customer->save();
