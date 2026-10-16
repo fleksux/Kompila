@@ -1,0 +1,107 @@
+/* Páginas da loja: carrinho, minha conta, acompanhar pedido e 404 */
+.gb-conta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;padding:10px 14px;border-radius:10px}
+.gb-conta:hover{background:var(--bebe)}
+.gb-conta svg{width:20px;height:20px}
+.gb-cart .gb-qt{font-style:normal;background:var(--forte);color:#fff;border-radius:999px;font-size:12px;padding:1px 7px;margin-left:4px}
+@media (max-width:760px){.gb-conta span{display:none}.gb-conta{padding:8px}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;height:50px;border-radius:12px;font:700 15px Inter;text-decoration:none!important;padding:0 22px}
+.btn.pri{background:var(--forte);color:#fff!important;box-shadow:0 10px 22px rgba(255,31,122,.25)}
+.btn.lin{background:var(--vinho);color:#fff!important}
+.acoes{display:flex;gap:10px;flex-wrap:wrap}
+
+/* 404 */
+.gb-404{text-align:center;max-width:620px;margin:20px auto 40px}
+.gb-404-n{font:800 120px/1 "Inter Tight";color:var(--bebe);-webkit-text-stroke:2px var(--forte);letter-spacing:-.04em}
+.gb-404 h1{margin:10px 0!important}
+.gb-404 p{color:var(--vinho2);font-size:18px;margin:0 auto 24px}
+.gb-404 .acoes{justify-content:center}
+
+/* avisos */
+.woocommerce-cart .woocommerce-message,.woocommerce-cart .woocommerce-info,.woocommerce-account .woocommerce-message,.woocommerce-account .woocommerce-info,.woocommerce-account .woocommerce-error{border:0!important;background:#f7f6f8!important;border-radius:12px;padding:14px 18px!important;font-size:14.5px;color:var(--vinho2)}
+.woocommerce-cart .woocommerce-message::before,.woocommerce-cart .woocommerce-info::before,.woocommerce-account .woocommerce-message::before,.woocommerce-account .woocommerce-info::before,.woocommerce-account .woocommerce-error::before{display:none}
+.woocommerce-cart .woocommerce-message .button{float:right}
+
+/* carrinho */
+.woocommerce-cart .gb-main>.woocommerce{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px;align-items:start}
+.woocommerce-cart .woocommerce-notices-wrapper{grid-column:1 / -1}
+.woocommerce-cart .woocommerce-cart-form{background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:8px 20px}
+.woocommerce-cart table.shop_table{border:0!important;margin:0!important}
+.woocommerce-cart table.shop_table thead{display:none}
+.woocommerce-cart table.shop_table td{border:0!important;border-bottom:1px solid #f3f1f3!important;padding:16px 6px!important;vertical-align:middle;background:none!important}
+.woocommerce-cart table.shop_table td.product-thumbnail img{width:72px!important;height:72px;object-fit:cover;border-radius:12px;background:var(--bebe)}
+.woocommerce-cart table.shop_table td.product-name a{font-weight:700;color:var(--vinho);text-decoration:none}
+.woocommerce-cart table.shop_table td.product-name dl{font-size:12.5px;color:var(--vinho2);margin:4px 0 0}
+.woocommerce-cart table.shop_table td.product-price{color:var(--vinho2);font-size:14px}
+.woocommerce-cart table.shop_table td.product-subtotal{font-weight:800;text-align:right}
+.woocommerce-cart table.shop_table td.product-remove a.remove{width:30px;height:30px;line-height:28px;border-radius:50%;background:#f7f6f8;color:var(--vinho2)!important;font-size:20px}
+.woocommerce-cart table.shop_table td.product-remove a.remove:hover{background:#ffe3ec;color:var(--forte)!important}
+.woocommerce-cart .quantity .qty{width:64px;height:42px;border:1.5px solid #e6e1e4;border-radius:10px;text-align:center;font:600 15px Inter}
+.woocommerce-cart table.shop_table td.actions{border-bottom:0!important;padding-top:16px!important}
+.woocommerce-cart td.actions .coupon{display:flex;gap:8px}
+.woocommerce-cart td.actions .coupon .input-text{height:44px;border:1.5px solid #e6e1e4!important;border-radius:10px!important;padding:0 12px!important;width:180px!important}
+.woocommerce-cart td.actions .button{height:44px;border-radius:10px!important}
+.woocommerce-cart td.actions button[name=update_cart]{background:#f7f6f8!important;color:var(--vinho)!important}
+.woocommerce-cart .cart-collaterals{width:auto!important}
+.woocommerce-cart .cart-collaterals .cart_totals{width:100%!important;float:none!important;background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:20px 22px;position:sticky;top:104px}
+.woocommerce-cart .cart_totals h2{font:800 20px "Inter Tight"!important;margin:0 0 10px!important}
+.woocommerce-cart .cart_totals table{border:0!important}
+.woocommerce-cart .cart_totals th,.woocommerce-cart .cart_totals td{border:0!important;border-top:1px solid #f3f1f3!important;padding:12px 0!important;background:none!important;font-size:14.5px}
+.woocommerce-cart .cart_totals th{color:var(--vinho2);font-weight:500;width:35%}
+.woocommerce-cart .cart_totals td{text-align:right}
+.woocommerce-cart .cart_totals .order-total td,.woocommerce-cart .cart_totals .order-total th{font:800 22px "Inter Tight"!important;color:var(--vinho)}
+.woocommerce-cart .cart_totals #shipping_method{list-style:none;padding:0;margin:0}
+.woocommerce-cart .cart_totals .woocommerce-shipping-destination{font-size:13px;color:var(--vinho2)}
+.woocommerce-cart .wc-proceed-to-checkout{padding:14px 0 0!important}
+.woocommerce-cart .wc-proceed-to-checkout .checkout-button{height:58px;display:flex!important;align-items:center;justify-content:center;border-radius:12px!important;font:800 18px Inter!important;box-shadow:0 10px 24px rgba(255,31,122,.28);margin:0!important}
+.woocommerce-cart .cart-empty{font:800 26px "Inter Tight";text-align:center;background:none!important;color:var(--vinho)!important}
+.woocommerce-cart .return-to-shop{text-align:center}
+
+/* minha conta */
+.woocommerce-account:not(.logged-in) .gb-main>h1{text-align:center}
+.woocommerce-account .woocommerce form.login,.woocommerce-account .woocommerce form.register,.woocommerce-account form.lost_reset_password{max-width:440px;margin:0 auto!important;background:#fff;border:1px solid #ece8eb!important;border-radius:16px!important;padding:26px!important}
+.woocommerce-account .u-columns{display:block}
+.woocommerce-account .u-column1,.woocommerce-account .u-column2{width:100%!important;float:none!important}
+.woocommerce-account h2{font:800 22px "Inter Tight";text-align:center;margin:0 0 14px}
+.woocommerce-account form .form-row{padding:0!important;margin:0 0 14px!important}
+.woocommerce-account form .form-row label{font:600 13px Inter;color:var(--vinho2);margin-bottom:6px;display:block}
+.woocommerce-account form .input-text,.woocommerce-account form select{height:50px;border:1.5px solid #e6e1e4!important;border-radius:10px!important;padding:0 14px!important;font:500 16px Inter;width:100%}
+.woocommerce-account form .input-text:focus{border-color:var(--forte)!important;box-shadow:0 0 0 4px rgba(255,31,122,.12);outline:0}
+.woocommerce-account form .button{height:50px;width:100%;border-radius:12px!important;font:800 16px Inter!important;margin-top:4px}
+.woocommerce-account form.login .woocommerce-form-login__rememberme{display:flex;align-items:center;gap:8px;font-size:14px;margin:6px 0 12px}
+.woocommerce-account .lost_password{text-align:center;font-size:14px}
+.gb-rastreio{max-width:440px;margin:16px auto 0;text-align:center;background:var(--bebe);border-radius:14px;padding:16px;font-size:14.5px;color:var(--vinho2)}
+.gb-rastreio a{font-weight:700;color:var(--forte)}
+.woocommerce-account.logged-in .gb-main>.woocommerce{display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;align-items:start}
+.woocommerce-MyAccount-navigation{width:auto!important;float:none!important;background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:10px}
+.woocommerce-MyAccount-navigation ul{list-style:none;margin:0;padding:0}
+.woocommerce-MyAccount-navigation li a{display:block;padding:11px 14px;border-radius:10px;text-decoration:none;font-weight:600;color:var(--vinho2)}
+.woocommerce-MyAccount-navigation li.is-active a,.woocommerce-MyAccount-navigation li a:hover{background:var(--bebe);color:var(--forte)}
+.woocommerce-MyAccount-content{width:auto!important;float:none!important;background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:24px}
+.woocommerce-MyAccount-content table.shop_table{border:0!important}
+.woocommerce-MyAccount-content table.shop_table th{font-size:12.5px;color:var(--vinho2);font-weight:600;border:0!important;border-bottom:1px solid #ece8eb!important}
+.woocommerce-MyAccount-content table.shop_table td{border:0!important;border-bottom:1px solid #f3f1f3!important;padding:14px 8px!important}
+.woocommerce-MyAccount-content .woocommerce-button{border-radius:10px!important;padding:8px 14px!important;font-size:13px!important}
+.woocommerce-MyAccount-content mark{background:var(--bebe);color:var(--forte);border-radius:6px;padding:1px 6px}
+.woocommerce-MyAccount-content address{font-style:normal;background:#f7f6f8;border-radius:12px;padding:14px}
+
+/* acompanhar pedido */
+.woocommerce form.track_order{max-width:520px;margin:0 auto;background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:26px}
+.woocommerce form.track_order .form-row{width:100%!important;float:none!important;padding:0!important;margin:0 0 14px!important}
+.woocommerce form.track_order .input-text{height:50px;border:1.5px solid #e6e1e4!important;border-radius:10px!important;padding:0 14px!important;font:500 16px Inter;width:100%}
+.woocommerce form.track_order .button{height:50px;width:100%;border-radius:12px!important;font:800 16px Inter!important}
+
+@media (max-width:900px){
+ .woocommerce-cart .gb-main>.woocommerce,.woocommerce-account.logged-in .gb-main>.woocommerce{grid-template-columns:minmax(0,1fr)}
+ .woocommerce-cart .cart-collaterals .cart_totals{position:static}
+ .woocommerce-cart td.actions .coupon{flex-direction:column}.woocommerce-cart td.actions .coupon .input-text{width:100%!important}
+}
+/* campos das páginas de conta e rastreio: vence o estilo padrão do WooCommerce */
+.woocommerce-account .woocommerce form .form-row input.input-text,.woocommerce-account .woocommerce form .form-row select,.woocommerce form.track_order .form-row input.input-text{height:50px!important;border:1.5px solid #e6e1e4!important;border-radius:10px!important;padding:0 14px!important;font:500 16px Inter!important;line-height:normal!important;background:#fff!important;width:100%!important;box-sizing:border-box}
+.woocommerce-account .woocommerce form .form-row input.input-text:focus,.woocommerce form.track_order .form-row input.input-text:focus{border-color:var(--forte)!important;box-shadow:0 0 0 4px rgba(255,31,122,.12)!important;outline:0}
+.woocommerce-account .woocommerce .password-input{display:block;position:relative}
+.woocommerce-account .woocommerce .show-password-input{top:50%!important;transform:translateY(-50%)}
+.woocommerce-account:not(.logged-in) .u-column1>h2,.woocommerce-account:not(.logged-in) .woocommerce>h2{display:none}
+.woocommerce-account:not(.logged-in) form.login::before{content:"Entrar na sua conta";display:block;font:800 22px "Inter Tight";text-align:center;margin:0 0 6px}
+.woocommerce-account:not(.logged-in) form.login::after{content:"Veja seus pedidos, endereços e dados.";display:block;text-align:center;color:var(--vinho2);font-size:14px;margin-top:12px}
+.woocommerce-page form.track_order>p:first-child{font-size:14px;color:var(--vinho2)}

@@ -168,3 +168,8 @@ form.woocommerce-checkout .woocommerce-NoticeGroup .woocommerce-error li{margin:
  .gb-ty-passos li{font-size:11px}
  .gb-ty-card{padding:18px 16px}
 }
+/* pedido recebido: tudo na mesma largura (o tema limita listas a 820px nas páginas de texto) */
+.gb-ty,.gb-ty ul,.gb-ty ol,.gb-ty p{max-width:none!important}
+.gb-ty{max-width:1180px!important}
+.gb-ty-passos{background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:20px 10px 16px!important;margin:16px 0!important}
+.gb-ty-passos li{font-size:14px}

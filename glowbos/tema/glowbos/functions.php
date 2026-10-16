@@ -298,7 +298,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return;
 	}
-	$v = wp_get_theme()->get( 'Version' ) . '.15';
+	$v = wp_get_theme()->get( 'Version' ) . '.16';
 	wp_enqueue_style( 'glowbos-checkout', get_template_directory_uri() . '/checkout.css', array( 'glowbos' ), $v );
 	wp_enqueue_script( 'glowbos-checkout', get_template_directory_uri() . '/checkout.js', array( 'jquery', 'wc-checkout' ), $v, true );
 }, 30 );
@@ -353,3 +353,38 @@ add_filter( 'woocommerce_checkout_show_terms', '__return_false' );
 add_action( 'woocommerce_review_order_before_submit', function () {
 	echo '<div class="woocommerce-privacy-policy-text"><p>' . wp_kses_post( wc_replace_policy_page_link_placeholders( wc_get_privacy_policy_text( 'checkout' ) ) ) . '</p></div>';
 } );
+
+// Carrinho, minha conta, acompanhar pedido e 404 no visual da loja.
+add_action( 'wp_enqueue_scripts', function () {
+	if ( is_404() || ( function_exists( 'is_cart' ) && ( is_cart() || is_account_page() || is_page( 'acompanhar-pedido' ) ) ) || is_page() ) {
+		wp_enqueue_style( 'glowbos-paginas', get_template_directory_uri() . '/paginas.css', array( 'glowbos' ), wp_get_theme()->get( 'Version' ) . '.2' );
+	}
+}, 31 );
+// Minha conta: textos em português da casa e atalho para acompanhar pedido sem senha.
+add_filter( 'woocommerce_account_menu_items', function ( $i ) {
+	unset( $i['downloads'] );
+	$novo = array();
+	foreach ( $i as $k => $v ) {
+		$novo[ $k ] = array( 'dashboard' => 'Início', 'orders' => 'Meus pedidos', 'edit-address' => 'Endereços', 'edit-account' => 'Meus dados', 'customer-logout' => 'Sair' )[ $k ] ?? $v;
+	}
+	return $novo;
+} );
+add_action( 'woocommerce_after_customer_login_form', function () {
+	echo '<p class="gb-rastreio">Comprou sem criar conta? <a href="' . esc_url( home_url( '/acompanhar-pedido/' ) ) . '">Acompanhe pelo número do pedido</a>.</p>';
+} );
+// No checkout, criar conta já vem marcado (senha chega por e-mail), pra o cliente ter "Meus pedidos".
+add_filter( 'woocommerce_create_account_default_checked', '__return_true' );
+add_filter( 'gettext', function ( $t, $orig, $dom ) {
+	if ( 'woocommerce' === $dom ) {
+		if ( 'Proceed to checkout' === $orig ) {
+			return 'Finalizar compra';
+		}
+		if ( 'Order ID' === $orig ) {
+			return 'Número do pedido';
+		}
+		if ( 'Track' === $orig ) {
+			return 'Acompanhar';
+		}
+	}
+	return $t;
+}, 20, 3 );
