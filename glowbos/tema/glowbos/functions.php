@@ -295,10 +295,10 @@ add_filter( 'woocommerce_shipping_fields', function ( $f ) {
 
 // Checkout com a cara da Glowbos: estilo e script próprios, CEP primeiro e campos em ordem de quem preenche.
 add_action( 'wp_enqueue_scripts', function () {
-	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return;
 	}
-	$v = wp_get_theme()->get( 'Version' ) . '.14';
+	$v = wp_get_theme()->get( 'Version' ) . '.15';
 	wp_enqueue_style( 'glowbos-checkout', get_template_directory_uri() . '/checkout.css', array( 'glowbos' ), $v );
 	wp_enqueue_script( 'glowbos-checkout', get_template_directory_uri() . '/checkout.js', array( 'jquery', 'wc-checkout' ), $v, true );
 }, 30 );
