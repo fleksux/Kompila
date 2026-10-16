@@ -1074,3 +1074,23 @@ require_once __DIR__ . '/rastreio.php';
 
 // Avaliações da Shopee no lugar da aba vazia do WooCommerce.
 require_once __DIR__ . '/avaliacoes.php';
+
+// 16/10: ao descer a página, o "Chega hoje?" e o WhatsApp viram duas bolinhas no canto
+// direito (desktop). Antes eram duas pílulas de 290 px que cobriam produto e texto.
+add_action( 'wp_footer', function () {
+	?>
+<style>
+@media (min-width:761px){
+.gg-fab,.wpp{transition:width .35s ease,padding .35s ease,transform .7s cubic-bezier(.22,1,.36,1),opacity .4s ease!important}
+body.gb-desceu .gg-fab{width:56px!important;padding:0!important;justify-content:center;gap:0;animation:none}
+body.gb-desceu .gg-fab>span,body.gg-fab-x .gg-fab .bl,body.gb-desceu .gg-fab .bl{display:none!important}
+body.gb-desceu .gg-fab i{width:56px;height:56px;background:transparent}
+body.gb-desceu .gg-fab i svg{color:#fff;width:24px;height:24px}
+body.gb-desceu .wpp{width:56px!important;padding:0!important;justify-content:center;gap:0}
+body.gb-desceu .wpp span{display:none!important}
+body.gb-desceu .wpp svg{width:30px;height:30px}
+}
+</style>
+<script>(function(){var b=document.body,f=function(){b.classList.toggle('gb-desceu',scrollY>120)};addEventListener('scroll',f,{passive:true});f();})();</script>
+	<?php
+}, 99 );
