@@ -145,4 +145,4 @@ a{color:inherit}
 /* topo das páginas: logo nunca espreme; nomes dos ícones só em tela larga */
 .gb-logo{flex:none}.gb-logo img{width:auto!important;max-width:none}
 .gb-conta,.gb-cart{font:600 14.5px Inter!important;white-space:nowrap}
-@media (max-width:1279px){.gb-conta span,.gb-cart span{display:none}.gb-conta,.gb-cart{padding:9px!important}.gb-conta+.gb-cart{margin-left:2px}}
+@media (max-width:1519px){.gb-conta span,.gb-cart span{display:none}.gb-conta,.gb-cart{padding:9px!important}.gb-conta+.gb-cart{margin-left:2px}}
