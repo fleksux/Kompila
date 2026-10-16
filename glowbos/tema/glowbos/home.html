@@ -543,7 +543,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .cc-vazio{justify-content:flex-end!important;padding-bottom:9%;background:linear-gradient(180deg,rgba(247,243,234,0) 55%,rgba(247,243,234,.95) 82%)!important}
 /* tamanhos: um acende por vez, em ordem aleatória; para quando o mouse entra */
 .mpt button{border:2px solid #ece7ea!important;transition:border-color .5s ease,box-shadow .5s ease,transform .5s ease}
-.mpt button.acende{border-color:transparent!important;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,#B0124F,#FF1F7A,#FF7A6B,#B99CF0) border-box!important;box-shadow:0 10px 24px rgba(255,31,122,.22);transform:translateY(-3px)}
+.mpt button.acende{border-color:transparent!important;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,#B0124F,#FF1F7A,#FF7A6B,#B99CF0) border-box!important;box-shadow:0 10px 24px rgba(255,31,122,.22)}
 .mpt button.on{border-color:var(--pink,#ff1f7a)!important;box-shadow:0 0 0 3px #ffd3e3;transform:none}
 /* Escolha suas cores: botão em degradê de tons vizinhos */
 .cc-vazio b{background:linear-gradient(110deg,#B0124F,#FF1F7A 45%,#FF7A6B)!important;color:#fff!important;font:700 17px Inter!important;padding:13px 22px!important;border-radius:99px!important;box-shadow:0 12px 26px rgba(176,18,79,.28)!important;gap:10px!important;cursor:pointer;background-size:180% 100%!important;animation:ccgrad 4s ease-in-out infinite!important}
@@ -947,10 +947,10 @@ j.style.setProperty('--py',(p*.4).toFixed(1)+'px');j.style.setProperty('--po',Ma
 addEventListener('scroll',function(){if(!t)t=requestAnimationFrame(f)},{passive:true});f()})();
 </script>
 <script>
-// tamanhos acendendo um por vez, aleatório, pra chamar atenção; para no mouse e quando já escolheu
+// tamanhos acendendo um por vez, em ordem, pra chamar atenção; para no mouse e quando já escolheu
 (function(){var box=document.getElementById('mpt');if(!box||matchMedia('(prefers-reduced-motion:reduce)').matches)return;var para=false,ult=-1;
 box.addEventListener('mouseenter',function(){para=true;box.querySelectorAll('.acende').forEach(function(b){b.classList.remove('acende')})});box.addEventListener('mouseleave',function(){para=false});
-setInterval(function(){if(para||document.hidden)return;var bs=[].slice.call(box.querySelectorAll('button:not(.on)'));if(!bs.length)return;var i;do{i=Math.floor(Math.random()*bs.length)}while(bs.length>1&&i===ult);ult=i;var b=bs[i];b.classList.add('acende');setTimeout(function(){b.classList.remove('acende')},1100)},1500)})();
+setInterval(function(){if(para||document.hidden)return;var bs=[].slice.call(box.querySelectorAll('button'));ult=(ult+1)%bs.length;if(bs[ult].classList.contains('on'))ult=(ult+1)%bs.length;var b=bs[ult];b.classList.add('acende');setTimeout(function(){b.classList.remove('acende')},1100)},1500)})();
 </script>
 </body>
 </html>
