@@ -182,6 +182,9 @@ add_action( 'wp_head', function () {
 			$img = get_the_post_thumbnail_url( null, 'large' );
 		}
 		$url = get_permalink();
+	} elseif ( function_exists( 'glowbos_seo_desc' ) && ( $d = glowbos_seo_desc() ) ) {
+		$desc   = $d;
+		$titulo = wp_get_document_title();
 	}
 	printf( '<meta name="description" content="%s">' . "\n", esc_attr( $desc ) );
 	printf( '<meta property="og:type" content="website">' . "\n" );
@@ -216,7 +219,7 @@ add_action( 'wp_head', function () {
 	$dados = array(
 		'@context' => 'https://schema.org',
 		'@graph'   => array(
-			array(
+			apply_filters( 'glowbos_dados_loja', array(
 				'@type'       => 'OnlineStore',
 				'@id'         => $casa . '#loja',
 				'name'        => 'Glowbos',
@@ -226,7 +229,7 @@ add_action( 'wp_head', function () {
 				'description' => 'Loja online de balões e kits de festa: pacotes de balões, kits de arco, números gigantes e linha premium. Entrega no mesmo dia em São Paulo e Grande SP e envio para todo o Brasil.',
 				'areaServed'  => array( 'São Paulo', 'Grande São Paulo', 'Brasil' ),
 				'currenciesAccepted' => 'BRL',
-			),
+			) ),
 			array(
 				'@type'      => 'WebSite',
 				'@id'        => $casa . '#site',
@@ -512,7 +515,7 @@ function glowbos_app_config( $pid ) {
 }
 add_action( 'wp_enqueue_scripts', function () {
 	if ( function_exists( 'is_product' ) && is_product() && glowbos_app_config( get_queried_object_id() ) ) {
-		$v = wp_get_theme()->get( 'Version' ) . '.14';
+		$v = wp_get_theme()->get( 'Version' ) . '.15';
 		wp_enqueue_style( 'glowbos-app', get_template_directory_uri() . '/app.css', array( 'glowbos' ), $v );
 		wp_enqueue_script( 'glowbos-app', get_template_directory_uri() . '/app.js', array(), $v, true );
 	}
@@ -1147,3 +1150,6 @@ body.gb-desceu .wpp svg{width:30px;height:30px}
 <script>(function(){var b=document.body,f=function(){b.classList.toggle('gb-desceu',scrollY>120)};addEventListener('scroll',f,{passive:true});f();})();</script>
 	<?php
 }, 99 );
+
+// SEO por página e GEO (dados pra Google e IAs).
+require_once __DIR__ . '/seo.php';
