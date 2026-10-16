@@ -503,6 +503,16 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .p3v b{display:block;font:700 15px Inter;color:var(--vinho)}
 .prova3 .mapa{background:none!important;padding:0!important;border:0!important;box-shadow:none!important;margin:0!important}
 @media (max-width:900px){.p3{grid-template-columns:1fr}}
+/* celular: títulos centralizados e botões na largura toda */
+@media (max-width:640px){
+  .sl .tx{text-align:center!important;align-items:center!important}
+  .eyebrow,.tt,.sub,.ctr,.ncfg>h2,.ncfg>p,.ncfg>.eyebrow,.prova3 .ctr{text-align:center!important;margin-left:auto;margin-right:auto}
+  .sec .w>h2,.sec .w>p,.sec .w>.eyebrow{text-align:center}
+  .acoes{flex-direction:column!important;flex-wrap:nowrap!important;width:100%;align-items:stretch!important}
+  .acoes .btn,.sl .acoes .btn{width:100%!important;justify-content:center}
+  .sec .btn,.bloco .btn,.mbuy .btn,.nbuy .btn,.mp .btn{width:100%;justify-content:center}
+  .mbuy,.nbuy{flex-direction:column;align-items:stretch!important;text-align:center;gap:10px}
+}
 </style>
 </head>
 <body>
