@@ -292,3 +292,58 @@ add_filter( 'woocommerce_shipping_fields', function ( $f ) {
 	}
 	return $f;
 }, 20 );
+
+// Checkout com a cara da Glowbos: estilo e script próprios, CEP primeiro e campos em ordem de quem preenche.
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
+		return;
+	}
+	$v = wp_get_theme()->get( 'Version' ) . '.3';
+	wp_enqueue_style( 'glowbos-checkout', get_template_directory_uri() . '/checkout.css', array( 'glowbos' ), $v );
+	wp_enqueue_script( 'glowbos-checkout', get_template_directory_uri() . '/checkout.js', array( 'jquery', 'wc-checkout' ), $v, true );
+}, 30 );
+add_filter( 'woocommerce_checkout_fields', function ( $f ) {
+	$ordem = array(
+		'billing_first_name'   => array( 10, 'form-row-first' ),
+		'billing_last_name'    => array( 20, 'form-row-last' ),
+		'billing_email'        => array( 22, 'form-row-wide' ),
+		'billing_phone'        => array( 24, 'form-row-first' ),
+		'billing_cpf'          => array( 26, 'form-row-last' ),
+		'billing_postcode'     => array( 40, 'form-row-first' ),
+		'billing_address_1'    => array( 50, 'form-row-wide' ),
+		'billing_number'       => array( 55, 'form-row-first' ),
+		'billing_address_2'    => array( 60, 'form-row-last' ),
+		'billing_neighborhood' => array( 65, 'form-row-first' ),
+		'billing_city'         => array( 70, 'form-row-last' ),
+		'billing_state'        => array( 80, 'form-row-wide' ),
+	);
+	foreach ( $ordem as $k => $o ) {
+		if ( isset( $f['billing'][ $k ] ) ) {
+			$f['billing'][ $k ]['priority'] = $o[0];
+			$f['billing'][ $k ]['class']    = array( $o[1] );
+		}
+	}
+	if ( isset( $f['billing']['billing_address_1'] ) ) {
+		$f['billing']['billing_address_1']['placeholder'] = 'Preenche sozinho pelo CEP';
+	}
+	if ( isset( $f['billing']['billing_address_2'] ) ) {
+		$f['billing']['billing_address_2']['label']       = 'Complemento';
+		$f['billing']['billing_address_2']['placeholder'] = 'Apto, bloco (opcional)';
+	}
+	if ( isset( $f['billing']['billing_phone'] ) ) {
+		$f['billing']['billing_phone']['label'] = 'Celular (WhatsApp)';
+	}
+	if ( isset( $f['billing']['billing_cpf'] ) ) {
+		$f['billing']['billing_cpf']['required'] = true;
+	}
+	return $f;
+}, 99 );
+// O WooCommerce reordena os campos de endereço pelo país; para o Brasil, a ordem é a nossa.
+add_filter( 'woocommerce_get_country_locale', function ( $l ) {
+	$l['BR']['postcode']['priority']  = 40;
+	$l['BR']['address_1']['priority'] = 50;
+	$l['BR']['address_2']['priority'] = 60;
+	$l['BR']['city']['priority']      = 70;
+	$l['BR']['state']['priority']     = 80;
+	return $l;
+} );
