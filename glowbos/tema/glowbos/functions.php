@@ -1071,3 +1071,6 @@ function glowbos_mais_vendidos_html() {
 
 // Pixel da Meta e eventos de compra.
 require_once __DIR__ . '/rastreio.php';
+
+// Avaliações da Shopee no lugar da aba vazia do WooCommerce.
+require_once __DIR__ . '/avaliacoes.php';
