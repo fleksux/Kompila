@@ -763,7 +763,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   <div class="gh"><span>Seu carrinho</span><button id="fecha" aria-label="Fechar">✕</button></div>
   <div class="gl" id="gl"></div>
   <div class="gf">
-    <div class="xs" id="xs"><img src="img/fita_105.webp" alt="Fita para arco 5 m e dupla face"><div><small>Combina com seu arco</small><b>Fita 5 m + dupla face</b><span>R$ 11,98</span></div><button id="addFita">+ Adicionar</button></div>
+    <div class="xs" id="xs"><img src="img/fita_arco_rose.webp" alt="Fita para arco 5 m e dupla face"><div><small>Combina com seu arco</small><b>Fita 5 m + dupla face</b><span>R$ 11,98</span></div><button id="addFita">+ Adicionar</button></div>
     <div class="md">🚚 Em SP e Grande SP chega hoje</div>
     <div class="tot"><span>Total</span><b id="tot">R$ 0,00</b></div>
     <a class="btn pri" href="#">Finalizar compra</a>
@@ -829,7 +829,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
 $('#gl').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;const i=+b.dataset.i;C[i].q+=+b.dataset.d;if(C[i].q<1)C.splice(i,1);salva();pinta()});
 $('#packs').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;poe(b.dataset.n,+b.dataset.p,b.dataset.i);const r=b.getBoundingClientRect();confete(r.left+r.width/2,r.top);toast('✓ '+b.dataset.n+' no carrinho');b.textContent='✓ Adicionado';setTimeout(()=>b.textContent='Comprar',1400)});
 window.gbPoeLista=(it,nome)=>{it.forEach(x=>{const e=C.find(c=>c.n===x.n);e?e.q+=x.q:C.push({n:x.n,p:x.p,i:x.i,q:x.q})});salva();pinta();toast('✓ Lista do arco '+nome+' no carrinho');setTimeout(abre,450)};
-$('#addFita').onclick=()=>{poe('Fita 5 m + dupla face',11.98,'img/fita_105.webp');toast('✓ Fita adicionada')};
+$('#addFita').onclick=()=>{poe('Fita 5 m + dupla face',11.98,'img/fita_arco_rose.webp');toast('✓ Fita adicionada')};
 pinta();
 })();
 </script>
@@ -930,7 +930,7 @@ mostra('torcida');
  function compra(c){const it=[];let v=0;TAM.forEach(t=>{const n=a.c.reduce((x,k)=>x+c.q[k][t],0);if(!n)return;const [u,p,img]=PK[t],qt=Math.ceil(n/u);
    const pal=a.t+' '+fm(m)+': '+a.c.filter(k=>c.q[k][t]).map(k=>CO[k][0]+' '+c.q[k][t]).join(', ');
    it.push({n:'Pacote '+u+' balões '+t+'" · '+pal,p,i:'img/'+img+'.webp',q:qt});v+=p*qt});
-  it.push({n:'Fita 5 m + dupla face',p:11.98,i:'img/fita_105.webp',q:1});v+=11.98;return {it,v}}
+  it.push({n:'Fita 5 m + dupla face',p:11.98,i:'img/fita_arco_rose.webp',q:1});v+=11.98;return {it,v}}
  function foto(){if(!a.et)return 'img/arco_'+a.f+'.webp';const fs=a.et.concat(['arco_'+a.f]),k=Math.round((m-MIN)/(MAX-MIN)*(fs.length-1));return 'img/'+fs[Math.max(0,Math.min(fs.length-1,k))]+'.webp'}
  function troca(){const box=$('#maFoto'),f=foto(),at=box.querySelector('img.at');$('#maMont').style.display=a.et?'':'none';if(!at||at.getAttribute('src')===f)return;
   box.querySelectorAll('img.nx').forEach(x=>x.remove());const n=new Image();n.className='nx';n.alt=at.alt;n.src=f;box.appendChild(n);

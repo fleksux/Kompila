@@ -29,7 +29,7 @@
  function compra(c){const it=[];let v=0;TAM.forEach(t=>{const n=a.c.reduce((x,k)=>x+c.q[k][t],0);if(!n)return;const [u,p,img]=PK[t],qt=Math.ceil(n/u);
    const pal=a.t+' '+fm(m)+': '+a.c.filter(k=>c.q[k][t]).map(k=>CO[k][0]+' '+c.q[k][t]).join(', ');
    it.push({n:'Pacote '+u+' balões '+t+'" · '+pal,p,i:IMG+''+img+'.webp',q:qt});v+=p*qt});
-  it.push({n:'Fita 5 m + dupla face',p:11.98,i:IMG+'fita_105.webp',q:1});v+=11.98;return {it,v}}
+  it.push({n:'Fita 5 m + dupla face',p:11.98,i:IMG+'fita_arco_rose.webp',q:1});v+=11.98;return {it,v}}
  function foto(){if(!a.et)return IMG+'arco_'+a.f+'.webp';const fs=a.et.concat(['arco_'+a.f]),k=Math.round((m-MIN)/(MAX-MIN)*(fs.length-1));return IMG+''+fs[Math.max(0,Math.min(fs.length-1,k))]+'.webp'}
  function troca(){const box=$('#maFoto'),f=foto(),at=box.querySelector('img.at');$('#maMont').style.display=a.et?'':'none';if(!at||at.getAttribute('src')===f)return;
   box.querySelectorAll('img.nx').forEach(x=>x.remove());const n=new Image();n.className='nx';n.alt=at.alt;n.src=f;box.appendChild(n);

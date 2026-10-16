@@ -712,7 +712,7 @@ it.querySelectorAll(".gm-cats a[data-gm]").forEach(function(a){a.addEventListene
 // ===== App do arco na página de Arcos: escolhe pela foto, ajusta os metros, a lista vira pacotes no carrinho =====
 add_action( 'wp_enqueue_scripts', function () {
 	if ( function_exists( 'is_product_category' ) && is_product_category( 'arcos' ) ) {
-		$v = wp_get_theme()->get( 'Version' ) . '.3';
+		$v = wp_get_theme()->get( 'Version' ) . '.4';
 		wp_enqueue_style( 'glowbos-arco', get_template_directory_uri() . '/arco.css', array( 'glowbos' ), $v );
 		wp_enqueue_script( 'glowbos-arco', get_template_directory_uri() . '/arco.js', array(), $v, true );
 	}
