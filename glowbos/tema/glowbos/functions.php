@@ -302,25 +302,35 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return;
 	}
-	$v = wp_get_theme()->get( 'Version' ) . '.16';
+	$v = wp_get_theme()->get( 'Version' ) . '.17';
 	wp_enqueue_style( 'glowbos-checkout', get_template_directory_uri() . '/checkout.css', array( 'glowbos' ), $v );
 	wp_enqueue_script( 'glowbos-checkout', get_template_directory_uri() . '/checkout.js', array( 'jquery', 'wc-checkout' ), $v, true );
 }, 30 );
 add_filter( 'woocommerce_checkout_fields', function ( $f ) {
+	// 16/10: CEP primeiro (o frete aparece na hora) e nome completo num campo só.
 	$ordem = array(
-		'billing_first_name'   => array( 10, 'form-row-first' ),
-		'billing_last_name'    => array( 20, 'form-row-last' ),
-		'billing_email'        => array( 22, 'form-row-wide' ),
-		'billing_phone'        => array( 24, 'form-row-first' ),
-		'billing_cpf'          => array( 26, 'form-row-last' ),
-		'billing_postcode'     => array( 40, 'form-row-first' ),
-		'billing_address_1'    => array( 50, 'form-row-wide' ),
-		'billing_number'       => array( 55, 'form-row-first' ),
-		'billing_address_2'    => array( 60, 'form-row-last' ),
-		'billing_neighborhood' => array( 65, 'form-row-first' ),
-		'billing_city'         => array( 70, 'form-row-last' ),
-		'billing_state'        => array( 80, 'form-row-wide' ),
+		'billing_postcode'     => array( 5, 'form-row-first' ),
+		'billing_address_1'    => array( 10, 'form-row-wide' ),
+		'billing_number'       => array( 12, 'form-row-first' ),
+		'billing_address_2'    => array( 14, 'form-row-last' ),
+		'billing_neighborhood' => array( 16, 'form-row-first' ),
+		'billing_city'         => array( 18, 'form-row-last' ),
+		'billing_state'        => array( 19, 'form-row-wide' ),
+		'billing_first_name'   => array( 30, 'form-row-wide' ),
+		'billing_email'        => array( 32, 'form-row-wide' ),
+		'billing_phone'        => array( 34, 'form-row-first' ),
+		'billing_cpf'          => array( 36, 'form-row-last' ),
 	);
+	if ( isset( $f['billing']['billing_first_name'] ) ) {
+		$f['billing']['billing_first_name']['label']       = 'Nome completo';
+		$f['billing']['billing_first_name']['placeholder'] = 'Como está no documento';
+		$f['billing']['billing_first_name']['autocomplete'] = 'name';
+	}
+	unset( $f['billing']['billing_last_name'] );
+	if ( isset( $f['billing']['billing_postcode'] ) ) {
+		$f['billing']['billing_postcode']['label'] = 'CEP';
+		$f['billing']['billing_postcode']['placeholder'] = '00000-000';
+	}
 	foreach ( $ordem as $k => $o ) {
 		if ( isset( $f['billing'][ $k ] ) ) {
 			$f['billing'][ $k ]['priority'] = $o[0];
@@ -344,11 +354,11 @@ add_filter( 'woocommerce_checkout_fields', function ( $f ) {
 }, 99 );
 // O WooCommerce reordena os campos de endereço pelo país; para o Brasil, a ordem é a nossa.
 add_filter( 'woocommerce_get_country_locale', function ( $l ) {
-	$l['BR']['postcode']['priority']  = 40;
-	$l['BR']['address_1']['priority'] = 50;
-	$l['BR']['address_2']['priority'] = 60;
-	$l['BR']['city']['priority']      = 70;
-	$l['BR']['state']['priority']     = 80;
+	$l['BR']['postcode']['priority']  = 5;
+	$l['BR']['address_1']['priority'] = 10;
+	$l['BR']['address_2']['priority'] = 14;
+	$l['BR']['city']['priority']      = 18;
+	$l['BR']['state']['priority']     = 19;
 	return $l;
 } );
 
@@ -376,8 +386,49 @@ add_filter( 'woocommerce_account_menu_items', function ( $i ) {
 add_action( 'woocommerce_after_customer_login_form', function () {
 	echo '<p class="gb-rastreio">Comprou sem criar conta? <a href="' . esc_url( home_url( '/acompanhar-pedido/' ) ) . '">Acompanhe pelo número do pedido</a>.</p>';
 } );
-// No checkout, criar conta já vem marcado (senha chega por e-mail), pra o cliente ter "Meus pedidos".
-add_filter( 'woocommerce_create_account_default_checked', '__return_true' );
+// 16/10: sem caixinha de "criar conta". A conta nasce sozinha depois da compra, com o e-mail do
+// pedido, e o WooCommerce manda o link pra pessoa definir a senha e ver "Meus pedidos".
+add_filter( 'pre_option_woocommerce_enable_signup_and_login_from_checkout', function () { return 'no'; } );
+add_filter( 'pre_option_woocommerce_enable_guest_checkout', function () { return 'yes'; } );
+// Nome completo num campo só: separa em nome e sobrenome pro pedido, Bling e Mercado Pago.
+add_filter( 'woocommerce_checkout_posted_data', function ( $d ) {
+	$nome = trim( preg_replace( '/\s+/', ' ', (string) ( $d['billing_first_name'] ?? '' ) ) );
+	if ( '' !== $nome && empty( $d['billing_last_name'] ) ) {
+		$p = explode( ' ', $nome, 2 );
+		$d['billing_first_name'] = $p[0];
+		$d['billing_last_name']  = $p[1] ?? '';
+	}
+	return $d;
+} );
+add_action( 'woocommerce_checkout_order_processed', function ( $oid ) {
+	$o = wc_get_order( $oid );
+	if ( ! $o || $o->get_customer_id() ) {
+		return;
+	}
+	$email = $o->get_billing_email();
+	if ( ! is_email( $email ) ) {
+		return;
+	}
+	$uid = email_exists( $email );
+	if ( ! $uid ) {
+		add_filter( 'pre_option_woocommerce_registration_generate_password', function () { return 'yes'; } );
+		add_filter( 'pre_option_woocommerce_registration_generate_username', function () { return 'yes'; } );
+		$base = sanitize_user( strtolower( strstr( $email, '@', true ) ), true );
+		$login = $base ?: 'cliente';
+		for ( $i = 2; username_exists( $login ); $i++ ) {
+			$login = $base . $i;
+		}
+		$uid = wc_create_new_customer( $email, $login, '', array( 'first_name' => $o->get_billing_first_name(), 'last_name' => $o->get_billing_last_name() ) );
+		if ( is_wp_error( $uid ) ) {
+			return;
+		}
+		foreach ( array( 'first_name', 'last_name', 'phone', 'postcode', 'address_1', 'address_2', 'city', 'state', 'country' ) as $c ) {
+			update_user_meta( $uid, 'billing_' . $c, $o->{'get_billing_' . $c}() );
+		}
+	}
+	$o->set_customer_id( $uid );
+	$o->save();
+}, 20 );
 add_filter( 'gettext', function ( $t, $orig, $dom ) {
 	if ( 'woocommerce' === $dom ) {
 		if ( 'Proceed to checkout' === $orig ) {

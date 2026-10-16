@@ -1,7 +1,7 @@
 /* Checkout da Glowbos: preenche pelo CEP, lembra os dados e leva o cliente até o pagamento. */
 (function ($) {
 	if (!$ || !document.querySelector('form.woocommerce-checkout')) return;
-	var LS = 'glowbos_ck', GUARDA = ['billing_first_name', 'billing_last_name', 'billing_email', 'billing_phone', 'billing_postcode', 'billing_address_1', 'billing_number', 'billing_address_2', 'billing_neighborhood', 'billing_city', 'billing_state'];
+	var LS = 'glowbos_ck', GUARDA = ['billing_first_name', 'billing_email', 'billing_phone', 'billing_postcode', 'billing_address_1', 'billing_number', 'billing_address_2', 'billing_neighborhood', 'billing_city', 'billing_state'];
 
 	// títulos e textos
 	function titulos() {
@@ -55,7 +55,7 @@
 				if (j.uf) $('#' + pre + '_state').val(j.uf).trigger('change');
 				$msg.text('✓ ' + [j.logradouro, j.bairro, j.localidade + '/' + j.uf].filter(Boolean).join(', '));
 				$(document.body).trigger('update_checkout');
-				setTimeout(function () { var n = document.getElementById(pre + '_number'); if (n) n.focus(); }, 60);
+				setTimeout(function () { var n = document.getElementById(pre + '_number'); if (n && !n.value) n.focus(); }, 60);
 				guarda();
 			}).catch(function () { $msg.prop('hidden', true); });
 		});
@@ -82,7 +82,7 @@
 
 
 	// ordem e largura dos campos (o WooCommerce reordena pelo país; aqui manda a nossa)
-	var ORDEM = [['billing_first_name','first'],['billing_last_name','last'],['billing_email','wide'],['billing_phone','first'],['billing_cpf','last'],['billing_postcode','first'],['billing_address_1','wide'],['billing_number','first'],['billing_address_2','last'],['billing_neighborhood','first'],['billing_city','last'],['billing_state','wide']];
+	var ORDEM = [['billing_postcode','first'],['billing_address_1','wide'],['billing_number','first'],['billing_address_2','last'],['billing_neighborhood','first'],['billing_city','last'],['billing_state','wide'],['billing_first_name','wide'],['billing_email','wide'],['billing_phone','first'],['billing_cpf','last']];
 	function ordena() {
 		var w = document.querySelector('.woocommerce-billing-fields__field-wrapper'); if (!w) return;
 		ORDEM.forEach(function (o, i) {
