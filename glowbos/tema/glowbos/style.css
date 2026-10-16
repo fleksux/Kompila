@@ -2,7 +2,7 @@
 Theme Name: Glowbos
 Author: Kompila
 Description: Tema da loja Glowbos. A página inicial é a home aprovada (home.html); as páginas da loja usam o mesmo cabeçalho e rodapé.
-Version: 1.0.9
+Version: 1.0.11
 Text Domain: glowbos
 */
 :root{--forte:#FF1F7A;--bebe:#FFF2F6;--vinho:#1d1a1f;--vinho2:#5f5a63}
@@ -150,7 +150,10 @@ a{color:inherit}
 .gb-conta+.gb-cart{margin-left:-24px!important}
 .gb-hd>.gb-cart{margin-right:-9px}
 /* vitrine: foto inteira, sem cortar a embalagem */
-.woocommerce ul.products li.product a img{object-fit:contain!important;aspect-ratio:1!important;background:#FDF2F6;padding:6px;box-sizing:border-box}
+.woocommerce ul.products li.product a img{object-fit:contain!important;aspect-ratio:1!important;background:#fff!important;padding:0;box-sizing:border-box}
 /* botão secundário: sem branco com linha preta; tom rosado da marca */
 .woocommerce ul.products li.product .button.gb-escolher,.gb-arco .btn.lin,.gg-d .gg-a a.s{background:#FFE4EE!important;color:var(--berry,#B0124F)!important;border:0!important;box-shadow:none!important}
 .woocommerce ul.products li.product .button.gb-escolher:hover,.gb-arco .btn.lin:hover,.gg-d .gg-a a.s:hover{background:#FFD0E1!important;color:var(--berry,#B0124F)!important}
+/* vitrine: foto preenche o quadro; embalagem do pacote fechado aparece inteira */
+.woocommerce ul.products li.product a img{object-fit:cover!important}
+.woocommerce ul.products li.product.product_cat-pacotes-fechados a img{object-fit:contain!important}
