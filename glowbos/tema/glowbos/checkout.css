@@ -14,10 +14,10 @@
 form.checkout_coupon{border:1px solid #ece8eb!important;border-radius:12px!important;padding:16px!important}
 
 /* grade principal */
-form.woocommerce-checkout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:0 36px;align-items:start;margin-top:10px}
-form.woocommerce-checkout #customer_details{grid-column:1;grid-row:1 / span 3}
-form.woocommerce-checkout #order_review_heading{grid-column:2;grid-row:1;margin:0 0 12px!important}
-form.woocommerce-checkout #order_review{grid-column:2;grid-row:2;position:sticky;top:104px}
+form.woocommerce-checkout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-rows:auto auto 1fr;gap:0 36px;align-items:start;margin-top:10px}
+form.woocommerce-checkout #customer_details{grid-column:1;grid-row:2 / span 2}
+form.woocommerce-checkout #order_review_heading{grid-column:2;grid-row:2;margin:0 0 12px!important}
+form.woocommerce-checkout #order_review{grid-column:2;grid-row:3;position:sticky;top:104px}
 .woocommerce .col2-set .col-1,.woocommerce .col2-set .col-2,.woocommerce-page .col2-set .col-1,.woocommerce-page .col2-set .col-2{float:none!important;width:100%!important}
 #customer_details>div{background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:24px 24px 10px;margin-bottom:16px}
 #customer_details h3,#order_review_heading{font:800 20px "Inter Tight"!important;letter-spacing:-.02em;margin:0 0 16px!important;display:flex;align-items:center;gap:10px}
@@ -110,3 +110,10 @@ body.woocommerce-checkout #payment .mp-pix-template-container{padding:6px 0 4px!
 .woocommerce-checkout .select2-container .select2-selection--single{display:flex!important;align-items:center}
 .woocommerce-checkout .select2-container .select2-selection--single .select2-selection__rendered{line-height:1.2!important;padding:0!important}
 .woocommerce-checkout .select2-container .select2-selection--single .select2-selection__arrow{top:50%!important;transform:translateY(-50%);height:20px!important}
+
+/* erros do checkout: no topo, largura toda, bem visíveis */
+form.woocommerce-checkout .woocommerce-NoticeGroup{grid-column:1 / -1;grid-row:1;margin-bottom:16px}
+form.woocommerce-checkout .woocommerce-NoticeGroup .woocommerce-error{margin:0!important;background:#fff0f3!important;border:1.5px solid #ffc2d3!important;border-radius:14px;padding:16px 20px 16px 44px!important;position:relative;font-size:14.5px;color:#9b1239}
+form.woocommerce-checkout .woocommerce-NoticeGroup .woocommerce-error::before{display:block!important;content:"!";position:absolute;left:16px;top:16px;width:20px;height:20px;border-radius:50%;background:#e0245e;color:#fff;font:800 13px/20px Inter;text-align:center}
+form.woocommerce-checkout .woocommerce-NoticeGroup .woocommerce-error li{margin:2px 0}
+@media (max-width:900px){form.woocommerce-checkout .woocommerce-NoticeGroup{grid-column:1}}
