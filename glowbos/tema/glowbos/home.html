@@ -590,6 +590,27 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .avs-ver{text-align:center;margin-top:18px}.avs-ver a{color:#C2185B;font-weight:700;font-size:14.5px}
 @media (max-width:1100px){.avl{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:760px){.avl{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:18px 0 0;padding:0 0 8px;scrollbar-width:none}.avl::-webkit-scrollbar{display:none}.avc{flex:0 0 78%;scroll-snap-align:start}}
+/* carrossel: todas as avaliações com foto, setinhas */
+.avl{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:14px;scrollbar-width:none;padding-bottom:6px}
+.avl::-webkit-scrollbar{display:none}
+.avc{flex:0 0 calc((100% - 70px)/6);scroll-snap-align:start}
+.avs-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px}
+.avs-b{width:46px;height:46px;border-radius:50%;border:0;background:linear-gradient(135deg,#5E0B2E,#B0124F);color:#fff;font:700 26px/1 Inter;cursor:pointer;box-shadow:0 8px 18px rgba(94,11,46,.25)}
+.avs-b:disabled{opacity:.3;cursor:default}
+#avsN{font:600 14px Inter;color:#6b6470;min-width:110px;text-align:center}
+@media (max-width:1100px){.avc{flex-basis:calc((100% - 28px)/3)}}
+@media (max-width:760px){.avc{flex-basis:78%}}
+/* 16/10: cartão estilo post (bolinha com foto do perfil, nome, estrelas, comentário, foto da festa) */
+.avc{background:#fff;border:1px solid #efe9ec;border-radius:16px;overflow:hidden;display:flex!important;flex-direction:column;padding:14px 14px 12px;gap:10px}
+.avc-h{display:flex;align-items:center;gap:10px}
+.avc-av{width:42px;height:42px;border-radius:50%;flex:none;overflow:hidden;background:linear-gradient(135deg,#FFD0E1,#F8A5C2);display:grid;place-items:center;font:800 17px "Inter Tight",Inter;color:#8E1446;text-transform:uppercase}
+.avc-av img{width:100%;height:100%;object-fit:cover;display:block}
+.avc-h>div{min-width:0;flex:1}.avc-h b{display:block;font:700 13.5px Inter;color:#1d1a1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.avc-h .avc-e{margin-top:2px}
+.avc>p{margin:0;font-size:14px;line-height:1.5;color:#1d1a1f}
+.avl{align-items:flex-start}
+.avc .avc-f{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block}
+.avc>small{color:#6b6470;font-size:12px}
 </style>
 </head>
 <body>
@@ -754,8 +775,8 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   <div class="temas" id="temasg"></div>
 </div></section>
 <section class="sec avs" id="avaliacoes"><div class="w"><div class="ctr"><span class="eyebrow">Avaliações na Shopee</span><h2 class="tt">Quem já fez festa com a gente</h2><p class="sub">Fotos e palavras de clientes da Mayara Festas, a nossa loja na Shopee. Nota 4,9 com mais de 67 mil avaliações.</p></div>
-<div class="avl"><article class="avc"><img src="img/avaliacoes/av_carros.webp" alt="Festa de cliente com balões da Mayara Festas" loading="lazy"><div class="avc-b"><div class="avc-e" aria-label="5 de 5 estrelas"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></div><p>“Muito lindo, chegou certinho e consegui fazer uma decoração perfeita para meu menino.”</p><div class="avc-q"><b>t*****s</b><small>comprou Pacote 75 balões</small></div></div></article><article class="avc"><img src="img/avaliacoes/av_belisa.webp" alt="Festa de cliente com balões da Mayara Festas" loading="lazy"><div class="avc-b"><div class="avc-e" aria-label="5 de 5 estrelas"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></div><p>“Ótimo produto, vendedor atencioso, me respondeu educadamente porque comprei o produto 1 semana antes da festa e precisava que chegasse no prazo. Vídeo de 4 dias após encher: ainda estão intactas. Ótimo custo benefício.”</p><div class="avc-q"><b>b*****a</b><small>comprou Pacote 75 balões</small></div></div></article><article class="avc"><img src="img/avaliacoes/av_gabrielly.webp" alt="Festa de cliente com balões da Mayara Festas" loading="lazy"><div class="avc-b"><div class="avc-e" aria-label="5 de 5 estrelas"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></div><p>“Comprei para fazer essa decoração e amei, os balões vêm de todos os tamanhos.”</p><div class="avc-q"><b>g*****y</b><small>comprou Kit arco 60 peças</small></div></div></article><article class="avc"><img src="img/avaliacoes/av_dino.webp" alt="Festa de cliente com balões da Mayara Festas" loading="lazy"><div class="avc-b"><div class="avc-e" aria-label="5 de 5 estrelas"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></div><p>“… Chegou certinho, bem embalada. Podem comprar, são ótimas, deu certinho no arco de balão, amei.”</p><div class="avc-q"><b>j*****5</b><small>comprou Pacote 75 balões</small></div></div></article><article class="avc"><img src="img/avaliacoes/av_lorene.webp" alt="Festa de cliente com balões da Mayara Festas" loading="lazy"><div class="avc-b"><div class="avc-e" aria-label="5 de 5 estrelas"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></div><p>“… As cores são bonitas, ficou lindo na decoração, dá pra compor bem! No geral gostei bastante!”</p><div class="avc-q"><b>l*****t</b><small>comprou Pacote 75 balões</small></div></div></article><article class="avc"><img src="img/avaliacoes/av_safari.webp" alt="Festa de cliente com balões da Mayara Festas" loading="lazy"><div class="avc-b"><div class="avc-e" aria-label="5 de 5 estrelas"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></div><p>“Qualidade ótima, tamanho ótimo. As cores combinaram com a decoração.”</p><div class="avc-q"><b>g*****x</b><small>comprou Pacote 75 balões</small></div></div></article></div>
-<p class="avs-ver"><a href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener">Ler mais avaliações na Shopee ↗</a></p></div></section>
+<div class="avl" id="avl"></div>
+<div class="avs-nav"><button type="button" class="avs-b" id="avsAnt" aria-label="Anteriores">‹</button><span id="avsN"></span><button type="button" class="avs-b" id="avsProx" aria-label="Próximas">›</button></div></div></section>
 </main>
 
 <footer><div class="w">
@@ -977,6 +998,28 @@ addEventListener('load',ajusta);addEventListener('resize',ajusta);setTimeout(aju
 function f(){t=0;var h=j.offsetHeight,y=Math.min(Math.max(scrollY-(j.getBoundingClientRect().top+scrollY-scrollY),0),h);var r=j.getBoundingClientRect();var p=Math.min(Math.max(-r.top,0),h);
 j.style.setProperty('--py',(p*.4).toFixed(1)+'px');j.style.setProperty('--po',Math.max(0,1-p/(h*.75)).toFixed(3))}
 addEventListener('scroll',function(){if(!t)t=requestAnimationFrame(f)},{passive:true});f()})();
+</script>
+<script>
+/* 16/10: carrossel com todas as avaliações com foto da Mayara Festas na Shopee */
+(function(){
+var l=document.getElementById('avl'); if(!l)return;
+var ant=document.getElementById('avsAnt'),prox=document.getElementById('avsProx'),n=document.getElementById('avsN');
+var EST='<svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg>'.repeat(5);
+var esc=function(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML};
+var BASE='img/avaliacoes/shopee/';
+fetch('/wp-content/themes/glowbos/avaliacoes_shopee.json').then(function(r){return r.json()}).then(function(d){
+  var h='';d.forEach(function(x){
+    var av=x.a?'<img src="'+BASE+'../perfil/'+x.a+'" alt="" loading="lazy">':esc((x.n||'?').replace(/[^a-z0-9]/gi,'').charAt(0)||'?');
+    h+='<article class="avc"><div class="avc-h"><span class="avc-av">'+av+'</span><div><b>'+esc(x.n)+'</b><div class="avc-e" aria-label="5 de 5 estrelas">'+EST+'</div></div></div><p>“'+esc(x.c)+'”</p><img class="avc-f" src="'+BASE+x.f+'" alt="Foto da festa de '+esc(x.n)+'" loading="lazy"><small>comprou '+esc(x.p)+' · avaliação na Shopee</small></article>'});
+  l.innerHTML=h;conta();
+}).catch(function(){});
+function conta(){var c=l.querySelectorAll('.avc'),w=c[0]?c[0].getBoundingClientRect().width+14:1,i=Math.round(l.scrollLeft/w),vis=Math.max(1,Math.round(l.clientWidth/w));
+  n.textContent=(i+1)+'–'+Math.min(c.length,i+vis)+' de '+c.length;ant.disabled=l.scrollLeft<5;prox.disabled=l.scrollLeft+l.clientWidth>=l.scrollWidth-5}
+ant.onclick=function(){l.scrollBy({left:-l.clientWidth,behavior:'smooth'})};
+prox.onclick=function(){l.scrollBy({left:l.clientWidth,behavior:'smooth'})};
+l.addEventListener('scroll',function(){clearTimeout(l._t);l._t=setTimeout(conta,80)},{passive:true});
+addEventListener('resize',conta);conta();
+})();
 </script>
 </body>
 </html>
