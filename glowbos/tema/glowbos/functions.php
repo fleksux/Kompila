@@ -350,3 +350,6 @@ add_filter( 'woocommerce_get_country_locale', function ( $l ) {
 
 // Sem caixinha de "Li e concordo": o aceite dos termos vai numa linha discreta junto do aviso de privacidade.
 add_filter( 'woocommerce_checkout_show_terms', '__return_false' );
+add_action( 'woocommerce_review_order_before_submit', function () {
+	echo '<div class="woocommerce-privacy-policy-text"><p>' . wp_kses_post( wc_replace_policy_page_link_placeholders( wc_get_privacy_policy_text( 'checkout' ) ) ) . '</p></div>';
+} );
