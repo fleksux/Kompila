@@ -5,6 +5,7 @@
 // a Meta não contar a mesma compra duas vezes.
 
 const GLOWBOS_PIXEL = '2329466134467831';
+const GLOWBOS_GA4   = 'G-11H893WBQ3'; // Google Analytics, conta Glowbos no Google do fleks.ux
 
 function glowbos_px_valor( $v ) {
 	return round( (float) $v, 2 );
@@ -224,13 +225,27 @@ add_action( 'wp_head', function () {
 		$eventos[] = $compra;
 	}
 
+	// Os mesmos momentos no Google Analytics, com os nomes de comércio do GA4.
+	$ga_nome = array( 'ViewContent' => 'view_item', 'AddToCart' => 'add_to_cart', 'InitiateCheckout' => 'begin_checkout', 'Purchase' => 'purchase' );
 	$js = '';
 	foreach ( $eventos as $e ) {
 		$js .= sprintf( "fbq('track',%s,%s,{eventID:%s});\n", wp_json_encode( $e['ev'] ), wp_json_encode( $e['data'] ), wp_json_encode( $e['id'] ) );
+		$itens = array();
+		foreach ( (array) ( $e['data']['content_ids'] ?? array() ) as $pid ) {
+			$p       = wc_get_product( (int) $pid );
+			$itens[] = array( 'item_id' => (string) $pid, 'item_name' => $p ? $p->get_name() : '', 'price' => $p ? glowbos_px_valor( $p->get_price() ) : 0 );
+		}
+		$ga = array( 'currency' => 'BRL', 'value' => $e['data']['value'] ?? 0, 'items' => $itens );
+		if ( 'Purchase' === $e['ev'] ) {
+			$ga['transaction_id'] = $e['data']['order_id'] ?? $e['id'];
+		}
+		$js .= sprintf( "gtag('event',%s,%s);\n", wp_json_encode( $ga_nome[ $e['ev'] ] ), wp_json_encode( $ga ) );
 	}
 	?>
-<!-- Meta Pixel: Glowbos -->
+<!-- Google Analytics e Meta Pixel: Glowbos -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( GLOWBOS_GA4 ); ?>"></script>
 <script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?php echo esc_js( GLOWBOS_GA4 ); ?>');
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 fbq('init','<?php echo esc_js( GLOWBOS_PIXEL ); ?>');
 fbq('track','PageView');
