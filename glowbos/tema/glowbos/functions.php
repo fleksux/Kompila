@@ -449,7 +449,7 @@ function glowbos_app_config( $pid ) {
 		'candy50' => array( 'sequencia', 2, 'candy', '50 balões candy de 8"' ), 'candy75' => array( 'sequencia', 3, 'candy', '75 balões candy de 8"' ), 'candy100' => array( 'sequencia', 4, 'candy', '100 balões candy de 8"' ),
 		'kit60' => array( 'sequencia', 3, 'lisos', 'kit 60 peças' ), 'kit100' => array( 'sequencia', 3, 'lisos', 'kit 100 peças' ), 'kit112' => array( 'sequencia', 4, 'lisos', 'kit 112 peças' ),
 		'kit120' => array( 'sequencia', 3, 'lisos', 'kit 120 peças' ), 'kiteco100' => array( 'sequencia', 2, 'lisos', 'kit econômico 100 balões' ),
-		'pct5_50' => array( 'quantidade', 0, 'lisos', '50 balões de 5"' ), 'pct9_50' => array( 'quantidade', 0, 'lisos', '50 balões de 9"' ),
+		'pct5_50' => array( 'quantidade', 0, 'lisos', '50 balões de 5"' ), 'pct7_50' => array( 'quantidade', 0, 'lisos', '50 balões de 7"' ), 'pct9_50' => array( 'quantidade', 0, 'lisos', '50 balões de 9"' ),
 		'pct12_25' => array( 'quantidade', 0, 'lisos', '25 balões de 12"' ), 'pct16_12' => array( 'quantidade', 0, 'lisos', '12 balões de 16"' ),
 		'metal5_25' => array( 'quantidade', 0, 'metal', '25 balões metalizados de 5"' ),
 		'numero' => array( 'numero', 0, '', 'coluna com número' ),
