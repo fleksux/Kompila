@@ -565,6 +565,8 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 @media (max-width:900px){.deco-in{grid-template-columns:1fr;width:calc(100% - 32px)}.deco-ft{order:-1;min-height:240px}.deco-tx{padding:26px 20px;text-align:center;align-items:center}.deco-ac{width:100%;flex-direction:column}.deco-ac .btn{width:100%}}
 @media (min-width:901px){.deco-in{grid-template-columns:minmax(500px,1.1fr) 1fr!important}.deco-ac{flex-wrap:nowrap}.deco-ac .btn{white-space:nowrap;padding:0 22px}.deco-tx{padding:46px 40px}}
 .mpt button{position:relative}.mpt-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#16A34A;color:#fff;font:700 10.5px/1 Inter;padding:5px 9px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 10px rgba(22,163,74,.3)}
+.btn.lin,.deco-ac .btn.lin{background:#FFE4EE!important;color:var(--berry,#B0124F)!important;border:0!important;box-shadow:none!important}.btn.lin:hover{background:#FFD0E1!important}
+.mpt .mpt-tag{color:#fff!important;font-weight:800!important}
 </style>
 </head>
 <body>
@@ -904,7 +906,7 @@ mostra('torcida');
   {f:'16_verde_e_branco',t:'Alviverde',g:'Torcida',c:['verde_bandeira','branco']}
  ];
  const TAM=['16','12','9','5'],DENS={'16':1.6,'12':16,'9':10,'5':14},MIN=2,MAX=5;
- const PK={'5':[50,17.98,'pacote_5pol'],'9':[50,14.89,'pacote_9pol'],'12':[25,21.50,'pacote_12pol'],'16':[12,21.97,'pacote_16pol']};
+ const PK={'5':[50,9.99,'pacote_5pol'],'9':[50,18.99,'pacote_9pol'],'12':[25,15.99,'pacote_12pol'],'16':[12,15.99,'pacote_16pol']};
  const $=s=>document.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',','),fm=m=>String(Math.round(m*10)/10).replace('.',',')+' m';
  if(!$('#maArcos'))return;
  let g='Todos',a=AR[0],m=3,alvo=0;

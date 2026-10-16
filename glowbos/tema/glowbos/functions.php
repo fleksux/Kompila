@@ -776,7 +776,7 @@ function glowbos_guia_linhas() {
 		'arcos'    => array( 'Arcos', 'arco_10_candy_morango.webp', 'Escolha pela foto, diga os metros e a gente calcula os balões.', 'R$ 35,99', $cat( 'arcos' ) . '#gbArco', 'Montar meu arco', $cat( 'arcos' ) ),
 		'kits'     => array( 'Kits de arco', 'kit_503.webp', 'De 60 a 120 peças, com as cores que você escolher.', 'R$ 31,99', $prod( 'kit100' ), 'Montar meu kit', $cat( 'kits-de-arco' ) ),
 		'sortidos' => array( 'Pacotes sortidos', 'pack_azul_verm_amar.webp', '50 a 125 balões de 8" em até 5 cores, na sua sequência.', 'R$ 19,87', $prod( 'pct75' ), 'Montar meu pacote', $cat( 'pacotes' ) ),
-		'fechados' => array( 'Pacotes fechados', 'arco_07_pastel_neutro.webp', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada.', 'R$ 14,89', $prod( 'pct9_50' ), 'Escolher as cores', $cat( 'pacotes-fechados' ) ),
+		'fechados' => array( 'Pacotes fechados', 'emb_lilas.webp', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada.', 'R$ 9,99', $prod( 'pct9_50' ), 'Escolher as cores', $cat( 'pacotes-fechados' ) ),
 		'candy'    => array( 'Candy colors', 'pack_candy.webp', 'Os tons pastel do chá revelação e da festa infantil.', 'R$ 19,87', $prod( 'candy75' ), 'Montar candy', $cat( 'candy-colors' ) ),
 		'cromados' => array( 'Cromados', 'premium_4_cromado.webp', 'Metalizados com brilho de festa profissional.', 'R$ 14,98', $prod( 'metal5_25' ), 'Escolher as cores', $cat( 'cromados' ) ),
 		'numeros'  => array( 'Números', 'num_rose_5.webp', 'Número gigante de 0 a 9 sobre coluna de balões.', 'sob encomenda', $prod( 'numero' ), 'Escolher o número', $cat( 'numeros' ) ),

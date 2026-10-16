@@ -17,7 +17,7 @@
   {f:'16_verde_e_branco',t:'Alviverde',g:'Torcida',c:['verde_bandeira','branco']}
  ];
  const TAM=['16','12','9','5'],DENS={'16':1.6,'12':16,'9':10,'5':14},MIN=2,MAX=5;
- const PK={'5':[50,17.98,'pacote_5pol'],'9':[50,14.89,'pacote_9pol'],'12':[25,21.50,'pacote_12pol'],'16':[12,21.97,'pacote_16pol']};
+ const PK={'5':[50,9.99,'pacote_5pol'],'9':[50,18.99,'pacote_9pol'],'12':[25,15.99,'pacote_12pol'],'16':[12,15.99,'pacote_16pol']};
  const IMG=(document.getElementById('gbArco')||{}).dataset?document.getElementById('gbArco').dataset.img:'img/';const $=s=>document.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',','),fm=m=>String(Math.round(m*10)/10).replace('.',',')+' m';
  if(!$('#maArcos'))return;
  let g='Todos',a=AR[0],m=3,alvo=0;
