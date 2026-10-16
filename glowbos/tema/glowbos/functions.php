@@ -88,6 +88,10 @@ add_action( 'wc_ajax_glowbos_sync', function () {
 
 // Página do produto: entrega no mesmo dia, CEP e garantias logo abaixo do botão de comprar.
 add_action( 'woocommerce_single_product_summary', function () {
+	$gc = glowbos_app_config( get_the_ID() );
+	if ( $gc && in_array( $gc[0], array( 'numero', 'bubble' ), true ) ) {
+		return; // sob encomenda: prazo e valor vêm pelo WhatsApp
+	}
 	?>
 	<div class="gb-pdp">
 		<div class="gb-hoje"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span><span><b>Chega hoje em São Paulo e Grande SP</b>Pedido pago até 12h sai no mesmo dia; depois disso, chega no dia seguinte.</span></div>
@@ -448,6 +452,8 @@ function glowbos_app_config( $pid ) {
 		'pct5_50' => array( 'quantidade', 0, 'lisos', '50 balões de 5"' ), 'pct9_50' => array( 'quantidade', 0, 'lisos', '50 balões de 9"' ),
 		'pct12_25' => array( 'quantidade', 0, 'lisos', '25 balões de 12"' ), 'pct16_12' => array( 'quantidade', 0, 'lisos', '12 balões de 16"' ),
 		'metal5_25' => array( 'quantidade', 0, 'metal', '25 balões metalizados de 5"' ),
+		'numero' => array( 'numero', 0, '', 'coluna com número' ),
+		'bubble' => array( 'bubble', 3, 'lisos', 'bubble personalizado' ),
 	);
 	return $c[ $k ] ?? null;
 }
@@ -466,9 +472,9 @@ add_action( 'woocommerce_single_product_summary', function () {
 	}
 	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 	printf(
-		'<div class="gb-app2" id="gbApp2" data-tipo="%s" data-cores="%d" data-paleta="%s" data-resumo="%s" data-preco="%s" data-pid="%d" data-nome="%s" data-img="%s" data-add="%s"></div>',
+		'<div class="gb-app2" id="gbApp2" data-tipo="%s" data-cores="%d" data-paleta="%s" data-resumo="%s" data-preco="%s" data-pid="%d" data-nome="%s" data-img="%s" data-add="%s" data-orc="%s"></div>',
 		esc_attr( $c[0] ), (int) $c[1], esc_attr( $c[2] ), esc_attr( $c[3] ), esc_attr( wc_get_price_to_display( $product ) ), (int) $product->get_id(),
-		esc_attr( $product->get_name() ), esc_url( get_template_directory_uri() . '/img/' ), esc_url( add_query_arg( 'wc-ajax', 'glowbos_add', home_url( '/' ) ) )
+		esc_attr( $product->get_name() ), esc_url( get_template_directory_uri() . '/img/' ), esc_url( add_query_arg( 'wc-ajax', 'glowbos_add', home_url( '/' ) ) ), esc_url( add_query_arg( 'wc-ajax', 'glowbos_orcamento', home_url( '/' ) ) )
 	);
 	printf(
 		'<form id="gbForm" method="post" action="%s" style="display:none"><input type="hidden" name="add-to-cart" value="%d"><input type="hidden" name="quantity" value="1"><input type="hidden" name="paleta" value=""><input type="hidden" name="gb_img" value=""></form>',
@@ -513,6 +519,7 @@ function glowbos_departamentos() {
 		'pacotes'          => array( 'Pacotes sortidos', '50 a 125 balões de 8" em até 5 cores, na sequência que você montar.', 'pack_azul_verm_amar.webp' ),
 		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'arco_07_pastel_neutro.webp' ),
 		'candy-colors'     => array( 'Candy colors', 'Os tons pastel que viraram a cara do chá revelação e da festa infantil.', 'arco_09_candy_algodao.webp' ),
+		'bubbles'          => array( 'Bubbles', 'Balão transparente com o nome da festa e balõezinhos coloridos dentro.', 'cena_04_bubble_alice.webp' ),
 		'cromados'         => array( 'Cromados e metalizados', 'O brilho que dá acabamento de festa profissional.', 'premium_4_cromado.webp' ),
 		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'numero_5_rose.webp' ),
 		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'cena_07_textura_baloes.webp' ),
@@ -544,6 +551,9 @@ function glowbos_dep_topo() {
 }
 // filtros: tamanho e preço (o WooCommerce entende ?filter_tamanho= e ?min_price/max_price)
 add_action( 'woocommerce_before_shop_loop', function () {
+	if ( is_product_category( 'numeros' ) ) {
+		return;
+	}
 	$base  = remove_query_arg( array( 'filter_tamanho', 'query_type_tamanho', 'min_price', 'max_price', 'paged' ) );
 	$tam   = isset( $_GET['filter_tamanho'] ) ? sanitize_title( wp_unslash( $_GET['filter_tamanho'] ) ) : '';
 	$pmax  = isset( $_GET['max_price'] ) ? (int) $_GET['max_price'] : 0;
@@ -571,5 +581,122 @@ add_filter( 'woocommerce_loop_add_to_cart_link', function ( $html, $product ) {
 	if ( ! $c ) {
 		return $html;
 	}
-	return sprintf( '<a href="%s" class="button gb-escolher">%s</a>', esc_url( $product->get_permalink() ), 'quantidade' === $c[0] ? 'Escolher as cores' : 'Montar as cores' );
+	return sprintf( '<a href="%s" class="button gb-escolher">%s</a>', esc_url( $product->get_permalink() ), 'bubble' === $c[0] ? 'Personalizar' : ( 'numero' === $c[0] ? 'Escolher o número' : ( 'quantidade' === $c[0] ? 'Escolher as cores' : 'Montar as cores' ) ) );
 }, 10, 2 );
+
+// ===== Assinatura de novidades (perto do rodapé, em todas as páginas) =====
+function glowbos_news_html() {
+	$url = esc_url( add_query_arg( 'wc-ajax', 'glowbos_news', home_url( '/' ) ) );
+	return '<style>
+.gb-news{background:var(--bebe,#fff0f6);padding:34px 0;margin-top:72px}
+.gb-news~footer,.gb-news~.gb-foot{margin-top:0!important}
+.gb-news-w{max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:20px 40px;flex-wrap:wrap}
+.gb-news h3{font:800 24px/1.15 "Inter Tight",sans-serif;letter-spacing:-.02em;margin:0 0 4px;color:var(--vinho,#1a1720)}
+.gb-news p{margin:0;font-size:14.5px;color:var(--vinho2,#5c5560)}
+.gb-news form{display:flex;gap:8px;flex:1;max-width:460px;min-width:280px}
+.gb-news input[type=email]{flex:1;height:48px;border:1.5px solid #ecd9e1;border-radius:10px;padding:0 14px;font:500 15px Inter,sans-serif;background:#fff;min-width:0}
+.gb-news input[type=email]:focus{outline:0;border-color:var(--forte,#ff1f7a)}
+.gb-news button{height:48px;padding:0 20px;border:0;border-radius:10px;background:var(--vinho,#1a1720);color:#fff;font:700 15px Inter,sans-serif;cursor:pointer;white-space:nowrap}
+.gb-news button:hover{background:var(--forte,#ff1f7a)}
+.gb-news .ok{font-weight:700;color:#17803d}
+.gb-news .hp{position:absolute;left:-9999px}
+@media (max-width:640px){.gb-news-w{padding:0 16px}.gb-news form{min-width:0;width:100%;max-width:none}.gb-news h3{font-size:20px}}
+</style>
+<section class="gb-news"><div class="gb-news-w"><div><h3>Novidades e paletas da semana</h3><p>Lançamentos, temas de época e promoções no seu e-mail. Sem spam.</p></div>
+<form id="gbNews" data-url="' . $url . '"><input type="email" name="email" placeholder="Seu e-mail" required autocomplete="email"><input class="hp" type="text" name="site" tabindex="-1" autocomplete="off"><button type="submit">Quero receber</button></form></div></section>
+<script>(function(){var f=document.getElementById("gbNews");if(!f)return;f.addEventListener("submit",function(e){e.preventDefault();var b=f.querySelector("button");b.disabled=true;b.textContent="Enviando...";fetch(f.dataset.url,{method:"POST",body:new FormData(f)}).then(function(r){return r.json()}).then(function(j){if(j&&j.success){f.outerHTML="<p class=\"ok\">✓ Pronto! Você vai receber as novidades da Glowbos.</p>"}else{b.disabled=false;b.textContent="Quero receber";var i=f.querySelector("input[type=email]");i.focus();i.style.borderColor="#d7262e"}}).catch(function(){b.disabled=false;b.textContent="Quero receber"})})})();</script>';
+}
+add_action( 'wc_ajax_glowbos_news', function () {
+	$email = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
+	if ( ! empty( $_POST['site'] ) || ! is_email( $email ) ) {
+		wp_send_json_error();
+	}
+	$lista = (array) get_option( 'glowbos_news', array() );
+	if ( ! isset( $lista[ $email ] ) ) {
+		$lista[ $email ] = current_time( 'mysql' );
+		update_option( 'glowbos_news', $lista, false );
+		wp_mail( 'contato@glowbos.com.br', '[Glowbos] Nova assinatura de novidades', $email . "\n" . count( $lista ) . ' assinantes no total.' );
+	}
+	wp_send_json_success();
+} );
+
+// número sob encomenda: mostra "Sob encomenda" no lugar do preço vazio
+add_filter( 'woocommerce_get_price_html', function ( $html, $product ) {
+	return ( '' === $product->get_price() && glowbos_app_config( $product->get_id() ) ) ? '<span class="gb-sob">Sob encomenda</span>' : $html;
+}, 10, 2 );
+
+// ===== Menu da loja: "Produtos" abre um painel com todas as categorias, os produtos e um destaque =====
+function glowbos_mega_html() {
+	$deps  = glowbos_departamentos();
+	$mapa  = (array) get_option( 'glowbos_produtos', array() );
+	$cols  = '';
+	$paine = '';
+	$i     = 0;
+	foreach ( $deps as $slug => $d ) {
+		$t = get_term_by( 'slug', $slug, 'product_cat' );
+		if ( ! $t || ! $t->count ) {
+			continue;
+		}
+		$ps = wc_get_products( array( 'category' => array( $slug ), 'limit' => 6, 'status' => 'publish', 'orderby' => 'price', 'order' => 'ASC' ) );
+		$cols .= sprintf( '<a href="%s" data-gm="%d"%s>%s <small>%d</small></a>', esc_url( get_term_link( $t ) ), $i, $i ? '' : ' class="on"', esc_html( $t->name ), (int) $t->count );
+		$it = '';
+		foreach ( $ps as $p ) {
+			$img = wp_get_attachment_image_url( $p->get_image_id(), 'thumbnail' );
+			$it .= sprintf( '<a class="gm-p" href="%s">%s<span><b>%s</b><em>%s</em></span></a>', esc_url( $p->get_permalink() ), $img ? '<img src="' . esc_url( $img ) . '" alt="" loading="lazy">' : '<i></i>', esc_html( $p->get_name() ), wp_kses_post( $p->get_price_html() ) );
+		}
+		$paine .= sprintf( '<div class="gm-g%s" data-gm="%d"><div class="gm-gt"><b>%s</b><a href="%s">Ver tudo →</a></div><div class="gm-ps">%s</div></div>', $i ? '' : ' on', $i, esc_html( $d[0] ), esc_url( get_term_link( $t ) ), $it );
+		$i++;
+	}
+	$dest = ! empty( $mapa['pct75'] ) ? wc_get_product( $mapa['pct75'] ) : null;
+	$card = '';
+	if ( $dest ) {
+		$card = sprintf( '<a class="gm-dest" href="%s"><span class="gm-tag">Mais vendido</span><img src="%s" alt=""><b>%s</b><small>Você escolhe 3 cores e a sequência</small><span class="gm-pr">%s <em>Montar →</em></span></a>', esc_url( $dest->get_permalink() ), esc_url( wp_get_attachment_image_url( $dest->get_image_id(), 'medium' ) ), esc_html( $dest->get_name() ), wp_kses_post( $dest->get_price_html() ) );
+	}
+	$links = '';
+	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'numeros' => 'Números' ) as $s => $n ) {
+		$on     = function_exists( 'is_product_category' ) && is_product_category( $s );
+		$links .= sprintf( '<a class="gm-l%s" href="%s">%s</a>', $on ? ' on' : '', esc_url( home_url( '/categoria/' . $s . '/' ) ), $n );
+	}
+	return '<nav class="gm"><div class="gm-item"><button type="button" class="gm-btn" aria-expanded="false">Produtos <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button>'
+		. '<div class="gm-pan"><div class="gm-in"><div class="gm-cats">' . $cols . '<a class="gm-all" href="' . esc_url( home_url( '/loja/' ) ) . '">Ver a loja inteira</a></div><div class="gm-mid">' . $paine . '</div>' . $card . '</div></div></div>' . $links . '</nav>'
+		. '<style>
+.gm{display:flex;align-items:center;gap:2px;flex:1;justify-content:center}
+.gm-l,.gm-btn{font:600 14.5px Inter,sans-serif;padding:9px 14px;border-radius:10px;text-decoration:none;color:var(--vinho,#1a1720);background:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.gm-l:hover,.gm-btn:hover,.gm-item.open .gm-btn{background:var(--bebe,#fff0f6)}
+.gm-l.on{color:var(--forte,#ff1f7a)}
+.gm-item.open .gm-btn svg{transform:rotate(180deg)}
+.gm-pan{position:absolute;left:0;right:0;top:100%;background:#fff;border-top:1px solid #f1e6ea;box-shadow:0 24px 40px rgba(26,23,32,.10);opacity:0;visibility:hidden;transform:translateY(-6px);transition:.18s;z-index:60}
+.gm-item.open .gm-pan{opacity:1;visibility:visible;transform:none}
+.gm-in{max-width:1240px;margin:0 auto;padding:22px 24px 26px;display:grid;grid-template-columns:220px minmax(0,1fr) 260px;gap:26px;text-align:left}
+.gm-cats{display:flex;flex-direction:column;gap:2px;border-right:1px solid #f1eef0;padding-right:16px}
+.gm-cats a{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-radius:9px;font:600 14.5px Inter,sans-serif;color:var(--vinho2,#5c5560);text-decoration:none}
+.gm-cats a small{font-size:12px;color:#b8b1bb;font-weight:600}
+.gm-cats a.on,.gm-cats a:hover{background:#f7f6f8;color:var(--vinho,#1a1720)}
+.gm-cats a.gm-all{margin-top:8px;color:var(--forte,#ff1f7a);background:none}
+.gm-g{display:none}.gm-g.on{display:block}
+.gm-gt{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.gm-gt b{font:800 19px "Inter Tight",sans-serif;letter-spacing:-.02em;color:var(--vinho,#1a1720)}
+.gm-gt a{font:600 13.5px Inter,sans-serif;color:var(--vinho2,#5c5560);text-decoration:none}
+.gm-gt a:hover{color:var(--forte,#ff1f7a)}
+.gm-ps{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.gm-p{display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px;text-decoration:none;color:var(--vinho,#1a1720)}
+.gm-p:hover{background:#f7f6f8}
+.gm-p img,.gm-p i{width:52px;height:52px;border-radius:9px;object-fit:cover;flex:none;background:#f7f3ea}
+.gm-p b{display:block;font:600 13.5px/1.25 Inter,sans-serif}
+.gm-p em{font-style:normal;font-size:13px;font-weight:700;color:var(--forte,#ff1f7a)}
+.gm-p em del{color:#b8b1bb;font-weight:500}
+.gm-dest{position:relative;display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:14px;background:#f7f3ea;text-decoration:none;color:var(--vinho,#1a1720)}
+.gm-dest img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;margin-bottom:6px}
+.gm-dest b{font:700 14.5px/1.25 Inter,sans-serif}
+.gm-dest small{font-size:12.5px;color:var(--vinho2,#5c5560)}
+.gm-pr{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-weight:800;color:var(--forte,#ff1f7a)}
+.gm-pr em{font-style:normal;font-size:13px;color:var(--vinho,#1a1720)}
+.gm-tag{position:absolute;top:20px;left:20px;background:#fff;font:700 11.5px Inter,sans-serif;padding:4px 9px;border-radius:99px}
+@media (max-width:1100px){.gm-in{grid-template-columns:200px minmax(0,1fr)}.gm-dest{display:none}}
+@media (max-width:900px){.gm-item{display:none}}
+</style>'
+		. '<script>(function(){var it=document.currentScript.parentNode.querySelector(".gm-item");if(!it||it.dataset.ok)return;it.dataset.ok=1;var b=it.querySelector(".gm-btn"),t;function ab(){clearTimeout(t);it.classList.add("open");b.setAttribute("aria-expanded","true")}function fe(){t=setTimeout(function(){it.classList.remove("open");b.setAttribute("aria-expanded","false")},160)}
+if(matchMedia("(hover:hover)").matches){it.addEventListener("mouseenter",ab);it.addEventListener("mouseleave",fe)}b.addEventListener("click",function(){it.classList.contains("open")?(it.classList.remove("open"),b.setAttribute("aria-expanded","false")):ab()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")fe()});
+it.querySelectorAll(".gm-cats a[data-gm]").forEach(function(a){a.addEventListener("mouseenter",function(){it.querySelectorAll(".gm-cats a").forEach(function(x){x.classList.remove("on")});a.classList.add("on");it.querySelectorAll(".gm-g").forEach(function(g){g.classList.toggle("on",g.dataset.gm===a.dataset.gm)})})})})();</script>';
+}

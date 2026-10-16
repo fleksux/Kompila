@@ -10,11 +10,12 @@
 <div class="gb-barra">🚚 Chega hoje em São Paulo e Grande SP</div>
 <header class="gb-head"><div class="gb-hd">
 	<a class="gb-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>"><img src="<?php echo esc_url( get_template_directory_uri() . '/img/D_logo_crop.png' ); ?>" alt="Glowbos"></a>
+	<?php echo glowbos_mega_html(); // phpcs:ignore ?>
 	<nav class="gb-nav">
 		<a href="<?php echo esc_url( home_url( '/categoria/arcos/' ) ); ?>"<?php echo is_product_category( 'arcos' ) ? ' class="on"' : ''; ?>>Arcos</a>
 		<a href="<?php echo esc_url( home_url( '/categoria/kits-de-arco/' ) ); ?>"<?php echo is_product_category( 'kits-de-arco' ) ? ' class="on"' : ''; ?>>Kits</a>
-		<a href="<?php echo esc_url( home_url( '/categoria/pacotes/' ) ); ?>"<?php echo is_product_category( 'pacotes' ) ? ' class="on"' : ''; ?>>Pacotes</a>
-		<a href="<?php echo esc_url( home_url( '/categoria/pacotes-fechados/' ) ); ?>"<?php echo is_product_category( 'pacotes-fechados' ) ? ' class="on"' : ''; ?>>Fechados</a>
+		<a href="<?php echo esc_url( home_url( '/categoria/pacotes/' ) ); ?>"<?php echo is_product_category( 'pacotes' ) ? ' class="on"' : ''; ?>>Pacotes sortidos</a>
+		<a href="<?php echo esc_url( home_url( '/categoria/pacotes-fechados/' ) ); ?>"<?php echo is_product_category( 'pacotes-fechados' ) ? ' class="on"' : ''; ?>>Pacotes fechados</a>
 		<a href="<?php echo esc_url( home_url( '/categoria/candy-colors/' ) ); ?>"<?php echo is_product_category( 'candy-colors' ) ? ' class="on"' : ''; ?>>Candy colors</a>
 		<a href="<?php echo esc_url( home_url( '/categoria/cromados/' ) ); ?>"<?php echo is_product_category( 'cromados' ) ? ' class="on"' : ''; ?>>Cromados</a>
 		<a href="<?php echo esc_url( home_url( '/categoria/numeros/' ) ); ?>"<?php echo is_product_category( 'numeros' ) ? ' class="on"' : ''; ?>>Números</a>

@@ -1,4 +1,5 @@
 </main>
+<?php echo glowbos_news_html(); // phpcs:ignore ?>
 <footer class="gb-foot"><div class="gb-ft">
 	<div><img src="<?php echo esc_url( get_template_directory_uri() . '/img/D_icone.webp' ); ?>" alt=""><p>Balões e festa com cara de sonho. Em São Paulo e Grande SP, chega no mesmo dia.</p></div>
 	<div><h5>Loja</h5><a href="/#festas">Festas</a><a href="/#premium">Linha premium</a><a href="/#numeros">Números</a><a href="/#monte">Monte seu arco</a><a href="/#temas">Temas</a><a href="/loja/">Todos os produtos</a></div>
