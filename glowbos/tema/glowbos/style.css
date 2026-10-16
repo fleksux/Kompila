@@ -2,7 +2,7 @@
 Theme Name: Glowbos
 Author: Kompila
 Description: Tema da loja Glowbos. A página inicial é a home aprovada (home.html); as páginas da loja usam o mesmo cabeçalho e rodapé.
-Version: 1.0.12
+Version: 1.0.13
 Text Domain: glowbos
 */
 :root{--forte:#FF1F7A;--bebe:#FFF2F6;--vinho:#1d1a1f;--vinho2:#5f5a63}
@@ -158,3 +158,6 @@ a{color:inherit}
 .woocommerce ul.products li.product a img{object-fit:cover!important}
 .woocommerce ul.products li.product.product_cat-pacotes-fechados a img{object-fit:contain!important}
 .woocommerce ul.products li.product:not(.product_cat-pacotes-fechados) a img{object-position:center 22%!important}
+/* vitrine em pé (4:5): as fotos de produto são verticais; a embalagem fica grande e o arco não perde o topo */
+.woocommerce ul.products li.product a img{aspect-ratio:4/5!important}
+.woocommerce ul.products li.product.product_cat-pacotes-fechados a img{object-fit:cover!important;object-position:center!important}
