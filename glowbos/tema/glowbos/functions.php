@@ -548,6 +548,9 @@ function glowbos_dep_topo() {
 		printf( '<a href="%s"%s>%s</a>', esc_url( get_term_link( $t ) ), $s === $slug ? ' class="on"' : '', esc_html( $t->name ) );
 	}
 	echo '</nav>';
+	if ( 'arcos' === $slug ) {
+		glowbos_arco_app();
+	}
 }
 // filtros: tamanho e preço (o WooCommerce entende ?filter_tamanho= e ?min_price/max_price)
 add_action( 'woocommerce_before_shop_loop', function () {
@@ -700,3 +703,56 @@ if(matchMedia("(hover:hover)").matches){it.addEventListener("mouseenter",ab);it.
 document.addEventListener("keydown",function(e){if(e.key==="Escape")fe()});
 it.querySelectorAll(".gm-cats a[data-gm]").forEach(function(a){a.addEventListener("mouseenter",function(){it.querySelectorAll(".gm-cats a").forEach(function(x){x.classList.remove("on")});a.classList.add("on");it.querySelectorAll(".gm-g").forEach(function(g){g.classList.toggle("on",g.dataset.gm===a.dataset.gm)})})})})();</script>';
 }
+
+// ===== App do arco na página de Arcos: escolhe pela foto, ajusta os metros, a lista vira pacotes no carrinho =====
+add_action( 'wp_enqueue_scripts', function () {
+	if ( function_exists( 'is_product_category' ) && is_product_category( 'arcos' ) ) {
+		$v = wp_get_theme()->get( 'Version' ) . '.2';
+		wp_enqueue_style( 'glowbos-arco', get_template_directory_uri() . '/arco.css', array( 'glowbos' ), $v );
+		wp_enqueue_script( 'glowbos-arco', get_template_directory_uri() . '/arco.js', array(), $v, true );
+	}
+}, 33 );
+function glowbos_arco_app() {
+	$img = get_template_directory_uri() . '/img/';
+	$add = add_query_arg( 'wc-ajax', 'glowbos_lista', home_url( '/' ) );
+	?>
+	<section class="gb-arco" id="gbArco" data-img="<?php echo esc_url( $img ); ?>" data-add="<?php echo esc_url( $add ); ?>">
+		<div class="ma-hd"><div><b>Monte seu arco</b><p>Escolha pela foto, ajuste o tamanho da parede e a gente calcula os balões, com 10% de reserva.</p></div></div>
+		<div class="ma-tabs" id="maTabs"></div>
+		<div class="ma">
+			<div class="ma-foto" id="maFoto"><img class="at" id="maImg" src="<?php echo esc_url( $img . 'arco_09_candy_algodao.webp' ); ?>" alt="Arco de balões"><span class="ma-mont" id="maMont">Arraste os metros e veja o arco crescer</span></div>
+			<div class="ma-cfg">
+				<div class="ma-arcos" id="maArcos"></div>
+				<div class="ma-box"><div class="ma-sl"><span>Tamanho do arco</span><b id="maMv">3 m</b></div><input id="maM" type="range" min="2" max="5" step=".5" value="3" aria-label="Tamanho do arco em metros"><div class="ma-esc"><span>2 m</span><span>5 m</span></div></div>
+				<div class="ma-box" id="maTab"></div>
+				<div class="ma-buy"><div><small>Sua lista sai por</small><b id="maTot">R$ 0,00</b><small id="maPk"></small></div></div>
+				<div class="ma-acoes"><button class="btn pri" id="maComprar">Comprar esta lista</button><button class="btn lin" id="maTrocar">Trocar as cores</button></div>
+				<div class="ma-cores" id="maCores" hidden></div>
+				<p class="mnote">🚚 Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
+			</div>
+		</div>
+	</section>
+	<h2 class="gb-arco-sub">Ou leve o kit pronto</h2>
+	<?php
+}
+// lista de pacotes do arco: soma ao carrinho (não apaga o que já está lá)
+add_action( 'wc_ajax_glowbos_lista', function () {
+	$itens = json_decode( wp_unslash( $_POST['itens'] ?? '[]' ), true );
+	$ids   = (array) get_option( 'glowbos_produtos', array() );
+	if ( ! is_array( $itens ) || ! WC()->cart ) {
+		wp_send_json_error();
+	}
+	if ( WC()->session && ! WC()->session->has_session() ) {
+		WC()->session->set_customer_session_cookie( true );
+	}
+	$ok = 0;
+	foreach ( array_slice( $itens, 0, 10 ) as $it ) {
+		$k = sanitize_key( $it['k'] ?? '' );
+		if ( ! in_array( $k, array( 'pct5_50', 'pct9_50', 'pct12_25', 'pct16_12', 'fita' ), true ) || empty( $ids[ $k ] ) ) {
+			continue;
+		}
+		$extra = empty( $it['paleta'] ) ? array() : array( 'glowbos_paleta' => sanitize_text_field( $it['paleta'] ) );
+		$ok   += WC()->cart->add_to_cart( (int) $ids[ $k ], max( 1, min( 99, (int) ( $it['q'] ?? 1 ) ) ), 0, array(), $extra ) ? 1 : 0;
+	}
+	$ok ? wp_send_json_success( array( 'carrinho' => wc_get_cart_url() ) ) : wp_send_json_error();
+} );

@@ -1,0 +1,52 @@
+/* monte seu arco: receita por foto + metros + lista que vira carrinho */
+.ma-tabs{display:flex;gap:22px;justify-content:center;margin:6px 0 22px;border-bottom:1px solid #ece8eb;overflow-x:auto}
+.ma-tabs button{background:none;border:0;padding:10px 0;font:inherit;font-weight:600;color:var(--vinho2);white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
+.ma-tabs button.on{color:var(--vinho);border-color:var(--forte)}
+.ma{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.ma-cfg{min-width:0}
+.ma-foto{position:relative;border-radius:16px;overflow:hidden;background:#f0eeec;position:sticky;top:90px}
+.ma-foto img{width:100%;display:block;aspect-ratio:4/5;object-fit:cover}
+.ma-foto img.nx{position:absolute;inset:0;opacity:0;transition:opacity .35s}
+.ma-mont{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.92);border-radius:6px;padding:6px 10px;font-size:13px;font-weight:600}
+.ma-arcos{display:grid;grid-auto-flow:column;grid-auto-columns:76px;gap:8px;overflow-x:auto;padding-bottom:6px}
+.ma-arcos button{border:2px solid transparent;border-radius:10px;padding:0;background:#fff;cursor:pointer;overflow:hidden;text-align:left}
+.ma-arcos button img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
+.ma-arcos button span{display:block;font-size:11px;font-weight:600;padding:4px 6px;line-height:1.2}
+.ma-arcos button.on{border-color:var(--forte)}
+.ma-box{background:#fff;border:1px solid #ece8eb;border-radius:12px;padding:16px 18px;margin-top:14px}
+.ma-sl{display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
+.ma-sl b{font-size:24px;color:var(--forte)}
+.ma-box input[type=range]{width:100%;margin:12px 0 4px;accent-color:var(--forte);height:28px}
+.ma-esc{display:flex;justify-content:space-between;font-size:12px;color:var(--vinho2)}
+.ma-lh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.ma-lh span{font-size:14px;color:var(--vinho2)}.ma-lh span b{font-size:20px;color:var(--vinho)}
+.ma table{width:100%;border-collapse:collapse;font-size:14px}
+.ma th{font-size:12px;color:var(--vinho2);font-weight:600;text-align:center;padding:5px 3px;border-bottom:1px solid #ece8eb}
+.ma th:first-child{text-align:left}
+.ma td{padding:8px 3px;border-bottom:1px solid #f3f1f3;text-align:center;font-weight:700}
+.ma td.nm{text-align:left;font-weight:600;display:flex;align-items:center;gap:8px}
+.ma td.nm i{width:15px;height:15px;border-radius:50%;border:1px solid rgba(0,0,0,.1);flex:none}
+.ma td.z{color:#cfcacd;font-weight:500}
+.ma-ex{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ma-ex div{background:#f7f6f8;border-radius:8px;padding:8px 10px;font-size:12px;color:var(--vinho2)}
+.ma-ex b{display:block;font-size:16px;color:var(--vinho)}
+.ma-buy{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.ma-buy small{display:block;font-size:12px;color:var(--vinho2)}.ma-buy b{font-size:26px}
+.ma-acoes{margin-top:12px}.ma-acoes .btn{flex:1 1 0;justify-content:center}
+.ma-cores{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.ma-cores button{display:flex;align-items:center;gap:6px;border:1px solid #ece8eb;border-radius:6px;padding:4px 8px;font:inherit;font-size:13px;background:#fff;cursor:pointer}
+.ma-cores button i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+@media(max-width:860px){.ma-tabs{justify-content:flex-start}.ma{grid-template-columns:minmax(0,1fr)}.ma-foto{position:relative;top:0}.ma-acoes .btn{font-size:14px;padding:0 10px}}
+.gb-arco{margin:6px 0 34px;padding:28px;border-radius:16px;background:#fff7fa}
+.gb-arco .ma-hd{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.gb-arco .ma-hd b{display:block;font:800 26px/1.1 "Inter Tight";letter-spacing:-.02em;color:var(--vinho)}
+.gb-arco .ma-hd p{margin:6px 0 0;color:var(--vinho2);font-size:15px}
+.gb-arco .ma-tabs{justify-content:flex-start}
+.gb-arco .ma-acoes{display:flex;gap:10px}
+.gb-arco .btn{height:52px;border-radius:12px;border:0;font:800 15.5px Inter;cursor:pointer;display:inline-flex;align-items:center;padding:0 18px}
+.gb-arco .btn.pri{background:var(--forte);color:#fff}
+.gb-arco .btn.lin{background:#fff;color:var(--vinho);border:1.5px solid var(--vinho)}
+.gb-arco .mnote{font-size:13.5px;color:var(--vinho2);margin:12px 0 0}
+.gb-arco .ma-cores button.on{border-color:var(--forte)}
+.gb-arco-sub{font:800 22px "Inter Tight";letter-spacing:-.02em;margin:0 0 12px}
+@media (max-width:760px){.gb-arco{padding:16px;margin:0 -4px 26px}.ma{grid-template-columns:1fr!important}.ma-foto{position:relative!important;top:0!important}}
