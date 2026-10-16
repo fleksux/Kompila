@@ -357,7 +357,7 @@ add_action( 'woocommerce_review_order_before_submit', function () {
 // Carrinho, minha conta, acompanhar pedido e 404 no visual da loja.
 add_action( 'wp_enqueue_scripts', function () {
 	if ( is_404() || ( function_exists( 'is_cart' ) && ( is_cart() || is_account_page() || is_page( 'acompanhar-pedido' ) ) ) || is_page() ) {
-		wp_enqueue_style( 'glowbos-paginas', get_template_directory_uri() . '/paginas.css', array( 'glowbos' ), wp_get_theme()->get( 'Version' ) . '.3' );
+		wp_enqueue_style( 'glowbos-paginas', get_template_directory_uri() . '/paginas.css', array( 'glowbos' ), wp_get_theme()->get( 'Version' ) . '.4' );
 	}
 }, 31 );
 // Minha conta: textos em português da casa e atalho para acompanhar pedido sem senha.
@@ -433,3 +433,143 @@ add_action( 'wp_footer', function () {
 	</script>
 	<?php
 }, 99 );
+
+// ===== Apps de produto: a página do produto é o montador =====
+// Qual app cada produto usa (chave do glowbos_produtos => tipo, nº de cores, cartela, resumo)
+function glowbos_app_config( $pid ) {
+	$mapa = array_flip( (array) get_option( 'glowbos_produtos', array() ) );
+	$k    = $mapa[ (string) $pid ] ?? '';
+	$c    = array(
+		'pct50' => array( 'sequencia', 2, 'lisos', '50 balões de 8"' ), 'pct75' => array( 'sequencia', 3, 'lisos', '75 balões de 8"' ),
+		'pct100' => array( 'sequencia', 4, 'lisos', '100 balões de 8"' ), 'pct125' => array( 'sequencia', 5, 'lisos', '125 balões de 8"' ),
+		'candy50' => array( 'sequencia', 2, 'candy', '50 balões candy de 8"' ), 'candy75' => array( 'sequencia', 3, 'candy', '75 balões candy de 8"' ), 'candy100' => array( 'sequencia', 4, 'candy', '100 balões candy de 8"' ),
+		'kit60' => array( 'sequencia', 3, 'lisos', 'kit 60 peças' ), 'kit100' => array( 'sequencia', 3, 'lisos', 'kit 100 peças' ), 'kit112' => array( 'sequencia', 4, 'lisos', 'kit 112 peças' ),
+		'kit120' => array( 'sequencia', 3, 'lisos', 'kit 120 peças' ), 'kiteco100' => array( 'sequencia', 2, 'lisos', 'kit econômico 100 balões' ),
+		'pct5_50' => array( 'quantidade', 0, 'lisos', '50 balões de 5"' ), 'pct9_50' => array( 'quantidade', 0, 'lisos', '50 balões de 9"' ),
+		'pct12_25' => array( 'quantidade', 0, 'lisos', '25 balões de 12"' ), 'pct16_12' => array( 'quantidade', 0, 'lisos', '12 balões de 16"' ),
+		'metal5_25' => array( 'quantidade', 0, 'metal', '25 balões metalizados de 5"' ),
+	);
+	return $c[ $k ] ?? null;
+}
+add_action( 'wp_enqueue_scripts', function () {
+	if ( function_exists( 'is_product' ) && is_product() && glowbos_app_config( get_queried_object_id() ) ) {
+		$v = wp_get_theme()->get( 'Version' ) . '.2';
+		wp_enqueue_style( 'glowbos-app', get_template_directory_uri() . '/app.css', array( 'glowbos' ), $v );
+		wp_enqueue_script( 'glowbos-app', get_template_directory_uri() . '/app.js', array(), $v, true );
+	}
+}, 32 );
+add_action( 'woocommerce_single_product_summary', function () {
+	global $product;
+	$c = glowbos_app_config( $product->get_id() );
+	if ( ! $c ) {
+		return;
+	}
+	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+	printf(
+		'<div class="gb-app2" id="gbApp2" data-tipo="%s" data-cores="%d" data-paleta="%s" data-resumo="%s" data-preco="%s" data-pid="%d" data-nome="%s" data-img="%s" data-add="%s"></div>',
+		esc_attr( $c[0] ), (int) $c[1], esc_attr( $c[2] ), esc_attr( $c[3] ), esc_attr( wc_get_price_to_display( $product ) ), (int) $product->get_id(),
+		esc_attr( $product->get_name() ), esc_url( get_template_directory_uri() . '/img/' ), esc_url( add_query_arg( 'wc-ajax', 'glowbos_add', home_url( '/' ) ) )
+	);
+	printf(
+		'<form id="gbForm" method="post" action="%s" style="display:none"><input type="hidden" name="add-to-cart" value="%d"><input type="hidden" name="quantity" value="1"><input type="hidden" name="paleta" value=""><input type="hidden" name="gb_img" value=""></form>',
+		esc_url( wc_get_cart_url() ), (int) $product->get_id()
+	);
+}, 25 );
+// foto da montagem enviada pelo app vai junto do item
+add_filter( 'woocommerce_add_cart_item_data', function ( $data ) {
+	if ( ! empty( $_POST['gb_img'] ) ) {
+		$f = glowbos_salva_foto( wp_unslash( $_POST['gb_img'] ) );
+		if ( $f ) {
+			$data['glowbos_img'] = $f;
+		}
+	}
+	return $data;
+}, 11 );
+// vários itens de uma vez (pacotes fechados, metalizados), somando ao carrinho
+add_action( 'wc_ajax_glowbos_add', function () {
+	$itens = json_decode( wp_unslash( $_POST['itens'] ?? '[]' ), true );
+	if ( ! is_array( $itens ) || ! WC()->cart ) {
+		wp_send_json_error();
+	}
+	if ( WC()->session && ! WC()->session->has_session() ) {
+		WC()->session->set_customer_session_cookie( true );
+	}
+	foreach ( array_slice( $itens, 0, 40 ) as $it ) {
+		$pid = absint( $it['pid'] ?? 0 );
+		$q   = max( 1, min( 50, (int) ( $it['q'] ?? 1 ) ) );
+		if ( ! $pid || ! glowbos_app_config( $pid ) ) {
+			continue;
+		}
+		WC()->cart->add_to_cart( $pid, $q, 0, array(), array( 'glowbos_paleta' => sanitize_text_field( $it['paleta'] ?? '' ) ) );
+	}
+	wp_send_json_success( array( 'qtd' => WC()->cart->get_cart_contents_count(), 'carrinho' => wc_get_cart_url() ) );
+} );
+
+// ===== Departamentos: banner no topo, filtros e vitrine =====
+function glowbos_departamentos() {
+	return array(
+		'arcos'            => array( 'Arcos de balões', 'Monte o seu arco escolhendo as cores, ou leve o kit com tudo pronto pra montar.', 'arco_02_vivo_primarias.webp' ),
+		'kits-de-arco'     => array( 'Kits de arco', 'De 60 a 120 peças em 4 tamanhos, com as cores que você escolher. Chega com a fita.', 'arco_06_analoga_lilas.webp' ),
+		'pacotes'          => array( 'Pacotes sortidos', '50 a 125 balões de 8" em até 5 cores, na sequência que você montar.', 'pack_azul_verm_amar.webp' ),
+		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'arco_07_pastel_neutro.webp' ),
+		'candy-colors'     => array( 'Candy colors', 'Os tons pastel que viraram a cara do chá revelação e da festa infantil.', 'arco_09_candy_algodao.webp' ),
+		'cromados'         => array( 'Cromados e metalizados', 'O brilho que dá acabamento de festa profissional.', 'premium_4_cromado.webp' ),
+		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'numero_5_rose.webp' ),
+		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'cena_07_textura_baloes.webp' ),
+	);
+}
+add_filter( 'woocommerce_show_page_title', function ( $show ) {
+	return ( is_product_category() || is_shop() ) ? false : $show;
+} );
+remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
+function glowbos_dep_topo() {
+	if ( ! is_product_category() && ! is_shop() ) {
+		return;
+	}
+	$d    = glowbos_departamentos();
+	$slug = is_product_category() ? get_queried_object()->slug : '';
+	$c    = $d[ $slug ] ?? array( 'Loja Glowbos', 'Todos os balões, kits e pacotes. Em SP e Grande SP, pago até 12h chega hoje.', 'cena_01_capa_festa_sala.webp' );
+	$img  = get_template_directory_uri() . '/img/' . $c[2];
+	echo '<section class="gb-dep-banner" style="--img:url(' . esc_url( $img ) . ')"><div><small><a href="' . esc_url( home_url( '/' ) ) . '">Início</a> / ' . ( $slug ? '<a href="' . esc_url( home_url( '/loja/' ) ) . '">Loja</a> / ' : '' ) . esc_html( $slug ? get_queried_object()->name : 'Loja' ) . '</small><h1>' . esc_html( $c[0] ) . '</h1><p>' . esc_html( $c[1] ) . '</p></div></section>';
+	// atalhos de departamento
+	echo '<nav class="gb-dep-nav"><a href="' . esc_url( home_url( '/loja/' ) ) . '"' . ( $slug ? '' : ' class="on"' ) . '>Tudo</a>';
+	foreach ( $d as $s => $x ) {
+		$t = get_term_by( 'slug', $s, 'product_cat' );
+		if ( ! $t || ! $t->count ) {
+			continue;
+		}
+		printf( '<a href="%s"%s>%s</a>', esc_url( get_term_link( $t ) ), $s === $slug ? ' class="on"' : '', esc_html( $t->name ) );
+	}
+	echo '</nav>';
+}
+// filtros: tamanho e preço (o WooCommerce entende ?filter_tamanho= e ?min_price/max_price)
+add_action( 'woocommerce_before_shop_loop', function () {
+	$base  = remove_query_arg( array( 'filter_tamanho', 'query_type_tamanho', 'min_price', 'max_price', 'paged' ) );
+	$tam   = isset( $_GET['filter_tamanho'] ) ? sanitize_title( wp_unslash( $_GET['filter_tamanho'] ) ) : '';
+	$pmax  = isset( $_GET['max_price'] ) ? (int) $_GET['max_price'] : 0;
+	echo '<div class="gb-filtros"><div class="gb-f"><span>Tamanho</span>';
+	$termos = get_terms( array( 'taxonomy' => 'pa_tamanho', 'hide_empty' => true, 'orderby' => 'slug' ) );
+	usort( $termos, function ( $a, $b ) { return (int) $a->slug - (int) $b->slug; } );
+	foreach ( $termos as $t ) {
+		$on = $tam === $t->slug;
+		printf( '<a class="%s" href="%s">%s</a>', $on ? 'on' : '', esc_url( $on ? remove_query_arg( 'filter_tamanho' ) : add_query_arg( 'filter_tamanho', $t->slug, remove_query_arg( 'paged' ) ) ), esc_html( $t->name ) );
+	}
+	echo '</div><div class="gb-f"><span>Preço</span>';
+	foreach ( array( 20 => 'até R$ 20', 40 => 'até R$ 40', 80 => 'até R$ 80' ) as $v => $r ) {
+		$on = $pmax === $v;
+		printf( '<a class="%s" href="%s">%s</a>', $on ? 'on' : '', esc_url( $on ? remove_query_arg( array( 'min_price', 'max_price' ) ) : add_query_arg( array( 'min_price' => 0, 'max_price' => $v ), remove_query_arg( 'paged' ) ) ), esc_html( $r ) );
+	}
+	if ( $tam || $pmax ) {
+		printf( '<a class="limpa" href="%s">Limpar filtros</a>', esc_url( $base ) );
+	}
+	echo '</div></div>';
+}, 15 );
+
+// produto com app: na vitrine o botão leva pro montador (as cores se escolhem lá)
+add_filter( 'woocommerce_loop_add_to_cart_link', function ( $html, $product ) {
+	$c = glowbos_app_config( $product->get_id() );
+	if ( ! $c ) {
+		return $html;
+	}
+	return sprintf( '<a href="%s" class="button gb-escolher">%s</a>', esc_url( $product->get_permalink() ), 'quantidade' === $c[0] ? 'Escolher as cores' : 'Montar as cores' );
+}, 10, 2 );

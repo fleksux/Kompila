@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ímã de IA: como atrair quem já quer comprar | Kompila</title>
+<meta name="description" content="Guia pro dono: como montar, com IA, um teste ou ferramenta grátis que atrai o cliente certo e entrega a conversa pronta no seu WhatsApp. 7 passos com os pedidos prontos pra colar na IA.">
+<link rel="canonical" href="https://kompila.com.br/blog/ima-de-ia/">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="author" content="Alexsandro Reges">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Kompila">
+<meta property="og:title" content="Ímã de IA: como atrair quem já quer comprar">
+<meta property="og:description" content="Guia pro dono: como montar, com IA, um teste ou ferramenta grátis que atrai o cliente certo e entrega a conversa pronta no seu WhatsApp. 7 passos com os pedidos prontos pra colar na IA.">
+<meta property="og:url" content="https://kompila.com.br/blog/ima-de-ia/">
+<meta property="og:image" content="https://kompila.com.br/blog/img/ima-capa.webp">
+<meta property="article:published_time" content="2026-10-14">
+<meta property="article:modified_time" content="2026-10-14">
+<meta property="article:author" content="Alexsandro Reges">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/regua.css">
+<link rel="stylesheet" href="../../css/blog.css">
+<link rel="preload" as="image" href="../img/clinica-capa.webp">
+<style>
+/* Ímã de IA (14/10/2026): o teste do topo, a escada de cliente, os pedidos pra IA e o plano. Tokens do blog.css. */
+.im-teste{background:#fff;border:1px solid var(--bg-linha);border-radius:24px;padding:26px 26px 24px;min-height:430px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.im-teste::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--bg-verde)}
+.im-tag{font:600 12px 'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--bg-verde-e)}
+.im-tt b{display:block;font-size:24px;line-height:1.2;font-weight:800;color:var(--bg-carbono);margin:8px 0 4px;letter-spacing:-.02em}
+.im-tt small{color:var(--bg-cinza);font-size:14px}
+.im-passos{display:flex;gap:6px;list-style:none;padding:0;margin:18px 0 22px}
+.im-passos li{flex:1;height:5px;border-radius:5px;background:var(--bg-linha);transition:background .3s}
+.im-passos li.on{background:var(--bg-verde)}
+.im-q{display:none;flex-direction:column;gap:12px;animation:imEntra .35s ease}
+.im-q.on{display:flex}
+@keyframes imEntra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.im-q label,.im-q>p{font-size:18px;font-weight:700;color:var(--bg-carbono);line-height:1.35;margin:0}
+.im-q input{font:600 22px Inter,sans-serif;padding:12px 16px;border:1.5px solid var(--bg-linha);border-radius:12px;outline:none;width:100%}
+.im-q input:focus{border-color:var(--bg-verde-e)}
+.im-op{display:grid;gap:8px}
+.im-op button,.im-go{font:600 16px Inter,sans-serif;text-align:left;padding:13px 16px;border-radius:12px;border:1.5px solid var(--bg-linha);background:var(--bg-off);color:var(--bg-texto);cursor:pointer;transition:border-color .2s,background .2s}
+.im-op button:hover{border-color:var(--bg-verde-e);background:var(--bg-verde-c)}
+.im-go{background:var(--bg-carbono);color:#fff;border-color:var(--bg-carbono);text-align:center}
+.im-go:disabled{opacity:.35;cursor:default}
+.im-res .im-sinais{font-size:28px;line-height:1.15;font-weight:900;color:var(--bg-carbono);letter-spacing:-.02em}
+.im-res .im-conta{margin:0;color:var(--bg-texto);font-size:16px}
+.im-res .im-conta b{font:700 17px 'JetBrains Mono',monospace;color:var(--bg-verde-e)}
+.im-lista{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.im-lista li{font-size:15px;line-height:1.45;padding:10px 12px;border-radius:10px;background:var(--bg-ambar);color:var(--bg-ambar-t)}
+.im-lista li.ok{background:var(--bg-verde-c);color:#0d5a2d}
+.im-cta{margin-top:4px;text-align:center}
+.im-nota{font-size:13px;color:var(--bg-cinza)}
+.im-refaz{background:none;border:0;color:var(--bg-cinza);font:500 13px Inter,sans-serif;text-decoration:underline;cursor:pointer;align-self:flex-start;padding:0}
+.im-escada{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 26px}
+.im-escada div{border:1px solid var(--bg-linha);border-radius:16px;padding:16px;background:var(--bg-off)}
+.im-escada div:nth-child(2){transform:translateY(-8px)}.im-escada div:nth-child(3){transform:translateY(-16px)}
+.im-escada b{display:block;font-size:17px;color:var(--bg-carbono);margin-bottom:4px}
+.im-escada span{font-size:14px;line-height:1.45;color:var(--bg-cinza)}
+.im-escada .ok{background:var(--bg-carbono);border-color:var(--bg-carbono)}
+.im-escada .ok b{color:var(--bg-verde)}.im-escada .ok span{color:#cfd3d8}
+.im-pedido{position:relative;margin:14px 0 4px;border-radius:14px;background:var(--bg-carbono);color:#E9EBEE;padding:16px 18px 16px}
+.im-pedido span{font:600 11px 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--bg-verde)}
+.im-pedido p{margin:8px 0 0!important;color:#E9EBEE!important;font-size:15px;line-height:1.6}
+.im-copia{position:absolute;top:12px;right:12px;font:600 12px Inter,sans-serif;padding:6px 12px;border-radius:999px;border:1px solid #3a4048;background:transparent;color:#E9EBEE;cursor:pointer}
+.im-copia:hover{border-color:var(--bg-verde);color:var(--bg-verde)}
+.im-formatos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 16px}
+.im-formatos div{border:1px solid var(--bg-linha);border-radius:14px;padding:14px 16px}
+.im-formatos b{display:block;color:var(--bg-carbono)}.im-formatos span{font-size:14px;line-height:1.45;color:var(--bg-cinza)}
+.im-plano{display:grid;gap:10px;margin:6px 0 10px}
+.im-plano div{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;padding:16px 18px;border-radius:16px;background:var(--bg-off);border:1px solid var(--bg-linha)}
+.im-plano span{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--bg-verde);color:var(--bg-carbono);font:700 18px 'JetBrains Mono',monospace}
+.im-plano p{margin:0!important}
+@media (max-width:860px){.im-escada{grid-template-columns:1fr}.im-escada div{transform:none!important}.im-formatos{grid-template-columns:1fr}.im-teste{min-height:0}}
+/* O quadro não muda de tamanho entre as perguntas; o topo alinha pelo começo. */
+.bg-hero:has(.im-teste){align-items:start}
+.im-teste{min-height:600px}
+.im-res .im-conta{font-size:16px!important;font-weight:400!important;line-height:1.5!important}
+.im-cta{display:block;text-align:center!important;justify-content:center}
+@media (max-width:860px){.im-teste{min-height:0}}
+
+</style>
+<script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
+<script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
+<script src="/js/pixel.js" defer></script>
+<script src="/js/anima.js" defer></script>
+</head>
+<body class="kr bg-pag">
+<!-- partes:menu (não edite aqui: partes/menu.html + scripts/montar_site.py) -->
+<header class="kr-nav"><div class="kr-box">
+  <a class="kr-logo" href="../../"><b>[</b> kompila <b>]</b></a>
+  <ul>
+    <li class="kr-drop"><a href="../../#produtos">Produtos <span class="v">▾</span></a>
+      <div class="kr-menu">
+        <a href="../../chatbot/"><b>IA de atendimento e CRM</b><span>A Liz atende, qualifica e move o pipeline</span></a>
+        <a href="../../crm/"><b>kompila .crm</b><span>Atendimento e vendas num lugar só</span></a>
+        <a href="../../loja/"><b>kompila loja</b><span>Loja própria, sem taxa por venda</span></a>
+        <a href="../../design/"><b>kompila design</b><span>Marca, site e criativo</span></a>
+        <a href="../../trafego/"><b>kompila tráfego</b><span>Anúncio que sabe qual lead virou venda</span></a>
+      </div>
+    </li>
+    <li><a href="../../chatbot/">IA de atendimento e CRM</a></li>
+    <li><a href="../../#como">Como funciona</a></li>
+    <li><a href="../../#clientes">Clientes</a></li>
+    <li><a href="../../trabalhos/">Trabalhos</a></li>
+    <li><a href="../../blog/">Blog</a></li>
+  </ul>
+  <div class="k-dir"><a class="k-ig" href="https://instagram.com/kompila_ai" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila_ai"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a data-liz class="kr-btn" href="#liz">Falar com a Kompila</a></div>
+</div></header>
+<!-- /partes:menu -->
+<main>
+<header class="bg-topo"><div class="bg-box bg-hero">
+  <div class="bg-htxt">
+    <nav class="bg-trilha" aria-label="Você está em"><a href="../../">Kompila</a> / <a href="../">Blog</a> / <span>Ímã de IA</span></nav>
+    <p class="bg-rot">Guia pro dono · Atrair cliente</p>
+    <h1>Você não precisa de mais contato. Precisa de quem <em>já quer comprar</em>.</h1>
+    <p class="bg-lead">Como montar, com IA, um teste ou uma ferramenta grátis que atrai o cliente certo e entrega a conversa pronta no seu WhatsApp. 7 passos, com os pedidos prontos pra colar na IA.</p>
+    <p class="bg-meta">Por <b>Alexsandro Reges</b>, Kompila · <time datetime="2026-10-14">14 de outubro de 2026</time> · 9 min de leitura</p>
+  </div>
+
+  <!-- O próprio ímã, funcionando: o leitor usa antes de aprender a fazer. -->
+  <aside class="im-teste rv" aria-label="Teste de 3 minutos">
+    <div class="im-tt">
+      <span class="im-tag">[ teste · 3 min ]</span>
+      <b>Seu WhatsApp está perdendo venda?</b>
+      <small>4 perguntas. O resultado sai na hora.</small>
+    </div>
+    <ol class="im-passos" aria-hidden="true"><li class="on"></li><li></li><li></li><li></li><li></li></ol>
+
+    <div class="im-q on" data-q="1">
+      <label for="im-msgs">Quantas mensagens novas de cliente chegam por dia?</label>
+      <input id="im-msgs" type="number" min="1" max="2000" inputmode="numeric" placeholder="Ex.: 25">
+      <button class="im-go" data-vai="2">Próxima</button>
+    </div>
+    <div class="im-q" data-q="2">
+      <p>Quanto tempo leva a primeira resposta?</p>
+      <div class="im-op"><button data-r="t" data-v="0">Na hora</button><button data-r="t" data-v="1">Até 1 hora</button><button data-r="t" data-v="2">Algumas horas</button><button data-r="t" data-v="3">No dia seguinte</button></div>
+    </div>
+    <div class="im-q" data-q="3">
+      <p>E a mensagem que chega depois das 18h ou no fim de semana?</p>
+      <div class="im-op"><button data-r="n" data-v="0">Alguém responde na hora</button><button data-r="n" data-v="1">Fica pro dia seguinte</button><button data-r="n" data-v="2">Às vezes fica sem resposta</button></div>
+    </div>
+    <div class="im-q" data-q="4">
+      <p>Orçamento enviado e o cliente sumiu. Alguém volta nele?</p>
+      <div class="im-op"><button data-r="o" data-v="0">Sempre, com data marcada</button><button data-r="o" data-v="1">Às vezes, quando lembra</button><button data-r="o" data-v="2">Ninguém volta</button></div>
+    </div>
+    <div class="im-q im-res" data-q="5" aria-live="polite">
+      <span class="im-tag">[ seu resultado ]</span>
+      <b class="im-sinais"></b>
+      <p class="im-conta"></p>
+      <ul class="im-lista"></ul>
+      <a class="bg-btn im-cta" data-liz href="#liz">Quero ver isso no meu WhatsApp</a>
+      <small class="im-nota">Você acabou de usar um ímã de IA. O resto da página mostra como montar o seu.</small>
+      <button class="im-refaz" type="button">Refazer o teste</button>
+    </div>
+  </aside>
+</div></header>
+
+<div class="bg-box bg-corpo">
+<article class="bg-texto">
+  <section class="bg-curta rv" aria-label="Resposta curta">
+    <p class="bg-rot">Resposta curta</p>
+    <p>Ímã de IA é uma coisa útil que você dá de graça (um teste, uma calculadora, um modelo pronto) em troca do contato. Ele resolve um pedaço pequeno do problema do cliente, mostra que você entende do assunto e deixa claro que o resto se resolve com você. A IA ajuda a montar cada parte. Quem chega por ele não é curioso: é gente que já se reconheceu no problema.</p>
+  </section>
+
+  <figure class="bg-fig rv"><img src="../img/ima-capa.webp" alt="Dona de loja de móveis sorrindo ao ver no celular a mensagem de um cliente pronto para comprar" width="1600" height="900" loading="lazy"></figure>
+
+  <h2>Seguidor não é cliente. Contato <em>também não</em>.</h2>
+  <p>Seguidor você não consegue chamar. Contato (um e-mail, um WhatsApp) você consegue, mas ter o número na lista ainda não quer dizer nada. O que enche o caixa é o terceiro tipo: a pessoa que já está decidindo e só precisa de uma resposta.</p>
+  <div class="im-escada rv">
+    <div><b>Seguidor</b><span>Vê seu post. Você não tem como chamar.</span></div>
+    <div><b>Contato</b><span>Deixou o número. Pode nunca responder.</span></div>
+    <div class="ok"><b>Cliente quase pronto</b><span>Fez uma coisa que mostra que vai comprar.</span></div>
+  </div>
+  <p class="bg-forte">E o cliente quase pronto não espera.</p>
+  <div class="bg-dupla rv"><div><b>23%</b><span>das empresas nunca responderam o contato que chegou pelo site.</span></div><div><b>42 h</b><span>foi o tempo médio de resposta das que responderam.</span></div></div>
+  <p class="bg-fonte">Fonte: Harvard Business Review, pesquisa com 2.241 empresas dos EUA (2011).</p>
+
+  <h2>Antes de tudo: o que prova que o cliente <em>vai comprar</em>, no seu negócio?</h2>
+  <p>Cada negócio tem um sinal. Ele não aparece no achismo, aparece nas suas últimas vendas: o que quem fechou fez antes de fechar? Alguns exemplos de como esse sinal costuma ser:</p>
+  <div class="bg-chips rv"><span class="bg-chip">Clínica <small>pediu horário com dia</small></span><span class="bg-chip">Loja de móveis <small>mandou a medida do cômodo</small></span><span class="bg-chip">Oficina <small>mandou a placa e o problema</small></span><span class="bg-chip">Imobiliária <small>perguntou de financiamento</small></span><span class="bg-chip">Contabilidade <small>contou o faturamento</small></span></div>
+  <p class="bg-fonte">Exemplos ilustrativos. O seu sinal sai dos seus dados.</p>
+  <figure class="bg-fig rv"><img src="../img/ima-dentro.webp" alt="Cliente em casa medindo a parede com a trena, com o celular na mão para mandar a medida à loja" width="1600" height="900" loading="lazy"><figcaption class="bg-fonte">Na loja de móveis, mandar a medida da parede é o sinal: quem mede já está decidindo.</figcaption></figure>
+  <p>Achou o sinal, o ímã inteiro passa a ter um objetivo só: levar a pessoa a fazer essa coisa. Não é juntar e-mail, é chegar nesse ponto.</p>
+
+  <h2 id="passos">Os 7 passos do ímã de IA</h2>
+  <nav class="bg-sumario rv" aria-label="Os 7 passos"><ol><li><a href="#p1">Ache o problema pequeno que dói</a></li><li><a href="#p2">Resolva só um pedaço, de graça</a></li><li><a href="#p3">Escolha o formato</a></li><li><a href="#p4">Dê um título que pare o dedo</a></li><li><a href="#p5">Deixe fácil de usar</a></li><li><a href="#p6">Entregue mais do que prometeu</a></li><li><a href="#p7">Diga o próximo passo</a></li></ol></nav>
+
+  <div class="bg-bloco">
+    <article class="bg-item rv" id="p1"><span class="bg-n">01</span><div>
+      <h3>Ache o problema pequeno que dói</h3>
+      <p>O erro mais comum é fazer o ímã sobre o problema grande, que é justamente o que você vende. Quebre o grande em pequenos. Para quem vende pelo WhatsApp, por exemplo: demora pra responder, cliente que some, orçamento que ninguém cobra, mensagem do fim de semana sem dono. Cada pequeno vira um ímã. Comece por um.</p>
+      <p class="bg-dor">Problema grande assusta. Problema pequeno se resolve rápido e gera confiança.</p>
+      <div class="im-pedido"><span>Pedido pra IA</span><p>Meu negócio é [o que você vende] para [quem compra, com idade, cidade e situação]. Antes de comprar, o cliente se sente [como]. Monte uma tabela com os 10 maiores problemas desse cliente e, para cada um, 5 problemas menores. Em cada linha: o que ele sente, a urgência e se ele já sabe que tem esse problema. Se faltar informação, me pergunte antes de responder.</p><button type="button" class="im-copia">Copiar</button></div>
+    </div></article>
+
+    <article class="bg-item rv" id="p2"><span class="bg-n">02</span><div>
+      <h3>Resolva só um pedaço, de graça</h3>
+      <p>O ímã resolve o problema pequeno e para no meio do caminho. Se resolver tudo, ninguém precisa de você. Resolvendo um pedaço, você ganha a confiança e o resto fica óbvio: "se isso é grátis, imagina o pago".</p>
+      <div class="im-pedido"><span>Pedido pra IA</span><p>Proponha 5 soluções grátis e rápidas para este problema: [cole o problema pequeno]. Para cada uma: o formato, quanto tempo a pessoa leva para usar, o que ela ganha e quem aproveita mais. Nenhuma pode resolver o problema inteiro.</p><button type="button" class="im-copia">Copiar</button></div>
+    </div></article>
+
+    <article class="bg-item rv" id="p3"><span class="bg-n">03</span><div>
+      <h3>Escolha o formato</h3>
+      <p>O melhor formato não é o mais bonito: é o que pede menos esforço e dá o resultado mais rápido. Os que mais funcionam hoje são interativos, porque o resultado é da pessoa e não de um PDF genérico.</p>
+      <div class="im-formatos rv"><div><b>Teste</b><span>Responde 4 perguntas, vê o diagnóstico.</span></div><div><b>Calculadora</b><span>Coloca os números dela, vê quanto perde ou ganha.</span></div><div><b>Análise por foto</b><span>Manda a foto do ambiente, recebe a sugestão.</span></div><div><b>Modelo pronto</b><span>Planilha ou checklist pra usar na hora.</span></div></div>
+      <p>Dá pra montar um teste ou uma calculadora com IA, sem programar, em ferramentas que criam a página a partir de um pedido escrito.</p>
+    </div></article>
+
+    <article class="bg-item rv" id="p4"><span class="bg-n">04</span><div>
+      <h3>Dê um título que pare o dedo</h3>
+      <p>O título disputa atenção com tudo o que está no celular da pessoa. Funciona: um número quebrado (3 minutos, não 10), um prazo curto, a dor dita do jeito que o cliente fala e a palavra "pronto". Peça várias versões e corte até ficar curto.</p>
+      <div class="im-pedido"><span>Pedido pra IA</span><p>Crie 10 títulos para este material grátis: [o que é e qual problema resolve]. Use curiosidade, ganho imediato, promessa clara e emoção. Faça 5 diretos e 5 inspiradores. Depois reescreva os 3 melhores mais curtos, com um número.</p><button type="button" class="im-copia">Copiar</button></div>
+    </div></article>
+
+    <article class="bg-item rv" id="p5"><span class="bg-n">05</span><div>
+      <h3>Deixe fácil de usar</h3>
+      <p>Cada campo a mais, cada aplicativo pra baixar, é gente indo embora. Entregue onde a pessoa já está: num link do site, no WhatsApp ou no e-mail.</p>
+      <p class="bg-dor">Pedir nome, e-mail e telefone antes de começar espanta. Peça no fim, antes de mostrar o resultado: quem já respondeu tudo quer ver.</p>
+    </div></article>
+
+    <article class="bg-item rv" id="p6"><span class="bg-n">06</span><div>
+      <h3>Entregue mais do que prometeu</h3>
+      <p>Todo mundo já baixou um "guia definitivo" que não valia o clique. O título promete, o conteúdo decepciona, a pessoa não volta. Prometa um pouco menos e entregue um pouco mais. E capriche no visual: material frio, feito só pela IA, não vende.</p>
+    </div></article>
+
+    <article class="bg-item rv" id="p7"><span class="bg-n">07</span><div>
+      <h3>Diga o próximo passo</h3>
+      <p>O título traz a pessoa. Quem faz ela agir é o botão. Curto e direto: "Quero o modelo grátis", "Ver meu resultado", "Falar no WhatsApp". Teste duas versões e fique com a que mais gente clicou, não com a que você mais gostou.</p>
+      <div class="im-pedido"><span>Pedido pra IA</span><p>Crie 5 textos de botão para levar a pessoa a [baixar, marcar uma conversa, pedir orçamento]. No máximo 4 palavras cada.</p><button type="button" class="im-copia">Copiar</button></div>
+    </div></article>
+  </div>
+
+  <h2>A IA faz o meio. <em>Você faz o começo e o fim.</em></h2>
+  <p>No começo, quem dá o contexto é você: o que vende, pra quem, como o cliente se sente. Quando a IA erra, quase sempre faltou isso. No meio, ela trabalha. No fim, você confere, corta o que não é verdade e deixa com a cara do seu negócio.</p>
+
+  <h2>Depois do ímã: o que fazer com <em>quem chegou</em></h2>
+  <div class="im-plano rv">
+    <div><span>1</span><p><b>Um ímã por problema.</b> Três problemas fortes, três ímãs. Cada um fala com um cliente diferente.</p></div>
+    <div><span>2</span><p><b>Resposta na hora.</b> Quem acabou de fazer o teste está quente agora, não amanhã.</p></div>
+    <div><span>3</span><p><b>Conversa pela temperatura.</b> Quem mostrou o sinal de compra vai direto pro vendedor. Quem só olhou recebe conteúdo.</p></div>
+    <div><span>4</span><p><b>Conte conversas, não downloads.</b> O número que importa é quantos chegaram no sinal de compra.</p></div>
+    <div><span>5</span><p><b>Revise todo mês.</b> Título e formato envelhecem. Troque o que parou de funcionar.</p></div>
+  </div>
+
+  <section class="bg-kompila rv">
+    <p class="bg-rot">Quem escreveu</p>
+    <h2>A Kompila monta, liga e mede isso pra você.</h2>
+    <p>A gente cria o ímã (conteúdo e visual), coloca no seu site e no seu WhatsApp, e a Liz, nossa IA, responde na hora quem chegou por ele, faz as perguntas e passa pro vendedor quem está pronto, com o resumo da conversa. Todo mês você vê quantos chegaram, quantos viraram conversa e quantos compraram.</p>
+    <div class="bg-ctas"><a class="bg-btn" data-liz href="#liz">Conversar com a Liz</a><a class="bg-btn bg-ghost" href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">Falar com um consultor</a></div>
+  </section>
+
+  <h2>Perguntas frequentes</h2>
+  <div class="bg-faq">
+    <details open><summary>O que é um ímã de IA?</summary><p>É um material ou ferramenta grátis (teste, calculadora, análise, modelo pronto) que resolve um pedaço pequeno do problema do cliente em troca do contato. É "de IA" porque a IA ajuda a montar o conteúdo e, nos interativos, gera o resultado personalizado.</p></details>
+    <details><summary>Ímã de IA serve pra pequena empresa?</summary><p>Serve, e é onde ele faz mais diferença: um teste simples no site ou no WhatsApp traz gente que já se reconheceu no problema, em vez de seguidor que nunca compra.</p></details>
+    <details><summary>Preciso saber programar?</summary><p>Não. O conteúdo sai de pedidos escritos pra IA, e teste ou calculadora dá pra montar em ferramentas que criam a página a partir de um pedido. O cuidado que fica com você é o contexto no começo e a conferência no fim.</p></details>
+    <details><summary>Onde peço o contato da pessoa?</summary><p>No fim, antes de mostrar o resultado. Pedir no começo faz muita gente desistir antes de usar.</p></details>
+    <details><summary>Como sei se o meu ímã está funcionando?</summary><p>Contando quantas pessoas chegaram no sinal de compra do seu negócio (pediram horário, mandaram a medida, pediram orçamento), não quantas baixaram.</p></details>
+  </div>
+
+  <h2>Fontes</h2>
+  <ol class="bg-fontes"><li><a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener">Harvard Business Review, The Short Life of Online Sales Leads (2011), 2.241 empresas dos EUA.</a></li></ol>
+</article>
+</div>
+
+<section class="bg-outros"><div class="bg-box"><h2>Outros guias da série</h2><div class="bg-ogrid"><a class="bg-outro rv" href="../barbearia-na-era-da-ia/"><img src="../img/barbearia-capa.webp" alt="Barbearia na era da IA" loading="lazy" width="400" height="225"><span>Barbearia na era da IA</span></a><a class="bg-outro rv" href="../studio-na-era-da-ia/"><img src="../img/studio-capa.webp" alt="Studio na era da IA" loading="lazy" width="400" height="225"><span>Studio na era da IA</span></a><a class="bg-outro rv" href="../restaurante-na-era-da-ia/"><img src="../img/restaurante-capa.webp" alt="Restaurante na era da IA" loading="lazy" width="400" height="225"><span>Restaurante na era da IA</span></a><a class="bg-outro rv" href="../loja-na-era-da-ia/"><img src="../img/loja-capa.webp" alt="Loja na era da IA" loading="lazy" width="400" height="225"><span>Loja na era da IA</span></a><a class="bg-outro rv" href="../roupas-na-era-da-ia/"><img src="../img/roupas-capa.webp" alt="Loja de roupas na era da IA" loading="lazy" width="400" height="225"><span>Loja de roupas na era da IA</span></a><a class="bg-outro rv" href="../oficina-na-era-da-ia/"><img src="../img/oficina-capa.webp" alt="Oficina na era da IA" loading="lazy" width="400" height="225"><span>Oficina na era da IA</span></a><a class="bg-outro rv" href="../imobiliaria-na-era-da-ia/"><img src="../img/imobiliaria-capa.webp" alt="Imobiliária na era da IA" loading="lazy" width="400" height="225"><span>Imobiliária na era da IA</span></a><a class="bg-outro rv" href="../contabilidade-na-era-da-ia/"><img src="../img/contabilidade-capa.webp" alt="Contabilidade na era da IA" loading="lazy" width="400" height="225"><span>Contabilidade na era da IA</span></a><a class="bg-outro rv" href="../academia-na-era-da-ia/"><img src="../img/academia-capa.webp" alt="Academia na era da IA" loading="lazy" width="400" height="225"><span>Academia na era da IA</span></a><a class="bg-outro rv" href="../ecommerce-na-era-da-ia/"><img src="../img/ecommerce-capa.webp" alt="E-commerce na era da IA" loading="lazy" width="400" height="225"><span>E-commerce na era da IA</span></a></div></div></section>
+</main>
+<!-- partes:rodape (não edite aqui: partes/rodape.html + scripts/montar_site.py) -->
+<footer class="kr-foot">
+  <div class="kr-box kr-rodape">
+    <div class="kr-marca">
+      <div class="kr-logo"><b>[</b> kompila <b>]</b></div>
+      <p>IA sob medida pra pequena e média empresa.</p><div class="k-acoes"><a class="k-ig-f" href="https://instagram.com/kompila_ai" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila_ai"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a class="kr-btn" href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">Falar direto com um consultor</a></div>
+    </div>
+    <div class="kr-col"><h4>Produtos</h4>
+      <a href="../../chatbot/">IA de atendimento e CRM</a><a href="../../crm/">kompila .crm</a><a href="../../loja/">kompila loja</a><a href="../../design/">kompila design</a><a href="../../trafego/">kompila tráfego</a>
+    </div>
+    <div class="kr-col"><h4>Kompila</h4>
+      <a href="../../#o-que-faz">O que a IA faz</a><a href="../../#como">Como funciona</a><a href="../../#clientes">Clientes</a><a href="../../trabalhos/">Trabalhos</a><a href="../../blog/">Blog</a>
+    </div>
+    <div class="kr-col"><h4>Parceiros</h4>
+      <a href="https://coleve.com.br" target="_blank" rel="noopener">Coleve · contabilidade</a><a href="https://p1led.com.br" target="_blank" rel="noopener">P1LED · painéis de LED</a>
+    </div>
+    <div class="kr-col"><h4>Contato</h4>
+      <a href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">WhatsApp (11) 96734-2512</a><a href="https://instagram.com/kompila_ai" target="_blank" rel="noopener">Instagram @kompila_ai</a><a href="https://crm.kompila.com.br">Entrar no CRM</a>
+    </div>
+  </div>
+  <div class="kr-box kr-base">
+    <span>Kompila · CNPJ 65.907.771/0001-02 · Mogi das Cruzes/SP</span>
+    <a href="../../privacidade/">Política de privacidade</a>
+    <a href="../../termos/">Termos de serviço</a>
+    <a href="../../exclusao-de-dados/">Exclusão de dados</a>
+  </div>
+</footer>
+<!-- /partes:rodape -->
+<script>
+/* O teste do topo (14/10/2026). Conta só com o que a pessoa respondeu: nenhuma taxa inventada. */
+(function () {
+  var box = document.querySelector('.im-teste'); if (!box) return;
+  var resp = {}, msgs = 0;
+  var passos = box.querySelectorAll('.im-passos li');
+  function mostra(n) {
+    box.querySelectorAll('.im-q').forEach(function (q) { q.classList.toggle('on', q.getAttribute('data-q') === String(n)); });
+    passos.forEach(function (p, i) { p.classList.toggle('on', i < n); });
+    var f = box.querySelector('.im-q.on input'); if (f) f.focus();
+  }
+  var campo = box.querySelector('#im-msgs'), ir = box.querySelector('.im-go');
+  function confere() { msgs = Math.round(Number(campo.value) || 0); ir.disabled = !(msgs > 0); }
+  campo.addEventListener('input', confere); confere();
+  campo.addEventListener('keydown', function (e) { if (e.key === 'Enter' && msgs > 0) mostra(2); });
+  ir.addEventListener('click', function () { if (msgs > 0) mostra(2); });
+  box.querySelectorAll('.im-op button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      resp[b.getAttribute('data-r')] = Number(b.getAttribute('data-v'));
+      var atual = Number(b.closest('.im-q').getAttribute('data-q'));
+      if (atual < 4) mostra(atual + 1); else { resultado(); mostra(5); }
+    });
+  });
+  function resultado() {
+    var sinais = [], ok = [];
+    if (resp.t >= 2) sinais.push('A primeira resposta demora horas. Quem pergunta pra você costuma perguntar pra mais gente.');
+    else ok.push('Você responde rápido no horário comercial.');
+    if (resp.n >= 1) sinais.push(resp.n === 2 ? 'Mensagem da noite e do fim de semana às vezes fica sem resposta.' : 'Mensagem da noite e do fim de semana só é vista no dia seguinte.');
+    else ok.push('A noite e o fim de semana têm quem responda.');
+    if (resp.o >= 1) sinais.push(resp.o === 2 ? 'Orçamento sem resposta não é cobrado por ninguém.' : 'Orçamento sem resposta só é cobrado quando alguém lembra.');
+    else ok.push('Orçamento parado é cobrado com data.');
+    var t = sinais.length;
+    box.querySelector('.im-sinais').textContent = t === 0 ? 'Nenhum sinal de venda perdida.' : (t + (t === 1 ? ' sinal' : ' sinais') + ' de venda perdida.');
+    box.querySelector('.im-conta').innerHTML = 'Pelas suas respostas, são <b>[ ' + (msgs * 30).toLocaleString('pt-BR') + ' ]</b> conversas por mês passando pelo seu WhatsApp. Cada sinal abaixo é uma porta por onde parte delas sai sem comprar.';
+    var ul = box.querySelector('.im-lista'); ul.innerHTML = '';
+    sinais.forEach(function (s) { var li = document.createElement('li'); li.textContent = s; ul.appendChild(li); });
+    ok.forEach(function (s) { var li = document.createElement('li'); li.className = 'ok'; li.textContent = s; ul.appendChild(li); });
+  }
+  box.querySelector('.im-refaz').addEventListener('click', function () { resp = {}; campo.value = ''; confere(); mostra(1); });
+  /* Botão Copiar dos pedidos pra IA */
+  document.querySelectorAll('.im-copia').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.parentElement.querySelector('p').textContent;
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = 'Copiado'; setTimeout(function () { b.textContent = 'Copiar'; }, 1600); }).catch(function () {});
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

@@ -131,3 +131,27 @@
  .gb-dash-atalhos{grid-template-columns:1fr 1fr}
  .gb-dash-ped{flex-wrap:wrap}
 }
+
+/* meus pedidos (lista leve) */
+.woocommerce-account .woocommerce-notices-wrapper *:focus,.woocommerce-account .woocommerce-message:focus,.woocommerce-account .woocommerce-info:focus{outline:0!important}
+.gb-ped-t{text-align:left!important;margin:0 0 12px!important;font:800 22px "Inter Tight"}
+.gb-peds{list-style:none;margin:0;padding:0;border:1px solid #ece8eb;border-radius:14px;background:#fff;overflow:hidden}
+.gb-ped{display:grid;grid-template-columns:minmax(0,1.4fr) auto minmax(90px,auto) minmax(150px,auto);align-items:center;gap:16px;padding:14px 18px;border-top:1px solid #f1eef0}
+.gb-ped:first-child{border-top:0}
+.gb-ped-n{text-decoration:none;color:var(--vinho)}
+.gb-ped-n b{display:block;font:700 15px Inter}
+.gb-ped-n small{color:var(--vinho2);font-size:13px}
+.gb-ped-st{justify-self:start;font:700 12px Inter;padding:4px 10px;border-radius:99px;background:#f2f0f2;color:#77707a}
+.gb-ped.ok .gb-ped-st{background:#e7f6ec;color:#17803d}
+.gb-ped.esp .gb-ped-st{background:#fff4dc;color:#a46a00}
+.gb-ped.off{opacity:.62}
+.gb-ped-v{font:700 15px Inter;color:var(--vinho);text-align:right}
+.gb-ped-a{display:flex;gap:14px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+.gb-ped-link{font:600 13.5px Inter;color:var(--vinho2)!important;text-decoration:none}
+.gb-ped-link:hover{color:var(--forte)!important;text-decoration:underline}
+.gb-ped-link.cancel{color:#a39ca6!important}
+.gb-ped-pagar{background:var(--forte);color:#fff!important;font:700 13.5px Inter;padding:8px 14px;border-radius:9px;text-decoration:none}
+.gb-ped-pag{display:flex;justify-content:space-between;margin-top:12px;font-weight:600}
+.gb-ped-vazio{text-align:center;padding:40px 20px;border:1px solid #ece8eb;border-radius:14px;background:#fff}
+.gb-ped-vazio b{font:800 20px "Inter Tight"}
+@media (max-width:640px){.gb-ped{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}.gb-ped-st{grid-column:2;grid-row:1;justify-self:end}.gb-ped-v{grid-column:1;text-align:left}.gb-ped-a{grid-column:2}}

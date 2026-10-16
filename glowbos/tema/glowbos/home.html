@@ -38,7 +38,7 @@ nav a:hover{background:var(--bebe);color:var(--vinho)}
 main,header,.barra,.troca,footer{position:relative;z-index:1}
 header{z-index:30;position:sticky!important;top:0}
 .hero{padding:0}
-.janela{position:relative;overflow:hidden;width:100%;height:calc(100svh - 126px);min-height:560px;background:#fff}
+.janela{position:relative;overflow:hidden;width:100%;height:clamp(440px,calc(100svh - 200px),520px);background:#fff}
 .sl{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;pointer-events:none}
 .sl.on{opacity:1;pointer-events:auto}
 .sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right top;transform:scale(1.04);transform-origin:right top;transition:transform 7s ease}
@@ -64,7 +64,7 @@ header{z-index:30;position:sticky!important;top:0}
 .sl.esc .btn.lin{background:#fff;color:var(--vinho)}
 .acoes{flex-wrap:nowrap}.sl .acoes .btn{height:58px;padding:0 26px}.ac1{width:100%;max-width:560px}.ac1 .cep{flex:1 1 0;min-width:0;max-width:none;height:58px;padding:5px 5px 5px 18px;border:1.5px solid #e6e1e4;box-shadow:none}.ac1 .cep button{height:46px;background:var(--vinho);font-size:15px;padding:0 16px}.ac1 .cep:focus-within{border-color:var(--forte)}.cepr:empty{display:none}
 .btn.pri{background:var(--forte);color:#fff;box-shadow:0 10px 24px rgba(255,31,122,.25)}
-.dots{position:absolute;z-index:3;left:max(24px,calc((100vw - 1240px)/2 + 24px));bottom:34px;display:flex;gap:8px;align-items:center}
+.dots{position:absolute;z-index:3;left:max(24px,calc((100vw - 1240px)/2 + 24px));bottom:22px;display:flex;gap:8px;align-items:center}
 .dot{width:34px;height:4px;border:0;cursor:pointer;padding:0;border-radius:2px;background:rgba(29,26,31,.22);transition:.3s}
 
 .dot.on{background:var(--forte);width:56px}
@@ -470,22 +470,10 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .ma-cores button i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
 .ma-cores button.on{border-color:var(--forte);background:var(--bebe)}
 @media(max-width:860px){.ma-tabs{justify-content:flex-start}.ma{grid-template-columns:minmax(0,1fr)}.ma-foto{position:relative;top:0}.ma-acoes .btn{font-size:14px;padding:0 10px}}
-.gb-confia{display:grid;grid-template-columns:minmax(0,1.3fr) auto auto;align-items:center;gap:18px 28px;margin-top:14px;padding:22px 26px;background:#fff;border:1px solid #ffd9c7;border-radius:18px;box-shadow:0 12px 30px rgba(238,77,45,.07)}
-.gc-a{display:flex;align-items:center;gap:16px}
-.gc-ic{width:56px;height:56px;border-radius:16px;background:#ee4d2d;color:#fff;display:grid;place-items:center;flex:none;box-shadow:0 10px 22px rgba(238,77,45,.28)}
-.gc-ic svg{width:28px;height:28px}
-.gc-a small{display:block;font:700 12px Inter;letter-spacing:.06em;text-transform:uppercase;color:#ee4d2d}
-.gc-a b{display:block;font:800 21px/1.15 "Inter Tight";letter-spacing:-.02em;color:var(--vinho);margin:3px 0}
-.gc-a p{margin:0;font-size:14px;color:var(--vinho2)}
-.gc-n{list-style:none;margin:0;padding:0;display:flex;gap:6px}
-.gc-n li{background:#fff6f1;border-radius:12px;padding:10px 14px;text-align:center;min-width:96px}
-.gc-n b{display:block;font:800 20px/1 "Inter Tight";color:var(--vinho)}.gc-n b i{font-style:normal;color:#ee4d2d}
-.gc-n span{display:block;font-size:11.5px;color:var(--vinho2);margin-top:4px}
-.gc-btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 20px;border-radius:12px;background:#ee4d2d;color:#fff!important;font:700 15px Inter;text-decoration:none;white-space:nowrap}
-.gc-btn:hover{background:#d8401f}
-.gc-cnpj{grid-column:1/-1;margin:0;padding-top:12px;border-top:1px solid #f6e7df;font-size:12px;color:#a39ca6}
-@media (max-width:980px){.gb-confia{grid-template-columns:1fr}.gc-n li{flex:1}.gc-btn{justify-content:center}}
-@media (max-width:640px){.gb-confia{padding:18px 16px;gap:14px}.gc-a b{font-size:18px}.gc-ic{width:48px;height:48px}.gc-n li{min-width:0;padding:10px 6px}.gc-n b{font-size:17px}}
+.gb-confia{margin:14px 0 0;font-size:13px;color:#a39ca6;text-align:center}
+.gb-confia a{color:var(--vinho2);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.gb-confia a:hover{color:#ee4d2d}
+.selos .sl0{background:#fff!important;border-color:#f1e4e9!important;color:var(--vinho2)!important;box-shadow:none!important}.selos .sl0 i{background:var(--bebe)!important;color:var(--forte)!important}.selos .sl0 b{color:var(--vinho)!important;font-size:16px!important}
 /* cartões do topo no celular: lado a lado, arrastando com o dedo */
 @media (max-width:640px){
   .selos{display:flex!important;flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px!important;padding:14px 16px 8px!important;margin:0 -16px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
@@ -503,7 +491,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 
 <header><div class="w hd">
   <a class="logo" href="#"><img src="img/D_logo_crop.png" alt="Glowbos"></a>
-  <nav><a href="#festas">Festas</a><a href="#premium">Premium</a><a href="#numeros">Números</a><a href="#monte">Monte seu arco</a><a href="#temas">Temas</a><a href="#pacotes">Pacotes</a></nav>
+  <nav><a href="/categoria/arcos/">Arcos</a><a href="/categoria/kits-de-arco/">Kits</a><a href="/categoria/pacotes/">Pacotes</a><a href="/categoria/pacotes-fechados/">Fechados</a><a href="/categoria/candy-colors/">Candy colors</a><a href="/categoria/cromados/">Cromados</a><a href="/categoria/numeros/">Números</a></nav>
   <div class="ic">
     <button class="tg" id="tg" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <a href="#" aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
@@ -514,7 +502,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 <div class="mvel" id="mvel"></div>
 <aside class="mmenu" id="mmenu" aria-hidden="true">
   <div class="mmh"><img src="img/D_logo_crop.png" alt="Glowbos"><button id="mfecha" aria-label="Fechar menu">✕</button></div>
-  <nav class="mml"><a href="#festas">Festas <small>aniversário, halloween, chá revelação</small></a><a href="#premium">Linha premium <small>painel, gigante, cromado</small></a><a href="#temas">Temas <small>torcidas, halloween, natal, heróis</small></a><a href="#numeros">Números <small>de 0 a 9, no seu estilo</small></a><a href="#monte">Monte seu arco <small>a partir de R$ 35,99</small></a><a href="#pacotes">Pacotes <small>75 balões, R$ 25,99</small></a></nav>
+  <nav class="mml"><a href="/categoria/arcos/">Arcos <small>monte o seu ou leve pronto</small></a><a href="/categoria/kits-de-arco/">Kits <small>60 a 120 peças, cores à escolha</small></a><a href="/categoria/pacotes/">Pacotes <small>sortidos de 50 a 125 balões</small></a><a href="/categoria/pacotes-fechados/">Fechados <small>uma cor por pacote, 5" a 16"</small></a><a href="/categoria/candy-colors/">Candy colors <small>tons pastel</small></a><a href="/categoria/cromados/">Cromados <small>metalizados com brilho</small></a><a href="/categoria/numeros/">Números <small>de 0 a 9, no seu estilo</small></a><a href="/loja/">Ver tudo <small>a loja inteira, com filtros</small></a></nav>
   <div class="mmd"><b>🚚 Entrega no mesmo dia</b>em São Paulo e Grande SP</div>
   <a class="btn pri" href="#" style="width:100%">Falar no WhatsApp</a>
 </aside>
@@ -558,7 +546,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
     <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4Z"/><path d="M8 9.5h8M8 12.5h5"/></svg></i><span><b>67 mil avaliações</b>de quem já fez festa</span></div>
     <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></svg></i><span><b>121 mil+ vendidos</b>pra todo o Brasil</span></div>
   </div>
-  <div class="gb-confia"><div class="gc-a"><span class="gc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/><path d="m9.5 13 1.8 1.8 3.4-3.6"/></svg></span><div><small>Loja própria da Mayara Festas</small><b>Mesma loja da Shopee. Mesmo preço.</b><p>Aqui você paga igual e, em São Paulo, recebe no mesmo dia.</p></div></div><ul class="gc-n"><li><b>4,9 <i>★</i></b><span>nota na Shopee</span></li><li><b>67 mil</b><span>avaliações</span></li><li><b>121 mil</b><span>pacotes vendidos</span></li></ul><a class="gc-btn" href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener">Conferir na Shopee <span>↗</span></a><p class="gc-cnpj">Mayara Festas e Decorações LTDA · CNPJ 45.147.944/0001-24 · Santo André/SP</p></div></div>
+  <p class="gb-confia"><a href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener">Mesma loja e mesmo preço da Shopee. Conferir ↗</a> · Mayara Festas e Decorações LTDA · CNPJ 45.147.944/0001-24</p></div>
 </section>
 
 <section class="sec" id="pacotes"><div class="w">
