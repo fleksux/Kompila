@@ -491,6 +491,18 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .pm .cap a::after{content:" →"}
 .pm .cap a:hover{border-color:#fff}
 @media (max-width:980px){.pm .cap,.prem2 .pm .cap{flex-direction:column!important;align-items:flex-start!important;padding:14px!important;gap:6px!important}.pm .cap b{font-size:16px!important}.prem2 .pm .cap small{display:none!important}}
+/* prova em 3 colunas, limpa */
+.p3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.p3c{border:1px solid #f0e6ea;border-radius:14px;padding:20px 22px;background:#fff}
+.p3c h4{font:700 13px Inter;text-transform:uppercase;letter-spacing:.08em;color:#a39ca6;margin:0 0 14px}
+.p3n{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 10px}
+.p3n li{font-size:13px;color:var(--vinho2)}
+.p3n b{display:block;font:800 24px/1.1 "Inter Tight";color:var(--vinho);letter-spacing:-.02em}
+.p3v{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.p3v li{font-size:13.5px;color:var(--vinho2);padding-left:14px;border-left:2px solid var(--forte)}
+.p3v b{display:block;font:700 15px Inter;color:var(--vinho)}
+.prova3 .mapa{background:none!important;padding:0!important;border:0!important;box-shadow:none!important;margin:0!important}
+@media (max-width:900px){.p3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -633,31 +645,12 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   </div>
 </div></section>
 
-<section class="sec"><div class="w">
-  <div class="prova">
-    <div>
-      <span class="eyebrow">Quem já fez festa com a gente</span>
-      <h2 class="tt inf">Festa de verdade, em todo canto</h2>
-      <div class="pnums">
-        <div class="pn"><b>4,9★</b><span>nota média na Shopee</span></div>
-        <div class="pn"><b>67 mil</b><span>avaliações de clientes</span></div>
-        <div class="pn"><b>121 mil+</b><span>pacotes vendidos</span></div>
-        <div class="pn"><b>4.478</b><span>pedidos nos últimos 30 dias</span></div>
-      </div>
-      <div class="mapa"><h4>Onde já tem festa nossa</h4><div id="ufs"></div></div>
-    </div>
-    <div class="marca">
-      <div class="mfoto"><img src="img/D_aplicado.webp" alt="Caixa e sacola Glowbos"><span class="tag">Abre e a festa sai de dentro</span></div>
-      <div class="mcard">
-        <div class="mtopo"><img class="mico" src="img/D_icone.webp" alt=""><div><b>Glowbos</b><span>Festa pronta, na caixa.</span></div></div>
-        <p>A gente escolhe as cores que combinam, separa tudo e entrega. Você só abre, monta e vive a festa.</p>
-        <ul class="mval">
-          <li><i>🚚</i><span><b>Chega hoje</b>SP e Grande SP</span></li>
-          <li><i>🎈</i><span><b>Cor que combina</b>13 paletas prontas</span></li>
-          <li><i>✨</i><span><b>Do pacote ao premium</b>de R$ 19,87 ao sob medida</span></li>
-        </ul>
-      </div>
-    </div>
+<section class="sec prova3"><div class="w">
+  <div class="ctr"><span class="eyebrow">Quem já fez festa com a gente</span><h2 class="tt">Festa de verdade, em todo canto</h2></div>
+  <div class="p3">
+    <div class="p3c"><h4>Na Shopee</h4><ul class="p3n"><li><b>4,9★</b>nota média</li><li><b>67 mil</b>avaliações</li><li><b>121 mil+</b>pacotes vendidos</li><li><b>4.478</b>pedidos em 30 dias</li></ul></div>
+    <div class="p3c"><h4>Onde já tem festa nossa</h4><div id="ufs" class="mapa"></div></div>
+    <div class="p3c"><h4>Por que Glowbos</h4><ul class="p3v"><li><b>Chega hoje</b>em SP e Grande SP, pago até 12h</li><li><b>Cor que combina</b>13 paletas prontas ou monte a sua</li><li><b>Do pacote ao premium</b>de R$ 19,87 ao sob medida</li></ul></div>
   </div>
 </div></section>
 
@@ -745,7 +738,7 @@ function nsel(){$('#nsel').textContent='Número '+NUM+' · '+EST}
 const PK=[['pack_azul_verm_amar','Azul, vermelho e amarelo'],['pack_preto_verm_amar','Vermelho, preto e amarelo'],['pack_lar_marrom_verde','Laranja, marrom e verde'],['pack_candy','Candy: rosa, lilás e azul']];
 $('#packs').innerHTML=PK.map(([i,n])=>`<article class="pk"><img src="img/${i}.webp" alt="${n}"><h4>${n}</h4><small>75 balões · 8 polegadas</small><div class="pp"><b>R$ 25,99</b><button data-n="${n}" data-p="25.99" data-i="img/${i}.webp">Comprar</button></div></article>`).join('');
 
-$('#ufs').innerHTML=[['SP',32.5],['MG',16.4],['RJ',10.1],['RS',8.6],['PR',8.0],['SC',5.5],['BA',4.9],['Outros',14.0]].map(([u,v])=>`<div class="uf"><b>${u}</b><span><i style="width:${(v/32.5*100).toFixed(0)}%"></i></span><em>${v.toFixed(1).replace('.',',')}%</em></div>`).join('');
+$('#ufs').innerHTML=[['SP',32.5],['MG',16.4],['RJ',10.1],['RS',8.6],['PR',8.0],['Outros',24.4]].map(([u,v])=>`<div class="uf"><b>${u}</b><span><i style="width:${(v/32.5*100).toFixed(0)}%"></i></span><em>${v.toFixed(1).replace('.',',')}%</em></div>`).join('');
 
 let C=[];try{C=JSON.parse(localStorage.getItem('glowbos_cart_D'))||[]}catch(e){}
 const salva=()=>{try{localStorage.setItem('glowbos_cart_D',JSON.stringify(C))}catch(e){}};
