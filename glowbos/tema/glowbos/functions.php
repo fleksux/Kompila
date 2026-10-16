@@ -88,7 +88,7 @@ add_action( 'wc_ajax_glowbos_sync', function () {
 add_action( 'woocommerce_single_product_summary', function () {
 	?>
 	<div class="gb-pdp">
-		<div class="gb-hoje"><span class="i">🚚</span><span><b>Chega hoje em São Paulo e Grande SP</b>Pedido aprovado até o horário de corte sai no mesmo dia.</span></div>
+		<div class="gb-hoje"><span class="i">🚚</span><span><b>Chega hoje em São Paulo e Grande SP</b>Pedido pago até 12h sai no mesmo dia; depois disso, chega no dia seguinte.</span></div>
 		<div><span class="i">📍</span><span style="flex:1"><b>Ver prazo pro seu CEP</b>
 			<span class="gb-cep"><input inputmode="numeric" maxlength="9" placeholder="00000-000" id="gbcep"><button type="button" id="gbcepb">Ver</button></span>
 			<span class="gb-cepr" id="gbcepr"></span></span></div>
@@ -265,3 +265,14 @@ add_action( 'wc_ajax_glowbos_orcamento', function () {
 	) );
 	$id ? wp_send_json_success() : wp_send_json_error();
 } );
+
+// Frete do motoboy (SP e Grande SP): o nome mostra se chega hoje ou amanhã pelo corte das 12h.
+add_filter( 'woocommerce_package_rates', function ( $rates ) {
+	$hora = (int) ( new DateTime( 'now', new DateTimeZone( 'America/Sao_Paulo' ) ) )->format( 'G' );
+	foreach ( $rates as $rate ) {
+		if ( 'flat_rate' === $rate->get_method_id() ) {
+			$rate->set_label( $hora < 12 ? 'Motoboy · chega hoje' : 'Motoboy · chega amanhã (pedidos até 12h chegam no mesmo dia)' );
+		}
+	}
+	return $rates;
+}, 20 );
