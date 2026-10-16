@@ -470,10 +470,30 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .ma-cores button i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
 .ma-cores button.on{border-color:var(--forte);background:var(--bebe)}
 @media(max-width:860px){.ma-tabs{justify-content:flex-start}.ma{grid-template-columns:minmax(0,1fr)}.ma-foto{position:relative;top:0}.ma-acoes .btn{font-size:14px;padding:0 10px}}
-.gb-confia{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px;padding:16px 20px;border:1px solid #ffd8c2;background:#fff7f2;border-radius:14px;text-decoration:none;color:var(--vinho);font-size:14.5px;line-height:1.45}
-.gb-confia .st{color:#ee4d2d;font-size:16px;letter-spacing:1px}
-.gb-confia span:nth-child(2){flex:1;min-width:240px}
-.gb-confia em{font-style:normal;font-weight:700;color:#ee4d2d;white-space:nowrap}
+.gb-confia{display:grid;grid-template-columns:minmax(0,1.3fr) auto auto;align-items:center;gap:18px 28px;margin-top:14px;padding:22px 26px;background:#fff;border:1px solid #ffd9c7;border-radius:18px;box-shadow:0 12px 30px rgba(238,77,45,.07)}
+.gc-a{display:flex;align-items:center;gap:16px}
+.gc-ic{width:56px;height:56px;border-radius:16px;background:#ee4d2d;color:#fff;display:grid;place-items:center;flex:none;box-shadow:0 10px 22px rgba(238,77,45,.28)}
+.gc-ic svg{width:28px;height:28px}
+.gc-a small{display:block;font:700 12px Inter;letter-spacing:.06em;text-transform:uppercase;color:#ee4d2d}
+.gc-a b{display:block;font:800 21px/1.15 "Inter Tight";letter-spacing:-.02em;color:var(--vinho);margin:3px 0}
+.gc-a p{margin:0;font-size:14px;color:var(--vinho2)}
+.gc-n{list-style:none;margin:0;padding:0;display:flex;gap:6px}
+.gc-n li{background:#fff6f1;border-radius:12px;padding:10px 14px;text-align:center;min-width:96px}
+.gc-n b{display:block;font:800 20px/1 "Inter Tight";color:var(--vinho)}.gc-n b i{font-style:normal;color:#ee4d2d}
+.gc-n span{display:block;font-size:11.5px;color:var(--vinho2);margin-top:4px}
+.gc-btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 20px;border-radius:12px;background:#ee4d2d;color:#fff!important;font:700 15px Inter;text-decoration:none;white-space:nowrap}
+.gc-btn:hover{background:#d8401f}
+.gc-cnpj{grid-column:1/-1;margin:0;padding-top:12px;border-top:1px solid #f6e7df;font-size:12px;color:#a39ca6}
+@media (max-width:980px){.gb-confia{grid-template-columns:1fr}.gc-n li{flex:1}.gc-btn{justify-content:center}}
+@media (max-width:640px){.gb-confia{padding:18px 16px;gap:14px}.gc-a b{font-size:18px}.gc-ic{width:48px;height:48px}.gc-n li{min-width:0;padding:10px 6px}.gc-n b{font-size:17px}}
+/* cartões do topo no celular: lado a lado, arrastando com o dedo */
+@media (max-width:640px){
+  .selos{display:flex!important;flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px!important;padding:14px 16px 8px!important;margin:0 -16px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ .selos::-webkit-scrollbar{display:none}
+ .selos div,.selos .sl0{flex:0 0 80%!important;scroll-snap-align:center;flex-direction:row!important;align-items:center!important;gap:14px!important;padding:16px 18px!important;grid-column:auto!important}
+ .selos div b{font-size:17px!important}
+ .selos div:not(.sl0){font-size:13.5px!important}
+}
 </style>
 </head>
 <body>
@@ -538,7 +558,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
     <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4Z"/><path d="M8 9.5h8M8 12.5h5"/></svg></i><span><b>67 mil avaliações</b>de quem já fez festa</span></div>
     <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></svg></i><span><b>121 mil+ vendidos</b>pra todo o Brasil</span></div>
   </div>
-  <a class="gb-confia" href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener"><span class="st">★★★★★</span><span><b>A Glowbos é a loja própria da Mayara Festas</b>, a mesma da Shopee: nota 4,9, +67 mil avaliações e +121 mil pacotes vendidos. Mayara Festas e Decorações LTDA · CNPJ 45.147.944/0001-24.</span><em>Ver as avaliações na Shopee ↗</em></a></div>
+  <div class="gb-confia"><div class="gc-a"><span class="gc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/><path d="m9.5 13 1.8 1.8 3.4-3.6"/></svg></span><div><small>Loja própria da Mayara Festas</small><b>Mesma loja da Shopee. Mesmo preço.</b><p>Aqui você paga igual e, em São Paulo, recebe no mesmo dia.</p></div></div><ul class="gc-n"><li><b>4,9 <i>★</i></b><span>nota na Shopee</span></li><li><b>67 mil</b><span>avaliações</span></li><li><b>121 mil</b><span>pacotes vendidos</span></li></ul><a class="gc-btn" href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener">Conferir na Shopee <span>↗</span></a><p class="gc-cnpj">Mayara Festas e Decorações LTDA · CNPJ 45.147.944/0001-24 · Santo André/SP</p></div></div>
 </section>
 
 <section class="sec" id="pacotes"><div class="w">
@@ -943,6 +963,11 @@ mostra('torcida');
  $('#maComprar').onclick=()=>{const b=lista();window.gbPoeLista&&window.gbPoeLista(b.it,a.t+' · '+fm(m))};
  abas();arcos();
 })();
+</script>
+<script>
+(function(){var j=document.querySelector('.janela');if(!j)return;
+function ajusta(){if(innerWidth>640){j.style.height='';return}var t=j.getBoundingClientRect().top,m=0;j.querySelectorAll('.sl').forEach(function(s){s.querySelectorAll('a,button,p,h1,h2,small,span').forEach(function(e){var r=e.getBoundingClientRect();if(r.height)m=Math.max(m,r.bottom-t)})});if(m>200)j.style.setProperty('height',Math.ceil(m+28)+'px','important')}
+addEventListener('load',ajusta);addEventListener('resize',ajusta);setTimeout(ajusta,600);})();
 </script>
 </body>
 </html>

@@ -357,7 +357,7 @@ add_action( 'woocommerce_review_order_before_submit', function () {
 // Carrinho, minha conta, acompanhar pedido e 404 no visual da loja.
 add_action( 'wp_enqueue_scripts', function () {
 	if ( is_404() || ( function_exists( 'is_cart' ) && ( is_cart() || is_account_page() || is_page( 'acompanhar-pedido' ) ) ) || is_page() ) {
-		wp_enqueue_style( 'glowbos-paginas', get_template_directory_uri() . '/paginas.css', array( 'glowbos' ), wp_get_theme()->get( 'Version' ) . '.2' );
+		wp_enqueue_style( 'glowbos-paginas', get_template_directory_uri() . '/paginas.css', array( 'glowbos' ), wp_get_theme()->get( 'Version' ) . '.3' );
 	}
 }, 31 );
 // Minha conta: textos em português da casa e atalho para acompanhar pedido sem senha.
