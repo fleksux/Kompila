@@ -1029,3 +1029,41 @@ function glowbos_util_html() {
 <div class="ub-r"><a href="' . esc_url( wc_get_account_endpoint_url( 'orders' ) ) . '">' . $i( '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>' ) . 'Meus pedidos</a><a href="https://wa.me/5511945231106" target="_blank" rel="noopener">' . $i( '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>' ) . '(11) 94523-1106</a><a class="ub-ig" href="https://instagram.com/glowbosbaloes" target="_blank" rel="noopener" aria-label="Instagram da Glowbos">' . $i( '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>' ) . '</a></div>
 </div></div>';
 }
+
+// ===== Régua "Os mais vendidos": os campeões da Shopee, com o número real de vendas de lá =====
+function glowbos_mais_vendidos_html() {
+	$mapa = (array) get_option( 'glowbos_produtos', array() );
+	// chave => [selo de vendas na Shopee, nome curto]
+	$top  = array( 'pack_azul' => array( '5 mil+', 'Azul, vermelho e amarelo' ), 'pack_laranja' => array( '5 mil+', 'Laranja, marrom e verde' ), 'pack_preto' => array( '4 mil+', 'Vermelho, preto e amarelo' ), 'pct50' => array( '3 mil+', '50 balões, 2 cores à escolha' ) );
+	$c    = '';
+	$n    = 1;
+	foreach ( $top as $k => $t ) {
+		$p = empty( $mapa[ $k ] ) ? null : wc_get_product( $mapa[ $k ] );
+		if ( ! $p ) {
+			continue;
+		}
+		$c .= sprintf( '<a class="mv-c" href="%s"><span class="mv-n">%d</span><img src="%s" alt="" loading="lazy"><span class="mv-t"><em>%s vendidos</em><b>%s</b><strong>%s</strong></span></a>', esc_url( $p->get_permalink() ), $n++, esc_url( wp_get_attachment_image_url( $p->get_image_id(), 'medium' ) ), esc_html( $t[0] ), esc_html( $t[1] ), wp_kses_post( wc_price( $p->get_price() ) ) );
+	}
+	return '<style>
+.mv{position:relative;margin:70px 0 0;padding:34px 0;background:linear-gradient(110deg,#2a0f22 0%,#5a1240 45%,#8e1650 100%);color:#fff;overflow:hidden}
+.mv::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--faixa)}
+.mv-w{max-width:1240px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;align-items:center;position:relative}
+.mv-h small{display:block;font:700 12px Inter;letter-spacing:.16em;text-transform:uppercase;color:#ffb3d0;margin-bottom:8px}
+.mv-h b{display:block;font:800 34px/1.02 "Inter Tight";letter-spacing:-.03em}
+.mv-h p{margin:10px 0 16px;color:rgba(255,255,255,.75);font-size:14px;line-height:1.45}
+.mv-h a{display:inline-flex;align-items:center;height:44px;padding:0 18px;border-radius:10px;background:#fff;color:#2a0f22;font:800 14px Inter;text-decoration:none}
+.mv-l{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mv-c{position:relative;display:flex;flex-direction:column;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:12px;text-decoration:none;color:#fff;transition:transform .2s,background .2s}
+.mv-c:hover{transform:translateY(-4px);background:rgba(255,255,255,.12)}
+.mv-c img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#f7f3ea}
+.mv-n{position:absolute;top:18px;left:18px;width:30px;height:30px;border-radius:50%;background:#fff;color:#8e1650;font:800 15px/30px "Inter Tight";text-align:center;z-index:1}
+.mv-t{display:block;padding:10px 2px 0}
+.mv-t em{display:inline-block;font-style:normal;font:700 11.5px Inter;color:#2a0f22;background:#ffd1e3;padding:3px 8px;border-radius:99px;margin-bottom:6px}
+.mv-t b{display:block;font:700 14px/1.25 Inter}
+.mv-t strong{display:block;margin-top:4px;font:800 17px "Inter Tight";color:#ffb3d0}
+.mv-t strong .woocommerce-Price-amount{color:inherit}
+@media (max-width:980px){.mv-w{grid-template-columns:1fr;text-align:center}.mv-h a{margin:0 auto}}
+@media (max-width:640px){.mv{margin-top:44px;padding:26px 0}.mv-w{padding:0 16px}.mv-h b{font-size:28px}.mv-l{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px;scrollbar-width:none}.mv-l::-webkit-scrollbar{display:none}.mv-c{flex:0 0 62%;scroll-snap-align:start;text-align:left}}
+</style>
+<section class="mv"><div class="mv-w"><div class="mv-h"><small>Na Shopee</small><b>Os mais vendidos</b><p>Os pacotes que mais saem na nossa loja da Shopee, pelo mesmo preço e com entrega no mesmo dia em SP.</p><a href="' . esc_url( home_url( '/categoria/pacotes/' ) ) . '">Ver todos os pacotes →</a></div><div class="mv-l">' . $c . '</div></div></section>';
+}
