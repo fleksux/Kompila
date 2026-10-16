@@ -278,3 +278,17 @@ add_filter( 'woocommerce_package_rates', function ( $rates ) {
 	}
 	return $rates;
 }, 20 );
+
+// Checkout: bairro obrigatório (Melhor Envio e antifraude do Mercado Pago usam o endereço completo).
+add_filter( 'woocommerce_billing_fields', function ( $f ) {
+	if ( isset( $f['billing_neighborhood'] ) ) {
+		$f['billing_neighborhood']['required'] = true;
+	}
+	return $f;
+}, 20 );
+add_filter( 'woocommerce_shipping_fields', function ( $f ) {
+	if ( isset( $f['shipping_neighborhood'] ) ) {
+		$f['shipping_neighborhood']['required'] = true;
+	}
+	return $f;
+}, 20 );
