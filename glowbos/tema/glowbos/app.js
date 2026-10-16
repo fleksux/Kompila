@@ -124,14 +124,15 @@
 	if (D.tipo === 'numero') {
 		var NUM = '5', EST = ['rose', 'Rosé'], ESTS = [['rose', 'Rosé'], ['ouro', 'Ouro e preto'], ['lilas', 'Candy'], ['azul', 'Azul']];
 		// set pronto: a foto é a do próprio set; só a coluna de número troca a foto pelo estilo
-		var ehSet = /^Set /.test(nome || '');
+		var ehSet = /^Set /.test(nome || ''), nSet = (nome || '').match(/número (\d)/);
+		if (ehSet && nSet) NUM = nSet[1];
 		var gimg = $('.woocommerce-product-gallery'), pv = null;
 		if (gimg && !ehSet) { pv = document.createElement('div'); pv.className = 'gb-prev gb-prev-num'; gimg.appendChild(pv); }
 		box.innerHTML = '<p class="gb-st"><i>1</i> ' + (ehSet ? 'A idade' : 'O número') + '</p><div class="gb-dig" id="gbDig"></div>' +
 			(ehSet ? '' : '<p class="gb-st"><i>2</i> O estilo</p><div class="gb-est" id="gbEst"></div>') +
 			'<p class="gb-st"><i>' + (ehSet ? 2 : 3) + '</i> Pra quando e onde</p><div class="gb-orc"><input id="gbW" inputmode="tel" placeholder="Seu WhatsApp com DDD" autocomplete="tel"><input id="gbDt" type="date" aria-label="Data da festa"><input id="gbCep" inputmode="numeric" placeholder="CEP da festa" maxlength="9"></div>' +
 			'<div class="gb-buy"><div><small id="gbNsel"></small><b>Sob encomenda</b></div><button type="button" class="gb-btn" id="gbOrc">Pedir orçamento</button></div><p class="gb-nota2">A gente responde no WhatsApp com o valor e a data de entrega.</p>';
-		$('#gbDig').innerHTML = Array.from({ length: 10 }, function (_, k) { return '<button type="button" data-n="' + k + '"' + (k === 5 ? ' class="on"' : '') + '>' + k + '</button>'; }).join('');
+		$('#gbDig').innerHTML = Array.from({ length: 10 }, function (_, k) { return '<button type="button" data-n="' + k + '"' + (String(k) === NUM ? ' class="on"' : '') + '>' + k + '</button>'; }).join('');
 		var est = function () { if (ehSet) return; $('#gbEst').innerHTML = ESTS.map(function (e) { return '<button type="button" data-e="' + e[0] + '"' + (e[0] === EST[0] ? ' class="on"' : '') + '><img src="' + IMG + 'num_' + e[0] + '_' + NUM + '.webp" alt="">' + e[1] + '</button>'; }).join(''); };
 		var pn = function () { est(); $('#gbNsel').textContent = ehSet ? 'Idade ' + NUM : 'Número ' + NUM + ' · ' + EST[1]; if (pv) pv.innerHTML = '<img src="' + IMG + 'num_' + EST[0] + '_' + NUM + '.webp" alt="Coluna com número ' + NUM + '">'; };
 		$('#gbDig').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; box.querySelectorAll('#gbDig button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); NUM = b.dataset.n; pn(); });
