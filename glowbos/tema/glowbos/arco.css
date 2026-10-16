@@ -50,3 +50,7 @@
 .gb-arco .ma-cores button.on{border-color:var(--forte)}
 .gb-arco-sub{font:800 22px "Inter Tight";letter-spacing:-.02em;margin:0 0 12px}
 @media (max-width:760px){.gb-arco{padding:16px;margin:0 -4px 26px}.ma{grid-template-columns:1fr!important}.ma-foto{position:relative!important;top:0!important}}
+.gb-arco-hd{text-align:center;margin:8px 0 18px}
+.gb-arco-hd .gb-eb{display:inline-block;font:700 12px Inter;letter-spacing:.16em;text-transform:uppercase;color:var(--berry,#b0124f);margin-bottom:8px}
+.gb-arco-hd .gb-arco-sub{margin:0 0 6px}
+.gb-arco-hd p{margin:0;color:var(--vinho2);font-size:15px}

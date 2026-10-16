@@ -71,3 +71,7 @@
 .gb-vazio small{background:none;font-weight:500;color:var(--vinho2)}
 @keyframes ccseta{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(7px);opacity:1}}
 @media (max-width:760px){.gb-vazio b svg{transform:rotate(90deg);animation:none}}
+.gb-prev .cacho.vazio .cc-b{opacity:.45!important;filter:drop-shadow(0 6px 10px rgba(0,0,0,.06))!important}
+.gb-vazio{background:radial-gradient(closest-side,rgba(247,243,234,.92),rgba(247,243,234,0))}
+.gb-prev .cc-foto{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:cover}
+.gb-vazio{justify-content:flex-end;padding-bottom:9%;background:linear-gradient(180deg,rgba(247,243,234,0) 55%,rgba(247,243,234,.95) 82%)}

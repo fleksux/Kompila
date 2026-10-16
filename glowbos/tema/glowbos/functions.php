@@ -459,7 +459,7 @@ function glowbos_app_config( $pid ) {
 }
 add_action( 'wp_enqueue_scripts', function () {
 	if ( function_exists( 'is_product' ) && is_product() && glowbos_app_config( get_queried_object_id() ) ) {
-		$v = wp_get_theme()->get( 'Version' ) . '.3';
+		$v = wp_get_theme()->get( 'Version' ) . '.5';
 		wp_enqueue_style( 'glowbos-app', get_template_directory_uri() . '/app.css', array( 'glowbos' ), $v );
 		wp_enqueue_script( 'glowbos-app', get_template_directory_uri() . '/app.js', array(), $v, true );
 	}
@@ -712,7 +712,7 @@ it.querySelectorAll(".gm-cats a[data-gm]").forEach(function(a){a.addEventListene
 // ===== App do arco na página de Arcos: escolhe pela foto, ajusta os metros, a lista vira pacotes no carrinho =====
 add_action( 'wp_enqueue_scripts', function () {
 	if ( function_exists( 'is_product_category' ) && is_product_category( 'arcos' ) ) {
-		$v = wp_get_theme()->get( 'Version' ) . '.2';
+		$v = wp_get_theme()->get( 'Version' ) . '.3';
 		wp_enqueue_style( 'glowbos-arco', get_template_directory_uri() . '/arco.css', array( 'glowbos' ), $v );
 		wp_enqueue_script( 'glowbos-arco', get_template_directory_uri() . '/arco.js', array(), $v, true );
 	}
@@ -737,7 +737,7 @@ function glowbos_arco_app() {
 			</div>
 		</div>
 	</section>
-	<h2 class="gb-arco-sub">Ou leve o kit pronto</h2>
+	<div class="gb-arco-hd"><span class="gb-eb">Novidades</span><h2 class="gb-arco-sub">Ou leve o kit pronto</h2><p>Kits com tudo separado pra montar em casa, com as cores que você escolher.</p></div>
 	<?php
 }
 // lista de pacotes do arco: soma ao carrinho (não apaga o que já está lá)

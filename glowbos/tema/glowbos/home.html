@@ -537,6 +537,17 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 @keyframes ccseta{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(7px);opacity:1}}
 @media (max-width:980px){.cc-vazio b{flex-direction:column;gap:8px}.cc-vazio b svg.vd{display:none}.cc-vazio b svg.vm{display:block;animation-name:ccsetab}}
 @keyframes ccsetab{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(7px);opacity:1}}
+.cacho.vazio .cc-b{opacity:.45!important;filter:drop-shadow(0 6px 10px rgba(0,0,0,.06))!important}
+.cc-vazio{background:radial-gradient(closest-side,rgba(247,243,234,.92),rgba(247,243,234,0))}
+.cc-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cc-vazio{justify-content:flex-end!important;padding-bottom:9%;background:linear-gradient(180deg,rgba(247,243,234,0) 55%,rgba(247,243,234,.95) 82%)!important}
+/* contorno dos tamanhos trocando de cor; para quando o mouse entra */
+.mpt button{border-width:2px!important;animation:ctn 6s linear infinite}
+.mpt button:nth-child(2){animation-delay:-1.5s}.mpt button:nth-child(3){animation-delay:-3s}.mpt button:nth-child(4){animation-delay:-4.5s}
+.mpt:hover button{animation-play-state:paused}
+.mpt button.on{animation:none;border-color:var(--pink,#ff1f7a)!important;box-shadow:0 0 0 3px #ffd3e3}
+@keyframes ctn{0%,100%{border-color:#FF8DB8}25%{border-color:#B99CF0}50%{border-color:#FFC2A1}75%{border-color:#FF7A6B}}
+@media (prefers-reduced-motion:reduce){.mpt button{animation:none}}
 </style>
 </head>
 <body>
@@ -622,7 +633,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
       <div class="mbuy"><div><small id="mpsel">75 balões · 3 cores</small><b id="mptot">R$ 25,99</b></div><button class="btn pri" id="mpadd" disabled>Escolha as 3 cores</button></div>
     </div>
   </div>
-  <div class="ctr" style="margin-top:56px"><h3 class="tt" style="font-size:28px">Ou leve um pronto</h3></div>
+  <div class="ctr" style="margin-top:56px"><span class="eyebrow">Novidades</span><h3 class="tt" style="font-size:28px">Ou leve um pronto</h3><p class="sub">Combinações que a gente já montou e testou. É só escolher e colocar no carrinho.</p></div>
   <div class="packs" id="packs"></div>
 </div></section>
 
@@ -816,7 +827,7 @@ const svg=$('#mpsvg');
 // posições do cacho (x,y,raio)
 const POS=[[200,150,58],[135,190,54],[265,190,54],[165,110,48],[240,105,50],[200,235,52],[110,130,44],[290,135,46],[150,260,46],[255,265,48],[200,70,44],[95,225,42],[305,230,42],[200,300,40],[135,60,36],[270,55,38]];
 function pinta(){
- svg.innerHTML=SEQ.length?window.gbCacho(SEQ):'<div class="cc-vazio"><b>Escolha suas cores<svg class="vd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg><svg class="vm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M7 14l5 5 5-5"/></svg></b><small>'+T.c+' cores pro pacote de '+T.q+' balões</small></div>';
+ svg.innerHTML=SEQ.length?window.gbCacho(SEQ):'<img class="cc-foto" src="'+((window.GB&&GB.img)||'img/')+'pack_branco.webp" alt="Balões brancos perolados"><div class="cc-vazio"><b>Escolha suas cores<svg class="vd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg><svg class="vm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M7 14l5 5 5-5"/></svg></b><small>'+T.c+' cores pro pacote de '+T.q+' balões</small></div>';
  svg.classList.toggle('vazio',!SEQ.length);
  $('#mps').innerHTML=Array.from({length:T.c},(_,i)=>{const k=SEQ[i];return k===undefined?`<div class="slot"><i>${i+1}</i>escolha</div>`:`<div class="slot cheio" data-s="${i}" title="Tirar ${CORES[k][0]}"><i>${i+1}</i><img class="bimg" src="img/b_${window.GB_ARQ[k]}.webp" alt="">${CORES[k][0]}</div>`}).join('');
  document.querySelectorAll('.cor').forEach(b=>b.classList.toggle('usada',SEQ.includes(+b.dataset.k)||SEQ.length>=T.c));
