@@ -1068,3 +1068,6 @@ function glowbos_mais_vendidos_html() {
 </style>
 <section class="mv"><div class="mv-w"><div class="mv-h"><small>Na Shopee</small><b>Os mais vendidos</b><p>Os pacotes que mais saem na nossa loja da Shopee, pelo mesmo preço e com entrega no mesmo dia em SP.</p><a href="' . esc_url( home_url( '/categoria/pacotes/' ) ) . '">Ver todos os pacotes →</a></div><div class="mv-l">' . $c . '</div></div></section>';
 }
+
+// Pixel da Meta e eventos de compra.
+require_once __DIR__ . '/rastreio.php';
