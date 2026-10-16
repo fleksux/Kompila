@@ -525,9 +525,10 @@ function glowbos_app_config( $pid ) {
 }
 add_action( 'wp_enqueue_scripts', function () {
 	if ( function_exists( 'is_product' ) && is_product() && glowbos_app_config( get_queried_object_id() ) ) {
-		$v = wp_get_theme()->get( 'Version' ) . '.15';
-		wp_enqueue_style( 'glowbos-app', get_template_directory_uri() . '/app.css', array( 'glowbos' ), $v );
-		wp_enqueue_script( 'glowbos-app', get_template_directory_uri() . '/app.js', array(), $v, true );
+		// versão pela data do arquivo: mudou o app, o navegador baixa de novo sozinho
+		$d = get_template_directory();
+		wp_enqueue_style( 'glowbos-app', get_template_directory_uri() . '/app.css', array( 'glowbos' ), (string) filemtime( $d . '/app.css' ) );
+		wp_enqueue_script( 'glowbos-app', get_template_directory_uri() . '/app.js', array(), (string) filemtime( $d . '/app.js' ), true );
 	}
 }, 32 );
 add_action( 'woocommerce_single_product_summary', function () {
