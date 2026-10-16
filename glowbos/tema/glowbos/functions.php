@@ -797,7 +797,8 @@ add_action( 'wp_footer', function () {
 @keyframes ggsobe{0%{transform:translateY(10px) scale(.6) rotate(-6deg);opacity:0}15%{opacity:1}70%{opacity:1}100%{transform:translateY(-46px) scale(1) rotate(8deg);opacity:0}}
 @keyframes ggpulse{0%,100%{box-shadow:0 14px 30px rgba(176,18,79,.35),0 0 0 0 rgba(255,31,122,.35)}50%{box-shadow:0 14px 30px rgba(176,18,79,.35),0 0 0 10px rgba(255,31,122,0)}}
 @media (prefers-reduced-motion:reduce){.gg-fab,.gg-fab .bl{animation:none}.gg-fab .bl{display:none}}
-.wpp{bottom:112px!important}
+.gg-fab{right:22px;width:290px;height:56px;box-sizing:border-box}
+@media (min-width:761px){.wpp{width:290px;height:56px;box-sizing:border-box;bottom:22px!important;right:22px!important}body:has(.wpp) .gg-fab{bottom:90px}}
 .gg-fab,.wpp{transition:opacity .3s,transform .3s}
 body.no-rodape .gg-fab,body.no-rodape .wpp{opacity:0!important;transform:translateY(24px)!important;pointer-events:none!important}
 .gg-v{position:fixed;inset:0;background:rgba(29,26,31,.45);opacity:0;pointer-events:none;transition:.3s;z-index:70}
