@@ -34,12 +34,9 @@ function glowbos_aval_num( $n ) {
 
 // 16/10: avaliações de cara e pequenas, na coluna da compra: nota numa linha, 4 comentários
 // em lista e "Ver mais" que abre de 6 em 6. Só fotos que combinam com o produto (glowbos_aval_grupo).
-add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
-	unset( $tabs['reviews'] );
-	return $tabs;
-}, 99 );
-
-add_action( 'woocommerce_single_product_summary', function () {
+// 16/10: "Avaliações" é a primeira aba (aberta), antes de Descrição e Informação adicional,
+// e as abas sobem pra coluna da esquerda, embaixo da foto do produto.
+function glowbos_aval_lista() {
 	list( $p, $loja ) = glowbos_aval_dados( get_the_ID() );
 	$nota  = number_format( $p ? $p['nota'] : ( $loja['nota'] ?? 4.9 ), 1, ',', '' );
 	$total = $p ? glowbos_aval_num( $p['total'] ) : '+' . glowbos_aval_num( $loja['total'] ?? 67000 );
@@ -51,7 +48,14 @@ add_action( 'woocommerce_single_product_summary', function () {
 		<button type="button" class="gbr-mais" hidden>Ver mais avaliações</button>
 	</div>
 	<?php
-}, 45 );
+}
+add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
+	unset( $tabs['reviews'] );
+	list( $p, $loja ) = glowbos_aval_dados( get_the_ID() );
+	$total = $p ? glowbos_aval_num( $p['total'] ) : glowbos_aval_num( $loja['total'] ?? 67000 );
+	$tabs['gb_aval'] = array( 'title' => 'Avaliações (' . $total . ')', 'priority' => 1, 'callback' => 'glowbos_aval_lista' );
+	return $tabs;
+}, 50 );
 
 add_action( 'wp_head', function () {
 	if ( ! is_product() ) {
@@ -59,7 +63,11 @@ add_action( 'wp_head', function () {
 	}
 	?>
 <style>
-.gbr{margin:18px 0 6px;border-top:1px solid #f0eaee;padding-top:14px}
+.gbr{margin:4px 0 6px}
+@media (min-width:769px){.single-product div.product{display:grid;grid-template-columns:1fr 1fr;column-gap:48px;align-items:start}.single-product div.product>*{grid-column:1/-1}.single-product div.product>.woocommerce-product-gallery{grid-column:1;grid-row:1;width:auto!important;float:none!important;margin:0!important}.single-product div.product>.summary{grid-column:2;grid-row:1/span 2;width:auto!important;float:none!important;margin:0!important}.single-product div.product>.woocommerce-tabs{grid-column:1;grid-row:2;margin-top:28px;min-width:0}}
+.single-product .woocommerce-tabs .panel>h2:first-child{display:none}
+.single-product div.product>*{min-width:0;max-width:100%}.single-product .woocommerce-tabs,.single-product .woocommerce-tabs ul.tabs{min-width:0;max-width:100%}
+@media (max-width:768px){.woocommerce div.product .woocommerce-tabs ul.tabs{gap:20px}.woocommerce div.product .woocommerce-tabs ul.tabs li a{font-size:14px!important}}
 .gbr-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13.5px;color:#5b5560}
 .gbr-top .gbr-st{color:#FF1F7A;letter-spacing:1px;font-size:14px}
 .gbr-top b{font:800 15px Inter;color:#1d1a1f}
