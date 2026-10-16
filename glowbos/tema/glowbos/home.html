@@ -564,6 +564,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .deco-ft{min-height:340px}.deco-ft img{width:100%;height:100%;object-fit:cover;object-position:60% center;display:block}
 @media (max-width:900px){.deco-in{grid-template-columns:1fr;width:calc(100% - 32px)}.deco-ft{order:-1;min-height:240px}.deco-tx{padding:26px 20px;text-align:center;align-items:center}.deco-ac{width:100%;flex-direction:column}.deco-ac .btn{width:100%}}
 @media (min-width:901px){.deco-in{grid-template-columns:minmax(500px,1.1fr) 1fr!important}.deco-ac{flex-wrap:nowrap}.deco-ac .btn{white-space:nowrap;padding:0 22px}.deco-tx{padding:46px 40px}}
+.mpt button{position:relative}.mpt-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#16A34A;color:#fff;font:700 10.5px/1 Inter;padding:5px 9px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 10px rgba(22,163,74,.3)}
 </style>
 </head>
 <body>
@@ -639,7 +640,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
       <p class="mst"><i>1</i> O tamanho</p>
       <div class="mpt" id="mpt">
         <button data-q="50" data-c="2" data-p="19.87"><b>50</b><span>balões</span><small>2 cores</small><em>R$ 19,87</em></button>
-        <button class="on" data-q="75" data-c="3" data-p="25.99"><b>75</b><span>balões</span><small>3 cores</small><em>R$ 25,99</em></button>
+        <button class="on" data-q="75" data-c="3" data-p="25.99"><span class="mpt-tag">Mais vendido</span><b>75</b><span>balões</span><small>3 cores</small><em>R$ 25,99</em></button>
         <button data-q="100" data-c="4" data-p="32.99"><b>100</b><span>balões</span><small>4 cores</small><em>R$ 32,99</em></button>
         <button data-q="125" data-c="5" data-p="36.99"><b>125</b><span>balões</span><small>5 cores</small><em>R$ 36,99</em></button>
       </div>
@@ -796,7 +797,7 @@ function nsel(){$('#nsel').textContent='Número '+NUM+' · '+EST}
 const PK=[['pack_azul_verm_amar','Azul, vermelho e amarelo'],['pack_preto_verm_amar','Vermelho, preto e amarelo'],['pack_lar_marrom_verde','Laranja, marrom e verde'],['pack_candy','Candy: rosa, lilás e azul']];
 $('#packs').innerHTML=PK.map(([i,n])=>`<article class="pk"><img src="img/${i}.webp" alt="${n}"><h4>${n}</h4><small>75 balões · 8 polegadas</small><div class="pp"><b>R$ 25,99</b><button data-n="${n}" data-p="25.99" data-i="img/${i}.webp">Comprar</button></div></article>`).join('');
 
-$('#ufs').innerHTML=[['SP',32.5],['MG',16.4],['RJ',10.1],['RS',8.6],['PR',8.0],['Outros',24.4]].map(([u,v])=>`<div class="uf"><b>${u}</b><span><i style="width:${(v/32.5*100).toFixed(0)}%"></i></span><em>${v.toFixed(1).replace('.',',')}%</em></div>`).join('');
+if($('#ufs'))$('#ufs').innerHTML=[['SP',32.5],['MG',16.4],['RJ',10.1],['RS',8.6],['PR',8.0],['Outros',24.4]].map(([u,v])=>`<div class="uf"><b>${u}</b><span><i style="width:${(v/32.5*100).toFixed(0)}%"></i></span><em>${v.toFixed(1).replace('.',',')}%</em></div>`).join('');
 
 let C=[];try{C=JSON.parse(localStorage.getItem('glowbos_cart_D'))||[]}catch(e){}
 const salva=()=>{try{localStorage.setItem('glowbos_cart_D',JSON.stringify(C))}catch(e){}};

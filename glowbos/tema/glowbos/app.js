@@ -11,6 +11,7 @@
 	var METAL = [['Dourado', '#c9a24a', '#f3dc8b'], ['Prata', '#9da3a8', '#e9ecef'], ['Rosê gold', '#c98f7f', '#f4cfc3'], ['Rosa', '#e86aa0', '#ffc3dc'], ['Vermelho', '#b81d27', '#ff7a80'], ['Azul', '#2153b8', '#8fb4ff'], ['Verde', '#16804a', '#86e0ad'], ['Roxo', '#6a32b0', '#c4a1f2'], ['Grafite', '#2b2b30', '#8a8a92']];
 	// cores oficiais da Glowbos (fotos da cartela) + perolado e dourado, pros pacotes fechados
 	var OFIC = [['Branco', 'c_branco'], ['Marfim', 'c_marfim'], ['Nude', 'c_nude'], ['Caramelo', 'c_caramelo'], ['Marrom', 'c_marrom'], ['Amarelo', 'c_amarelo'], ['Vermelho', 'c_vermelho'], ['Rosa claro', 'c_rosa_claro'], ['Rosa', 'c_rosa'], ['Fúcsia', 'c_fucsia'], ['Lilás', 'c_lilas'], ['Roxo', 'c_roxo'], ['Azul claro', 'c_azul_claro'], ['Azul celeste', 'c_azul_celeste'], ['Azul', 'c_azul'], ['Azul turquesa', 'c_azul_turquesa'], ['Verde claro', 'c_verde_claro'], ['Verde lima', 'c_verde_lima'], ['Verde folha', 'c_verde_folha'], ['Branco perolado', 'b_branco', 'perola'], ['Dourado', 'b_dourado', 'metal']];
+	var EMB = ['branco', 'marfim', 'nude', 'caramelo', 'marrom', 'amarelo', 'vermelho', 'rosa_claro', 'rosa', 'fucsia', 'lilas', 'roxo', 'azul_claro', 'azul_celeste', 'azul', 'azul_turquesa', 'verde_claro', 'verde_lima', 'verde_folha', 'perolado', 'dourado'];
 	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : (D.tipo === 'quantidade' ? OFIC : LISOS);
 	var preco = +D.preco, pid = D.pid, nome = D.nome;
 	var POS = [[50, 22, 30, -3], [34, 30, 29, 9], [66, 29, 29, -8], [42, 40, 31, 4], [60, 42, 30, -5], [25, 48, 28, 11], [75, 48, 28, -11], [50, 54, 31, 1], [36, 62, 29, 7], [64, 63, 29, -6], [50, 72, 30, 2], [22, 66, 26, 13], [78, 66, 26, -13]];
@@ -87,6 +88,15 @@
 				soma();
 			}).catch(function () { toast('Sem conexão. Tente de novo.'); soma(); });
 		};
+		// foto grande: a embalagem Glowbos da cor que o cliente mexeu por último
+		if (PAL === OFIC) {
+			var g2 = $('.woocommerce-product-gallery'), pe = null;
+			if (g2) { pe = document.createElement('div'); pe.className = 'gb-prev gb-prev-emb'; g2.appendChild(pe); }
+			var mostra = function (i) { if (pe) pe.innerHTML = '<img src="' + IMG + 'emb_' + EMB[i] + '.webp" alt="Pacote Glowbos ' + PAL[i][0] + '"><span class="gb-tag">' + PAL[i][0] + '</span>'; };
+			mostra(13);
+			$('#gbQ').addEventListener('mouseover', function (e) { var r = e.target.closest('.gb-q'); if (r) mostra(+r.dataset.i); });
+			$('#gbQ').addEventListener('click', function (e) { var r = e.target.closest('.gb-q'); if (r) mostra(+r.dataset.i); });
+		}
 		soma();
 	}
 	if (D.tipo === 'bubble') {
