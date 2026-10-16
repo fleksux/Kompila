@@ -1,0 +1,101 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>c3_combinacoes</title><link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,700;0,800;0,900;1,800&family=Inter:wght@500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet"><style>
+:root{--berry:#B0124F;--pink:#FF1F7A;--rosa:#FF8DB8;--pessego:#FFC2A1;--lilas:#B99CF0;--creme:#F7F3EA;--grafite:#1d1a1f;--bebe:#FFF2F6;--ink:#1d1a1f;--mut:#5f5a63}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#bbb}
+#pano{position:relative;height:1440px;overflow:hidden;font-family:Inter,sans-serif;color:var(--ink)}
+.sl{position:absolute;top:0;width:1080px;height:1440px;overflow:hidden}
+.x{position:absolute;z-index:6}            /* elemento que atravessa slides (coordenada do canvas) */
+/* fundos */
+.f-creme{background:var(--creme)}.f-bebe{background:var(--bebe)}.f-branco{background:#fff}
+.f-lilas{background:#EEE6FF}.f-pessego{background:#FFE9DC}.f-rosa{background:#FFE1EC}
+.f-berry{background:var(--berry);color:#fff}.f-pink{background:var(--pink);color:#fff}.f-grafite{background:var(--grafite);color:#fff}
+.f-lilasf{background:var(--lilas);color:#fff}.f-pessegof{background:var(--pessego)}
+/* topo e rodapé fixos */
+.lg{position:absolute;left:96px;top:70px;height:70px;z-index:7}
+.f-berry .lg,.f-pink .lg,.f-grafite .lg,.f-lilasf .lg{filter:drop-shadow(0 4px 14px rgba(0,0,0,.18))}
+.pg{position:absolute;right:96px;top:92px;font:700 22px Inter;letter-spacing:.06em;opacity:.65;z-index:7}
+.faixa{position:absolute;left:0;bottom:0;height:16px;z-index:8;background:linear-gradient(90deg,var(--berry) 0 20%,var(--pink) 20% 40%,var(--rosa) 40% 60%,var(--pessego) 60% 80%,var(--lilas) 80% 100%);background-size:1080px 16px}
+.site{position:absolute;left:96px;bottom:60px;font:700 24px Inter;opacity:.7;z-index:7}
+.seta{position:absolute;right:96px;bottom:52px;font:700 44px Caveat;z-index:7}
+/* tipografia */
+.k{font:800 22px Inter;letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
+.f-berry .k,.f-pink .k,.f-grafite .k,.f-lilasf .k{color:#fff;opacity:.85}
+.t{font:900 92px/.98 "Inter Tight";letter-spacing:-.045em}
+.t2{font:900 68px/1 "Inter Tight";letter-spacing:-.04em}
+.t3{font:800 44px/1.08 "Inter Tight";letter-spacing:-.03em}
+.m{font:700 1.18em/0.8 Caveat;color:var(--pink);letter-spacing:0;display:inline-block;transform:rotate(-2deg);margin-right:.12em}
+.f-berry .m,.f-pink .m,.f-grafite .m{color:#FFD0E1}.f-lilasf .m{color:#fff}
+.p{font:600 34px/1.38 Inter;color:var(--mut)}
+.f-berry .p,.f-pink .p,.f-grafite .p,.f-lilasf .p{color:rgba(255,255,255,.86)}
+.mao{font:700 46px/1.05 Caveat;color:var(--berry)}
+.f-berry .mao,.f-pink .mao,.f-grafite .mao{color:#FFD0E1}
+.blk{position:absolute;left:96px;right:96px}
+/* fotos */
+.ft{position:absolute;overflow:hidden;border-radius:30px;background:#eee;box-shadow:0 20px 50px rgba(29,26,31,.16)}
+.ft img,.ftc img,.pol img{width:100%;height:100%;object-fit:cover;display:block}
+.ftc{position:absolute;overflow:hidden;border-radius:50%;box-shadow:0 18px 40px rgba(29,26,31,.18);border:10px solid #fff}
+.pol{position:absolute;background:#fff;padding:16px 16px 64px;border-radius:6px;box-shadow:0 18px 44px rgba(29,26,31,.18)}
+.pol i{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:700 34px Caveat;color:var(--berry);font-style:normal}
+.full{position:absolute;inset:0}.full img{width:100%;height:100%;object-fit:cover}
+.vel{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(180deg,rgba(29,26,31,0),rgba(29,26,31,.82) 70%)}
+.velc{position:absolute;left:0;right:0;bottom:0;height:58%;background:linear-gradient(180deg,rgba(247,243,234,0),var(--creme) 62%)}
+/* peças */
+.pill{display:inline-flex;align-items:center;gap:12px;height:72px;padding:0 30px;border-radius:99px;background:var(--pink);color:#fff;font:800 30px Inter}
+.pill.br{background:#fff;color:var(--berry)}.pill.gr{background:var(--grafite)}
+.num{display:grid;place-items:center;width:96px;height:96px;border-radius:50%;background:var(--pink);color:#fff;font:900 52px "Inter Tight";flex:none}
+.num.out{background:transparent;border:5px solid currentColor;color:var(--pink)}
+.cartao{position:absolute;background:#fff;border-radius:30px;padding:34px 36px;box-shadow:0 16px 44px rgba(29,26,31,.12);color:var(--ink)}
+.cartao .p{color:var(--mut)}
+.preco{font:900 64px "Inter Tight";letter-spacing:-.03em;color:var(--pink)}
+.preco small{font:700 26px Inter;color:var(--mut);letter-spacing:0;margin-right:8px}
+.estrela{color:#F5A623;letter-spacing:3px;font:800 30px Inter}
+/* especialista: selo com foto redonda */
+.esp{position:absolute;display:flex;align-items:center;gap:18px;z-index:7}
+.esp .ftc{position:relative;width:110px;height:110px;border-width:6px}
+.esp b{display:block;font:800 26px Inter}.esp small{display:block;font:600 22px Inter;opacity:.7}
+.lista{list-style:none;display:flex;flex-direction:column;gap:26px}
+.lista li{display:flex;gap:24px;align-items:flex-start;font:600 34px/1.3 Inter}
+.lista li b{font-weight:800}
+.lista .num{width:72px;height:72px;font-size:38px}
+.bolha{position:absolute;background:#fff;border-radius:34px 34px 34px 8px;padding:30px 34px;font:600 32px/1.38 Inter;color:var(--ink);box-shadow:0 14px 36px rgba(29,26,31,.14)}
+.bolha b{font-weight:800}
+</style></head><body><div id="pano" style="width:6480px"><section class="sl f-creme" style="left:0px">
+  <div class="ft" style="left:96px;top:190px;width:420px;height:520px;transform:rotate(-4deg)"><img src="../../../tema/glowbos/img/arco_01_vivo_arco-iris.webp"></div>
+  <div class="ft" style="left:560px;top:170px;width:420px;height:520px;transform:rotate(3deg)"><img src="../../../tema/glowbos/img/arco_09_candy_algodao.webp"></div>
+  <div class="blk" style="top:800px"><div class="k">16 paletas testadas</div>
+  <h1 class="t" style="margin-top:18px">Combinações que<br><span class="m">nunca erram</span></h1>
+  <p class="p" style="margin-top:22px">Arrasta e escolhe a da sua festa.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">1/6</span><span class="seta">arrasta →</span></section><section class="sl f-pessego" style="left:1080px">
+  <div class="blk" style="top:190px"><div class="k">cores vivas</div><h2 class="t2" style="margin-top:14px">Pra festa <span class="m">animada</span></h2></div>
+  <div class="blk" style="top:400px;display:grid;grid-template-columns:1.25fr 1fr;gap:24px"><div><div style="height:760px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_01_vivo_arco-iris.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Arco-íris</div></div>
+<div style="display:flex;flex-direction:column;gap:24px"><div><div style="height:330px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_02_vivo_primarias.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Primárias</div></div><div><div style="height:330px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_03_vivo_joias.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Joias</div></div></div></div>
+  <div class="mao" style="position:absolute;left:96px;right:96px;bottom:150px">combina com festa infantil e personagem</div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">2/6</span><span class="seta">arrasta →</span></section><section class="sl f-lilas" style="left:2160px">
+  <div class="blk" style="top:190px"><div class="k">tons vizinhos</div><h2 class="t2" style="margin-top:14px">Pra quem gosta de <span class="m">harmonia</span></h2></div>
+  <div class="blk" style="top:400px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px"><div><div style="height:600px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_04_analoga_quente.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Quente</div></div><div><div style="height:600px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_05_analoga_fria.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Fria</div></div><div><div style="height:600px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_06_analoga_lilas.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Lilás</div></div></div>
+  <div class="mao" style="position:absolute;left:96px;right:96px;bottom:150px">cores lado a lado, o arco fica degradê</div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">3/6</span><span class="seta">arrasta →</span></section><section class="sl f-rosa" style="left:3240px">
+  <div class="blk" style="top:190px"><div class="k">pastel e candy</div><h2 class="t2" style="margin-top:14px">Pra festa <span class="m">delicada</span></h2></div>
+  <div class="blk" style="top:400px;display:grid;grid-template-columns:repeat(2,1fr);gap:24px"><div><div style="height:320px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_07_pastel_neutro.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Pastel neutro</div></div><div><div style="height:320px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_08_pastel_bebe.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Pastel bebê</div></div><div><div style="height:320px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_09_candy_algodao.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Candy algodão</div></div><div><div style="height:320px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_10_candy_morango.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Candy morango</div></div></div>
+  <div class="mao" style="position:absolute;left:96px;right:96px;bottom:150px">chá revelação, batizado, 1 aninho</div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">4/6</span><span class="seta">arrasta →</span></section><section class="sl f-creme" style="left:4320px">
+  <div class="blk" style="top:190px"><div class="k">cores dos temas</div><h2 class="t2" style="margin-top:14px">Pra festa <span class="m">temática</span></h2></div>
+  <div class="blk" style="top:400px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px"><div><div style="height:280px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_11_tema_homem-aranha.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Homem-Aranha</div></div><div><div style="height:280px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_12_tema_bob-esponja.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Bob Esponja</div></div><div><div style="height:280px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_13_tema_moana.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Moana</div></div><div><div style="height:280px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_14_vermelho_preto_amarelo.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Vermelho, preto e amarelo</div></div><div><div style="height:280px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_15_preto_e_branco.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Preto e branco</div></div><div><div style="height:280px;border-radius:24px;overflow:hidden;box-shadow:0 14px 34px rgba(29,26,31,.14)"><img src="../../../tema/glowbos/img/arco_16_verde_e_branco.webp" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="font:800 26px/1.15 Inter;margin-top:12px">Verde e branco</div></div></div>
+  <div class="mao" style="position:absolute;left:96px;right:96px;bottom:150px">as cores do personagem, sem erro</div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">5/6</span><span class="seta">arrasta →</span></section><section class="sl f-grafite" style="left:5400px">
+  <div class="ftc" style="left:96px;top:200px;width:300px;height:300px"><img src="../especialista/cores.jpg" style="object-position:50% 35%"></div>
+  <div class="mao" style="position:absolute;left:430px;top:300px">dica da especialista</div>
+  <h2 class="t2 blk" style="top:580px;color:#fff">Uma cor <span class="m">manda,</span><br>uma acompanha,<br>uma <span class="m">brilha.</span></h2>
+  <p class="p blk" style="top:900px">Escolheu a paleta? Monta no site com a ordem que você quiser.</p>
+  <div class="blk" style="top:1080px"><span class="pill">glowbos.com.br</span></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">6/6</span><span class="site">glowbos.com.br</span></section><div class="faixa" style="width:6480px"></div></div></body></html>

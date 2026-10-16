@@ -1,0 +1,95 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>f1_kits</title><link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,700;0,800;0,900;1,800&family=Inter:wght@500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet"><style>
+:root{--berry:#B0124F;--pink:#FF1F7A;--rosa:#FF8DB8;--pessego:#FFC2A1;--lilas:#B99CF0;--creme:#F7F3EA;--grafite:#1d1a1f;--bebe:#FFF2F6;--ink:#1d1a1f;--mut:#5f5a63}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#bbb}
+#pano{position:relative;height:1440px;overflow:hidden;font-family:Inter,sans-serif;color:var(--ink)}
+.sl{position:absolute;top:0;width:1080px;height:1440px;overflow:hidden}
+.x{position:absolute;z-index:6}            /* elemento que atravessa slides (coordenada do canvas) */
+/* fundos */
+.f-creme{background:var(--creme)}.f-bebe{background:var(--bebe)}.f-branco{background:#fff}
+.f-lilas{background:#EEE6FF}.f-pessego{background:#FFE9DC}.f-rosa{background:#FFE1EC}
+.f-berry{background:var(--berry);color:#fff}.f-pink{background:var(--pink);color:#fff}.f-grafite{background:var(--grafite);color:#fff}
+.f-lilasf{background:var(--lilas);color:#fff}.f-pessegof{background:var(--pessego)}
+/* topo e rodapé fixos */
+.lg{position:absolute;left:96px;top:70px;height:70px;z-index:7}
+.f-berry .lg,.f-pink .lg,.f-grafite .lg,.f-lilasf .lg{filter:drop-shadow(0 4px 14px rgba(0,0,0,.18))}
+.pg{position:absolute;right:96px;top:92px;font:700 22px Inter;letter-spacing:.06em;opacity:.65;z-index:7}
+.faixa{position:absolute;left:0;bottom:0;height:16px;z-index:8;background:linear-gradient(90deg,var(--berry) 0 20%,var(--pink) 20% 40%,var(--rosa) 40% 60%,var(--pessego) 60% 80%,var(--lilas) 80% 100%);background-size:1080px 16px}
+.site{position:absolute;left:96px;bottom:60px;font:700 24px Inter;opacity:.7;z-index:7}
+.seta{position:absolute;right:96px;bottom:52px;font:700 44px Caveat;z-index:7}
+/* tipografia */
+.k{font:800 22px Inter;letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
+.f-berry .k,.f-pink .k,.f-grafite .k,.f-lilasf .k{color:#fff;opacity:.85}
+.t{font:900 92px/.98 "Inter Tight";letter-spacing:-.045em}
+.t2{font:900 68px/1 "Inter Tight";letter-spacing:-.04em}
+.t3{font:800 44px/1.08 "Inter Tight";letter-spacing:-.03em}
+.m{font:700 1.18em/0.8 Caveat;color:var(--pink);letter-spacing:0;display:inline-block;transform:rotate(-2deg);margin-right:.12em}
+.f-berry .m,.f-pink .m,.f-grafite .m{color:#FFD0E1}.f-lilasf .m{color:#fff}
+.p{font:600 34px/1.38 Inter;color:var(--mut)}
+.f-berry .p,.f-pink .p,.f-grafite .p,.f-lilasf .p{color:rgba(255,255,255,.86)}
+.mao{font:700 46px/1.05 Caveat;color:var(--berry)}
+.f-berry .mao,.f-pink .mao,.f-grafite .mao{color:#FFD0E1}
+.blk{position:absolute;left:96px;right:96px}
+/* fotos */
+.ft{position:absolute;overflow:hidden;border-radius:30px;background:#eee;box-shadow:0 20px 50px rgba(29,26,31,.16)}
+.ft img,.ftc img,.pol img{width:100%;height:100%;object-fit:cover;display:block}
+.ftc{position:absolute;overflow:hidden;border-radius:50%;box-shadow:0 18px 40px rgba(29,26,31,.18);border:10px solid #fff}
+.pol{position:absolute;background:#fff;padding:16px 16px 64px;border-radius:6px;box-shadow:0 18px 44px rgba(29,26,31,.18)}
+.pol i{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:700 34px Caveat;color:var(--berry);font-style:normal}
+.full{position:absolute;inset:0}.full img{width:100%;height:100%;object-fit:cover}
+.vel{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(180deg,rgba(29,26,31,0),rgba(29,26,31,.82) 70%)}
+.velc{position:absolute;left:0;right:0;bottom:0;height:58%;background:linear-gradient(180deg,rgba(247,243,234,0),var(--creme) 62%)}
+/* peças */
+.pill{display:inline-flex;align-items:center;gap:12px;height:72px;padding:0 30px;border-radius:99px;background:var(--pink);color:#fff;font:800 30px Inter}
+.pill.br{background:#fff;color:var(--berry)}.pill.gr{background:var(--grafite)}
+.num{display:grid;place-items:center;width:96px;height:96px;border-radius:50%;background:var(--pink);color:#fff;font:900 52px "Inter Tight";flex:none}
+.num.out{background:transparent;border:5px solid currentColor;color:var(--pink)}
+.cartao{position:absolute;background:#fff;border-radius:30px;padding:34px 36px;box-shadow:0 16px 44px rgba(29,26,31,.12);color:var(--ink)}
+.cartao .p{color:var(--mut)}
+.preco{font:900 64px "Inter Tight";letter-spacing:-.03em;color:var(--pink)}
+.preco small{font:700 26px Inter;color:var(--mut);letter-spacing:0;margin-right:8px}
+.estrela{color:#F5A623;letter-spacing:3px;font:800 30px Inter}
+/* especialista: selo com foto redonda */
+.esp{position:absolute;display:flex;align-items:center;gap:18px;z-index:7}
+.esp .ftc{position:relative;width:110px;height:110px;border-width:6px}
+.esp b{display:block;font:800 26px Inter}.esp small{display:block;font:600 22px Inter;opacity:.7}
+.lista{list-style:none;display:flex;flex-direction:column;gap:26px}
+.lista li{display:flex;gap:24px;align-items:flex-start;font:600 34px/1.3 Inter}
+.lista li b{font-weight:800}
+.lista .num{width:72px;height:72px;font-size:38px}
+.bolha{position:absolute;background:#fff;border-radius:34px 34px 34px 8px;padding:30px 34px;font:600 32px/1.38 Inter;color:var(--ink);box-shadow:0 14px 36px rgba(29,26,31,.14)}
+.bolha b{font-weight:800}
+.m{margin:0 .14em}</style></head><body><div id="pano" style="width:6480px"><section class="sl f-creme" style="left:0px">
+  <div class="ft" style="left:0;right:0;top:0;height:860px;border-radius:0"><img src="../fotos_loja/glowbos_kit100_parede.webp" style="object-position:50% 45%"></div>
+  <div class="blk" style="top:930px"><div class="k">pra montar em casa</div>
+  <h1 class="t" style="margin-top:18px;font-size:86px">Kit de arco: <span class="m">o que vem</span> na caixa</h1>
+  <p class="p" style="margin-top:22px">Você escolhe as cores. Sem pagar decorador.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">1/6</span><span class="seta">arrasta →</span></section><section class="sl f-lilas" style="left:1080px">
+  <div class="ft" style="left:96px;top:190px;width:470px;height:1060px"><img src="../fotos_loja/glowbos_kit60_parede.webp" style="object-position:62% 50%"></div>
+  <div style="position:absolute;left:620px;right:96px;top:230px">
+   <div class="k">o de entrada</div><h2 class="t2" style="margin-top:14px">Kit 60 peças</h2>
+   <div class="preco" style="margin-top:18px">R$ 35,99</div>
+   <ul class="lista" style="margin-top:56px"><li><span class="num">24</span><span>balões de <b>12"</b><br><small style="color:var(--mut)">uns 30 cm cheio</small></span></li>
+   <li><span class="num">36</span><span>balões de <b>9"</b><br><small style="color:var(--mut)">uns 25 cm cheio</small></span></li></ul>
+   <p class="mao" style="margin-top:56px">a fita vende separada</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">2/6</span><span class="seta">arrasta →</span></section><section class="sl f-pessego" style="left:2160px">
+  <div class="blk" style="top:200px"><div class="k">o mais completo pra começar</div><h2 class="t2" style="margin-top:14px">Kit 100 peças <span class="m">desconstruído</span></h2>
+  <div class="preco" style="margin-top:14px">R$ 52,99</div></div>
+  <div class="blk" style="top:560px;display:flex;justify-content:space-between;align-items:flex-end"><div style="display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:230px;height:230px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff 0 6%,var(--pink) 30%,var(--berry) 100%);box-shadow:0 14px 30px rgba(176,18,79,.25)"></div><b style="font:900 54px 'Inter Tight'">2</b><small style="font:700 26px Inter;color:var(--mut)">de 16"</small></div><div style="display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:180px;height:180px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff 0 6%,var(--pink) 30%,var(--berry) 100%);box-shadow:0 14px 30px rgba(176,18,79,.25)"></div><b style="font:900 54px 'Inter Tight'">6</b><small style="font:700 26px Inter;color:var(--mut)">de 12"</small></div><div style="display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff 0 6%,var(--pink) 30%,var(--berry) 100%);box-shadow:0 14px 30px rgba(176,18,79,.25)"></div><b style="font:900 54px 'Inter Tight'">60</b><small style="font:700 26px Inter;color:var(--mut)">de 9"</small></div><div style="display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:86px;height:86px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff 0 6%,var(--pink) 30%,var(--berry) 100%);box-shadow:0 14px 30px rgba(176,18,79,.25)"></div><b style="font:900 54px 'Inter Tight'">30</b><small style="font:700 26px Inter;color:var(--mut)">de 5"</small></div></div>
+  <div class="cartao" style="left:96px;right:96px;top:1010px;display:flex;gap:24px;align-items:center"><span style="font:900 60px 'Inter Tight';color:var(--pink)">+</span><p class="p" style="color:var(--ink)"><b>fita de arco de 5 m</b> e <b>dupla face com 100 pontos</b>. Chega tudo pra montar.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">3/6</span><span class="seta">arrasta →</span></section><section class="sl f-bebe" style="left:3240px">
+  <div class="blk" style="top:200px"><div class="k">pra arco maior</div><h2 class="t2" style="margin-top:14px">112 ou 120 <span class="m">peças</span></h2></div>
+  <div class="cartao" style="left:96px;top:420px;width:428px;padding:0;overflow:hidden">
+   <div style="height:430px"><img src="../fotos_loja/glowbos_kit112.webp" style="width:100%;height:100%;object-fit:cover"></div>
+   <div style="padding:28px 30px 32px"><b style="font:900 46px 'Inter Tight'">Kit 112</b><div class="preco" style="font-size:52px">R$ 54,99</div>
+   <p class="p" style="font-size:26px;margin-top:10px">2 de 16", 8 de 12", 60 de 9", 40 de 5"<br><b style="color:var(--ink)">+ fita e dupla face</b></p></div></div>
+  <div class="cartao" style="left:556px;top:420px;width:428px;padding:0;overflow:hidden">
+   <div style="height:430px"><img src="../fotos_loja/glowbos_kit120.webp" style="width:100%;height:100%;object-fit:cover"></div>
+   <div style="padding:28px 30px 32px"><b style="font:900 46px 'Inter Tight'">Kit 120</b><div class="preco" style="font-size:52px">R$ 62,00</div>
+   <p class="p" style="font-size:26px;margin-top:10px">3 de 16", 12 de 12", 75 de 9", 30 de 5"<br><b style="color:var(--ink)">+ fita</b></p></div></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">4/6</span><span class="seta">arrasta →</span></section><section class="sl f-grafite" style="left:4320px">
+  <div class="ft" style="left:96px;right:96px;top:190px;height:640px"><img src="../fotos_loja/glowbos_kiteco100.webp" style="object-position:50% 50%"></div>
+  <div class="blk" style="top:890px"><div class="k">o mais barato</div><h2 class="t2" style="margin-top:14px;color:#fff">Econômico: 100 balões de 8"</h2>
+  <div style="display:flex;align-items:baseline;gap:30px;margin-top:22px"><div class="preco" style="color:#FF8DB8">R$ 31,99</div><p class="p">2 cores · rende uns 25 cachos de 4</p></div></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">5/6</span><span class="seta">arrasta →</span></section><section class="sl f-rosa" style="left:5400px">
+  <div class="ft" style="left:96px;top:190px;width:500px;height:690px;transform:rotate(-3deg)"><img src="../especialista/fita.jpg" style="object-position:40% 60%"></div>
+  <div style="position:absolute;left:630px;right:96px;top:250px"><div class="mao">dica da especialista</div>
+  <p style="font:800 44px/1.15 'Inter Tight';letter-spacing:-.02em;margin-top:18px">O kit 60 não vem com a fita. Leva junto.</p></div>
+  <div class="cartao" style="left:96px;right:96px;top:950px;display:flex;justify-content:space-between;align-items:center;gap:20px">
+   <div><b style="font:800 32px Inter">Fita de arco 5 m + dupla face</b><p class="p" style="font-size:26px;margin-top:6px">os balões entram pelos furos</p></div><div class="preco" style="font-size:54px">R$ 11,98</div></div>
+  <div class="blk" style="top:1170px;display:flex;gap:16px"><span class="pill">glowbos.com.br</span><span class="pill gr">balões Joy · Inmetro</span></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">6/6</span><span class="site">glowbos.com.br</span></section><div class="faixa" style="width:6480px"></div></div></body></html>

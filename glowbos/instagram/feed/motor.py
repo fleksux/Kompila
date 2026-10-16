@@ -1,0 +1,130 @@
+# Motor do feed da Glowbos (17/10/2026). Um arquivo por post em posts/, este motor monta o HTML
+# panorâmico (N x 1080 x 1440, molde aprovado 08/10) ou o Reels (1080 x 1920 animado) e o render.js
+# tira os JPG / o MP4. Linguagem: foto real grande, paleta inteira da marca (berry, pink, rosa,
+# pêssego, lilás sobre creme e grafite), letra de mão Caveat como acento, a especialista dando dica,
+# texto pra quem nunca montou um balão. Faixa de 5 cores da marca atravessa o carrossel inteiro.
+import importlib.util, json, pathlib, sys, html as H
+
+BASE = pathlib.Path(__file__).parent
+IMG = '../../../tema/glowbos/img/'      # do <slug>/pano.html até o tema
+ESP = '../especialista/'                 # fotos da especialista
+LOGO = IMG + 'D_logo_crop.png'
+
+PAL = dict(berry='#B0124F', pink='#FF1F7A', rosa='#FF8DB8', pessego='#FFC2A1', lilas='#B99CF0',
+           creme='#F7F3EA', grafite='#1d1a1f', bebe='#FFF2F6')
+
+FONTES = '<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,700;0,800;0,900;1,800&family=Inter:wght@500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">'
+
+CSS = r"""
+:root{--berry:#B0124F;--pink:#FF1F7A;--rosa:#FF8DB8;--pessego:#FFC2A1;--lilas:#B99CF0;--creme:#F7F3EA;--grafite:#1d1a1f;--bebe:#FFF2F6;--ink:#1d1a1f;--mut:#5f5a63}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#bbb}
+#pano{position:relative;height:1440px;overflow:hidden;font-family:Inter,sans-serif;color:var(--ink)}
+.sl{position:absolute;top:0;width:1080px;height:1440px;overflow:hidden}
+.x{position:absolute;z-index:6}            /* elemento que atravessa slides (coordenada do canvas) */
+/* fundos */
+.f-creme{background:var(--creme)}.f-bebe{background:var(--bebe)}.f-branco{background:#fff}
+.f-lilas{background:#EEE6FF}.f-pessego{background:#FFE9DC}.f-rosa{background:#FFE1EC}
+.f-berry{background:var(--berry);color:#fff}.f-pink{background:var(--pink);color:#fff}.f-grafite{background:var(--grafite);color:#fff}
+.f-lilasf{background:var(--lilas);color:#fff}.f-pessegof{background:var(--pessego)}
+/* topo e rodapé fixos */
+.lg{position:absolute;left:96px;top:70px;height:70px;z-index:7}
+.f-berry .lg,.f-pink .lg,.f-grafite .lg,.f-lilasf .lg{filter:drop-shadow(0 4px 14px rgba(0,0,0,.18))}
+.pg{position:absolute;right:96px;top:92px;font:700 22px Inter;letter-spacing:.06em;opacity:.65;z-index:7}
+.faixa{position:absolute;left:0;bottom:0;height:16px;z-index:8;background:linear-gradient(90deg,var(--berry) 0 20%,var(--pink) 20% 40%,var(--rosa) 40% 60%,var(--pessego) 60% 80%,var(--lilas) 80% 100%);background-size:1080px 16px}
+.site{position:absolute;left:96px;bottom:60px;font:700 24px Inter;opacity:.7;z-index:7}
+.seta{position:absolute;right:96px;bottom:52px;font:700 44px Caveat;z-index:7}
+/* tipografia */
+.k{font:800 22px Inter;letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
+.f-berry .k,.f-pink .k,.f-grafite .k,.f-lilasf .k{color:#fff;opacity:.85}
+.t{font:900 92px/.98 "Inter Tight";letter-spacing:-.045em}
+.t2{font:900 68px/1 "Inter Tight";letter-spacing:-.04em}
+.t3{font:800 44px/1.08 "Inter Tight";letter-spacing:-.03em}
+.m{font:700 1.18em/0.8 Caveat;color:var(--pink);letter-spacing:0;display:inline-block;transform:rotate(-2deg);margin-right:.12em}
+.f-berry .m,.f-pink .m,.f-grafite .m{color:#FFD0E1}.f-lilasf .m{color:#fff}
+.p{font:600 34px/1.38 Inter;color:var(--mut)}
+.f-berry .p,.f-pink .p,.f-grafite .p,.f-lilasf .p{color:rgba(255,255,255,.86)}
+.mao{font:700 46px/1.05 Caveat;color:var(--berry)}
+.f-berry .mao,.f-pink .mao,.f-grafite .mao{color:#FFD0E1}
+.blk{position:absolute;left:96px;right:96px}
+/* fotos */
+.ft{position:absolute;overflow:hidden;border-radius:30px;background:#eee;box-shadow:0 20px 50px rgba(29,26,31,.16)}
+.ft img,.ftc img,.pol img{width:100%;height:100%;object-fit:cover;display:block}
+.ftc{position:absolute;overflow:hidden;border-radius:50%;box-shadow:0 18px 40px rgba(29,26,31,.18);border:10px solid #fff}
+.pol{position:absolute;background:#fff;padding:16px 16px 64px;border-radius:6px;box-shadow:0 18px 44px rgba(29,26,31,.18)}
+.pol i{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:700 34px Caveat;color:var(--berry);font-style:normal}
+.full{position:absolute;inset:0}.full img{width:100%;height:100%;object-fit:cover}
+.vel{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(180deg,rgba(29,26,31,0),rgba(29,26,31,.82) 70%)}
+.velc{position:absolute;left:0;right:0;bottom:0;height:58%;background:linear-gradient(180deg,rgba(247,243,234,0),var(--creme) 62%)}
+/* peças */
+.pill{display:inline-flex;align-items:center;gap:12px;height:72px;padding:0 30px;border-radius:99px;background:var(--pink);color:#fff;font:800 30px Inter}
+.pill.br{background:#fff;color:var(--berry)}.pill.gr{background:var(--grafite)}
+.num{display:grid;place-items:center;width:96px;height:96px;border-radius:50%;background:var(--pink);color:#fff;font:900 52px "Inter Tight";flex:none}
+.num.out{background:transparent;border:5px solid currentColor;color:var(--pink)}
+.cartao{position:absolute;background:#fff;border-radius:30px;padding:34px 36px;box-shadow:0 16px 44px rgba(29,26,31,.12);color:var(--ink)}
+.cartao .p{color:var(--mut)}
+.preco{font:900 64px "Inter Tight";letter-spacing:-.03em;color:var(--pink)}
+.preco small{font:700 26px Inter;color:var(--mut);letter-spacing:0;margin-right:8px}
+.estrela{color:#F5A623;letter-spacing:3px;font:800 30px Inter}
+/* especialista: selo com foto redonda */
+.esp{position:absolute;display:flex;align-items:center;gap:18px;z-index:7}
+.esp .ftc{position:relative;width:110px;height:110px;border-width:6px}
+.esp b{display:block;font:800 26px Inter}.esp small{display:block;font:600 22px Inter;opacity:.7}
+.lista{list-style:none;display:flex;flex-direction:column;gap:26px}
+.lista li{display:flex;gap:24px;align-items:flex-start;font:600 34px/1.3 Inter}
+.lista li b{font-weight:800}
+.lista .num{width:72px;height:72px;font-size:38px}
+.bolha{position:absolute;background:#fff;border-radius:34px 34px 34px 8px;padding:30px 34px;font:600 32px/1.38 Inter;color:var(--ink);box-shadow:0 14px 36px rgba(29,26,31,.14)}
+.bolha b{font-weight:800}
+"""
+
+def esc(t): return H.escape(t)
+def mk(t):
+    """*palavra* vira letra de mão; o resto escapado."""
+    import re
+    return re.sub(r'\*(.+?)\*', r'<span class="m">\1</span>', esc(t))
+
+def carregar():
+    sys.path.insert(0, str(BASE)); posts = []
+    for f in sorted((BASE / 'posts').glob('*.py')):
+        spec = importlib.util.spec_from_file_location(f.stem, f); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        p = m.POST; p['arq'] = f.stem; posts.append(p)
+    return posts
+
+def pagina_carrossel(p):
+    n = len(p['slides']); W = n * 1080
+    out = []
+    for i, s in enumerate(p['slides']):
+        fundo = s.get('fundo', 'creme')
+        topo = '' if s.get('sem_topo') else f'<img class="lg" src="{LOGO}" alt=""><span class="pg">{i+1}/{n}</span>'
+        pe = s.get('pe', 'seta' if i < n - 1 else 'site')
+        rod = {'seta': '<span class="seta">arrasta →</span>', 'site': '<span class="site">glowbos.com.br</span>', '': ''}[pe]
+        out.append(f'<section class="sl f-{fundo}" style="left:{i*1080}px">{s["html"]}{topo}{rod}</section>')
+    cross = ''.join(p.get('cross', []))
+    faixa = f'<div class="faixa" style="width:{W}px"></div>'
+    return (f'<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>{esc(p["slug"])}</title>{FONTES}<style>{CSS}{p.get("css","")}</style></head>'
+            f'<body><div id="pano" style="width:{W}px">{"".join(out)}{cross}{faixa}</div></body></html>')
+
+def pagina_reel(p):
+    # Reels 1080x1920; animações CSS com duração total p['dur'] segundos. O render pausa e avança o tempo quadro a quadro.
+    return (f'<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>{esc(p["slug"])}</title>{FONTES}<style>{CSS}'
+            '#reel{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Inter,sans-serif;color:var(--ink)}'
+            '#reel .lg{top:120px}#reel .faixa{width:1080px}'
+            f'{p.get("css","")}</style></head><body><div id="reel" class="f-{p.get("fundo","creme")}">{p["html"]}'
+            f'<img class="lg" src="{LOGO}" alt=""><div class="faixa"></div></div></body></html>')
+
+def montar():
+    posts = carregar(); idx = []
+    for p in posts:
+        d = BASE / p['slug']; (d / 'export').mkdir(parents=True, exist_ok=True)
+        if p['tipo'] == 'reel':
+            (d / 'reel.html').write_text(pagina_reel(p))
+        else:
+            (d / 'pano.html').write_text(pagina_carrossel(p))
+        (d / 'legenda.txt').write_text(p['leg'].strip() + '\n')
+        idx.append(dict(slug=p['slug'], tipo=p['tipo'], n=len(p.get('slides', [])), dur=p.get('dur', 0), ordem=p['ordem']))
+    (BASE / 'indice.json').write_text(json.dumps(sorted(idx, key=lambda x: x['ordem']), ensure_ascii=False, indent=1))
+    print('montados', len(posts))
+
+if __name__ == '__main__':
+    montar()

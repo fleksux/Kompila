@@ -12,10 +12,22 @@ CAR = '../carrossel/'
 def leg(arq): return html.escape((BASE / CAR / arq).read_text().strip()).replace('\n', '<br>')
 
 V = CAR + '2026-10-16_votacao/export/'
-POSTS = [
- dict(id=1, local='São Paulo', leg=leg('2026-10-16_votacao/legenda.txt'),
-      slides=[dict(tipo='postado', img=V + f'glowbos_votacao_{i:02d}.jpg') for i in range(1, 13)]),
-]
+VOT = dict(local='São Paulo', leg=leg('2026-10-16_votacao/legenda.txt'),
+      slides=[dict(tipo='postado', img=V + f'glowbos_votacao_{i:02d}.jpg') for i in range(1, 13)])
+# Feed de 17/10 (../feed/): ordem = posição na grade, de cima pra baixo; a votação fecha a última linha.
+FEED = BASE.parent / 'feed'
+def legf(slug): return html.escape((FEED / slug / 'legenda.txt').read_text().strip()).replace('\n', '<br>')
+POSTS = []
+for x in json.loads((FEED / 'indice.json').read_text()):
+    pasta = '../feed/' + x['slug'] + '/export/'
+    if x['tipo'] == 'reel':
+        sl = [dict(tipo='video', src=pasta + 'reel.mp4')]
+    else:
+        sl = [dict(tipo='postado', img=pasta + f'{i:02d}.jpg') for i in range(1, x['n'] + 1)]
+    POSTS.append(dict(local='São Paulo', leg=legf(x['slug']), slides=sl, slug=x['slug']))
+POSTS.append(VOT)
+for i, p_ in enumerate(POSTS):
+    p_['id'] = i + 1; p_['meio'] = (i % 3 == 1)
 
 BODY = (BODY.replace('<h2>kompila</h2><b>Kompila</b>', '<h2>glowbosbaloes</h2><b>Glowbos Decoração</b>')
         .replace('IA sob medida pra pequena e média empresa · do bruto ao pronto.', 'Balões e kits de arco · chega hoje em SP e Grande SP · glowbos.com.br'))
