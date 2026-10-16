@@ -661,13 +661,13 @@ function glowbos_mega_html() {
 		$links .= sprintf( '<a class="gm-l%s" href="%s">%s</a>', $on ? ' on' : '', esc_url( home_url( '/categoria/' . $s . '/' ) ), $n );
 	}
 	return '<nav class="gm"><div class="gm-item"><button type="button" class="gm-btn" aria-expanded="false">Produtos <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button>'
-		. '<div class="gm-pan"><div class="gm-in"><div class="gm-cats">' . $cols . '<a class="gm-all" href="' . esc_url( home_url( '/loja/' ) ) . '">Ver a loja inteira</a></div><div class="gm-mid">' . $paine . '</div>' . $card . '</div></div></div>' . $links . '<button type="button" class="gm-cta" data-prazo>🚚 Chega hoje? Calcule o frete</button></nav>'
+		. '<div class="gm-pan"><div class="gm-in"><div class="gm-cats">' . $cols . '<a class="gm-all" href="' . esc_url( home_url( '/loja/' ) ) . '">Ver a loja inteira</a></div><div class="gm-mid">' . $paine . '</div>' . $card . '</div></div></div>' . $links . '<button type="button" class="gm-cta" data-prazo><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>Chega hoje? Calcule o frete</button></nav>'
 		. '<style>
 .gm{display:flex;align-items:center;gap:2px;flex:1;justify-content:center}
 .gm-l,.gm-btn{font:600 14.5px Inter,sans-serif;padding:9px 14px;border-radius:10px;text-decoration:none;color:var(--vinho,#1a1720);background:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .gm-l:hover,.gm-btn:hover,.gm-item.open .gm-btn{background:var(--bebe,#fff0f6)}
 .gm-l.on{color:var(--forte,#ff1f7a)}
-.gm-cta{margin-left:8px;height:38px;padding:0 14px;border:1.5px solid var(--forte,#ff1f7a);border-radius:10px;background:#fff;color:var(--forte,#ff1f7a);font:700 14px Inter,sans-serif;cursor:pointer;white-space:nowrap}
+.gm-cta{display:inline-flex;align-items:center;gap:8px;margin-left:8px;height:38px;padding:0 14px;border:1.5px solid var(--forte,#ff1f7a);border-radius:10px;background:#fff;color:var(--forte,#ff1f7a);font:700 14px Inter,sans-serif;cursor:pointer;white-space:nowrap}
 .gm-cta:hover{background:var(--forte,#ff1f7a);color:#fff}
 @media (max-width:1180px){.gm-cta{display:none}}
 .gm-item.open .gm-btn svg{transform:rotate(180deg)}
@@ -733,7 +733,7 @@ function glowbos_arco_app() {
 				<div class="ma-buy"><div><small>Sua lista sai por</small><b id="maTot">R$ 0,00</b><small id="maPk"></small></div></div>
 				<div class="ma-acoes"><button class="btn pri" id="maComprar">Comprar esta lista</button><button class="btn lin" id="maTrocar">Trocar as cores</button></div>
 				<div class="ma-cores" id="maCores" hidden></div>
-				<p class="mnote">🚚 Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
+				<p class="mnote">Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
 			</div>
 		</div>
 	</section>
@@ -862,7 +862,7 @@ var inp=q('#ggCep input'),r=q('#ggR');try{var c=localStorage.getItem('glowbos_ce
 inp.addEventListener('input',function(){var d=inp.value.replace(/\D/g,'').slice(0,8);inp.value=d.length>5?d.slice(0,5)+'-'+d.slice(5):d});
 function prazo(){var d=inp.value.replace(/\D/g,'');if(d.length!==8){r.className='gg-r';r.textContent='Digite os 8 números do CEP.';return}
 try{localStorage.setItem('glowbos_cep',inp.value)}catch(x){}var n=+d,h=new Date().getHours();
-if(n>=1000000&&n<=9999999){r.className='gg-r ok';r.textContent=h<12?'🚚 Chega hoje! Motoboy por R$ 10.':'🚚 Chega amanhã cedo. Motoboy por R$ 10.'}else{r.className='gg-r';r.textContent='📦 Enviamos pelos Correios. O frete aparece no pagamento.'}}
+if(n>=1000000&&n<=9999999){r.className='gg-r ok';r.textContent=h<12?'Chega hoje! Motoboy por R$ 10.':'Chega amanhã cedo. Motoboy por R$ 10.'}else{r.className='gg-r';r.textContent='Enviamos pelos Correios. O frete aparece no pagamento.'}}
 q('#ggCep').onsubmit=function(e){e.preventDefault();prazo()};if(inp.value)prazo();
 q('#ggG').onclick=function(e){var b=e.target.closest('button');if(!b)return;g.querySelectorAll('#ggG button').forEach(function(x){x.classList.toggle('on',x===b)});
 g.querySelectorAll('.gg-d').forEach(function(d){d.hidden=d.dataset.d!==b.dataset.l});var d=q('.gg-d[data-d="'+b.dataset.l+'"]');d.scrollIntoView({behavior:'smooth',block:'nearest'})};
