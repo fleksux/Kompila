@@ -123,24 +123,26 @@
 	}
 	if (D.tipo === 'numero') {
 		var NUM = '5', EST = ['rose', 'Rosé'], ESTS = [['rose', 'Rosé'], ['ouro', 'Ouro e preto'], ['lilas', 'Candy'], ['azul', 'Azul']];
+		// set pronto: a foto é a do próprio set; só a coluna de número troca a foto pelo estilo
+		var ehSet = /^Set /.test(nome || '');
 		var gimg = $('.woocommerce-product-gallery'), pv = null;
-		if (gimg) { pv = document.createElement('div'); pv.className = 'gb-prev gb-prev-num'; gimg.appendChild(pv); }
-		box.innerHTML = '<p class="gb-st"><i>1</i> O número</p><div class="gb-dig" id="gbDig"></div>' +
-			'<p class="gb-st"><i>2</i> O estilo</p><div class="gb-est" id="gbEst"></div>' +
-			'<p class="gb-st"><i>3</i> Pra quando e onde</p><div class="gb-orc"><input id="gbW" inputmode="tel" placeholder="Seu WhatsApp com DDD" autocomplete="tel"><input id="gbDt" type="date" aria-label="Data da festa"><input id="gbCep" inputmode="numeric" placeholder="CEP da festa" maxlength="9"></div>' +
+		if (gimg && !ehSet) { pv = document.createElement('div'); pv.className = 'gb-prev gb-prev-num'; gimg.appendChild(pv); }
+		box.innerHTML = '<p class="gb-st"><i>1</i> ' + (ehSet ? 'A idade' : 'O número') + '</p><div class="gb-dig" id="gbDig"></div>' +
+			(ehSet ? '' : '<p class="gb-st"><i>2</i> O estilo</p><div class="gb-est" id="gbEst"></div>') +
+			'<p class="gb-st"><i>' + (ehSet ? 2 : 3) + '</i> Pra quando e onde</p><div class="gb-orc"><input id="gbW" inputmode="tel" placeholder="Seu WhatsApp com DDD" autocomplete="tel"><input id="gbDt" type="date" aria-label="Data da festa"><input id="gbCep" inputmode="numeric" placeholder="CEP da festa" maxlength="9"></div>' +
 			'<div class="gb-buy"><div><small id="gbNsel"></small><b>Sob encomenda</b></div><button type="button" class="gb-btn" id="gbOrc">Pedir orçamento</button></div><p class="gb-nota2">A gente responde no WhatsApp com o valor e a data de entrega.</p>';
 		$('#gbDig').innerHTML = Array.from({ length: 10 }, function (_, k) { return '<button type="button" data-n="' + k + '"' + (k === 5 ? ' class="on"' : '') + '>' + k + '</button>'; }).join('');
-		var est = function () { $('#gbEst').innerHTML = ESTS.map(function (e) { return '<button type="button" data-e="' + e[0] + '"' + (e[0] === EST[0] ? ' class="on"' : '') + '><img src="' + IMG + 'num_' + e[0] + '_' + NUM + '.webp" alt="">' + e[1] + '</button>'; }).join(''); };
-		var pn = function () { est(); $('#gbNsel').textContent = 'Número ' + NUM + ' · ' + EST[1]; if (pv) pv.innerHTML = '<img src="' + IMG + 'num_' + EST[0] + '_' + NUM + '.webp" alt="Coluna com número ' + NUM + '">'; };
+		var est = function () { if (ehSet) return; $('#gbEst').innerHTML = ESTS.map(function (e) { return '<button type="button" data-e="' + e[0] + '"' + (e[0] === EST[0] ? ' class="on"' : '') + '><img src="' + IMG + 'num_' + e[0] + '_' + NUM + '.webp" alt="">' + e[1] + '</button>'; }).join(''); };
+		var pn = function () { est(); $('#gbNsel').textContent = ehSet ? 'Idade ' + NUM : 'Número ' + NUM + ' · ' + EST[1]; if (pv) pv.innerHTML = '<img src="' + IMG + 'num_' + EST[0] + '_' + NUM + '.webp" alt="Coluna com número ' + NUM + '">'; };
 		$('#gbDig').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; box.querySelectorAll('#gbDig button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); NUM = b.dataset.n; pn(); });
-		$('#gbEst').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; EST = ESTS.filter(function (x) { return x[0] === b.dataset.e; })[0]; pn(); });
+		if (!ehSet) $('#gbEst').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; EST = ESTS.filter(function (x) { return x[0] === b.dataset.e; })[0]; pn(); });
 		$('#gbOrc').onclick = function () {
 			var w = $('#gbW'), b = this;
 			if (w.value.replace(/\D/g, '').length < 10) { w.focus(); w.classList.add('erro'); toast('Coloque seu WhatsApp com DDD pra gente responder.'); return; }
 			w.classList.remove('erro'); b.disabled = true; b.textContent = 'Enviando...';
-			var fd = new FormData(); fd.append('tipo', 'Número ' + NUM + ' · ' + EST[1]); fd.append('wpp', w.value); fd.append('data', $('#gbDt').value); fd.append('cep', $('#gbCep').value); fd.append('nome', '');
+			var fd = new FormData(); fd.append('tipo', ehSet ? nome + ' · idade ' + NUM : 'Número ' + NUM + ' · ' + EST[1]); fd.append('wpp', w.value); fd.append('data', $('#gbDt').value); fd.append('cep', $('#gbCep').value); fd.append('nome', '');
 			fetch(D.orc, { method: 'POST', body: fd }).then(function (r) { return r.json(); }).then(function (j) {
-				if (j && j.success) { box.querySelector('.gb-buy').outerHTML = '<div class="gb-ok"><b>✓ Pedido recebido!</b> A gente te chama no WhatsApp com o valor do número ' + NUM + ' ' + EST[1] + '.</div>'; }
+				if (j && j.success) { box.querySelector('.gb-buy').outerHTML = '<div class="gb-ok"><b>✓ Pedido recebido!</b> A gente te chama no WhatsApp com o valor ' + (ehSet ? 'do ' + nome : 'do número ' + NUM + ' ' + EST[1]) + '.</div>'; }
 				else { b.disabled = false; b.textContent = 'Pedir orçamento'; toast('Não deu certo. Tente de novo.'); }
 			}).catch(function () { b.disabled = false; b.textContent = 'Pedir orçamento'; toast('Sem conexão. Tente de novo.'); });
 		};
