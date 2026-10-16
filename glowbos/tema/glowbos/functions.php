@@ -388,3 +388,48 @@ add_filter( 'gettext', function ( $t, $orig, $dom ) {
 	}
 	return $t;
 }, 20, 3 );
+
+// App da Glowbos (PWA): instala no celular e no computador; carrinho e checkout nunca ficam em cache.
+add_action( 'wp_head', function () {
+	$i = get_template_directory_uri() . '/img/app/';
+	echo '<link rel="manifest" href="/manifest.webmanifest">' . "\n";
+	echo '<meta name="theme-color" content="#FF1F7A">' . "\n";
+	echo '<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">' . "\n";
+	echo '<meta name="apple-mobile-web-app-title" content="Glowbos"><meta name="apple-mobile-web-app-status-bar-style" content="default">' . "\n";
+	echo '<link rel="apple-touch-icon" href="' . esc_url( $i . 'icone-180.png' ) . '">' . "\n";
+}, 2 );
+add_action( 'wp_footer', function () {
+	?>
+	<div class="gb-app" id="gbApp" hidden>
+		<img src="<?php echo esc_url( get_template_directory_uri() . '/img/app/icone-192.png' ); ?>" alt="">
+		<span><b>Baixe o app da Glowbos</b><small id="gbAppTxt">Compre mais rápido, direto da tela inicial.</small></span>
+		<button type="button" id="gbAppOk">Baixar</button>
+		<button type="button" id="gbAppX" aria-label="Fechar">×</button>
+	</div>
+	<style>
+	.gb-app{position:fixed;left:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #f1d9e3;border-radius:16px;padding:10px 10px 10px 12px;box-shadow:0 14px 34px rgba(29,26,31,.16);max-width:380px;font:14px/1.3 Inter,system-ui,sans-serif;color:#1d1a1f}
+	.gb-app[hidden]{display:none}.gb-app img{width:42px;height:42px;border-radius:10px}
+	.gb-app span{flex:1}.gb-app b{display:block;font-size:14.5px}.gb-app small{color:#5f5a63;font-size:12.5px}
+	.gb-app #gbAppOk{background:#FF1F7A;color:#fff;border:0;border-radius:10px;height:38px;padding:0 14px;font:700 14px Inter;cursor:pointer}
+	.gb-app #gbAppX{background:none;border:0;font-size:22px;color:#a39ca6;cursor:pointer;padding:0 4px}
+	@media (max-width:640px){.gb-app{left:10px;right:10px;bottom:74px;max-width:none}}
+	</style>
+	<script>
+	(function(){
+		if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(function(){});}
+		var app=document.getElementById('gbApp'),ok=document.getElementById('gbAppOk'),x=document.getElementById('gbAppX'),txt=document.getElementById('gbAppTxt');
+		if(!app)return;
+		var instalado=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+		var fechou=false;try{fechou=localStorage.getItem('gb_app_x')==='1'}catch(e){}
+		if(instalado||fechou||/finalizar-compra|carrinho/.test(location.pathname))return;
+		var ev=null,ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
+		function mostra(){setTimeout(function(){app.hidden=false},2500)}
+		addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;mostra();});
+		if(ios){txt.textContent='No iPhone: toque em Compartilhar e depois em "Adicionar à Tela de Início".';ok.textContent='Como?';mostra();}
+		ok.onclick=function(){if(ev){ev.prompt();ev.userChoice.then(function(){app.hidden=true;ev=null;});}else if(ios){txt.innerHTML='Toque em <b>Compartilhar</b> (o quadrado com a seta) e depois em <b>Adicionar à Tela de Início</b>.';ok.hidden=true;}};
+		x.onclick=function(){app.hidden=true;try{localStorage.setItem('gb_app_x','1')}catch(e){}};
+		addEventListener('appinstalled',function(){app.hidden=true;});
+	})();
+	</script>
+	<?php
+}, 99 );
