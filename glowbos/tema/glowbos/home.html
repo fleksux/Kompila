@@ -520,6 +520,10 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 @media (min-width:1540px){.ic a::after{content:attr(aria-label)}}
 .ic a{white-space:nowrap}.hd .logo{flex:none}
 .ic .tg{background:none!important}
+/* respiro entre seções: menor e igual em todas */
+.sec,#numeros{padding-top:56px!important}.bloco{padding:56px 0!important;margin-top:56px!important}
+.bloco+.sec,.mv+.sec,.mv+.bloco{margin-top:0!important}.bloco+.sec,.bloco+#numeros{padding-top:20px!important}
+@media (max-width:640px){.sec,#numeros{padding-top:40px!important}.bloco{padding:40px 0!important;margin-top:40px!important}}
 </style>
 </head>
 <body>
