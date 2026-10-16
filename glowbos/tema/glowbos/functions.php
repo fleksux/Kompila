@@ -956,3 +956,44 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 </nav>
 	<?php
 }, 31 );
+
+// ===== Paleta: família de tons dos balões (pink só no acento; rosa, lilás, pêssego e coral em volta) =====
+add_action( 'wp_head', function () {
+	?>
+<style id="gb-paleta">
+:root{--berry:#B0124F;--pink:#FF1F7A;--rosa:#FF8DB8;--coral:#FF7A6B;--pessego:#FFC2A1;--lilas:#B99CF0;--roxo:#7A4FD6;
+--t-rosa:#FFF0F5;--t-lilas:#F5F0FF;--t-pessego:#FFF3EC;--t-coral:#FFEFEC;
+--faixa:linear-gradient(90deg,var(--berry) 0 20%,var(--pink) 20% 40%,var(--rosa) 40% 60%,var(--pessego) 60% 80%,var(--lilas) 80% 100%)}
+/* faixa das cores dos balões: marca da loja */
+header.gb-head::after,body>header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px;background:var(--faixa)}
+.rf::before{content:"";display:block;height:5px;background:var(--faixa)}
+/* barra do topo em degradê suave de tons */
+.gb-barra,.barra{background:linear-gradient(90deg,var(--t-rosa),var(--t-lilas),var(--t-pessego))!important;color:var(--vinho)!important}
+/* sobretítulos no tom profundo, não no pink */
+.eyebrow{color:var(--berry)!important}
+/* fundos de seção em tons vizinhos, não só rosa */
+.bloco{background:linear-gradient(180deg,var(--t-lilas),#fff)!important}
+.gb-news{background:linear-gradient(90deg,var(--t-pessego),var(--t-rosa))!important}
+.gb-arco{background:linear-gradient(180deg,var(--t-lilas),var(--t-rosa))!important}
+/* ícones em tons alternados */
+.selos div:nth-child(1) i{background:var(--t-rosa)!important;color:var(--berry)!important}
+.selos div:nth-child(2) i{background:var(--t-lilas)!important;color:var(--roxo)!important}
+.selos div:nth-child(3) i{background:var(--t-pessego)!important;color:#C9561E!important}
+.selos div:nth-child(4) i{background:var(--t-coral)!important;color:#D2433A!important}
+.rf-s:nth-child(1) i{background:rgba(255,141,184,.16);color:var(--rosa)}
+.rf-s:nth-child(2) i{background:rgba(185,156,240,.16);color:var(--lilas)}
+.rf-s:nth-child(3) i{background:rgba(255,194,161,.16);color:var(--pessego)}
+.rf-s:nth-child(4) i{background:rgba(255,122,107,.16);color:var(--coral)}
+.p3v li:nth-child(1){border-color:var(--pink)}.p3v li:nth-child(2){border-color:var(--lilas)}.p3v li:nth-child(3){border-color:var(--pessego)}
+/* guia: chips das linhas com tons de fundo */
+.gg-g button:nth-child(4n+1) img{background:var(--t-rosa)}.gg-g button:nth-child(4n+2) img{background:var(--t-lilas)}.gg-g button:nth-child(4n+3) img{background:var(--t-pessego)}.gg-g button:nth-child(4n) img{background:var(--t-coral)}
+.gg-d{background:linear-gradient(135deg,var(--t-rosa),var(--t-lilas))!important}
+.mb .mb-c i{border:0;background:linear-gradient(#fff,#fff) padding-box,var(--faixa) border-box;border:2px solid transparent}
+/* banner de departamento e filtros */
+.gb-dep-nav a.on{background:var(--berry);border-color:var(--berry)}
+.gb-f a.on{background:var(--berry)}
+.gm-dest{background:linear-gradient(160deg,var(--t-pessego),var(--t-rosa))!important}
+.gm-tag{color:var(--berry)}
+</style>
+	<?php
+}, 99 );
