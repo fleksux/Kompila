@@ -698,7 +698,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 </aside>
 <div class="toast" id="toast"></div>
 <a class="wpp" href="https://wa.me/5511945231106?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Glowbos%20e%20quero%20ajuda%20pra%20montar%20minha%20festa" target="_blank" rel="noopener" title="Falar no WhatsApp"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.2 1.3Z"/></svg><span>Ajuda pra montar sua festa</span></a>
-<a class="mbar" href="#monte">🚚 Chega hoje em SP e Grande SP</a>
+<a class="mbar" href="#monte-sua-festa" data-prazo>🎈 Monte sua festa · ver prazo pro seu CEP</a>
 
 <script>
 (function(){const b=document.body,tg=document.getElementById('tg');
@@ -824,78 +824,7 @@ mostra('torcida');
 })();
 </script>
 
-<div class="pzv" id="pzv"></div>
-<aside class="pz" id="pz" aria-label="Ver prazo e comprar" aria-hidden="true">
-  <div class="pzh"><span>Ver prazo</span><button type="button" id="pzx" aria-label="Fechar">✕</button></div>
-  <div class="pzb">
-    <form class="cep" id="pzcep"><input inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP"><button>Ver prazo</button></form>
-    <p class="pzr" id="pzr"></p>
-    <p class="pzq">O que você está buscando?</p>
-    <div class="pzc" id="pzc">
-      <button type="button" data-o="arco"><img src="img/arco_10_candy_morango.webp" alt="">Arcos</button>
-      <button type="button" data-o="sort"><img src="img/pack_azul_verm_amar.webp" alt="">Balões sortidos</button>
-      <button type="button" data-o="pers"><img src="img/premium_1_arco_painel.webp" alt="">Balões personalizados</button>
-    </div>
-    <div class="pzf" id="pzf-arco" hidden>
-      <p class="pzl">1. A paleta</p><div class="pzp" id="pzpal"></div>
-      <p class="pzl">2. O tamanho</p>
-      <div class="pzt" id="pzkit"><button type="button" class="on" data-k="kit60" data-p="35.99"><b>60 peças</b>12 e 9 polegadas<em>R$ 35,99</em></button><button type="button" data-k="kit100" data-p="52.99"><b>100 peças</b>desconstruído + dupla face<em>R$ 52,99</em></button></div>
-      <button type="button" class="btn pri pzgo" data-go="arco">Comprar agora · R$ 35,99</button>
-    </div>
-    <div class="pzf" id="pzf-sort" hidden>
-      <p class="pzl">Quantos balões? Balões de 8 polegadas em cores sortidas.</p>
-      <div class="pzt q4" id="pzpct"><button type="button" data-k="pct50" data-p="19.87"><b>50</b><em>R$ 19,87</em></button><button type="button" class="on" data-k="pct75" data-p="25.99"><b>75</b><em>R$ 25,99</em></button><button type="button" data-k="pct100" data-p="32.99"><b>100</b><em>R$ 32,99</em></button><button type="button" data-k="pct125" data-p="36.99"><b>125</b><em>R$ 36,99</em></button></div>
-      <button type="button" class="btn pri pzgo" data-go="sort">Comprar agora · R$ 25,99</button>
-      <p class="pzn">Quer escolher as cores? <a href="#pacotes" data-fecha style="color:var(--forte);font-weight:800">Monte seu pacote</a></p>
-    </div>
-    <div class="pzf" id="pzf-pers" hidden>
-      <p class="pzl">1. O que você quer</p>
-      <div class="pzt" id="pzpers"><button type="button" class="on" data-v="Balão gigante com nome"><b>Gigante</b>com nome ou frase</button><button type="button" data-v="Arco com painel e nome"><b>Arco</b>com painel e nome</button><button type="button" data-v="Número gigante"><b>Número</b>metalizado gigante</button><button type="button" data-v="Tema da festa"><b>Tema</b>futebol, safári, ursinho</button></div>
-      <p class="pzl">2. Detalhes</p>
-      <input class="pzi" id="pznome" placeholder="Nome ou frase no balão">
-      <input class="pzi" id="pzdata" placeholder="Data da festa">
-      <input class="pzi" id="pzwpp" inputmode="tel" placeholder="Seu WhatsApp com DDD">
-      <button type="button" class="btn pri pzgo" data-go="pers">Pedir orçamento</button>
-      <p class="pzn" id="pzmsg"></p>
-    </div>
-  </div>
-</aside>
-<script>
-(function(){
- const pz=document.getElementById('pz'),q=s=>pz.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',',');
- const PAL=[['10_candy_morango','Morango'],['09_candy_algodao','Algodão-doce'],['01_vivo_arco-iris','Arco-íris'],['02_vivo_primarias','Primárias'],['07_pastel_neutro','Nude'],['08_pastel_bebe','Chá de bebê'],['06_analoga_lilas','Lilás'],['05_analoga_fria','Menta e céu'],['04_analoga_quente','Pêssego'],['03_vivo_joias','Joias'],['15_preto_e_branco','Preto e branco'],['14_vermelho_preto_amarelo','Herói']];
- let cep='',pal=PAL[0][1];
- q('#pzpal').innerHTML=PAL.map((p,i)=>`<button type="button"${i?'':' class="on"'} data-n="${p[1]}"><img src="${(window.GB&&GB.img)||'img/'}arco_${p[0]}.webp" alt="">${p[1]}</button>`).join('');
- const abre=()=>{document.body.classList.add('pz-on');pz.setAttribute('aria-hidden','false');setTimeout(()=>q('#pzcep input').focus(),350)};
- const fecha=()=>{document.body.classList.remove('pz-on');pz.setAttribute('aria-hidden','true')};
- document.querySelectorAll('[data-prazo]').forEach(b=>b.addEventListener('click',abre));
- document.getElementById('pzv').onclick=fecha;q('#pzx').onclick=fecha;
- pz.querySelectorAll('[data-fecha]').forEach(a=>a.addEventListener('click',fecha));
- document.addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
- const inp=q('#pzcep input');
- inp.addEventListener('input',()=>{let d=inp.value.replace(/\D/g,'').slice(0,8);inp.value=d.length>5?d.slice(0,5)+'-'+d.slice(5):d});
- q('#pzcep').onsubmit=e=>{e.preventDefault();const d=inp.value.replace(/\D/g,''),r=q('#pzr');
-  if(d.length!==8){r.className='pzr';r.textContent='Digite os 8 números do CEP.';return}
-  cep=d;const n=+d;if(n>=1000000&&n<=9999999){r.className='pzr ok';r.textContent='Chega hoje! Seu CEP tem entrega no mesmo dia.'}else{r.className='pzr';r.textContent='Enviamos pro seu CEP. O frete aparece no pagamento.'}};
- const marca=(box,b)=>{box.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))};
- q('#pzc').onclick=e=>{const b=e.target.closest('button');if(!b)return;marca(q('#pzc'),b);pz.querySelectorAll('.pzf').forEach(f=>f.hidden=f.id!=='pzf-'+b.dataset.o);q('#pzf-'+b.dataset.o).scrollIntoView({behavior:'smooth',block:'nearest'})};
- q('#pzpal').onclick=e=>{const b=e.target.closest('button');if(!b)return;marca(q('#pzpal'),b);pal=b.dataset.n};
- const preco=(box,go)=>{box.onclick=e=>{const b=e.target.closest('button');if(!b)return;marca(box,b);q('[data-go="'+go+'"]').textContent='Comprar agora · '+R(+b.dataset.p)}};
- preco(q('#pzkit'),'arco');preco(q('#pzpct'),'sort');
- q('#pzpers').onclick=e=>{const b=e.target.closest('button');if(b)marca(q('#pzpers'),b)};
- const compra=(itens,btn)=>{if(!window.GB)return;const t=btn.textContent;btn.disabled=true;btn.textContent='Indo pro pagamento...';
-  const fd=new FormData();fd.append('itens',JSON.stringify(itens));fd.append('cep',cep);
-  fetch(GB.sync,{method:'POST',body:fd,credentials:'same-origin'}).then(r=>r.json()).then(j=>{if(j&&j.success)location.href=j.data.checkout;else{btn.disabled=false;btn.textContent=t}}).catch(()=>{btn.disabled=false;btn.textContent=t})};
- pz.querySelectorAll('[data-go]').forEach(btn=>btn.onclick=()=>{const go=btn.dataset.go;
-  if(go==='arco')return compra([{k:q('#pzkit .on').dataset.k,q:1,paleta:pal}],btn);
-  if(go==='sort')return compra([{k:q('#pzpct .on').dataset.k,q:1,paleta:'Sortidas'}],btn);
-  const w=q('#pzwpp').value.replace(/\D/g,''),m=q('#pzmsg');
-  if(w.length<10){m.textContent='Coloque seu WhatsApp com DDD pra gente te mandar o valor.';q('#pzwpp').focus();return}
-  const fd=new FormData();fd.append('tipo',q('#pzpers .on').dataset.v);fd.append('nome',q('#pznome').value);fd.append('data',q('#pzdata').value);fd.append('wpp',w);fd.append('cep',cep);
-  btn.disabled=true;btn.textContent='Enviando...';
-  fetch(GB.orc,{method:'POST',body:fd,credentials:'same-origin'}).then(r=>r.json()).then(j=>{if(j&&j.success){btn.textContent='Pedido enviado';m.textContent='Recebemos! A gente te chama no WhatsApp com o valor.'}else{btn.disabled=false;btn.textContent='Pedir orçamento';m.textContent='Não deu certo, tenta de novo.'}}).catch(()=>{btn.disabled=false;btn.textContent='Pedir orçamento'})});
-})();
-</script>
+
 <script>
 // monte seu arco: escolhe a receita, ajusta os metros e a lista vira pacotes no carrinho
 (function(){

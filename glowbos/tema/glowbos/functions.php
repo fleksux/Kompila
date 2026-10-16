@@ -661,12 +661,15 @@ function glowbos_mega_html() {
 		$links .= sprintf( '<a class="gm-l%s" href="%s">%s</a>', $on ? ' on' : '', esc_url( home_url( '/categoria/' . $s . '/' ) ), $n );
 	}
 	return '<nav class="gm"><div class="gm-item"><button type="button" class="gm-btn" aria-expanded="false">Produtos <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button>'
-		. '<div class="gm-pan"><div class="gm-in"><div class="gm-cats">' . $cols . '<a class="gm-all" href="' . esc_url( home_url( '/loja/' ) ) . '">Ver a loja inteira</a></div><div class="gm-mid">' . $paine . '</div>' . $card . '</div></div></div>' . $links . '</nav>'
+		. '<div class="gm-pan"><div class="gm-in"><div class="gm-cats">' . $cols . '<a class="gm-all" href="' . esc_url( home_url( '/loja/' ) ) . '">Ver a loja inteira</a></div><div class="gm-mid">' . $paine . '</div>' . $card . '</div></div></div>' . $links . '<button type="button" class="gm-cta" data-prazo>🎈 Monte sua festa</button></nav>'
 		. '<style>
 .gm{display:flex;align-items:center;gap:2px;flex:1;justify-content:center}
 .gm-l,.gm-btn{font:600 14.5px Inter,sans-serif;padding:9px 14px;border-radius:10px;text-decoration:none;color:var(--vinho,#1a1720);background:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .gm-l:hover,.gm-btn:hover,.gm-item.open .gm-btn{background:var(--bebe,#fff0f6)}
 .gm-l.on{color:var(--forte,#ff1f7a)}
+.gm-cta{margin-left:8px;height:38px;padding:0 14px;border:1.5px solid var(--forte,#ff1f7a);border-radius:10px;background:#fff;color:var(--forte,#ff1f7a);font:700 14px Inter,sans-serif;cursor:pointer;white-space:nowrap}
+.gm-cta:hover{background:var(--forte,#ff1f7a);color:#fff}
+@media (max-width:1180px){.gm-cta{display:none}}
 .gm-item.open .gm-btn svg{transform:rotate(180deg)}
 .gm-pan{position:absolute;left:0;right:0;top:100%;background:#fff;border-top:1px solid #f1e6ea;box-shadow:0 24px 40px rgba(26,23,32,.10);opacity:0;visibility:hidden;transform:translateY(-6px);transition:.18s;z-index:60}
 .gm-item.open .gm-pan{opacity:1;visibility:visible;transform:none}
@@ -696,7 +699,9 @@ function glowbos_mega_html() {
 .gm-pr em{font-style:normal;font-size:13px;color:var(--vinho,#1a1720)}
 .gm-tag{position:absolute;top:20px;left:20px;background:#fff;font:700 11.5px Inter,sans-serif;padding:4px 9px;border-radius:99px}
 @media (max-width:1100px){.gm-in{grid-template-columns:200px minmax(0,1fr)}.gm-dest{display:none}}
-@media (max-width:900px){.gm-item{display:none}}
+@media (max-width:900px){.gm{display:none!important}}
+.gm-l,.gm-btn{white-space:nowrap}
+@media (max-width:1280px){.gm-l,.gm-btn{padding:9px 10px;font-size:14px}}
 </style>'
 		. '<script>(function(){var it=document.currentScript.parentNode.querySelector(".gm-item");if(!it||it.dataset.ok)return;it.dataset.ok=1;var b=it.querySelector(".gm-btn"),t;function ab(){clearTimeout(t);it.classList.add("open");b.setAttribute("aria-expanded","true")}function fe(){t=setTimeout(function(){it.classList.remove("open");b.setAttribute("aria-expanded","false")},160)}
 if(matchMedia("(hover:hover)").matches){it.addEventListener("mouseenter",ab);it.addEventListener("mouseleave",fe)}b.addEventListener("click",function(){it.classList.contains("open")?(it.classList.remove("open"),b.setAttribute("aria-expanded","false")):ab()});
@@ -756,3 +761,102 @@ add_action( 'wc_ajax_glowbos_lista', function () {
 	}
 	$ok ? wp_send_json_success( array( 'carrinho' => wc_get_cart_url() ) ) : wp_send_json_error();
 } );
+
+// ===== Guia "Monte sua festa": CEP + todas as linhas, aberto de qualquer página (o chamariz da loja) =====
+function glowbos_guia_linhas() {
+	$mapa = (array) get_option( 'glowbos_produtos', array() );
+	$prod = function ( $k ) use ( $mapa ) {
+		return empty( $mapa[ $k ] ) ? '' : get_permalink( $mapa[ $k ] );
+	};
+	$cat = function ( $s ) {
+		return home_url( '/categoria/' . $s . '/' );
+	};
+	// [nome, imagem, frase, a partir de, link do app, rótulo do app, link da categoria]
+	return array(
+		'arcos'    => array( 'Arcos', 'arco_10_candy_morango.webp', 'Escolha pela foto, diga os metros e a gente calcula os balões.', 'R$ 35,99', $cat( 'arcos' ) . '#gbArco', 'Montar meu arco', $cat( 'arcos' ) ),
+		'kits'     => array( 'Kits de arco', 'kit_503.webp', 'De 60 a 120 peças, com as cores que você escolher.', 'R$ 31,99', $prod( 'kit100' ), 'Montar meu kit', $cat( 'kits-de-arco' ) ),
+		'sortidos' => array( 'Pacotes sortidos', 'pack_azul_verm_amar.webp', '50 a 125 balões de 8" em até 5 cores, na sua sequência.', 'R$ 19,87', $prod( 'pct75' ), 'Montar meu pacote', $cat( 'pacotes' ) ),
+		'fechados' => array( 'Pacotes fechados', 'arco_07_pastel_neutro.webp', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada.', 'R$ 14,89', $prod( 'pct9_50' ), 'Escolher as cores', $cat( 'pacotes-fechados' ) ),
+		'candy'    => array( 'Candy colors', 'pack_candy.webp', 'Os tons pastel do chá revelação e da festa infantil.', 'R$ 19,87', $prod( 'candy75' ), 'Montar candy', $cat( 'candy-colors' ) ),
+		'cromados' => array( 'Cromados', 'premium_4_cromado.webp', 'Metalizados com brilho de festa profissional.', 'R$ 14,98', $prod( 'metal5_25' ), 'Escolher as cores', $cat( 'cromados' ) ),
+		'numeros'  => array( 'Números', 'num_rose_5.webp', 'Número gigante de 0 a 9 sobre coluna de balões.', 'sob encomenda', $prod( 'numero' ), 'Escolher o número', $cat( 'numeros' ) ),
+		'bubbles'  => array( 'Bubbles', 'cena_04_bubble_alice.webp', 'Balão transparente com o nome e balõezinhos dentro.', 'sob encomenda', $prod( 'bubble' ), 'Personalizar', $cat( 'bubbles' ) ),
+	);
+}
+add_action( 'wp_footer', function () {
+	$img = get_template_directory_uri() . '/img/';
+	$L   = glowbos_guia_linhas();
+	?>
+<style>
+.gg-fab{position:fixed;left:18px;bottom:18px;z-index:58;display:flex;align-items:center;gap:10px;height:52px;padding:0 20px 0 8px;border:0;border-radius:99px;background:var(--forte,#ff1f7a);color:#fff;font:800 15px Inter,sans-serif;cursor:pointer;box-shadow:0 14px 30px rgba(255,31,122,.35)}
+.gg-fab i{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;font-style:normal;font-size:19px}
+.gg-fab small{display:block;font-weight:600;font-size:11.5px;opacity:.9;text-align:left}
+.gg-v{position:fixed;inset:0;background:rgba(29,26,31,.45);opacity:0;pointer-events:none;transition:.3s;z-index:70}
+.gg{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:#fff;z-index:71;transform:translateX(105%);transition:.38s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;font-family:Inter,sans-serif;color:var(--vinho,#1a1720)}
+.gg-on .gg-v{opacity:1;pointer-events:auto}.gg-on .gg{transform:none}
+.gg-h{display:flex;justify-content:space-between;align-items:flex-start;padding:22px 24px 12px}
+.gg-h b{display:block;font:800 25px/1.1 "Inter Tight",sans-serif;letter-spacing:-.02em}
+.gg-h small{display:block;font-size:13.5px;color:var(--vinho2,#5c5560);margin-top:4px}
+.gg-h button{width:40px;height:40px;border:0;border-radius:10px;background:var(--bebe,#fff0f6);font-size:18px;cursor:pointer;flex:none}
+.gg-b{flex:1;overflow:auto;padding:0 24px 28px}
+.gg-cep{display:flex;gap:8px}
+.gg-cep input{flex:1;height:50px;border:1.5px solid #e6e1e4;border-radius:12px;padding:0 14px;font:600 16px Inter,sans-serif;min-width:0}
+.gg-cep input:focus{outline:0;border-color:var(--forte,#ff1f7a)}
+.gg-cep button{height:50px;padding:0 18px;border:0;border-radius:12px;background:var(--vinho,#1a1720);color:#fff;font:700 15px Inter,sans-serif;cursor:pointer}
+.gg-r{margin:10px 0 0;font-weight:800;font-size:15px;min-height:20px}.gg-r.ok{color:var(--forte,#ff1f7a)}
+.gg-q{margin:20px 0 12px;font:800 19px "Inter Tight",sans-serif;letter-spacing:-.01em}
+.gg-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gg-g button{border:1.5px solid #ece7ea;background:#fff;border-radius:12px;padding:6px 6px 8px;cursor:pointer;text-align:left;font:700 12.5px/1.2 Inter,sans-serif;color:var(--vinho,#1a1720);transition:.15s}
+.gg-g button img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;background:#f7f3ea}
+.gg-g button em{display:block;font-style:normal;font-weight:600;font-size:11px;color:var(--vinho2,#5c5560);margin-top:2px}
+.gg-g button:hover{border-color:#d9cdd3}
+.gg-g button.on{border-color:var(--forte,#ff1f7a);box-shadow:0 0 0 3px #ffd3e3}
+.gg-d{margin-top:16px;padding:16px;border-radius:14px;background:#f7f6f8}.gg-d[hidden]{display:none}
+.gg-d b{display:block;font:800 18px "Inter Tight",sans-serif}
+.gg-d p{margin:4px 0 12px;font-size:14px;color:var(--vinho2,#5c5560)}
+.gg-d .gg-a{display:flex;gap:8px}
+.gg-d .gg-a a{flex:1;display:flex;align-items:center;justify-content:center;height:48px;border-radius:11px;font:800 14.5px Inter,sans-serif;text-decoration:none}
+.gg-d .gg-a a.p{background:var(--forte,#ff1f7a);color:#fff}
+.gg-d .gg-a a.s{background:#fff;color:var(--vinho,#1a1720);border:1.5px solid var(--vinho,#1a1720)}
+.gg-n{font-size:12.5px;color:var(--vinho2,#5c5560);margin:14px 0 0}
+@media (max-width:640px){.gg{top:auto;left:0;width:100%;max-height:92svh;border-radius:18px 18px 0 0;transform:translateY(105%)}.gg-h{padding:18px 18px 10px}.gg-b{padding:0 18px 22px}.gg-g{gap:6px}.gg-g button{font-size:11.5px;padding:5px 5px 7px}.gg-g button em{display:none}.gg-fab{left:12px;bottom:12px;height:48px;font-size:14px}.gg-fab small{display:none}}
+body.gg-on{overflow:hidden}
+@media (max-width:640px){.mbar~.gg-fab{display:none}}
+</style>
+<button type="button" class="gg-fab" data-prazo aria-label="Monte sua festa"><i>🎈</i><span>Monte sua festa<small>veja o prazo pro seu CEP</small></span></button>
+<div class="gg-v" id="ggV"></div>
+<aside class="gg" id="gg" aria-hidden="true" aria-label="Monte sua festa">
+	<div class="gg-h"><div><b>Monte sua festa</b><small>Em SP e Grande SP, pago até 12h chega hoje.</small></div><button type="button" id="ggX" aria-label="Fechar">✕</button></div>
+	<div class="gg-b">
+		<form class="gg-cep" id="ggCep"><input inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP" autocomplete="postal-code"><button>Ver prazo</button></form>
+		<p class="gg-r" id="ggR"></p>
+		<p class="gg-q">O que você está buscando?</p>
+		<div class="gg-g" id="ggG">
+			<?php foreach ( $L as $k => $l ) : ?>
+				<button type="button" data-l="<?php echo esc_attr( $k ); ?>"><img src="<?php echo esc_url( $img . $l[1] ); ?>" alt="" loading="lazy"><?php echo esc_html( $l[0] ); ?><em><?php echo esc_html( 'sob encomenda' === $l[3] ? 'sob encomenda' : 'a partir de ' . $l[3] ); ?></em></button>
+			<?php endforeach; ?>
+		</div>
+		<?php foreach ( $L as $k => $l ) : ?>
+			<div class="gg-d" data-d="<?php echo esc_attr( $k ); ?>" hidden><b><?php echo esc_html( $l[0] ); ?></b><p><?php echo esc_html( $l[2] ); ?></p><div class="gg-a"><a class="p" href="<?php echo esc_url( $l[4] ? $l[4] : $l[6] ); ?>"><?php echo esc_html( $l[5] ); ?> →</a><a class="s" href="<?php echo esc_url( $l[6] ); ?>">Ver todos</a></div></div>
+		<?php endforeach; ?>
+		<p class="gg-n">Mesma loja da Shopee, mesmo preço · 4,9★ com 67 mil avaliações</p>
+	</div>
+</aside>
+<script>
+(function(){var g=document.getElementById('gg');if(!g||g.dataset.ok)return;g.dataset.ok=1;var q=function(s){return g.querySelector(s)};
+var abre=function(e){if(e)e.preventDefault();document.body.classList.add('gg-on');g.setAttribute('aria-hidden','false');setTimeout(function(){var i=q('#ggCep input');if(!i.value&&matchMedia('(hover:hover)').matches)i.focus()},380)};
+var fecha=function(){document.body.classList.remove('gg-on');g.setAttribute('aria-hidden','true')};
+document.addEventListener('click',function(e){if(e.target.closest('[data-prazo]'))abre(e)});
+document.getElementById('ggV').onclick=fecha;q('#ggX').onclick=fecha;document.addEventListener('keydown',function(e){if(e.key==='Escape')fecha()});
+var inp=q('#ggCep input'),r=q('#ggR');try{var c=localStorage.getItem('glowbos_cep');if(c)inp.value=c}catch(x){}
+inp.addEventListener('input',function(){var d=inp.value.replace(/\D/g,'').slice(0,8);inp.value=d.length>5?d.slice(0,5)+'-'+d.slice(5):d});
+function prazo(){var d=inp.value.replace(/\D/g,'');if(d.length!==8){r.className='gg-r';r.textContent='Digite os 8 números do CEP.';return}
+try{localStorage.setItem('glowbos_cep',inp.value)}catch(x){}var n=+d,h=new Date().getHours();
+if(n>=1000000&&n<=9999999){r.className='gg-r ok';r.textContent=h<12?'🚚 Chega hoje! Motoboy por R$ 10.':'🚚 Chega amanhã cedo. Motoboy por R$ 10.'}else{r.className='gg-r';r.textContent='📦 Enviamos pelos Correios. O frete aparece no pagamento.'}}
+q('#ggCep').onsubmit=function(e){e.preventDefault();prazo()};if(inp.value)prazo();
+q('#ggG').onclick=function(e){var b=e.target.closest('button');if(!b)return;g.querySelectorAll('#ggG button').forEach(function(x){x.classList.toggle('on',x===b)});
+g.querySelectorAll('.gg-d').forEach(function(d){d.hidden=d.dataset.d!==b.dataset.l});var d=q('.gg-d[data-d="'+b.dataset.l+'"]');d.scrollIntoView({behavior:'smooth',block:'nearest'})};
+if(location.hash==='#monte-sua-festa')abre();})();
+</script>
+	<?php
+}, 30 );
