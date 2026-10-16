@@ -548,6 +548,11 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .mpt button.on{animation:none;border-color:var(--pink,#ff1f7a)!important;box-shadow:0 0 0 3px #ffd3e3}
 @keyframes ctn{0%,100%{border-color:#FF8DB8}25%{border-color:#B99CF0}50%{border-color:#FFC2A1}75%{border-color:#FF7A6B}}
 @media (prefers-reduced-motion:reduce){.mpt button{animation:none}}
+/* Escolha suas cores: botão em degradê de tons vizinhos */
+.cc-vazio b{background:linear-gradient(110deg,#B0124F,#FF1F7A 45%,#FF7A6B)!important;color:#fff!important;font:700 17px Inter!important;padding:13px 22px!important;border-radius:99px!important;box-shadow:0 12px 26px rgba(176,18,79,.28)!important;gap:10px!important;cursor:pointer;background-size:180% 100%!important;animation:ccgrad 4s ease-in-out infinite!important}
+.cc-vazio b svg{width:22px!important;height:22px!important;color:#fff!important}
+@keyframes ccgrad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@media (max-width:980px){.cc-vazio b{flex-direction:row!important}}
 </style>
 </head>
 <body>
@@ -827,8 +832,8 @@ const svg=$('#mpsvg');
 // posições do cacho (x,y,raio)
 const POS=[[200,150,58],[135,190,54],[265,190,54],[165,110,48],[240,105,50],[200,235,52],[110,130,44],[290,135,46],[150,260,46],[255,265,48],[200,70,44],[95,225,42],[305,230,42],[200,300,40],[135,60,36],[270,55,38]];
 function pinta(){
- svg.innerHTML=SEQ.length?window.gbCacho(SEQ):'<img class="cc-foto" src="'+((window.GB&&GB.img)||'img/')+'pack_branco.webp" alt="Balões brancos perolados"><div class="cc-vazio"><b>Escolha suas cores<svg class="vd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg><svg class="vm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M7 14l5 5 5-5"/></svg></b></div>';
- svg.classList.toggle('vazio',!SEQ.length);
+ svg.innerHTML=SEQ.length?window.gbCacho(SEQ):'<img class="cc-foto" src="'+((window.GB&&GB.img)||'img/')+'pack_branco.webp?v=2" alt="Balões brancos"><div class="cc-vazio"><b>Escolha suas cores<svg class="vd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg><svg class="vm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M7 14l5 5 5-5"/></svg></b></div>';
+ svg.classList.toggle('vazio',!SEQ.length);const cv=svg.querySelector('.cc-vazio b');if(cv)cv.onclick=()=>document.getElementById('mpcores').scrollIntoView({behavior:'smooth',block:'center'});
  $('#mps').innerHTML=Array.from({length:T.c},(_,i)=>{const k=SEQ[i];return k===undefined?`<div class="slot"><i>${i+1}</i>escolha</div>`:`<div class="slot cheio" data-s="${i}" title="Tirar ${CORES[k][0]}"><i>${i+1}</i><img class="bimg" src="img/b_${window.GB_ARQ[k]}.webp" alt="">${CORES[k][0]}</div>`}).join('');
  document.querySelectorAll('.cor').forEach(b=>b.classList.toggle('usada',SEQ.includes(+b.dataset.k)||SEQ.length>=T.c));
  const falta=T.c-SEQ.length,nomes=SEQ.map(i=>CORES[i][0]);

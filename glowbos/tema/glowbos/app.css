@@ -75,3 +75,6 @@
 .gb-vazio{background:radial-gradient(closest-side,rgba(247,243,234,.92),rgba(247,243,234,0))}
 .gb-prev .cc-foto{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:cover}
 .gb-vazio{justify-content:flex-end;padding-bottom:9%;background:linear-gradient(180deg,rgba(247,243,234,0) 55%,rgba(247,243,234,.95) 82%)}
+.gb-vazio b{background:linear-gradient(110deg,#B0124F,#FF1F7A 45%,#FF7A6B)!important;background-size:180% 100%!important;color:#fff!important;font:700 17px Inter!important;padding:13px 22px!important;border-radius:99px!important;box-shadow:0 12px 26px rgba(176,18,79,.28)!important;animation:ccgrad 4s ease-in-out infinite}
+.gb-vazio b svg{width:22px!important;height:22px!important;color:#fff!important}
+@keyframes ccgrad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
