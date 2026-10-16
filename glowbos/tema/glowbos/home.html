@@ -603,6 +603,14 @@ main~.gb-news{margin-top:0!important}
 #avsN{display:block;text-align:center;font:500 13px Inter;color:#8a838d;margin-top:14px}
 @media (max-width:1100px){.avc{flex-basis:calc((100% - 40px)/3)}}
 @media (max-width:760px){.avc{flex-basis:82%}.avs-b{display:none}.avl{gap:14px}}
+/* 16/10: banner com o mesmo desenho nos 3 slides (texto não pula) e troca sem sobrepor os títulos */
+@media (min-width:641px){
+  .sl .tx{max-width:calc(max(24px,calc((100vw - 1240px)/2 + 24px)) + 760px)!important}
+  .sl h1,.sl h2{max-width:720px;min-height:calc(2 * 1.02em)}
+  .sl p{min-height:calc(2 * 1.45em);line-height:1.45}
+}
+.sl .tx>*{transition:opacity .45s ease .45s}
+.sl:not(.on) .tx>*{opacity:0;transition:opacity .2s ease 0s}
 </style>
 </head>
 <body>
