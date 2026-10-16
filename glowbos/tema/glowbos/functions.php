@@ -270,7 +270,7 @@ add_action( 'wc_ajax_glowbos_orcamento', function () {
 add_filter( 'woocommerce_package_rates', function ( $rates ) {
 	$hora = (int) ( new DateTime( 'now', new DateTimeZone( 'America/Sao_Paulo' ) ) )->format( 'G' );
 	foreach ( $rates as $rate ) {
-		if ( 'flat_rate' === $rate->get_method_id() ) {
+		if ( 'flat_rate' === $rate->get_method_id() && 0 === strpos( $rate->get_label(), 'Motoboy' ) ) {
 			$rate->set_label( $hora < 12 ? 'Motoboy · chega hoje' : 'Motoboy · chega amanhã (pedidos até 12h chegam no mesmo dia)' );
 		}
 	}
