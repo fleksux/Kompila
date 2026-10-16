@@ -52,6 +52,7 @@ function glowbos_capi( $ev, $id, $data, $order = null ) {
 		) );
 	}
 	$url = $order ? $order->get_checkout_order_received_url() : home_url( add_query_arg( array() ) );
+	glowbos_tt_api( $ev, $id, $data, $user, $url );
 	wp_remote_post( 'https://graph.facebook.com/v21.0/' . GLOWBOS_PIXEL . '/events', array(
 		'blocking' => false,
 		'timeout'  => 3,
@@ -67,6 +68,46 @@ function glowbos_capi( $ev, $id, $data, $order = null ) {
 				'custom_data'      => $data,
 			) ) ),
 		),
+	) );
+}
+
+// API Events do TikTok: o mesmo evento, com o mesmo event_id do pixel. Token no option
+// glowbos_tiktok_token (gerado no Gerenciador de Eventos do TikTok, conta Animar Balões).
+function glowbos_tt_api( $ev, $id, $data, $user_meta, $url ) {
+	$token = get_option( 'glowbos_tiktok_token' );
+	if ( ! $token ) {
+		return;
+	}
+	$user = array_filter( array(
+		'email'       => $user_meta['em'] ?? null,
+		'phone'       => $user_meta['ph'] ?? null,
+		'external_id' => $user_meta['external_id'] ?? null,
+		'ip'          => $user_meta['client_ip_address'] ?? null,
+		'user_agent'  => $user_meta['client_user_agent'] ?? null,
+		'ttp'         => $_COOKIE['_ttp'] ?? null,
+		'ttclid'      => $_COOKIE['ttclid'] ?? null,
+	) );
+	$contents = array();
+	foreach ( (array) ( $data['content_ids'] ?? array() ) as $pid ) {
+		$p          = wc_get_product( (int) $pid );
+		$contents[] = array( 'content_id' => (string) $pid, 'content_name' => $p ? $p->get_name() : '', 'price' => $p ? glowbos_px_valor( $p->get_price() ) : 0, 'quantity' => 1 );
+	}
+	wp_remote_post( 'https://business-api.tiktok.com/open_api/v1.3/event/track/', array(
+		'blocking' => false,
+		'timeout'  => 3,
+		'headers'  => array( 'Access-Token' => $token, 'Content-Type' => 'application/json' ),
+		'body'     => wp_json_encode( array(
+			'event_source'    => 'web',
+			'event_source_id' => GLOWBOS_TIKTOK,
+			'data'            => array( array(
+				'event'      => 'Purchase' === $ev ? 'CompletePayment' : $ev,
+				'event_time' => time(),
+				'event_id'   => $id,
+				'user'       => (object) $user,
+				'page'       => array( 'url' => $url ),
+				'properties' => array( 'contents' => $contents, 'content_type' => 'product', 'currency' => 'BRL', 'value' => $data['value'] ?? 0 ),
+			) ),
+		) ),
 	) );
 }
 
