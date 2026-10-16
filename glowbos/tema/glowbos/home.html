@@ -552,6 +552,17 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .cc-vazio{justify-content:flex-start!important;padding:4% 0 0!important}
 .cc-vazio{justify-content:center!important;padding:0!important}
 .ic{gap:0!important;margin-left:auto;margin-right:-8px;flex:none}.ic a{width:38px!important;height:40px!important;padding:0!important;justify-content:center}.hd{gap:20px!important}.hd .gm{min-width:0}
+/* régua: cadastro de decoradoras */
+.deco{padding:56px 0 0}
+.deco-in{max-width:1240px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr 1.25fr;align-items:stretch;border-radius:22px;overflow:hidden}
+.deco-in{padding:0;background:linear-gradient(120deg,var(--t-pessego,#fff3ec),var(--t-rosa,#fff0f5) 55%,var(--t-lilas,#f5f0ff));width:calc(100% - 48px)}
+.deco-tx{padding:46px 44px;display:flex;flex-direction:column;justify-content:center}
+.deco-tx h2{font:800 clamp(28px,3vw,40px)/1.05 "Inter Tight";letter-spacing:-.03em;margin:0 0 12px;color:var(--vinho)}
+.deco-tx p{margin:0 0 22px;color:var(--vinho2);font-size:16px;line-height:1.5;max-width:440px}
+.deco-ac{display:flex;gap:10px;flex-wrap:wrap}
+.deco-ac .btn.lin{background:#fff!important;color:var(--vinho)!important;border:1.5px solid var(--vinho)!important;box-shadow:none!important}
+.deco-ft{min-height:340px}.deco-ft img{width:100%;height:100%;object-fit:cover;object-position:60% center;display:block}
+@media (max-width:900px){.deco-in{grid-template-columns:1fr;width:calc(100% - 32px)}.deco-ft{order:-1;min-height:240px}.deco-tx{padding:26px 20px;text-align:center;align-items:center}.deco-ac{width:100%;flex-direction:column}.deco-ac .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -694,13 +705,10 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   </div>
 </div></section>
 
-<section class="sec prova3"><div class="w">
-  <div class="ctr"><span class="eyebrow">Quem já fez festa com a gente</span><h2 class="tt">Festa de verdade, em todo canto</h2></div>
-  <div class="p3">
-    <div class="p3c"><h4>Na Shopee</h4><ul class="p3n"><li><b>4,9★</b>nota média</li><li><b>67 mil</b>avaliações</li><li><b>121 mil+</b>pacotes vendidos</li><li><b>4.478</b>pedidos em 30 dias</li></ul></div>
-    <div class="p3c"><h4>Onde já tem festa nossa</h4><div id="ufs" class="mapa"></div></div>
-    <div class="p3c"><h4>Por que Glowbos</h4><ul class="p3v"><li><b>Chega hoje</b>em SP e Grande SP, pago até 12h</li><li><b>Cor que combina</b>13 paletas prontas ou monte a sua</li><li><b>Do pacote ao premium</b>de R$ 19,87 ao sob medida</li></ul></div>
-  </div>
+<section class="deco"><div class="deco-in">
+  <div class="deco-tx"><span class="eyebrow">Pra quem decora</span><h2>Você é decoradora?<br>Cadastre-se na Glowbos.</h2><p>Balões pras suas montagens com entrega no mesmo dia em SP e Grande SP, e atendimento direto com a gente pelo WhatsApp.</p>
+  <div class="deco-ac"><a class="btn pri" href="https://wa.me/5511945231106?text=Ol%C3%A1%21%20Sou%20decoradora%20e%20quero%20me%20cadastrar%20na%20Glowbos." target="_blank" rel="noopener">Quero me cadastrar</a><a class="btn lin" href="/categoria/pacotes-fechados/">Ver pacotes fechados</a></div></div>
+  <div class="deco-ft"><img src="img/cena_06_decoradora_atelie.webp" alt="Decoradora montando um arco de balões no ateliê" loading="lazy"></div>
 </div></section>
 
 <section class="sec" id="festas"><div class="w ctr">
