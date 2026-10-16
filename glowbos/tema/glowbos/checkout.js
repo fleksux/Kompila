@@ -77,11 +77,8 @@
 		var b = document.getElementById('place_order'); if (b) { b.classList.add('pulsa'); setTimeout(function () { b.classList.remove('pulsa'); }, 1600); }
 	}
 
-	// telefone com máscara
-	$('#billing_phone').attr({ inputmode: 'tel', autocomplete: 'tel' }).on('input', function () {
-		var v = this.value.replace(/\D/g, '').slice(0, 11);
-		this.value = v.length > 6 ? '(' + v.slice(0, 2) + ') ' + v.slice(2, v.length - 4) + '-' + v.slice(-4) : v.length > 2 ? '(' + v.slice(0, 2) + ') ' + v.slice(2) : v;
-	});
+	// telefone: a máscara é a do plugin brasileiro (duas máscaras brigavam); aqui só o teclado numérico
+	$('#billing_phone').attr({ inputmode: 'tel', autocomplete: 'tel' });
 
 
 	// ordem e largura dos campos (o WooCommerce reordena pelo país; aqui manda a nossa)
