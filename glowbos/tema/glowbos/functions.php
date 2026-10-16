@@ -723,7 +723,7 @@ function glowbos_mega_html() {
 		$card = sprintf( '<a class="gm-dest" href="%s"><span class="gm-tag">Mais vendido</span><img src="%s" alt=""><b>%s</b><small>Você escolhe 3 cores e a sequência</small><span class="gm-pr">%s <em>Montar →</em></span></a>', esc_url( $dest->get_permalink() ), esc_url( wp_get_attachment_image_url( $dest->get_image_id(), 'medium' ) ), esc_html( $dest->get_name() ), wp_kses_post( $dest->get_price_html() ) );
 	}
 	$links = '';
-	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'numeros' => 'Números', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
+	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'numeros' => 'Números' ) as $s => $n ) {
 		$on     = function_exists( 'is_product_category' ) && is_product_category( $s );
 		$links .= sprintf( '<a class="gm-l%s" href="%s">%s</a>', $on ? ' on' : '', esc_url( home_url( '/categoria/' . $s . '/' ) ), $n );
 	}
