@@ -439,6 +439,9 @@ add_filter( 'gettext', function ( $t, $orig, $dom ) {
 		if ( 'Proceed to checkout' === $orig ) {
 			return 'Finalizar compra';
 		}
+		if ( 'Coupon code' === $orig ) {
+			return 'Cupom';
+		}
 		if ( 'Order ID' === $orig ) {
 			return 'Número do pedido';
 		}
