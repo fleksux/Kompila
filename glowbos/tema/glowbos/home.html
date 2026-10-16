@@ -541,13 +541,10 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .cc-vazio{background:radial-gradient(closest-side,rgba(247,243,234,.92),rgba(247,243,234,0))}
 .cc-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cc-vazio{justify-content:flex-end!important;padding-bottom:9%;background:linear-gradient(180deg,rgba(247,243,234,0) 55%,rgba(247,243,234,.95) 82%)!important}
-/* contorno dos tamanhos trocando de cor; para quando o mouse entra */
-.mpt button{border-width:2px!important;animation:ctn 6s linear infinite}
-.mpt button:nth-child(2){animation-delay:-1.5s}.mpt button:nth-child(3){animation-delay:-3s}.mpt button:nth-child(4){animation-delay:-4.5s}
-.mpt:hover button{animation-play-state:paused}
-.mpt button.on{animation:none;border-color:var(--pink,#ff1f7a)!important;box-shadow:0 0 0 3px #ffd3e3}
-@keyframes ctn{0%,100%{border-color:#FF8DB8}25%{border-color:#B99CF0}50%{border-color:#FFC2A1}75%{border-color:#FF7A6B}}
-@media (prefers-reduced-motion:reduce){.mpt button{animation:none}}
+/* tamanhos: um acende por vez, em ordem aleatória; para quando o mouse entra */
+.mpt button{border:2px solid #ece7ea!important;transition:border-color .5s ease,box-shadow .5s ease,transform .5s ease}
+.mpt button.acende{border-color:transparent!important;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,#B0124F,#FF1F7A,#FF7A6B,#B99CF0) border-box!important;box-shadow:0 10px 24px rgba(255,31,122,.22);transform:translateY(-3px)}
+.mpt button.on{border-color:var(--pink,#ff1f7a)!important;box-shadow:0 0 0 3px #ffd3e3;transform:none}
 /* Escolha suas cores: botão em degradê de tons vizinhos */
 .cc-vazio b{background:linear-gradient(110deg,#B0124F,#FF1F7A 45%,#FF7A6B)!important;color:#fff!important;font:700 17px Inter!important;padding:13px 22px!important;border-radius:99px!important;box-shadow:0 12px 26px rgba(176,18,79,.28)!important;gap:10px!important;cursor:pointer;background-size:180% 100%!important;animation:ccgrad 4s ease-in-out infinite!important}
 .cc-vazio b svg{width:22px!important;height:22px!important;color:#fff!important}
@@ -948,6 +945,12 @@ addEventListener('load',ajusta);addEventListener('resize',ajusta);setTimeout(aju
 function f(){t=0;var h=j.offsetHeight,y=Math.min(Math.max(scrollY-(j.getBoundingClientRect().top+scrollY-scrollY),0),h);var r=j.getBoundingClientRect();var p=Math.min(Math.max(-r.top,0),h);
 j.style.setProperty('--py',(p*.4).toFixed(1)+'px');j.style.setProperty('--po',Math.max(0,1-p/(h*.75)).toFixed(3))}
 addEventListener('scroll',function(){if(!t)t=requestAnimationFrame(f)},{passive:true});f()})();
+</script>
+<script>
+// tamanhos acendendo um por vez, aleatório, pra chamar atenção; para no mouse e quando já escolheu
+(function(){var box=document.getElementById('mpt');if(!box||matchMedia('(prefers-reduced-motion:reduce)').matches)return;var para=false,ult=-1;
+box.addEventListener('mouseenter',function(){para=true;box.querySelectorAll('.acende').forEach(function(b){b.classList.remove('acende')})});box.addEventListener('mouseleave',function(){para=false});
+setInterval(function(){if(para||document.hidden)return;var bs=[].slice.call(box.querySelectorAll('button:not(.on)'));if(!bs.length)return;var i;do{i=Math.floor(Math.random()*bs.length)}while(bs.length>1&&i===ult);ult=i;var b=bs[i];b.classList.add('acende');setTimeout(function(){b.classList.remove('acende')},1100)},1500)})();
 </script>
 </body>
 </html>
