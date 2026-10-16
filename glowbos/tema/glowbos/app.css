@@ -81,3 +81,6 @@
 .gb-vazio{background:none!important;padding-bottom:3%!important}
 .gb-vazio{justify-content:flex-start!important;padding:4% 0 0!important}
 .gb-vazio{justify-content:center!important;padding:0!important}
+.gb-q img{height:40px;width:auto}
+.gb-q img.gb-perola{filter:drop-shadow(0 0 4px rgba(255,214,234,.9)) brightness(1.03)}
+.gb-qcores{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}

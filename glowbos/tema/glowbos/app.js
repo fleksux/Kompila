@@ -9,7 +9,9 @@
 	var LISOS = [['Branco', 0], ['Preto', 1], ['Vermelho', 2], ['Amarelo', 3], ['Laranja', 4], ['Pink', 5], ['Rosa', 6], ['Lilás', 7], ['Roxo', 8], ['Azul Cobalto', 9], ['Azul Royal', 10], ['Azul Celeste', 11], ['Azul Baby', 12], ['Tiffany', 13], ['Verde Água', 14], ['Verde Bandeira', 15], ['Verde Citrus', 16], ['Marrom', 17], ['Bege', 18], ['Cinza', 19], ['Dourado', 20]];
 	var CANDY = [['Rosa candy', 6], ['Azul candy', 12], ['Lilás candy', 7], ['Verde candy', 14], ['Branco', 0], ['Bege', 18]];
 	var METAL = [['Dourado', '#c9a24a', '#f3dc8b'], ['Prata', '#9da3a8', '#e9ecef'], ['Rosê gold', '#c98f7f', '#f4cfc3'], ['Rosa', '#e86aa0', '#ffc3dc'], ['Vermelho', '#b81d27', '#ff7a80'], ['Azul', '#2153b8', '#8fb4ff'], ['Verde', '#16804a', '#86e0ad'], ['Roxo', '#6a32b0', '#c4a1f2'], ['Grafite', '#2b2b30', '#8a8a92']];
-	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : LISOS;
+	// cores oficiais da Glowbos (fotos da cartela) + perolado e dourado, pros pacotes fechados
+	var OFIC = [['Branco', 'c_branco'], ['Marfim', 'c_marfim'], ['Nude', 'c_nude'], ['Caramelo', 'c_caramelo'], ['Marrom', 'c_marrom'], ['Amarelo', 'c_amarelo'], ['Vermelho', 'c_vermelho'], ['Rosa claro', 'c_rosa_claro'], ['Rosa', 'c_rosa'], ['Fúcsia', 'c_fucsia'], ['Lilás', 'c_lilas'], ['Roxo', 'c_roxo'], ['Azul claro', 'c_azul_claro'], ['Azul celeste', 'c_azul_celeste'], ['Azul', 'c_azul'], ['Azul turquesa', 'c_azul_turquesa'], ['Verde claro', 'c_verde_claro'], ['Verde lima', 'c_verde_lima'], ['Verde folha', 'c_verde_folha'], ['Branco perolado', 'b_branco', 'perola'], ['Dourado', 'b_dourado', 'metal']];
+	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : (D.tipo === 'quantidade' ? OFIC : LISOS);
 	var preco = +D.preco, pid = D.pid, nome = D.nome;
 	var POS = [[50, 22, 30, -3], [34, 30, 29, 9], [66, 29, 29, -8], [42, 40, 31, 4], [60, 42, 30, -5], [25, 48, 28, 11], [75, 48, 28, -11], [50, 54, 31, 1], [36, 62, 29, 7], [64, 63, 29, -6], [50, 72, 30, 2], [22, 66, 26, 13], [78, 66, 26, -13]];
 	function cacho(ks) {
@@ -64,7 +66,7 @@
 
 	if (D.tipo === 'quantidade') {
 		var Q = PAL.map(function () { return 0; });
-		var sw = function (c, i) { return D.paleta === 'metal' ? '<i class="gb-sw" style="background:radial-gradient(circle at 32% 28%,' + c[2] + ' 0,' + c[1] + ' 62%)"></i>' : '<img src="' + IMG + 'b_' + ARQ[c[1]] + '.webp" alt="">'; };
+		var sw = function (c, i) { return D.paleta === 'metal' ? '<i class="gb-sw" style="background:radial-gradient(circle at 32% 28%,' + c[2] + ' 0,' + c[1] + ' 62%)"></i>' : '<img src="' + IMG + c[1] + '.webp" alt=""' + (c[2] ? ' class="gb-' + c[2] + '"' : '') + '>'; };
 		box.innerHTML = '<p class="gb-st"><i>1</i> Quantos pacotes de cada cor? <small>' + D.resumo + ' por pacote</small></p><div class="gb-qcores" id="gbQ"></div>' +
 			'<div class="gb-buy"><div><small id="gbQsel">Nenhum pacote ainda</small><b id="gbQtot">' + R(0) + '</b></div><button type="button" class="gb-btn" id="gbQadd" disabled>Escolha as cores</button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje.</p>';
 		$('#gbQ').innerHTML = PAL.map(function (c, i) { return '<div class="gb-q" data-i="' + i + '">' + sw(c, i) + '<span>' + c[0] + '</span><div class="gb-step"><button type="button" data-d="-1" aria-label="Menos">−</button><em>0</em><button type="button" data-d="1" aria-label="Mais">+</button></div></div>'; }).join('');
