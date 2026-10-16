@@ -93,5 +93,8 @@ form.woocommerce-checkout #order_review{grid-column:2;grid-row:2;position:sticky
 #place_order.pulsa{animation:gbPulsa .8s ease 2}
 @keyframes gbPulsa{50%{transform:scale(1.03);box-shadow:0 14px 34px rgba(255,31,122,.45)}}
 /* logo do Pix dentro da caixa: discreto */
-body.woocommerce-checkout #payment .mp-pix-template-container img.mp-pix-template-image{width:96px!important;max-width:96px!important;height:50px!important;object-fit:contain;margin:4px auto 10px!important;display:block}
+body.woocommerce-checkout #payment .mp-pix-template-container img.mp-pix-template-image{width:150px!important;max-width:150px!important;height:79px!important;object-fit:contain;margin:4px auto 10px!important;display:block}
 .woocommerce-checkout .payment_method_woo-mercado-pago-pix .payment_box{text-align:center}
+/* aviso de termos do próprio Mercado Pago dentro da caixa: sai (o aceite já está na linha acima do botão) */
+body.woocommerce-checkout #payment .mp-terms-and-conditions-container{display:none!important}
+body.woocommerce-checkout #payment .mp-pix-template-container{padding:6px 0 4px!important}
