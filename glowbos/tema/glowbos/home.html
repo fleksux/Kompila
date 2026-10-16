@@ -430,6 +430,46 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 @media (prefers-reduced-motion:reduce){
   *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+/* monte seu arco: receita por foto + metros + lista que vira carrinho */
+.ma-tabs{display:flex;gap:22px;justify-content:center;margin:6px 0 22px;border-bottom:1px solid #ece8eb;overflow-x:auto}
+.ma-tabs button{background:none;border:0;padding:10px 0;font:inherit;font-weight:600;color:var(--vinho2);white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
+.ma-tabs button.on{color:var(--vinho);border-color:var(--forte)}
+.ma{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.ma-cfg{min-width:0}
+.ma-foto{position:relative;border-radius:var(--r);overflow:hidden;background:#f0eeec;position:sticky;top:90px}
+.ma-foto img{width:100%;display:block;aspect-ratio:4/5;object-fit:cover}
+.ma-foto img.nx{position:absolute;inset:0;opacity:0;transition:opacity .35s}
+.ma-mont{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.92);border-radius:6px;padding:6px 10px;font-size:13px;font-weight:600}
+.ma-arcos{display:grid;grid-auto-flow:column;grid-auto-columns:76px;gap:8px;overflow-x:auto;padding-bottom:6px}
+.ma-arcos button{border:2px solid transparent;border-radius:10px;padding:0;background:#fff;cursor:pointer;overflow:hidden;text-align:left}
+.ma-arcos button img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
+.ma-arcos button span{display:block;font-size:11px;font-weight:600;padding:4px 6px;line-height:1.2}
+.ma-arcos button.on{border-color:var(--forte)}
+.ma-box{background:#fff;border:1px solid #ece8eb;border-radius:12px;padding:16px 18px;margin-top:14px}
+.ma-sl{display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
+.ma-sl b{font-size:24px;color:var(--forte)}
+.ma-box input[type=range]{width:100%;margin:12px 0 4px;accent-color:var(--forte);height:28px}
+.ma-esc{display:flex;justify-content:space-between;font-size:12px;color:var(--vinho2)}
+.ma-lh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.ma-lh span{font-size:14px;color:var(--vinho2)}.ma-lh span b{font-size:20px;color:var(--vinho)}
+.ma table{width:100%;border-collapse:collapse;font-size:14px}
+.ma th{font-size:12px;color:var(--vinho2);font-weight:600;text-align:center;padding:5px 3px;border-bottom:1px solid #ece8eb}
+.ma th:first-child{text-align:left}
+.ma td{padding:8px 3px;border-bottom:1px solid #f3f1f3;text-align:center;font-weight:700}
+.ma td.nm{text-align:left;font-weight:600;display:flex;align-items:center;gap:8px}
+.ma td.nm i{width:15px;height:15px;border-radius:50%;border:1px solid rgba(0,0,0,.1);flex:none}
+.ma td.z{color:#cfcacd;font-weight:500}
+.ma-ex{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ma-ex div{background:#f7f6f8;border-radius:8px;padding:8px 10px;font-size:12px;color:var(--vinho2)}
+.ma-ex b{display:block;font-size:16px;color:var(--vinho)}
+.ma-buy{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.ma-buy small{display:block;font-size:12px;color:var(--vinho2)}.ma-buy b{font-size:26px}
+.ma-acoes{margin-top:12px}.ma-acoes .btn{flex:1 1 0;justify-content:center}
+.ma-cores{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.ma-cores button{display:flex;align-items:center;gap:6px;border:1px solid #ece8eb;border-radius:6px;padding:4px 8px;font:inherit;font-size:13px;background:#fff;cursor:pointer}
+.ma-cores button i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+.ma-cores button.on{border-color:var(--forte);background:var(--bebe)}
+@media(max-width:860px){.ma-tabs{justify-content:flex-start}.ma{grid-template-columns:minmax(0,1fr)}.ma-foto{position:relative;top:0}.ma-acoes .btn{font-size:14px;padding:0 10px}}
 </style>
 </head>
 <body>
@@ -554,19 +594,18 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 </div></section>
 
 <section class="sec" id="monte"><div class="w">
-  <div class="ctr"><span class="eyebrow">Monte seu arco</span><h2 class="tt inf">Escolha a cor, a gente manda o arco</h2></div>
-  <div class="monte">
-    <div class="mprev"><img id="mimg" src="img/arco_10_candy_morango.webp" alt="Prévia do arco"><span class="mtag" id="mtag">Morango</span></div>
-    <div class="mcfg">
-      <div class="mst"><i>1</i> A paleta</div>
-      <div class="sws" id="sws"></div>
-      <div class="mst"><i>2</i> O tamanho</div>
-      <div class="tams">
-        <label class="tam"><input type="radio" name="tam" value="60" data-p="35.99" checked><span><b>Kit 60 peças</b><small>balões de 12 e 9 polegadas · ★ 5,0</small></span><em>R$ 35,99</em></label>
-        <label class="tam"><input type="radio" name="tam" value="100" data-p="52.99"><span><b>Kit 100 peças desconstruído</b><small>16, 12, 9 e 5 polegadas + dupla face</small></span><em>R$ 52,99</em></label>
-      </div>
-      <div class="mbuy"><div><small>Seu arco</small><b id="mtot">R$ 35,99</b></div><button class="btn pri" id="addKit">Colocar no carrinho</button></div>
-      <p class="mnote">🚚 Em São Paulo e Grande SP chega no mesmo dia.</p>
+  <div class="ctr"><span class="eyebrow">Monte seu arco</span><h2 class="tt inf">Escolha o arco pela foto. A gente calcula e entrega os balões.</h2><p class="sub">Ajuste o tamanho da sua parede e a lista de balões se refaz na hora, já com 10% de reserva pra estouro.</p></div>
+  <div class="ma-tabs" id="maTabs"></div>
+  <div class="ma">
+    <div class="ma-foto" id="maFoto"><img class="at" id="maImg" src="img/arco_09_candy_algodao.webp" alt="Arco de balões"><span class="ma-mont" id="maMont">Arraste os metros e veja o arco crescer</span></div>
+    <div class="ma-cfg">
+      <div class="ma-arcos" id="maArcos"></div>
+      <div class="ma-box"><div class="ma-sl"><span>Tamanho do arco</span><b id="maMv">3 m</b></div><input id="maM" type="range" min="2" max="5" step=".5" value="3" aria-label="Tamanho do arco em metros"><div class="ma-esc"><span>2 m</span><span>5 m</span></div></div>
+      <div class="ma-box" id="maTab"></div>
+      <div class="ma-buy"><div><small>Sua lista sai por</small><b id="maTot">R$ 0,00</b><small id="maPk"></small></div></div>
+      <div class="acoes ma-acoes"><button class="btn pri" id="maComprar">Comprar esta lista</button><button class="btn lin" id="maTrocar">Trocar as cores</button></div>
+      <div class="ma-cores" id="maCores" hidden></div>
+      <p class="mnote">🚚 Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
     </div>
   </div>
 </div></section>
@@ -679,12 +718,6 @@ function nfoto(){const im=$('#nimg');im.style.opacity=.3;setTimeout(()=>{im.src=
 addEventListener('load',()=>setTimeout(()=>[0,1,2,3,4,5,6,7,8,9].forEach(k=>['rose','ouro','lilas','azul'].forEach(e=>{const i=new Image();i.src='img/num_'+e+'_'+k+'.webp'})),3500));
 function nsel(){$('#nsel').textContent='Número '+NUM+' · '+EST}
 
-const PAL=[['01_vivo_arco-iris','Arco-íris'],['02_vivo_primarias','Primárias'],['03_vivo_joias','Joias'],['04_analoga_quente','Pêssego'],['05_analoga_fria','Menta e céu'],['06_analoga_lilas','Lilás'],['07_pastel_neutro','Nude'],['08_pastel_bebe','Chá de bebê'],['09_candy_algodao','Algodão-doce'],['10_candy_morango','Morango'],['14_vermelho_preto_amarelo','Herói'],['15_preto_e_branco','Preto e branco'],['16_verde_e_branco','Verde e branco']];
-let COR={f:'10_candy_morango',n:'Morango'};
-$('#sws').innerHTML=PAL.map(([f,n])=>`<button class="sw${f===COR.f?' on':''}" data-f="${f}" data-n="${n}"><img src="img/arco_${f}.webp" alt=""><span>${n}</span></button>`).join('');
-document.querySelectorAll('.sw').forEach(b=>b.onclick=()=>{document.querySelectorAll('.sw').forEach(x=>x.classList.remove('on'));b.classList.add('on');COR={f:b.dataset.f,n:b.dataset.n};const i=$('#mimg');i.style.opacity=.3;setTimeout(()=>{i.src='img/arco_'+COR.f+'.webp';i.style.opacity=1},150);$('#mtag').textContent=COR.n});
-const tam=()=>document.querySelector('input[name=tam]:checked');
-document.querySelectorAll('input[name=tam]').forEach(r=>r.onchange=()=>$('#mtot').textContent=R(+tam().dataset.p));
 
 const PK=[['pack_azul_verm_amar','Azul, vermelho e amarelo'],['pack_preto_verm_amar','Vermelho, preto e amarelo'],['pack_lar_marrom_verde','Laranja, marrom e verde'],['pack_candy','Candy: rosa, lilás e azul']];
 $('#packs').innerHTML=PK.map(([i,n])=>`<article class="pk"><img src="img/${i}.webp" alt="${n}"><h4>${n}</h4><small>75 balões · 8 polegadas</small><div class="pp"><b>R$ 25,99</b><button data-n="${n}" data-p="25.99" data-i="img/${i}.webp">Comprar</button></div></article>`).join('');
@@ -706,7 +739,7 @@ $('#cartBtn').onclick=e=>{e.preventDefault();abre()};$('#fecha').onclick=fecha;$
 addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
 $('#gl').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;const i=+b.dataset.i;C[i].q+=+b.dataset.d;if(C[i].q<1)C.splice(i,1);salva();pinta()});
 $('#packs').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;poe(b.dataset.n,+b.dataset.p,b.dataset.i);const r=b.getBoundingClientRect();confete(r.left+r.width/2,r.top);toast('✓ '+b.dataset.n+' no carrinho');b.textContent='✓ Adicionado';setTimeout(()=>b.textContent='Comprar',1400)});
-$('#addKit').onclick=e=>{const r=tam();const n=(r.value==='60'?'Kit arco 60 peças':'Kit arco 100 peças desconstruído')+' · '+COR.n;poe(n,+r.dataset.p,'img/arco_'+COR.f+'.webp');const b=e.currentTarget.getBoundingClientRect();confete(b.left+b.width/2,b.top);toast('✓ '+n+' no carrinho');setTimeout(abre,450)};
+window.gbPoeLista=(it,nome)=>{it.forEach(x=>{const e=C.find(c=>c.n===x.n);e?e.q+=x.q:C.push({n:x.n,p:x.p,i:x.i,q:x.q})});salva();pinta();toast('✓ Lista do arco '+nome+' no carrinho');setTimeout(abre,450)};
 $('#addFita').onclick=()=>{poe('Fita 5 m + dupla face',11.98,'img/fita_105.webp');toast('✓ Fita adicionada')};
 pinta();
 })();
@@ -845,6 +878,64 @@ mostra('torcida');
   const fd=new FormData();fd.append('tipo',q('#pzpers .on').dataset.v);fd.append('nome',q('#pznome').value);fd.append('data',q('#pzdata').value);fd.append('wpp',w);fd.append('cep',cep);
   btn.disabled=true;btn.textContent='Enviando...';
   fetch(GB.orc,{method:'POST',body:fd,credentials:'same-origin'}).then(r=>r.json()).then(j=>{if(j&&j.success){btn.textContent='Pedido enviado';m.textContent='Recebemos! A gente te chama no WhatsApp com o valor.'}else{btn.disabled=false;btn.textContent='Pedir orçamento';m.textContent='Não deu certo, tenta de novo.'}}).catch(()=>{btn.disabled=false;btn.textContent='Pedir orçamento'})});
+})();
+</script>
+<script>
+// monte seu arco: escolhe a receita, ajusta os metros e a lista vira pacotes no carrinho
+(function(){
+ const CO={amarelo:['Amarelo','#f7d22e'],azul_baby:['Azul baby','#a9d1ef'],azul_celeste:['Azul celeste','#7fb2e5'],azul_cobalto:['Azul cobalto','#1f4fa8'],azul_royal:['Azul royal','#2448c8'],bege:['Bege','#e8d2b4'],branco:['Branco','#f7f5f2'],cinza:['Cinza','#b9b7b5'],dourado:['Dourado','#d7ae49'],laranja:['Laranja','#f58a2c'],lilas:['Lilás','#c3aee3'],marrom:['Marrom','#7a4b33'],pink:['Pink','#e8378a'],preto:['Preto','#232226'],rosa:['Rosa','#f4b6c8'],roxo:['Roxo','#6b3fa0'],tiffany:['Tiffany','#3cc2c6'],verde_agua:['Verde água','#a6e0cd'],verde_bandeira:['Verde bandeira','#16954a'],verde_citrus:['Verde citrus','#8ccc3e'],vermelho:['Vermelho','#d8262e']};
+ const AR=[
+  {f:'09_candy_algodao',t:'Algodão doce',g:'Infantil',c:['rosa','azul_baby','amarelo','verde_agua'],et:['montagem/a09_1','montagem/a09_2','montagem/a09_3','montagem/a09_4']},
+  {f:'01_vivo_arco-iris',t:'Arco-íris',g:'Infantil',c:['pink','amarelo','azul_royal','laranja','verde_citrus']},
+  {f:'02_vivo_primarias',t:'Primárias',g:'Infantil',c:['vermelho','amarelo','azul_royal','verde_bandeira']},
+  {f:'10_candy_morango',t:'Morango',g:'Infantil',c:['vermelho','rosa','branco','pink']},
+  {f:'08_pastel_bebe',t:'Chá de bebê',g:'Chá de bebê',c:['rosa','azul_baby','branco','bege']},
+  {f:'05_analoga_fria',t:'Menta e céu',g:'Chá de bebê',c:['verde_agua','azul_baby','tiffany']},
+  {f:'06_analoga_lilas',t:'Lilás',g:'15 anos',c:['lilas','azul_celeste','roxo','rosa']},
+  {f:'03_vivo_joias',t:'Joias',g:'Adulto',c:['verde_bandeira','azul_cobalto','roxo','vermelho']},
+  {f:'04_analoga_quente',t:'Pêssego',g:'Adulto',c:['laranja','bege','rosa','marrom']},
+  {f:'07_pastel_neutro',t:'Nude',g:'Adulto',c:['bege','branco','marrom']},
+  {f:'14_vermelho_preto_amarelo',t:'Rubro-negro',g:'Torcida',c:['vermelho','preto','amarelo']},
+  {f:'15_preto_e_branco',t:'Preto e branco',g:'Torcida',c:['preto','branco']},
+  {f:'16_verde_e_branco',t:'Alviverde',g:'Torcida',c:['verde_bandeira','branco']}
+ ];
+ const TAM=['16','12','9','5'],DENS={'16':1.6,'12':16,'9':10,'5':14},MIN=2,MAX=5;
+ const PK={'5':[50,17.98,'pacote_5pol'],'9':[50,14.89,'pacote_9pol'],'12':[25,21.50,'pacote_12pol'],'16':[12,21.97,'pacote_16pol']};
+ const $=s=>document.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',','),fm=m=>String(Math.round(m*10)/10).replace('.',',')+' m';
+ if(!$('#maArcos'))return;
+ let g='Todos',a=AR[0],m=3,alvo=0;
+ function pesos(n,t){const w=[];for(let i=0;i<n;i++){const x=n-i,y=i+1;w.push(t==='16'?(i<2?x*x:0):t==='12'?x+1:t==='9'?2:y)}return w}
+ function calc(){const q={};a.c.forEach(c=>q[c]={'16':0,'12':0,'9':0,'5':0});let tot=0;
+  TAM.forEach(t=>{const w=pesos(a.c.length,t),s=w.reduce((x,y)=>x+y,0);a.c.forEach((c,i)=>{q[c][t]=w[i]?Math.ceil(DENS[t]*m*w[i]/s*1.1):0;tot+=q[c][t]})});
+  let gr=0;a.c.forEach(c=>gr+=q[c]['16']+q[c]['12']);const min=Math.round(35*m/15)*15,h=Math.floor(min/60),mm=min%60;
+  return {q,tot,cachos:Math.round(gr/4),fita:fm(m+.5),tempo:(h?h+'h'+(mm?(mm<10?'0':'')+mm:''):mm+' min')}}
+ function compra(c){const it=[];let v=0;TAM.forEach(t=>{const n=a.c.reduce((x,k)=>x+c.q[k][t],0);if(!n)return;const [u,p,img]=PK[t],qt=Math.ceil(n/u);
+   const pal=a.t+' '+fm(m)+': '+a.c.filter(k=>c.q[k][t]).map(k=>CO[k][0]+' '+c.q[k][t]).join(', ');
+   it.push({n:'Pacote '+u+' balões '+t+'" · '+pal,p,i:'img/'+img+'.webp',q:qt});v+=p*qt});
+  it.push({n:'Fita 5 m + dupla face',p:11.98,i:'img/fita_105.webp',q:1});v+=11.98;return {it,v}}
+ function foto(){if(!a.et)return 'img/arco_'+a.f+'.webp';const fs=a.et.concat(['arco_'+a.f]),k=Math.round((m-MIN)/(MAX-MIN)*(fs.length-1));return 'img/'+fs[Math.max(0,Math.min(fs.length-1,k))]+'.webp'}
+ function troca(){const box=$('#maFoto'),f=foto(),at=box.querySelector('img.at');$('#maMont').style.display=a.et?'':'none';if(!at||at.getAttribute('src')===f)return;
+  box.querySelectorAll('img.nx').forEach(x=>x.remove());const n=new Image();n.className='nx';n.alt=at.alt;n.src=f;box.appendChild(n);
+  n.onload=()=>{requestAnimationFrame(()=>n.style.opacity=1);setTimeout(()=>{at.remove();n.className='at';n.style.opacity=''},350)}}
+ function lista(){const c=calc(),b=compra(c);
+  $('#maTab').innerHTML='<div class="ma-lh"><b>Sua lista de balões</b><span><b>'+c.tot+'</b> balões</span></div><table><thead><tr><th>Cor</th><th>16"</th><th>12"</th><th>9"</th><th>5"</th></tr></thead><tbody>'+
+   a.c.map(k=>'<tr><td class="nm"><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'</td>'+TAM.map(t=>{const v=c.q[k][t];return '<td class="'+(v?'':'z')+'">'+(v||'·')+'</td>'}).join('')+'</tr>').join('')+
+   '</tbody></table><div class="ma-ex"><div>Fita de arco<b>'+c.fita+'</b></div><div>Cachos de 4<b>'+c.cachos+'</b></div><div>Montagem<b>'+c.tempo+'</b></div></div>';
+  $('#maTot').textContent=R(b.v);$('#maPk').textContent=b.it.map(x=>x.q+'× '+x.n.split(' · ')[0].replace('Pacote ','').replace(' + dupla face','')).join(' · ');return b}
+ function abas(){const G=['Todos'].concat([...new Set(AR.map(x=>x.g))]);$('#maTabs').innerHTML=G.map(x=>'<button class="'+(x===g?'on':'')+'">'+x+'</button>').join('');
+  $('#maTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{g=b.textContent;abas();arcos()})}
+ function arcos(){const L=AR.filter(x=>g==='Todos'||x.g===g);if(L.indexOf(a)<0)a=L[0];
+  $('#maArcos').innerHTML=L.map(x=>'<button class="'+(x===a?'on':'')+'" data-f="'+x.f+'"><img src="img/arco_'+x.f+'.webp" alt="" loading="lazy"><span>'+x.t+'</span></button>').join('');
+  $('#maArcos').querySelectorAll('button').forEach(b=>b.onclick=()=>{a=AR.find(x=>x.f===b.dataset.f);alvo=0;$('#maCores').hidden=true;arcos()});troca();lista()}
+ $('#maM').oninput=e=>{m=+e.target.value;$('#maMv').textContent=fm(m);troca();lista()};
+ function cores(){const box=$('#maCores');box.innerHTML='<div style="width:100%;font-size:13px;color:var(--vinho2)">Trocar <b>'+CO[a.c[alvo]][0]+'</b> por:</div>'+
+   a.c.map((k,i)=>'<button data-i="'+i+'" class="'+(i===alvo?'on':'')+'"><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'</button>').join('')+'<div style="width:100%;height:1px;background:#ece8eb;margin:4px 0"></div>'+
+   Object.keys(CO).filter(k=>a.c.indexOf(k)<0).map(k=>'<button data-k="'+k+'"><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'</button>').join('');
+  box.querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>{alvo=+b.dataset.i;cores()});
+  box.querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>{a.c[alvo]=b.dataset.k;cores();lista()})}
+ $('#maTrocar').onclick=()=>{const box=$('#maCores');box.hidden=!box.hidden;if(!box.hidden)cores()};
+ $('#maComprar').onclick=()=>{const b=lista();window.gbPoeLista&&window.gbPoeLista(b.it,a.t+' · '+fm(m))};
+ abas();arcos();
 })();
 </script>
 </body>
