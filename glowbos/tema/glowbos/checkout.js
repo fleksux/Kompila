@@ -22,7 +22,7 @@
 		var b = document.getElementById('place_order');
 		if (!b || document.querySelector('.gb-selos')) return;
 		b.textContent = 'Finalizar pedido';
-		b.insertAdjacentHTML('afterend', '<div class="gb-selos"><div><b>🔒 Pagamento seguro</b>Mercado Pago</div><div><b>⚡ Pix</b>confirma na hora</div><div><b>🚚 Chega hoje</b>pago até 12h em SP</div></div>');
+		b.insertAdjacentHTML('afterend', '<div class="gb-selos"><div><b>🔒 Pagamento seguro</b>Mercado Pago</div><div><b>⚡ Pix</b>confirma na hora</div><div><b>🚚 Chega hoje</b>pago até 12h em SP</div></div><a class="gb-shopee" href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener"><span class="st">★★★★★</span><span><b>4,9 na Shopee</b> · +67 mil avaliações · +121 mil vendidos</span><em>Ver a loja ↗</em></a><p class="gb-cnpj">Mayara Festas e Decorações LTDA · CNPJ 45.147.944/0001-24 · Santo André/SP</p>');
 	}
 
 	// lembra os dados da última compra (nunca o CPF)

@@ -94,7 +94,7 @@ add_action( 'woocommerce_single_product_summary', function () {
 		<div><span class="i">📍</span><span style="flex:1"><b>Ver prazo pro seu CEP</b>
 			<span class="gb-cep"><input inputmode="numeric" maxlength="9" placeholder="00000-000" id="gbcep"><button type="button" id="gbcepb">Ver</button></span>
 			<span class="gb-cepr" id="gbcepr"></span></span></div>
-		<div><span class="i">⭐</span><span><b>Nota 4,9 na Shopee</b>67 mil avaliações de quem já fez festa.</span></div>
+		<div><span class="i">⭐</span><span><b>Nota 4,9 na Shopee</b>A Glowbos é a loja própria da Mayara Festas: +67 mil avaliações e +121 mil vendidos. <a href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener">Ver na Shopee ↗</a></span></div>
 		<div><span class="i">↩️</span><span><b>Troca fácil</b>7 dias pra se arrepender. <a href="/trocas-e-devolucoes/">Ver regras</a></span></div>
 	</div>
 	<script>
@@ -298,7 +298,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
 		return;
 	}
-	$v = wp_get_theme()->get( 'Version' ) . '.8';
+	$v = wp_get_theme()->get( 'Version' ) . '.10';
 	wp_enqueue_style( 'glowbos-checkout', get_template_directory_uri() . '/checkout.css', array( 'glowbos' ), $v );
 	wp_enqueue_script( 'glowbos-checkout', get_template_directory_uri() . '/checkout.js', array( 'jquery', 'wc-checkout' ), $v, true );
 }, 30 );
