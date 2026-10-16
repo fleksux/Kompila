@@ -579,38 +579,29 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   .sl .acoes{flex-direction:row!important;gap:8px!important}
   .sl .acoes .btn{width:auto!important;flex:1 1 0;min-width:0;padding:0 10px!important;font-size:14.5px!important;white-space:nowrap}
 }
-/* 16/10: avaliações reais da Shopee no lugar da galeria */
-.avl{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:22px}
-.avc{background:#fff;border:1px solid #efe9ec;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.avc img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
-.avc-b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
-.avc-e{display:flex;gap:2px}.avc-e svg{width:15px;height:15px;fill:#FF1F7A}
-.avc-b p{margin:0;font-size:14px;line-height:1.5;color:var(--vinho,#1d1a1f);flex:1}
-.avc-q b{display:block;font:700 13.5px Inter}.avc-q small{color:#6b6470;font-size:12px}
-.avs-ver{text-align:center;margin-top:18px}.avs-ver a{color:#C2185B;font-weight:700;font-size:14.5px}
-@media (max-width:1100px){.avl{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:760px){.avl{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:18px 0 0;padding:0 0 8px;scrollbar-width:none}.avl::-webkit-scrollbar{display:none}.avc{flex:0 0 78%;scroll-snap-align:start}}
-/* carrossel: todas as avaliações com foto, setinhas */
-.avl{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:14px;scrollbar-width:none;padding-bottom:6px}
+/* 16/10: avaliações da Shopee, cartões iguais e limpos */
+.avs{background:#FBF8FA}
+.avw{position:relative;margin-top:26px}
+.avl{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding:4px 2px 14px}
 .avl::-webkit-scrollbar{display:none}
-.avc{flex:0 0 calc((100% - 70px)/6);scroll-snap-align:start}
-.avs-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px}
-.avs-b{width:46px;height:46px;border-radius:50%;border:0;background:linear-gradient(135deg,#5E0B2E,#B0124F);color:#fff;font:700 26px/1 Inter;cursor:pointer;box-shadow:0 8px 18px rgba(94,11,46,.25)}
-.avs-b:disabled{opacity:.3;cursor:default}
-#avsN{font:600 14px Inter;color:#6b6470;min-width:110px;text-align:center}
-@media (max-width:1100px){.avc{flex-basis:calc((100% - 28px)/3)}}
-@media (max-width:760px){.avc{flex-basis:78%}}
-/* 16/10: cartão estilo post (bolinha com foto do perfil, nome, estrelas, comentário, foto da festa) */
-.avc{background:#fff;border:1px solid #efe9ec;border-radius:16px;overflow:hidden;display:flex!important;flex-direction:column;padding:14px 14px 12px;gap:10px}
-.avc-h{display:flex;align-items:center;gap:10px}
-.avc-av{width:42px;height:42px;border-radius:50%;flex:none;overflow:hidden;background:linear-gradient(135deg,#FFD0E1,#F8A5C2);display:grid;place-items:center;font:800 17px "Inter Tight",Inter;color:#8E1446;text-transform:uppercase}
+.avc{flex:0 0 calc((100% - 60px)/4);scroll-snap-align:start;background:#fff;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(29,26,31,.04),0 8px 24px rgba(29,26,31,.06)}
+.avc-f{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#f3eef1}
+.avc-b{position:relative;padding:0 18px 18px;display:flex;flex-direction:column;flex:1}
+.avc-h{display:flex;align-items:flex-start;gap:10px;margin-top:-24px}
+.avc-av{width:48px;height:48px;border-radius:50%;flex:none;overflow:hidden;border:3px solid #fff;background:linear-gradient(135deg,#FFD0E1,#F8A5C2);display:grid;place-items:center;font:800 18px "Inter Tight",Inter;color:#8E1446;text-transform:uppercase}
 .avc-av img{width:100%;height:100%;object-fit:cover;display:block}
-.avc-h>div{min-width:0;flex:1}.avc-h b{display:block;font:700 13.5px Inter;color:#1d1a1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.avc-h .avc-e{margin-top:2px}
-.avc>p{margin:0;font-size:14px;line-height:1.5;color:#1d1a1f}
-.avl{align-items:flex-start}
-.avc .avc-f{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block}
-.avc>small{color:#6b6470;font-size:12px}
+.avc-h>div{min-width:0;flex:1;margin-top:28px}
+.avc-h b{display:block;font:700 14px Inter;color:#1d1a1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.avc-e{display:flex;gap:1px;margin-top:2px}.avc-e svg{width:13px;height:13px;fill:#FF1F7A}
+.avc-b>p{margin:10px 0 14px;font-size:14.5px;line-height:1.55;color:#3a343d;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;min-height:calc(1.55em*4);flex:1}
+.avc-t{align-self:flex-start;font:600 12px Inter;color:#8E1446;background:#FFF0F5;border-radius:99px;padding:5px 10px}
+.avs-b{position:absolute;top:calc(50% - 30px);width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:#8E1446;font:600 28px/1 Inter;cursor:pointer;box-shadow:0 6px 20px rgba(29,26,31,.12);display:grid;place-items:center;z-index:2;transition:opacity .2s}
+.avs-b:hover{background:#8E1446;color:#fff}
+#avsAnt{left:-22px}#avsProx{right:-22px}
+.avs-b:disabled{opacity:0;pointer-events:none}
+#avsN{display:block;text-align:center;font:500 13px Inter;color:#8a838d;margin-top:10px}
+@media (max-width:1100px){.avc{flex-basis:calc((100% - 40px)/3)}}
+@media (max-width:760px){.avc{flex-basis:82%}.avs-b{display:none}.avl{gap:14px}}
 </style>
 </head>
 <body>
@@ -775,8 +766,8 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
   <div class="temas" id="temasg"></div>
 </div></section>
 <section class="sec avs" id="avaliacoes"><div class="w"><div class="ctr"><span class="eyebrow">Avaliações na Shopee</span><h2 class="tt">Quem já fez festa com a gente</h2><p class="sub">Fotos e palavras de clientes da Mayara Festas, a nossa loja na Shopee. Nota 4,9 com mais de 67 mil avaliações.</p></div>
-<div class="avl" id="avl"></div>
-<div class="avs-nav"><button type="button" class="avs-b" id="avsAnt" aria-label="Anteriores">‹</button><span id="avsN"></span><button type="button" class="avs-b" id="avsProx" aria-label="Próximas">›</button></div></div></section>
+<div class="avw"><button type="button" class="avs-b" id="avsAnt" aria-label="Anteriores">‹</button><div class="avl" id="avl"></div><button type="button" class="avs-b" id="avsProx" aria-label="Próximas">›</button></div><span id="avsN"></span>
+</div></section>
 </main>
 
 <footer><div class="w">
@@ -1010,10 +1001,10 @@ var BASE='img/avaliacoes/shopee/';
 fetch('/wp-content/themes/glowbos/avaliacoes_shopee.json').then(function(r){return r.json()}).then(function(d){
   var h='';d.forEach(function(x){
     var av=x.a?'<img src="'+BASE+'../perfil/'+x.a+'" alt="" loading="lazy">':esc((x.n||'?').replace(/[^a-z0-9]/gi,'').charAt(0)||'?');
-    h+='<article class="avc"><div class="avc-h"><span class="avc-av">'+av+'</span><div><b>'+esc(x.n)+'</b><div class="avc-e" aria-label="5 de 5 estrelas">'+EST+'</div></div></div><p>“'+esc(x.c)+'”</p><img class="avc-f" src="'+BASE+x.f+'" alt="Foto da festa de '+esc(x.n)+'" loading="lazy"><small>comprou '+esc(x.p)+' · avaliação na Shopee</small></article>'});
+    h+='<article class="avc"><img class="avc-f" src="'+BASE+x.f+'" alt="Festa de '+esc(x.n)+'" loading="lazy"><div class="avc-b"><div class="avc-h"><span class="avc-av">'+av+'</span><div><b>'+esc(x.n)+'</b><div class="avc-e" aria-label="5 de 5 estrelas">'+EST+'</div></div></div><p>“'+esc(x.c)+'”</p><span class="avc-t">'+esc(x.p)+'</span></div></article>'});
   l.innerHTML=h;conta();
 }).catch(function(){});
-function conta(){var c=l.querySelectorAll('.avc'),w=c[0]?c[0].getBoundingClientRect().width+14:1,i=Math.round(l.scrollLeft/w),vis=Math.max(1,Math.round(l.clientWidth/w));
+function conta(){var c=l.querySelectorAll('.avc'),w=c[0]?c[0].getBoundingClientRect().width+20:1,i=Math.round(l.scrollLeft/w),vis=Math.max(1,Math.round(l.clientWidth/w));
   n.textContent=(i+1)+'–'+Math.min(c.length,i+vis)+' de '+c.length;ant.disabled=l.scrollLeft<5;prox.disabled=l.scrollLeft+l.clientWidth>=l.scrollWidth-5}
 ant.onclick=function(){l.scrollBy({left:-l.clientWidth,behavior:'smooth'})};
 prox.onclick=function(){l.scrollBy({left:l.clientWidth,behavior:'smooth'})};
