@@ -524,6 +524,10 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .sec,#numeros{padding-top:56px!important}.bloco{padding:56px 0!important;margin-top:56px!important}
 .bloco+.sec,.mv+.sec,.mv+.bloco{margin-top:0!important}.bloco+.sec,.bloco+#numeros{padding-top:20px!important}
 @media (max-width:640px){.sec,#numeros{padding-top:40px!important}.bloco{padding:40px 0!important;margin-top:40px!important}}
+/* parallax do banner principal: foto desce mais devagar, texto sobe e esmaece */
+.janela .sl img{translate:0 var(--py,0px)}
+.janela .sl .tx{translate:0 calc(var(--py,0px) * -.35);opacity:var(--po,1)}
+@media (prefers-reduced-motion:reduce){.janela .sl img,.janela .sl .tx{translate:none;opacity:1}}
 </style>
 </head>
 <body>
@@ -908,6 +912,13 @@ mostra('torcida');
 (function(){var j=document.querySelector('.janela');if(!j)return;
 function ajusta(){if(innerWidth>640){j.style.height='';return}var t=j.getBoundingClientRect().top,m=0;j.querySelectorAll('.sl').forEach(function(s){s.querySelectorAll('a,button,p,h1,h2,small,span').forEach(function(e){var r=e.getBoundingClientRect();if(r.height)m=Math.max(m,r.bottom-t)})});if(m>200)j.style.setProperty('height',Math.ceil(m+28)+'px','important')}
 addEventListener('load',ajusta);addEventListener('resize',ajusta);setTimeout(ajusta,600);})();
+</script>
+<script>
+// parallax do banner principal (só enquanto ele está na tela)
+(function(){var j=document.querySelector('.janela');if(!j||matchMedia('(prefers-reduced-motion:reduce)').matches)return;var t=0;
+function f(){t=0;var h=j.offsetHeight,y=Math.min(Math.max(scrollY-(j.getBoundingClientRect().top+scrollY-scrollY),0),h);var r=j.getBoundingClientRect();var p=Math.min(Math.max(-r.top,0),h);
+j.style.setProperty('--py',(p*.4).toFixed(1)+'px');j.style.setProperty('--po',Math.max(0,1-p/(h*.75)).toFixed(3))}
+addEventListener('scroll',function(){if(!t)t=requestAnimationFrame(f)},{passive:true});f()})();
 </script>
 </body>
 </html>
