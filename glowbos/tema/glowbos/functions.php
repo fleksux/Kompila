@@ -966,6 +966,7 @@ add_action( 'wp_head', function () {
 --faixa:linear-gradient(90deg,var(--berry) 0 20%,var(--pink) 20% 40%,var(--rosa) 40% 60%,var(--pessego) 60% 80%,var(--lilas) 80% 100%)}
 /* faixa das cores dos balões: marca da loja */
 header.gb-head::after,body>header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px;background:var(--faixa)}
+@media (max-width:760px){header.gb-head::after{display:none}.gb-nav{border-bottom:4px solid transparent!important;background:linear-gradient(#fff,#fff) padding-box,var(--faixa) border-box!important}}
 .rf::before{content:"";display:block;height:5px;background:var(--faixa)}
 /* barra do topo em degradê suave de tons */
 .gb-barra,.barra{background:linear-gradient(90deg,var(--t-rosa),var(--t-lilas),var(--t-pessego))!important;color:var(--vinho)!important}
@@ -997,3 +998,24 @@ header.gb-head::after,body>header::after{content:"";position:absolute;left:0;rig
 </style>
 	<?php
 }, 99 );
+
+// ===== Barra fina do topo: prazo e site seguro à esquerda; pedidos, telefone e Instagram à direita =====
+function glowbos_util_html() {
+	$i = function ( $d ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $d . '</svg>';
+	};
+	return '<style>
+.ub{background:linear-gradient(90deg,var(--t-rosa,#fff0f5),var(--t-lilas,#f5f0ff),var(--t-pessego,#fff3ec));color:var(--vinho,#1d1a1f);font:500 12.5px/1 Inter,sans-serif}
+.ub-w{max-width:1240px;margin:0 auto;padding:0 24px;height:36px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.ub-l,.ub-r{display:flex;align-items:center;gap:18px;white-space:nowrap}
+.ub span,.ub a{display:inline-flex;align-items:center;gap:6px;color:inherit;text-decoration:none}
+.ub a:hover{color:var(--berry,#b0124f)}
+.ub svg{width:15px;height:15px;opacity:.75}
+.ub .ub-ig svg{width:17px;height:17px;opacity:.9}
+@media (max-width:760px){.ub-w{padding:0 14px;height:32px;font-size:12px}.ub-l span+span,.ub-r a:not(.ub-ig){display:none}.ub-w{justify-content:space-between}}
+</style>
+<div class="ub"><div class="ub-w">
+<div class="ub-l"><span>' . $i( '<path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' ) . 'Chega hoje em SP e Grande SP, pago até 12h</span><span>' . $i( '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>' ) . 'Site seguro</span></div>
+<div class="ub-r"><a href="' . esc_url( wc_get_account_endpoint_url( 'orders' ) ) . '">' . $i( '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>' ) . 'Meus pedidos</a><a href="https://wa.me/5511945231106" target="_blank" rel="noopener">' . $i( '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>' ) . '(11) 94523-1106</a><a class="ub-ig" href="https://instagram.com/glowbosbaloes" target="_blank" rel="noopener" aria-label="Instagram da Glowbos">' . $i( '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>' ) . '</a></div>
+</div></div>';
+}

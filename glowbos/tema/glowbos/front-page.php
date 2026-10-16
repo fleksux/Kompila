@@ -17,6 +17,7 @@ $gb = array(
 	'orc'  => esc_url_raw( add_query_arg( 'wc-ajax', 'glowbos_orcamento', home_url( '/' ) ) ),
 );
 // menu da loja com o painel de produtos no lugar do menu do protótipo
+$html = str_replace( '<div class="barra">🚚 Chega hoje em São Paulo e Grande SP</div>', glowbos_util_html(), $html );
 $gbn = strpos( $html, '<nav><a href="/categoria/' );
 if ( false !== $gbn ) {
 	$html = substr_replace( $html, glowbos_mega_html(), $gbn, strpos( $html, '</nav>', $gbn ) + 6 - $gbn );

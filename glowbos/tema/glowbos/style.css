@@ -137,3 +137,8 @@ a{color:inherit}
 .gb-ped-vazio .button,.gb-ty .acoes .btn{width:100%}
 .gb-main>h1,.gb-main .entry-title{text-align:center}
 }
+/* ícones do topo: firmes, sem caixinha, com nome */
+.gb-cart{background:none!important;display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;color:var(--vinho)}
+.gb-cart:hover,.gb-conta:hover{background:#f6f3f5!important}
+.gb-cart svg{width:21px;height:21px}
+@media (max-width:760px){.gb-cart span{display:none}.gb-cart{padding:8px}}
