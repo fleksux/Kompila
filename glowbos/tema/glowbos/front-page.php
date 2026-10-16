@@ -21,7 +21,13 @@ $gbn = strpos( $html, '<nav><a href="/categoria/' );
 if ( false !== $gbn ) {
 	$html = substr_replace( $html, glowbos_mega_html(), $gbn, strpos( $html, '</nav>', $gbn ) + 6 - $gbn );
 }
-$gbf  = strpos( $html, '<footer>' );
+// rodapé único do tema no lugar do rodapé do protótipo
+$gbr = strpos( $html, '<footer>' );
+if ( false !== $gbr ) {
+	$html = substr_replace( $html, glowbos_rodape_html(), $gbr, strpos( $html, '</footer>', $gbr ) + 9 - $gbr );
+}
+$gbf  = strpos( $html, '<style>
+.rf{' );
 if ( false !== $gbf ) {
 	$html = substr_replace( $html, glowbos_news_html(), $gbf, 0 );
 }

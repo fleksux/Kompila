@@ -860,3 +860,59 @@ if(location.hash==='#monte-sua-festa')abre();})();
 </script>
 	<?php
 }, 30 );
+
+// ===== Rodapé único (home e páginas): links da loja, ajuda, contato e selos de compra segura =====
+function glowbos_rodape_html() {
+	$ic  = get_template_directory_uri() . '/img/D_icone.webp';
+	$svg = function ( $d ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $d . '</svg>';
+	};
+	$cats = '';
+	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits de arco', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'cromados' => 'Cromados', 'numeros' => 'Números', 'bubbles' => 'Bubbles' ) as $s => $n ) {
+		$cats .= '<a href="' . esc_url( home_url( '/categoria/' . $s . '/' ) ) . '">' . esc_html( $n ) . '</a>';
+	}
+	$selos = array(
+		array( $svg( '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>' ), 'Compra segura', 'site com SSL, dados protegidos' ),
+		array( $svg( '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/>' ), 'Mercado Pago', 'Pix e cartão em até 3x' ),
+		array( $svg( '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/>' ), '4,9 de 5 na Shopee', '67 mil avaliações · ver ↗' ),
+		array( $svg( '<path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' ), 'Chega hoje', 'SP e Grande SP, pago até 12h' ),
+	);
+	$sh = '';
+	foreach ( $selos as $n => $s ) {
+		$tag = 2 === $n ? 'a href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener"' : 'div';
+		$sh .= '<' . $tag . ' class="rf-s"><i>' . $s[0] . '</i><span><b>' . esc_html( $s[1] ) . '</b>' . esc_html( $s[2] ) . '</span></' . ( 2 === $n ? 'a' : 'div' ) . '>';
+	}
+	return '<style>
+.rf{background:#141216!important;color:#fff;font-family:Inter,sans-serif;margin:0!important;padding:0!important}
+.rf a{color:inherit;text-decoration:none}
+.rf-w{max-width:1240px;margin:0 auto;padding:0 24px}
+.rf-selos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:30px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.rf-s:hover{border-color:rgba(255,127,179,.6)}
+.rf-s{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.12);border-radius:12px}
+.rf-s i{width:40px;height:40px;border-radius:10px;background:rgba(255,31,122,.16);color:#ff7fb3;display:grid;place-items:center;flex:none}
+.rf-s i svg{width:21px;height:21px}
+.rf-s span{font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.35}
+.rf-s b{display:block;font:700 15px Inter,sans-serif;color:#fff}
+.rf-g{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;padding:40px 0 30px}
+.rf-g h5{font:700 15px Inter,sans-serif;margin:0 0 12px;color:#fff}
+.rf-g a{display:block;color:rgba(255,255,255,.7);margin:7px 0;font-size:14px}
+.rf-g a:hover{color:#ff7fb3}
+.rf-m img{width:64px;border-radius:12px;margin-bottom:12px}
+.rf-m p{color:rgba(255,255,255,.7);font-size:14px;line-height:1.5;margin:0 0 14px;max-width:300px}
+.rf-pg{display:flex;flex-wrap:wrap;gap:6px}
+.rf-pg span{font:700 11.5px Inter,sans-serif;padding:5px 9px;border-radius:6px;background:#fff;color:#141216}
+.rf-b{display:flex;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;padding:18px 0 26px;border-top:1px solid rgba(255,255,255,.1);font-size:12.5px;color:rgba(255,255,255,.55)}
+@media (max-width:980px){.rf-selos{grid-template-columns:1fr 1fr}.rf-g{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.rf-w{padding:0 16px}.rf-selos{gap:8px;padding:22px 0}.rf-s{padding:10px;gap:10px}.rf-s i{width:34px;height:34px}.rf-s b{font-size:13.5px}.rf-s span{font-size:11.5px}.rf-g{gap:22px}.rf-m{grid-column:1/-1}}
+</style>
+<footer class="rf"><div class="rf-w">
+<div class="rf-selos">' . $sh . '</div>
+<div class="rf-g">
+<div class="rf-m"><img src="' . esc_url( $ic ) . '" alt="Glowbos"><p>Balões e festa com cara de sonho. Em São Paulo e Grande SP, chega no mesmo dia.</p><div class="rf-pg"><span>Pix</span><span>Visa</span><span>Mastercard</span><span>Elo</span><span>Mercado Pago</span></div></div>
+<div><h5>Loja</h5>' . $cats . '</div>
+<div><h5>Ajuda</h5><a href="/como-montar/">Como montar seu arco</a><a href="/entrega-e-frete/">Entrega e frete</a><a href="/trocas-e-devolucoes/">Trocas e devoluções</a><a href="/perguntas-frequentes/">Perguntas frequentes</a><a href="/acompanhar-pedido/">Acompanhar pedido</a><a href="/minha-conta/">Minha conta</a></div>
+<div><h5>Fale com a gente</h5><a href="https://wa.me/5511945231106" target="_blank" rel="noopener">WhatsApp (11) 94523-1106</a><a href="https://instagram.com/glowbosbaloes" target="_blank" rel="noopener">Instagram @glowbosbaloes</a><a href="mailto:contato@glowbos.com.br">contato@glowbos.com.br</a><a href="/sobre/">Sobre a Glowbos</a><a href="/politica-de-privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></div>
+</div>
+<div class="rf-b"><span>© 2026 Glowbos · Mayara Festas e Decorações LTDA · CNPJ 45.147.944/0001-24 · Santo André/SP</span><a href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener">Mesma loja da Shopee ↗</a></div>
+</div></footer>';
+}
