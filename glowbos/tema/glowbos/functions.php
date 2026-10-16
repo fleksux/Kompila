@@ -577,14 +577,14 @@ add_action( 'wc_ajax_glowbos_add', function () {
 // ===== Departamentos: banner no topo, filtros e vitrine =====
 function glowbos_departamentos() {
 	return array(
-		'arcos'            => array( 'Arcos de balões', 'Monte o seu arco escolhendo as cores, ou leve o kit com tudo pronto pra montar.', 'arco_02_vivo_primarias.webp' ),
-		'kits-de-arco'     => array( 'Kits de arco', 'De 60 a 120 peças em 4 tamanhos, com as cores que você escolher. Chega com a fita.', 'arco_06_analoga_lilas.webp' ),
-		'pacotes'          => array( 'Pacotes sortidos', '50 a 125 balões de 8" em até 5 cores, na sequência que você montar.', 'pack_azul_verm_amar.webp' ),
-		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'arco_07_pastel_neutro.webp' ),
-		'candy-colors'     => array( 'Candy colors', 'Os tons pastel que viraram a cara do chá revelação e da festa infantil.', 'arco_09_candy_algodao.webp' ),
+		'arcos'            => array( 'Arcos de balões', 'Monte o seu arco escolhendo as cores, ou leve o kit com tudo pronto pra montar.', 'banner_arcos.webp' ),
+		'kits-de-arco'     => array( 'Kits de arco', 'De 60 a 120 peças em 4 tamanhos, com as cores que você escolher. Chega com a fita.', 'banner_kits.webp' ),
+		'pacotes'          => array( 'Pacotes sortidos', '50 a 125 balões de 8" em até 5 cores, na sequência que você montar.', 'banner_pacotes.webp' ),
+		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'banner_fechados.webp' ),
+		'candy-colors'     => array( 'Candy colors', 'Os tons pastel que viraram a cara do chá revelação e da festa infantil.', 'banner_candy.webp' ),
 		'bubbles'          => array( 'Bubbles', 'Balão transparente com o nome da festa e balõezinhos coloridos dentro.', 'cena_04_bubble_alice.webp' ),
-		'cromados'         => array( 'Cromados e metalizados', 'O brilho que dá acabamento de festa profissional.', 'premium_4_cromado.webp' ),
-		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'numero_5_rose.webp' ),
+		'cromados'         => array( 'Cromados e metalizados', 'O brilho que dá acabamento de festa profissional.', 'banner_cromados.webp' ),
+		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'banner_numeros.webp' ),
 		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'cena_07_textura_baloes.webp' ),
 	);
 }
