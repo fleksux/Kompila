@@ -347,3 +347,6 @@ add_filter( 'woocommerce_get_country_locale', function ( $l ) {
 	$l['BR']['state']['priority']     = 80;
 	return $l;
 } );
+
+// Sem caixinha de "Li e concordo": o aceite dos termos vai numa linha discreta junto do aviso de privacidade.
+add_filter( 'woocommerce_checkout_show_terms', '__return_false' );
