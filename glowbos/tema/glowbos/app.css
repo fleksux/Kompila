@@ -66,3 +66,8 @@
 .gb-ok{margin-top:16px;padding:14px 16px;border-radius:12px;background:#e7f6ec;color:#17803d;font-size:14.5px}
 @media (max-width:640px){.gb-dig{grid-template-columns:repeat(5,1fr)}.gb-est{grid-template-columns:repeat(2,1fr)}.gb-orc{grid-template-columns:1fr}}
 .gb-cor.on{border-color:var(--forte);background:#fff8fb}
+.gb-vazio b{background:none!important;box-shadow:none!important;color:var(--vinho);font:600 22px "Inter Tight";padding:0;display:inline-flex;align-items:center;gap:12px}
+.gb-vazio b svg{width:32px;height:32px;color:var(--berry,#b0124f);animation:ccseta 1.8s ease-in-out infinite}
+.gb-vazio small{background:none;font-weight:500;color:var(--vinho2)}
+@keyframes ccseta{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(7px);opacity:1}}
+@media (max-width:760px){.gb-vazio b svg{transform:rotate(90deg);animation:none}}

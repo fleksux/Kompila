@@ -49,7 +49,7 @@
 			box.querySelectorAll('.gb-cor').forEach(function (b) { b.classList.toggle('usada', SEQ.indexOf(+b.dataset.i) > -1 || SEQ.length >= N); });
 			$('#gbCnt').textContent = SEQ.length + ' de ' + N;
 			var falta = N - SEQ.length, b = $('#gbAdd'); b.disabled = falta > 0; b.textContent = falta > 0 ? 'Escolha ' + (falta === 1 ? 'mais 1 cor' : 'mais ' + falta + ' cores') : 'Colocar no carrinho';
-			if (prev) { prev.innerHTML = '<div class="cacho' + (SEQ.length ? '' : ' vazio') + '">' + cacho(SEQ.length ? SEQ.map(function (k) { return PAL[k][1]; }) : [0, 19, 0, 18]) + (SEQ.length ? '<span class="gb-tag">' + SEQ.map(function (k) { return PAL[k][0]; }).join(' · ') + '</span>' : '<div class="gb-vazio"><b>Escolha as cores ao lado</b><small>A prévia aparece aqui</small></div>') + '</div>'; }
+			if (prev) { prev.innerHTML = '<div class="cacho' + (SEQ.length ? '' : ' vazio') + '">' + (SEQ.length ? cacho(SEQ.map(function (k) { return PAL[k][1]; })) : '') + (SEQ.length ? '<span class="gb-tag">' + SEQ.map(function (k) { return PAL[k][0]; }).join(' · ') + '</span>' : '<div class="gb-vazio"><b>Escolha suas cores<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg></b><small>A prévia do cacho aparece aqui</small></div>') + '</div>'; }
 		};
 		$('#gbCores').addEventListener('click', function (e) { var b = e.target.closest('.gb-cor'); if (!b || SEQ.length >= N || SEQ.indexOf(+b.dataset.i) > -1) return; SEQ.push(+b.dataset.i); pinta(); });
 		$('#gbSlots').addEventListener('click', function (e) { var s = e.target.closest('.gb-slot.cheio'); if (!s) return; SEQ.splice(+s.dataset.s, 1); pinta(); });

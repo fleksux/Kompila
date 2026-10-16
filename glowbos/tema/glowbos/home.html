@@ -528,6 +528,15 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .janela .sl img{translate:0 var(--py,0px)}
 .janela .sl .tx{translate:0 calc(var(--py,0px) * -.35);opacity:var(--po,1)}
 @media (prefers-reduced-motion:reduce){.janela .sl img,.janela .sl .tx{translate:none;opacity:1}}
+/* aviso de cores vazio: delicado, seta suave apontando pras cores */
+.cacho.vazio{background:#F7F3EA}
+.cc-vazio b{background:none!important;box-shadow:none!important;color:var(--vinho)!important;font:600 22px/1.2 "Inter Tight"!important;letter-spacing:-.01em;padding:0!important;animation:none!important;display:inline-flex!important;align-items:center;gap:12px}
+.cc-vazio b svg{width:34px;height:34px;color:var(--berry,#b0124f);animation:ccseta 1.8s ease-in-out infinite}
+.cc-vazio b svg.vm{display:none}
+.cc-vazio small{background:none!important;color:var(--vinho2)!important;font-weight:500!important;font-size:14px!important;padding:0!important}
+@keyframes ccseta{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(7px);opacity:1}}
+@media (max-width:980px){.cc-vazio b{flex-direction:column;gap:8px}.cc-vazio b svg.vd{display:none}.cc-vazio b svg.vm{display:block;animation-name:ccsetab}}
+@keyframes ccsetab{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(7px);opacity:1}}
 </style>
 </head>
 <body>
@@ -807,13 +816,13 @@ const svg=$('#mpsvg');
 // posições do cacho (x,y,raio)
 const POS=[[200,150,58],[135,190,54],[265,190,54],[165,110,48],[240,105,50],[200,235,52],[110,130,44],[290,135,46],[150,260,46],[255,265,48],[200,70,44],[95,225,42],[305,230,42],[200,300,40],[135,60,36],[270,55,38]];
 function pinta(){
- svg.innerHTML=SEQ.length?window.gbCacho(SEQ):window.gbCacho([0,19,0,18])+'<div class="cc-vazio"><b><i class="vd">👉</i><i class="vm">👇</i>Escolha suas cores<br><span class="vd">ao lado</span><span class="vm">aqui embaixo</span></b><small>'+T.c+' cores pro pacote de '+T.q+' balões</small></div>';
+ svg.innerHTML=SEQ.length?window.gbCacho(SEQ):'<div class="cc-vazio"><b>Escolha suas cores<svg class="vd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg><svg class="vm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M7 14l5 5 5-5"/></svg></b><small>'+T.c+' cores pro pacote de '+T.q+' balões</small></div>';
  svg.classList.toggle('vazio',!SEQ.length);
  $('#mps').innerHTML=Array.from({length:T.c},(_,i)=>{const k=SEQ[i];return k===undefined?`<div class="slot"><i>${i+1}</i>escolha</div>`:`<div class="slot cheio" data-s="${i}" title="Tirar ${CORES[k][0]}"><i>${i+1}</i><img class="bimg" src="img/b_${window.GB_ARQ[k]}.webp" alt="">${CORES[k][0]}</div>`}).join('');
  document.querySelectorAll('.cor').forEach(b=>b.classList.toggle('usada',SEQ.includes(+b.dataset.k)||SEQ.length>=T.c));
  const falta=T.c-SEQ.length,nomes=SEQ.map(i=>CORES[i][0]);
  $('#mpcount').textContent=SEQ.length+' de '+T.c;
- $('#mptag').textContent=nomes.length?(TEMA?TEMA+': ':'')+nomes.join(' · '):'Escolha as cores';
+ $('#mptag').textContent=nomes.length?(TEMA?TEMA+': ':'')+nomes.join(' · '):'';$('#mptag').style.display=nomes.length?'':'none';
  $('#mpsel').textContent=T.q+' balões · '+T.c+' cores';
  $('#mptot').textContent=T.p?R(T.p):'Sob consulta';
  const b=$('#mpadd');b.disabled=falta>0;b.textContent=falta>0?('Escolha '+(falta===1?'mais 1 cor':'mais '+falta+' cores')):(T.p?'Colocar no carrinho':'Pedir orçamento');
