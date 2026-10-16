@@ -1160,3 +1160,27 @@ body.gb-desceu .wpp svg{width:30px;height:30px}
 
 // SEO por página e GEO (dados pra Google e IAs).
 require_once __DIR__ . '/seo.php';
+
+// 16/10: o login do WordPress não fica mais à mostra. Lista de usuários da API, mapa de autores e
+// ?author=1 só pra quem está logado; sem versão do PHP no cabeçalho; HTTPS obrigatório (HSTS).
+add_filter( 'rest_endpoints', function ( $e ) {
+	if ( ! is_user_logged_in() ) {
+		unset( $e['/wp/v2/users'], $e['/wp/v2/users/(?P<id>[\d]+)'] );
+	}
+	return $e;
+} );
+add_filter( 'wp_sitemaps_add_provider', function ( $p, $nome ) {
+	return 'users' === $nome ? false : $p;
+}, 10, 2 );
+add_action( 'template_redirect', function () {
+	if ( ( is_author() || isset( $_GET['author'] ) ) && ! is_user_logged_in() ) {
+		wp_safe_redirect( home_url( '/' ), 301 );
+		exit;
+	}
+}, 1 );
+add_action( 'send_headers', function () {
+	header_remove( 'X-Powered-By' );
+	if ( is_ssl() ) {
+		header( 'Strict-Transport-Security: max-age=15552000' );
+	}
+} );
