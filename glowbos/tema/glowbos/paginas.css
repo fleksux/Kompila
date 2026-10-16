@@ -35,7 +35,7 @@
 .woocommerce-cart table.shop_table td.actions{border-bottom:0!important;padding-top:16px!important}
 .woocommerce-cart td.actions .coupon{display:flex;gap:8px}
 .woocommerce-cart td.actions .coupon .input-text{height:44px;border:1.5px solid #e6e1e4!important;border-radius:10px!important;padding:0 12px!important;width:180px!important}
-.woocommerce-cart td.actions .button{height:44px;border-radius:10px!important}
+.woocommerce-cart td.actions .button{height:44px;border-radius:10px!important;white-space:nowrap}
 .woocommerce-cart td.actions button[name=update_cart]{background:#f7f6f8!important;color:var(--vinho)!important}
 .woocommerce-cart .cart-collaterals{width:auto!important}
 .woocommerce-cart .cart-collaterals .cart_totals{width:100%!important;float:none!important;background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:20px 22px;position:sticky;top:104px}
@@ -89,7 +89,8 @@
 @media (max-width:900px){
  .woocommerce-cart .gb-main>.woocommerce,.woocommerce-account.logged-in .gb-main>.woocommerce{grid-template-columns:minmax(0,1fr)}
  .woocommerce-cart .cart-collaterals .cart_totals{position:static}
- .woocommerce-cart td.actions .coupon{flex-direction:column}.woocommerce-cart td.actions .coupon .input-text{width:100%!important}
+ .woocommerce-cart table.shop_table{width:100%!important;max-width:100%;table-layout:fixed}.woocommerce-cart table.shop_table td{min-width:0;overflow-wrap:anywhere;box-sizing:border-box}
+ .woocommerce-cart td.actions .coupon{flex-direction:row;align-items:stretch;width:auto!important;max-width:100%;box-sizing:border-box;float:none!important}.woocommerce-cart td.actions{box-sizing:border-box;max-width:100%}.woocommerce-cart td.actions .coupon .input-text{flex:1 1 0;min-width:0;width:auto!important;float:none!important;margin:0!important}.woocommerce-cart td.actions .coupon .button{flex:none;width:auto!important;white-space:nowrap;padding:0 14px!important;float:none!important;margin:0!important;line-height:1;font-size:14.5px!important}
 }
 /* campos das páginas de conta e rastreio: vence o estilo padrão do WooCommerce */
 .woocommerce-account .woocommerce form .form-row input.input-text,.woocommerce-account .woocommerce form .form-row select,.woocommerce form.track_order .form-row input.input-text{height:50px!important;border:1.5px solid #e6e1e4!important;border-radius:10px!important;padding:0 14px!important;font:500 16px Inter!important;line-height:normal!important;background:#fff!important;width:100%!important;box-sizing:border-box}
