@@ -357,6 +357,8 @@ add_filter( 'woocommerce_get_country_locale', function ( $l ) {
 	$l['BR']['postcode']['priority']  = 5;
 	$l['BR']['address_1']['priority'] = 10;
 	$l['BR']['address_2']['priority'] = 14;
+	$l['BR']['address_2']['label']    = 'Complemento';
+	$l['BR']['address_2']['label_class'] = array();
 	$l['BR']['city']['priority']      = 18;
 	$l['BR']['state']['priority']     = 19;
 	return $l;
