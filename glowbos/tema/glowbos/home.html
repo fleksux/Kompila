@@ -570,6 +570,15 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .mpt{padding-top:12px!important;overflow:visible!important}
 .deco-ft{position:relative}.deco-ft::before{content:"";position:absolute;inset:0 auto 0 0;width:38%;background:linear-gradient(90deg,#FFF0F4 0%,rgba(255,240,244,.75) 35%,rgba(255,240,244,0) 100%);pointer-events:none;z-index:1}
 @media (max-width:900px){.deco-ft::before{inset:auto 0 0 0;width:auto;height:35%;background:linear-gradient(0deg,#FFF0F4,rgba(255,240,244,0))}}
+/* 16/10: botões do banner. Vinho em degradê + rosa escuro, texto branco, sempre lado a lado (celular também) */
+.sl .acoes .btn.pri{background:linear-gradient(135deg,#5E0B2E 0%,#8E1446 55%,#B0124F 100%)!important;color:#fff!important;box-shadow:0 10px 24px rgba(94,11,46,.32)!important}
+.sl .acoes .btn.pri:hover{background:linear-gradient(135deg,#4A0824 0%,#7A1040 55%,#9E1047 100%)!important}
+.sl .acoes .btn.lin{background:#D6195F!important;color:#fff!important;border:0!important;box-shadow:0 10px 24px rgba(214,25,95,.28)!important}
+.sl .acoes .btn.lin:hover{background:#BC1452!important}
+@media (max-width:640px){
+  .sl .acoes{flex-direction:row!important;gap:8px!important}
+  .sl .acoes .btn{width:auto!important;flex:1 1 0;min-width:0;padding:0 10px!important;font-size:14.5px!important;white-space:nowrap}
+}
 </style>
 </head>
 <body>
