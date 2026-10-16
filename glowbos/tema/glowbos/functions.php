@@ -916,3 +916,43 @@ function glowbos_rodape_html() {
 <div class="rf-b"><span>© 2026 Glowbos · Mayara Festas e Decorações LTDA · CNPJ 45.147.944/0001-24 · Santo André/SP</span><a href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener">Mesma loja da Shopee ↗</a></div>
 </div></footer>';
 }
+
+// ===== Menu do celular: barra branca de ícones embaixo (no lugar das faixas rosas) =====
+add_action( 'wp_footer', function () {
+	$q   = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
+	$svg = function ( $d ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' . $d . '</svg>';
+	};
+	$on  = function ( $c ) {
+		return $c ? ' class="on"' : '';
+	};
+	$home = is_front_page();
+	$loja = function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_category() || is_product() );
+	$cart = function_exists( 'is_cart' ) && is_cart();
+	$conta = function_exists( 'is_account_page' ) && is_account_page();
+	?>
+<style>
+.mb{display:none}
+@media (max-width:760px){
+.mb{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid #efe9ec;padding:6px 4px calc(6px + env(safe-area-inset-bottom));font-family:Inter,sans-serif}
+.mb a,.mb button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;background:none;border:0;color:#77707a;font:600 10.5px Inter,sans-serif;text-decoration:none;position:relative;cursor:pointer}
+.mb svg{width:23px;height:23px}
+.mb .on{color:var(--vinho,#1a1720)}
+.mb .on::before{content:"";position:absolute;top:-6px;width:22px;height:2.5px;border-radius:2px;background:var(--forte,#ff1f7a)}
+.mb .mb-c{color:var(--forte,#ff1f7a)}
+.mb .mb-c i{width:44px;height:44px;margin-top:-18px;border-radius:50%;background:#fff;border:1.5px solid #f3d3e0;display:grid;place-items:center;box-shadow:0 6px 16px rgba(26,23,32,.10)}
+.mb em{position:absolute;top:0;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:var(--forte,#ff1f7a);color:#fff;font:800 10px/17px Inter,sans-serif;font-style:normal;text-align:center}
+body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+.mbar,.gg-fab{display:none!important}
+.wpp{bottom:calc(76px + env(safe-area-inset-bottom))!important}
+}
+</style>
+<nav class="mb" aria-label="Menu">
+	<a href="<?php echo esc_url( home_url( '/' ) ); ?>"<?php echo $on( $home ); // phpcs:ignore ?>><?php echo $svg( '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>' ); // phpcs:ignore ?>Início</a>
+	<a href="<?php echo esc_url( home_url( '/loja/' ) ); ?>"<?php echo $on( $loja ); // phpcs:ignore ?>><?php echo $svg( '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>' ); // phpcs:ignore ?>Produtos</a>
+	<button type="button" class="mb-c" data-prazo><i><?php echo $svg( '<path d="M12 3c3.3 0 6 2.6 6 6 0 3.6-3 6.5-6 7.5-3-1-6-3.9-6-7.5 0-3.4 2.7-6 6-6Z"/><path d="M12 16.5v1.5c0 1.5-1 2-2 3"/>' ); // phpcs:ignore ?></i>Monte</button>
+	<a href="<?php echo esc_url( wc_get_cart_url() ); ?>"<?php echo $on( $cart ); // phpcs:ignore ?>><?php echo $svg( '<path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/>' ); // phpcs:ignore ?><?php if ( $q ) : ?><em><?php echo (int) $q; ?></em><?php endif; ?>Carrinho</a>
+	<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>"<?php echo $on( $conta ); // phpcs:ignore ?>><?php echo $svg( '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>' ); // phpcs:ignore ?>Conta</a>
+</nav>
+	<?php
+}, 31 );

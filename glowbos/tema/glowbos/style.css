@@ -9,7 +9,7 @@ Text Domain: glowbos
 *{box-sizing:border-box}
 body{margin:0;background:#fff;color:var(--vinho);font:16px/1.6 Inter,system-ui,sans-serif}
 a{color:inherit}
-.gb-barra{background:var(--forte);color:#fff;text-align:center;font:800 14px Inter;padding:10px 12px}
+.gb-barra{background:var(--bebe);color:var(--vinho);text-align:center;font:800 14px Inter;padding:10px 12px}
 .gb-head{background:#fff;border-bottom:1px solid #f1e6ea;position:sticky;top:0;z-index:30}
 .gb-hd{max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:28px;height:84px}
 .gb-logo{align-self:flex-start;margin-top:6px;margin-bottom:-30px;position:relative;z-index:5}
