@@ -23,7 +23,7 @@ for x in json.loads((FEED / 'indice.json').read_text()):
     if x['tipo'] == 'reel':
         sl = [dict(tipo='video', src=pasta + 'reel.mp4')]
     else:
-        sl = [dict(tipo='postado', img=pasta + f'{i:02d}.jpg') for i in range(1, x['n'] + 1)]
+        sl = [dict(tipo='video', src=pasta + f'{i:02d}.mp4') for i in range(1, x['n'] + 1)]  # todo slide tem movimento
     POSTS.append(dict(local='São Paulo', leg=legf(x['slug']), slides=sl, slug=x['slug']))
 POSTS.append(VOT)
 for i, p_ in enumerate(POSTS):

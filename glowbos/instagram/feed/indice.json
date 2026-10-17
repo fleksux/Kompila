@@ -1,142 +1,23 @@
 [
  {
-  "slug": "a1_esqueceu",
+  "slug": "a1_pai_saiu_tarde",
   "tipo": "carrossel",
   "n": 6,
   "dur": 0,
   "ordem": 1
  },
  {
-  "slug": "a2_reel_chegahoje",
+  "slug": "a2_reel_pai",
   "tipo": "reel",
   "n": 0,
-  "dur": 11,
+  "dur": 12.5,
   "ordem": 2
  },
  {
-  "slug": "a3_comofunciona",
+  "slug": "a3_mora_longe",
   "tipo": "carrossel",
-  "n": 5,
+  "n": 6,
   "dur": 0,
   "ordem": 3
- },
- {
-  "slug": "b1_comecaaqui",
-  "tipo": "carrossel",
-  "n": 6,
-  "dur": 0,
-  "ordem": 4
- },
- {
-  "slug": "b2_reel_arco",
-  "tipo": "reel",
-  "n": 0,
-  "dur": 12,
-  "ordem": 5
- },
- {
-  "slug": "b3_tamanhos",
-  "tipo": "carrossel",
-  "n": 6,
-  "dur": 0,
-  "ordem": 6
- },
- {
-  "slug": "c1_monteseu",
-  "tipo": "carrossel",
-  "n": 5,
-  "dur": 0,
-  "ordem": 7
- },
- {
-  "slug": "c2_marca_tres_cores",
-  "tipo": "carrossel",
-  "n": 1,
-  "dur": 0,
-  "ordem": 8
- },
- {
-  "slug": "c3_combinacoes",
-  "tipo": "carrossel",
-  "n": 6,
-  "dur": 0,
-  "ordem": 9
- },
- {
-  "slug": "d1_sets_prontos",
-  "tipo": "carrossel",
-  "n": 6,
-  "dur": 0,
-  "ordem": 10
- },
- {
-  "slug": "d2_reel_sets",
-  "tipo": "reel",
-  "n": 0,
-  "dur": 12,
-  "ordem": 11
- },
- {
-  "slug": "d3_numeros",
-  "tipo": "carrossel",
-  "n": 5,
-  "dur": 0,
-  "ordem": 12
- },
- {
-  "slug": "e1_primeira_festa",
-  "tipo": "carrossel",
-  "n": 6,
-  "dur": 0,
-  "ordem": 13
- },
- {
-  "slug": "e2_marca_cha",
-  "tipo": "marca",
-  "n": 1,
-  "dur": 0,
-  "ordem": 14
- },
- {
-  "slug": "e3_cores_do_tema",
-  "tipo": "carrossel",
-  "n": 6,
-  "dur": 0,
-  "ordem": 15
- },
- {
-  "slug": "f1_kits",
-  "tipo": "carrossel",
-  "n": 6,
-  "dur": 0,
-  "ordem": 16
- },
- {
-  "slug": "f2_reel_candy",
-  "tipo": "reel",
-  "n": 0,
-  "dur": 12,
-  "ordem": 17
- },
- {
-  "slug": "f3_cromados",
-  "tipo": "carrossel",
-  "n": 5,
-  "dur": 0,
-  "ordem": 18
- },
- {
-  "slug": "g1_avaliacoes",
-  "tipo": "carrossel",
-  "n": 6,
-  "dur": 0,
-  "ordem": 19
- },
- {
-  "slug": "g2_prazer",
-  "tipo": "carrossel",
-  "n": 1,
-  "dur": 0,
-  "ordem": 20
  }
 ]

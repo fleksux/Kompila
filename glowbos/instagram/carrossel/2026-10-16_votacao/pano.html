@@ -58,6 +58,17 @@ body{background:#ccc}
 .fim .cm p b{font-weight:800;color:var(--ink)}
 .fim .cm p i{font-style:normal;color:var(--rosa);font-weight:800}
 .fim .ob{position:absolute;left:96px;right:96px;top:1130px;font:700 50px/1.1 Caveat;color:var(--vinho)}
+
+/* movimento (17/10): texto sobe, foto aproxima, polaroid flutua */
+@keyframes sobe{from{opacity:0;transform:translateY(46px)}to{opacity:1;transform:none}}
+@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.08)}}
+@keyframes flut{from{translate:0 0}to{translate:0 -16px}}
+.capa h1,.capa p,.fim h2,.fim .cm,.fim .ob,.post .hd,.post .ac,.post .tx,.nota{animation:sobe .9s cubic-bezier(.2,.8,.2,1) both}
+.capa h1,.fim h2,.post .hd{animation-delay:.2s}.capa p,.post .ac,.fim .cm{animation-delay:.5s}.post .tx,.fim .ob{animation-delay:.7s}.nota{animation-delay:1s}
+.ft img{animation:zoom 5s linear both}
+.pol{animation:flut 2.5s ease-in-out infinite alternate}.pol:nth-child(2n){animation-delay:-1.2s}
+.num{animation:sobe .7s .9s both}
+.fim .gr div{animation:sobe .7s both}
 </style></head><body>
 <div id="pano">
   <svg id="fita" viewBox="0 0 12960 1440" preserveAspectRatio="none"><path id="fp" d="" fill="none" stroke="#FF8DB8" stroke-width="16" stroke-linecap="round" opacity=".55"/></svg>
