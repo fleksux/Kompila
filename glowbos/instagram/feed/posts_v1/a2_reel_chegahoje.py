@@ -21,8 +21,8 @@ css = """
 .cena .foto{position:absolute;left:0;right:0;top:0;height:1280px;overflow:hidden}
 .cena .foto img{width:100%;height:100%;object-fit:cover;animation:zoom 2.6s linear both}
 @keyframes zoom{from{transform:scale(1)}to{transform:scale(1.08)}}
-.cena .hora{position:absolute;left:96px;top:1120px;font:800 260px/1 'Bricolage Grotesque';letter-spacing:-.06em;color:var(--pink);text-shadow:0 10px 40px rgba(0,0,0,.18)}
-.cena .frase{position:absolute;left:96px;right:96px;top:1420px;font:800 64px/1.08 'Bricolage Grotesque';letter-spacing:-.03em;color:var(--ink)}
+.cena .hora{position:absolute;left:96px;top:1120px;font:900 260px/1 'Inter Tight';letter-spacing:-.06em;color:var(--pink);text-shadow:0 10px 40px rgba(0,0,0,.18)}
+.cena .frase{position:absolute;left:96px;right:96px;top:1420px;font:800 64px/1.08 'Inter Tight';letter-spacing:-.03em;color:var(--ink)}
 .fim{position:absolute;inset:0;background:var(--berry);padding:520px 96px 0;opacity:0;animation:fim 1.4s ease-out both;animation-delay:9.2s}
 @keyframes fim{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
 .fim .p{color:rgba(255,255,255,.88)}

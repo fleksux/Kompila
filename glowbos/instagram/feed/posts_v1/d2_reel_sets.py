@@ -13,21 +13,21 @@ for t0, foto, nome, idade, cor in CENAS:
   <div class="foto"><img src="{S}{foto}" style="animation-delay:{t0}s"></div>
   <div class="nome" style="animation-delay:{t0+.35}s"><b>{nome}</b><span style="background:{cor}">{idade}</span></div></div>"""
 html += f"""<div class="fim"><div class="k" style="color:#fff">sob encomenda</div>
-<h1 class="t" style="color:#fff;font-size:112px;margin-top:18px">Escolha o tema<br>{mk('*e a idade.*')}</h1>
+<h1 class="t" style="color:#fff;font-size:120px;margin-top:18px">Escolha o tema<br>{mk('*e a idade.*')}</h1>
 <p class="p" style="margin-top:34px">Número gigante, base de balões, figuras e buquê, tudo combinando.</p>
 <span class="pill br" style="margin-top:56px">glowbos.com.br</span></div>"""
 css = """
-.topo{position:absolute;left:96px;top:480px;z-index:5}
-.cena{position:absolute;left:0;right:0;top:0;height:1920px;opacity:0;animation:cena 2.7s linear both}
+.topo{position:absolute;left:96px;top:250px;z-index:5}
+.cena{position:absolute;left:0;right:0;top:420px;height:1500px;opacity:0;animation:cena 2.7s linear both}
 @keyframes cena{0%{opacity:0}8%{opacity:1}90%{opacity:1}100%{opacity:0}}
-.cena .foto{position:absolute;left:96px;right:96px;top:640px;height:720px;border-radius:34px;overflow:hidden;box-shadow:0 24px 60px rgba(29,26,31,.18)}
+.cena .foto{position:absolute;left:96px;right:96px;top:0;height:1180px;border-radius:34px;overflow:hidden;box-shadow:0 24px 60px rgba(29,26,31,.18)}
 .cena .foto img{width:100%;height:100%;object-fit:cover;animation:zoom 2.7s linear both}
 @keyframes zoom{from{transform:scale(1.12)}to{transform:scale(1)}}
-.cena .nome{position:absolute;left:96px;right:96px;top:1394px;display:flex;align-items:center;justify-content:space-between;gap:20px;animation:sobe .6s ease-out both}
+.cena .nome{position:absolute;left:96px;right:96px;top:1220px;display:flex;align-items:center;justify-content:space-between;gap:20px;animation:sobe .6s ease-out both}
 @keyframes sobe{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
-.cena .nome b{font:800 58px/1 'Bricolage Grotesque';letter-spacing:-.04em}
+.cena .nome b{font:900 64px/1 'Inter Tight';letter-spacing:-.04em}
 .cena .nome span{flex:none;height:66px;line-height:66px;padding:0 28px;border-radius:99px;color:#fff;font:800 28px Inter}
-.fim{position:absolute;inset:0;background:var(--grafite);padding:620px 96px 0;opacity:0;animation:fim 1.2s ease-out both;animation-delay:9.8s;z-index:8}
+.fim{position:absolute;inset:0;background:var(--grafite);padding:600px 96px 0;opacity:0;animation:fim 1.2s ease-out both;animation-delay:9.8s;z-index:8}
 @keyframes fim{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
 .fim .p{color:rgba(255,255,255,.88)}
 """

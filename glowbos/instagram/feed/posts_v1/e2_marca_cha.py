@@ -11,9 +11,9 @@ glowbos.com.br · chega hoje em SP e Grande SP
 #charevelacao #chadebebe #baloes #festaemcasa #glowbos
 """, slides=[
  dict(fundo='lilas', pe='', sem_topo=True, html=f"""
-  <img class="lg" src="{LOGO}" alt="" style="left:50%;transform:translateX(-50%);top:160px;height:74px">
-  <div class="ft" style="left:215px;top:270px;width:650px;height:720px;border-radius:325px 325px 30px 30px"><img src="{IMG}cena_02_cha_revelacao.webp" style="object-position:50% 30%"></div>
-  <div class="blk" style="top:1030px;text-align:center"><h1 class="t" style="font-size:78px">Menino ou menina?<br>{mk('*A cor é sua.*')}</h1></div>
-  <span class="pill" style="position:absolute;right:120px;top:860px;transform:rotate(6deg)">rosa</span>
-  <span class="pill" style="position:absolute;left:120px;top:700px;background:#7FB4E8;transform:rotate(-6deg)">azul</span>"""),
+  <img class="lg" src="{LOGO}" alt="" style="left:50%;transform:translateX(-50%);top:60px;height:90px">
+  <div class="ft" style="left:190px;top:190px;width:700px;height:830px;border-radius:350px 350px 30px 30px"><img src="{IMG}cena_02_cha_revelacao.webp" style="object-position:50% 30%"></div>
+  <div class="blk" style="top:1070px;text-align:center"><h1 class="t" style="font-size:82px">Menino ou menina?<br>{mk('*A cor é sua.*')}</h1></div>
+  <span class="pill" style="position:absolute;right:96px;top:900px;transform:rotate(6deg)">rosa</span>
+  <span class="pill" style="position:absolute;left:96px;top:760px;background:#7FB4E8;transform:rotate(-6deg)">azul</span>"""),
 ])

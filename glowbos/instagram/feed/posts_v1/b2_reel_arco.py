@@ -25,7 +25,7 @@ css = """
 @keyframes topo{0%,72%{opacity:1}75%,100%{opacity:0}}
 .passo{position:absolute;left:96px;right:96px;top:1380px;display:flex;align-items:center;gap:28px;background:#fff;border-radius:30px;padding:30px 34px;box-shadow:0 18px 50px rgba(29,26,31,.18)}
 .passo .num{width:110px;height:110px;font-size:60px}
-.passo .frase{font:800 72px/1 'Bricolage Grotesque';letter-spacing:-.04em}
+.passo .frase{font:900 72px/1 'Inter Tight';letter-spacing:-.04em}
 .fim{position:absolute;inset:0;background:var(--pink);padding:520px 96px 0;opacity:0;animation:fim 1.2s ease-out both;animation-delay:10.6s;z-index:8}
 @keyframes fim{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
 .fim .p{color:rgba(255,255,255,.88)}

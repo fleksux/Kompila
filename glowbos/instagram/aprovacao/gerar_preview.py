@@ -18,12 +18,14 @@ VOT = dict(local='São Paulo', leg=leg('2026-10-16_votacao/legenda.txt'),
 FEED = BASE.parent / 'feed'
 def legf(slug): return html.escape((FEED / slug / 'legenda.txt').read_text().strip()).replace('\n', '<br>')
 POSTS = []
-for x in json.loads((FEED / 'indice.json').read_text()):
+# linha nova (indice.json) em cima; os 20 de 16/10 (indice_v1.json, do jeito que ele viu) embaixo
+for x in json.loads((FEED / 'indice.json').read_text()) + json.loads((FEED / 'indice_v1.json').read_text()):
     pasta = '../feed/' + x['slug'] + '/export/'
     if x['tipo'] == 'reel':
         sl = [dict(tipo='video', src=pasta + 'reel.mp4')]
     else:
-        sl = [dict(tipo='video', src=pasta + f'{i:02d}.mp4') for i in range(1, x['n'] + 1)]  # todo slide tem movimento
+        ex = FEED / x['slug'] / 'export'
+        sl = [dict(tipo='video', src=pasta + f'{i:02d}.mp4') if (ex / f'{i:02d}.mp4').exists() else dict(tipo='postado', img=pasta + f'{i:02d}.jpg') for i in range(1, x['n'] + 1)]
     POSTS.append(dict(local='São Paulo', leg=legf(x['slug']), slides=sl, slug=x['slug']))
 POSTS.append(VOT)
 for i, p_ in enumerate(POSTS):

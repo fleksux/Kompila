@@ -11,8 +11,8 @@ Salva pra usar no próximo pacote 👉 glowbos.com.br
 #dicasdefesta #arcodebaloes #festaemcasa #glowbos
 """, slides=[
  dict(fundo='lilasf', pe='', html=f"""
-  <div class="ftc" style="left:300px;top:260px;width:480px;height:480px;border-width:12px"><img src="{ESP}cores.jpg" style="object-position:50% 38%"></div>
-  <div style="position:absolute;left:96px;right:96px;top:790px;text-align:center"><div class="k">dica da especialista</div>
+  <div class="ftc" style="left:290px;top:180px;width:500px;height:500px;border-width:12px"><img src="{ESP}cores.jpg" style="object-position:50% 38%"></div>
+  <div style="position:absolute;left:96px;right:96px;top:740px;text-align:center"><div class="k">dica da especialista</div>
   <h1 class="t" style="color:#fff;margin-top:20px">3 cores e<br>uma {mk('*neutra*')}</h1>
   <p class="p" style="margin-top:26px">Escolha 3 cores do tema e some branco, marfim ou nude. O arco fica leve e o tema aparece mais.</p></div>"""),
 ])

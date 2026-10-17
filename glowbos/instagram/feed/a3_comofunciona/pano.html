@@ -1,4 +1,4 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>a3_comofunciona</title><link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,700;0,800;0,900;1,800&family=Inter:wght@500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet"><style>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>a3_comofunciona</title><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Serif:ital@0;1&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet"><style>
 :root{--berry:#B0124F;--pink:#FF1F7A;--rosa:#FF8DB8;--pessego:#FFC2A1;--lilas:#B99CF0;--creme:#F7F3EA;--grafite:#1d1a1f;--bebe:#FFF2F6;--ink:#1d1a1f;--mut:#5f5a63}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#bbb}
@@ -11,23 +11,23 @@ body{background:#bbb}
 .f-berry{background:var(--berry);color:#fff}.f-pink{background:var(--pink);color:#fff}.f-grafite{background:var(--grafite);color:#fff}
 .f-lilasf{background:var(--lilas);color:#fff}.f-pessegof{background:var(--pessego)}
 /* topo e rodapé fixos */
-.lg{position:absolute;left:96px;top:70px;height:70px;z-index:7}
+.lg{position:absolute;left:96px;top:150px;height:58px;z-index:7}
 .f-berry .lg,.f-pink .lg,.f-grafite .lg,.f-lilasf .lg{filter:drop-shadow(0 4px 14px rgba(0,0,0,.18))}
-.pg{position:absolute;right:96px;top:92px;font:700 22px Inter;letter-spacing:.06em;opacity:.65;z-index:7}
+.pg{position:absolute;right:96px;top:164px;font:700 22px Inter;letter-spacing:.06em;opacity:.65;z-index:7}
 .faixa{position:absolute;left:0;bottom:0;height:16px;z-index:8;background:linear-gradient(90deg,var(--berry) 0 20%,var(--pink) 20% 40%,var(--rosa) 40% 60%,var(--pessego) 60% 80%,var(--lilas) 80% 100%);background-size:1080px 16px}
-.site{position:absolute;left:96px;bottom:60px;font:700 24px Inter;opacity:.7;z-index:7}
-.seta{position:absolute;right:96px;bottom:52px;font:700 44px Caveat;z-index:7}
+.site{position:absolute;left:96px;bottom:150px;font:700 24px Inter;opacity:.7;z-index:7}
+.seta{position:absolute;right:96px;bottom:150px;font:italic 400 40px 'Instrument Serif';z-index:7}
 /* tipografia */
 .k{font:800 22px Inter;letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
 .f-berry .k,.f-pink .k,.f-grafite .k,.f-lilasf .k{color:#fff;opacity:.85}
-.t{font:900 92px/.98 "Inter Tight";letter-spacing:-.045em}
-.t2{font:900 68px/1 "Inter Tight";letter-spacing:-.04em}
-.t3{font:800 44px/1.08 "Inter Tight";letter-spacing:-.03em}
-.m{font:700 1.18em/0.8 Caveat;color:var(--pink);letter-spacing:0;display:inline-block;transform:rotate(-2deg);margin-right:.12em}
+.t{font:800 92px/.96 'Bricolage Grotesque';letter-spacing:-.035em}
+.t2{font:800 66px/1 'Bricolage Grotesque';letter-spacing:-.03em}
+.t3{font:700 44px/1.08 'Bricolage Grotesque';letter-spacing:-.02em}
+.m{font:italic 400 1.06em/1 'Instrument Serif';color:var(--pink);letter-spacing:-.01em}
 .f-berry .m,.f-pink .m,.f-grafite .m{color:#FFD0E1}.f-lilasf .m{color:#fff}
 .p{font:600 34px/1.38 Inter;color:var(--mut)}
 .f-berry .p,.f-pink .p,.f-grafite .p,.f-lilasf .p{color:rgba(255,255,255,.86)}
-.mao{font:700 46px/1.05 Caveat;color:var(--berry)}
+.mao{font:italic 400 52px/1.05 'Instrument Serif';color:var(--berry)}
 .f-berry .mao,.f-pink .mao,.f-grafite .mao{color:#FFD0E1}
 .blk{position:absolute;left:96px;right:96px}
 /* fotos */
@@ -35,18 +35,18 @@ body{background:#bbb}
 .ft img,.ftc img,.pol img{width:100%;height:100%;object-fit:cover;display:block}
 .ftc{position:absolute;overflow:hidden;border-radius:50%;box-shadow:0 18px 40px rgba(29,26,31,.18);border:10px solid #fff}
 .pol{position:absolute;background:#fff;padding:16px 16px 64px;border-radius:6px;box-shadow:0 18px 44px rgba(29,26,31,.18)}
-.pol i{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:700 34px Caveat;color:var(--berry);font-style:normal}
+.pol i{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:italic 400 34px 'Instrument Serif';color:var(--berry)}
 .full{position:absolute;inset:0}.full img{width:100%;height:100%;object-fit:cover}
 .vel{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(180deg,rgba(29,26,31,0),rgba(29,26,31,.82) 70%)}
 .velc{position:absolute;left:0;right:0;bottom:0;height:58%;background:linear-gradient(180deg,rgba(247,243,234,0),var(--creme) 62%)}
 /* peças */
 .pill{display:inline-flex;align-items:center;gap:12px;height:72px;padding:0 30px;border-radius:99px;background:var(--pink);color:#fff;font:800 30px Inter}
 .pill.br{background:#fff;color:var(--berry)}.pill.gr{background:var(--grafite)}
-.num{display:grid;place-items:center;width:96px;height:96px;border-radius:50%;background:var(--pink);color:#fff;font:900 52px "Inter Tight";flex:none}
+.num{display:grid;place-items:center;width:96px;height:96px;border-radius:50%;background:var(--pink);color:#fff;font:800 50px 'Bricolage Grotesque';flex:none}
 .num.out{background:transparent;border:5px solid currentColor;color:var(--pink)}
 .cartao{position:absolute;background:#fff;border-radius:30px;padding:34px 36px;box-shadow:0 16px 44px rgba(29,26,31,.12);color:var(--ink)}
 .cartao .p{color:var(--mut)}
-.preco{font:900 64px "Inter Tight";letter-spacing:-.03em;color:var(--pink)}
+.preco{font:800 64px 'Bricolage Grotesque';letter-spacing:-.02em;color:var(--pink)}
 .preco small{font:700 26px Inter;color:var(--mut);letter-spacing:0;margin-right:8px}
 .estrela{color:#F5A623;letter-spacing:3px;font:800 30px Inter}
 /* especialista: selo com foto redonda */
@@ -59,24 +59,34 @@ body{background:#bbb}
 .lista .num{width:72px;height:72px;font-size:38px}
 .bolha{position:absolute;background:#fff;border-radius:34px 34px 34px 8px;padding:30px 34px;font:600 32px/1.38 Inter;color:var(--ink);box-shadow:0 14px 36px rgba(29,26,31,.14)}
 .bolha b{font-weight:800}
+/* movimento (5 s por slide; o render grava em vídeo) */
+@keyframes sobe{from{opacity:0;transform:translateY(46px)}to{opacity:1;transform:none}}
+@keyframes zoom{from{transform:scale(1.0)}to{transform:scale(1.09)}}
+@keyframes flut{from{translate:0 0}to{translate:0 -16px}}
+.sl .k,.sl .t,.sl .t2,.sl .t3,.sl .p,.sl .mao,.sl .pill,.sl .preco,.sl .cartao,.sl .bolha,.sl .lista li,.sl .num,.sl .esp{animation:sobe .9s cubic-bezier(.2,.8,.2,1) both}
+.sl .k{animation-delay:.15s}.sl .t,.sl .t2{animation-delay:.3s}.sl .t3,.sl .mao{animation-delay:.45s}.sl .p,.sl .preco{animation-delay:.6s}
+.sl .cartao,.sl .bolha{animation-delay:.75s}.sl .pill{animation-delay:.9s}
+.sl .lista li:nth-child(1){animation-delay:.5s}.sl .lista li:nth-child(2){animation-delay:.7s}.sl .lista li:nth-child(3){animation-delay:.9s}.sl .lista li:nth-child(4){animation-delay:1.1s}.sl .lista li:nth-child(5){animation-delay:1.3s}
+.ft img,.full img,.ftc img{animation:zoom 5s linear both}
+.pol,.ftc,.x{animation:flut 2.5s ease-in-out infinite alternate}
+.pol:nth-of-type(2n){animation-delay:-1.2s}
 </style></head><body><div id="pano" style="width:5400px"><section class="sl f-creme" style="left:0px">
-  <div class="ft" style="left:500px;top:170px;width:580px;height:1000px;border-radius:30px 0 0 30px"><img src="../especialista/dica.jpg" style="object-position:40% 20%"></div>
+  <div class="ft" style="left:500px;top:250px;width:580px;height:950px;border-radius:30px 0 0 30px"><img src="../especialista/dica.jpg" style="object-position:40% 20%"></div>
   <div class="blk" style="top:300px;right:610px"><div class="k">nunca comprou?</div>
   <h1 class="t" style="margin-top:22px;font-size:70px">Como funciona o <span class="m">chega hoje</span></h1>
-  <p class="p" style="margin-top:28px">3 passos. Leva 2 minutos.</p></div>
-  <div class="mao" style="position:absolute;left:96px;top:1220px">a especialista te mostra →</div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">1/5</span><span class="seta">arrasta →</span></section><section class="sl f-bebe" style="left:1080px">
-  <div class="blk" style="top:200px;display:flex;gap:28px;align-items:center"><span class="num">1</span><h2 class="t2">Escolhe <span class="m">no site</span></h2></div>
-  <div class="ft" style="left:96px;top:420px;width:430px;height:540px"><img src="../../../tema/glowbos/img/arco_09_candy_algodao.webp"></div>
-  <div class="ft" style="left:554px;top:420px;width:430px;height:255px"><img src="../../../tema/glowbos/img/pack_azul_verm_amar.webp"></div>
-  <div class="ft" style="left:554px;top:705px;width:430px;height:255px"><img src="../../../tema/glowbos/img/numero_5_rose.webp" style="object-position:50% 25%"></div>
-  <div class="blk" style="top:1010px"><p class="p" style="color:var(--ink)"><b>Pacote, kit de arco, número ou set pronto.</b> Você escolhe as cores, a gente separa.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">2/5</span><span class="seta">arrasta →</span></section><section class="sl f-pessego" style="left:2160px">
-  <div class="blk" style="top:200px;display:flex;gap:28px;align-items:center"><span class="num">2</span><h2 class="t2">Paga <span class="m">até 12h</span></h2></div>
-  <div class="blk" style="top:470px;font:900 330px/0.85 'Inter Tight';letter-spacing:-.06em;color:var(--berry)">12:00</div>
-  <div class="cartao" style="left:96px;right:96px;top:860px"><p class="p" style="color:var(--ink)"><b>Pagou até o meio-dia, sai hoje.</b><br>Depois disso, chega no dia seguinte. O carrinho já mostra quando chega.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">3/5</span><span class="seta">arrasta →</span></section><section class="sl f-lilas" style="left:3240px">
-  <div class="blk" style="top:200px;display:flex;gap:28px;align-items:center"><span class="num">3</span><h2 class="t2">O motoboy <span class="m">entrega</span></h2></div>
-  <div class="ft" style="left:96px;top:420px;width:888px;height:560px"><img src="../../../tema/glowbos/img/hero_entrega_2.webp" style="object-position:70% 40%"></div>
-  <div class="blk" style="top:1030px"><p class="p" style="color:var(--ink)"><b>SP e Grande SP, frete R$ 10.</b> Fora daqui vai pelos Correios, PAC ou SEDEX.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">4/5</span><span class="seta">arrasta →</span></section><section class="sl f-rosa" style="left:4320px">
-  <div class="ftc" style="left:96px;top:220px;width:300px;height:300px"><img src="../especialista/dica.jpg" style="object-position:45% 18%"></div>
-  <div class="mao" style="position:absolute;left:430px;top:300px">dica da especialista</div>
-  <div class="bolha" style="left:96px;right:96px;top:580px;font-size:40px"><b>Festa no sábado?</b> Pede na sexta de manhã. Chega no mesmo dia, você enche à noite e no sábado só monta.</div>
-  <div class="blk" style="top:1000px;display:flex;gap:18px;flex-wrap:wrap"><span class="pill">glowbos.com.br</span><span class="pill gr">chega hoje em SP</span></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">5/5</span><span class="site">glowbos.com.br</span></section><div class="faixa" style="width:5400px"></div></div></body></html>
+  <p class="p" style="margin-top:28px">3 passos, 2 minutos.</p><div class="mao" style="margin-top:46px">a especialista<br>te mostra →</div></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">1/5</span><span class="seta">arrasta →</span></section><section class="sl f-bebe" style="left:1080px">
+  <div class="blk" style="top:270px;display:flex;gap:28px;align-items:center"><span class="num">1</span><h2 class="t2">Escolhe <span class="m">no site</span></h2></div>
+  <div class="ft" style="left:96px;top:470px;width:430px;height:520px"><img src="../../../tema/glowbos/img/arco_09_candy_algodao.webp"></div>
+  <div class="ft" style="left:554px;top:470px;width:430px;height:245px"><img src="../../../tema/glowbos/img/pack_azul_verm_amar.webp"></div>
+  <div class="ft" style="left:554px;top:745px;width:430px;height:245px"><img src="../../../tema/glowbos/img/numero_5_rose.webp" style="object-position:50% 25%"></div>
+  <div class="blk" style="top:1030px"><p class="p" style="color:var(--ink)"><b>Pacote, kit de arco, número ou set pronto.</b> Você escolhe as cores, a gente separa.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">2/5</span><span class="seta">arrasta →</span></section><section class="sl f-pessego" style="left:2160px">
+  <div class="blk" style="top:270px;display:flex;gap:28px;align-items:center"><span class="num">2</span><h2 class="t2">Paga <span class="m">até 12h</span></h2></div>
+  <div class="blk" style="top:500px;font:800 330px/0.85 'Bricolage Grotesque';letter-spacing:-.06em;color:var(--berry)">12:00</div>
+  <div class="cartao" style="left:96px;right:96px;top:880px"><p class="p" style="color:var(--ink)"><b>Pagou até o meio-dia, sai hoje.</b><br>Depois disso, chega no dia seguinte. O carrinho já mostra quando chega.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">3/5</span><span class="seta">arrasta →</span></section><section class="sl f-lilas" style="left:3240px">
+  <div class="blk" style="top:270px;display:flex;gap:28px;align-items:center"><span class="num">3</span><h2 class="t2">O motoboy <span class="m">entrega</span></h2></div>
+  <div class="ft" style="left:96px;top:470px;width:888px;height:530px"><img src="../../../tema/glowbos/img/hero_entrega_2.webp" style="object-position:70% 40%"></div>
+  <div class="blk" style="top:1040px"><p class="p" style="color:var(--ink)"><b>SP e Grande SP, frete R$ 10.</b> Fora daqui vai pelos Correios, PAC ou SEDEX.</p></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">4/5</span><span class="seta">arrasta →</span></section><section class="sl f-rosa" style="left:4320px">
+  <div class="ftc" style="left:96px;top:270px;width:300px;height:300px"><img src="../especialista/dica.jpg" style="object-position:45% 18%"></div>
+  <div class="mao" style="position:absolute;left:430px;top:390px">dica da especialista</div>
+  <div class="bolha" style="left:96px;right:96px;top:640px;font-size:40px"><b>Festa no sábado?</b> Pede na sexta de manhã. Chega no mesmo dia, você enche à noite e no sábado só monta.</div>
+  <div class="blk" style="top:1040px;display:flex;gap:18px;flex-wrap:wrap"><span class="pill">glowbos.com.br</span><span class="pill gr">chega hoje em SP</span></div><img class="lg" src="../../../tema/glowbos/img/D_logo_crop.png" alt=""><span class="pg">5/5</span><span class="site">glowbos.com.br</span></section><div class="faixa" style="width:5400px"></div></div></body></html>
