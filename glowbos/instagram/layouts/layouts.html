@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Glowbos 20 layouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* 20 layouts, mesma foto, mesmo texto, identidade do manual da Glowbos (Fredoka 700 + Nunito; rosa #F93388, rosa claro #FFD8E8,
+   branco, preto; degradês das linhas; Halloween em outubro). Texto e logo sempre dentro da área segura: 96 px laterais, 150 px topo/base. */
+:root{--rosa:#F93388;--rosaf:#FFD8E8;--ink:#1a1418;--mut:#5c5258;--por:linear-gradient(135deg,#F87838,#A040C8);--oceano:linear-gradient(135deg,#60E8F0,#4080F8);
+--citrico:linear-gradient(135deg,#98E0B8,#F8D830);--algodao:linear-gradient(160deg,#F8C8D8,#C0D8F0);--neon:linear-gradient(160deg,#100038,#08B0F8);--noite:#201040;--abobora:#F07000;--roxo:#502070;--vela:#F8A810}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#999;display:flex;flex-wrap:wrap;gap:40px;padding:40px;font-family:Nunito,sans-serif;color:var(--ink)}
+.L{position:relative;width:1080px;height:1440px;overflow:hidden;background:#fff;flex:none}
+.L img{display:block}
+.F{font-family:Fredoka;font-weight:700;letter-spacing:-.005em}
+.cap{font:900 22px Nunito;letter-spacing:.18em;text-transform:uppercase}
+.sub{font:600 34px/1.4 Nunito}
+.btn{display:inline-flex;align-items:center;height:76px;padding:0 34px;border-radius:99px;font:800 28px Nunito;white-space:nowrap}
+.ab{position:absolute}
+.cover{width:100%;height:100%;object-fit:cover}
+.foto{background:url(foto.jpg) center 30%/cover}
+</style></head><body>
+
+<!-- 01 · Editorial: foto inteira, degradê embaixo, título grande -->
+<section class="L" id="l01">
+  <img class="cover ab" style="inset:0" src="foto.jpg">
+  <div class="ab" style="inset:auto 0 0 0;height:66%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.82) 70%)"></div>
+  <img class="ab" src="marca/icone_G.png" style="left:96px;top:150px;width:120px">
+  <div class="ab" style="left:96px;right:96px;bottom:150px;color:#fff">
+    <div class="cap" style="color:var(--rosaf)">Festa amanhã?</div>
+    <h1 class="F" style="font-size:118px;line-height:.98;margin-top:22px">Dá tempo.</h1>
+    <p class="sub" style="margin-top:22px;color:rgba(255,255,255,.9)">Pagou até 12h, chega hoje em SP e Grande SP.</p>
+  </div>
+</section>
+
+<!-- 02 · Polaroid inclinada no rosa claro -->
+<section class="L" id="l02" style="background:var(--rosaf)">
+  <img class="ab" src="marca/chiclete_00_original_rosa.png" style="left:50%;top:150px;width:250px;transform:translateX(-50%)">
+  <div class="ab" style="left:150px;top:380px;width:780px;height:680px;background:#fff;padding:22px 22px 0;transform:rotate(-3.5deg);box-shadow:0 30px 60px rgba(249,51,136,.25)">
+    <img class="cover" src="foto.jpg" style="height:560px;object-position:50% 25%">
+    <div class="F" style="font-size:44px;color:var(--rosa);text-align:center;margin-top:20px">a festa é amanhã</div></div>
+  <h1 class="F ab" style="left:96px;right:96px;bottom:150px;text-align:center;font-size:104px;color:var(--ink)">Dá tempo.</h1>
+</section>
+
+<!-- 03 · Dividido: foto à esquerda, bloco rosa à direita -->
+<section class="L" id="l03" style="background:var(--rosa)">
+  <img class="cover ab" style="left:0;top:0;width:560px;height:1440px;object-position:42% 30%" src="foto.jpg">
+  <img class="ab" src="marca/simples_02_branco_no_preto.png" style="left:620px;top:150px;width:220px">
+  <div class="ab" style="left:620px;right:96px;top:520px;color:#fff">
+    <div class="cap">Festa amanhã?</div>
+    <h1 class="F" style="font-size:96px;line-height:1;margin-top:26px">Dá<br>tempo.</h1>
+    <p class="sub" style="margin-top:30px;color:rgba(255,255,255,.92)">Pagou até 12h, chega hoje.</p>
+  </div>
+  <div class="ab cap" style="left:620px;bottom:150px;color:#fff">SP e Grande SP</div>
+</section>
+
+<!-- 04 · Foto em arco (como o painel de festa) -->
+<section class="L" id="l04" style="background:#fff">
+  <div class="ab" style="left:150px;right:150px;top:150px;height:880px;border-radius:390px 390px 0 0;overflow:hidden;background:var(--rosaf)">
+    <img class="cover" src="foto.jpg" style="object-position:50% 20%"></div>
+  <div class="ab" style="left:96px;right:96px;top:1070px;text-align:center">
+    <h1 class="F" style="font-size:88px;color:var(--rosa)">Dá tempo.</h1>
+    <p class="sub" style="margin-top:12px;color:var(--mut)">A festa é amanhã. Pagou até 12h, chega hoje.</p></div>
+</section>
+
+<!-- 05 · Círculo gigante com o texto girando em volta -->
+<section class="L" id="l05" style="background:var(--rosaf)">
+  <div class="ab" style="left:200px;top:300px;width:680px;height:680px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 18px #fff"><img class="cover" src="foto.jpg" style="object-position:50% 22%"></div>
+  <svg class="ab" viewBox="0 0 1080 1440" style="inset:0;width:1080px;height:1440px">
+    <defs><path id="c5" d="M540,640 m-405,0 a405,405 0 1,1 810,0 a405,405 0 1,1 -810,0"/></defs>
+    <text style="font:700 46px Fredoka;letter-spacing:6px" fill="#F93388"><textPath href="#c5" startOffset="2%">a festa é amanhã · dá tempo · chega hoje em SP · a festa é amanhã · dá tempo ·</textPath></text></svg>
+  <img class="ab" src="marca/chiclete_00_original_rosa.png" style="left:96px;top:150px;width:210px">
+  <h1 class="F ab" style="left:96px;right:96px;bottom:150px;text-align:center;font-size:80px;color:var(--ink)">Pagou até 12h,<br>chega hoje.</h1>
+</section>
+
+<!-- 06 · Capa de revista -->
+<section class="L" id="l06">
+  <img class="cover ab" style="inset:0;object-position:50% 40%" src="foto.jpg">
+  <div class="ab" style="inset:0 0 auto 0;height:48%;background:linear-gradient(180deg,#FFD8E8 0,#FFD8E8 58%,rgba(255,216,232,0))"></div>
+  <img class="ab" src="marca/chiclete_00_original_rosa.png" style="left:50%;top:150px;width:400px;transform:translateX(-50%)">
+  <div class="ab cap" style="left:50%;top:500px;transform:translateX(-50%);color:var(--rosa);white-space:nowrap">Edição festa em casa</div>
+  <div class="ab" style="right:96px;bottom:150px;width:520px;background:#fff;border-radius:28px;padding:32px 34px">
+    <h1 class="F" style="font-size:66px;line-height:1;color:var(--rosa)">Festa amanhã? Dá tempo.</h1>
+    <p style="margin-top:14px;font:700 26px/1.4 Nunito;color:var(--mut)">Pagou até 12h, chega hoje em SP.</p></div>
+</section>
+
+<!-- 07 · Adesivos: foto com borda branca e selos colados -->
+<section class="L" id="l07" style="background:var(--algodao)">
+  <div class="ab" style="left:120px;top:250px;width:840px;height:900px;border-radius:44px;border:16px solid #fff;overflow:hidden;transform:rotate(2deg);box-shadow:0 30px 70px rgba(64,128,248,.25)"><img class="cover" src="foto.jpg" style="object-position:50% 25%"></div>
+  <div class="ab F" style="left:110px;top:190px;background:var(--rosa);color:#fff;font-size:52px;padding:20px 34px;border-radius:99px;transform:rotate(-6deg);box-shadow:0 10px 24px rgba(0,0,0,.15)">Dá tempo!</div>
+  <div class="ab" style="right:96px;top:860px;width:260px;height:260px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center;transform:rotate(10deg);box-shadow:0 10px 24px rgba(0,0,0,.15)">
+    <div><div class="F" style="font-size:72px;color:var(--rosa);line-height:1">12h</div><div class="cap" style="font-size:17px;margin-top:6px">pagou, chega hoje</div></div></div>
+  <img class="ab" src="marca/chiclete_07_algodao_doce.png" style="left:96px;bottom:150px;width:260px">
+</section>
+
+<!-- 08 · Conversa de WhatsApp sobre a foto -->
+<section class="L" id="l08">
+  <img class="cover ab" style="inset:0;object-position:50% 30%;filter:blur(2px) brightness(.75)" src="foto.jpg">
+  <div class="ab" style="left:96px;right:96px;top:300px;display:flex;flex-direction:column;gap:26px">
+    <div style="align-self:flex-start;max-width:720px;background:#fff;border-radius:34px 34px 34px 8px;padding:28px 34px;font:700 40px/1.3 Nunito">A festa da Bia é amanhã e eu não comprei nada 😩</div>
+    <div style="align-self:flex-end;max-width:720px;background:var(--rosa);color:#fff;border-radius:34px 34px 8px 34px;padding:28px 34px;font:700 40px/1.3 Nunito">Calma. Pagou até 12h, chega hoje 💗</div>
+    <div style="align-self:flex-start;max-width:720px;background:#fff;border-radius:34px 34px 34px 8px;padding:28px 34px;font:700 40px/1.3 Nunito">Sério?? Manda o site</div>
+    <div style="align-self:flex-end;background:var(--rosa);color:#fff;border-radius:34px 34px 8px 34px;padding:28px 34px;font:800 40px Nunito">glowbos.com.br</div></div>
+  <img class="ab" src="marca/icone_G.png" style="left:96px;bottom:150px;width:120px">
+</section>
+
+<!-- 09 · A foto dentro da palavra -->
+<section class="L" id="l09" style="background:#fff">
+  <img class="ab" src="marca/chiclete_00_original_rosa.png" style="left:96px;top:150px;width:220px">
+  <div class="ab F" style="left:96px;right:96px;top:380px;font-size:300px;line-height:.86;letter-spacing:-.02em;background:url(foto.jpg) 50% 30%/cover;-webkit-background-clip:text;color:transparent">Dá<br>tempo</div>
+  <div class="ab" style="left:96px;right:96px;bottom:150px">
+    <p class="sub" style="color:var(--ink)"><b>A festa é amanhã.</b> Pagou até 12h, chega hoje em SP e Grande SP.</p></div>
+</section>
+
+<!-- 10 · Mosaico: quatro recortes da mesma foto -->
+<section class="L" id="l10" style="background:#fff">
+  <div class="ab" style="left:96px;right:96px;top:150px;bottom:150px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.25fr 1fr 1fr;gap:16px">
+    <div style="grid-row:1/3;border-radius:30px;overflow:hidden"><img class="cover" src="foto.jpg" style="object-position:30% 20%"></div>
+    <div style="border-radius:30px;overflow:hidden"><img class="cover" src="foto.jpg" style="object-position:80% 60%;transform:scale(1.8)"></div>
+    <div style="border-radius:30px;background:var(--rosa);color:#fff;padding:34px;display:flex;flex-direction:column;justify-content:flex-end"><div class="cap" style="font-size:18px">Festa amanhã?</div><div class="F" style="font-size:72px;line-height:1;margin-top:8px">Dá tempo.</div></div>
+    <div style="border-radius:30px;background:var(--rosaf);display:grid;place-items:center"><img src="marca/chiclete_00_original_rosa.png" style="width:280px"></div>
+    <div style="border-radius:30px;overflow:hidden"><img class="cover" src="foto.jpg" style="object-position:50% 85%;transform:scale(1.6)"></div></div>
+</section>
+
+<!-- 11 · Cartão flutuante no degradê pôr do sol -->
+<section class="L" id="l11" style="background:var(--por)">
+  <img class="ab" src="marca/chiclete_01_por_do_sol.png" style="left:50%;top:150px;width:260px;transform:translateX(-50%)">
+  <div class="ab" style="left:96px;right:96px;top:420px;background:#fff;border-radius:40px;padding:20px;box-shadow:0 40px 80px rgba(80,0,60,.35)">
+    <img class="cover" src="foto.jpg" style="height:520px;border-radius:26px;object-position:50% 25%">
+    <div style="padding:30px 20px 18px"><h1 class="F" style="font-size:76px;line-height:1;color:var(--ink)">A festa é amanhã. <span style="color:#A040C8">Dá tempo.</span></h1>
+    <p style="margin-top:14px;font:700 28px Nunito;color:var(--mut)">Pagou até 12h, chega hoje em SP.</p></div></div>
+</section>
+
+<!-- 12 · Neon, festa à noite -->
+<section class="L" id="l12" style="background:var(--neon)">
+  <img class="ab" src="marca/chiclete_08_neon.png" style="left:96px;top:150px;width:240px">
+  <div class="ab" style="left:150px;right:150px;top:380px;height:640px;border-radius:30px;overflow:hidden;box-shadow:0 0 0 6px #08B0F8,0 0 60px 10px rgba(8,176,248,.6)"><img class="cover" src="foto.jpg" style="object-position:50% 25%"></div>
+  <div class="ab" style="left:96px;right:96px;bottom:150px;text-align:center;color:#fff">
+    <h1 class="F" style="font-size:110px;line-height:1;text-shadow:0 0 30px rgba(8,176,248,.9),0 0 8px #fff">Dá tempo.</h1>
+    <p class="sub" style="margin-top:14px;color:#BFEFFF">A festa é amanhã. Pagou até 12h, chega hoje.</p></div>
+</section>
+
+<!-- 13 · Edição Halloween (outubro) -->
+<section class="L" id="l13" style="background:var(--noite)">
+  <img class="ab" src="marca/halloween_01_abobora.png" style="left:50%;top:150px;width:330px;transform:translateX(-50%)">
+  <div class="ab" style="left:96px;right:96px;top:460px;height:560px;border-radius:300px 300px 30px 30px;overflow:hidden;border:8px solid var(--abobora)"><img class="cover" src="foto.jpg" style="object-position:50% 25%"></div>
+  <div class="ab" style="left:96px;right:96px;bottom:150px;text-align:center">
+    <h1 class="F" style="font-size:96px;color:var(--abobora)">Dá tempo.</h1>
+    <p class="sub" style="margin-top:8px;color:#fff">Festa amanhã? Pagou até 12h, chega hoje.</p></div>
+</section>
+
+<!-- 14 · Ingresso / cupom destacável -->
+<section class="L" id="l14" style="background:var(--rosaf)">
+  <div class="ab" style="left:96px;right:96px;top:150px;bottom:150px;background:#fff;border-radius:36px;overflow:hidden;box-shadow:0 30px 60px rgba(249,51,136,.18)">
+    <img class="cover" src="foto.jpg" style="height:640px;object-position:50% 25%">
+    <div style="position:relative;height:0;border-top:5px dashed var(--rosaf)"><i style="position:absolute;left:-30px;top:-32px;width:60px;height:60px;border-radius:50%;background:var(--rosaf)"></i><i style="position:absolute;right:-30px;top:-32px;width:60px;height:60px;border-radius:50%;background:var(--rosaf)"></i></div>
+    <div style="padding:44px 50px;display:flex;justify-content:space-between;align-items:center;gap:30px">
+      <div><div class="cap" style="color:var(--rosa)">Válido pra amanhã</div><h1 class="F" style="font-size:84px;line-height:1;margin-top:12px">Dá tempo.</h1>
+      <p style="margin-top:14px;font:700 26px/1.4 Nunito;color:var(--mut)">Pagou até 12h, chega hoje<br>em SP e Grande SP.</p></div>
+      <img src="marca/icone_G.png" style="width:170px"></div></div>
+</section>
+
+<!-- 15 · Celular na mão: a loja na tela -->
+<section class="L" id="l15" style="background:var(--rosa)">
+  <div class="ab" style="left:96px;right:96px;top:150px;color:#fff"><div class="cap">Festa amanhã?</div><h1 class="F" style="font-size:100px;margin-top:14px">Dá tempo.</h1></div>
+  <div class="ab" style="left:290px;top:420px;width:500px;height:860px;border-radius:70px;background:#111;padding:20px;box-shadow:0 40px 80px rgba(0,0,0,.35)">
+    <div style="width:100%;height:100%;border-radius:52px;overflow:hidden;background:#fff;position:relative">
+      <img class="cover" src="foto.jpg" style="height:560px;object-position:50% 25%">
+      <div style="padding:26px"><img src="marca/chiclete_00_original_rosa.png" style="width:150px"><div style="font:800 26px Nunito;margin-top:12px">Kit arco + número</div>
+      <div style="margin-top:14px;background:var(--rosa);color:#fff;border-radius:16px;text-align:center;padding:16px;font:800 22px Nunito">Chega hoje · comprar</div></div></div></div>
+</section>
+
+<!-- 16 · Branco e ar: título enorme, foto pequena -->
+<section class="L" id="l16" style="background:#fff">
+  <img class="ab" src="marca/chiclete_00_original_rosa.png" style="left:96px;top:150px;width:200px">
+  <h1 class="F ab" style="left:96px;right:96px;top:400px;font-size:170px;line-height:.92;color:var(--ink)">A festa é amanhã.</h1>
+  <div class="ab" style="left:96px;bottom:150px;width:330px;height:330px;border-radius:24px;overflow:hidden"><img class="cover" src="foto.jpg" style="object-position:50% 25%"></div>
+  <div class="ab" style="left:470px;right:96px;bottom:150px"><div class="F" style="font-size:72px;color:var(--rosa)">Dá tempo.</div><p style="margin-top:12px;font:700 28px/1.4 Nunito;color:var(--mut)">Pagou até 12h, chega hoje em SP.</p></div>
+</section>
+
+<!-- 17 · Duotone rosa -->
+<section class="L" id="l17" style="background:var(--rosa)">
+  <img class="cover ab" style="inset:0;object-position:50% 30%;filter:grayscale(1) contrast(1.15);mix-blend-mode:multiply;opacity:.9" src="foto.jpg">
+  <div class="ab" style="inset:0;background:linear-gradient(180deg,rgba(249,51,136,0) 40%,rgba(249,51,136,.9))"></div>
+  <img class="ab" src="marca/icone_G.png" style="left:96px;top:150px;width:120px">
+  <div class="ab" style="left:96px;right:96px;bottom:150px;color:#fff"><h1 class="F" style="font-size:112px;line-height:.98">A festa é amanhã.<br>Dá tempo.</h1>
+  <p class="sub" style="margin-top:20px;color:#fff">Pagou até 12h, chega hoje.</p></div>
+</section>
+
+<!-- 18 · Três balões: a foto em bolhas -->
+<section class="L" id="l18" style="background:var(--citrico)">
+  <div class="ab" style="left:96px;top:300px;width:560px;height:560px;border-radius:50%;overflow:hidden;border:12px solid #fff"><img class="cover" src="foto.jpg" style="object-position:40% 20%"></div>
+  <div class="ab" style="left:600px;top:200px;width:380px;height:380px;border-radius:50%;overflow:hidden;border:12px solid #fff"><img class="cover" src="foto.jpg" style="object-position:85% 40%;transform:scale(1.6)"></div>
+  <div class="ab" style="left:640px;top:640px;width:300px;height:300px;border-radius:50%;overflow:hidden;border:12px solid #fff"><img class="cover" src="foto.jpg" style="object-position:50% 90%;transform:scale(1.7)"></div>
+  <img class="ab" src="marca/chiclete_04_citrico.png" style="left:96px;top:150px;width:200px">
+  <div class="ab" style="left:96px;right:96px;bottom:150px"><h1 class="F" style="font-size:96px;line-height:1;color:var(--ink)">A festa é amanhã.<br>Dá tempo.</h1>
+  <p class="sub" style="margin-top:16px;color:#3a3a2a">Pagou até 12h, chega hoje em SP.</p></div>
+</section>
+
+<!-- 19 · Folha de calendário -->
+<section class="L" id="l19" style="background:var(--oceano)">
+  <div class="ab" style="left:96px;right:96px;top:150px;height:620px;background:#fff;border-radius:36px;overflow:hidden;box-shadow:0 30px 60px rgba(0,40,120,.25)">
+    <div style="background:var(--rosa);color:#fff;text-align:center;padding:22px;font:800 30px Nunito;letter-spacing:.16em">SÁBADO</div>
+    <div class="F" style="text-align:center;font-size:300px;line-height:1;color:var(--ink);margin-top:10px">17</div>
+    <div style="text-align:center;font:800 32px Nunito;color:var(--rosa)">aniversário da Bia 🎈</div></div>
+  <div class="ab" style="left:96px;width:430px;top:830px;height:460px;border-radius:30px;overflow:hidden;border:10px solid #fff"><img class="cover" src="foto.jpg" style="object-position:50% 25%"></div>
+  <div class="ab" style="left:570px;right:96px;top:860px;color:#fff"><h1 class="F" style="font-size:80px;line-height:1">É amanhã? Dá tempo.</h1>
+  <p class="sub" style="margin-top:18px;color:#fff">Pagou até 12h, chega hoje.</p></div>
+</section>
+
+<!-- 20 · Faixa de título + foto + dois botões lado a lado -->
+<section class="L" id="l20" style="background:#fff">
+  <div class="ab" style="left:96px;right:96px;top:150px;display:flex;justify-content:space-between;align-items:center">
+    <img src="marca/chiclete_00_original_rosa.png" style="width:200px"><div class="cap" style="color:var(--rosa)">Chega hoje em SP</div></div>
+  <h1 class="F ab" style="left:96px;right:96px;top:330px;font-size:84px;line-height:1">A festa é amanhã. <span style="color:var(--rosa)">Dá tempo.</span></h1>
+  <div class="ab" style="left:96px;right:96px;top:560px;height:540px;border-radius:30px;overflow:hidden"><img class="cover" src="foto.jpg" style="object-position:50% 25%"></div>
+  <div class="ab" style="left:96px;right:96px;bottom:150px;display:flex;gap:18px"><span class="btn" style="flex:1;justify-content:center;background:var(--rosa);color:#fff">Montar meu kit</span><span class="btn" style="flex:1;justify-content:center;background:var(--ink);color:#fff">Ver sets prontos</span></div>
+</section>
+
+</body></html>
