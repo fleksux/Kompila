@@ -1178,6 +1178,15 @@ var m=document.getElementById('gbm');if(!m)return;var cx=m.querySelector('.gbm-c
 function abre(id){var sec=document.getElementById(id);if(!sec)return;ult=document.activeElement;cx.querySelectorAll(':scope>section').forEach(function(s){s.classList.toggle('on',s===sec)});m.hidden=false;m.setAttribute('aria-hidden','false');document.body.classList.add('gbm-aberto');cx.scrollTop=0;dispatchEvent(new Event('resize'));m.querySelector('.gbm-x').focus({preventScroll:true})}
 function fecha(){m.hidden=true;m.setAttribute('aria-hidden','true');document.body.classList.remove('gbm-aberto');if(ult&&ult.focus)ult.focus({preventScroll:true})}
 window.gbAbreApp=abre;
+// guia o passo a passo: escolheu, a janela já leva pro próximo passo
+function leva(sel,bloco){var el=cx.querySelector(sel);if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:bloco||'start'})},180)}
+cx.addEventListener('click',function(e){
+ if(e.target.closest('#mpt button'))leva('#mps','start');
+ else if(e.target.closest('#bolhas button'))leva('.estilos','center');
+ else if(e.target.closest('.estilos .es'))leva('.nbuy','center');
+ else if(e.target.closest('#maArcos button'))leva('#maM','center');
+},true);
+var add=document.getElementById('mpadd');if(add)new MutationObserver(function(){if(!add.disabled&&!m.hidden)leva('.mbuy','center')}).observe(add,{attributes:true,attributeFilter:['disabled']});
 document.addEventListener('click',function(e){var b=e.target.closest('[data-app]');if(b){e.preventDefault();abre(b.dataset.app);return}
  var a=e.target.closest('a[href]');if(a){var h=a.getAttribute('href').replace(/^\/(?=#)/,'');if(h==='#pacotes'||h==='#numeros'||h==='#monte'){e.preventDefault();abre(h.slice(1));return}}
  if(e.target.closest('[data-fecha]'))fecha()});
