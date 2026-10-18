@@ -831,7 +831,7 @@ $('#janela').addEventListener('mouseenter',()=>clearInterval(ht));$('#janela').a
 document.querySelectorAll('.cepi').forEach(i=>{i.addEventListener('input',()=>{i.value=i.value.replace(/\D/g,'').replace(/^(\d{5})(\d)/,'$1-$2')});i.addEventListener('focus',()=>clearInterval(ht))});
 window.vePrazo=function(f){const d=f.querySelector('input').value.replace(/\D/g,''),r=$('#cepr');clearInterval(ht);
  if(d.length!==8){r.className='cepr';r.textContent='Digite os 8 números do CEP.';return}
- const n=+d;if(n>=1000000&&n<=9999999){r.className='cepr ok';r.textContent='Chega hoje! 🎉 Seu CEP tem entrega no mesmo dia.'}else{r.className='cepr';r.textContent='📦 Enviamos pro seu CEP. O prazo aparece no carrinho.'}};
+ const f=window.gbFrete?window.gbFrete(d):{ok:false,msg:'O prazo aparece no carrinho.'};r.className=f.ok?'cepr ok':'cepr';r.textContent=(f.ok?'🎉 ':'📦 ')+f.msg};
 
 const bol=$('#bolhas');let NUM='5',EST='Rosé';
 for(let k=0;k<10;k++){const b=document.createElement('button');b.className='bo'+(k===5?' on':'');b.textContent=k;b.setAttribute('aria-label','Número '+k);b.onclick=()=>{bol.querySelectorAll('.bo').forEach(x=>x.classList.remove('on'));b.classList.add('on');NUM=String(k);nfoto()};bol.appendChild(b)}

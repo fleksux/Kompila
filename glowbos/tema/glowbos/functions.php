@@ -105,7 +105,7 @@ add_action( 'woocommerce_single_product_summary', function () {
 	(function(){var i=document.getElementById('gbcep'),b=document.getElementById('gbcepb'),r=document.getElementById('gbcepr');
 	i.addEventListener('input',function(){i.value=i.value.replace(/\D/g,'').replace(/^(\d{5})(\d)/,'$1-$2')});
 	b.onclick=function(){var d=i.value.replace(/\D/g,'');if(d.length!==8){r.textContent='Digite os 8 números do CEP.';return}var n=+d;
-	r.textContent=(n>=1000000&&n<=9999999)?'🎉 Chega hoje! Esse CEP tem entrega no mesmo dia.':'📦 Enviamos pro seu CEP. O prazo aparece no carrinho.'};})();
+	var f=window.gbFrete(d);r.textContent=(f.ok?'🎉 ':'📦 ')+f.msg};})();
 	</script>
 	<?php
 }, 35 );
@@ -285,6 +285,51 @@ add_filter( 'woocommerce_package_rates', function ( $rates ) {
 	}
 	return $rates;
 }, 20 );
+
+// 17/10: as calculadoras de CEP (home, produto, "Chega hoje?") leem as faixas das próprias zonas do
+// WooCommerce, que seguem a tabela PEX Collect. Mudou a zona no painel, muda o aviso junto.
+function glowbos_faixas_frete() {
+	$faixas = get_transient( 'glowbos_faixas_frete' );
+	if ( false !== $faixas ) {
+		return $faixas;
+	}
+	$faixas = array();
+	foreach ( WC_Shipping_Zones::get_zones() as $z ) {
+		$custo = null;
+		$nome  = '';
+		foreach ( $z['shipping_methods'] as $m ) {
+			if ( 'yes' === $m->enabled && 'flat_rate' === $m->id && ( null === $custo || (float) $m->get_option( 'cost' ) < $custo ) ) {
+				$custo = (float) $m->get_option( 'cost' );
+				$nome  = $m->get_option( 'title' );
+			}
+		}
+		if ( null === $custo ) {
+			continue;
+		}
+		foreach ( $z['zone_locations'] as $l ) {
+			if ( 'postcode' === $l->type && preg_match( '/^(\d{8})\.\.\.(\d{8})$/', $l->code, $p ) ) {
+				$faixas[] = array( (int) $p[1], (int) $p[2], $nome, $custo );
+			}
+		}
+	}
+	set_transient( 'glowbos_faixas_frete', $faixas, HOUR_IN_SECONDS );
+	return $faixas;
+}
+add_action( 'woocommerce_shipping_zone_method_status_toggled', function () { delete_transient( 'glowbos_faixas_frete' ); } );
+add_action( 'woocommerce_after_shipping_zone_object_save', function () { delete_transient( 'glowbos_faixas_frete' ); } );
+
+add_action( 'wp_head', function () {
+	?>
+	<script>window.GB_FRETE=<?php echo wp_json_encode( glowbos_faixas_frete() ); ?>;
+	// devolve {ok, msg} pro CEP: ok = chega por entrega própria (hoje, amanhã ou 2 dias úteis)
+	window.gbFrete=function(cep){var n=+String(cep).replace(/\D/g,''),f=null;(window.GB_FRETE||[]).some(function(x){if(n>=x[0]&&n<=x[1]){f=x;return true}});
+	if(!f||!/^(Motoboy|Entrega expressa)/.test(f[2]))return{ok:false,msg:'Enviamos pelos Correios. O frete aparece no pagamento.'};
+	var v='R$ '+f[3].toFixed(2).replace('.',','),h=new Date().getHours();
+	if(/^Motoboy/.test(f[2]))return{ok:true,msg:h<12?'Chega hoje! Motoboy por '+v+'.':'Chega amanhã cedo. Motoboy por '+v+'. Pago até 12h chega no mesmo dia.'};
+	if(/amanh/.test(f[2]))return{ok:true,msg:'Chega amanhã. Entrega expressa por '+v+'.'};
+	return{ok:true,msg:'Chega em até 2 dias úteis. Entrega expressa por '+v+'.'}};</script>
+	<?php
+}, 2 );
 
 // Checkout: bairro obrigatório (Melhor Envio e antifraude do Mercado Pago usam o endereço completo).
 add_filter( 'woocommerce_billing_fields', function ( $f ) {
@@ -929,8 +974,7 @@ document.getElementById('ggV').onclick=fecha;q('#ggX').onclick=fecha;document.ad
 var inp=q('#ggCep input'),r=q('#ggR');try{var c=localStorage.getItem('glowbos_cep');if(c)inp.value=c}catch(x){}
 inp.addEventListener('input',function(){var d=inp.value.replace(/\D/g,'').slice(0,8);inp.value=d.length>5?d.slice(0,5)+'-'+d.slice(5):d});
 function prazo(){var d=inp.value.replace(/\D/g,'');if(d.length!==8){r.className='gg-r';r.textContent='Digite os 8 números do CEP.';return}
-try{localStorage.setItem('glowbos_cep',inp.value)}catch(x){}var n=+d,h=new Date().getHours();
-if(n>=1000000&&n<=9999999){r.className='gg-r ok';r.textContent=h<12?'Chega hoje! Motoboy por R$ 10.':'Chega amanhã cedo. Motoboy por R$ 10.'}else{r.className='gg-r';r.textContent='Enviamos pelos Correios. O frete aparece no pagamento.'}}
+try{localStorage.setItem('glowbos_cep',inp.value)}catch(x){}var f=window.gbFrete(d);r.className=f.ok?'gg-r ok':'gg-r';r.textContent=f.msg}
 q('#ggCep').onsubmit=function(e){e.preventDefault();prazo()};if(inp.value)prazo();
 q('#ggG').onclick=function(e){var b=e.target.closest('button');if(!b)return;g.querySelectorAll('#ggG button').forEach(function(x){x.classList.toggle('on',x===b)});
 g.querySelectorAll('.gg-d').forEach(function(d){d.hidden=d.dataset.d!==b.dataset.l});var d=q('.gg-d[data-d="'+b.dataset.l+'"]');d.scrollIntoView({behavior:'smooth',block:'nearest'})};
