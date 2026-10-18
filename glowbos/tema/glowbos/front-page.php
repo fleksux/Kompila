@@ -18,6 +18,7 @@ $gb = array(
 );
 // menu da loja com o painel de produtos no lugar do menu do protótipo
 $html = str_replace( '<div class="barra">🚚 Chega hoje em São Paulo e Grande SP</div>', glowbos_util_html(), $html );
+$html = str_replace( '<!--LINHAS-->', glowbos_linhas_html(), $html );
 $html = str_replace( '<!--MAIS_VENDIDOS-->', glowbos_mais_vendidos_html() . glowbos_sets_html(), $html );
 $gbn = strpos( $html, '<nav><a href="/categoria/' );
 if ( false !== $gbn ) {

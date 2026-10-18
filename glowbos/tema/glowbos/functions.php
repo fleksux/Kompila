@@ -1144,6 +1144,84 @@ function glowbos_util_html() {
 }
 
 // ===== Régua "Os mais vendidos": os campeões da Shopee, com o número real de vendas de lá =====
+// 18/10: linhas de produtos da home, uma por categoria, como vitrine de loja.
+function glowbos_linhas_html() {
+	$linhas = array(
+		'pacotes'           => array( 'Pacotes sortidos', 'Balões de 8 polegadas nas cores que você escolher.' ),
+		'kits-de-arco'      => array( 'Kits de arco', 'Tudo pra montar o arco em casa.' ),
+		'candy-colors'      => array( 'Candy colors', 'Os tons pastel do chá revelação e da festa infantil.' ),
+		'cromados'          => array( 'Cromados', 'Brilho de metal pro destaque da festa.' ),
+		'arcos'             => array( 'Arcos prontos', 'Escolha pela foto e diga os metros.' ),
+		'pacotes-fechados'  => array( 'Pacotes fechados', 'Uma cor por pacote, pra quem decora.' ),
+	);
+	$h = '';
+	foreach ( $linhas as $slug => $t ) {
+		$term = get_term_by( 'slug', $slug, 'product_cat' );
+		if ( ! $term ) {
+			continue;
+		}
+		$ps = wc_get_products( array( 'status' => 'publish', 'limit' => 12, 'category' => array( $slug ), 'orderby' => array( 'menu_order' => 'ASC', 'title' => 'ASC' ), 'visibility' => 'catalog' ) );
+		if ( ! $ps ) {
+			continue;
+		}
+		$c = '';
+		foreach ( $ps as $p ) {
+			$img = wp_get_attachment_image_url( $p->get_image_id(), 'medium_large' );
+			if ( ! $img ) {
+				continue; // produto sem foto não entra na vitrine
+			}
+			$c  .= sprintf(
+				'<a class="lj-c" href="%1$s"><span class="lj-f"><img src="%2$s" alt="%3$s" loading="lazy"></span><span class="lj-n">%3$s</span><span class="lj-p">%4$s</span><span class="lj-b">Comprar</span></a>',
+				esc_url( $p->get_permalink() ),
+				esc_url( $img ),
+				esc_html( $p->get_name() ),
+				wp_kses_post( $p->get_price_html() )
+			);
+		}
+		$h .= sprintf(
+			'<section class="lj" id="linha-%1$s"><div class="w"><div class="lj-h"><div><h2>%2$s</h2><p>%3$s</p></div><div class="lj-ac"><a href="%4$s">Ver todos (%5$d)</a><button type="button" class="lj-s" data-d="-1" aria-label="Voltar">‹</button><button type="button" class="lj-s" data-d="1" aria-label="Avançar">›</button></div></div><div class="lj-l">%6$s</div></div></section>',
+			esc_attr( $slug ),
+			esc_html( $t[0] ),
+			esc_html( $t[1] ),
+			esc_url( get_term_link( $term ) ),
+			(int) $term->count,
+			$c
+		);
+	}
+	if ( ! $h ) {
+		return '';
+	}
+	return '<style>
+.lj{padding:44px 0 0}
+.lj-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
+.lj-h h2{margin:0;font:700 clamp(24px,2.4vw,32px)/1.05 Fredoka,"Inter Tight",sans-serif;color:#B0124F}
+.lj-h p{margin:6px 0 0;font:500 14.5px/1.4 Inter;color:#6b5560}
+.lj-ac{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.lj-ac a{font:700 14px Inter;color:#F93388;text-decoration:none;margin-right:8px;white-space:nowrap}
+.lj-ac a:hover{text-decoration:underline}
+.lj-s{width:40px;height:40px;border-radius:50%;border:0;background:#fff;color:#B0124F;font:400 26px/38px Inter;cursor:pointer;box-shadow:inset 0 0 0 1.5px #FFD8E8}
+.lj-s:hover{background:#F93388;color:#fff}
+.lj-l{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px 16px;scrollbar-width:none}
+.lj-l::-webkit-scrollbar{display:none}
+.lj-c{flex:0 0 calc((100% - 56px)/5);scroll-snap-align:start;display:flex;flex-direction:column;background:#fff;border-radius:18px;padding:10px;text-decoration:none;color:#2a0f22;box-shadow:inset 0 0 0 1.5px #F6E3EB;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}
+.lj-c:hover{transform:translateY(-4px);box-shadow:0 16px 34px -16px rgba(176,18,79,.35),inset 0 0 0 1.5px #FFD8E8}
+.lj-f{display:block;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#F7F3EA}
+.lj-f img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.lj-c:hover .lj-f img{transform:scale(1.05)}
+.lj-n{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;margin:10px 2px 0;font:600 14px/1.3 Inter}
+.lj-p{display:block;margin:6px 2px 10px;font:800 18px "Inter Tight";color:#B0124F}
+.lj-p del{font-size:13px;color:#a08a94;font-weight:500;margin-right:4px}
+.lj-p ins{text-decoration:none}
+.lj-p .woocommerce-Price-amount{color:inherit}
+.lj-b{margin-top:auto;display:flex;align-items:center;justify-content:center;height:40px;border-radius:12px;background:#FFF0F6;color:#B0124F;font:800 14px Inter;transition:background .2s,color .2s}
+.lj-c:hover .lj-b{background:#F93388;color:#fff}
+@media (max-width:1100px){.lj-c{flex-basis:calc((100% - 42px)/4)}}
+@media (max-width:760px){.lj-c{flex-basis:calc((100% - 28px)/3)}}
+@media (max-width:640px){.lj{padding-top:34px}.lj-l{margin:0 -16px;padding:4px 16px 14px;scroll-padding:0 16px}.lj-c{flex-basis:44%}.lj-s{display:none}.lj-h{align-items:flex-start}.lj-ac a{margin:6px 0 0}}
+</style>
+' . $h . '<script>document.querySelectorAll(".lj").forEach(function(s){var l=s.querySelector(".lj-l");s.querySelectorAll(".lj-s").forEach(function(b){b.onclick=function(){l.scrollBy({left:+b.dataset.d*l.clientWidth*.9})}})});</script>';
+}
+
 function glowbos_mais_vendidos_html() {
 	$mapa = (array) get_option( 'glowbos_produtos', array() );
 	// chave => [selo de vendas na Shopee, nome curto]

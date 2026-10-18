@@ -660,10 +660,13 @@ main~.gb-news{margin-top:0!important}
 .sl.cor picture{position:absolute;inset:0;display:block}
 .sl.cor .tx{flex:1 1 auto}
 .dots{z-index:7!important}
+@media (min-width:641px){
 .voa .v1{width:118px!important;left:max(2px,calc((100vw - 1240px)/2 - 120px))!important;top:-150px!important}
 .voa .v2{width:78px!important;left:max(0px,calc((100vw - 1240px)/2 - 150px))!important;top:-58px!important}
 .voa .v3{width:120px!important;right:max(2px,calc((100vw - 1240px)/2 - 120px))!important;top:-140px!important}
 .voa .v4{width:80px!important;right:max(0px,calc((100vw - 1240px)/2 - 150px))!important;top:-52px!important}
+}
+@media (max-width:640px){.voa .v1{width:54px!important;left:2px!important;top:-56px!important}.voa .v3{width:52px!important;right:2px!important;left:auto!important;top:-60px!important}.voa .v2,.voa .v4{display:none!important}}
 @media (min-width:641px){.sl.cor .tx{padding-top:44px!important}}
 @media (max-width:640px){
   .sl.cor .tx{max-width:none!important}
@@ -671,6 +674,35 @@ main~.gb-news{margin-top:0!important}
   .sl.cor .acoes{display:flex!important;width:100%;gap:10px}
   .sl.cor .acoes .btn{flex:1 1 0;min-width:0;padding:0 12px!important;font-size:15px}
 }
+
+/* 18/10: apps em janela, abertos pelos 3 botões */
+.gba{padding:34px 0 0}
+.gba-h{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
+.gba-h .tt{margin:0;font-size:clamp(24px,2.4vw,32px)}
+.gba-l{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gba-b{display:flex;align-items:center;gap:16px;padding:14px 18px 14px 14px;border:0;border-radius:20px;background:linear-gradient(135deg,#fff 0%,#FFF0F6 100%);box-shadow:0 1px 0 rgba(176,18,79,.06),0 10px 30px -12px rgba(176,18,79,.28),inset 0 0 0 1.5px #FFD8E8;cursor:pointer;text-align:left;font:inherit;color:#2a0f22;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}
+.gba-b:hover{transform:translateY(-4px);box-shadow:0 18px 40px -14px rgba(176,18,79,.42),inset 0 0 0 1.5px #F93388}
+.gba-i{flex:0 0 76px;width:76px;height:76px;border-radius:50%;overflow:hidden;background:#FFD8E8;box-shadow:0 0 0 4px #fff,0 0 0 6px #FFD8E8}
+.gba-i img{width:100%;height:100%;object-fit:cover}
+.gba-t{flex:1;min-width:0}
+.gba-t b{display:block;font:700 21px/1.1 Fredoka,"Inter Tight",sans-serif;color:#B0124F}
+.gba-t small{display:block;margin-top:4px;font:500 13.5px/1.35 Inter;color:#6b5560}
+.gba-b>i{flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:#F93388;color:#fff;font:700 24px/36px Inter;font-style:normal;text-align:center;transition:transform .25s}
+.gba-b:hover>i{transform:translateX(3px)}
+.gbm[hidden]{display:none}
+.gbm{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
+.gbm-fundo{position:absolute;inset:0;background:rgba(42,15,34,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:gbmF .25s ease}
+.gbm-cx{position:relative;width:min(1180px,100%);max-height:calc(100svh - 48px);overflow:auto;overscroll-behavior:contain;background:#fff;border-radius:24px;box-shadow:0 30px 80px -20px rgba(42,15,34,.5);animation:gbmS .35s cubic-bezier(.22,1,.36,1)}
+.gbm-cx>section{display:none;padding:44px 0 36px!important;margin:0!important}
+.gbm-cx>section.on{display:block}
+.gbm-x{position:sticky;top:14px;float:right;margin:14px 14px -58px 0;z-index:5;width:44px;height:44px;border:0;border-radius:50%;background:#fff;color:#B0124F;font:400 30px/42px Inter;cursor:pointer;box-shadow:0 4px 16px rgba(42,15,34,.18),inset 0 0 0 1.5px #FFD8E8}
+.gbm-x:hover{background:#F93388;color:#fff}
+.gbm-x:focus{outline:none}.gbm-x:focus-visible{outline:3px solid #FFD8E8;outline-offset:2px}
+body.gbm-aberto{overflow:hidden}
+@keyframes gbmF{from{opacity:0}}
+@keyframes gbmS{from{opacity:0;transform:translateY(24px) scale(.98)}}
+@media (max-width:900px){.gba-l{grid-template-columns:1fr}.gba-h{flex-direction:column;gap:4px}}
+@media (max-width:640px){.gba{padding-top:26px}.gba-b{padding:12px 14px 12px 12px}.gba-i{flex-basis:60px;width:60px;height:60px}.gba-t b{font-size:18px}.gbm{padding:0;align-items:flex-end}.gbm-cx{max-height:94svh;border-radius:22px 22px 0 0}.gbm-cx>section{padding:56px 0 28px!important}}
 </style>
 </head>
 <body>
@@ -778,25 +810,17 @@ main~.gb-news{margin-top:0!important}
   <p class="gb-confia"><a href="https://shopee.com.br/shop/414535277" target="_blank" rel="noopener">Mesma loja e mesmo preço da Shopee. Conferir ↗</a> · Mayara Festas e Decorações LTDA · CNPJ 45.147.944/0001-24</p></div>
 </section>
 
-<section class="sec" id="pacotes"><div class="w">
-  <div class="ctr"><span class="eyebrow">Pra encher em casa</span><h2 class="tt inf">Monte seu pacote de balões</h2><p class="sub">Balões de 8 polegadas. Escolha o tamanho e a sequência das cores.</p></div>
-  <div class="mp">
-    <div class="mpv"><div class="cacho" id="mpsvg" aria-label="Prévia das cores"></div><span class="mptag" id="mptag">Escolha as cores</span></div>
-    <div class="mpc">
-      <p class="mst"><i>1</i> O tamanho</p>
-      <div class="mpt" id="mpt">
-        <button data-q="50" data-c="2" data-p="19.87"><b>50</b><span>balões</span><small>2 cores</small><em>R$ 19,87</em></button>
-        <button class="on" data-q="75" data-c="3" data-p="25.99"><span class="mpt-tag">Mais vendido</span><b>75</b><span>balões</span><small>3 cores</small><em>R$ 25,99</em></button>
-        <button data-q="100" data-c="4" data-p="32.99"><b>100</b><span>balões</span><small>4 cores</small><em>R$ 32,99</em></button>
-        <button data-q="125" data-c="5" data-p="36.99"><b>125</b><span>balões</span><small>5 cores</small><em>R$ 36,99</em></button>
-      </div>
-      <p class="mst"><i>2</i> A sequência das cores <small id="mpcount"></small></p>
-      <div class="mps" id="mps"></div>
-      <div class="mpcores" id="mpcores"></div>
-      <div class="mbuy"><div><small id="mpsel">75 balões · 3 cores</small><b id="mptot">R$ 25,99</b></div><button class="btn pri" id="mpadd" disabled>Escolha as 3 cores</button></div>
-    </div>
+<section class="gba"><div class="w">
+  <div class="gba-h"><span class="eyebrow">Monte do seu jeito</span><h2 class="tt inf">Escolha, monte e receba.</h2></div>
+  <div class="gba-l">
+    <button type="button" class="gba-b" data-app="pacotes"><span class="gba-i"><img src="img/hero_pacote_5_m.webp" alt=""></span><span class="gba-t"><b>Monte seu pacote</b><small>De 50 a 125 balões, até 5 cores</small></span><i>›</i></button>
+    <button type="button" class="gba-b" data-app="monte"><span class="gba-i"><img src="img/arco_09_candy_algodao.webp" alt=""></span><span class="gba-t"><b>Monte seu arco</b><small>Escolha pela foto, a gente calcula</small></span><i>›</i></button>
+    <button type="button" class="gba-b" data-app="numeros"><span class="gba-i"><img src="img/num_rose_5.webp" alt=""></span><span class="gba-t"><b>Número gigante</b><small>Coluna com número metalizado</small></span><i>›</i></button>
   </div>
 </div></section>
+
+
+<!--LINHAS-->
 
 <!--MAIS_VENDIDOS-->
 <section class="bloco" id="premium"><div class="w">
@@ -813,43 +837,9 @@ main~.gb-news{margin-top:0!important}
   </div>
 </div></section>
 
-<section class="sec" id="numeros" style="padding-top:60px"><div class="w">
-  <div class="nums">
-    <div class="nfoto"><img id="nimg" src="img/num_rose_5.webp" alt="Coluna de número 5 rosé"></div>
-    <div class="ncfg">
-      <span class="eyebrow">Linha de números</span>
-      <h2 class="tt inf">Quantos aninhos?</h2>
-      <p class="sub" style="margin-bottom:6px">Número metalizado gigante sobre uma coluna de balões, no estilo que você escolher.</p>
-      <h3>1 · O número</h3>
-      <div class="bolhas" id="bolhas"></div>
-      <h3>2 · O estilo</h3>
-      <div class="estilos">
-        <button class="es on" data-e="rose" data-n="Rosé"><img src="img/num_rose_5.webp" alt="Número 5 rosé">Rosé</button>
-        <button class="es" data-e="ouro" data-n="Ouro e preto"><img src="img/num_ouro_5.webp" alt="Número 5 dourado">Ouro e preto</button>
-        <button class="es" data-e="lilas" data-n="Candy"><img src="img/num_lilas_5.webp" alt="Número 5 lilás">Candy</button>
-        <button class="es" data-e="azul" data-n="Azul"><img src="img/num_azul_5.webp" alt="Número 5 azul">Azul</button>
-      </div>
-      <div class="nbuy"><div><small id="nsel">Número 5 · Rosé</small><b>Sob encomenda</b></div><a class="btn pri" id="nlink" href="/produto/coluna-com-numero-metalizado-gigante/">Pedir orçamento</a></div>
-    </div>
-  </div>
-</div></section>
 
-<section class="sec" id="monte"><div class="w">
-  <div class="ctr"><span class="eyebrow">Monte seu arco</span><h2 class="tt inf">Escolha o arco pela foto. A gente calcula e entrega os balões.</h2><p class="sub">Ajuste o tamanho da sua parede e a lista de balões se refaz na hora, já com 10% de reserva pra estouro.</p></div>
-  <div class="ma-tabs" id="maTabs"></div>
-  <div class="ma">
-    <div class="ma-foto" id="maFoto"><img class="at" id="maImg" src="img/arco_09_candy_algodao.webp" alt="Arco de balões"><span class="ma-mont" id="maMont">Arraste os metros e veja o arco crescer</span></div>
-    <div class="ma-cfg">
-      <div class="ma-arcos" id="maArcos"></div>
-      <div class="ma-box"><div class="ma-sl"><span>Tamanho do arco</span><b id="maMv">3 m</b></div><input id="maM" type="range" min="2" max="5" step=".5" value="3" aria-label="Tamanho do arco em metros"><div class="ma-esc"><span>2 m</span><span>5 m</span></div></div>
-      <div class="ma-box" id="maTab"></div>
-      <div class="ma-buy"><div><small>Sua lista sai por</small><b id="maTot">R$ 0,00</b><small id="maPk"></small></div></div>
-      <div class="acoes ma-acoes"><button class="btn pri" id="maComprar">Comprar esta lista</button><button class="btn lin" id="maTrocar">Trocar as cores</button></div>
-      <div class="ma-cores" id="maCores" hidden></div>
-      <p class="mnote">🚚 Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
-    </div>
-  </div>
-</div></section>
+
+
 
 <section class="deco"><div class="deco-in">
   <div class="deco-tx"><span class="eyebrow">Pra quem decora</span><h2>Você é decoradora?<br>Cadastre-se na Glowbos.</h2><p>Balões pras suas montagens com entrega no mesmo dia em SP e Grande SP, e atendimento direto com a gente pelo WhatsApp.</p>
@@ -915,6 +905,67 @@ const rola=()=>{const y=scrollY;b.classList.toggle('rolou',y>60);b.classList.tog
 let at='';secs.forEach(s=>{if(s.getBoundingClientRect().top<160)at=s.id});links.forEach(a=>a.classList.toggle('at',a.getAttribute('href')==='#'+at))};
 addEventListener('scroll',rola,{passive:true});rola();})();
 </script>
+<div class="gbm" id="gbm" hidden aria-hidden="true">
+  <div class="gbm-fundo" data-fecha></div>
+  <div class="gbm-cx" role="dialog" aria-modal="true" aria-label="Monte do seu jeito">
+    <button class="gbm-x" type="button" data-fecha aria-label="Fechar">×</button>
+<section class="sec" id="pacotes"><div class="w">
+  <div class="ctr"><span class="eyebrow">Pra encher em casa</span><h2 class="tt inf">Monte seu pacote de balões</h2><p class="sub">Balões de 8 polegadas. Escolha o tamanho e a sequência das cores.</p></div>
+  <div class="mp">
+    <div class="mpv"><div class="cacho" id="mpsvg" aria-label="Prévia das cores"></div><span class="mptag" id="mptag">Escolha as cores</span></div>
+    <div class="mpc">
+      <p class="mst"><i>1</i> O tamanho</p>
+      <div class="mpt" id="mpt">
+        <button data-q="50" data-c="2" data-p="19.87"><b>50</b><span>balões</span><small>2 cores</small><em>R$ 19,87</em></button>
+        <button class="on" data-q="75" data-c="3" data-p="25.99"><span class="mpt-tag">Mais vendido</span><b>75</b><span>balões</span><small>3 cores</small><em>R$ 25,99</em></button>
+        <button data-q="100" data-c="4" data-p="32.99"><b>100</b><span>balões</span><small>4 cores</small><em>R$ 32,99</em></button>
+        <button data-q="125" data-c="5" data-p="36.99"><b>125</b><span>balões</span><small>5 cores</small><em>R$ 36,99</em></button>
+      </div>
+      <p class="mst"><i>2</i> A sequência das cores <small id="mpcount"></small></p>
+      <div class="mps" id="mps"></div>
+      <div class="mpcores" id="mpcores"></div>
+      <div class="mbuy"><div><small id="mpsel">75 balões · 3 cores</small><b id="mptot">R$ 25,99</b></div><button class="btn pri" id="mpadd" disabled>Escolha as 3 cores</button></div>
+    </div>
+  </div>
+</div></section>
+<section class="sec" id="numeros" style="padding-top:60px"><div class="w">
+  <div class="nums">
+    <div class="nfoto"><img id="nimg" src="img/num_rose_5.webp" alt="Coluna de número 5 rosé"></div>
+    <div class="ncfg">
+      <span class="eyebrow">Linha de números</span>
+      <h2 class="tt inf">Quantos aninhos?</h2>
+      <p class="sub" style="margin-bottom:6px">Número metalizado gigante sobre uma coluna de balões, no estilo que você escolher.</p>
+      <h3>1 · O número</h3>
+      <div class="bolhas" id="bolhas"></div>
+      <h3>2 · O estilo</h3>
+      <div class="estilos">
+        <button class="es on" data-e="rose" data-n="Rosé"><img src="img/num_rose_5.webp" alt="Número 5 rosé">Rosé</button>
+        <button class="es" data-e="ouro" data-n="Ouro e preto"><img src="img/num_ouro_5.webp" alt="Número 5 dourado">Ouro e preto</button>
+        <button class="es" data-e="lilas" data-n="Candy"><img src="img/num_lilas_5.webp" alt="Número 5 lilás">Candy</button>
+        <button class="es" data-e="azul" data-n="Azul"><img src="img/num_azul_5.webp" alt="Número 5 azul">Azul</button>
+      </div>
+      <div class="nbuy"><div><small id="nsel">Número 5 · Rosé</small><b>Sob encomenda</b></div><a class="btn pri" id="nlink" href="/produto/coluna-com-numero-metalizado-gigante/">Pedir orçamento</a></div>
+    </div>
+  </div>
+</div></section>
+<section class="sec" id="monte"><div class="w">
+  <div class="ctr"><span class="eyebrow">Monte seu arco</span><h2 class="tt inf">Escolha o arco pela foto. A gente calcula e entrega os balões.</h2><p class="sub">Ajuste o tamanho da sua parede e a lista de balões se refaz na hora, já com 10% de reserva pra estouro.</p></div>
+  <div class="ma-tabs" id="maTabs"></div>
+  <div class="ma">
+    <div class="ma-foto" id="maFoto"><img class="at" id="maImg" src="img/arco_09_candy_algodao.webp" alt="Arco de balões"><span class="ma-mont" id="maMont">Arraste os metros e veja o arco crescer</span></div>
+    <div class="ma-cfg">
+      <div class="ma-arcos" id="maArcos"></div>
+      <div class="ma-box"><div class="ma-sl"><span>Tamanho do arco</span><b id="maMv">3 m</b></div><input id="maM" type="range" min="2" max="5" step=".5" value="3" aria-label="Tamanho do arco em metros"><div class="ma-esc"><span>2 m</span><span>5 m</span></div></div>
+      <div class="ma-box" id="maTab"></div>
+      <div class="ma-buy"><div><small>Sua lista sai por</small><b id="maTot">R$ 0,00</b><small id="maPk"></small></div></div>
+      <div class="acoes ma-acoes"><button class="btn pri" id="maComprar">Comprar esta lista</button><button class="btn lin" id="maTrocar">Trocar as cores</button></div>
+      <div class="ma-cores" id="maCores" hidden></div>
+      <p class="mnote">🚚 Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
+    </div>
+  </div>
+</div></section>
+  </div>
+</div>
 <script>
 (function(){
 const reduz=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1119,6 +1170,19 @@ ant.onclick=function(){l.scrollBy({left:-l.clientWidth,behavior:'smooth'})};
 prox.onclick=function(){l.scrollBy({left:l.clientWidth,behavior:'smooth'})};
 l.addEventListener('scroll',function(){clearTimeout(l._t);l._t=setTimeout(conta,80)},{passive:true});
 addEventListener('resize',conta);conta();
+})();
+</script>
+<script>
+(function(){
+var m=document.getElementById('gbm');if(!m)return;var cx=m.querySelector('.gbm-cx'),ult=null;
+function abre(id){var sec=document.getElementById(id);if(!sec)return;ult=document.activeElement;cx.querySelectorAll(':scope>section').forEach(function(s){s.classList.toggle('on',s===sec)});m.hidden=false;m.setAttribute('aria-hidden','false');document.body.classList.add('gbm-aberto');cx.scrollTop=0;dispatchEvent(new Event('resize'));m.querySelector('.gbm-x').focus({preventScroll:true})}
+function fecha(){m.hidden=true;m.setAttribute('aria-hidden','true');document.body.classList.remove('gbm-aberto');if(ult&&ult.focus)ult.focus({preventScroll:true})}
+window.gbAbreApp=abre;
+document.addEventListener('click',function(e){var b=e.target.closest('[data-app]');if(b){e.preventDefault();abre(b.dataset.app);return}
+ var a=e.target.closest('a[href]');if(a){var h=a.getAttribute('href').replace(/^\/(?=#)/,'');if(h==='#pacotes'||h==='#numeros'||h==='#monte'){e.preventDefault();abre(h.slice(1));return}}
+ if(e.target.closest('[data-fecha]'))fecha()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)fecha()});
+var h=location.hash.slice(1);if(h==='pacotes'||h==='numeros'||h==='monte')setTimeout(function(){abre(h)},300);
 })();
 </script>
 </body>
