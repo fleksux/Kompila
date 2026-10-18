@@ -17,7 +17,7 @@
 		<a href="<?php echo esc_url( home_url( '/categoria/pacotes/' ) ); ?>"<?php echo is_product_category( 'pacotes' ) ? ' class="on"' : ''; ?>>Pacotes sortidos</a>
 		<a href="<?php echo esc_url( home_url( '/categoria/pacotes-fechados/' ) ); ?>"<?php echo is_product_category( 'pacotes-fechados' ) ? ' class="on"' : ''; ?>>Pacotes fechados</a>
 		<a href="<?php echo esc_url( home_url( '/categoria/candy-colors/' ) ); ?>"<?php echo is_product_category( 'candy-colors' ) ? ' class="on"' : ''; ?>>Candy colors</a>
-		<a href="<?php echo esc_url( home_url( '/categoria/cromados/' ) ); ?>"<?php echo is_product_category( 'cromados' ) ? ' class="on"' : ''; ?>>Cromados</a>
+		<a href="<?php echo esc_url( home_url( '/categoria/decorativos/' ) ); ?>"<?php echo is_product_category( 'decorativos' ) ? ' class="on"' : ''; ?>>Decorativos</a>
 		<a href="<?php echo esc_url( home_url( '/categoria/numeros/' ) ); ?>"<?php echo is_product_category( 'numeros' ) ? ' class="on"' : ''; ?>>Números</a>
 	</nav>
 	<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>

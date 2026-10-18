@@ -10,7 +10,7 @@ function glowbos_seo_desc() {
 		'pacotes'          => 'Pacotes de 50 a 125 balões de 8 polegadas, com cores à escolha ou combinações prontas, a partir de R$ 19,87. Chega hoje em SP e Grande SP.',
 		'pacotes-fechados' => 'Pacotes fechados de balões, uma cor por pacote, de 5 a 16 polegadas, a partir de R$ 9,99. Entrega no mesmo dia em São Paulo e Grande SP.',
 		'candy-colors'     => 'Balões candy em tons pastel pra chá de bebê, chá revelação e festa infantil, de 50 a 100 balões com cores à escolha. Chega hoje em SP.',
-		'cromados'         => 'Balões metalizados e cromados pra dar brilho ao arco e à festa. Entrega no mesmo dia em São Paulo e Grande SP.',
+		'decorativos'      => 'Balões decorativos metalizados: coração, estrela, bola e safári pra dar destaque à festa. Entrega no mesmo dia em São Paulo e Grande SP.',
 		'numeros'          => 'Número metalizado gigante de 0 a 9 sobre coluna de balões, no estilo da festa. Sob encomenda, com entrega em São Paulo.',
 		'bubbles'          => 'Balão bubble transparente personalizado com nome ou frase e balõezinhos dentro. Sob encomenda, com entrega em São Paulo.',
 		'acessorios'       => 'Fita para arco e adesivo dupla face pra montar arco de balões em casa. Chega hoje em SP e Grande SP.',

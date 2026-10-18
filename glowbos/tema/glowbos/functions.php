@@ -640,6 +640,14 @@ add_action( 'wc_ajax_glowbos_add', function () {
 	wp_send_json_success( array( 'qtd' => WC()->cart->get_cart_contents_count(), 'carrinho' => wc_get_cart_url() ) );
 } );
 
+// 18/10: Cromados virou Decorativos; o endereço antigo leva pro novo.
+add_action( 'template_redirect', function () {
+	if ( preg_match( '#^/categoria/cromados(/.*)?$#', (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ) ) ) {
+		wp_safe_redirect( home_url( '/categoria/decorativos/' ), 301 );
+		exit;
+	}
+} );
+
 // ===== Departamentos: banner no topo, filtros e vitrine =====
 function glowbos_departamentos() {
 	return array(
@@ -649,7 +657,7 @@ function glowbos_departamentos() {
 		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'banner_fechados.webp' ),
 		'candy-colors'     => array( 'Candy colors', 'Os tons pastel que viraram a cara do chá revelação e da festa infantil.', 'banner_candy.webp' ),
 		'bubbles'          => array( 'Bubbles', 'Balão transparente com o nome da festa e balõezinhos coloridos dentro.', 'banner_bubbles.webp' ),
-		'cromados'         => array( 'Cromados e metalizados', 'O brilho que dá acabamento de festa profissional.', 'banner_cromados.webp' ),
+		'decorativos'      => array( 'Decorativos', 'Metalizados de coração, estrela, bola e safári pro destaque da festa.', 'banner_cromados.webp' ),
 		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'banner_numeros.webp' ),
 		'sets-prontos'     => array( 'Sets prontos', 'Número, base de balões, figuras e buquê montados no estilo da festa. Escolha o tema e a idade.', 'banner_sets.webp' ),
 		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'banner_acessorios.webp' ),
@@ -918,7 +926,7 @@ function glowbos_guia_linhas() {
 		'sortidos' => array( 'Pacotes sortidos', 'pack_azul_verm_amar.webp', '50 a 125 balões de 8" em até 5 cores, na sua sequência.', 'R$ 19,87', $prod( 'pct75' ), 'Montar meu pacote', $cat( 'pacotes' ) ),
 		'fechados' => array( 'Pacotes fechados', 'emb_lilas.webp', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada.', 'R$ 9,99', $prod( 'pct9_50' ), 'Escolher as cores', $cat( 'pacotes-fechados' ) ),
 		'candy'    => array( 'Candy colors', 'pack_candy.webp', 'Os tons pastel do chá revelação e da festa infantil.', 'R$ 19,87', $prod( 'candy75' ), 'Montar candy', $cat( 'candy-colors' ) ),
-		'cromados' => array( 'Cromados', 'premium_4_cromado.webp', 'Metalizados com brilho de festa profissional.', 'R$ 14,98', $prod( 'metal5_25' ), 'Escolher as cores', $cat( 'cromados' ) ),
+		'decorativos' => array( 'Decorativos', 'premium_4_cromado.webp', 'Metalizados de coração, estrela, bola e safári.', 'R$ 14,98', $prod( 'metal5_25' ), 'Escolher as cores', $cat( 'decorativos' ) ),
 		'numeros'  => array( 'Números', 'num_rose_5.webp', 'Número gigante de 0 a 9 sobre coluna de balões.', 'sob encomenda', $prod( 'numero' ), 'Escolher o número', $cat( 'numeros' ) ),
 		'bubbles'  => array( 'Bubbles', 'cena_04_bubble_alice.webp', 'Balão transparente com o nome e balõezinhos dentro.', 'sob encomenda', $prod( 'bubble' ), 'Personalizar', $cat( 'bubbles' ) ),
 	);
@@ -1018,7 +1026,7 @@ function glowbos_rodape_html() {
 		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $d . '</svg>';
 	};
 	$cats = '';
-	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits de arco', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'cromados' => 'Cromados', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
+	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits de arco', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'decorativos' => 'Decorativos', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
 		$cats .= '<a href="' . esc_url( home_url( '/categoria/' . $s . '/' ) ) . '">' . esc_html( $n ) . '</a>';
 	}
 	$selos = array(
@@ -1177,7 +1185,7 @@ function glowbos_linhas_html() {
 		'pacotes'           => array( 'Pacotes sortidos', 'Balões de 8 polegadas nas cores que você escolher.' ),
 		'kits-de-arco'      => array( 'Kits de arco', 'Tudo pra montar o arco em casa.' ),
 		'candy-colors'      => array( 'Candy colors', 'Os tons pastel do chá revelação e da festa infantil.' ),
-		'cromados'          => array( 'Cromados', 'Brilho de metal pro destaque da festa.' ),
+		'decorativos'       => array( 'Decorativos', 'Metalizados de coração, estrela e tema pro destaque da festa.' ),
 		'arcos'             => array( 'Arcos prontos', 'Escolha pela foto e diga os metros.' ),
 		'pacotes-fechados'  => array( 'Pacotes fechados', 'Uma cor por pacote, pra quem decora.' ),
 	);
