@@ -1181,6 +1181,7 @@ window.gbAbreApp=abre;
 // guia o passo a passo: escolheu, a janela já leva pro próximo passo
 function leva(sel,bloco){var el=cx.querySelector(sel);if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:bloco||'start'})},180)}
 cx.addEventListener('click',function(e){
+ var c=e.target.closest('#mpadd,#maComprar');if(c&&!c.disabled){setTimeout(fecha,450);return}
  if(e.target.closest('#mpt button'))leva('#mps','start');
  else if(e.target.closest('#bolhas button'))leva('.estilos','center');
  else if(e.target.closest('.estilos .es'))leva('.nbuy','center');
