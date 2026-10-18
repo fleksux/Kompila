@@ -14,8 +14,8 @@
 		if (pk) return { k: 'pct' + pk[1], paleta: pk[2] };
 		var av = nome.match(/^Pacote (\d+) balões (\d+)" · (.+)$/);
 		if (av) return { k: 'pct' + av[2] + '_' + av[1], paleta: av[3] };
-		var m = nome.match(/^Kit arco (60|100) peças[^·]*·\s*(.+)$/);
-		if (m) return { k: m[1] === '60' ? 'kit60' : 'kit100', paleta: m[2] };
+		var m = nome.match(/^Kit arco (60|100|112|120) peças[^·]*·\s*(.+)$/);
+		if (m) return { k: 'kit' + m[1], paleta: m[2] };
 		return null;
 	}
 	var btn = document.querySelector('.gf .btn');

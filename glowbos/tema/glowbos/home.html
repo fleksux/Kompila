@@ -703,6 +703,27 @@ body.gbm-aberto{overflow:hidden}
 @keyframes gbmS{from{opacity:0;transform:translateY(24px) scale(.98)}}
 @media (max-width:900px){.gba-l{grid-template-columns:1fr}.gba-h{flex-direction:column;gap:4px}}
 @media (max-width:640px){.gba{padding-top:44px}.gba-l{gap:14px}.gba-b{padding:12px 14px 12px 12px}.gba-i{flex-basis:60px;width:60px;height:60px}.gba-t b{font-size:18px}.gbm{padding:0;align-items:flex-end}.gbm-cx{max-height:94svh;border-radius:22px 22px 0 0}.gbm-cx>section{padding:56px 0 28px!important}}
+
+/* 18/10: arco por kit da loja */
+.ma-kits{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:6px}
+.ma-kits button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px 10px;border:1.5px solid #f0dfe7;border-radius:14px;background:#fff;cursor:pointer;font:inherit;color:#2a0f22}
+.ma-kits button.on{border-color:#F93388;box-shadow:0 0 0 3px #FFD8E8}
+.ma-kits img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;margin-bottom:4px;background:#F7F3EA}
+.ma-kits b{font:800 13.5px/1.1 "Inter Tight";text-align:center}
+.ma-kits span{font:500 12px Inter;color:#6b5560}
+.ma-kits em{font:800 13.5px "Inter Tight";font-style:normal;color:#F93388}
+.ma-kits .mpt-tag{color:#fff!important;font-weight:800!important;position:absolute;top:-9px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;padding:2px 7px}
+.ma-sel{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;min-height:38px;align-items:center}
+.ma-sel button{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 10px;border:1.5px solid #F93388;border-radius:99px;background:#FFF0F6;font:700 13px Inter;color:#B0124F;cursor:pointer}
+.ma-sel button i,.ma-cores button i{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.ma-sel button span{font-size:16px;line-height:1;opacity:.7}
+.ma-vz{font:500 13px Inter;color:#a08a94}
+.ma-cores{display:flex!important;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.ma-cores button{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 10px;border:1px solid #ece2e7;border-radius:99px;background:#fff;font:600 12.5px Inter;color:#2a0f22;cursor:pointer}
+.ma-cores button.on{border-color:#F93388;background:#FFF0F6}
+.ma-cores button:disabled{opacity:.35;cursor:not-allowed}
+.ma-buy2 small{display:block;max-width:330px;line-height:1.35}
+@media (max-width:640px){.ma-kits{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
@@ -948,17 +969,19 @@ addEventListener('scroll',rola,{passive:true});rola();})();
   </div>
 </div></section>
 <section class="sec" id="monte"><div class="w">
-  <div class="ctr"><span class="eyebrow">Monte seu arco</span><h2 class="tt inf">Escolha o arco pela foto. A gente calcula e entrega os balões.</h2><p class="sub">Ajuste o tamanho da sua parede e a lista de balões se refaz na hora, já com 10% de reserva pra estouro.</p></div>
+  <div class="ctr"><span class="eyebrow">Monte seu arco</span><h2 class="tt inf">Escolha o arco pela foto. A gente separa os balões.</h2><p class="sub">Arco desconstruído em kit, com balões de vários tamanhos. Você escolhe o kit e as cores.</p></div>
   <div class="ma-tabs" id="maTabs"></div>
   <div class="ma">
-    <div class="ma-foto" id="maFoto"><img class="at" id="maImg" src="img/arco_09_candy_algodao.webp" alt="Arco de balões"><span class="ma-mont" id="maMont">Arraste os metros e veja o arco crescer</span></div>
+    <div class="ma-foto" id="maFoto"><img class="at" id="maImg" src="img/arco_09_candy_algodao.webp" alt="Arco de balões"></div>
     <div class="ma-cfg">
+      <p class="mst"><i>1</i> O arco</p>
       <div class="ma-arcos" id="maArcos"></div>
-      <div class="ma-box"><div class="ma-sl"><span>Tamanho do arco</span><b id="maMv">3 m</b></div><input id="maM" type="range" min="2" max="5" step=".5" value="3" aria-label="Tamanho do arco em metros"><div class="ma-esc"><span>2 m</span><span>5 m</span></div></div>
-      <div class="ma-box" id="maTab"></div>
-      <div class="ma-buy"><div><small>Sua lista sai por</small><b id="maTot">R$ 0,00</b><small id="maPk"></small></div></div>
-      <div class="acoes ma-acoes"><button class="btn pri" id="maComprar">Comprar esta lista</button><button class="btn lin" id="maTrocar">Trocar as cores</button></div>
-      <div class="ma-cores" id="maCores" hidden></div>
+      <p class="mst"><i>2</i> O tamanho do kit</p>
+      <div class="ma-kits" id="maKits"></div>
+      <p class="mst"><i>3</i> As cores <small id="maCn"></small></p>
+      <div class="ma-sel" id="maSel"></div>
+      <div class="ma-cores" id="maCores"></div>
+      <div class="mbuy ma-buy2"><div><small id="maRes"></small><b id="maTot">R$ 0,00</b></div><button class="btn pri" id="maComprar">Colocar no carrinho</button></div>
       <p class="mnote">🚚 Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
     </div>
   </div>
@@ -1080,11 +1103,11 @@ mostra('torcida');
 
 
 <script>
-// monte seu arco: escolhe a receita, ajusta os metros e a lista vira pacotes no carrinho
+// monte seu arco: escolhe o arco pela foto, o kit e as cores; vai pro carrinho como kit da loja
 (function(){
  const CO={amarelo:['Amarelo','#f7d22e'],azul_baby:['Azul baby','#a9d1ef'],azul_celeste:['Azul celeste','#7fb2e5'],azul_cobalto:['Azul cobalto','#1f4fa8'],azul_royal:['Azul royal','#2448c8'],bege:['Bege','#e8d2b4'],branco:['Branco','#f7f5f2'],cinza:['Cinza','#b9b7b5'],dourado:['Dourado','#d7ae49'],laranja:['Laranja','#f58a2c'],lilas:['Lilás','#c3aee3'],marrom:['Marrom','#7a4b33'],pink:['Pink','#e8378a'],preto:['Preto','#232226'],rosa:['Rosa','#f4b6c8'],roxo:['Roxo','#6b3fa0'],tiffany:['Tiffany','#3cc2c6'],verde_agua:['Verde água','#a6e0cd'],verde_bandeira:['Verde bandeira','#16954a'],verde_citrus:['Verde citrus','#8ccc3e'],vermelho:['Vermelho','#d8262e']};
  const AR=[
-  {f:'09_candy_algodao',t:'Algodão doce',g:'Infantil',c:['rosa','azul_baby','amarelo','verde_agua'],et:['montagem/a09_1','montagem/a09_2','montagem/a09_3','montagem/a09_4']},
+  {f:'09_candy_algodao',t:'Algodão doce',g:'Infantil',c:['rosa','azul_baby','amarelo','verde_agua']},
   {f:'01_vivo_arco-iris',t:'Arco-íris',g:'Infantil',c:['pink','amarelo','azul_royal','laranja','verde_citrus']},
   {f:'02_vivo_primarias',t:'Primárias',g:'Infantil',c:['vermelho','amarelo','azul_royal','verde_bandeira']},
   {f:'10_candy_morango',t:'Morango',g:'Infantil',c:['vermelho','rosa','branco','pink']},
@@ -1098,43 +1121,38 @@ mostra('torcida');
   {f:'15_preto_e_branco',t:'Preto e branco',g:'Torcida',c:['preto','branco']},
   {f:'16_verde_e_branco',t:'Alviverde',g:'Torcida',c:['verde_bandeira','branco']}
  ];
- const TAM=['16','12','9','5'],DENS={'16':1.6,'12':16,'9':10,'5':14},MIN=2,MAX=5;
- const PK={'5':[50,9.99,'pacote_5pol'],'9':[50,18.99,'pacote_9pol'],'12':[25,15.99,'pacote_12pol'],'16':[12,15.99,'pacote_16pol']};
- const $=s=>document.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',','),fm=m=>String(Math.round(m*10)/10).replace('.',',')+' m';
+ const U='https://glowbos.com.br/wp-content/uploads/2026/10/';
+ const KITS=[
+  {k:'60',t:'60 peças',n:'Kit arco 60 peças',b:60,comp:'24 de 12" e 36 de 9"',x:'Sem fita',p:35.99,nc:3,i:U+'glowbos_kit60_parede.webp'},
+  {k:'100',t:'100 peças',n:'Kit arco 100 peças desconstruído',b:98,comp:'2 de 16", 6 de 12", 60 de 9" e 30 de 5"',x:'Fita 5 m + dupla face',p:52.99,nc:3,i:U+'glowbos_kit100_parede.webp',top:1},
+  {k:'112',t:'112 peças',n:'Kit arco 112 peças',b:110,comp:'2 de 16", 8 de 12", 60 de 9" e 40 de 5"',x:'Fita 5 m + dupla face',p:54.99,nc:4,i:U+'glowbos_kit112.webp'},
+  {k:'120',t:'120 peças',n:'Kit arco 120 peças',b:120,comp:'3 de 16", 12 de 12", 75 de 9" e 30 de 5"',x:'Fita 5 m',p:62.00,nc:3,i:U+'glowbos_kit120.webp'},
+  {k:'cp',t:'Arco completo',n:'Kit arco 120 peças',b:145,comp:'Kit 120 peças + 25 balões de 12"',x:'Fita 5 m',p:62.00+15.99,nc:3,i:U+'glowbos_kit120.webp',extra:{n:'Pacote 25 balões 12"',p:15.99,i:U+'pacote-glowbos-mix_12-f2.jpg'}}
+ ];
+ const $=s=>document.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',',');
  if(!$('#maArcos'))return;
- let g='Todos',a=AR[0],m=3,alvo=0;
- function pesos(n,t){const w=[];for(let i=0;i<n;i++){const x=n-i,y=i+1;w.push(t==='16'?(i<2?x*x:0):t==='12'?x+1:t==='9'?2:y)}return w}
- function calc(){const q={};a.c.forEach(c=>q[c]={'16':0,'12':0,'9':0,'5':0});let tot=0;
-  TAM.forEach(t=>{const w=pesos(a.c.length,t),s=w.reduce((x,y)=>x+y,0);a.c.forEach((c,i)=>{q[c][t]=w[i]?Math.ceil(DENS[t]*m*w[i]/s*1.1):0;tot+=q[c][t]})});
-  let gr=0;a.c.forEach(c=>gr+=q[c]['16']+q[c]['12']);const min=Math.round(35*m/15)*15,h=Math.floor(min/60),mm=min%60;
-  return {q,tot,cachos:Math.round(gr/4),fita:fm(m+.5),tempo:(h?h+'h'+(mm?(mm<10?'0':'')+mm:''):mm+' min')}}
- function compra(c){const it=[];let v=0;TAM.forEach(t=>{const n=a.c.reduce((x,k)=>x+c.q[k][t],0);if(!n)return;const [u,p,img]=PK[t],qt=Math.ceil(n/u);
-   const pal=a.t+' '+fm(m)+': '+a.c.filter(k=>c.q[k][t]).map(k=>CO[k][0]+' '+c.q[k][t]).join(', ');
-   it.push({n:'Pacote '+u+' balões '+t+'" · '+pal,p,i:'img/'+img+'.webp',q:qt});v+=p*qt});
-  it.push({n:'Fita 5 m + dupla face',p:11.98,i:'img/fita_arco_rose.webp',q:1});v+=11.98;return {it,v}}
- function foto(){if(!a.et)return 'img/arco_'+a.f+'.webp';const fs=a.et.concat(['arco_'+a.f]),k=Math.round((m-MIN)/(MAX-MIN)*(fs.length-1));return 'img/'+fs[Math.max(0,Math.min(fs.length-1,k))]+'.webp'}
- function troca(){const box=$('#maFoto'),f=foto(),at=box.querySelector('img.at');$('#maMont').style.display=a.et?'':'none';if(!at||at.getAttribute('src')===f)return;
-  box.querySelectorAll('img.nx').forEach(x=>x.remove());const n=new Image();n.className='nx';n.alt=at.alt;n.src=f;box.appendChild(n);
+ let g='Todos',a=AR[0],K=KITS[1],sel=a.c.slice(0,K.nc);
+ function foto(){const box=$('#maFoto'),f='img/arco_'+a.f+'.webp',at=box.querySelector('img.at');if(!at||at.getAttribute('src')===f)return;
+  box.querySelectorAll('img.nx').forEach(x=>x.remove());const n=new Image();n.className='nx';n.alt='Arco '+a.t;n.src=f;box.appendChild(n);
   n.onload=()=>{requestAnimationFrame(()=>n.style.opacity=1);setTimeout(()=>{at.remove();n.className='at';n.style.opacity=''},350)}}
- function lista(){const c=calc(),b=compra(c);
-  $('#maTab').innerHTML='<div class="ma-lh"><b>Sua lista de balões</b><span><b>'+c.tot+'</b> balões</span></div><table><thead><tr><th>Cor</th><th>16"</th><th>12"</th><th>9"</th><th>5"</th></tr></thead><tbody>'+
-   a.c.map(k=>'<tr><td class="nm"><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'</td>'+TAM.map(t=>{const v=c.q[k][t];return '<td class="'+(v?'':'z')+'">'+(v||'·')+'</td>'}).join('')+'</tr>').join('')+
-   '</tbody></table><div class="ma-ex"><div>Fita de arco<b>'+c.fita+'</b></div><div>Cachos de 4<b>'+c.cachos+'</b></div><div>Montagem<b>'+c.tempo+'</b></div></div>';
-  $('#maTot').textContent=R(b.v);$('#maPk').textContent=b.it.map(x=>x.q+'× '+x.n.split(' · ')[0].replace('Pacote ','').replace(' + dupla face','')).join(' · ');return b}
+ function kits(){$('#maKits').innerHTML=KITS.map(x=>'<button class="'+(x===K?'on':'')+'" data-k="'+x.k+'">'+(x.top?'<span class="mpt-tag">Mais vendido</span>':'')+'<img src="'+x.i+'" alt="" loading="lazy"><b>'+x.t+'</b><span>'+x.b+' balões</span><em>'+R(x.p)+'</em></button>').join('');
+  $('#maKits').querySelectorAll('button').forEach(b=>b.onclick=()=>{K=KITS.find(x=>x.k===b.dataset.k);sel=sel.slice(0,K.nc);a.c.forEach(c=>{if(sel.length<K.nc&&sel.indexOf(c)<0)sel.push(c)});kits();resumo()})}
+ function cores(){$('#maCn').textContent='até '+K.nc+' cores · '+sel.length+' escolhidas';
+  $('#maSel').innerHTML=sel.map((k,i)=>'<button data-i="'+i+'" title="Tirar"><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'<span>×</span></button>').join('')+(sel.length<K.nc?'<span class="ma-vz">escolha abaixo</span>':'');
+  $('#maCores').innerHTML=Object.keys(CO).map(k=>'<button data-k="'+k+'" class="'+(sel.indexOf(k)>=0?'on':'')+'"'+(sel.indexOf(k)<0&&sel.length>=K.nc?' disabled':'')+'><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'</button>').join('');
+  $('#maSel').querySelectorAll('button').forEach(b=>b.onclick=()=>{sel.splice(+b.dataset.i,1);resumo()});
+  $('#maCores').querySelectorAll('button').forEach(b=>b.onclick=()=>{const k=b.dataset.k,j=sel.indexOf(k);if(j>=0)sel.splice(j,1);else if(sel.length<K.nc)sel.push(k);resumo()})}
+ function resumo(){cores();$('#maTot').textContent=R(K.p);$('#maRes').textContent=K.b+' balões · '+K.comp+' · '+K.x;
+  const bt=$('#maComprar');bt.disabled=!sel.length;bt.textContent=sel.length?'Colocar no carrinho':'Escolha pelo menos 1 cor'}
  function abas(){const G=['Todos'].concat([...new Set(AR.map(x=>x.g))]);$('#maTabs').innerHTML=G.map(x=>'<button class="'+(x===g?'on':'')+'">'+x+'</button>').join('');
   $('#maTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{g=b.textContent;abas();arcos()})}
  function arcos(){const L=AR.filter(x=>g==='Todos'||x.g===g);if(L.indexOf(a)<0)a=L[0];
   $('#maArcos').innerHTML=L.map(x=>'<button class="'+(x===a?'on':'')+'" data-f="'+x.f+'"><img src="img/arco_'+x.f+'.webp" alt="" loading="lazy"><span>'+x.t+'</span></button>').join('');
-  $('#maArcos').querySelectorAll('button').forEach(b=>b.onclick=()=>{a=AR.find(x=>x.f===b.dataset.f);alvo=0;$('#maCores').hidden=true;arcos()});troca();lista()}
- $('#maM').oninput=e=>{m=+e.target.value;$('#maMv').textContent=fm(m);troca();lista()};
- function cores(){const box=$('#maCores');box.innerHTML='<div style="width:100%;font-size:13px;color:var(--vinho2)">Trocar <b>'+CO[a.c[alvo]][0]+'</b> por:</div>'+
-   a.c.map((k,i)=>'<button data-i="'+i+'" class="'+(i===alvo?'on':'')+'"><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'</button>').join('')+'<div style="width:100%;height:1px;background:#ece8eb;margin:4px 0"></div>'+
-   Object.keys(CO).filter(k=>a.c.indexOf(k)<0).map(k=>'<button data-k="'+k+'"><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'</button>').join('');
-  box.querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>{alvo=+b.dataset.i;cores()});
-  box.querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>{a.c[alvo]=b.dataset.k;cores();lista()})}
- $('#maTrocar').onclick=()=>{const box=$('#maCores');box.hidden=!box.hidden;if(!box.hidden)cores()};
- $('#maComprar').onclick=()=>{const b=lista();window.gbPoeLista&&window.gbPoeLista(b.it,a.t+' · '+fm(m))};
- abas();arcos();
+  $('#maArcos').querySelectorAll('button').forEach(b=>b.onclick=()=>{a=AR.find(x=>x.f===b.dataset.f);sel=a.c.slice(0,K.nc);arcos()});foto();resumo()}
+ $('#maComprar').onclick=()=>{if(!sel.length)return;const cs=sel.map(k=>CO[k][0]).join(', '),it=[{n:K.n+' · '+a.t+': '+cs,p:K.extra?Math.round((K.p-K.extra.p)*100)/100:K.p,i:K.i,q:1}];
+  if(K.extra)it.push({n:K.extra.n+' · '+a.t+': '+cs,p:K.extra.p,i:K.extra.i,q:1});
+  window.gbPoeLista&&window.gbPoeLista(it,a.t+' · '+K.t)};
+ abas();kits();arcos();
 })();
 </script>
 <script>
@@ -1184,7 +1202,8 @@ cx.addEventListener('click',function(e){
  if(e.target.closest('#mpt button'))leva('#mps','start');
  else if(e.target.closest('#bolhas button'))leva('.estilos','center');
  else if(e.target.closest('.estilos .es'))leva('.nbuy','center');
- else if(e.target.closest('#maArcos button'))leva('#maM','center');
+ else if(e.target.closest('#maArcos button'))leva('#maKits','center');
+ else if(e.target.closest('#maKits button'))leva('#maSel','center');
 },true);
 var add=document.getElementById('mpadd');if(add)new MutationObserver(function(){if(!add.disabled&&!m.hidden)leva('.mbuy','center')}).observe(add,{attributes:true,attributeFilter:['disabled']});
 document.addEventListener('click',function(e){var b=e.target.closest('[data-app]');if(b){e.preventDefault();abre(b.dataset.app);return}
