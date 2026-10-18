@@ -648,13 +648,18 @@ function glowbos_departamentos() {
 		'pacotes'          => array( 'Pacotes sortidos', '50 a 125 balões de 8" em até 5 cores, na sequência que você montar.', 'banner_pacotes.webp' ),
 		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'banner_fechados.webp' ),
 		'candy-colors'     => array( 'Candy colors', 'Os tons pastel que viraram a cara do chá revelação e da festa infantil.', 'banner_candy.webp' ),
-		'bubbles'          => array( 'Bubbles', 'Balão transparente com o nome da festa e balõezinhos coloridos dentro.', 'cena_04_bubble_alice.webp' ),
+		'bubbles'          => array( 'Bubbles', 'Balão transparente com o nome da festa e balõezinhos coloridos dentro.', 'banner_bubbles.webp' ),
 		'cromados'         => array( 'Cromados e metalizados', 'O brilho que dá acabamento de festa profissional.', 'banner_cromados.webp' ),
 		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'banner_numeros.webp' ),
 		'sets-prontos'     => array( 'Sets prontos', 'Número, base de balões, figuras e buquê montados no estilo da festa. Escolha o tema e a idade.', 'banner_sets.webp' ),
-		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'cena_07_textura_baloes.webp' ),
+		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'banner_acessorios.webp' ),
 	);
 }
+add_action( 'wp_head', function () {
+	if ( is_product_category() || is_shop() ) {
+		echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">';
+	}
+} );
 add_filter( 'woocommerce_show_page_title', function ( $show ) {
 	return ( is_product_category() || is_shop() ) ? false : $show;
 } );
@@ -665,9 +670,14 @@ function glowbos_dep_topo() {
 	}
 	$d    = glowbos_departamentos();
 	$slug = is_product_category() ? get_queried_object()->slug : '';
-	$c    = $d[ $slug ] ?? array( 'Loja Glowbos', 'Todos os balões, kits e pacotes. Em SP e Grande SP, pago até 12h chega hoje.', 'cena_01_capa_festa_sala.webp' );
+	$c    = $d[ $slug ] ?? array( 'Loja Glowbos', 'Todos os balões, kits e pacotes. Em SP e Grande SP, pago até 12h chega hoje.', 'banner_loja.webp' );
 	$img  = get_template_directory_uri() . '/img/' . $c[2];
-	echo '<section class="gb-dep-banner" style="--img:url(' . esc_url( $img ) . ')"><div><small><a href="' . esc_url( home_url( '/' ) ) . '">Início</a> / ' . ( $slug ? '<a href="' . esc_url( home_url( '/loja/' ) ) . '">Loja</a> / ' : '' ) . esc_html( $slug ? get_queried_object()->name : 'Loja' ) . '</small><h1>' . esc_html( $c[0] ) . '</h1><p>' . esc_html( $c[1] ) . '</p></div></section>';
+	$esc  = in_array( $slug, array( 'pacotes-fechados', 'sets-prontos' ), true ) ? ' esc' : '';
+	$imgm = preg_replace( '#(banner_[a-z]+)\.webp$#', '$1_m.webp', $img );
+	$ver  = '?v=' . (int) @filemtime( get_template_directory() . '/img/' . $c[2] );
+	$img .= $ver;
+	$imgm .= $ver;
+	echo '<section class="gb-dep-banner gb-dep2' . $esc . '" style="--img:url(' . esc_url( $img ) . ');--imgm:url(' . esc_url( $imgm ) . ')"><div><small><a href="' . esc_url( home_url( '/' ) ) . '">Início</a> / ' . ( $slug ? '<a href="' . esc_url( home_url( '/loja/' ) ) . '">Loja</a> / ' : '' ) . esc_html( $slug ? get_queried_object()->name : 'Loja' ) . '</small><h1>' . esc_html( $c[0] ) . '</h1><p>' . esc_html( $c[1] ) . '</p></div></section>';
 	// atalhos de departamento
 	echo '<nav class="gb-dep-nav"><a href="' . esc_url( home_url( '/loja/' ) ) . '"' . ( $slug ? '' : ' class="on"' ) . '>Tudo</a>';
 	foreach ( $d as $s => $x ) {

@@ -171,3 +171,20 @@ a{color:inherit}
 /* vitrine quadrada de novo (sem esticar); embalagem já vem em quadrado branco com respiro */
 .woocommerce ul.products li.product a img{aspect-ratio:1!important}
 .woocommerce ul.products li.product.product_cat-pacotes-fechados a img{object-fit:contain!important}
+
+/* 18/10: banners de departamento em textura de balões, texto direto no degradê */
+.gb-dep-banner.gb-dep2{min-height:250px;padding:34px 40px;text-align:left!important;justify-content:flex-start!important;background:var(--img) center/cover no-repeat #FFD8E8;border:0;box-shadow:0 18px 40px -24px rgba(176,18,79,.35)}
+.gb-dep2 div{max-width:520px!important;margin:0!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important;padding:0!important}
+.gb-dep2 small{color:#8a5f73!important;font-weight:600}
+.gb-dep2 h1{font:700 clamp(34px,4vw,52px)/1.02 Fredoka,"Inter Tight",sans-serif!important;letter-spacing:0!important;color:#B0124F!important;margin:8px 0 10px!important}
+.gb-dep2 p{color:#5E0B2E!important;font:500 16px/1.45 Inter!important;max-width:440px}
+.gb-dep2.esc small{color:rgba(255,255,255,.85)!important}.gb-dep2.esc small a{color:#fff}
+.gb-dep2.esc h1{color:#fff!important;text-shadow:0 2px 14px rgba(120,10,50,.25)}
+.gb-dep2.esc p{color:#fff!important}
+@media (max-width:760px){
+.gb-dep-banner.gb-dep2{min-height:330px;padding:0 18px 20px;align-items:flex-end;background:var(--imgm) right top/100% auto no-repeat #FFD8E8}
+.gb-dep2::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#FFE3EE 0,#FFE3EE 40%,rgba(255,227,238,0) 66%);pointer-events:none}
+.gb-dep2.esc::before{background:linear-gradient(0deg,#C8175F 0,#C8175F 40%,rgba(200,23,95,0) 66%)}
+.gb-dep2 div{position:relative;z-index:1}
+.gb-dep2 h1{font-size:34px!important}.gb-dep2 p{font-size:14.5px!important}
+}
