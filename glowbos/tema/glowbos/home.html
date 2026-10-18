@@ -725,6 +725,15 @@ body.gbm-aberto{overflow:hidden}
 .ma-cores button:disabled{opacity:.35;cursor:not-allowed}
 .ma-buy2 small{display:block;max-width:330px;line-height:1.35}
 @media (max-width:640px){.ma-kits{grid-template-columns:repeat(3,1fr)}}
+
+.ma-curso{margin-top:34px}
+.ma-vids{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mv-v{position:relative;display:block;padding:0;border:0;border-radius:16px;overflow:hidden;aspect-ratio:9/16;background:#2a0f22;cursor:pointer;font:inherit}
+.mv-v img,.mv-v video{width:100%;height:100%;object-fit:cover;display:block}
+.mv-v i{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(249,51,136,.92);color:#fff;font:400 22px/56px Inter;font-style:normal;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.mv-v span{position:absolute;left:0;right:0;bottom:0;padding:30px 12px 12px;background:linear-gradient(0deg,rgba(42,15,34,.85),transparent);color:#fff;font:700 14px/1.25 Inter;text-align:left}
+.mv-v.tocando i,.mv-v.tocando span{display:none}
+@media (max-width:760px){.ma-vids{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.mv-v{flex:0 0 46%;scroll-snap-align:start}}
 </style>
 </head>
 <body>
@@ -986,6 +995,7 @@ addEventListener('scroll',rola,{passive:true});rola();})();
       <p class="mnote">🚚 Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
     </div>
   </div>
+  <div class="ma-curso"><p class="mst"><i>▶</i> Como montar em casa</p><div class="ma-vids"><button type="button" class="mv-v" data-v="https://glowbos.com.br/wp-content/uploads/curso/Aula2-01-Guirlanda-passo-a-passo.mp4"><img src="https://glowbos.com.br/wp-content/uploads/curso/Aula2-01-Guirlanda-passo-a-passo.jpg" alt="" loading="lazy"><i>▶</i><span>Arco desconstruído passo a passo</span></button><button type="button" class="mv-v" data-v="https://glowbos.com.br/wp-content/uploads/curso/Aula1-03-3-jeitos-de-prender-cachos.mp4"><img src="https://glowbos.com.br/wp-content/uploads/curso/Aula1-03-3-jeitos-de-prender-cachos.jpg" alt="" loading="lazy"><i>▶</i><span>3 jeitos de prender os cachos</span></button><button type="button" class="mv-v" data-v="https://glowbos.com.br/wp-content/uploads/curso/Aula2-04-Como-prender-guirlanda-na-parede.mp4"><img src="https://glowbos.com.br/wp-content/uploads/curso/Aula2-04-Como-prender-guirlanda-na-parede.jpg" alt="" loading="lazy"><i>▶</i><span>Como prender na parede</span></button><button type="button" class="mv-v" data-v="https://glowbos.com.br/wp-content/uploads/curso/Aula3-01-Truque-arco-redondo.mp4"><img src="https://glowbos.com.br/wp-content/uploads/curso/Aula3-01-Truque-arco-redondo.jpg" alt="" loading="lazy"><i>▶</i><span>Truque do arco redondo</span></button></div></div>
 </div></section>
   </div>
 </div>
@@ -1213,6 +1223,7 @@ document.addEventListener('click',function(e){var b=e.target.closest('[data-app]
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)fecha()});
 var h=location.hash.slice(1);if(h==='pacotes'||h==='numeros'||h==='monte')setTimeout(function(){abre(h)},300);
 })();
+document.addEventListener('click',function(e){var b=e.target.closest('.mv-v');if(!b||b.classList.contains('tocando'))return;document.querySelectorAll('.mv-v.tocando video').forEach(function(v){v.pause()});b.classList.add('tocando');b.insertAdjacentHTML('beforeend','<video src="'+b.dataset.v+'" controls autoplay playsinline style="position:absolute;inset:0"></video>')});
 </script>
 </body>
 </html>
