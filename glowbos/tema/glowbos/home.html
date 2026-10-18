@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Glowbos · home D · Chiclete</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Inter+Tight:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --chi:#1d1a1f;--forte:#FF1F7A;--bebe:#FFF2F6;--bebe2:#FFFFFF;--logo:#FFFFFF;--vinho:#1d1a1f;--vinho2:#5f5a63;--esc:#141216;
@@ -613,6 +613,64 @@ main~.gb-news{margin-top:0!important}
 .sl:not(.on) .tx>*{opacity:0;transition:opacity .2s ease 0s}
 /* 16/10: texto dos cards de festa centralizado, como o título da seção */
 #festas .fb{text-align:center!important}#festas .fb b,#festas .fb small{display:block;text-align:center}
+
+/* 18/10 hero: parede de balões de ponta a ponta, texto branco Fredoka, balões saindo por cima da borda */
+.hero{position:relative}
+.sl.cor:before{background:linear-gradient(90deg,rgba(70,0,35,.38) 0,rgba(70,0,35,.18) 34%,transparent 58%)!important;display:block!important}
+.sl.cor img{object-position:center 40%}
+.sl.cor h1,.sl.cor h2{font-family:"Fredoka",sans-serif!important;font-weight:700!important;letter-spacing:-.005em!important;color:#fff!important;text-shadow:0 6px 30px rgba(90,0,45,.45)}
+.sl.cor p{color:#fff!important;text-shadow:0 2px 14px rgba(90,0,45,.5)}
+.sl.cor .eyebrow{color:#fff!important;background:#F93388;padding:7px 14px;border-radius:999px;letter-spacing:.12em}
+.sl.cor .acoes .btn.pri{background:#fff!important;color:#F93388!important;box-shadow:0 12px 30px rgba(90,0,45,.25)!important}
+.sl.cor .btn.lin{background:rgba(255,255,255,.14)!important;color:#fff!important;box-shadow:inset 0 0 0 2px #fff!important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.sl.cor .cepr{color:#fff!important}
+.sl.cor.claro h1,.sl.cor.claro h2{color:#B0124F!important;text-shadow:0 2px 0 rgba(255,255,255,.6)}
+.sl.cor.claro p{color:#5E0B2E!important;text-shadow:none}
+.sl.cor.claro .acoes .btn.pri{background:#F93388!important;color:#fff!important}
+.sl.cor.claro .btn.lin{color:#B0124F!important;box-shadow:inset 0 0 0 2px #B0124F!important;background:rgba(255,255,255,.55)!important}
+.sl.cor.claro:before{background:linear-gradient(90deg,rgba(255,240,246,.55) 0,rgba(255,240,246,.25) 40%,transparent 60%)!important}
+@media (max-width:640px){.sl.cor.claro h1,.sl.cor.claro h2,.sl.cor.claro p{color:#fff!important;text-shadow:none!important}.sl.cor.claro .btn.lin{color:#fff!important;box-shadow:inset 0 0 0 2px #fff!important;background:rgba(255,255,255,.14)!important}.sl.cor.claro:before{background:linear-gradient(0deg,rgba(176,18,79,.92) 0,rgba(176,18,79,.55) 34%,transparent 58%)!important}}
+.voa{position:absolute;left:0;right:0;top:clamp(440px,calc(100svh - 200px),520px);height:0;pointer-events:none;z-index:6}
+.voa img{position:absolute;filter:drop-shadow(0 14px 18px rgba(90,0,45,.22));animation:voa 6s ease-in-out infinite}
+.voa .v1{width:140px;left:max(4px,calc((100vw - 1340px)/2));top:-150px;animation-delay:-1s}
+.voa .v2{width:96px;left:max(70px,calc((100vw - 1340px)/2 + 80px));top:-92px;animation-duration:7s}
+.voa .v3{width:132px;right:max(4px,calc((100vw - 1340px)/2));top:-160px;animation-delay:-2.5s}
+.voa .v4{width:76px;right:max(96px,calc((100vw - 1340px)/2 + 110px));top:-100px;animation-duration:5s;animation-delay:-.5s}
+.voa .v5,.voa .v6{display:none}
+@keyframes voa{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-18px) rotate(4deg)}}
+@media (prefers-reduced-motion:reduce){.voa img{animation:none}}
+@media (max-width:640px){
+  .dots{top:auto!important;bottom:22px!important}
+  .janela{height:78svh!important;min-height:560px!important;background:#F93388!important}
+  .sl.cor img{inset:0!important;height:100%!important;object-position:center top!important}
+  .sl.cor:before{display:block!important;background:linear-gradient(0deg,rgba(176,18,79,.92) 0,rgba(176,18,79,.55) 34%,transparent 58%)!important}
+  .sl.cor .tx{position:relative!important;top:auto!important;height:100%!important;justify-content:flex-end!important;padding:0 18px 52px!important;background:none!important}
+  .sl.cor h1,.sl.cor h2{color:#fff!important;font-size:33px!important}
+  .sl.cor .tx{align-items:flex-start!important;text-align:left!important}
+  .voa{top:max(560px,78svh)!important}
+  .sl.cor p{color:#fff!important}
+  .voa .v1{width:64px;top:-100px}.voa .v2{display:none}.voa .v3{width:60px;top:-104px}.voa .v4{display:none}.voa .v5,.voa .v6{display:none}
+}
+
+/* 18/10 revisão */
+.sl.cor h1,.sl.cor h2{max-width:700px!important;min-height:0!important;font-size:clamp(40px,min(4.6vw,8.6svh),68px)!important;line-height:1.02!important;margin-bottom:14px!important}
+.sl.cor .tx{margin:0!important;max-width:none!important;width:auto!important;padding-left:max(24px,calc((100vw - 1240px)/2 + 24px))!important;align-items:flex-start!important;text-align:left!important}
+.sl.cor .tx>*{max-width:700px}
+.sl.cor{align-items:flex-start!important}
+.sl.cor picture{position:absolute;inset:0;display:block}
+.sl.cor .tx{flex:1 1 auto}
+.dots{z-index:7!important}
+.voa .v1{width:118px!important;left:max(2px,calc((100vw - 1240px)/2 - 120px))!important;top:-150px!important}
+.voa .v2{width:78px!important;left:max(0px,calc((100vw - 1240px)/2 - 150px))!important;top:-58px!important}
+.voa .v3{width:120px!important;right:max(2px,calc((100vw - 1240px)/2 - 120px))!important;top:-140px!important}
+.voa .v4{width:80px!important;right:max(0px,calc((100vw - 1240px)/2 - 150px))!important;top:-52px!important}
+@media (min-width:641px){.sl.cor .tx{padding-top:44px!important}}
+@media (max-width:640px){
+  .sl.cor .tx{max-width:none!important}
+  .sl.cor .eyebrow{align-self:flex-start!important;margin-left:0!important;margin-right:auto!important}
+  .sl.cor .acoes{display:flex!important;width:100%;gap:10px}
+  .sl.cor .acoes .btn{flex:1 1 0;min-width:0;padding:0 12px!important;font-size:15px}
+}
 </style>
 </head>
 <body>
@@ -641,36 +699,67 @@ main~.gb-news{margin-top:0!important}
 <main>
 <section class="hero">
   <div class="janela" id="janela">
-    <div class="sl on" style="--g:#141216">
-      <picture><source media="(max-width:640px)" srcset="img/hero_entrega_2_m.webp"><img src="img/hero_entrega_2.webp" alt="Moça recebendo balões na porta de casa"></picture>
+    <div class="sl on cor claro">
+      <picture><source media="(max-width:640px)" srcset="img/hero_drone_5_m.webp"><img src="img/hero_drone_5.webp" alt="Drone rosa entregando um pacote de balões Glowbos"></picture>
       <div class="tx">
         <span class="eyebrow">Entrega no mesmo dia</span>
         <h1 class="inf">Pediu hoje,<br>a festa chega hoje!</h1>
-        <p>Em São Paulo e Grande SP, seus balões batem na porta no mesmo dia.</p>
+        <p style="max-width:380px">Em SP e Grande SP, pagou até 12h, chega no mesmo dia.</p>
         <div class="acoes"><a class="btn pri" href="#pacotes">Comprar balões</a><button type="button" class="btn lin" data-prazo>Ver prazo</button></div>
         <div class="cepr" id="cepr"></div>
       </div>
     </div>
-    <div class="sl" style="--g:#141216">
-      <picture><source media="(max-width:640px)" srcset="img/hero_crianca_2_m.webp"><img src="img/hero_crianca_2.webp" alt="Menina de 7 anos em festa com o número 7 dourado"></picture>
+    <div class="sl cor">
+      <picture><source media="(max-width:640px)" srcset="img/hero_pacote_5_m.webp"><img src="img/hero_pacote_5.webp" alt="Pacote de balões Glowbos sortido aberto com balões saindo"></picture>
       <div class="tx">
-        <span class="eyebrow">Festa de criança</span>
-        <h2 class="inf">O número dela,<br>do tamanho do sonho.</h2>
-        <p>Arco, número gigante e as cores que ela escolheu. Em SP, chega no mesmo dia.</p>
-        <div class="acoes"><a class="btn pri" href="/produto/coluna-com-numero-metalizado-gigante/">Escolher o número</a><a class="btn lin" href="/categoria/arcos/#gbArco">Montar o arco</a></div>
+        <span class="eyebrow">Pacote sortido</span>
+        <h2 class="inf">Abre, monta,<br>festa.</h2>
+        <p style="max-width:380px">De 50 a 125 balões, até 5 cores, na ordem que você quiser.</p>
+        <div class="acoes"><a class="btn pri" href="#pacotes">Montar meu pacote</a><a class="btn lin" href="/categoria/arcos/#gbArco">Ver arcos</a></div>
+        
       </div>
     </div>
-    <div class="sl" style="--g:#4a2340">
-      <picture><source media="(max-width:640px)" srcset="img/hero_halloween_2_m.webp"><img src="img/hero_halloween_2.webp" alt="Três crianças fantasiadas em festa de Halloween"></picture>
+    <div class="sl cor claro">
+      <picture><source media="(max-width:640px)" srcset="img/hero_candy_5_m.webp"><img src="img/hero_candy_5.webp" alt="Máquina de doces cheia de balões candy colors"></picture>
+      <div class="tx">
+        <span class="eyebrow">Candy colors</span>
+        <h2 class="inf">Os tons que você<br>salvou no Pinterest.</h2>
+        <p style="max-width:380px">Rosa, lilás, azul e verde candy, pra chá revelação e festa infantil.</p>
+        <div class="acoes"><a class="btn pri" href="/categoria/candy-colors/">Ver candy colors</a><a class="btn lin" href="#pacotes">Montar pacote</a></div>
+        
+      </div>
+    </div>
+    <div class="sl cor">
+      <picture><source media="(max-width:640px)" srcset="img/hero_15anos_5_m.webp"><img src="img/hero_15anos_5.webp" alt="Menina de 15 anos sorrindo ao lado de uma parede de balões cromados rose gold e dourados com o número 15"></picture>
+      <div class="tx">
+        <span class="eyebrow">15 anos</span>
+        <h2 class="inf">A festa dos 15,<br>do jeito dela.</h2>
+        <p style="max-width:380px">Balões cromados e números metalizados pra montar a parede em casa.</p>
+        <div class="acoes"><a class="btn pri" href="/categoria/cromados/">Ver cromados</a><a class="btn lin" href="/categoria/numeros/">Ver números</a></div>
+      </div>
+    </div>
+    <div class="sl cor">
+      <picture><source media="(max-width:640px)" srcset="img/hero_presente_5_m.webp"><img src="img/hero_presente_5.webp" alt="Caixa de presente rosa explodindo em balões"></picture>
+      <div class="tx">
+        <span class="eyebrow">Festa em casa</span>
+        <h2 class="inf">Festa linda<br>gastando pouco.</h2>
+        <p style="max-width:380px">Você monta, do seu jeito, com os balões que estão em alta.</p>
+        <div class="acoes"><a class="btn pri" href="/loja/">Ver a loja</a><a class="btn lin" href="/categoria/arcos/#gbArco">Montar o arco</a></div>
+        
+      </div>
+    </div>
+    <div class="sl cor">
+      <picture><source media="(max-width:640px)" srcset="img/hero_halloween_4_m.webp"><img src="img/hero_halloween_4.webp" alt="Crianças fantasiadas numa parede de balões laranja, roxo e preto"></picture>
       <div class="tx">
         <span class="eyebrow">Halloween</span>
         <h2 class="inf">Doces, sustos<br>e balões.</h2>
-        <p>Arco de Halloween em preto, laranja e roxo. Entregue hoje em SP e Grande SP.</p>
+        <p style="max-width:380px">Laranja, roxo e preto pro Halloween em casa.</p>
         <div class="acoes"><a class="btn pri" href="#festas">Ver Halloween</a><a class="btn lin" href="/categoria/arcos/#gbArco">Montar o arco</a></div>
       </div>
     </div>
-    <div class="dots" id="dots"><button class="dot on" aria-label="Slide 1"></button><button class="dot" aria-label="Slide 2"></button><button class="dot" aria-label="Slide 3"></button></div>
+    <div class="dots" id="dots"><button class="dot on" aria-label="Slide 1"></button><button class="dot" aria-label="Slide 2"></button><button class="dot" aria-label="Slide 3"></button><button class="dot" aria-label="Slide 4"></button><button class="dot" aria-label="Slide 5"></button><button class="dot" aria-label="Slide 6"></button></div>
   </div>
+  <div class="voa" aria-hidden="true"><img class="v1" src="img/hb_pink.webp" alt=""><img class="v2" src="img/hb_rosa.webp" alt=""><img class="v3" src="img/hb_lilas.webp" alt=""><img class="v4" src="img/hb_dourado.webp" alt=""><img class="v5" src="img/hb_rosa.webp" alt=""><img class="v6" src="img/hb_azul_baby.webp" alt=""></div>
   <div class="w"><div class="selos">
     <div class="sl0"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></i><span><b>Entrega no mesmo dia</b>em São Paulo e Grande SP</span></div>
     <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></i><span><b>Nota 4,9</b>na Shopee</span></div>
@@ -831,7 +920,7 @@ $('#janela').addEventListener('mouseenter',()=>clearInterval(ht));$('#janela').a
 document.querySelectorAll('.cepi').forEach(i=>{i.addEventListener('input',()=>{i.value=i.value.replace(/\D/g,'').replace(/^(\d{5})(\d)/,'$1-$2')});i.addEventListener('focus',()=>clearInterval(ht))});
 window.vePrazo=function(f){const d=f.querySelector('input').value.replace(/\D/g,''),r=$('#cepr');clearInterval(ht);
  if(d.length!==8){r.className='cepr';r.textContent='Digite os 8 números do CEP.';return}
- const f=window.gbFrete?window.gbFrete(d):{ok:false,msg:'O prazo aparece no carrinho.'};r.className=f.ok?'cepr ok':'cepr';r.textContent=(f.ok?'🎉 ':'📦 ')+f.msg};
+ const fr=window.gbFrete?window.gbFrete(d):{ok:false,msg:'O prazo aparece no carrinho.'};r.className=fr.ok?'cepr ok':'cepr';r.textContent=(fr.ok?'🎉 ':'📦 ')+fr.msg};
 
 const bol=$('#bolhas');let NUM='5',EST='Rosé';
 for(let k=0;k<10;k++){const b=document.createElement('button');b.className='bo'+(k===5?' on':'');b.textContent=k;b.setAttribute('aria-label','Número '+k);b.onclick=()=>{bol.querySelectorAll('.bo').forEach(x=>x.classList.remove('on'));b.classList.add('on');NUM=String(k);nfoto()};bol.appendChild(b)}
