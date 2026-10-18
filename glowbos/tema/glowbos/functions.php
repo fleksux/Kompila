@@ -149,6 +149,23 @@ add_filter( 'woocommerce_order_item_display_meta_value', function ( $valor, $met
 	return $valor;
 }, 10, 2 );
 
+// 18/10: o resumo do checkout mostra a foto de cada item (a montagem, se tiver; senão a do produto).
+add_filter( 'woocommerce_cart_item_name', function ( $nome, $item ) {
+	if ( ! is_checkout() ) {
+		return $nome;
+	}
+	$url = ! empty( $item['glowbos_img'] ) ? $item['glowbos_img'] : ( isset( $item['data'] ) ? wp_get_attachment_image_url( $item['data']->get_image_id(), 'thumbnail' ) : '' );
+	if ( ! $url ) {
+		return $nome;
+	}
+	return '<span class="gb-rv"><img src="' . esc_url( $url ) . '" alt="" width="56" height="56"><span>' . $nome . '</span></span>';
+}, 20, 2 );
+add_action( 'wp_head', function () {
+	if ( is_checkout() ) {
+		echo '<style>.gb-rv{display:inline-flex;align-items:center;gap:12px;vertical-align:middle}.gb-rv img{flex:0 0 56px;width:56px;height:56px;object-fit:cover;border-radius:10px;background:#F7F3EA}</style>';
+	}
+} );
+
 // Carrinho e checkout em blocos (Store API) também mostram a foto da montagem.
 add_filter( 'woocommerce_store_api_cart_item_images', function ( $imagens, $cart_item ) {
 	if ( empty( $cart_item['glowbos_img'] ) ) {
