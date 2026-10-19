@@ -442,7 +442,7 @@ function abrirSacola() {
     <div class="bloco"><h4>Pagamento</h4><div class="seg" id="pag">${D.loja.pagamentos.map(p => `<button data-p="${p}">${p}</button>`).join('')}</div><div class="dica" id="pag-quando"></div><div class="campo" id="troco-box" style="display:none"><label>Troco pra quanto?</label><input id="troco" inputmode="decimal" placeholder="ex.: 50"></div></div>
     <div class="bloco"><h4>Seus dados</h4><div class="campo"><label>Nome</label><input id="nome" autocomplete="name"></div><div class="campo"><label>WhatsApp</label><input id="tel" inputmode="tel" autocomplete="tel" placeholder="(37) 9...."></div></div>
     <div class="contas" id="contas"></div><div class="total"><span>Total</span><span id="tot"></span></div><div class="erro" id="erro"></div>
-  </div><div class="acao"><button class="btn" id="enviar">Enviar pedido pelo WhatsApp</button></div>`
+  </div><div class="acao"><button class="btn" id="enviar">Confirmar pelo WhatsApp</button></div>`
   const ped = (() => { try { return JSON.parse(localStorage.getItem('lucius_dados') || '{}') } catch (e) { return {} } })()
   ;['nome', 'tel', 'rua', 'bairro', 'ref'].forEach(k => { if (ped[k]) $('#' + k).value = ped[k] })
   const seg = () => { document.querySelectorAll('#tipo button').forEach(b => b.classList.toggle('on', b.dataset.t === tipo)); document.querySelectorAll('#pag button').forEach(b => b.classList.toggle('on', b.dataset.p === pag)); $('#end-box').style.display = tipo === 'entrega' ? '' : 'none'; $('#pag-quando').textContent = tipo === 'entrega' ? 'Você paga quando o pedido chegar.' : 'Você paga quando vier buscar.'; const tx = taxa(); $('#contas').innerHTML = `<div><span>Itens</span><span>${R(ts)}</span></div>` + (tipo === 'entrega' ? `<div><span>Entrega</span><span>${tx == null ? ($('#bairro').value ? 'a loja confirma' : 'escolhe o bairro') : R(tx)}</span></div>` : ''); $('#tot').textContent = R(ts + (tx || 0)) + (tipo === 'entrega' && tx == null ? ' + entrega' : ''); $('#troco-box').style.display = pag === 'Dinheiro' ? '' : 'none' }
@@ -477,6 +477,7 @@ async function inscreverPush(pedidoId) {
     await registrar({ chave: 'kmp_lucius_lanches', acao: 'push', pedido_id: pedidoId, sub: sub.toJSON() })
   } catch (e) {}
 }
+const WA_CONFIRMA = '5511967342512'   // WhatsApp da Liz (número oficial da Kompila na API)
 async function enviar() {
   const v = k => $('#' + k).value.trim(), tel = v('tel').replace(/\D/g, '')
   const falta = !v('nome') ? 'Coloca seu nome.' : tel.length < 10 ? 'Coloca seu WhatsApp com DDD.' : tipo === 'entrega' && (!v('rua') || !v('bairro')) ? 'Coloca a rua, o número e o bairro.' : ''
@@ -491,8 +492,12 @@ async function enviar() {
   const r = await registrar({ chave: 'kmp_lucius_lanches', nome: v('nome'), telefone: tel, tipo, endereco: tipo === 'entrega' ? `${v('rua')}, ${v('bairro')}${v('ref') ? ' (' + v('ref') + ')' : ''}` : '', bairro: tipo === 'entrega' ? v('bairro') : '', pagamento: pagTxt(), troco: pag === 'Dinheiro' ? v('troco') : '', itens: sacola.map(x => ({ id: x.id, qtd: x.qtd, ad: x.ad, tira: x.tira, obs: x.obs })) })
   if (permissao) await permissao
   if (r && r.id) await inscreverPush(r.id)
-  bt.disabled = false; bt.textContent = 'Enviar pedido pelo WhatsApp'
-  location.href = `https://wa.me/${D.loja.whatsapp}?text=${encodeURIComponent(r && r.numero ? msg.replace('*Pedido pelo cardápio*', `*Pedido nº ${r.numero}*`) : msg)}`
+  bt.disabled = false; bt.textContent = 'Confirmar pelo WhatsApp'
+  // 0192 (19/10, Alex): o pedido grava 'aguardando' e o cliente confirma no WhatsApp da Kompila; a Liz da loja manda o resumo e o Pix ou a maquininha.
+  // Se o registro falhou, cai no jeito antigo: o pedido inteiro vai pro WhatsApp da loja.
+  location.href = r && r.numero
+    ? `https://wa.me/${WA_CONFIRMA}?text=${encodeURIComponent(`*Pedido nº ${r.numero} · ${D.loja.nome}*\nQuero confirmar meu pedido.`)}`
+    : `https://wa.me/${D.loja.whatsapp}?text=${encodeURIComponent(msg)}`
 }
 
 /* pedir de novo: o último pedido deste celular */
