@@ -656,7 +656,7 @@ function glowbos_departamentos() {
 	return array(
 		'arcos'            => array( 'Arcos de balões', 'Monte o seu arco escolhendo as cores, ou leve o kit com tudo pronto pra montar.', 'banner_arcos.webp' ),
 		'decoracao-pronta' => array( 'Decoração Pronta', 'Kits de arco de 60 a 120 peças e bubble encapsulado, com as cores que você escolher.', 'banner_kits.webp' ),
-		'baloes-joy'       => array( 'Balões Joy', 'Balões Joy de 5, 9, 12 e 16 polegadas. Você escolhe as cores.', 'banner_fechados.webp' ),
+		'baloes-joy'       => array( 'Balões Joy', 'Balões Joy de 5, 9, 12 e 16 polegadas. Você escolhe as cores.', 'banner_joy.webp' ),
 		'pacotes'          => array( 'Pacotes sortidos', '50 a 125 balões de 8" em até 5 cores, na sequência que você montar.', 'banner_pacotes.webp' ),
 		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'banner_fechados.webp' ),
 		'candy-colors'     => array( 'Candy colors', 'Os tons pastel que viraram a cara do chá revelação e da festa infantil.', 'banner_candy.webp' ),
@@ -684,7 +684,7 @@ function glowbos_dep_topo() {
 	$slug = is_product_category() ? get_queried_object()->slug : '';
 	$c    = $d[ $slug ] ?? array( 'Loja Glowbos', 'Todos os balões, kits e pacotes. Em SP e Grande SP, pago até 12h chega hoje.', 'banner_loja.webp' );
 	$img  = get_template_directory_uri() . '/img/' . $c[2];
-	$esc  = in_array( $slug, array( 'pacotes-fechados', 'sets-prontos' ), true ) ? ' esc' : '';
+	$esc  = in_array( $slug, array( 'pacotes-fechados', 'pacotes', 'sets-prontos' ), true ) ? ' esc' : '';
 	$imgm = preg_replace( '#(banner_[a-z]+)\.webp$#', '$1_m.webp', $img );
 	$ver  = '?v=' . (int) @filemtime( get_template_directory() . '/img/' . $c[2] );
 	$img .= $ver;
@@ -1216,7 +1216,7 @@ function glowbos_linhas_html() {
 		$pq( 'kit60', 'Kit Arco 60 peças' ) . $pq( 'kit80', 'Kit Arco 80 peças' ) . $pq( 'kit100', 'Kit Arco 100 peças' ) . $pq( 'bubble_encap', 'Bubble Encapsulado' ) );
 	$h .= $sec( 'joy', 'Balões Joy', 'A marca Joy em 4 tamanhos. Você escolhe as cores.', $cat( 'baloes-joy' ),
 		$pq( 'pct5_50', 'Joy 5" · 50 un.' ) . $pq( 'pct9_50', 'Joy 9" · 50 un.' ) . $pq( 'pct12_25', 'Joy 12" · 25 un.' ) . $pq( 'pct16_12', 'Joy 16" · 12 un.' ) .
-		$q( 'Joy Big 25"', $img . 'banner_fechados_m.webp', '', 'em breve', ' vq-breve' ) );
+		$q( 'Joy Big 25"', $img . 'banner_joy_m.webp', '', 'em breve', ' vq-breve' ) );
 	$h .= $sec( 'formatos', 'Formatos', 'Números e balões de formato pro destaque da festa.', $cat( 'formatos' ),
 		$q( 'Balões de Números', $img . 'num_rose_5.webp', $cat( 'numeros' ), 'de 0 a 9' ) .
 		$q( 'Balões de Formatos', wp_get_attachment_image_url( get_post_thumbnail_id( $mapa['met18_estrela'] ?? 0 ), 'medium_large' ) ?: $img . 'banner_cromados_m.webp', $cat( 'formatos' ), 'coração, estrela, bola e safári' ) );
