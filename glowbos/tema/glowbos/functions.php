@@ -569,7 +569,7 @@ function glowbos_app_config( $pid ) {
 	$mapa = array_flip( (array) get_option( 'glowbos_produtos', array() ) );
 	$k    = $mapa[ (string) $pid ] ?? '';
 	$c    = array(
-		'pct25' => array( 'sequencia', 1, 'lisos', '25 balões de 8"' ), 'pct50' => array( 'sequencia', 2, 'lisos', '50 balões de 8"' ), 'pct75' => array( 'sequencia', 3, 'lisos', '75 balões de 8"' ),
+		'pct50' => array( 'sequencia', 2, 'lisos', '50 balões de 8"' ), 'pct75' => array( 'sequencia', 3, 'lisos', '75 balões de 8"' ),
 		'pct100' => array( 'sequencia', 4, 'lisos', '100 balões de 8"' ), 'pct125' => array( 'sequencia', 5, 'lisos', '125 balões de 8"' ),
 		'candy50' => array( 'sequencia', 2, 'candy', '50 balões candy de 8"' ), 'candy75' => array( 'sequencia', 3, 'candy', '75 balões candy de 8"' ), 'candy100' => array( 'sequencia', 4, 'candy', '100 balões candy de 8"' ),
 		'kit60' => array( 'sequencia', 3, 'lisos', 'kit 60 peças' ), 'kit80' => array( 'sequencia', 3, 'lisos', 'kit 80 peças' ), 'kit100' => array( 'sequencia', 3, 'lisos', 'kit 100 peças' ), 'kit112' => array( 'sequencia', 4, 'lisos', 'kit 112 peças' ),
@@ -640,11 +640,14 @@ add_action( 'wc_ajax_glowbos_add', function () {
 	wp_send_json_success( array( 'qtd' => WC()->cart->get_cart_contents_count(), 'carrinho' => wc_get_cart_url() ) );
 } );
 
-// 18/10: Cromados virou Decorativos; o endereço antigo leva pro novo.
+// Endereços antigos de categoria levam pro nome novo (18 e 19/10).
 add_action( 'template_redirect', function () {
-	if ( preg_match( '#^/categoria/cromados(/.*)?$#', (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ) ) ) {
-		wp_safe_redirect( home_url( '/categoria/decorativos/' ), 301 );
-		exit;
+	$path = (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH );
+	foreach ( array( 'cromados' => 'formatos', 'decorativos' => 'formatos', 'kits-de-arco' => 'decoracao-pronta' ) as $de => $para ) {
+		if ( preg_match( '#^/categoria/' . $de . '(/.*)?$#', $path ) ) {
+			wp_safe_redirect( home_url( '/categoria/' . $para . '/' ), 301 );
+			exit;
+		}
 	}
 } );
 
@@ -652,12 +655,13 @@ add_action( 'template_redirect', function () {
 function glowbos_departamentos() {
 	return array(
 		'arcos'            => array( 'Arcos de balões', 'Monte o seu arco escolhendo as cores, ou leve o kit com tudo pronto pra montar.', 'banner_arcos.webp' ),
-		'kits-de-arco'     => array( 'Kits de arco', 'De 60 a 120 peças em 4 tamanhos, com as cores que você escolher. Chega com a fita.', 'banner_kits.webp' ),
+		'decoracao-pronta' => array( 'Decoração Pronta', 'Kits de arco de 60 a 120 peças e bubble encapsulado, com as cores que você escolher.', 'banner_kits.webp' ),
+		'baloes-joy'       => array( 'Balões Joy', 'Balões Joy de 5, 9, 12 e 16 polegadas. Você escolhe as cores.', 'banner_fechados.webp' ),
 		'pacotes'          => array( 'Pacotes sortidos', '50 a 125 balões de 8" em até 5 cores, na sequência que você montar.', 'banner_pacotes.webp' ),
 		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'banner_fechados.webp' ),
 		'candy-colors'     => array( 'Candy colors', 'Os tons pastel que viraram a cara do chá revelação e da festa infantil.', 'banner_candy.webp' ),
 		'bubbles'          => array( 'Bubbles', 'Balão transparente com o nome da festa e balõezinhos coloridos dentro.', 'banner_bubbles.webp' ),
-		'decorativos'      => array( 'Decorativos', 'Metalizados de coração, estrela, bola e safári pro destaque da festa.', 'banner_cromados.webp' ),
+		'formatos'         => array( 'Formatos', 'Metalizados de coração, estrela, bola e safári pro destaque da festa.', 'banner_cromados.webp' ),
 		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'banner_numeros.webp' ),
 		'sets-prontos'     => array( 'Sets prontos', 'Número, base de balões, figuras e buquê montados no estilo da festa. Escolha o tema e a idade.', 'banner_sets.webp' ),
 		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'banner_acessorios.webp' ),
@@ -804,7 +808,7 @@ function glowbos_mega_html() {
 		$card = sprintf( '<a class="gm-dest" href="%s"><span class="gm-tag">Mais vendido</span><img src="%s" alt=""><b>%s</b><small>Você escolhe 3 cores e a sequência</small><span class="gm-pr">%s <em>Montar →</em></span></a>', esc_url( $dest->get_permalink() ), esc_url( wp_get_attachment_image_url( $dest->get_image_id(), 'medium' ) ), esc_html( $dest->get_name() ), wp_kses_post( $dest->get_price_html() ) );
 	}
 	$links = '';
-	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'numeros' => 'Números' ) as $s => $n ) {
+	foreach ( array( 'arcos' => 'Arcos', 'decoracao-pronta' => 'Decoração Pronta', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'numeros' => 'Números' ) as $s => $n ) {
 		$on     = function_exists( 'is_product_category' ) && is_product_category( $s );
 		$links .= sprintf( '<a class="gm-l%s" href="%s">%s</a>', $on ? ' on' : '', esc_url( home_url( '/categoria/' . $s . '/' ) ), $n );
 	}
@@ -922,11 +926,11 @@ function glowbos_guia_linhas() {
 	// [nome, imagem, frase, a partir de, link do app, rótulo do app, link da categoria]
 	return array(
 		'arcos'    => array( 'Arcos', 'arco_10_candy_morango.webp', 'Escolha pela foto, diga os metros e a gente calcula os balões.', 'R$ 35,99', $cat( 'arcos' ) . '#gbArco', 'Montar meu arco', $cat( 'arcos' ) ),
-		'kits'     => array( 'Kits de arco', 'kit_503.webp', 'De 60 a 120 peças, com as cores que você escolher.', 'R$ 31,99', $prod( 'kit100' ), 'Montar meu kit', $cat( 'kits-de-arco' ) ),
-		'sortidos' => array( 'Pacotes sortidos', 'pack_azul_verm_amar.webp', '50 a 125 balões de 8" em até 5 cores, na sua sequência.', 'R$ 8,99', $prod( 'pct75' ), 'Montar meu pacote', $cat( 'pacotes' ) ),
-		'fechados' => array( 'Pacotes fechados', 'emb_lilas.webp', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada.', 'R$ 9,99', $prod( 'pct9_50' ), 'Escolher as cores', $cat( 'pacotes-fechados' ) ),
+		'kits'     => array( 'Decoração Pronta', 'kit_503.webp', 'De 60 a 120 peças, com as cores que você escolher.', 'R$ 31,99', $prod( 'kit100' ), 'Montar meu kit', $cat( 'decoracao-pronta' ) ),
+		'sortidos' => array( 'Pacotes sortidos', 'pack_azul_verm_amar.webp', '50 a 125 balões de 8" em até 5 cores, na sua sequência.', 'R$ 17,50', $prod( 'pct75' ), 'Montar meu pacote', $cat( 'pacotes' ) ),
+		'fechados' => array( 'Pacotes fechados', 'emb_lilas.webp', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada.', 'R$ 8,99', $prod( 'pct9_50' ), 'Escolher as cores', $cat( 'pacotes-fechados' ) ),
 		'candy'    => array( 'Candy colors', 'pack_candy.webp', 'Os tons pastel do chá revelação e da festa infantil.', 'R$ 19,87', $prod( 'candy75' ), 'Montar candy', $cat( 'candy-colors' ) ),
-		'decorativos' => array( 'Decorativos', 'premium_4_cromado.webp', 'Metalizados de coração, estrela, bola e safári.', 'R$ 14,98', $prod( 'metal5_25' ), 'Escolher as cores', $cat( 'decorativos' ) ),
+		'formatos' => array( 'Formatos', 'premium_4_cromado.webp', 'Metalizados de coração, estrela, bola e safári.', 'R$ 14,98', $prod( 'metal5_25' ), 'Escolher as cores', $cat( 'formatos' ) ),
 		'numeros'  => array( 'Números', 'num_rose_5.webp', 'Número gigante de 0 a 9 sobre coluna de balões.', 'sob encomenda', $prod( 'numero' ), 'Escolher o número', $cat( 'numeros' ) ),
 		'bubbles'  => array( 'Bubbles', 'cena_04_bubble_alice.webp', 'Balão transparente com o nome e balõezinhos dentro.', 'sob encomenda', $prod( 'bubble' ), 'Personalizar', $cat( 'bubbles' ) ),
 	);
@@ -1026,7 +1030,7 @@ function glowbos_rodape_html() {
 		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $d . '</svg>';
 	};
 	$cats = '';
-	foreach ( array( 'arcos' => 'Arcos', 'kits-de-arco' => 'Kits de arco', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'decorativos' => 'Decorativos', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
+	foreach ( array( 'arcos' => 'Arcos', 'decoracao-pronta' => 'Decoração Pronta', 'baloes-joy' => 'Balões Joy', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'formatos' => 'Formatos', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
 		$cats .= '<a href="' . esc_url( home_url( '/categoria/' . $s . '/' ) ) . '">' . esc_html( $n ) . '</a>';
 	}
 	$selos = array(
@@ -1179,15 +1183,69 @@ function glowbos_util_html() {
 }
 
 // ===== Régua "Os mais vendidos": os campeões da Shopee, com o número real de vendas de lá =====
-// 18/10: linhas de produtos da home, uma por categoria, como vitrine de loja.
+// 19/10: vitrine da home em quadrantes (relatório do Vitor): Categorias, Decoração Pronta, Balões Joy,
+// Formatos e Acessórios; Pacotes fechados segue como fileira de produtos.
 function glowbos_linhas_html() {
+	$mapa = (array) get_option( 'glowbos_produtos', array() );
+	$img  = get_template_directory_uri() . '/img/';
+	$cat  = function ( $s ) { $t = get_term_by( 'slug', $s, 'product_cat' ); return $t ? get_term_link( $t ) : home_url( '/loja/' ); };
+	$prod = function ( $k ) use ( $mapa ) { return empty( $mapa[ $k ] ) ? null : wc_get_product( $mapa[ $k ] ); };
+	$q    = function ( $titulo, $foto, $link, $sub = '', $extra = '' ) {
+		$tag = $link ? 'a href="' . esc_url( $link ) . '"' : 'div';
+		$fim = $link ? 'a' : 'div';
+		return '<' . $tag . ' class="vq-c' . $extra . '"' . ( $link && 0 === strpos( $link, '#' ) ? ' data-app="' . esc_attr( substr( $link, 1 ) ) . '"' : '' ) . '><span class="vq-f"><img src="' . esc_url( $foto ) . '" alt="' . esc_attr( $titulo ) . '" loading="lazy"></span><b>' . esc_html( $titulo ) . '</b>' . ( $sub ? '<small>' . wp_kses_post( $sub ) . '</small>' : '' ) . '</' . $fim . '>';
+	};
+	$pq = function ( $k, $titulo = '' ) use ( $prod, $q ) {
+		$p = $prod( $k );
+		if ( ! $p ) {
+			return '';
+		}
+		return $q( $titulo ?: $p->get_name(), wp_get_attachment_image_url( $p->get_image_id(), 'medium_large' ), $p->get_permalink(), wc_price( $p->get_price() ) );
+	};
+	$sec = function ( $id, $titulo, $sub, $ver, $cards ) {
+		return '<section class="vq" id="vq-' . esc_attr( $id ) . '"><div class="w"><div class="vq-h"><div><h2>' . esc_html( $titulo ) . '</h2>' . ( $sub ? '<p>' . esc_html( $sub ) . '</p>' : '' ) . '</div>' . ( $ver ? '<a href="' . esc_url( $ver ) . '">Ver tudo</a>' : '' ) . '</div><div class="vq-l">' . $cards . '</div></div></section>';
+	};
+	$met5 = $prod( 'metal5_25' );
+	$h  = $sec( 'categorias', 'Categorias', 'Escolha a linha e monte a sua festa.', home_url( '/loja/' ),
+		$q( 'Balões Cromados', $img . 'banner_cromados_m.webp', $met5 ? $met5->get_permalink() : $cat( 'formatos' ), $met5 ? 'a partir de ' . wc_price( $met5->get_price() ) : '' ) .
+		$q( 'Linha Candy', $img . 'banner_candy_m.webp', $cat( 'candy-colors' ), 'tons pastel' ) .
+		$q( 'Balões Lisos', wp_get_attachment_image_url( get_post_thumbnail_id( $mapa['fech8_rosa'] ?? 0 ), 'medium_large' ) ?: $img . 'banner_fechados_m.webp', $cat( 'pacotes-fechados' ), 'uma cor por pacote' ) .
+		$q( 'Arco Desconstruído', wp_get_attachment_image_url( get_post_thumbnail_id( $mapa['kit100'] ?? 0 ), 'medium_large' ) ?: $img . 'banner_kits_m.webp', '#monte', 'monte o seu' ) .
+		$q( 'Pacotes Sortidos', $img . 'banner_pacotes_m.webp', '#pacotes', 'escolha as cores' ) );
+	$h .= $sec( 'decoracao', 'Decoração Pronta', 'Kits pra montar em casa, com as cores que você escolher.', $cat( 'decoracao-pronta' ),
+		$pq( 'kit60', 'Kit Arco 60 peças' ) . $pq( 'kit80', 'Kit Arco 80 peças' ) . $pq( 'kit100', 'Kit Arco 100 peças' ) . $pq( 'bubble_encap', 'Bubble Encapsulado' ) );
+	$h .= $sec( 'joy', 'Balões Joy', 'A marca Joy em 4 tamanhos. Você escolhe as cores.', $cat( 'baloes-joy' ),
+		$pq( 'pct5_50', 'Joy 5" · 50 un.' ) . $pq( 'pct9_50', 'Joy 9" · 50 un.' ) . $pq( 'pct12_25', 'Joy 12" · 25 un.' ) . $pq( 'pct16_12', 'Joy 16" · 12 un.' ) .
+		$q( 'Joy Big 25"', $img . 'banner_fechados_m.webp', '', 'em breve', ' vq-breve' ) );
+	$h .= $sec( 'formatos', 'Formatos', 'Números e balões de formato pro destaque da festa.', $cat( 'formatos' ),
+		$q( 'Balões de Números', $img . 'num_rose_5.webp', $cat( 'numeros' ), 'de 0 a 9' ) .
+		$q( 'Balões de Formatos', wp_get_attachment_image_url( get_post_thumbnail_id( $mapa['met18_estrela'] ?? 0 ), 'medium_large' ) ?: $img . 'banner_cromados_m.webp', $cat( 'formatos' ), 'coração, estrela, bola e safári' ) );
+	$h .= $sec( 'acessorios', 'Acessórios', 'O que precisa pra montar.', $cat( 'acessorios' ), $pq( 'fita', 'Fita para arco + dupla face' ) );
+	return '<style>
+.vq{padding:72px 0 0}
+.vq-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}
+.vq-h h2{margin:0;font:700 clamp(26px,2.6vw,36px)/1.05 Fredoka,"Inter Tight",sans-serif;color:#B0124F}
+.vq-h p{margin:6px 0 0;font:500 15px/1.4 Inter;color:#6b5560}
+.vq-h a{font:700 14px Inter;color:#F93388;text-decoration:none;white-space:nowrap}
+.vq-l{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+.vq-c{display:flex;flex-direction:column;text-decoration:none;color:#2a0f22;cursor:pointer}
+.vq-f{display:block;aspect-ratio:1;border-radius:20px;overflow:hidden;background:#F7F3EA;box-shadow:inset 0 0 0 1.5px #F6E3EB;transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s}
+.vq-f img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.vq-c:hover .vq-f{transform:translateY(-4px);box-shadow:0 18px 36px -18px rgba(176,18,79,.4)}
+.vq-c:hover .vq-f img{transform:scale(1.05)}
+.vq-c b{margin-top:12px;font:700 18px/1.15 Fredoka,"Inter Tight",sans-serif;color:#2a0f22;text-align:center}
+.vq-c small{margin-top:4px;font:700 14px Inter;color:#B0124F;text-align:center}
+.vq-c small .woocommerce-Price-amount{color:inherit}
+.vq-breve{cursor:default}.vq-breve .vq-f{filter:grayscale(.2) opacity(.75)}.vq-breve small{color:#a08a94}
+@media (max-width:900px){.vq-l{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.vq{padding-top:48px}.vq-l{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 16px;gap:14px;margin:0 -16px;padding:0 16px 6px;scrollbar-width:none}.vq-l::-webkit-scrollbar{display:none}.vq-c{flex:0 0 42%;scroll-snap-align:start}.vq-c b{font-size:16px}}
+</style>' . $h . glowbos_linha_fechados_html();
+}
+
+// Fileira de produtos (hoje só Pacotes fechados).
+function glowbos_linha_fechados_html() {
 	$linhas = array(
-		'pacotes'           => array( 'Pacotes sortidos', 'Balões de 8 polegadas nas cores que você escolher.' ),
-		'kits-de-arco'      => array( 'Kits de arco', 'Tudo pra montar o arco em casa.' ),
-		'candy-colors'      => array( 'Candy colors', 'Os tons pastel do chá revelação e da festa infantil.' ),
-		'decorativos'       => array( 'Decorativos', 'Metalizados de coração, estrela e tema pro destaque da festa.' ),
-		'arcos'             => array( 'Arcos prontos', 'Escolha pela foto e diga os metros.' ),
-		'pacotes-fechados'  => array( 'Pacotes fechados', 'Uma cor por pacote, pra quem decora.' ),
+		'pacotes-fechados'  => array( 'Pacotes Fechados', 'Uma cor por pacote: Glowbos de 8" e Joy de 5" a 16".' ),
 	);
 	$h = '';
 	foreach ( $linhas as $slug => $t ) {
@@ -1195,7 +1253,7 @@ function glowbos_linhas_html() {
 		if ( ! $term ) {
 			continue;
 		}
-		$ps = wc_get_products( array( 'status' => 'publish', 'limit' => 12, 'category' => array( $slug ), 'orderby' => array( 'menu_order' => 'ASC', 'title' => 'ASC' ), 'visibility' => 'catalog' ) );
+		$ps = wc_get_products( array( 'status' => 'publish', 'limit' => 30, 'category' => array( $slug ), 'orderby' => array( 'menu_order' => 'ASC', 'title' => 'ASC' ), 'visibility' => 'catalog' ) );
 		if ( ! $ps ) {
 			continue;
 		}

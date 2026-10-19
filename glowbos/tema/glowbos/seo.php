@@ -6,11 +6,12 @@
 function glowbos_seo_desc() {
 	$cats = array(
 		'arcos'            => 'Arcos de balões pra montar em casa: escolha o arco pela foto, ajuste o tamanho e receba a lista de balões. Chega hoje em SP e Grande SP.',
-		'kits-de-arco'     => 'Kits de arco de balões com 60 a 120 peças, balões de 16, 12, 9 e 5 polegadas e fita. Você escolhe as cores. Chega hoje em SP e Grande SP.',
-		'pacotes'          => 'Pacotes de 50 a 125 balões de 8 polegadas, com cores à escolha ou combinações prontas, a partir de R$ 8,99. Chega hoje em SP e Grande SP.',
+		'decoracao-pronta' => 'Decoração pronta: kits de arco de balões de 60 a 120 peças e kit bubble encapsulado. Você escolhe as cores. Chega hoje em SP e Grande SP.',
+		'pacotes'          => 'Pacotes de 50 a 125 balões de 8 polegadas, com cores à escolha ou combinações prontas, a partir de R$ 17,50. Chega hoje em SP e Grande SP.',
 		'pacotes-fechados' => 'Pacotes fechados de balões, uma cor por pacote, de 5 a 16 polegadas, a partir de R$ 8,99. Entrega no mesmo dia em São Paulo e Grande SP.',
 		'candy-colors'     => 'Balões candy em tons pastel pra chá de bebê, chá revelação e festa infantil, de 50 a 100 balões com cores à escolha. Chega hoje em SP.',
-		'decorativos'      => 'Balões decorativos metalizados: coração, estrela, bola e safári pra dar destaque à festa. Entrega no mesmo dia em São Paulo e Grande SP.',
+		'baloes-joy'       => 'Balões Joy de 5, 9, 12 e 16 polegadas, com cores à escolha. Entrega no mesmo dia em São Paulo e Grande SP.',
+		'formatos'         => 'Balões metalizados em formatos: coração, estrela, bola e safári pra dar destaque à festa. Entrega no mesmo dia em São Paulo e Grande SP.',
 		'numeros'          => 'Número metalizado gigante de 0 a 9 sobre coluna de balões, no estilo da festa. Sob encomenda, com entrega em São Paulo.',
 		'bubbles'          => 'Balão bubble transparente personalizado com nome ou frase e balõezinhos dentro. Sob encomenda, com entrega em São Paulo.',
 		'acessorios'       => 'Fita para arco e adesivo dupla face pra montar arco de balões em casa. Chega hoje em SP e Grande SP.',

@@ -327,7 +327,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .mpv svg{width:88%;height:88%}
 .mptag{position:absolute;left:16px;bottom:16px;background:var(--forte);color:#fff;border-radius:10px;padding:8px 14px;font:700 14px "Inter Tight";max-width:calc(100% - 32px)}
 .mpc{min-width:0}
-.mpt{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.mpt{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .mpt button{border:2px solid #ecdde3;background:#fff;border-radius:12px;padding:12px 8px;cursor:pointer;text-align:center;color:var(--vinho);transition:.2s;font-family:Inter}
 .mpt b{display:block;font:800 28px/1 "Inter Tight";letter-spacing:-.03em}
 .mpt span{display:block;font-size:12px;color:var(--vinho2)}
@@ -346,7 +346,7 @@ nav a{position:relative}nav a.at{color:var(--forte)}nav a.at:after{content:"";po
 .cor.usada{opacity:.35;pointer-events:none}
 #mpadd:disabled{opacity:.5;cursor:not-allowed}
 @media (max-width:980px){.mp{grid-template-columns:1fr}.mpv{position:relative;top:0;max-width:420px;width:100%;margin:0 auto}}
-@media (max-width:640px){.mp{padding:16px;gap:20px}.mpt{grid-template-columns:repeat(3,1fr)}.mpcores{grid-template-columns:repeat(5,1fr)}.slot{width:54px;height:66px}}
+@media (max-width:640px){.mp{padding:16px;gap:20px}.mpt{grid-template-columns:repeat(2,1fr)}.mpcores{grid-template-columns:repeat(5,1fr)}.slot{width:54px;height:66px}}
 
 .tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:6px 0 22px}
 .tabs button{border:0;background:var(--bebe);color:var(--vinho);border-radius:99px;padding:11px 20px;font:700 15px "Inter Tight";cursor:pointer;transition:.2s}
@@ -734,6 +734,8 @@ body.gbm-aberto{overflow:hidden}
 .mv-v span{position:absolute;left:0;right:0;bottom:0;padding:30px 12px 12px;background:linear-gradient(0deg,rgba(42,15,34,.85),transparent);color:#fff;font:700 14px/1.25 Inter;text-align:left}
 .mv-v.tocando i,.mv-v.tocando span{display:none}
 @media (max-width:760px){.ma-vids{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.mv-v{flex:0 0 46%;scroll-snap-align:start}}
+
+.pm-breve{display:inline-flex;align-items:center;height:34px;padding:0 14px;border-radius:99px;background:rgba(255,255,255,.22);color:#fff;font:700 13px Inter;white-space:nowrap;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 </style>
 </head>
 <body>
@@ -743,7 +745,7 @@ body.gbm-aberto{overflow:hidden}
 
 <header><div class="w hd">
   <a class="logo" href="#"><img src="img/D_logo_crop.png" alt="Glowbos"></a>
-  <nav><a href="/categoria/arcos/">Arcos</a><a href="/categoria/kits-de-arco/">Kits</a><a href="/categoria/pacotes/">Pacotes</a><a href="/categoria/pacotes-fechados/">Fechados</a><a href="/categoria/candy-colors/">Candy colors</a><a href="/categoria/decorativos/">Decorativos</a><a href="/categoria/numeros/">Números</a></nav>
+  <nav><a href="/categoria/arcos/">Arcos</a><a href="/categoria/decoracao-pronta/">Decoração Pronta</a><a href="/categoria/pacotes/">Pacotes</a><a href="/categoria/pacotes-fechados/">Fechados</a><a href="/categoria/candy-colors/">Candy colors</a><a href="/categoria/formatos/">Decorativos</a><a href="/categoria/numeros/">Números</a></nav>
   <div class="ic">
     <button class="tg" id="tg" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <a href="#" aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
@@ -754,7 +756,7 @@ body.gbm-aberto{overflow:hidden}
 <div class="mvel" id="mvel"></div>
 <aside class="mmenu" id="mmenu" aria-hidden="true">
   <div class="mmh"><img src="img/D_logo_crop.png" alt="Glowbos"><button id="mfecha" aria-label="Fechar menu">✕</button></div>
-  <nav class="mml"><a href="/categoria/arcos/">Arcos <small>monte o seu ou leve pronto</small></a><a href="/categoria/kits-de-arco/">Kits <small>60 a 120 peças, cores à escolha</small></a><a href="/categoria/pacotes/">Pacotes sortidos <small>sortidos de 50 a 125 balões</small></a><a href="/categoria/pacotes-fechados/">Pacotes fechados <small>uma cor por pacote, 5" a 16"</small></a><a href="/categoria/candy-colors/">Candy colors <small>tons pastel</small></a><a href="/categoria/decorativos/">Decorativos <small>coração, estrela e tema</small></a><a href="/categoria/numeros/">Números <small>de 0 a 9, no seu estilo</small></a><a href="/loja/">Ver tudo <small>a loja inteira, com filtros</small></a></nav>
+  <nav class="mml"><a href="/categoria/arcos/">Arcos <small>monte o seu ou leve pronto</small></a><a href="/categoria/decoracao-pronta/">Decoração Pronta <small>kits de arco e bubble</small></a><a href="/categoria/pacotes/">Pacotes sortidos <small>sortidos de 50 a 125 balões</small></a><a href="/categoria/pacotes-fechados/">Pacotes fechados <small>uma cor por pacote, 5" a 16"</small></a><a href="/categoria/candy-colors/">Candy colors <small>tons pastel</small></a><a href="/categoria/formatos/">Decorativos <small>coração, estrela e tema</small></a><a href="/categoria/numeros/">Números <small>de 0 a 9, no seu estilo</small></a><a href="/loja/">Ver tudo <small>a loja inteira, com filtros</small></a></nav>
   <div class="mmd"><b>🚚 Entrega no mesmo dia</b>em São Paulo e Grande SP</div>
   <a class="btn pri" href="#" style="width:100%">Falar no WhatsApp</a>
 </aside>
@@ -778,7 +780,7 @@ body.gbm-aberto{overflow:hidden}
         <span class="eyebrow">Aniversário em casa</span>
         <h2 class="inf">A sala virou<br>festa.</h2>
         <p style="max-width:380px">Arco de balões que você monta em casa. O kit de 100 peças já vem com fita e dupla face.</p>
-        <div class="acoes"><a class="btn pri" href="/categoria/kits-de-arco/">Ver kits de arco</a><a class="btn lin" href="/categoria/arcos/#gbArco">Montar o arco</a></div>
+        <div class="acoes"><a class="btn pri" href="/categoria/decoracao-pronta/">Ver kits de arco</a><a class="btn lin" href="/categoria/arcos/#gbArco">Montar o arco</a></div>
       </div>
     </div>
     <div class="sl cor">
@@ -816,8 +818,8 @@ body.gbm-aberto{overflow:hidden}
       <div class="tx">
         <span class="eyebrow">15 anos</span>
         <h2 class="inf">A festa dos 15,<br>do jeito dela.</h2>
-        <p style="max-width:380px">Balões decorativos e números metalizados pra montar a parede em casa.</p>
-        <div class="acoes"><a class="btn pri" href="/categoria/decorativos/">Ver decorativos</a><a class="btn lin" href="/categoria/numeros/">Ver números</a></div>
+        <p style="max-width:380px">Balões metalizados e números pra montar a parede em casa.</p>
+        <div class="acoes"><a class="btn pri" href="/categoria/formatos/">Ver formatos</a><a class="btn lin" href="/categoria/numeros/">Ver números</a></div>
       </div>
     </div>
     <div class="sl cor">
@@ -854,14 +856,14 @@ body.gbm-aberto{overflow:hidden}
 
 <!--MAIS_VENDIDOS-->
 <section class="bloco" id="premium"><div class="w">
-  <div class="ctr"><span class="eyebrow">Linha premium</span><h2 class="tt inf">Pra festa que ninguém esquece</h2><p class="sub">Montado com a cor e o nome da sua festa. Em SP e Grande SP, entregue no mesmo dia.</p></div>
+  <div class="ctr"><span class="eyebrow">Linha premium</span><h2 class="tt inf">Pra festa que ninguém esquece</h2><p class="sub">Montado com a cor e o nome da sua festa, sob encomenda.</p></div>
   <div class="prem">
-    <article class="pm big"><img src="img/premium_1_arco_painel.webp" alt="Arco com painel e nome"><div class="cap"><div><b>Arco com painel e nome</b><small>O arco sobe pelo painel com o nome da festa.</small></div><a href="#">Pedir orçamento</a></div></article>
+    <article class="pm big"><img src="img/premium_1_arco_painel.webp" alt="Arco com painel e nome"><div class="cap"><div><b>Arco com painel e nome</b><small>Arco de balões com o nome da festa. O painel não acompanha.</small></div><a href="https://wa.me/5511945231106?text=Ol%C3%A1%21%20Quero%20um%20or%C3%A7amento%20do%20arco%20com%20painel%20e%20nome." target="_blank" rel="noopener">Pedir orçamento</a></div></article>
     <div class="pcol">
-      <article class="pm lar"><img src="img/premium_3_gigante.webp" alt="Balão gigante com nome" style="object-position:center 22%"><div class="cap"><div><b>Balão gigante com nome</b><small>36 polegadas com frase e borla.</small></div><a href="#">Pedir orçamento</a></div></article>
+      <article class="pm lar"><img src="https://glowbos.com.br/wp-content/uploads/2026/10/set_menina_5anos.png" alt="Set pronto Borboleta Rosê com número 5" style="object-position:center 30%"><div class="cap"><div><b>Sets prontos</b><small>Número, base de balões e figuras no tema da festa.</small></div><a href="/categoria/sets-prontos/">Ver sets</a></div></article>
       <div class="prem2">
-        <article class="pm"><img src="img/premium_4_cromado.webp" alt="Cromado pendurado"><div class="cap"><div><b>Cromado pendurado</b><small>Prata e rosa com laço de cetim.</small></div><a href="#">Pedir orçamento</a></div></article>
-        <article class="pm"><img src="img/premium_5_futebol.webp" alt="Tema da festa"><div class="cap"><div><b>Tema da festa</b><small>Futebol, safári, ursinho.</small></div><a href="#">Pedir orçamento</a></div></article>
+        <article class="pm"><img src="img/premium_4_cromado.webp" alt="Cromado pendurado"><div class="cap"><div><b>Cromado pendurado</b><small>Prata e rosa com laço de cetim.</small></div><span class="pm-breve">Em breve</span></div></article>
+        <article class="pm"><img src="img/premium_5_futebol.webp" alt="Tema da festa"><div class="cap"><div><b>Tema da festa</b><small>Kits de balões por tema.</small></div><span class="pm-breve">Em breve</span></div></article>
       </div>
     </div>
   </div>
@@ -946,7 +948,6 @@ addEventListener('scroll',rola,{passive:true});rola();})();
     <div class="mpc">
       <p class="mst"><i>1</i> O tamanho</p>
       <div class="mpt" id="mpt">
-        <button data-q="25" data-c="1" data-p="8.99"><b>25</b><span>balões</span><small>1 cor</small><em>R$ 8,99</em></button>
         <button data-q="50" data-c="2" data-p="17.50"><b>50</b><span>balões</span><small>2 cores</small><em>R$ 17,50</em></button>
         <button class="on" data-q="75" data-c="3" data-p="24.99"><span class="mpt-tag">Mais vendido</span><b>75</b><span>balões</span><small>3 cores</small><em>R$ 25,99</em></button>
         <button data-q="100" data-c="4" data-p="32.99"><b>100</b><span>balões</span><small>4 cores</small><em>R$ 32,99</em></button>
