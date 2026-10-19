@@ -149,4 +149,32 @@
 		};
 		pn();
 	}
+	// 19/10: número metalizado de 32" vendido na hora: escolhe o número e a cor, vai pro carrinho
+	if (D.tipo === 'num32') {
+		var N32 = '1', C32 = 'dourado', CORES32 = [['dourado', 'Dourado'], ['prata', 'Prata'], ['rosa', 'Rosa']];
+		var nomeCor = function () { return CORES32.filter(function (c) { return c[0] === C32; })[0][1]; };
+		var g32 = $('.woocommerce-product-gallery'), pv32 = null;
+		if (g32) { pv32 = document.createElement('div'); pv32.className = 'gb-prev gb-prev-num'; g32.appendChild(pv32); }
+		box.innerHTML = '<p class="gb-st"><i>1</i> O número</p><div class="gb-dig" id="gbDig"></div>' +
+			'<p class="gb-st"><i>2</i> A cor</p><div class="gb-est" id="gbEst"></div>' +
+			'<div class="gb-buy"><div><small id="gbNsel"></small><b>' + R(preco) + '</b></div><button type="button" class="gb-btn" id="gbAdd32">Colocar no carrinho</button></div>' +
+			'<p class="gb-nota">Vai vazio: enche em casa com bomba de ar. Pra idade com 2 números, coloque um de cada.</p>';
+		$('#gbDig').innerHTML = Array.from({ length: 10 }, function (_, k) { return '<button type="button" data-n="' + k + '"' + (String(k) === N32 ? ' class="on"' : '') + '>' + k + '</button>'; }).join('');
+		var pc32 = function () {
+			$('#gbEst').innerHTML = CORES32.map(function (c) { return '<button type="button" data-c="' + c[0] + '"' + (c[0] === C32 ? ' class="on"' : '') + '><img src="' + IMG + 'num32_' + c[0] + '.webp" alt="">' + c[1] + '</button>'; }).join('');
+			$('#gbNsel').textContent = 'Número ' + N32 + ' · ' + nomeCor();
+			if (pv32) pv32.innerHTML = '<img src="' + IMG + 'num32_' + C32 + '.webp" alt="Número metalizado ' + nomeCor() + '">';
+		};
+		$('#gbDig').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; box.querySelectorAll('#gbDig button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); N32 = b.dataset.n; pc32(); });
+		$('#gbEst').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; C32 = b.dataset.c; pc32(); });
+		$('#gbAdd32').onclick = function () {
+			var b = this; b.disabled = true; b.textContent = 'Colocando...';
+			var fd = new FormData(); fd.append('itens', JSON.stringify([{ pid: +pid, q: 1, paleta: 'Número ' + N32 + ' · ' + nomeCor() }]));
+			fetch(D.add, { method: 'POST', body: fd, credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (j) {
+				if (j && j.success) { toast('✓ Número ' + N32 + ' ' + nomeCor().toLowerCase() + ' no carrinho.', j.data.carrinho); contaMenu(j.data.qtd); } else toast('Não deu certo. Tente de novo.');
+				b.disabled = false; b.textContent = 'Colocar no carrinho';
+			}).catch(function () { toast('Sem conexão. Tente de novo.'); b.disabled = false; b.textContent = 'Colocar no carrinho'; });
+		};
+		pc32();
+	}
 })();

@@ -582,6 +582,9 @@ function glowbos_app_config( $pid ) {
 		'set_carros_4anos' => array( 'numero', 0, '', 'set pronto Carros, número 4' ), 'set_menina_5anos' => array( 'numero', 0, '', 'set pronto Borboleta Rosê, número 5' ),
 		'set_safari_1ano' => array( 'numero', 0, '', 'set pronto Safári, número 1' ), 'set_cha_revelacao' => array( 'numero', 0, '', 'set pronto Chá Revelação' ),
 		'bubble' => array( 'bubble', 3, 'lisos', 'bubble personalizado' ),
+		// 19/10: mini arco (arco de mesa, 50 balões de 5") e número metalizado de 32" vendido na hora (0 a 9, dourado, prata ou rosa).
+		'miniarco' => array( 'sequencia', 3, 'lisos', '50 balões de 5"' ),
+		'num32' => array( 'num32', 0, '', 'número metalizado de 32"' ),
 	);
 	return $c[ $k ] ?? null;
 }
@@ -656,6 +659,7 @@ function glowbos_departamentos() {
 	return array(
 		'arcos'            => array( 'Arcos de balões', 'Monte o seu arco escolhendo as cores, ou leve o kit com tudo pronto pra montar.', 'banner_arcos.webp' ),
 		'decoracao-pronta' => array( 'Decoração Pronta', 'Kits de arco de 60 a 120 peças e bubble encapsulado, com as cores que você escolher.', 'banner_kits.webp' ),
+		'mini-arco'        => array( 'Mini Arco', 'O arco de mesa: 50 balões de 5" nas cores que você escolher, pronto em minutos.', 'banner_miniarco.webp' ),
 		'baloes-joy'       => array( 'Balões Joy', 'Balões Joy de 5, 9, 12 e 16 polegadas. Você escolhe as cores.', 'banner_joy.webp' ),
 		'pacotes'          => array( 'Pacotes sortidos', '50 a 125 balões de 8" em até 5 cores, na sequência que você montar.', 'banner_pacotes.webp' ),
 		'pacotes-fechados' => array( 'Pacotes fechados', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada cor.', 'banner_fechados.webp' ),
@@ -736,7 +740,7 @@ add_filter( 'woocommerce_loop_add_to_cart_link', function ( $html, $product ) {
 	if ( ! $c ) {
 		return $html;
 	}
-	return sprintf( '<a href="%s" class="button gb-escolher">%s</a>', esc_url( $product->get_permalink() ), 'bubble' === $c[0] ? 'Personalizar' : ( 'numero' === $c[0] ? 'Escolher o número' : ( 'quantidade' === $c[0] ? 'Escolher as cores' : 'Montar as cores' ) ) );
+	return sprintf( '<a href="%s" class="button gb-escolher">%s</a>', esc_url( $product->get_permalink() ), 'bubble' === $c[0] ? 'Personalizar' : ( in_array( $c[0], array( 'numero', 'num32' ), true ) ? 'Escolher o número' : ( 'quantidade' === $c[0] ? 'Escolher as cores' : 'Montar as cores' ) ) );
 }, 10, 2 );
 
 // ===== Assinatura de novidades (perto do rodapé, em todas as páginas) =====
@@ -1030,7 +1034,7 @@ function glowbos_rodape_html() {
 		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $d . '</svg>';
 	};
 	$cats = '';
-	foreach ( array( 'arcos' => 'Arcos', 'decoracao-pronta' => 'Decoração Pronta', 'baloes-joy' => 'Balões Joy', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'formatos' => 'Formatos', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
+	foreach ( array( 'arcos' => 'Arcos', 'decoracao-pronta' => 'Decoração Pronta', 'mini-arco' => 'Mini Arco', 'baloes-joy' => 'Balões Joy', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'formatos' => 'Formatos', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
 		$cats .= '<a href="' . esc_url( home_url( '/categoria/' . $s . '/' ) ) . '">' . esc_html( $n ) . '</a>';
 	}
 	$selos = array(
@@ -1213,12 +1217,13 @@ function glowbos_linhas_html() {
 		$q( 'Arco Desconstruído', wp_get_attachment_image_url( get_post_thumbnail_id( $mapa['kit100'] ?? 0 ), 'medium_large' ) ?: $img . 'banner_kits_m.webp', '#monte', 'monte o seu' ) .
 		$q( 'Pacotes Sortidos', $img . 'banner_pacotes_m.webp', '#pacotes', 'escolha as cores' ) );
 	$h .= $sec( 'decoracao', 'Decoração Pronta', 'Kits pra montar em casa, com as cores que você escolher.', $cat( 'decoracao-pronta' ),
-		$pq( 'kit60', 'Kit Arco 60 peças' ) . $pq( 'kit80', 'Kit Arco 80 peças' ) . $pq( 'kit100', 'Kit Arco 100 peças' ) . $pq( 'bubble_encap', 'Bubble Encapsulado' ) );
+		$pq( 'kit60', 'Kit Arco 60 peças' ) . $pq( 'kit80', 'Kit Arco 80 peças' ) . $pq( 'kit100', 'Kit Arco 100 peças' ) . $pq( 'miniarco', 'Mini Arco de mesa' ) . $pq( 'bubble_encap', 'Bubble Encapsulado' ) );
 	$h .= $sec( 'joy', 'Balões Joy', 'A marca Joy em 4 tamanhos. Você escolhe as cores.', $cat( 'baloes-joy' ),
 		$pq( 'pct5_50', 'Joy 5" · 50 un.' ) . $pq( 'pct9_50', 'Joy 9" · 50 un.' ) . $pq( 'pct12_25', 'Joy 12" · 25 un.' ) . $pq( 'pct16_12', 'Joy 16" · 12 un.' ) .
 		$q( 'Joy Big 25"', $img . 'banner_joy_m.webp', '', 'em breve', ' vq-breve' ) );
 	$h .= $sec( 'formatos', 'Formatos', 'Números e balões de formato pro destaque da festa.', $cat( 'formatos' ),
 		$q( 'Balões de Números', $img . 'num_rose_5.webp', $cat( 'numeros' ), 'de 0 a 9' ) .
+		$pq( 'num32', 'Número metalizado 32" · 81 cm' ) .
 		$q( 'Balões de Formatos', wp_get_attachment_image_url( get_post_thumbnail_id( $mapa['met18_estrela'] ?? 0 ), 'medium_large' ) ?: $img . 'banner_cromados_m.webp', $cat( 'formatos' ), 'coração, estrela, bola e safári' ) );
 	$h .= $sec( 'acessorios', 'Acessórios', 'O que precisa pra montar.', $cat( 'acessorios' ), $pq( 'fita', 'Fita para arco + dupla face' ) );
 	return '<style>
