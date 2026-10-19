@@ -569,10 +569,10 @@ function glowbos_app_config( $pid ) {
 	$mapa = array_flip( (array) get_option( 'glowbos_produtos', array() ) );
 	$k    = $mapa[ (string) $pid ] ?? '';
 	$c    = array(
-		'pct50' => array( 'sequencia', 2, 'lisos', '50 balões de 8"' ), 'pct75' => array( 'sequencia', 3, 'lisos', '75 balões de 8"' ),
+		'pct25' => array( 'sequencia', 1, 'lisos', '25 balões de 8"' ), 'pct50' => array( 'sequencia', 2, 'lisos', '50 balões de 8"' ), 'pct75' => array( 'sequencia', 3, 'lisos', '75 balões de 8"' ),
 		'pct100' => array( 'sequencia', 4, 'lisos', '100 balões de 8"' ), 'pct125' => array( 'sequencia', 5, 'lisos', '125 balões de 8"' ),
 		'candy50' => array( 'sequencia', 2, 'candy', '50 balões candy de 8"' ), 'candy75' => array( 'sequencia', 3, 'candy', '75 balões candy de 8"' ), 'candy100' => array( 'sequencia', 4, 'candy', '100 balões candy de 8"' ),
-		'kit60' => array( 'sequencia', 3, 'lisos', 'kit 60 peças' ), 'kit100' => array( 'sequencia', 3, 'lisos', 'kit 100 peças' ), 'kit112' => array( 'sequencia', 4, 'lisos', 'kit 112 peças' ),
+		'kit60' => array( 'sequencia', 3, 'lisos', 'kit 60 peças' ), 'kit80' => array( 'sequencia', 3, 'lisos', 'kit 80 peças' ), 'kit100' => array( 'sequencia', 3, 'lisos', 'kit 100 peças' ), 'kit112' => array( 'sequencia', 4, 'lisos', 'kit 112 peças' ),
 		'kit120' => array( 'sequencia', 3, 'lisos', 'kit 120 peças' ), 'kiteco100' => array( 'sequencia', 2, 'lisos', 'kit econômico 100 balões' ),
 		'pct5_50' => array( 'quantidade', 0, 'lisos', '50 balões de 5"' ), 'pct7_50' => array( 'quantidade', 0, 'lisos', '50 balões de 7"' ), 'pct9_50' => array( 'quantidade', 0, 'lisos', '50 balões de 9"' ),
 		'pct12_25' => array( 'quantidade', 0, 'lisos', '25 balões de 12"' ), 'pct16_12' => array( 'quantidade', 0, 'lisos', '12 balões de 16"' ),
@@ -923,7 +923,7 @@ function glowbos_guia_linhas() {
 	return array(
 		'arcos'    => array( 'Arcos', 'arco_10_candy_morango.webp', 'Escolha pela foto, diga os metros e a gente calcula os balões.', 'R$ 35,99', $cat( 'arcos' ) . '#gbArco', 'Montar meu arco', $cat( 'arcos' ) ),
 		'kits'     => array( 'Kits de arco', 'kit_503.webp', 'De 60 a 120 peças, com as cores que você escolher.', 'R$ 31,99', $prod( 'kit100' ), 'Montar meu kit', $cat( 'kits-de-arco' ) ),
-		'sortidos' => array( 'Pacotes sortidos', 'pack_azul_verm_amar.webp', '50 a 125 balões de 8" em até 5 cores, na sua sequência.', 'R$ 19,87', $prod( 'pct75' ), 'Montar meu pacote', $cat( 'pacotes' ) ),
+		'sortidos' => array( 'Pacotes sortidos', 'pack_azul_verm_amar.webp', '50 a 125 balões de 8" em até 5 cores, na sua sequência.', 'R$ 8,99', $prod( 'pct75' ), 'Montar meu pacote', $cat( 'pacotes' ) ),
 		'fechados' => array( 'Pacotes fechados', 'emb_lilas.webp', 'Uma cor por pacote, do 5" ao 16". Escolha quantos de cada.', 'R$ 9,99', $prod( 'pct9_50' ), 'Escolher as cores', $cat( 'pacotes-fechados' ) ),
 		'candy'    => array( 'Candy colors', 'pack_candy.webp', 'Os tons pastel do chá revelação e da festa infantil.', 'R$ 19,87', $prod( 'candy75' ), 'Montar candy', $cat( 'candy-colors' ) ),
 		'decorativos' => array( 'Decorativos', 'premium_4_cromado.webp', 'Metalizados de coração, estrela, bola e safári.', 'R$ 14,98', $prod( 'metal5_25' ), 'Escolher as cores', $cat( 'decorativos' ) ),
