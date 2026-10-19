@@ -585,6 +585,8 @@ function glowbos_app_config( $pid ) {
 		// 19/10: mini arco (arco de mesa, 50 balões de 5") e número metalizado de 32" vendido na hora (0 a 9, dourado, prata ou rosa).
 		'miniarco' => array( 'sequencia', 3, 'lisos', '50 balões de 5"' ),
 		'num32' => array( 'num32', 0, '', 'número metalizado de 32"' ),
+		// 19/10: 9" sortido como a Shopee vende (50 em 2 cores, 75 em 3 cores)
+		'pct9_50_2c' => array( 'sequencia', 2, 'lisos', '50 balões de 9"' ), 'pct9_75_3c' => array( 'sequencia', 3, 'lisos', '75 balões de 9"' ),
 	);
 	return $c[ $k ] ?? null;
 }
