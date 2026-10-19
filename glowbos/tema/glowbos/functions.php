@@ -587,6 +587,8 @@ function glowbos_app_config( $pid ) {
 		'num32' => array( 'num32', 0, '', 'número metalizado de 32"' ),
 		// 19/10: 9" sortido como a Shopee vende (50 em 2 cores, 75 em 3 cores)
 		'pct9_50_2c' => array( 'sequencia', 2, 'lisos', '50 balões de 9"' ), 'pct9_75_3c' => array( 'sequencia', 3, 'lisos', '75 balões de 9"' ),
+		// 19/10: mesa da festa (pratinhos e guardanapo da Shopee): escolhe a cor e quantos pacotes
+		'prato20' => array( 'quantidade', 0, 'pratos', '20 pratinhos de 15 cm' ), 'prato30' => array( 'quantidade', 0, 'pratos30', '30 pratos de 15 cm' ), 'guardanapo' => array( 'quantidade', 0, 'guardanapo', '50 guardanapos' ),
 	);
 	return $c[ $k ] ?? null;
 }
@@ -671,6 +673,7 @@ function glowbos_departamentos() {
 		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'banner_numeros.webp' ),
 		'sets-prontos'     => array( 'Sets prontos', 'Número, base de balões, figuras e buquê montados no estilo da festa. Escolha o tema e a idade.', 'banner_sets.webp' ),
 		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'banner_acessorios.webp' ),
+		'mesa-da-festa'    => array( 'Mesa da festa', 'Pratinhos e guardanapos na cor da festa, pra mesa combinar com os balões.', 'banner_mesa.webp' ),
 	);
 }
 add_action( 'wp_head', function () {
@@ -1036,7 +1039,7 @@ function glowbos_rodape_html() {
 		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $d . '</svg>';
 	};
 	$cats = '';
-	foreach ( array( 'arcos' => 'Arcos', 'decoracao-pronta' => 'Decoração Pronta', 'mini-arco' => 'Mini Arco', 'baloes-joy' => 'Balões Joy', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'formatos' => 'Formatos', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos' ) as $s => $n ) {
+	foreach ( array( 'arcos' => 'Arcos', 'decoracao-pronta' => 'Decoração Pronta', 'mini-arco' => 'Mini Arco', 'baloes-joy' => 'Balões Joy', 'pacotes' => 'Pacotes sortidos', 'pacotes-fechados' => 'Pacotes fechados', 'candy-colors' => 'Candy colors', 'formatos' => 'Formatos', 'numeros' => 'Números', 'bubbles' => 'Bubbles', 'sets-prontos' => 'Sets prontos', 'mesa-da-festa' => 'Mesa da festa' ) as $s => $n ) {
 		$cats .= '<a href="' . esc_url( home_url( '/categoria/' . $s . '/' ) ) . '">' . esc_html( $n ) . '</a>';
 	}
 	$selos = array(
@@ -1227,7 +1230,9 @@ function glowbos_linhas_html() {
 		$q( 'Balões de Números', $img . 'num_rose_5.webp', $cat( 'numeros' ), 'de 0 a 9' ) .
 		$pq( 'num32', 'Número metalizado 32" · 81 cm' ) .
 		$q( 'Balões de Formatos', wp_get_attachment_image_url( get_post_thumbnail_id( $mapa['met18_estrela'] ?? 0 ), 'medium_large' ) ?: $img . 'banner_cromados_m.webp', $cat( 'formatos' ), 'coração, estrela, bola e safári' ) );
-	$h .= $sec( 'acessorios', 'Acessórios', 'O que precisa pra montar.', $cat( 'acessorios' ), $pq( 'fita', 'Fita para arco + dupla face' ) );
+	$h .= $sec( 'acessorios', 'Acessórios', 'O que precisa pra montar.', $cat( 'acessorios' ), $pq( 'fita', 'Fita para arco + dupla face' ) . $pq( 'inflador', 'Inflador manual' ) );
+	$h .= $sec( 'mesa', 'Mesa da festa', 'Pratinho e guardanapo na cor dos balões.', $cat( 'mesa-da-festa' ),
+		$pq( 'prato20', 'Pratinho 15 cm · 20 un.' ) . $pq( 'prato30', 'Pratos 15 cm · 30 un.' ) . $pq( 'guardanapo', 'Guardanapo colorido · 50 folhas' ) );
 	return '<style>
 .vq{padding:72px 0 0}
 .vq-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}

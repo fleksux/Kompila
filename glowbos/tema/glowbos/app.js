@@ -12,7 +12,12 @@
 	// cores oficiais da Glowbos (fotos da cartela) + perolado e dourado, pros pacotes fechados
 	var OFIC = [['Branco', 'c_branco'], ['Marfim', 'c_marfim'], ['Nude', 'c_nude'], ['Caramelo', 'c_caramelo'], ['Marrom', 'c_marrom'], ['Amarelo', 'c_amarelo'], ['Vermelho', 'c_vermelho'], ['Rosa claro', 'c_rosa_claro'], ['Rosa', 'c_rosa'], ['Fúcsia', 'c_fucsia'], ['Lilás', 'c_lilas'], ['Roxo', 'c_roxo'], ['Azul claro', 'c_azul_claro'], ['Azul celeste', 'c_azul_celeste'], ['Azul', 'c_azul'], ['Azul turquesa', 'c_azul_turquesa'], ['Verde claro', 'c_verde_claro'], ['Verde lima', 'c_verde_lima'], ['Verde folha', 'c_verde_folha'], ['Branco perolado', 'b_branco', 'perola'], ['Dourado', 'b_dourado', 'metal']];
 	var EMB = ['branco', 'marfim', 'nude', 'caramelo', 'marrom', 'amarelo', 'vermelho', 'rosa_claro', 'rosa', 'fucsia', 'lilas', 'roxo', 'azul_claro', 'azul_celeste', 'azul', 'azul_turquesa', 'verde_claro', 'verde_lima', 'verde_folha', 'perolado', 'dourado'];
-	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : (D.tipo === 'quantidade' ? OFIC : LISOS);
+	// 19/10: mesa da festa (pratinhos de plástico e guardanapo): cores da Shopee, só bolinha de cor, sem foto por cor
+	var PRATOS = [['Laranja', '#F57C1F', '#FFB070'], ['Pink', '#E8308A', '#FF8CC8'], ['Verde', '#2E9E4F', '#8FE0A5'], ['Azul', '#1F4FBF', '#7FA8FF'], ['Amarelo', '#F5C400', '#FFF08A'], ['Roxo', '#6A2DA8', '#B98BE8'], ['Preto', '#151515', '#6a6a6a']];
+	var PRATOS30 = [['Azul', '#1F4FBF', '#7FA8FF'], ['Amarelo', '#F5C400', '#FFF08A'], ['Roxo', '#6A2DA8', '#B98BE8'], ['Verde', '#2E9E4F', '#8FE0A5']];
+	var GUARD = [['Preto', '#151515', '#6a6a6a'], ['Vermelho', '#C8102E', '#FF7A80'], ['Amarelo', '#F5C400', '#FFF08A'], ['Azul escuro', '#1B3A8C', '#6F8FDC'], ['Verde escuro', '#1E6B3A', '#7CC596'], ['Laranja', '#F57C1F', '#FFB070'], ['Marrom', '#7A4A1E', '#C28B5C'], ['Rosa', '#F4A7C3', '#FFD6E6'], ['Lilás', '#B48FDC', '#E0CCF5'], ['Branco', '#e6e6e6', '#ffffff'], ['Pink', '#E8308A', '#FF8CC8'], ['Azul claro', '#8BC6F0', '#D2EBFF']];
+	var SW = ['metal', 'pratos', 'pratos30', 'guardanapo'].indexOf(D.paleta) > -1;
+	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : D.paleta === 'pratos' ? PRATOS : D.paleta === 'pratos30' ? PRATOS30 : D.paleta === 'guardanapo' ? GUARD : (D.tipo === 'quantidade' ? OFIC : LISOS);
 	var preco = +D.preco, pid = D.pid, nome = D.nome;
 	var POS = [[50, 22, 30, -3], [34, 30, 29, 9], [66, 29, 29, -8], [42, 40, 31, 4], [60, 42, 30, -5], [25, 48, 28, 11], [75, 48, 28, -11], [50, 54, 31, 1], [36, 62, 29, 7], [64, 63, 29, -6], [50, 72, 30, 2], [22, 66, 26, 13], [78, 66, 26, -13]];
 	function cacho(ks) {
@@ -67,7 +72,7 @@
 
 	if (D.tipo === 'quantidade') {
 		var Q = PAL.map(function () { return 0; });
-		var sw = function (c, i) { return D.paleta === 'metal' ? '<i class="gb-sw" style="background:radial-gradient(circle at 32% 28%,' + c[2] + ' 0,' + c[1] + ' 62%)"></i>' : '<img src="' + IMG + c[1] + '.webp" alt=""' + (c[2] ? ' class="gb-' + c[2] + '"' : '') + '>'; };
+		var sw = function (c, i) { return SW ? '<i class="gb-sw" style="background:radial-gradient(circle at 32% 28%,' + c[2] + ' 0,' + c[1] + ' 62%)"></i>' : '<img src="' + IMG + c[1] + '.webp" alt=""' + (c[2] ? ' class="gb-' + c[2] + '"' : '') + '>'; };
 		box.innerHTML = '<p class="gb-st"><i>1</i> Quantos pacotes de cada cor? <small>' + D.resumo + ' por pacote</small></p><div class="gb-qcores" id="gbQ"></div>' +
 			'<div class="gb-buy"><div><small id="gbQsel">Nenhum pacote ainda</small><b id="gbQtot">' + R(0) + '</b></div><button type="button" class="gb-btn" id="gbQadd" disabled>Escolha as cores</button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje.</p>';
 		$('#gbQ').innerHTML = PAL.map(function (c, i) { return '<div class="gb-q" data-i="' + i + '">' + sw(c, i) + '<span>' + c[0] + '</span><div class="gb-step"><button type="button" data-d="-1" aria-label="Menos">−</button><em>0</em><button type="button" data-d="1" aria-label="Mais">+</button></div></div>'; }).join('');
