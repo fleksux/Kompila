@@ -9,6 +9,11 @@ header{position:sticky;top:0;z-index:5;background:var(--txt);color:#fff;padding:
 header h1{margin:0;font-size:19px;font-weight:600}
 header p{margin:0;font-size:15px;opacity:.85}
 .btn{all:unset;cursor:pointer;background:var(--ok);color:#fff;padding:11px 18px;border-radius:12px;font-weight:600;font-size:15px}
+.btn.sec{background:transparent;border:1px solid rgba(255,255,255,.5)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.acoes{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+#envio{font-size:15px;flex-basis:100%}
+@media(max-width:600px){header{padding:10px 16px;gap:8px}header h1{font-size:17px}header p{font-size:14px}.btn{padding:9px 14px}#envio{font-size:14px}}
 main{max-width:1280px;margin:0 auto;padding:20px 16px 80px}
 .como{background:var(--cartao);border-radius:16px;padding:16px 20px;margin-bottom:22px}
 .como ol{margin:6px 0 0;padding-left:20px}
@@ -35,14 +40,14 @@ main{max-width:1280px;margin:0 auto;padding:20px 16px 80px}
 .nota-peca{margin:0 0 16px}
 .nota-peca label{font-size:15px;font-weight:600}
 </style></head><body>
-<header><div><h1>Fotos por cor · Maslu</h1><p id="conta">Conferência de 2026-10-23</p></div><button class="btn" id="baixar">Baixar as correções</button></header>
+<header><div><h1>Fotos por cor · Maslu</h1><p id="conta">Conferência de 2026-10-23</p></div><div class="acoes"><button class="btn" id="enviar">Enviar para a Kompila</button><button class="btn sec" id="baixar">Baixar arquivo</button><span id="envio" role="status"></span></div></header>
 <main>
 <div class="como"><b>Como usar</b>
 <ol>
 <li>Embaixo de cada foto está a cor que o site marca hoje.</li>
 <li>No campo "Cor certa", escreva a cor certa. Se a foto vale para qualquer cor (detalhe, tecido), escreva "todas". Se estiver certa, deixe em branco.</li>
 <li>Achou algo errado? Escreva no campo de comentário da foto ou no da peça.</li>
-<li>No fim, clique em "Baixar as correções" e me avise. Vai tudo junto.</li>
+<li>No fim, toque em "Enviar para a Kompila". Vai tudo junto para a gente. Pode enviar de novo depois, vale o último envio.</li>
 </ol></div>
 <div id="lista"></div>
 </main>
@@ -82,10 +87,26 @@ DADOS.forEach(function(p){
 });
 function conta(){ var n=0,c=0; DADOS.forEach(function(p){ if(p._nota&&p._nota.value.trim()) c++; p.fotos.forEach(function(f){ if(f._se.value.trim()) n++; if(f._tx&&f._tx.value.trim()) c++; }); }); document.getElementById('conta').textContent=n+' cores escritas · '+c+' comentários'; }
 conta();
-document.getElementById('baixar').addEventListener('click',function(){
+function junta(){
   var out={}, notas={}; DADOS.forEach(function(p){ var np=p._nota.value.trim(); if(np) (notas[p.id]=notas[p.id]||{}).peca=np; p.fotos.forEach(function(f){ if(!f.id) return; var cw=f._se.value.trim(); if(cw) (out[p.id]=out[p.id]||{})[f.id]={cor:cw,foto:f.src,cor_hoje:f.cor||''}; var t=f._tx.value.trim(); if(t) ((notas[p.id]=notas[p.id]||{}).fotos=notas[p.id].fotos||{})[f.id]={nota:t,foto:f.src,cor_hoje:f.cor||''}; }); });
-  var b=new Blob([JSON.stringify({dia:'2026-10-23',pecas:out,comentarios:notas},null,1)],{type:'application/json'});
+  return {dia:'2026-10-23',pecas:out,comentarios:notas}; }
+document.getElementById('baixar').addEventListener('click',function(){
+  var b=new Blob([JSON.stringify(junta(),null,1)],{type:'application/json'});
   var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='maslu-fotos-por-cor-2026-10-23.json'; document.body.appendChild(a); a.click(); a.remove();
+});
+var SB='https://fmbxnfebumfhrviumkbu.supabase.co', SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtYnhuZmVidW1maHJ2aXVta2J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0ODM2MjgsImV4cCI6MjEwNTA1OTYyOH0.eKrTJSHwztIdXwGT0_kkCUkD379f-eZ4iXcWM-jJQ58', AID='d50e4e82-931d-4a95-82f4-2337cb1cb3fd';
+document.getElementById('enviar').addEventListener('click',function(){
+  var bt=this, st=document.getElementById('envio'), d=junta(), n=0, c=0;
+  Object.keys(d.pecas).forEach(function(k){ n+=Object.keys(d.pecas[k]).length; });
+  Object.keys(d.comentarios).forEach(function(k){ var x=d.comentarios[k]; if(x.peca) c++; if(x.fotos) c+=Object.keys(x.fotos).length; });
+  if(!n&&!c){ st.textContent='Ainda não tem nada escrito para enviar.'; return; }
+  bt.disabled=true; st.textContent='Enviando...';
+  fetch(SB+'/rest/v1/rpc/folha_fotos_enviar',{method:'POST',headers:{'Content-Type':'application/json',apikey:SK,Authorization:'Bearer '+SK},
+    body:JSON.stringify({aid:AID,dados:d,autor:'Marlúcia',resumo:'Enviou a folha das fotos: '+n+' cores escritas e '+c+' comentários.'})})
+  .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.message||'erro'); }); })
+  .then(function(){ st.textContent='Enviado para a Kompila: '+n+' cores e '+c+' comentários. Obrigado!'; })
+  .catch(function(e){ st.textContent='Não foi: '+e.message+'. Tente de novo em um minuto.'; })
+  .then(function(){ bt.disabled=false; });
 });
 </script>
 </body></html>
