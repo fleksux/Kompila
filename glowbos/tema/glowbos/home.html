@@ -1083,7 +1083,9 @@ function pinta(){
  $('#mptot').textContent=T.p?R(T.p):'Sob consulta';
  const b=$('#mpadd');b.disabled=!SEQ.length;b.textContent=!SEQ.length?'Escolha pelo menos 1 cor':(T.p?'Colocar no carrinho':'Pedir orçamento');
 }
-$('#mpcores').innerHTML=CORES.map(([n,c],k)=>`<button class="cor" data-k="${k}"><img class="bimg" src="img/b_${window.GB_ARQ[k]}.webp" alt="">${n}</button>`).join('');
+// 26/10: dourado, cinza, bege e azul royal fora do Monte seu pacote (índices ficam, só não aparecem)
+const FORA=['Azul Royal','Bege','Cinza','Dourado'];
+$('#mpcores').innerHTML=CORES.map(([n,c],k)=>FORA.includes(n)?'':`<button class="cor" data-k="${k}"><img class="bimg" src="img/b_${window.GB_ARQ[k]}.webp" alt="">${n}</button>`).join('');
 $('#mpcores').addEventListener('click',e=>{const b=e.target.closest('.cor');if(!b||SEQ.length>=T.c)return;SEQ.push(+b.dataset.k);TEMA='';pinta()});
 $('#mps').addEventListener('click',e=>{const s=e.target.closest('.slot.cheio');if(!s)return;SEQ.splice(+s.dataset.s,1);pinta()});
 document.querySelectorAll('#mpt button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mpt button').forEach(x=>x.classList.remove('on'));b.classList.add('on');T={q:+b.dataset.q,c:+b.dataset.c,p:+b.dataset.p};SEQ=SEQ.slice(0,T.c);pinta()});
@@ -1098,10 +1100,10 @@ pinta();
 const $=s=>document.querySelector(s);
 const C=window.GB_CORES;if(!C)return;
 const T={
- torcida:[['Torcida Alviverde',[15,0]],['Torcida Alvinegra',[1,0]],['Torcida Rubro-negra',[2,1]],['Torcida Tricolor',[2,0,1]],['Torcida Celeste',[10,0]],['Torcida Colorada',[2,0]],['Tricolor Gaúcho',[11,1,0]],['Seleção',[3,15,10]]],
- datas:[['Halloween',[1,4,8,16]],['Natal',[2,15,0,20]],['Ano Novo',[0,20,19]],['Festa Junina',[2,3,10,15]],['Dia das Crianças',[2,3,9,15,4]],['Páscoa',[12,6,7,14]],['Carnaval',[5,3,13,8]],['Dia dos Namorados',[2,5,0]]],
- herois:[['Herói clássico',[2,10,3]],['Cavaleiro da noite',[1,3,19]],['Teia vermelha',[2,1,10]],['Força verde',[15,8,1]],['Heroína',[2,3,10,20]],['Herói do raio',[2,3,0]]],
- festas:[['Chá revelação',[12,6,0]],['Chá de bebê',[12,18,0]],['Unicórnio',[6,7,13,3]],['Safári',[17,18,15]],['Fundo do mar',[11,13,9,14]],['Princesa',[6,7,20]],['Fazendinha',[2,15,3,17]],['Neon',[5,16,3,13,8]]]
+ torcida:[['Torcida Alviverde',[15,0]],['Torcida Alvinegra',[1,0]],['Torcida Rubro-negra',[2,1]],['Torcida Tricolor',[2,0,1]],['Torcida Celeste',[11,0]],['Torcida Colorada',[2,0]],['Tricolor Gaúcho',[11,1,0]],['Seleção',[3,15,9]]],
+ datas:[['Halloween',[1,4,8,16]],['Natal',[2,15,0,3]],['Ano Novo',[0,3]],['Festa Junina',[2,3,9,15]],['Dia das Crianças',[2,3,9,15,4]],['Páscoa',[12,6,7,14]],['Carnaval',[5,3,13,8]],['Dia dos Namorados',[2,5,0]]],
+ herois:[['Herói clássico',[2,9,3]],['Cavaleiro da noite',[1,3,0]],['Teia vermelha',[2,1,9]],['Força verde',[15,8,1]],['Heroína',[2,3,9]],['Herói do raio',[2,3,0]]],
+ festas:[['Chá revelação',[12,6,0]],['Chá de bebê',[12,14,0]],['Unicórnio',[6,7,13,3]],['Safári',[17,4,15]],['Fundo do mar',[11,13,9,14]],['Princesa',[6,7,0]],['Fazendinha',[2,15,3,17]],['Neon',[5,16,3,13,8]]]
 };
 const PRECO={2:'R$ 19,87 · 50 balões',3:'R$ 25,99 · 75 balões',4:'R$ 32,99 · 100 balões',5:'R$ 36,99 · 125 balões'};
 const P=[[61,50,21],[38,58,19],[84,58,19],[48,31,17],[74,30,17],[61,76,18],[24,38,14],[98,38,14],[30,80,14],[92,80,14]];
