@@ -7,6 +7,8 @@
 	var R = function (v) { return 'R$ ' + v.toFixed(2).replace('.', ','); };
 	var ARQ = ['branco', 'preto', 'vermelho', 'amarelo', 'laranja', 'pink', 'rosa', 'lilas', 'roxo', 'azul_cobalto', 'azul_royal', 'azul_celeste', 'azul_baby', 'tiffany', 'verde_agua', 'verde_bandeira', 'verde_citrus', 'marrom', 'bege', 'cinza', 'dourado'];
 	var LISOS = [['Branco', 0], ['Preto', 1], ['Vermelho', 2], ['Amarelo', 3], ['Laranja', 4], ['Pink', 5], ['Rosa', 6], ['Lilás', 7], ['Roxo', 8], ['Azul Cobalto', 9], ['Azul Royal', 10], ['Azul Celeste', 11], ['Azul Baby', 12], ['Tiffany', 13], ['Verde Água', 14], ['Verde Bandeira', 15], ['Verde Citrus', 16], ['Marrom', 17], ['Bege', 18], ['Cinza', 19], ['Dourado', 20]];
+	// 26/10: pacotes sortidos de 8" sem dourado, cinza, bege e azul royal
+	var LISOS8 = LISOS.filter(function (c) { return ['Azul Royal', 'Bege', 'Cinza', 'Dourado'].indexOf(c[0]) < 0; });
 	var CANDY = [['Rosa candy', 6], ['Azul candy', 12], ['Lilás candy', 7], ['Verde candy', 14], ['Branco', 0], ['Bege', 18]];
 	var METAL = [['Dourado', '#c9a24a', '#f3dc8b'], ['Prata', '#9da3a8', '#e9ecef'], ['Rosê gold', '#c98f7f', '#f4cfc3'], ['Rosa', '#e86aa0', '#ffc3dc'], ['Vermelho', '#b81d27', '#ff7a80'], ['Azul', '#2153b8', '#8fb4ff'], ['Verde', '#16804a', '#86e0ad'], ['Roxo', '#6a32b0', '#c4a1f2'], ['Grafite', '#2b2b30', '#8a8a92']];
 	// cores oficiais da Glowbos (fotos da cartela) + perolado e dourado, pros pacotes fechados
@@ -17,7 +19,7 @@
 	var PRATOS30 = [['Azul', '#1F4FBF', '#7FA8FF'], ['Amarelo', '#F5C400', '#FFF08A'], ['Roxo', '#6A2DA8', '#B98BE8'], ['Verde', '#2E9E4F', '#8FE0A5']];
 	var GUARD = [['Preto', '#151515', '#6a6a6a'], ['Vermelho', '#C8102E', '#FF7A80'], ['Amarelo', '#F5C400', '#FFF08A'], ['Azul escuro', '#1B3A8C', '#6F8FDC'], ['Verde escuro', '#1E6B3A', '#7CC596'], ['Laranja', '#F57C1F', '#FFB070'], ['Marrom', '#7A4A1E', '#C28B5C'], ['Rosa', '#F4A7C3', '#FFD6E6'], ['Lilás', '#B48FDC', '#E0CCF5'], ['Branco', '#e6e6e6', '#ffffff'], ['Pink', '#E8308A', '#FF8CC8'], ['Azul claro', '#8BC6F0', '#D2EBFF']];
 	var SW = ['metal', 'pratos', 'pratos30', 'guardanapo'].indexOf(D.paleta) > -1;
-	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : D.paleta === 'pratos' ? PRATOS : D.paleta === 'pratos30' ? PRATOS30 : D.paleta === 'guardanapo' ? GUARD : (D.tipo === 'quantidade' ? OFIC : LISOS);
+	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : D.paleta === 'pratos' ? PRATOS : D.paleta === 'pratos30' ? PRATOS30 : D.paleta === 'guardanapo' ? GUARD : (D.tipo === 'quantidade' ? OFIC : D.paleta === 'lisos8' ? LISOS8 : LISOS);
 	var preco = +D.preco, pid = D.pid, nome = D.nome;
 	var POS = [[50, 22, 30, -3], [34, 30, 29, 9], [66, 29, 29, -8], [42, 40, 31, 4], [60, 42, 30, -5], [25, 48, 28, 11], [75, 48, 28, -11], [50, 54, 31, 1], [36, 62, 29, 7], [64, 63, 29, -6], [50, 72, 30, 2], [22, 66, 26, 13], [78, 66, 26, -13]];
 	function cacho(ks) {

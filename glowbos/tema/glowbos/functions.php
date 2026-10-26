@@ -569,8 +569,8 @@ function glowbos_app_config( $pid ) {
 	$mapa = array_flip( (array) get_option( 'glowbos_produtos', array() ) );
 	$k    = $mapa[ (string) $pid ] ?? '';
 	$c    = array(
-		'pct50' => array( 'sequencia', 2, 'lisos', '50 balões de 8"' ), 'pct75' => array( 'sequencia', 3, 'lisos', '75 balões de 8"' ),
-		'pct100' => array( 'sequencia', 4, 'lisos', '100 balões de 8"' ), 'pct125' => array( 'sequencia', 5, 'lisos', '125 balões de 8"' ),
+		'pct50' => array( 'sequencia', 2, 'lisos8', '50 balões de 8"' ), 'pct75' => array( 'sequencia', 3, 'lisos8', '75 balões de 8"' ),
+		'pct100' => array( 'sequencia', 4, 'lisos8', '100 balões de 8"' ), 'pct125' => array( 'sequencia', 5, 'lisos8', '125 balões de 8"' ),
 		'candy50' => array( 'sequencia', 2, 'candy', '50 balões candy de 8"' ), 'candy75' => array( 'sequencia', 3, 'candy', '75 balões candy de 8"' ), 'candy100' => array( 'sequencia', 4, 'candy', '100 balões candy de 8"' ),
 		'kit60' => array( 'sequencia', 3, 'lisos', 'kit 60 peças' ), 'kit80' => array( 'sequencia', 3, 'lisos', 'kit 80 peças' ), 'kit100' => array( 'sequencia', 3, 'lisos', 'kit 100 peças' ), 'kit112' => array( 'sequencia', 4, 'lisos', 'kit 112 peças' ),
 		'kit120' => array( 'sequencia', 3, 'lisos', 'kit 120 peças' ), 'kiteco100' => array( 'sequencia', 2, 'lisos', 'kit econômico 100 balões' ),
