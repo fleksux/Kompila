@@ -712,6 +712,33 @@ function glowbos_dep_topo() {
 	if ( 'arcos' === $slug ) {
 		glowbos_arco_app();
 	}
+	if ( 'pacotes' === $slug ) {
+		glowbos_pacotes_grade();
+	}
+}
+// 26/10 (relatório etapa 1): Pacotes sortidos = só 8", grade de 2 colunas, nome no meio da foto, sem preço
+function glowbos_pacotes_grade() {
+	$mapa = (array) get_option( 'glowbos_produtos', array() );
+	$h    = '';
+	foreach ( array( 'pct50' => array( 50, '2 cores' ), 'pct75' => array( 75, '3 cores' ), 'pct100' => array( 100, '4 cores' ), 'pct125' => array( 125, 'até 5 cores' ) ) as $k => $t ) {
+		$p = empty( $mapa[ $k ] ) ? null : wc_get_product( $mapa[ $k ] );
+		if ( ! $p ) {
+			continue;
+		}
+		$h .= sprintf( '<a class="pg-c" href="%s"><img src="%s" alt="" loading="lazy"><span class="pg-t"><b>%d balões</b><em>%s</em></span></a>', esc_url( $p->get_permalink() ), esc_url( wp_get_attachment_image_url( $p->get_image_id(), 'large' ) ), $t[0], esc_html( $t[1] ) );
+	}
+	echo '<style>
+.term-pacotes .gb-filtros,.term-pacotes ul.products,.term-pacotes .woocommerce-result-count,.term-pacotes .woocommerce-ordering,.term-pacotes .woocommerce-pagination{display:none!important}
+.pg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:720px;margin:24px auto 0}
+.pg-c{position:relative;display:block;border-radius:14px;overflow:hidden;background:#f7f3ea;text-decoration:none;color:var(--vinho,#1a1720)}
+.pg-c img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .35s}
+.pg-c:hover img{transform:scale(1.03)}
+.pg-t{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:6px 14px;border-radius:99px;background:rgba(255,255,255,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-align:center;white-space:nowrap;font:600 15px/1.2 Inter,sans-serif}
+.pg-t b{font-weight:700}
+.pg-t em{font-style:normal;color:var(--vinho2,#5c5560)}
+.pg-t em::before{content:" · "}
+@media (max-width:640px){.pg{gap:8px;margin-top:16px}.pg-c{border-radius:12px}.pg-t{padding:4px 10px;font-size:12.5px}.pg-t em{display:block}.pg-t em::before{content:none}.pg-t{border-radius:10px}}
+</style><div class="pg">' . $h . '</div>'; // phpcs:ignore
 }
 // filtros: tamanho e preço (o WooCommerce entende ?filter_tamanho= e ?min_price/max_price)
 add_action( 'woocommerce_before_shop_loop', function () {
