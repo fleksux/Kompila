@@ -94,7 +94,7 @@ add_action( 'woocommerce_single_product_summary', function () {
 	}
 	?>
 	<div class="gb-pdp">
-		<div class="gb-hoje"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span><span><b>Chega hoje em São Paulo e Grande SP</b>Pedido pago até 12h sai no mesmo dia; depois disso, chega no dia seguinte.</span></div>
+		<div class="gb-hoje"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span><span><b>Chega hoje em São Paulo e Grande SP</b>Pedido pago até 12h chega hoje até 21h. Depois das 12h, chega amanhã até 21h.</span></div>
 		<div><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span style="flex:1"><b>Ver prazo pro seu CEP</b>
 			<span class="gb-cep"><input inputmode="numeric" maxlength="9" placeholder="00000-000" id="gbcep"><button type="button" id="gbcepb">Ver</button></span>
 			<span class="gb-cepr" id="gbcepr"></span></span></div>
@@ -297,7 +297,7 @@ add_filter( 'woocommerce_package_rates', function ( $rates ) {
 	$hora = (int) ( new DateTime( 'now', new DateTimeZone( 'America/Sao_Paulo' ) ) )->format( 'G' );
 	foreach ( $rates as $rate ) {
 		if ( 'flat_rate' === $rate->get_method_id() && 0 === strpos( $rate->get_label(), 'Motoboy' ) ) {
-			$rate->set_label( $hora < 12 ? 'Motoboy · chega hoje' : 'Motoboy · chega amanhã (pedidos até 12h chegam no mesmo dia)' );
+			$rate->set_label( $hora < 12 ? 'Motoboy · chega hoje até 21h' : 'Motoboy · chega amanhã até 21h (pago até 12h chega no mesmo dia)' );
 		}
 	}
 	return $rates;
@@ -342,7 +342,7 @@ add_action( 'wp_head', function () {
 	window.gbFrete=function(cep){var n=+String(cep).replace(/\D/g,''),f=null;(window.GB_FRETE||[]).some(function(x){if(n>=x[0]&&n<=x[1]){f=x;return true}});
 	if(!f||!/^(Motoboy|Entrega expressa)/.test(f[2]))return{ok:false,msg:'Enviamos pelos Correios. O frete aparece no pagamento.'};
 	var v='R$ '+f[3].toFixed(2).replace('.',','),h=new Date().getHours();
-	if(/^Motoboy/.test(f[2]))return{ok:true,msg:h<12?'Chega hoje! Motoboy por '+v+'.':'Chega amanhã cedo. Motoboy por '+v+'. Pago até 12h chega no mesmo dia.'};
+	if(/^Motoboy/.test(f[2]))return{ok:true,msg:h<12?'Chega hoje até 21h! Motoboy por '+v+'.':'Chega amanhã até 21h. Motoboy por '+v+'. Pago até 12h chega no mesmo dia.'};
 	if(/amanh/.test(f[2]))return{ok:true,msg:'Chega amanhã. Entrega expressa por '+v+'.'};
 	return{ok:true,msg:'Chega em até 2 dias úteis. Entrega expressa por '+v+'.'}};</script>
 	<?php
@@ -367,7 +367,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return;
 	}
-	$v = wp_get_theme()->get( 'Version' ) . '.17';
+	$v = wp_get_theme()->get( 'Version' ) . '.18';
 	wp_enqueue_style( 'glowbos-checkout', get_template_directory_uri() . '/checkout.css', array( 'glowbos' ), $v );
 	wp_enqueue_script( 'glowbos-checkout', get_template_directory_uri() . '/checkout.js', array( 'jquery', 'wc-checkout' ), $v, true );
 }, 30 );
@@ -691,7 +691,7 @@ function glowbos_dep_topo() {
 	}
 	$d    = glowbos_departamentos();
 	$slug = is_product_category() ? get_queried_object()->slug : '';
-	$c    = $d[ $slug ] ?? array( 'Loja Glowbos', 'Todos os balões, kits e pacotes. Em SP e Grande SP, pago até 12h chega hoje.', 'banner_loja.webp' );
+	$c    = $d[ $slug ] ?? array( 'Loja Glowbos', 'Todos os balões, kits e pacotes. Em SP e Grande SP, pago até 12h chega hoje até 21h.', 'banner_loja.webp' );
 	$img  = get_template_directory_uri() . '/img/' . $c[2];
 	$esc  = in_array( $slug, array( 'pacotes-fechados', 'pacotes', 'sets-prontos' ), true ) ? ' esc' : '';
 	$imgm = preg_replace( '#(banner_[a-z]+)\.webp$#', '$1_m.webp', $img );
@@ -894,7 +894,7 @@ function glowbos_arco_app() {
 				<div class="ma-buy"><div><small>Sua lista sai por</small><b id="maTot">R$ 0,00</b><small id="maPk"></small></div></div>
 				<div class="ma-acoes"><button class="btn pri" id="maComprar">Comprar esta lista</button><button class="btn lin" id="maTrocar">Trocar as cores</button></div>
 				<div class="ma-cores" id="maCores" hidden></div>
-				<p class="mnote">Em São Paulo e Grande SP, pedido pago até 12h chega no mesmo dia.</p>
+				<p class="mnote">Em São Paulo e Grande SP, pedido pago até 12h chega hoje até 21h.</p>
 			</div>
 		</div>
 	</section>
@@ -997,7 +997,7 @@ body.gg-on{overflow:hidden}
 <button type="button" class="gg-fab" data-prazo aria-label="Chega hoje? Calcule o frete"><img class="bl b1" src="<?php echo esc_url( $img ); ?>b_rosa.webp" alt=""><img class="bl b2" src="<?php echo esc_url( $img ); ?>b_lilas.webp" alt=""><img class="bl b3" src="<?php echo esc_url( $img ); ?>b_dourado.webp" alt=""><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></i><span>Chega hoje?<small>Calcule o frete pro seu CEP</small></span></button>
 <div class="gg-v" id="ggV"></div>
 <aside class="gg" id="gg" aria-hidden="true" aria-label="Calcule o frete">
-	<div class="gg-h"><div><b>Chega hoje? Calcule o frete</b><small>Em SP e Grande SP, pago até 12h chega no mesmo dia.</small></div><button type="button" id="ggX" aria-label="Fechar">✕</button></div>
+	<div class="gg-h"><div><b>Chega hoje? Calcule o frete</b><small>Em SP e Grande SP, pago até 12h chega hoje até 21h. Depois das 12h, amanhã até 21h.</small></div><button type="button" id="ggX" aria-label="Fechar">✕</button></div>
 	<div class="gg-b">
 		<form class="gg-cep" id="ggCep"><input inputmode="numeric" maxlength="9" placeholder="Digite seu CEP" aria-label="CEP" autocomplete="postal-code"><button>Ver prazo</button></form>
 		<p class="gg-r" id="ggR"></p>
@@ -1046,7 +1046,7 @@ function glowbos_rodape_html() {
 		array( $svg( '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>' ), 'Compra segura', 'site com SSL, dados protegidos' ),
 		array( $svg( '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/>' ), 'Mercado Pago', 'Pix e cartão em até 3x' ),
 		array( $svg( '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/>' ), '4,9 de 5 na Shopee', '67 mil avaliações · ver ↗' ),
-		array( $svg( '<path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' ), 'Chega hoje', 'SP e Grande SP, pago até 12h' ),
+		array( $svg( '<path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' ), 'Chega hoje até 21h', 'SP e Grande SP, pago até 12h' ),
 	);
 	$sh = '';
 	foreach ( $selos as $n => $s ) {

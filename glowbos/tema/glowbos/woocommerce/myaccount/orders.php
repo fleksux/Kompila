@@ -50,7 +50,7 @@ $gb_cor = array( 'processing' => 'ok', 'completed' => 'ok', 'on-hold' => 'esp', 
 		</div>
 	<?php endif; ?>
 <?php else : ?>
-	<div class="gb-ped-vazio"><b>Você ainda não fez nenhum pedido</b><p>Escolha as cores e a gente entrega. Em SP, pago até 12h chega hoje.</p><a class="button" href="<?php echo esc_url( home_url( '/loja/' ) ); ?>">Ver a loja</a></div>
+	<div class="gb-ped-vazio"><b>Você ainda não fez nenhum pedido</b><p>Escolha as cores e a gente entrega. Em SP, pago até 12h chega hoje até 21h.</p><a class="button" href="<?php echo esc_url( home_url( '/loja/' ) ); ?>">Ver a loja</a></div>
 <?php endif; ?>
 
 <?php do_action( 'woocommerce_after_account_orders', $has_orders ); ?>

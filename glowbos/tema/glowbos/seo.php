@@ -17,8 +17,8 @@ function glowbos_seo_desc() {
 		'acessorios'       => 'Fita para arco e adesivo dupla face pra montar arco de balões em casa. Chega hoje em SP e Grande SP.',
 	);
 	$pags = array(
-		'loja'                    => 'Loja Glowbos: balões, kits de arco, números e pacotes de festa. Em SP e Grande SP, pedido pago até 12h chega hoje. Envio pra todo o Brasil.',
-		'entrega-e-frete'         => 'Entrega no mesmo dia em São Paulo e Grande SP pra pedido pago até 12h, de motoboy. Outras regiões pelos Correios, com prazo e valor pelo CEP.',
+		'loja'                    => 'Loja Glowbos: balões, kits de arco, números e pacotes de festa. Em SP e Grande SP, pedido pago até 12h chega hoje até 21h. Envio pra todo o Brasil.',
+		'entrega-e-frete'         => 'Em São Paulo e Grande SP, de motoboy: pedido pago até 12h chega hoje até 21h; depois das 12h, amanhã até 21h. Outras regiões pelos Correios, com prazo e valor pelo CEP.',
 		'trocas-e-devolucoes'     => 'Trocas e devoluções na Glowbos: 7 dias pra se arrepender da compra e troca de balão com defeito pelo WhatsApp.',
 		'perguntas-frequentes'    => 'Dúvidas sobre balões, cores, tamanhos, gás hélio, quantos balões vão num arco, entrega no mesmo dia e trocas na Glowbos.',
 		'como-montar'             => 'Passo a passo pra montar um arco de balões desconstruído em casa: quantos balões usar, como encher, prender na fita e fixar na parede.',

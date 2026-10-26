@@ -50,7 +50,7 @@
 	if (D.tipo === 'sequencia') {
 		var N = +D.cores, SEQ = [];
 		box.innerHTML = '<p class="gb-st"><i>1</i> Escolha até ' + N + ' cores, na ordem do cacho <small id="gbCnt"></small></p><div class="gb-slots" id="gbSlots"></div><div class="gb-cores" id="gbCores"></div>' +
-			'<div class="gb-buy"><div><small>' + D.resumo + '</small><b>' + R(preco) + '</b></div><button type="button" class="gb-btn" id="gbAdd" disabled></button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje.</p>';
+			'<div class="gb-buy"><div><small>' + D.resumo + '</small><b>' + R(preco) + '</b></div><button type="button" class="gb-btn" id="gbAdd" disabled></button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje até 21h.</p>';
 		$('#gbCores').innerHTML = PAL.map(function (c, i) { return '<button type="button" class="gb-cor" data-i="' + i + '"><img src="' + IMG + 'b_' + ARQ[c[1]] + '.webp" alt="">' + c[0] + '</button>'; }).join('');
 		var pinta = function () {
 			$('#gbSlots').innerHTML = Array.from({ length: N }, function (_, i) { var k = SEQ[i]; return k === undefined ? '<div class="gb-slot"><i>' + (i + 1) + '</i>' + (i ? 'opcional' : 'escolha') + '</div>' : '<button type="button" class="gb-slot cheio" data-s="' + i + '" title="Tirar"><i>' + (i + 1) + '</i><img src="' + IMG + 'b_' + ARQ[PAL[k][1]] + '.webp" alt="">' + PAL[k][0] + ' <span>×</span></button>'; }).join('');
@@ -74,7 +74,7 @@
 		var Q = PAL.map(function () { return 0; });
 		var sw = function (c, i) { return SW ? '<i class="gb-sw" style="background:radial-gradient(circle at 32% 28%,' + c[2] + ' 0,' + c[1] + ' 62%)"></i>' : '<img src="' + IMG + c[1] + '.webp" alt=""' + (c[2] ? ' class="gb-' + c[2] + '"' : '') + '>'; };
 		box.innerHTML = '<p class="gb-st"><i>1</i> Quantos pacotes de cada cor? <small>' + D.resumo + ' por pacote</small></p><div class="gb-qcores" id="gbQ"></div>' +
-			'<div class="gb-buy"><div><small id="gbQsel">Nenhum pacote ainda</small><b id="gbQtot">' + R(0) + '</b></div><button type="button" class="gb-btn" id="gbQadd" disabled>Escolha as cores</button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje.</p>';
+			'<div class="gb-buy"><div><small id="gbQsel">Nenhum pacote ainda</small><b id="gbQtot">' + R(0) + '</b></div><button type="button" class="gb-btn" id="gbQadd" disabled>Escolha as cores</button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje até 21h.</p>';
 		$('#gbQ').innerHTML = PAL.map(function (c, i) { return '<div class="gb-q" data-i="' + i + '">' + sw(c, i) + '<span>' + c[0] + '</span><div class="gb-step"><button type="button" data-d="-1" aria-label="Menos">−</button><em>0</em><button type="button" data-d="1" aria-label="Mais">+</button></div></div>'; }).join('');
 		var soma = function () {
 			var n = Q.reduce(function (a, b) { return a + b; }, 0);

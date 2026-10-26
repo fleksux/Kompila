@@ -33,7 +33,7 @@ if ( $falhou ) {
 	$classe = 'erro';
 } elseif ( $pago ) {
 	$titulo = ( $nome ? esc_html( $nome ) . ', seu' : 'Seu' ) . ' pedido está confirmado!';
-	$sub    = $hoje ? 'Pagamento aprovado. Já estamos separando os balões: <b>chega hoje</b>.' : 'Pagamento aprovado. Já estamos separando os seus balões.';
+	$sub    = $hoje ? 'Pagamento aprovado. Já estamos separando os balões: <b>chega hoje até 21h</b>.' : 'Pagamento aprovado. Já estamos separando os seus balões.';
 	$icone  = $gb_svg( '<path d="m5 12.5 4.5 4.5L19 7.5"/>' );
 	$classe = 'ok';
 } elseif ( $pix ) {
@@ -89,7 +89,7 @@ $passos = array( 'Pedido feito', 'Pagamento', 'Separando', 'A caminho', 'Entregu
 					<ul>
 						<li><?php echo $gb_svg( '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>' ); // phpcs:ignore ?><span><b>Confirmação no seu e-mail</b><?php echo esc_html( $order->get_billing_email() ); ?></span></li>
 						<li><?php echo $gb_svg( '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>' ); // phpcs:ignore ?><span><b>Separação com as suas cores</b>A gente confere cor por cor antes de fechar a caixa.</span></li>
-						<?php if ( $frete ) : ?><li><?php echo $gb_svg( '<path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' ); // phpcs:ignore ?><span><b><?php echo $hoje ? 'Chega hoje' : ( $motoboy ? 'Motoboy no próximo dia' : 'Enviamos pelos Correios' ); ?></b><?php echo esc_html( $frete ? $frete : 'Entrega' ); ?></span></li><?php endif; ?>
+						<?php if ( $frete ) : ?><li><?php echo $gb_svg( '<path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' ); // phpcs:ignore ?><span><b><?php echo $hoje ? 'Chega hoje até 21h' : ( $motoboy ? 'Chega amanhã até 21h' : 'Enviamos pelos Correios' ); ?></b><?php echo esc_html( $frete ? $frete : 'Entrega' ); ?></span></li><?php endif; ?>
 					</ul>
 				</div>
 			<?php endif; ?>
