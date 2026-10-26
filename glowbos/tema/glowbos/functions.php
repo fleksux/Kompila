@@ -1186,7 +1186,7 @@ function glowbos_util_html() {
 @media (max-width:760px){.ub-w{padding:0 14px;height:32px;font-size:12px}.ub-l span+span,.ub-r a:not(.ub-ig){display:none}.ub-w{justify-content:space-between}}
 </style>
 <div class="ub"><div class="ub-w">
-<div class="ub-l"><span>' . $i( '<path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' ) . 'Chega hoje em SP e Grande SP, pago até 12h</span><span>' . $i( '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>' ) . 'Site seguro</span></div>
+<div class="ub-l"><span>' . $i( '<path d="M2 6h12v10H2zM14 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' ) . 'Pagou até 12h, chega hoje até 21h em SP e Grande SP</span><span>' . $i( '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>' ) . 'Site seguro</span></div>
 <div class="ub-r"><a href="' . esc_url( wc_get_account_endpoint_url( 'orders' ) ) . '">' . $i( '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>' ) . 'Meus pedidos</a><a href="https://wa.me/5511945231106" target="_blank" rel="noopener">' . $i( '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>' ) . '(11) 94523-1106</a><a class="ub-ig" href="https://instagram.com/glowbosbaloes" target="_blank" rel="noopener" aria-label="Instagram da Glowbos">' . $i( '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>' ) . '</a></div>
 </div></div>';
 }
