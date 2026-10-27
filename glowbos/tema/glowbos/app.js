@@ -59,18 +59,19 @@
 
 	if (D.tipo === 'sequencia') {
 		var N = +D.cores, SEQ = [];
-		box.innerHTML = '<p class="gb-st"><i>1</i> Escolha até ' + N + ' cores, na ordem do cacho <small id="gbCnt"></small></p><div class="gb-slots" id="gbSlots"></div><div class="gb-cores" id="gbCores"></div>' +
+		box.innerHTML = '<p class="gb-st"><i>1</i> Toque nas cores que quer, até ' + N + '. Toque de novo pra tirar. <small id="gbCnt"></small></p><div class="gb-cores" id="gbCores"></div>' +
 			'<div class="gb-buy"><div><small>' + D.resumo + '</small><b>' + R(preco) + '</b></div><button type="button" class="gb-btn" id="gbAdd" disabled></button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje até 21h.</p>';
+		// linhas o mais iguais possível (21 = 7+7+7, 17 = 6+6+5 centralizada)
+		$('#gbCores').style.setProperty('--col', Math.ceil(PAL.length / Math.ceil(PAL.length / 7)));
 		$('#gbCores').innerHTML = PAL.map(function (c, i) { return '<button type="button" class="gb-cor" data-i="' + i + '"><img src="' + IMG + 'b_' + ARQ[c[1]] + '.webp" alt="">' + c[0] + '</button>'; }).join('');
 		var pinta = function () {
-			$('#gbSlots').innerHTML = Array.from({ length: N }, function (_, i) { var k = SEQ[i]; return k === undefined ? '<div class="gb-slot"><i>' + (i + 1) + '</i>' + (i ? 'opcional' : 'escolha') + '</div>' : '<button type="button" class="gb-slot cheio" data-s="' + i + '" title="Tirar"><i>' + (i + 1) + '</i><img src="' + IMG + 'b_' + ARQ[PAL[k][1]] + '.webp" alt="">' + PAL[k][0] + ' <span>×</span></button>'; }).join('');
-			box.querySelectorAll('.gb-cor').forEach(function (b) { b.classList.toggle('usada', SEQ.indexOf(+b.dataset.i) > -1 || SEQ.length >= N); });
+			// 27/10: igual ao arco e à festa: a cor escolhida fica marcada com o número da ordem; toca de novo e sai
+			box.querySelectorAll('.gb-cor').forEach(function (b) { var k = SEQ.indexOf(+b.dataset.i), e = b.querySelector('em'); b.classList.toggle('on', k > -1); b.classList.toggle('cheio', k < 0 && SEQ.length >= N); b.classList.remove('usada'); if (k > -1) { if (!e) { e = document.createElement('em'); b.appendChild(e); } e.textContent = k + 1; } else if (e) e.remove(); });
 			$('#gbCnt').textContent = 'até ' + N + ' · ' + SEQ.length + (SEQ.length === 1 ? ' escolhida' : ' escolhidas');
 			var b = $('#gbAdd'); b.disabled = !SEQ.length; b.textContent = SEQ.length ? 'Colocar no carrinho' : 'Escolha pelo menos 1 cor';
 			if (prev) { prev.innerHTML = '<div class="cacho' + (SEQ.length ? '' : ' vazio') + '">' + (SEQ.length ? cacho(SEQ.map(function (k) { return PAL[k][1]; })) : '<img class="cc-foto" src="' + IMG + 'pack_branco.webp?v=2" alt="">') + (SEQ.length ? '<span class="gb-tag">' + SEQ.map(function (k) { return PAL[k][0]; }).join(' · ') + '</span>' : '<div class="gb-vazio"><b>Escolha suas cores<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg></b></div>') + '</div>'; }
 		};
-		$('#gbCores').addEventListener('click', function (e) { var b = e.target.closest('.gb-cor'); if (!b || SEQ.length >= N || SEQ.indexOf(+b.dataset.i) > -1) return; SEQ.push(+b.dataset.i); pinta(); });
-		$('#gbSlots').addEventListener('click', function (e) { var s = e.target.closest('.gb-slot.cheio'); if (!s) return; SEQ.splice(+s.dataset.s, 1); pinta(); });
+		$('#gbCores').addEventListener('click', function (e) { var b = e.target.closest('.gb-cor'); if (!b) return; var i = +b.dataset.i, k = SEQ.indexOf(i); if (k > -1) SEQ.splice(k, 1); else if (SEQ.length < N) SEQ.push(i); else return; pinta(); });
 		$('#gbAdd').onclick = function () {
 			var b = this; b.disabled = true; b.textContent = 'Montando a foto...';
 			foto(SEQ.map(function (k) { return PAL[k][1]; })).then(function (img) {
@@ -86,22 +87,27 @@
 	if (D.tipo === 'quantidade') {
 		var Q = PAL.map(function () { return 0; });
 		var sw = function (c, i) { return SW ? '<i class="gb-sw" style="background:radial-gradient(circle at 32% 28%,' + c[2] + ' 0,' + c[1] + ' 62%)"></i>' : '<img src="' + IMG + c[1] + '.webp" alt=""' + (c[2] ? ' class="gb-' + c[2] + '"' : '') + '>'; };
-		box.innerHTML = '<p class="gb-st"><i>1</i> Quantos pacotes de cada cor? <small>' + D.resumo + ' por pacote</small></p><div class="gb-qcores" id="gbQ"></div>' +
+		box.innerHTML = '<p class="gb-st"><i>1</i> Toque na cor que quer. Pra pôr mais, use o + embaixo dela. <small>' + D.resumo + ' por pacote</small></p><div class="gb-qcores" id="gbQ"></div>' +
 			'<div class="gb-buy"><div><small id="gbQsel">Nenhum pacote ainda</small><b id="gbQtot">' + R(0) + '</b></div><button type="button" class="gb-btn" id="gbQadd" disabled>Escolha as cores</button></div><p class="gb-nota">Em SP e Grande SP, pago até 12h chega hoje até 21h.</p>';
-		$('#gbQ').innerHTML = PAL.map(function (c, i) { return '<div class="gb-q" data-i="' + i + '">' + sw(c, i) + '<span>' + c[0] + '</span><div class="gb-step"><button type="button" data-d="-1" aria-label="Menos">−</button><em>0</em><button type="button" data-d="1" aria-label="Mais">+</button></div></div>'; }).join('');
+		// 27/10: o mesmo jeito da festa em todo produto: toca na cor = 1 pacote; a quantidade fica no − e + embaixo
+		var nq = PAL.length, colq = nq <= 9 ? nq : Math.ceil(nq / 2);
+		$('#gbQ').style.setProperty('--col', colq);
+		var tile = function (i) { var c = PAL[i], q = Q[i]; return '<div class="gb-q' + (q ? ' on' : '') + '" data-i="' + i + '"><button type="button" class="gb-qt" data-d="' + (q ? 0 : 1) + '">' + sw(c, i) + '<span>' + c[0] + '</span></button>' + (q ? '<div class="gb-step"><button type="button" data-d="-1" aria-label="Menos">−</button><em>' + q + '</em><button type="button" data-d="1" aria-label="Mais">+</button></div>' : '<div class="gb-step gb-step0">Escolher</div>') + '</div>'; };
+		var desenha = function () { $('#gbQ').innerHTML = PAL.map(function (c, i) { return tile(i); }).join(''); };
+		desenha();
 		var soma = function () {
 			var n = Q.reduce(function (a, b) { return a + b; }, 0);
 			$('#gbQsel').textContent = n ? n + (n === 1 ? ' pacote' : ' pacotes') + ' · ' + Q.map(function (q, i) { return q ? q + '× ' + PAL[i][0] : ''; }).filter(Boolean).join(', ') : 'Nenhum pacote ainda';
 			$('#gbQtot').textContent = R(n * preco);
 			var b = $('#gbQadd'); b.disabled = !n; b.textContent = n ? 'Colocar ' + n + (n === 1 ? ' pacote' : ' pacotes') + ' no carrinho' : 'Escolha as cores';
 		};
-		$('#gbQ').addEventListener('click', function (e) { var b = e.target.closest('button[data-d]'); if (!b) return; var r = b.closest('.gb-q'), i = +r.dataset.i; Q[i] = Math.max(0, Math.min(50, Q[i] + +b.dataset.d)); r.querySelector('em').textContent = Q[i]; r.classList.toggle('on', Q[i] > 0); soma(); });
+		$('#gbQ').addEventListener('click', function (e) { var b = e.target.closest('button[data-d]'); if (!b) return; var r = b.closest('.gb-q'), i = +r.dataset.i; Q[i] = Math.max(0, Math.min(50, Q[i] + +b.dataset.d)); r.outerHTML = tile(i); soma(); });
 		$('#gbQadd').onclick = function () {
 			var b = this, itens = Q.map(function (q, i) { return q ? { pid: +pid, q: q, paleta: PAL[i][0] } : null; }).filter(Boolean);
 			b.disabled = true; b.textContent = 'Colocando...';
 			var fd = new FormData(); fd.append('itens', JSON.stringify(itens));
 			fetch(D.add, { method: 'POST', body: fd, credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (j) {
-				if (j && j.success) { toast('✓ Pacotes no carrinho.', j.data.carrinho); contaMenu(j.data.qtd); Q = Q.map(function () { return 0; }); box.querySelectorAll('.gb-q').forEach(function (r) { r.classList.remove('on'); r.querySelector('em').textContent = 0; }); }
+				if (j && j.success) { toast('✓ Pacotes no carrinho.', j.data.carrinho); contaMenu(j.data.qtd); Q = Q.map(function () { return 0; }); desenha(); }
 				else toast('Não deu certo. Tente de novo.');
 				soma();
 			}).catch(function () { toast('Sem conexão. Tente de novo.'); soma(); });

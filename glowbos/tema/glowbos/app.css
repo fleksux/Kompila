@@ -89,3 +89,34 @@
 .gb-prev-emb{background:#FDEAF1}.gb-prev-emb img{width:100%!important;height:100%!important;object-fit:contain;padding:4%}
 .gb-prev-emb{background:#fff!important}
 .gb-prev-emb{background:#F2F2F2!important}
+/* 27/10: um jeito só em todo produto (igual ao Monte sua festa): quadradinho da cor + − e + embaixo */
+.gb-qcores{display:grid!important;grid-template-columns:repeat(var(--col,6),minmax(0,1fr));gap:8px}
+@media (max-width:860px){.gb-qcores{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:480px){.gb-qcores{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.gb-q{display:flex!important;flex-direction:column;align-items:stretch;gap:0;padding:0!important;border:1.5px solid #ece2e7;border-radius:12px;background:#fff;overflow:hidden}
+.gb-q.on{border-color:var(--forte);background:#fff0f6}
+.gb-qt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;height:72px;border:0;background:none;cursor:pointer;font:600 12px Inter;color:var(--vinho);padding:6px 4px}
+.gb-q.on .gb-qt{cursor:default}
+.gb-qt img{height:34px!important;width:auto}
+.gb-qt .gb-sw{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 -2px 4px rgba(0,0,0,.2)}
+.gb-qt span{flex:none!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.gb-q .gb-step{display:flex;align-items:center;justify-content:space-between;height:34px;padding:0 5px 5px;margin:0;gap:0;border:0;background:none}
+.gb-q .gb-step button{width:26px;height:26px;border-radius:8px;border:1.5px solid #f3a6c6;background:#fff;color:#B0124F;font:800 16px/1 Inter;cursor:pointer;padding:0}
+.gb-q .gb-step em{font:800 15px Inter;font-style:normal;color:var(--vinho)}
+.gb-q .gb-step0{justify-content:center;font:600 11.5px Inter;color:#a0909a}
+/* 27/10: escolher cores igual ao arco e à festa (marca com o número, toca de novo pra tirar) */
+.gb-cores{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+@media (max-width:860px){.gb-cores{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:480px){.gb-cores{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.gb-cor{position:relative;height:84px;justify-content:center;border:1.5px solid #ece2e7!important;border-radius:12px!important;white-space:nowrap;font:600 12px Inter!important}
+.gb-cor img{height:34px!important}
+.gb-cor:hover{transform:none!important;border-color:#f3a6c6!important}
+.gb-cor.on{border-color:var(--forte)!important;background:#fff0f6!important}
+.gb-cor.cheio{opacity:.4}
+.gb-cor.usada{opacity:1;pointer-events:auto}
+.gb-cor em{position:absolute;top:5px;right:6px;width:19px;height:19px;border-radius:50%;background:var(--forte);color:#fff;font:800 11px/19px Inter;font-style:normal;text-align:center}
+.gb-slots{display:none!important}
+.gb-cores{display:flex!important;flex-wrap:wrap;justify-content:center;gap:8px}
+.gb-cores .gb-cor{flex:0 0 calc((100% - (var(--col,6) - 1) * 8px) / var(--col,6));min-width:0}
+@media (max-width:860px){.gb-cores .gb-cor{flex-basis:calc((100% - 24px) / 4)}}
+@media (max-width:480px){.gb-cores .gb-cor{flex-basis:calc((100% - 16px) / 3)}}
