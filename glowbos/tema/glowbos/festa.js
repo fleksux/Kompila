@@ -21,18 +21,18 @@
   const p=PASSOS[P],tot=itens().reduce((a,x)=>a+x.v,0);
   let h='<ol class="fe-pp">'+PASSOS.map((x,i)=>'<li class="'+(i===P?'on':feito(x)?'ok':'')+'"><button type="button" data-ir="'+i+'"><i>'+(i!==P&&feito(x)?'✓':i+1)+'</i><span>'+x.t+'</span></button></li>').join('')+'</ol><div class="fe-k">';
   if(p.id==='bal'){
-   h+='<div class="fe-kh"><div><b>Os balões</b><small>Escolha um: arco, mini arco ou balões sortidos.</small></div><button type="button" class="fe-pl" data-ir="1">'+(balao()?'Próximo →':'Pular este passo →')+'</button></div><div class="fe-tp">'+
+   h+='<div class="fe-kh"><div><b>Os balões</b><small>Escolha um: arco, mini arco ou balões sortidos.</small></div><button type="button" class="fe-pl" data-ir="1">'+'Próximo →'+'</button></div><div class="fe-tp">'+
     TIPO.map(t=>'<button type="button" data-tipo="'+t[0]+'" class="'+(S.tipo===t[0]?'on':'')+'"><span><img src="'+t[3]+'" alt=""></span><b>'+t[1]+'</b><small>'+t[2]+'</small><em>'+t[4]+'</em></button>').join('')+'</div>';
    if(S.tipo==='arco'){const A=D.arco.find(x=>x.n===S.arco.n);h+='<p class="fe-q">O tamanho</p><div class="fe-tm">'+D.arco.map(x=>'<button type="button" data-arco="'+x.n+'" class="'+(x.n===S.arco.n?'on':'')+'"><b>'+x.n+'</b> balões<em>'+R(x.p)+'</em></button>').join('')+'</div>'+(A?'<div class="fe-ar"><img src="'+IMG+'arco_tam_'+A.n+'.webp" alt="Arco de '+A.n+' balões"><div>'+lisos('arco',S.arco.c,A.c)+'</div></div>'+kit(A):'')}
    if(S.tipo==='mini')h+=lisos('mini',S.mini.c,IT.miniarco.c);
    if(S.tipo==='sort')h+='<p class="fe-q">O tamanho</p><div class="fe-tm">'+SORT.map(k=>'<button type="button" data-sort="'+k+'" class="'+(k===S.sort.k?'on':'')+'"><b>'+IT[k].s.split(' ')[0]+'</b> balões<em>'+R(IT[k].p)+'</em></button>').join('')+'</div>'+(S.sort.k?lisos('sort',S.sort.c,IT[S.sort.k].c):'');
   }else if(p.k){
-   h+='<div class="fe-kh"><div><b>'+p.t+'</b><small>'+(p.id==='velas'?'Toque na vela que quer. Toque de novo pra pôr mais.':'Toque na cor pra pôr um pacote. Toque de novo pra pôr mais.')+'</small></div><button type="button" class="fe-pl" data-ir="'+(P+1)+'">'+(feito(p)?'Próximo →':'Pular este passo →')+'</button></div><div class="fe-ms">'+
+   h+='<div class="fe-kh"><div><b>'+p.t+'</b><small>'+(p.id==='velas'?'Toque na vela que quer. Toque de novo pra pôr mais.':'Toque na cor pra pôr um pacote. Toque de novo pra pôr mais.')+'</small></div><button type="button" class="fe-pl" data-ir="'+(P+1)+'">'+'Próximo →'+'</button></div><div class="fe-ms">'+
     p.k.map(k=>'<div class="fe-m"><img src="'+IT[k].foto+'" alt=""><div><b>'+IT[k].t+'</b><small>'+IT[k].s+' · '+R(IT[k].p)+'</small>'+qtd(k)+'</div></div>').join('')+'</div>';
   }else h+='<div class="fe-kh"><div><b>Sua festa</b><small>Confira e coloque tudo no carrinho de uma vez.</small></div></div>';
   h+='</div>';
   if(p.id==='fim')h+='<div class="fe-nav fe-nav2"><button type="button" class="btn lin" data-ir="'+(P-1)+'">← Voltar</button></div>';
-  else h+='<div class="fe-nav">'+(P?'<button type="button" class="btn lin" data-ir="'+(P-1)+'">← Voltar</button>':'<span></span>')+'<div class="fe-nt"><small>Até agora</small><b>'+R(tot)+'</b></div><button type="button" class="btn pri" data-ir="'+(P+1)+'">'+(feito(p)?'Próximo →':'Pular →')+'</button></div>';
+  else h+='<div class="fe-nav">'+(P?'<button type="button" class="btn lin" data-ir="'+(P-1)+'">← Voltar</button>':'<span></span>')+'<div class="fe-nt"><small>Até agora</small><b>'+R(tot)+'</b></div><button type="button" class="btn pri" data-ir="'+(P+1)+'">'+'Próximo →'+'</button></div>';
   $('#feLista').innerHTML=h;
   s.querySelector('.fe-fim').style.display=p.id==='fim'?'':'none';
   resumo();

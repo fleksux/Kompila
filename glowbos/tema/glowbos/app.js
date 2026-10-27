@@ -20,8 +20,10 @@
 	var GUARD = [['Preto', '#151515', '#6a6a6a'], ['Vermelho', '#C8102E', '#FF7A80'], ['Amarelo', '#F5C400', '#FFF08A'], ['Azul escuro', '#1B3A8C', '#6F8FDC'], ['Verde escuro', '#1E6B3A', '#7CC596'], ['Laranja', '#F57C1F', '#FFB070'], ['Marrom', '#7A4A1E', '#C28B5C'], ['Rosa', '#F4A7C3', '#FFD6E6'], ['Lilás', '#B48FDC', '#E0CCF5'], ['Branco', '#e6e6e6', '#ffffff'], ['Pink', '#E8308A', '#FF8CC8'], ['Azul claro', '#8BC6F0', '#D2EBFF']];
 	// 26/10: garfos e copos (paleta com vermelho e branco)
 	var MESA = [['Vermelho', '#C8102E', '#FF7A80'], ['Azul', '#1F4FBF', '#7FA8FF'], ['Amarelo', '#F5C400', '#FFF08A'], ['Verde', '#2E9E4F', '#8FE0A5'], ['Laranja', '#F57C1F', '#FFB070'], ['Pink', '#E8308A', '#FF8CC8'], ['Roxo', '#6A2DA8', '#B98BE8'], ['Preto', '#151515', '#6a6a6a'], ['Branco', '#e6e6e6', '#ffffff']];
-	var SW = ['metal', 'pratos', 'pratos30', 'guardanapo', 'mesa'].indexOf(D.paleta) > -1;
-	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : D.paleta === 'pratos' ? PRATOS : D.paleta === 'pratos30' ? PRATOS30 : D.paleta === 'guardanapo' ? GUARD : D.paleta === 'mesa' ? MESA : (D.tipo === 'quantidade' ? OFIC : D.paleta === 'lisos8' ? LISOS8 : LISOS);
+	// vela de número: escolhe o número de 0 a 9
+	var NUM = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].map(function (n) { return ['Número ' + n, '#c9a24a', '#f3dc8b']; });
+	var SW = ['metal', 'pratos', 'pratos30', 'guardanapo', 'mesa', 'num'].indexOf(D.paleta) > -1;
+	var PAL = D.paleta === 'candy' ? CANDY : D.paleta === 'metal' ? METAL : D.paleta === 'pratos' ? PRATOS : D.paleta === 'pratos30' ? PRATOS30 : D.paleta === 'guardanapo' ? GUARD : D.paleta === 'mesa' ? MESA : D.paleta === 'num' ? NUM : (D.tipo === 'quantidade' ? OFIC : D.paleta === 'lisos8' ? LISOS8 : LISOS);
 	var preco = +D.preco, pid = D.pid, nome = D.nome;
 	var POS = [[50, 22, 30, -3], [34, 30, 29, 9], [66, 29, 29, -8], [42, 40, 31, 4], [60, 42, 30, -5], [25, 48, 28, 11], [75, 48, 28, -11], [50, 54, 31, 1], [36, 62, 29, 7], [64, 63, 29, -6], [50, 72, 30, 2], [22, 66, 26, 13], [78, 66, 26, -13]];
 	function cacho(ks) {

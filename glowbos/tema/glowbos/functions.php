@@ -588,7 +588,7 @@ function glowbos_app_config( $pid ) {
 		// 19/10: 9" sortido como a Shopee vende (50 em 2 cores, 75 em 3 cores)
 		'pct9_50_2c' => array( 'sequencia', 2, 'lisos', '50 balões de 9"' ), 'pct9_75_3c' => array( 'sequencia', 3, 'lisos', '75 balões de 9"' ),
 		// 19/10: mesa da festa (pratinhos e guardanapo da Shopee): escolhe a cor e quantos pacotes
-		'prato20' => array( 'quantidade', 0, 'pratos', '20 pratinhos de 15 cm' ), 'garfo25' => array( 'quantidade', 0, 'mesa', '25 garfos' ), 'copo25' => array( 'quantidade', 0, 'mesa', '25 copos' ), 'prato30' => array( 'quantidade', 0, 'pratos30', '30 pratos de 15 cm' ), 'guardanapo' => array( 'quantidade', 0, 'guardanapo', '50 guardanapos' ),
+		'prato20' => array( 'quantidade', 0, 'pratos', '20 pratinhos de 15 cm' ), 'garfo25' => array( 'quantidade', 0, 'mesa', '25 garfos' ), 'velas_glitter' => array( 'quantidade', 0, 'num', 'vela de número glitter' ), 'velas_candy' => array( 'quantidade', 0, 'num', 'vela de número candy' ), 'copo25' => array( 'quantidade', 0, 'mesa', '25 copos' ), 'prato30' => array( 'quantidade', 0, 'pratos30', '30 pratos de 15 cm' ), 'guardanapo' => array( 'quantidade', 0, 'guardanapo', '50 guardanapos' ),
 	);
 	return $c[ $k ] ?? null;
 }
@@ -1429,6 +1429,8 @@ function glowbos_festa_paletas() {
 		'metal'      => array( 'Dourado' => array( '#c9a24a', '#f3dc8b' ), 'Prata' => array( '#9da3a8', '#e9ecef' ), 'Rosê gold' => array( '#c98f7f', '#f4cfc3' ), 'Rosa' => array( '#e86aa0', '#ffc3dc' ), 'Vermelho' => array( '#b81d27', '#ff7a80' ), 'Azul' => array( '#2153b8', '#8fb4ff' ), 'Verde' => array( '#16804a', '#86e0ad' ), 'Roxo' => array( '#6a32b0', '#c4a1f2' ), 'Grafite' => array( '#2b2b30', '#8a8a92' ) ),
 		'prato20'    => array( 'Laranja' => array( '#F57C1F', '#FFB070' ), 'Pink' => array( '#E8308A', '#FF8CC8' ), 'Verde' => array( '#2E9E4F', '#8FE0A5' ), 'Azul' => array( '#1F4FBF', '#7FA8FF' ), 'Amarelo' => array( '#F5C400', '#FFF08A' ), 'Roxo' => array( '#6A2DA8', '#B98BE8' ), 'Preto' => array( '#151515', '#6a6a6a' ) ),
 		'prato30'    => array( 'Azul' => array( '#1F4FBF', '#7FA8FF' ), 'Amarelo' => array( '#F5C400', '#FFF08A' ), 'Roxo' => array( '#6A2DA8', '#B98BE8' ), 'Verde' => array( '#2E9E4F', '#8FE0A5' ) ),
+		// vela de número (26/10): escolhe o número de 0 a 9
+		'num'        => array( '0' => array( '#c9a24a', '#f3dc8b' ), '1' => array( '#c9a24a', '#f3dc8b' ), '2' => array( '#c9a24a', '#f3dc8b' ), '3' => array( '#c9a24a', '#f3dc8b' ), '4' => array( '#c9a24a', '#f3dc8b' ), '5' => array( '#c9a24a', '#f3dc8b' ), '6' => array( '#c9a24a', '#f3dc8b' ), '7' => array( '#c9a24a', '#f3dc8b' ), '8' => array( '#c9a24a', '#f3dc8b' ), '9' => array( '#c9a24a', '#f3dc8b' ) ),
 		// garfos e copos (26/10): paleta própria, com vermelho e branco
 		'mesa'       => array( 'Vermelho' => array( '#C8102E', '#FF7A80' ), 'Azul' => array( '#1F4FBF', '#7FA8FF' ), 'Amarelo' => array( '#F5C400', '#FFF08A' ), 'Verde' => array( '#2E9E4F', '#8FE0A5' ), 'Laranja' => array( '#F57C1F', '#FFB070' ), 'Pink' => array( '#E8308A', '#FF8CC8' ), 'Roxo' => array( '#6A2DA8', '#B98BE8' ), 'Preto' => array( '#151515', '#6a6a6a' ), 'Branco' => array( '#e6e6e6', '#ffffff' ) ),
 		'guardanapo' => array( 'Preto' => array( '#151515', '#6a6a6a' ), 'Vermelho' => array( '#C8102E', '#FF7A80' ), 'Amarelo' => array( '#F5C400', '#FFF08A' ), 'Azul escuro' => array( '#1B3A8C', '#6F8FDC' ), 'Verde escuro' => array( '#1E6B3A', '#7CC596' ), 'Laranja' => array( '#F57C1F', '#FFB070' ), 'Marrom' => array( '#7A4A1E', '#C28B5C' ), 'Rosa' => array( '#F4A7C3', '#FFD6E6' ), 'Lilás' => array( '#B48FDC', '#E0CCF5' ), 'Branco' => array( '#e6e6e6', '#ffffff' ), 'Pink' => array( '#E8308A', '#FF8CC8' ), 'Azul claro' => array( '#8BC6F0', '#D2EBFF' ) ),
@@ -1447,7 +1449,10 @@ function glowbos_festa_itens() {
 		'guardanapo' => array( 'Guardanapo', 'Pacote com 50 folhas', 'guardanapo', 0, true ),
 		'garfo25'    => array( 'Garfos', 'Pacote com 25', 'mesa', 0, true ),
 		'copo25'     => array( 'Copos', 'Pacote com 25', 'mesa', 0, true ),
-		'velas'      => array( 'Velas de aniversário', 'Pacote de velas espiral coloridas', '', 0, true ),
+		'velas_glitter'    => array( 'Vela de número glitter', 'Escolha o número', 'num', 0, true ),
+		'velas_candy'      => array( 'Vela de número candy', 'Tons pastel · escolha o número', 'num', 0, true ),
+		'velas_estrelinha' => array( 'Vela estrelinha', 'Faísca pro parabéns · pacote com 3', '', 0, true ),
+		'velas'            => array( 'Vela espiral colorida', 'Pacote de velas espiral', '', 0, true ),
 	);
 }
 function glowbos_festa_html() {
