@@ -343,7 +343,7 @@ add_action( 'wp_head', function () {
 	if(!f||!/^(Motoboy|Entrega expressa)/.test(f[2]))return{ok:false,msg:'Enviamos pelos Correios. O frete aparece no pagamento.'};
 	var v='R$ '+f[3].toFixed(2).replace('.',','),h=new Date().getHours();
 	if(/^Motoboy/.test(f[2]))return{ok:true,msg:h<12?'Chega hoje até 21h! Motoboy por '+v+'.':'Chega amanhã até 21h. Motoboy por '+v+'. Pago até 12h chega no mesmo dia.'};
-	if(/amanh/.test(f[2]))return{ok:true,msg:'Chega amanhã. Entrega expressa por '+v+'.'};
+	if(/amanh/.test(f[2]))return{ok:true,msg:(h<12?'Chega amanhã até 21h':'Chega depois de amanhã até 21h')+'. Entrega expressa por '+v+'.'};
 	return{ok:true,msg:'Chega em até 2 dias úteis. Entrega expressa por '+v+'.'}};</script>
 	<?php
 }, 2 );
