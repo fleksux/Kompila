@@ -173,3 +173,35 @@ form.woocommerce-checkout .woocommerce-NoticeGroup .woocommerce-error li{margin:
 .gb-ty{max-width:1180px!important}
 .gb-ty-passos{background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:20px 10px 16px!important;margin:16px 0!important}
 .gb-ty-passos li{font-size:14px}
+/* 27/10: bloco do Pix com a cara da loja */
+.gb-ty-pix .mp-row-checkout-pix-container{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.gb-ty-pix .mp-qr-input{flex:1;min-width:0;height:50px!important;border:1.5px solid #e6e1e4!important;border-radius:12px!important;padding:0 14px!important;font:500 14px Inter!important;color:#2a0f22;background:#faf8f9!important;box-shadow:none!important;outline:0}
+.gb-ty-pix .mp-details-pix-button{height:50px!important;border:0!important;border-radius:12px!important;background:var(--forte,#ff1f7a)!important;color:#fff!important;font:800 15px Inter!important;padding:0 22px!important;white-space:nowrap;cursor:pointer;box-shadow:none!important;margin:0!important;width:auto!important}
+.gb-ty-pix .mp-details-pix-button:hover{filter:brightness(.95)}
+.gb-ty-pix .mp-details-pix-title,.gb-ty-pix .mp-details-title{font:800 22px/1.2 "Inter Tight"!important;color:#2a0f22!important}
+.gb-ty-pix .mp-details-pix,.gb-ty-pix .mp-details-pix *{font-family:Inter,sans-serif}
+.gb-ty-pix .mp-details-pix-qr-value,.gb-ty-pix .mp-details-pix-amount{font:700 16px Inter!important}
+.gb-ty-troca{display:block;margin:18px 0 0;padding:14px 16px;border-radius:12px;background:var(--bebe,#fff0f6);color:#6b5560;font:500 14.5px Inter;text-align:center;text-decoration:none}
+.gb-ty-troca b{color:var(--forte,#ff1f7a)}
+.gb-ty-pix .mp-row-checkout-pix-container{width:100%;max-width:420px;margin-left:auto;margin-right:auto}
+.gb-ty-pix .mp-qr-input{width:auto!important;flex:1 1 auto!important}
+/* 27/10: Pagar pedido (trocar forma de pagamento) com a cara do checkout: pagamento à esquerda, resumo à direita */
+.woocommerce-order-pay .gb-main>h1{font:800 clamp(28px,3.4vw,40px)/1.05 "Inter Tight";letter-spacing:-.03em;margin:0 0 6px}
+.woocommerce-order-pay .gb-main>h1::after{content:"Escolha outra forma de pagamento. Seu pedido e o endereço continuam os mesmos.";display:block;font:500 15px/1.5 Inter;letter-spacing:0;color:var(--vinho2);margin-top:8px}
+.woocommerce-order-pay form#order_review{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0 32px;align-items:start;margin-top:22px;border:0!important;padding:0!important;background:none!important}
+.woocommerce-order-pay form#order_review>#payment{grid-column:1;grid-row:1;background:#fff!important;border:1px solid #ece8eb;border-radius:16px;padding:22px!important;margin:0}
+.woocommerce-order-pay form#order_review>table.shop_table{grid-column:2;grid-row:1;background:#fff;border:1px solid #ece8eb!important;border-radius:16px!important;border-collapse:separate!important;padding:8px 20px 12px;margin:0!important;width:100%}
+.woocommerce-order-pay table.shop_table thead{display:none}
+.woocommerce-order-pay table.shop_table td,.woocommerce-order-pay table.shop_table th{border:0!important;padding:10px 0!important;background:none!important;font:500 14.5px Inter;color:var(--vinho2);text-align:left;vertical-align:top}
+.woocommerce-order-pay table.shop_table td.product-name{font:700 15px Inter;color:var(--vinho)}
+.woocommerce-order-pay table.shop_table .wc-item-meta{list-style:none;margin:4px 0 0;padding:0;font:500 12.5px/1.45 Inter;color:var(--vinho2)}
+.woocommerce-order-pay table.shop_table .wc-item-meta p{display:inline;margin:0}
+.woocommerce-order-pay table.shop_table td.product-quantity{white-space:nowrap;padding:10px 10px!important}
+.woocommerce-order-pay table.shop_table td.product-subtotal,.woocommerce-order-pay table.shop_table td.product-total{text-align:right!important;color:var(--vinho);font-weight:700;white-space:nowrap}
+.woocommerce-order-pay table.shop_table tfoot tr th,.woocommerce-order-pay table.shop_table tfoot tr td{border-top:1px solid #f3eef1!important}
+.woocommerce-order-pay table.shop_table tfoot tr:nth-child(3) th,.woocommerce-order-pay table.shop_table tfoot tr:nth-child(3) td{font:800 20px "Inter Tight"!important;color:var(--vinho)}
+.woocommerce-order-pay table.shop_table tfoot tr:last-child{display:none}
+.woocommerce-order-pay table.shop_table .shipped_via{display:block;font:500 12px Inter;color:var(--vinho2);white-space:normal}
+.woocommerce-order-pay #payment .wc_payment_methods{border:0!important;padding:0!important;margin:0 0 16px!important}
+.woocommerce-order-pay #place_order{width:100%;height:56px;border-radius:14px!important;font:800 17px Inter!important}
+@media (max-width:900px){.woocommerce-order-pay form#order_review{grid-template-columns:1fr;gap:16px}.woocommerce-order-pay form#order_review>table.shop_table{grid-column:1;grid-row:1}.woocommerce-order-pay form#order_review>#payment{grid-row:2}}

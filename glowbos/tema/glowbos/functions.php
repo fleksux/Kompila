@@ -367,7 +367,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return;
 	}
-	$v = wp_get_theme()->get( 'Version' ) . '.19';
+	$v = wp_get_theme()->get( 'Version' ) . '.23';
 	wp_enqueue_style( 'glowbos-checkout', get_template_directory_uri() . '/checkout.css', array( 'glowbos' ), $v );
 	wp_enqueue_script( 'glowbos-checkout', get_template_directory_uri() . '/checkout.js', array( 'jquery', 'wc-checkout' ), $v, true );
 }, 30 );
@@ -474,6 +474,17 @@ add_filter( 'woocommerce_checkout_posted_data', function ( $d ) {
 // 27/10: a conta é ligada ao pedido na hora da compra; sem isto o WooCommerce pedia login na tela
 // do pedido recebido e o cliente não via o código do Pix. A chave do pedido na URL já protege a página.
 add_filter( 'woocommerce_order_received_verify_known_shoppers', '__return_false' );
+// 27/10: quem tem o link do pedido (com a chave) pode trocar a forma de pagamento sem login
+add_filter( 'user_has_cap', function ( $all, $caps, $args ) {
+	if ( 'pay_for_order' === ( $args[0] ?? '' ) && ! empty( $args[2] ) && isset( $_GET['key'] ) ) {
+		$o = wc_get_order( (int) $args[2] );
+		if ( $o && hash_equals( $o->get_order_key(), wc_clean( wp_unslash( $_GET['key'] ) ) ) ) {
+			$all['pay_for_order'] = true;
+		}
+	}
+	return $all;
+}, 20, 3 );
+
 add_action( 'woocommerce_checkout_order_processed', function ( $oid ) {
 	$o = wc_get_order( $oid );
 	if ( ! $o || $o->get_customer_id() ) {
@@ -663,6 +674,18 @@ add_action( 'template_redirect', function () {
 			exit;
 		}
 	}
+} );
+
+// ===== 27/10: busca de produtos no topo de todas as páginas (antes só a home tinha a lupa, e ela não buscava) =====
+function glowbos_busca_html() {
+	return '<button type="button" class="gb-lupa" aria-label="Buscar" onclick="var b=document.getElementById(\'gbBusca\');b.hidden=!b.hidden;if(!b.hidden)b.querySelector(\'input\').focus()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>';
+}
+add_action( 'wp_footer', function () {
+	echo '<form id="gbBusca" class="gb-busca" role="search" action="' . esc_url( home_url( '/' ) ) . '" hidden><input type="search" name="s" placeholder="Buscar balões, arcos, velas..." value="' . esc_attr( get_search_query() ) . '" aria-label="Buscar"><input type="hidden" name="post_type" value="product"><button type="submit">Buscar</button><button type="button" class="gb-busca-x" aria-label="Fechar" onclick="this.form.hidden=true">×</button></form>'
+		. '<style>.gb-lupa{display:inline-grid;place-items:center;width:40px;height:40px;border:0;background:none;color:inherit;cursor:pointer;border-radius:10px}.gb-lupa:hover{background:var(--bebe,#fff0f6)}.gb-lupa svg{width:21px;height:21px}
+.gb-busca{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;gap:8px;align-items:center;padding:14px max(16px,calc(50% - 600px));background:#fff;box-shadow:0 12px 30px -12px rgba(42,15,34,.35)}
+.gb-busca[hidden]{display:none}.gb-busca input[type=search]{flex:1;min-width:0;height:50px;border:1.5px solid #e6e1e4;border-radius:12px;padding:0 16px;font:500 16px Inter}.gb-busca input[type=search]:focus{outline:0;border-color:#ff1f7a;box-shadow:0 0 0 4px rgba(255,31,122,.12)}
+.gb-busca button[type=submit]{height:50px;padding:0 20px;border:0;border-radius:12px;background:#ff1f7a;color:#fff;font:800 15px Inter;cursor:pointer}.gb-busca-x{width:44px;height:44px;border:0;background:none;font:400 28px/1 Inter;color:#5c5560;cursor:pointer}</style>'; // phpcs:ignore
 } );
 
 // ===== Departamentos: banner no topo, filtros e vitrine =====

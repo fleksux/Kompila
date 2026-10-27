@@ -748,7 +748,7 @@ body.gbm-aberto{overflow:hidden}
   <nav><a href="/categoria/arcos/">Arcos</a><a href="/categoria/decoracao-pronta/">Decoração Pronta</a><a href="/categoria/pacotes/">Pacotes</a><a href="/categoria/pacotes-fechados/">Fechados</a><a href="/categoria/candy-colors/">Candy colors</a><a href="/categoria/formatos/">Decorativos</a><a href="/categoria/numeros/">Números</a></nav>
   <div class="ic">
     <button class="tg" id="tg" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    <a href="#" aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
+    <a href="#" aria-label="Buscar" onclick="event.preventDefault();var b=document.getElementById('gbBusca');if(b){b.hidden=!b.hidden;if(!b.hidden)b.querySelector('input').focus()}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
     <a href="/minha-conta/" aria-label="Minha conta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
     <a href="#" aria-label="Carrinho" id="cartBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><em class="qt" id="qt">0</em></a>
   </div>

@@ -102,6 +102,8 @@
 	$(document.body).on('country_to_state_changed updated_checkout', function () { setTimeout(ordena, 30); });
 	$('#ship-to-different-address-checkbox').on('change', function () { setTimeout(ordena, 30); setTimeout(ordena, 450); });
 
+	// 27/10: veio do "trocar forma de pagamento": já deixa o cartão marcado
+	if (/[?&]gb_cartao=1/.test(location.search)) { [300, 1200].forEach(function (t) { setTimeout(function () { var cc = document.getElementById('payment_method_woo-mercado-pago-custom'); if (cc && !cc.checked) $(cc).prop('checked', true).trigger('click').trigger('change'); }, t); }); }
 	titulos(); restaura(); cep('billing'); cep('shipping'); selos();
 	$(document.body).on('updated_checkout', function () { selos(); });
 	$('form.woocommerce-checkout').on('change blur', 'input,select', function () { guarda(); talvezDesce(); });

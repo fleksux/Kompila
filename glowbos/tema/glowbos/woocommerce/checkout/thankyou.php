@@ -76,12 +76,19 @@ $passos = array( 'Pedido feito', 'Pagamento', 'Separando', 'A caminho', 'Entregu
 	<div class="gb-ty-grade">
 		<div class="gb-ty-col">
 			<?php if ( $falhou ) : ?>
-				<div class="gb-ty-card"><div class="acoes"><a class="btn pri" href="<?php echo esc_url( $order->get_checkout_payment_url() ); ?>">Tentar pagar de novo</a><a class="btn lin" href="<?php echo esc_url( home_url( '/' ) ); ?>">Voltar pra loja</a></div></div>
+				<div class="gb-ty-card"><div class="acoes"><a class="btn pri" href="<?php echo esc_url( add_query_arg( 'gb_cartao', '1', $order->get_checkout_payment_url() ) ); ?>">Tentar pagar de novo</a><a class="btn lin" href="<?php echo esc_url( home_url( '/' ) ); ?>">Voltar pra loja</a></div></div>
 			<?php endif; ?>
 
 			<?php if ( ! $pago && ! $falhou ) : ?>
 				<div class="gb-ty-card gb-ty-pix">
-					<?php do_action( 'woocommerce_thankyou_' . $metodo, $order->get_id() ); ?>
+					<?php
+					ob_start();
+					do_action( 'woocommerce_thankyou_' . $metodo, $order->get_id() );
+					echo str_replace( array( '30 minutes', 'QR code' ), array( '30 minutos', 'QR Code' ), ob_get_clean() ); // phpcs:ignore -- HTML do Mercado Pago
+					?>
+					<?php if ( $pix && $order->needs_payment() ) : // 27/10: trocar Pix por cartão sem refazer o pedido ?>
+						<a class="gb-ty-troca" href="<?php echo esc_url( add_query_arg( 'gb_cartao', '1', $order->get_checkout_payment_url() ) ); ?>">Prefere pagar com cartão? <b>Trocar forma de pagamento</b></a>
+					<?php endif; ?>
 				</div>
 			<?php else : ?>
 				<div class="gb-ty-card gb-ty-prox">
