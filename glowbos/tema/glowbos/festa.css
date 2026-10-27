@@ -14,7 +14,7 @@
 .fe-tm button em{font:700 12.5px Inter;font-style:normal;color:#F93388;margin-top:3px}
 .fe-tm button.on{border-color:#F93388;background:#fff0f6;color:#B0124F}
 .fe-ar{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;margin-top:14px;align-items:start}
-.fe-ar img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;background:#f2efec}
+.fe-ar>img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;background:#f2efec}
 .fe-q{margin:14px 0 8px;font:700 14px Inter;color:#2a0f22}
 .fe-ar .fe-q{margin-top:0}
 .fe-q small{font-weight:500;color:#6b5560;margin-left:6px}
@@ -49,4 +49,64 @@
 .fe-msg{margin:8px 0 0;color:#F93388;font:600 14px Inter;text-align:center}
 .fe-msg:empty{display:none}
 #festa .mnote{text-align:center;margin-top:12px}
-@media (max-width:640px){.fe-k{padding:14px}.fe-ar{grid-template-columns:1fr}.fe-ar img{max-width:220px}.fe-tm button{min-width:72px;padding:7px 8px}.fe-qs{grid-template-columns:1fr}}
+@media (max-width:640px){.fe-k{padding:14px}.fe-ar{grid-template-columns:1fr}.fe-ar>img{max-width:220px}.fe-tm button{min-width:72px;padding:7px 8px}.fe-qs{grid-template-columns:1fr}}
+/* 26/10: três imagens no topo (um tipo de balão) e a mesa com foto */
+.fe-tp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fe-tp button{display:flex;flex-direction:column;text-align:left;padding:0;border:0;background:none;cursor:pointer;font:inherit;color:#2a0f22}
+.fe-tp span{display:block;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:#F7F3EA;box-shadow:inset 0 0 0 2px #f1e6ea;transition:box-shadow .2s,transform .2s}
+.fe-tp img{width:100%;height:100%;object-fit:cover}
+.fe-tp button:hover span{transform:translateY(-2px)}
+.fe-tp button.on span{box-shadow:0 0 0 3px #F93388}
+.fe-tp b{margin-top:8px;font:700 17px/1.15 Fredoka,"Inter Tight",sans-serif}
+.fe-tp small{font:500 12.5px Inter;color:#6b5560}
+.fe-tp em{font:700 13px Inter;font-style:normal;color:#F93388;margin-top:2px}
+.fe-ms{display:grid;gap:12px}
+.fe-m{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:start;padding-top:12px;border-top:1px solid #f6eef2}
+.fe-m:first-child{border-top:0;padding-top:0}
+.fe-m img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#F7F3EA}
+.fe-m b{display:block;font:700 16px/1.2 Fredoka,"Inter Tight",sans-serif;color:#2a0f22}
+.fe-m small{display:block;font:500 12.5px Inter;color:#6b5560;margin:2px 0 8px}
+.fe-m .fe-qs{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+@media (max-width:640px){.fe-tp{gap:8px}.fe-tp b{font-size:14px}.fe-tp small{font-size:11px}.fe-m{grid-template-columns:80px minmax(0,1fr)}}
+/* 26/10: passos na mesma janela */
+.fe-pp{display:flex;gap:4px;list-style:none;margin:0 auto 16px;padding:0;max-width:860px;overflow-x:auto;scrollbar-width:none}
+.fe-pp::-webkit-scrollbar{display:none}
+.fe-pp li{flex:1 0 auto}
+.fe-pp button{width:100%;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;border:0;background:none;cursor:pointer;font:600 12px Inter;color:#a0909a}
+.fe-pp i{width:28px;height:28px;border-radius:50%;background:#f3e9ee;color:#B0124F;font:800 13px/28px Inter;font-style:normal}
+.fe-pp li.ok i{background:#F93388;color:#fff}
+.fe-pp li.ok button{color:#2a0f22}
+.fe-pp li.on i{background:#B0124F;color:#fff;box-shadow:0 0 0 4px #ffd6e6}
+.fe-pp li.on button{color:#B0124F}
+.fe-kh>div{flex:1}
+.fe-nav{max-width:860px;margin:14px auto 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fe-nav .btn{min-width:150px;justify-content:center}
+.fe-nt{text-align:center}
+.fe-nt small{display:block;font:500 12px Inter;color:#6b5560}
+.fe-nt b{font:800 22px "Inter Tight";color:#2a0f22}
+@media (max-width:640px){.fe-pp span{font-size:10.5px}.fe-nav .btn{min-width:0;flex:1;padding:0 10px}.fe-nt b{font-size:18px}}
+.fe-n{width:22px;height:22px;border-radius:6px;background:#fff0f6;color:#B0124F;font:800 13px/22px "Inter Tight";font-style:normal;text-align:center;flex:none}
+#festa .fe-tm,#festa .fe-cs{scroll-margin:56px}#festa .fe-nav{scroll-margin:24px}
+/* 26/10: grade de cores alinhada (6 colunas, mesma altura, nome numa linha) */
+.fe-cs{grid-template-columns:repeat(6,minmax(0,1fr))}
+.fe-cs button{height:68px;justify-content:center;padding:6px 2px;white-space:nowrap;font-size:11px;letter-spacing:-.01em}
+.fe-cs button img{height:28px}
+.fe-ar{grid-template-columns:168px minmax(0,1fr)}
+.fe-ar>img{aspect-ratio:auto;height:100%;min-height:224px;max-height:260px}
+@media (max-width:860px){.fe-cs{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:640px){.fe-cs{grid-template-columns:repeat(3,minmax(0,1fr))}.fe-ar>img{height:auto;min-height:0;aspect-ratio:3/4}}
+.fe-k .fe-tm{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr))}.fe-k .fe-tm button{min-width:0}
+/* 26/10 UX: título enxuto, trilha com linha de progresso, ✓ no tipo escolhido e barra fixa no pé da janela */
+#festa .ctr{margin-bottom:10px}
+#festa .ctr h2{font-size:clamp(24px,3vw,34px)}
+#festa .ctr .sub{display:none}
+.fe-pp{position:relative}
+.fe-pp li{position:relative}
+.fe-pp li+li::before{content:"";position:absolute;top:20px;right:calc(50% + 16px);left:calc(-50% + 16px);height:2px;background:#f0e4ea}
+.fe-pp li.ok::before,.fe-pp li.on::before{background:#F93388}
+.fe-tp button{position:relative}
+.fe-tp button.on::after{content:"✓";position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:#F93388;color:#fff;font:800 16px/30px Inter;text-align:center;box-shadow:0 4px 12px rgba(249,51,136,.4)}
+.fe-tp button:not(.on) span{opacity:.92}
+#festa .fe-nav{position:sticky;bottom:0;z-index:5;max-width:none;margin:14px -24px -36px;padding:12px 24px 16px;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 -10px 24px -18px rgba(42,15,34,.35)}
+#festa .fe-nav>*{max-width:none}
+@media (max-width:640px){#festa .fe-nav{margin:12px -16px -36px;padding:10px 16px 14px}}

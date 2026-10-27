@@ -588,7 +588,7 @@ function glowbos_app_config( $pid ) {
 		// 19/10: 9" sortido como a Shopee vende (50 em 2 cores, 75 em 3 cores)
 		'pct9_50_2c' => array( 'sequencia', 2, 'lisos', '50 balões de 9"' ), 'pct9_75_3c' => array( 'sequencia', 3, 'lisos', '75 balões de 9"' ),
 		// 19/10: mesa da festa (pratinhos e guardanapo da Shopee): escolhe a cor e quantos pacotes
-		'prato20' => array( 'quantidade', 0, 'pratos', '20 pratinhos de 15 cm' ), 'prato30' => array( 'quantidade', 0, 'pratos30', '30 pratos de 15 cm' ), 'guardanapo' => array( 'quantidade', 0, 'guardanapo', '50 guardanapos' ),
+		'prato20' => array( 'quantidade', 0, 'pratos', '20 pratinhos de 15 cm' ), 'garfo25' => array( 'quantidade', 0, 'mesa', '25 garfos' ), 'copo25' => array( 'quantidade', 0, 'mesa', '25 copos' ), 'prato30' => array( 'quantidade', 0, 'pratos30', '30 pratos de 15 cm' ), 'guardanapo' => array( 'quantidade', 0, 'guardanapo', '50 guardanapos' ),
 	);
 	return $c[ $k ] ?? null;
 }
@@ -1429,21 +1429,25 @@ function glowbos_festa_paletas() {
 		'metal'      => array( 'Dourado' => array( '#c9a24a', '#f3dc8b' ), 'Prata' => array( '#9da3a8', '#e9ecef' ), 'Rosê gold' => array( '#c98f7f', '#f4cfc3' ), 'Rosa' => array( '#e86aa0', '#ffc3dc' ), 'Vermelho' => array( '#b81d27', '#ff7a80' ), 'Azul' => array( '#2153b8', '#8fb4ff' ), 'Verde' => array( '#16804a', '#86e0ad' ), 'Roxo' => array( '#6a32b0', '#c4a1f2' ), 'Grafite' => array( '#2b2b30', '#8a8a92' ) ),
 		'prato20'    => array( 'Laranja' => array( '#F57C1F', '#FFB070' ), 'Pink' => array( '#E8308A', '#FF8CC8' ), 'Verde' => array( '#2E9E4F', '#8FE0A5' ), 'Azul' => array( '#1F4FBF', '#7FA8FF' ), 'Amarelo' => array( '#F5C400', '#FFF08A' ), 'Roxo' => array( '#6A2DA8', '#B98BE8' ), 'Preto' => array( '#151515', '#6a6a6a' ) ),
 		'prato30'    => array( 'Azul' => array( '#1F4FBF', '#7FA8FF' ), 'Amarelo' => array( '#F5C400', '#FFF08A' ), 'Roxo' => array( '#6A2DA8', '#B98BE8' ), 'Verde' => array( '#2E9E4F', '#8FE0A5' ) ),
+		// garfos e copos (26/10): paleta própria, com vermelho e branco
+		'mesa'       => array( 'Vermelho' => array( '#C8102E', '#FF7A80' ), 'Azul' => array( '#1F4FBF', '#7FA8FF' ), 'Amarelo' => array( '#F5C400', '#FFF08A' ), 'Verde' => array( '#2E9E4F', '#8FE0A5' ), 'Laranja' => array( '#F57C1F', '#FFB070' ), 'Pink' => array( '#E8308A', '#FF8CC8' ), 'Roxo' => array( '#6A2DA8', '#B98BE8' ), 'Preto' => array( '#151515', '#6a6a6a' ), 'Branco' => array( '#e6e6e6', '#ffffff' ) ),
 		'guardanapo' => array( 'Preto' => array( '#151515', '#6a6a6a' ), 'Vermelho' => array( '#C8102E', '#FF7A80' ), 'Amarelo' => array( '#F5C400', '#FFF08A' ), 'Azul escuro' => array( '#1B3A8C', '#6F8FDC' ), 'Verde escuro' => array( '#1E6B3A', '#7CC596' ), 'Laranja' => array( '#F57C1F', '#FFB070' ), 'Marrom' => array( '#7A4A1E', '#C28B5C' ), 'Rosa' => array( '#F4A7C3', '#FFD6E6' ), 'Lilás' => array( '#B48FDC', '#E0CCF5' ), 'Branco' => array( '#e6e6e6', '#ffffff' ), 'Pink' => array( '#E8308A', '#FF8CC8' ), 'Azul claro' => array( '#8BC6F0', '#D2EBFF' ) ),
 	);
 }
-// o que entra na festa: [chave do produto, título, o que é, cores: 'lisos' (até N) ou paleta (quantidade por cor)]
+// o que entra na festa: [chave do produto, título, o que é, cores: 'lisos' (até N) ou paleta (quantidade por cor), é da mesa]
 function glowbos_festa_itens() {
 	return array(
-		'miniarco'   => array( 'Mini arco', 'O arco de mesa, 50 balões de 5"', 'lisos', 3 ),
-		'pct50'      => array( 'Balões sortidos', '50 balões de 8"', 'lisos', 2 ),
-		'pct75'      => array( 'Balões sortidos', '75 balões de 8"', 'lisos', 3 ),
-		'pct100'     => array( 'Balões sortidos', '100 balões de 8"', 'lisos', 4 ),
-		'pct125'     => array( 'Balões sortidos', '125 balões de 8"', 'lisos', 5 ),
-		'metal5_25'  => array( 'Balões cromados', 'Pacote com 25 de 5"', 'metal', 0 ),
-		'prato20'    => array( 'Pratinho 15 cm', 'Pacote com 20', 'prato20', 0 ),
-		'prato30'    => array( 'Pratos 15 cm', 'Pacote com 30', 'prato30', 0 ),
-		'guardanapo' => array( 'Guardanapo', 'Pacote com 50 folhas', 'guardanapo', 0 ),
+		'miniarco'   => array( 'Mini arco', 'O arco de mesa, 50 balões de 5"', 'lisos', 3, false ),
+		'pct50'      => array( 'Balões sortidos', '50 balões de 8"', 'lisos', 2, false ),
+		'pct75'      => array( 'Balões sortidos', '75 balões de 8"', 'lisos', 3, false ),
+		'pct100'     => array( 'Balões sortidos', '100 balões de 8"', 'lisos', 4, false ),
+		'pct125'     => array( 'Balões sortidos', '125 balões de 8"', 'lisos', 5, false ),
+		'prato20'    => array( 'Pratinho 15 cm', 'Pacote com 20', 'prato20', 0, true ),
+		'prato30'    => array( 'Pratos 15 cm', 'Pacote com 30', 'prato30', 0, true ),
+		'guardanapo' => array( 'Guardanapo', 'Pacote com 50 folhas', 'guardanapo', 0, true ),
+		'garfo25'    => array( 'Garfos', 'Pacote com 25', 'mesa', 0, true ),
+		'copo25'     => array( 'Copos', 'Pacote com 25', 'mesa', 0, true ),
+		'velas'      => array( 'Velas de aniversário', 'Pacote de velas espiral coloridas', '', 0, true ),
 	);
 }
 function glowbos_festa_html() {
@@ -1458,11 +1462,11 @@ function glowbos_festa_html() {
 	foreach ( glowbos_festa_itens() as $k => $t ) {
 		$x = empty( $mapa[ $k ] ) ? null : wc_get_product( $mapa[ $k ] );
 		if ( $x && $x->is_purchasable() ) {
-			$d['it'][ $k ] = array( 't' => $t[0], 's' => $t[1], 'pal' => $t[2], 'c' => $t[3], 'p' => (float) $x->get_price(), 'i' => wp_get_attachment_image_url( $x->get_image_id(), 'thumbnail' ) );
+			$d['it'][ $k ] = array( 't' => $t[0], 's' => $t[1], 'pal' => $t[2], 'c' => $t[3], 'p' => (float) $x->get_price(), 'foto' => wp_get_attachment_image_url( $x->get_image_id(), 'medium' ), 'mesa' => $t[4] );
 		}
 	}
 	return '<section class="sec" id="festa" data-img="' . esc_url( get_template_directory_uri() . '/img/' ) . '" data-add="' . esc_url( add_query_arg( 'wc-ajax', 'glowbos_festa', home_url( '/' ) ) ) . '" data-d="' . esc_attr( wp_json_encode( $d ) ) . '"><div class="w">'
-		. '<div class="ctr"><span class="eyebrow">Monte sua festa</span><h2 class="tt inf">Escolha tudo aqui e finalize.</h2><p class="sub">Marque o que quer na festa. O total vai somando lá embaixo.</p></div>'
+		. '<div class="ctr"><span class="eyebrow">Monte sua festa</span><h2 class="tt inf">Escolha tudo aqui e finalize.</h2><p class="sub">Escolha os balões e a mesa. O total vai somando lá embaixo.</p></div>'
 		. '<div class="fe" id="feLista"></div>'
 		. '<div class="fe-fim"><div class="fe-r" id="feResumo"></div><div class="fe-tot"><span>Total da festa</span><b id="feTot">R$ 0,00</b></div><button type="button" class="btn pri" id="feFim" disabled>Escolha pelo menos um item</button><p class="fe-msg" id="feMsg"></p><p class="mnote">Em São Paulo e Grande SP, pedido pago até 12h chega hoje até 21h.</p></div>'
 		. '</div></section>';
