@@ -170,3 +170,15 @@
 #festa .fe-nav{margin:12px -14px -36px;padding:10px 14px 14px}
 #festa .fe-nav .btn{min-width:0;flex:1;height:48px;font-size:14px}
 }
+/* 26/10: mesa sem título repetido e quadradinhos ocupando a largura toda */
+.fe-m{grid-template-columns:132px minmax(0,1fr);gap:20px;align-items:start}
+.fe-m>img{width:132px;height:132px;aspect-ratio:1}
+.fe-m .fe-pr{margin:0 0 12px;font:500 14px Inter;color:#6b5560}
+.fe-m .fe-pr strong{color:#2a0f22;font-weight:700}
+.fe-sw{grid-template-columns:repeat(var(--col,6),minmax(0,1fr));max-width:calc(var(--col,6) * 116px);gap:8px}
+.fe-tb{height:76px;padding:0 4px;white-space:nowrap;font-size:12px;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis}
+.fe-tb span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.fe-tb:hover{transform:none;border-color:#f3a6c6}
+@media (max-width:860px){.fe-sw{grid-template-columns:repeat(4,minmax(0,1fr));max-width:none}}
+@media (max-width:640px){.fe-m{grid-template-columns:1fr}.fe-m>img{width:96px;height:96px}}
+.fe-tn{width:auto;height:auto;background:none;font:800 30px/1 "Inter Tight";color:#B0124F}
