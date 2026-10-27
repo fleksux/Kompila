@@ -83,13 +83,16 @@
 
 	// ordem e largura dos campos (o WooCommerce reordena pelo país; aqui manda a nossa)
 	var ORDEM = [['billing_postcode','first'],['billing_address_1','wide'],['billing_number','first'],['billing_address_2','last'],['billing_neighborhood','first'],['billing_city','last'],['billing_state','wide'],['billing_first_name','wide'],['billing_email','wide'],['billing_phone','first'],['billing_cpf','last']];
-	function ordena() {
-		var w = document.querySelector('.woocommerce-billing-fields__field-wrapper'); if (!w) return;
+	// 27/10: a mesma ordem vale pro endereço de entrega diferente (antes ficava torto e cortado)
+	function ordena() { ordenaDe('billing'); ordenaDe('shipping'); }
+	function ordenaDe(pre) {
+		var w = document.querySelector('.woocommerce-' + pre + '-fields__field-wrapper'); if (!w) return;
 		ORDEM.forEach(function (o, i) {
-			var r = document.getElementById(o[0] + '_field'); if (!r) return;
+			var r = document.getElementById(o[0].replace(/^billing_/, pre + '_') + '_field'); if (!r) return;
 			r.classList.remove('form-row-first', 'form-row-last', 'form-row-wide'); r.classList.add('form-row-' + o[1]);
 			r.setAttribute('data-priority', (i + 1) * 10); w.appendChild(r);
 		});
+		if (pre !== 'billing') return;
 		var a1 = document.getElementById('billing_address_1'); if (a1) a1.placeholder = 'Preenche sozinho pelo CEP';
 		var a2 = document.getElementById('billing_address_2'); if (a2) a2.placeholder = 'Apto, bloco (opcional)';
 		var f2 = document.getElementById('billing_address_2_field'); if (f2 && !f2.querySelector('label.gb')) { var l = f2.querySelector('label'); if (l) { l.classList.remove('screen-reader-text'); l.classList.add('gb'); l.textContent = 'Complemento'; } }
@@ -97,6 +100,7 @@
 	}
 	ordena(); setTimeout(ordena, 300);
 	$(document.body).on('country_to_state_changed updated_checkout', function () { setTimeout(ordena, 30); });
+	$('#ship-to-different-address-checkbox').on('change', function () { setTimeout(ordena, 30); setTimeout(ordena, 450); });
 
 	titulos(); restaura(); cep('billing'); cep('shipping'); selos();
 	$(document.body).on('updated_checkout', function () { selos(); });

@@ -367,7 +367,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return;
 	}
-	$v = wp_get_theme()->get( 'Version' ) . '.18';
+	$v = wp_get_theme()->get( 'Version' ) . '.19';
 	wp_enqueue_style( 'glowbos-checkout', get_template_directory_uri() . '/checkout.css', array( 'glowbos' ), $v );
 	wp_enqueue_script( 'glowbos-checkout', get_template_directory_uri() . '/checkout.js', array( 'jquery', 'wc-checkout' ), $v, true );
 }, 30 );
@@ -438,7 +438,7 @@ add_action( 'woocommerce_review_order_before_submit', function () {
 // Carrinho, minha conta, acompanhar pedido e 404 no visual da loja.
 add_action( 'wp_enqueue_scripts', function () {
 	if ( is_404() || ( function_exists( 'is_cart' ) && ( is_cart() || is_account_page() || is_page( 'acompanhar-pedido' ) ) ) || is_page() ) {
-		wp_enqueue_style( 'glowbos-paginas', get_template_directory_uri() . '/paginas.css', array( 'glowbos' ), wp_get_theme()->get( 'Version' ) . '.5' );
+		wp_enqueue_style( 'glowbos-paginas', get_template_directory_uri() . '/paginas.css', array( 'glowbos' ), wp_get_theme()->get( 'Version' ) . '.7' );
 	}
 }, 31 );
 // Minha conta: textos em português da casa e atalho para acompanhar pedido sem senha.
@@ -453,6 +453,10 @@ add_filter( 'woocommerce_account_menu_items', function ( $i ) {
 add_action( 'woocommerce_after_customer_login_form', function () {
 	echo '<p class="gb-rastreio">Comprou sem criar conta? <a href="' . esc_url( home_url( '/acompanhar-pedido/' ) ) . '">Acompanhe pelo número do pedido</a>.</p>';
 } );
+// 27/10: textos do cadastro em português da casa
+add_filter( 'woocommerce_get_privacy_policy_text', function ( $t, $tipo ) {
+	return 'registration' === $tipo ? 'Seus dados servem só pra acompanhar seus pedidos e endereços. Veja a nossa [privacy_policy].' : $t;
+}, 10, 2 );
 // 16/10: sem caixinha de "criar conta". A conta nasce sozinha depois da compra, com o e-mail do
 // pedido, e o WooCommerce manda o link pra pessoa definir a senha e ver "Meus pedidos".
 add_filter( 'pre_option_woocommerce_enable_signup_and_login_from_checkout', function () { return 'no'; } );

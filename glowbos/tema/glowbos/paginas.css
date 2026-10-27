@@ -156,3 +156,13 @@
 .gb-ped-vazio{text-align:center;padding:40px 20px;border:1px solid #ece8eb;border-radius:14px;background:#fff}
 .gb-ped-vazio b{font:800 20px "Inter Tight"}
 @media (max-width:640px){.gb-ped{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}.gb-ped-st{grid-column:2;grid-row:1;justify-self:end}.gb-ped-v{grid-column:1;text-align:left}.gb-ped-a{grid-column:2}}
+/* 27/10: Minha conta com Entrar e Criar conta lado a lado, mesmo tamanho */
+.woocommerce-account:not(.logged-in) .u-columns{display:grid;grid-template-columns:repeat(2,minmax(0,420px));justify-content:center;gap:24px;align-items:stretch}
+.woocommerce-account:not(.logged-in) .u-column1,.woocommerce-account:not(.logged-in) .u-column2{display:flex;flex-direction:column}
+.woocommerce-account:not(.logged-in) .u-column2>h2{display:none}
+.woocommerce-account:not(.logged-in) .woocommerce form.login,.woocommerce-account:not(.logged-in) .woocommerce form.register{max-width:none;width:100%;flex:1;margin:0!important}
+.woocommerce-account:not(.logged-in) form.register::before{content:"Criar conta";display:block;font:800 22px "Inter Tight";text-align:center;margin:0 0 6px}
+.woocommerce-account form.register .woocommerce-privacy-policy-text p,.woocommerce-account form.register>p:not(.form-row){font-size:13px;color:var(--vinho2);line-height:1.45;margin:0 0 12px}
+.woocommerce-account:not(.logged-in) .gb-rastreio{max-width:864px}
+@media (max-width:860px){.woocommerce-account:not(.logged-in) .u-columns{grid-template-columns:minmax(0,440px)}}
+.woocommerce-account:not(.logged-in) .u-columns::before,.woocommerce-account:not(.logged-in) .u-columns::after{display:none!important;content:none!important}

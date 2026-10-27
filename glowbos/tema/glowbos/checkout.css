@@ -17,7 +17,7 @@ form.checkout_coupon{border:1px solid #ece8eb!important;border-radius:12px!impor
 form.woocommerce-checkout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-rows:auto auto 1fr;gap:0 36px;align-items:start;margin-top:10px}
 form.woocommerce-checkout #customer_details{grid-column:1;grid-row:2 / span 2}
 form.woocommerce-checkout #order_review_heading{grid-column:2;grid-row:2;margin:0 0 12px!important}
-form.woocommerce-checkout #order_review{grid-column:2;grid-row:3;position:sticky;top:104px}
+form.woocommerce-checkout #order_review{grid-column:2;grid-row:3;position:static}
 .woocommerce .col2-set .col-1,.woocommerce .col2-set .col-2,.woocommerce-page .col2-set .col-1,.woocommerce-page .col2-set .col-2{float:none!important;width:100%!important}
 #customer_details>div{background:#fff;border:1px solid #ece8eb;border-radius:16px;padding:24px 24px 10px;margin-bottom:16px}
 #customer_details h3,#order_review_heading{font:800 20px "Inter Tight"!important;letter-spacing:-.02em;margin:0 0 16px!important;display:flex;align-items:center;gap:10px}
