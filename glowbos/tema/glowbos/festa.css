@@ -193,3 +193,7 @@
 .fe-st b{font:800 15px Inter;color:#2a0f22}
 .fe-st0{justify-content:center;font:600 11.5px Inter;color:#a0909a;pointer-events:none}
 .fe-t em,.fe-tm2{display:none}
+/* 27/10: sem escada (até 9 numa linha) e nome cabendo no quadradinho */
+.fe-sw{max-width:calc(var(--col,6) * 110px)}
+.fe-tb span{font-size:11.5px}
+@media (max-width:860px){.fe-sw{grid-template-columns:repeat(var(--colm,4),minmax(0,1fr))}}
