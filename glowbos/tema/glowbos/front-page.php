@@ -20,6 +20,10 @@ $gb = array(
 $html = str_replace( '<div class="barra">🚚 Chega hoje em São Paulo e Grande SP</div>', glowbos_util_html(), $html );
 $html = str_replace( '<!--LINHAS-->', glowbos_linhas_html(), $html );
 $html = str_replace( '<!--MAIS_VENDIDOS-->', glowbos_mais_vendidos_html() . glowbos_sets_html(), $html );
+// 26/10: o mesmo app de arco da página de Arcos dentro da janela "Monte seu arco"
+ob_start();
+glowbos_arco_app( false );
+$html = str_replace( '<!--ARCO_APP-->', ob_get_clean(), $html );
 $gbn = strpos( $html, '<nav><a href="/categoria/' );
 if ( false !== $gbn ) {
 	$html = substr_replace( $html, glowbos_mega_html(), $gbn, strpos( $html, '</nav>', $gbn ) + 6 - $gbn );

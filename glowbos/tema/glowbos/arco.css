@@ -105,3 +105,10 @@
 .gb-arco button.ma-q.off{border-color:#ece8eb;background:#fff;color:#a39da1;text-decoration:line-through}
 .gb-arco button.ma-q.off img{opacity:.35}
 .gb-arco .ma-box>.ma-vz:first-child{margin-bottom:10px;font-size:13px}
+/* 26/10: dentro da janela da home o CSS antigo do app tem as mesmas classes; o #gbArco vence */
+#gbArco .ma-cores{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;margin:0}
+#gbArco .ma-cores button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;height:auto;padding:6px 4px;border:1.5px solid #ece8eb;border-radius:10px;font:600 12px Inter;color:var(--vinho)}
+#gbArco .ma-cores button.on{border-color:var(--forte);background:#fff0f6}
+#gbArco .ma-cores button i{width:18px;height:18px;border-radius:50%;box-shadow:none;border:0}
+#gbArco .ma-foto img{aspect-ratio:3/4}
+#gbm #gbArco{margin:0}

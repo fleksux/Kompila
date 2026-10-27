@@ -846,7 +846,7 @@ body.gbm-aberto{overflow:hidden}
   <div class="gba-h"><span class="eyebrow">Monte do seu jeito</span><h2 class="tt inf">Escolha, monte e receba.</h2></div>
   <div class="gba-l">
     <button type="button" class="gba-b" data-app="pacotes"><span class="gba-i"><img src="img/hero_pacote_5_m.webp" alt=""></span><span class="gba-t"><b>Monte seu pacote</b><small>De 50 a 125 balões, até 5 cores</small></span><i>›</i></button>
-    <button type="button" class="gba-b" data-app="monte"><span class="gba-i"><img src="img/arco_09_candy_algodao.webp" alt=""></span><span class="gba-t"><b>Monte seu arco</b><small>Escolha pela foto, a gente calcula</small></span><i>›</i></button>
+    <button type="button" class="gba-b" data-app="monte"><span class="gba-i"><img src="img/arco_tam_100.webp" alt=""></span><span class="gba-t"><b>Monte seu arco</b><small>Escolha o tamanho e as cores</small></span><i>›</i></button>
     <button type="button" class="gba-b" data-app="numeros"><span class="gba-i"><img src="img/num_rose_5.webp" alt=""></span><span class="gba-t"><b>Número gigante</b><small>Coluna com número metalizado</small></span><i>›</i></button>
   </div>
 </div></section>
@@ -981,22 +981,7 @@ addEventListener('scroll',rola,{passive:true});rola();})();
   </div>
 </div></section>
 <section class="sec" id="monte"><div class="w">
-  <div class="ctr"><span class="eyebrow">Monte seu arco</span><h2 class="tt inf">Escolha o arco pela foto. A gente separa os balões.</h2><p class="sub">Arco desconstruído em kit, com balões de vários tamanhos. Você escolhe o kit e as cores.</p></div>
-  <div class="ma-tabs" id="maTabs"></div>
-  <div class="ma">
-    <div class="ma-foto" id="maFoto"><img class="at" id="maImg" src="img/arco_09_candy_algodao.webp" alt="Arco de balões"></div>
-    <div class="ma-cfg">
-      <p class="mst"><i>1</i> O arco</p>
-      <div class="ma-arcos" id="maArcos"></div>
-      <p class="mst"><i>2</i> O tamanho do kit</p>
-      <div class="ma-kits" id="maKits"></div>
-      <p class="mst"><i>3</i> As cores <small id="maCn"></small></p>
-      <div class="ma-sel" id="maSel"></div>
-      <div class="ma-cores" id="maCores"></div>
-      <div class="mbuy ma-buy2"><div><small id="maRes"></small><b id="maTot">R$ 0,00</b></div><button class="btn pri" id="maComprar">Colocar no carrinho</button></div>
-      <p class="mnote">🚚 Em São Paulo e Grande SP, pedido pago até 12h chega hoje até 21h.</p>
-    </div>
-  </div>
+  <!--ARCO_APP-->
   <div class="ma-curso"><p class="mst"><i>▶</i> Como montar em casa</p><div class="ma-vids"><button type="button" class="mv-v" data-v="https://glowbos.com.br/wp-content/uploads/curso/Aula2-01-Guirlanda-passo-a-passo.mp4"><img src="https://glowbos.com.br/wp-content/uploads/curso/Aula2-01-Guirlanda-passo-a-passo.jpg" alt="" loading="lazy"><i>▶</i><span>Arco desconstruído passo a passo</span></button><button type="button" class="mv-v" data-v="https://glowbos.com.br/wp-content/uploads/curso/Aula1-03-3-jeitos-de-prender-cachos.mp4"><img src="https://glowbos.com.br/wp-content/uploads/curso/Aula1-03-3-jeitos-de-prender-cachos.jpg" alt="" loading="lazy"><i>▶</i><span>3 jeitos de prender os cachos</span></button><button type="button" class="mv-v" data-v="https://glowbos.com.br/wp-content/uploads/curso/Aula2-04-Como-prender-guirlanda-na-parede.mp4"><img src="https://glowbos.com.br/wp-content/uploads/curso/Aula2-04-Como-prender-guirlanda-na-parede.jpg" alt="" loading="lazy"><i>▶</i><span>Como prender na parede</span></button><button type="button" class="mv-v" data-v="https://glowbos.com.br/wp-content/uploads/curso/Aula3-01-Truque-arco-redondo.mp4"><img src="https://glowbos.com.br/wp-content/uploads/curso/Aula3-01-Truque-arco-redondo.jpg" alt="" loading="lazy"><i>▶</i><span>Truque do arco redondo</span></button></div></div>
 </div></section>
   </div>
@@ -1118,60 +1103,6 @@ mostra('torcida');
 
 
 <script>
-// monte seu arco: escolhe o arco pela foto, o kit e as cores; vai pro carrinho como kit da loja
-(function(){
- const CO={amarelo:['Amarelo','#f7d22e'],azul_baby:['Azul baby','#a9d1ef'],azul_celeste:['Azul celeste','#7fb2e5'],azul_cobalto:['Azul cobalto','#1f4fa8'],azul_royal:['Azul royal','#2448c8'],bege:['Bege','#e8d2b4'],branco:['Branco','#f7f5f2'],cinza:['Cinza','#b9b7b5'],dourado:['Dourado','#d7ae49'],laranja:['Laranja','#f58a2c'],lilas:['Lilás','#c3aee3'],marrom:['Marrom','#7a4b33'],pink:['Pink','#e8378a'],preto:['Preto','#232226'],rosa:['Rosa','#f4b6c8'],roxo:['Roxo','#6b3fa0'],tiffany:['Tiffany','#3cc2c6'],verde_agua:['Verde água','#a6e0cd'],verde_bandeira:['Verde bandeira','#16954a'],verde_citrus:['Verde citrus','#8ccc3e'],vermelho:['Vermelho','#d8262e']};
- const AR=[
-  {f:'09_candy_algodao',t:'Algodão doce',g:'Infantil',c:['rosa','azul_baby','amarelo','verde_agua']},
-  {f:'01_vivo_arco-iris',t:'Arco-íris',g:'Infantil',c:['pink','amarelo','azul_royal','laranja','verde_citrus']},
-  {f:'02_vivo_primarias',t:'Primárias',g:'Infantil',c:['vermelho','amarelo','azul_royal','verde_bandeira']},
-  {f:'10_candy_morango',t:'Morango',g:'Infantil',c:['vermelho','rosa','branco','pink']},
-  {f:'08_pastel_bebe',t:'Chá de bebê',g:'Chá de bebê',c:['rosa','azul_baby','branco','bege']},
-  {f:'05_analoga_fria',t:'Menta e céu',g:'Chá de bebê',c:['verde_agua','azul_baby','tiffany']},
-  {f:'06_analoga_lilas',t:'Lilás',g:'15 anos',c:['lilas','azul_celeste','roxo','rosa']},
-  {f:'03_vivo_joias',t:'Joias',g:'Adulto',c:['verde_bandeira','azul_cobalto','roxo','vermelho']},
-  {f:'04_analoga_quente',t:'Pêssego',g:'Adulto',c:['laranja','bege','rosa','marrom']},
-  {f:'07_pastel_neutro',t:'Nude',g:'Adulto',c:['bege','branco','marrom']},
-  {f:'14_vermelho_preto_amarelo',t:'Rubro-negro',g:'Torcida',c:['vermelho','preto','amarelo']},
-  {f:'15_preto_e_branco',t:'Preto e branco',g:'Torcida',c:['preto','branco']},
-  {f:'16_verde_e_branco',t:'Alviverde',g:'Torcida',c:['verde_bandeira','branco']}
- ];
- const U='https://glowbos.com.br/wp-content/uploads/2026/10/';
- const KITS=[
-  {k:'60',t:'60 peças',n:'Kit arco 60 peças',b:60,comp:'24 de 12" e 36 de 9"',x:'Sem fita',p:35.99,nc:3,i:U+'glowbos_kit60_parede.webp'},
-  {k:'80',t:'80 peças',n:'Kit arco 80 peças desconstruído',b:81,comp:'18 de 12", 36 de 9" e 27 de 5"',x:'',p:41.99,nc:3,i:'https://glowbos.com.br/wp-content/uploads/2026/10/glowbos_kit80_sem_tag_1.jpg'},
-  {k:'100',t:'100 peças',n:'Kit arco 100 peças desconstruído',b:98,comp:'2 de 16", 6 de 12", 60 de 9" e 30 de 5"',x:'Fita 5 m + dupla face',p:52.99,nc:3,i:U+'glowbos_kit100_parede.webp',top:1},
-  {k:'112',t:'112 peças',n:'Kit arco 112 peças',b:110,comp:'2 de 16", 8 de 12", 60 de 9" e 40 de 5"',x:'Fita 5 m + dupla face',p:54.99,nc:4,i:U+'glowbos_kit112.webp'},
-  {k:'120',t:'120 peças',n:'Kit arco 120 peças',b:124,comp:'4 de 16", 12 de 12", 72 de 9" e 36 de 5"',x:'Fita 5 m',p:62.00,nc:3,i:U+'glowbos_kit120.webp'},
-  {k:'cp',t:'Arco completo',n:'Kit arco 120 peças',b:149,comp:'Kit 120 peças + 25 balões de 12"',x:'Fita 5 m',p:62.00+14.99,nc:3,i:U+'glowbos_kit120.webp',extra:{n:'Pacote 25 balões 12"',p:14.99,i:U+'pacote-glowbos-mix_12-f2.jpg'}}
- ];
- const $=s=>document.querySelector(s),R=v=>'R$ '+v.toFixed(2).replace('.',',');
- if(!$('#maArcos'))return;
- let g='Todos',a=AR[0],K=KITS[1],sel=a.c.slice(0,K.nc);
- function foto(){const box=$('#maFoto'),f='img/arco_'+a.f+'.webp',at=box.querySelector('img.at');if(!at||at.getAttribute('src')===f)return;
-  box.querySelectorAll('img.nx').forEach(x=>x.remove());const n=new Image();n.className='nx';n.alt='Arco '+a.t;n.src=f;box.appendChild(n);
-  n.onload=()=>{requestAnimationFrame(()=>n.style.opacity=1);setTimeout(()=>{at.remove();n.className='at';n.style.opacity=''},350)}}
- function kits(){$('#maKits').innerHTML=KITS.map(x=>'<button class="'+(x===K?'on':'')+'" data-k="'+x.k+'">'+(x.top?'<span class="mpt-tag">Mais vendido</span>':'')+'<img src="'+x.i+'" alt="" loading="lazy"><b>'+x.t+'</b><span>'+x.b+' balões</span><em>'+R(x.p)+'</em></button>').join('');
-  $('#maKits').querySelectorAll('button').forEach(b=>b.onclick=()=>{K=KITS.find(x=>x.k===b.dataset.k);sel=sel.slice(0,K.nc);a.c.forEach(c=>{if(sel.length<K.nc&&sel.indexOf(c)<0)sel.push(c)});kits();resumo()})}
- function cores(){$('#maCn').textContent='até '+K.nc+' cores · '+sel.length+' escolhidas';
-  $('#maSel').innerHTML=sel.map((k,i)=>'<button data-i="'+i+'" title="Tirar"><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'<span>×</span></button>').join('')+(sel.length<K.nc?'<span class="ma-vz">escolha abaixo</span>':'');
-  $('#maCores').innerHTML=Object.keys(CO).map(k=>'<button data-k="'+k+'" class="'+(sel.indexOf(k)>=0?'on':'')+'"'+(sel.indexOf(k)<0&&sel.length>=K.nc?' disabled':'')+'><i style="background:'+CO[k][1]+'"></i>'+CO[k][0]+'</button>').join('');
-  $('#maSel').querySelectorAll('button').forEach(b=>b.onclick=()=>{sel.splice(+b.dataset.i,1);resumo()});
-  $('#maCores').querySelectorAll('button').forEach(b=>b.onclick=()=>{const k=b.dataset.k,j=sel.indexOf(k);if(j>=0)sel.splice(j,1);else if(sel.length<K.nc)sel.push(k);resumo()})}
- function resumo(){cores();$('#maTot').textContent=R(K.p);$('#maRes').textContent=K.b+' balões · '+K.comp+(K.x?' · '+K.x:'');
-  const bt=$('#maComprar');bt.disabled=!sel.length;bt.textContent=sel.length?'Colocar no carrinho':'Escolha pelo menos 1 cor'}
- function abas(){const G=['Todos'].concat([...new Set(AR.map(x=>x.g))]);$('#maTabs').innerHTML=G.map(x=>'<button class="'+(x===g?'on':'')+'">'+x+'</button>').join('');
-  $('#maTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{g=b.textContent;abas();arcos()})}
- function arcos(){const L=AR.filter(x=>g==='Todos'||x.g===g);if(L.indexOf(a)<0)a=L[0];
-  $('#maArcos').innerHTML=L.map(x=>'<button class="'+(x===a?'on':'')+'" data-f="'+x.f+'"><img src="img/arco_'+x.f+'.webp" alt="" loading="lazy"><span>'+x.t+'</span></button>').join('');
-  $('#maArcos').querySelectorAll('button').forEach(b=>b.onclick=()=>{a=AR.find(x=>x.f===b.dataset.f);sel=a.c.slice(0,K.nc);arcos()});foto();resumo()}
- $('#maComprar').onclick=()=>{if(!sel.length)return;const cs=sel.map(k=>CO[k][0]).join(', '),it=[{n:K.n+' · '+a.t+': '+cs,p:K.extra?Math.round((K.p-K.extra.p)*100)/100:K.p,i:K.i,q:1}];
-  if(K.extra)it.push({n:K.extra.n+' · '+a.t+': '+cs,p:K.extra.p,i:K.extra.i,q:1});
-  window.gbPoeLista&&window.gbPoeLista(it,a.t+' · '+K.t)};
- abas();kits();arcos();
-})();
-</script>
-<script>
 (function(){var j=document.querySelector('.janela');if(!j)return;
 function ajusta(){if(innerWidth>640){j.style.height='';return}var t=j.getBoundingClientRect().top,m=0;j.querySelectorAll('.sl').forEach(function(s){s.querySelectorAll('a,button,p,h1,h2,small,span').forEach(function(e){var r=e.getBoundingClientRect();if(r.height)m=Math.max(m,r.bottom-t)})});if(m>200)j.style.setProperty('height',Math.ceil(m+28)+'px','important')}
 addEventListener('load',ajusta);addEventListener('resize',ajusta);setTimeout(ajusta,600);})();
@@ -1218,8 +1149,7 @@ cx.addEventListener('click',function(e){
  if(e.target.closest('#mpt button'))leva('#mps','start');
  else if(e.target.closest('#bolhas button'))leva('.estilos','center');
  else if(e.target.closest('.estilos .es'))leva('.nbuy','center');
- else if(e.target.closest('#maArcos button'))leva('#maKits','center');
- else if(e.target.closest('#maKits button'))leva('#maSel','center');
+ else if(e.target.closest('#maTam button'))leva('#maCores','center');
 },true);
 var add=document.getElementById('mpadd');if(add)new MutationObserver(function(){if(!add.disabled&&!m.hidden)leva('.mbuy','center')}).observe(add,{attributes:true,attributeFilter:['disabled']});
 document.addEventListener('click',function(e){var b=e.target.closest('[data-app]');if(b){e.preventDefault();abre(b.dataset.app);return}

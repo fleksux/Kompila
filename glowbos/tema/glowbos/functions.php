@@ -672,7 +672,7 @@ function glowbos_departamentos() {
 		'formatos'         => array( 'Formatos', 'Metalizados de coração, estrela, bola e safári pro destaque da festa.', 'banner_cromados.webp' ),
 		'numeros'          => array( 'Números', 'Número metalizado gigante, de 0 a 9, no estilo da festa.', 'banner_numeros.webp' ),
 		'sets-prontos'     => array( 'Sets prontos', 'Número, base de balões, figuras e buquê montados no estilo da festa. Escolha o tema e a idade.', 'banner_sets.webp' ),
-		'acessorios'       => array( 'Acessórios', 'Fita, bomba e o que mais precisa pra montar.', 'banner_acessorios.webp' ),
+		'acessorios'       => array( 'Acessórios', 'Fita, inflador, pratinhos e guardanapos pra montar a festa.', 'banner_acessorios.webp' ),
 		'mesa-da-festa'    => array( 'Mesa da festa', 'Pratinhos e guardanapos na cor da festa, pra mesa combinar com os balões.', 'banner_mesa.webp' ),
 	);
 }
@@ -899,7 +899,8 @@ it.querySelectorAll(".gm-cats a[data-gm]").forEach(function(a){a.addEventListene
 
 // ===== App do arco na página de Arcos (26/10, relatório etapa 1): tamanho fixo, cores e divisão travada =====
 add_action( 'wp_enqueue_scripts', function () {
-	if ( function_exists( 'is_product_category' ) && is_product_category( 'arcos' ) ) {
+	// na home o mesmo app abre na janela "Monte seu arco"
+	if ( is_front_page() || ( function_exists( 'is_product_category' ) && is_product_category( 'arcos' ) ) ) {
 		$d = get_template_directory();
 		wp_enqueue_style( 'glowbos-arco', get_template_directory_uri() . '/arco.css', array( 'glowbos' ), (string) filemtime( $d . '/arco.css' ) );
 		wp_enqueue_script( 'glowbos-arco', get_template_directory_uri() . '/arco.js', array(), (string) filemtime( $d . '/arco.js' ), true );
@@ -920,7 +921,7 @@ function glowbos_arcos_tam() {
 function glowbos_arcos_cores() {
 	return array( 'branco' => 'Branco', 'preto' => 'Preto', 'vermelho' => 'Vermelho', 'amarelo' => 'Amarelo', 'laranja' => 'Laranja', 'pink' => 'Pink', 'rosa' => 'Rosa', 'lilas' => 'Lilás', 'roxo' => 'Roxo', 'azul_cobalto' => 'Azul Cobalto', 'azul_celeste' => 'Azul Celeste', 'azul_baby' => 'Azul Baby', 'tiffany' => 'Tiffany', 'verde_agua' => 'Verde Água', 'verde_bandeira' => 'Verde Bandeira', 'verde_citrus' => 'Verde Citrus', 'marrom' => 'Marrom' );
 }
-function glowbos_arco_app() {
+function glowbos_arco_app( $kits = true ) {
 	$img  = get_template_directory_uri() . '/img/';
 	$ids  = (array) get_option( 'glowbos_produtos', array() );
 	$tams = array();
@@ -951,8 +952,10 @@ function glowbos_arco_app() {
 			</div>
 		</div>
 	</section>
+	<?php if ( $kits ) : ?>
 	<div class="gb-arco-hd"><span class="gb-eb">Novidades</span><h2 class="gb-arco-sub">Ou leve o kit pronto</h2><p>Kits com tudo separado pra montar em casa, com as cores que você escolher.</p></div>
 	<?php
+	endif;
 }
 // arco montado: confere tamanho e cores e divide cada tamanho de balão igual entre as cores marcadas nele (a sobra vai pras primeiras)
 add_action( 'wc_ajax_glowbos_arco', function () {
@@ -1315,13 +1318,11 @@ function glowbos_linhas_html() {
 	$h .= $sec( 'joy', 'Balões Joy', 'A marca Joy em 4 tamanhos. Você escolhe as cores.', $cat( 'baloes-joy' ),
 		$pq( 'pct5_50', 'Joy 5" · 50 un.' ) . $pq( 'pct9_50', 'Joy 9" · 50 un.' ) . $pq( 'pct12_25', 'Joy 12" · 25 un.' ) . $pq( 'pct16_12', 'Joy 16" · 12 un.' ) .
 		$q( 'Joy Big 25"', $img . 'banner_joy_m.webp', '', 'em breve', ' vq-breve' ) );
+	// 26/10: Formatos com os 5 produtos (enchia só 3 de 5 colunas) e Acessórios junto com a Mesa da festa
 	$h .= $sec( 'formatos', 'Formatos', 'Números e balões de formato pro destaque da festa.', $cat( 'formatos' ),
-		$q( 'Balões de Números', $img . 'num_rose_5.webp', $cat( 'numeros' ), 'de 0 a 9' ) .
-		$pq( 'num32', 'Número metalizado 32" · 81 cm' ) .
-		$q( 'Balões de Formatos', wp_get_attachment_image_url( get_post_thumbnail_id( $mapa['met18_estrela'] ?? 0 ), 'medium_large' ) ?: $img . 'banner_cromados_m.webp', $cat( 'formatos' ), 'coração, estrela, bola e safári' ) );
-	$h .= $sec( 'acessorios', 'Acessórios', 'O que precisa pra montar.', $cat( 'acessorios' ), $pq( 'fita', 'Fita para arco + dupla face' ) . $pq( 'inflador', 'Inflador manual' ) );
-	$h .= $sec( 'mesa', 'Mesa da festa', 'Pratinho e guardanapo na cor dos balões.', $cat( 'mesa-da-festa' ),
-		$pq( 'prato20', 'Pratinho 15 cm · 20 un.' ) . $pq( 'prato30', 'Pratos 15 cm · 30 un.' ) . $pq( 'guardanapo', 'Guardanapo colorido · 50 folhas' ) );
+		$pq( 'num32', 'Número metalizado 32"' ) . $pq( 'met18_estrela', 'Estrela holográfica 18"' ) . $pq( 'met17_coracao', 'Coração holográfico 17"' ) . $pq( 'met18_futebol', 'Bola de futebol 18"' ) . $pq( 'met18_safari', 'Safári animal print 18"' ) );
+	$h .= $sec( 'acessorios', 'Acessórios', 'O que precisa pra montar e pra mesa combinar com os balões.', $cat( 'acessorios' ),
+		$pq( 'fita', 'Fita para arco + dupla face' ) . $pq( 'inflador', 'Inflador manual' ) . $pq( 'prato20', 'Pratinho 15 cm · 20 un.' ) . $pq( 'prato30', 'Pratos 15 cm · 30 un.' ) . $pq( 'guardanapo', 'Guardanapo colorido · 50 folhas' ) );
 	return '<style>
 .vq{padding:72px 0 0}
 .vq-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}
