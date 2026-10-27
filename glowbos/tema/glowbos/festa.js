@@ -9,7 +9,7 @@
  const lisos=(id,sel,max)=>'<p class="fe-q">As cores <small>até '+max+' · '+sel.length+' escolhida'+(sel.length===1?'':'s')+'</small></p><div class="fe-cs">'+Object.keys(COR).map(k=>{const i=sel.indexOf(k);return '<button type="button" data-cor="'+id+'" data-k="'+k+'" class="'+(i>-1?'on':(sel.length>=max?'cheio':''))+'"><img src="'+IMG+'b_'+k+'.webp" alt="">'+COR[k]+(i>-1?'<em>'+(i+1)+'</em>':'')+'</button>'}).join('')+'</div>';
  // mesa: com paleta, quantos de cada cor; sem paleta (velas), só a quantidade
  // mesa: quadradinhos de cor (toca = +1 pacote, número no canto, − pra tirar); vela sem cor = um quadradinho só
- const qtd=k=>{const P=IT[k].pal?PAL[IT[k].pal]:{'':['','']},Q=S.q[k];return '<div class="fe-sw">'+Object.keys(P).map(c=>{const n=Q[c]||0,num=IT[k].pal==='num';
+ const qtd=k=>{const P=IT[k].pal?PAL[IT[k].pal]:{'':['','']},Q=S.q[k];const n0=Object.keys(P).length,col=n0<=8?n0:Math.ceil(n0/2);return '<div class="fe-sw" style="--col:'+col+'">'+Object.keys(P).map(c=>{const n=Q[c]||0,num=IT[k].pal==='num';
   return '<div class="fe-t'+(n?' on':'')+'"><button type="button" class="fe-tb" data-q="'+k+'" data-c="'+c+'" data-d="1">'+(c?(num?'<i class="fe-tn">'+c+'</i>':'<i class="fe-ts" style="background:radial-gradient(circle at 35% 30%,'+P[c][1]+','+P[c][0]+' 72%)"></i>'):'<i class="fe-ts fe-ta">+</i>')+'<span>'+(c?(num?'Número '+c:c):'Adicionar')+'</span></button>'+(n?'<em>'+n+'</em><button type="button" class="fe-tm2" data-q="'+k+'" data-c="'+c+'" data-d="-1" aria-label="Tirar um">−</button>':'')+'</div>'}).join('')+'</div>'};
  const TIPO=[['arco','Arco de balões','De 60 a 160 balões',IMG+'arco_tam_100.webp',D.arco.length?'a partir de '+R(Math.min.apply(0,D.arco.map(a=>a.p))):''],['mini','Mini arco','Arco de mesa, 50 de 5"',IT.miniarco&&IT.miniarco.foto,IT.miniarco?R(IT.miniarco.p):''],['sort','Balões sortidos','De 50 a 125 balões de 8"',IMG+'banner_pacotes_m.webp',SORT.length?'a partir de '+R(IT[SORT[0]].p):'']].filter(t=>t[0]!=='mini'||IT.miniarco);
  // 26/10: por passos, tudo na mesma janela: um passo por vez, Voltar e Próximo, e o carrinho só no fim
@@ -19,7 +19,7 @@
  const feito=p=>p.id==='bal'?balao():p.k?p.k.some(k=>Object.values(S.q[k]).some(Boolean)):false;
  function lista(){
   const p=PASSOS[P],tot=itens().reduce((a,x)=>a+x.v,0);
-  let h='<ol class="fe-pp">'+PASSOS.map((x,i)=>'<li class="'+(i===P?'on':feito(x)?'ok':'')+'"><button type="button" data-ir="'+i+'"><i>'+(i!==P&&feito(x)?'✓':i+1)+'</i><span>'+x.t+'</span></button></li>').join('')+'</ol><div class="fe-k">';
+  let h='<ol class="fe-pp" style="--n:'+PASSOS.length+'">'+PASSOS.map((x,i)=>'<li class="'+(i===P?'on':feito(x)?'ok':'')+'"><button type="button" data-ir="'+i+'"><i>'+(i!==P&&feito(x)?'✓':i+1)+'</i><span>'+x.t+'</span></button></li>').join('')+'</ol><div class="fe-k">';
   if(p.id==='bal'){
    h+='<div class="fe-kh"><div><b>Os balões</b><small>Escolha um: arco, mini arco ou balões sortidos.</small></div><button type="button" class="fe-pl" data-ir="1">'+'Próximo →'+'</button></div><div class="fe-tp">'+
     TIPO.map(t=>'<button type="button" data-tipo="'+t[0]+'" class="'+(S.tipo===t[0]?'on':'')+'"><span><img src="'+t[3]+'" alt=""></span><b>'+t[1]+'</b><small>'+t[2]+'</small><em>'+t[4]+'</em></button>').join('')+'</div>';

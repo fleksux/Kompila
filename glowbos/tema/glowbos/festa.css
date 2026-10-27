@@ -145,3 +145,28 @@
 .fe-kq img{height:20px}
 .fe-kq.off{border-color:#ece2e7;background:#fff;color:#a39da1;text-decoration:line-through}
 .fe-kq.off img{opacity:.35}
+/* 26/10: quadradinhos da mesa sem sobra torta: tamanho fixo, até 8 numa linha, mais que isso divide em 2 linhas iguais */
+.fe-sw{grid-template-columns:repeat(var(--col,6),84px);justify-content:start}
+.fe-tb{height:80px}
+@media (max-width:860px){.fe-sw{grid-template-columns:repeat(auto-fill,minmax(76px,1fr))}}
+/* 26/10: trilha com passos de largura igual, linha contínua entre os círculos */
+.fe-pp{display:grid;grid-template-columns:repeat(var(--n,7),minmax(0,1fr));gap:0;max-width:680px;overflow:visible}
+.fe-pp li{flex:none;min-width:0}
+.fe-pp li+li::before{top:20px;left:calc(-50% + 18px);right:calc(50% + 18px)}
+.fe-pp button{padding:6px 0}
+.fe-pp span{white-space:nowrap}
+@media (max-width:640px){.fe-pp li+li::before{top:16px;left:calc(-50% + 14px);right:calc(50% + 14px)}.fe-pp i{width:24px;height:24px;line-height:24px;font-size:11px}.fe-pp span{font-size:9.5px}}
+/* 26/10: celular sem nada vazando pro lado */
+@media (max-width:640px){
+#festa,#festa .w,.fe,.fe-k,.fe-m,.fe-m>div{min-width:0;max-width:100%}
+#festa .w{padding:0 14px;overflow-x:hidden}
+.fe-pp{max-width:100%}
+.fe-pp span{display:none}
+.fe-pp li.on span{display:block;position:absolute;top:34px;left:50%;transform:translateX(-50%);font-size:10.5px}
+.fe-pp{padding-bottom:16px}
+.fe-m>img{max-width:120px}
+.fe-sw{grid-template-columns:repeat(4,minmax(0,1fr))}
+.fe-tb{height:72px;font-size:11px}
+#festa .fe-nav{margin:12px -14px -36px;padding:10px 14px 14px}
+#festa .fe-nav .btn{min-width:0;flex:1;height:48px;font-size:14px}
+}
