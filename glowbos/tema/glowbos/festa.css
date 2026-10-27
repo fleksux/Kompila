@@ -197,3 +197,36 @@
 .fe-sw{max-width:calc(var(--col,6) * 110px)}
 .fe-tb span{font-size:11.5px}
 @media (max-width:860px){.fe-sw{grid-template-columns:repeat(var(--colm,4),minmax(0,1fr))}}
+/* 27/10: cada produto da mesa = cabeçalho com foto pequena + cores na largura toda */
+.fe-m{display:block;padding-top:16px}
+.fe-m:first-child{padding-top:0}
+.fe-mh{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.fe-mh img{width:72px;height:72px;flex:none;border-radius:12px;object-fit:cover;background:#F7F3EA}
+.fe-mh b{display:block;font:700 18px/1.2 Fredoka,"Inter Tight",sans-serif;color:#2a0f22}
+.fe-m .fe-mh .fe-pr{margin:2px 0 0}
+.fe-sw{grid-template-columns:repeat(var(--col,6),minmax(0,1fr));max-width:none;gap:10px}
+.fe-t .fe-tb{height:70px}
+@media (max-width:860px){.fe-sw{grid-template-columns:repeat(var(--colm,4),minmax(0,1fr))}}
+@media (max-width:640px){.fe-mh img{width:56px;height:56px}}
+.fe-sw[style^="--col:1;"]{max-width:200px}
+/* 27/10: janela da festa enxuta (sem sobra branca dos lados, sem título grande) */
+.gbm-cx:has(#festa.on){width:min(920px,100%)}
+#festa.on{padding:26px 0 30px!important}
+#festa .ctr{margin-bottom:6px}
+#festa .ctr h2{display:none}
+#festa .ctr .eyebrow{margin:0}
+#festa .w{max-width:none;padding:0 28px}
+.fe,.fe-pp,.fe-fim{max-width:none}
+.fe-pp{max-width:620px;margin:6px auto 14px}
+.fe-k{padding:16px 18px}
+.fe-kh{margin-bottom:10px}
+.fe-tp span{aspect-ratio:16/10}
+.fe-t .fe-tb{height:62px}
+.fe-ts{width:26px;height:26px}
+#festa .fe-nav{margin:12px -28px -30px;padding:10px 28px 14px}
+@media (max-width:640px){#festa .w{padding:0 14px}#festa .fe-nav{margin:12px -14px -30px;padding:10px 14px 14px}}
+/* 27/10: 17 cores não dividem igual: última linha centralizada, nunca encostada na esquerda */
+.fe-cs{display:flex!important;flex-wrap:wrap;justify-content:center;gap:6px}
+.fe-cs button{flex:0 0 calc((100% - 30px) / 6)}
+@media (max-width:860px){.fe-cs button{flex-basis:calc((100% - 18px) / 4)}}
+@media (max-width:640px){.fe-cs button{flex-basis:calc((100% - 12px) / 3)}}

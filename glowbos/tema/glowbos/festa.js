@@ -9,7 +9,7 @@
  const lisos=(id,sel,max)=>'<p class="fe-q">As cores <small>até '+max+' · '+sel.length+' escolhida'+(sel.length===1?'':'s')+'</small></p><div class="fe-cs">'+Object.keys(COR).map(k=>{const i=sel.indexOf(k);return '<button type="button" data-cor="'+id+'" data-k="'+k+'" class="'+(i>-1?'on':(sel.length>=max?'cheio':''))+'"><img src="'+IMG+'b_'+k+'.webp" alt="">'+COR[k]+(i>-1?'<em>'+(i+1)+'</em>':'')+'</button>'}).join('')+'</div>';
  // mesa: com paleta, quantos de cada cor; sem paleta (velas), só a quantidade
  // mesa: quadradinhos de cor (toca = +1 pacote, número no canto, − pra tirar); vela sem cor = um quadradinho só
- const qtd=k=>{const P=IT[k].pal?PAL[IT[k].pal]:{'':['','']},Q=S.q[k];const n0=Object.keys(P).length,col=window.gbFeCol||(n0<=9?n0:Math.ceil(n0/2)),cm=Math.ceil(n0/Math.ceil(n0/4));return '<div class="fe-sw" style="--col:'+col+';--colm:'+cm+'">'+Object.keys(P).map(c=>{const n=Q[c]||0,num=IT[k].pal==='num';
+ const qtd=k=>{const P=IT[k].pal?PAL[IT[k].pal]:{'':['','']},Q=S.q[k];const n0=Object.keys(P).length,col=n0<=9?n0:Math.ceil(n0/2),cm=Math.ceil(n0/Math.ceil(n0/4));return '<div class="fe-sw" style="--col:'+col+';--colm:'+cm+'">'+Object.keys(P).map(c=>{const n=Q[c]||0,num=IT[k].pal==='num';
   // 27/10: tocar escolhe a cor (1 pacote); a quantidade muda no − e + que aparece embaixo, não tocando de novo
   return '<div class="fe-t'+(n?' on':'')+'"><button type="button" class="fe-tb" data-q="'+k+'" data-c="'+c+'" data-d="'+(n?0:1)+'">'+(c?(num?'<i class="fe-tn">'+c+'</i>':'<i class="fe-ts" style="background:radial-gradient(circle at 35% 30%,'+P[c][1]+','+P[c][0]+' 72%)"></i>'):'<i class="fe-ts fe-ta">+</i>')+(num?'':'<span>'+(c?c:'Adicionar')+'</span>')+'</button>'+
    (n?'<div class="fe-st"><button type="button" data-q="'+k+'" data-c="'+c+'" data-d="-1" aria-label="Menos">−</button><b>'+n+'</b><button type="button" data-q="'+k+'" data-c="'+c+'" data-d="1" aria-label="Mais">+</button></div>':'<div class="fe-st fe-st0">Escolher</div>')+'</div>'}).join('')+'</div>'};
@@ -30,12 +30,12 @@
    if(S.tipo==='sort')h+='<p class="fe-q">O tamanho</p><div class="fe-tm">'+SORT.map(k=>'<button type="button" data-sort="'+k+'" class="'+(k===S.sort.k?'on':'')+'"><b>'+IT[k].s.split(' ')[0]+'</b> balões<em>'+R(IT[k].p)+'</em></button>').join('')+'</div>'+(S.sort.k?lisos('sort',S.sort.c,IT[S.sort.k].c):'');
   }else if(p.k){
    h+='<div class="fe-kh"><div><b>'+p.t+'</b><small>'+(p.id==='velas'?'Toque na vela que quer. Pra pôr mais, use o + embaixo dela.':'Toque na cor que quer. Pra pôr mais pacotes, use o + embaixo dela.')+'</small></div><button type="button" class="fe-pl" data-ir="'+(P+1)+'">'+'Próximo →'+'</button></div><div class="fe-ms">'+
-    (window.gbFeCol=Math.max.apply(0,p.k.map(k=>{const n=IT[k].pal?Object.keys(PAL[IT[k].pal]).length:1;return n<=9?n:Math.ceil(n/2)})),'')+p.k.map(k=>'<div class="fe-m"><img src="'+IT[k].foto+'" alt=""><div>'+(p.k.length>1?'<b>'+IT[k].t+'</b>':'')+'<small class="fe-pr">'+IT[k].s+' · <strong>'+R(IT[k].p)+'</strong></small>'+qtd(k)+'</div></div>').join('')+'</div>';
+    p.k.map(k=>'<div class="fe-m"><div class="fe-mh"><img src="'+IT[k].foto+'" alt=""><div>'+(p.k.length>1?'<b>'+IT[k].t+'</b>':'')+'<small class="fe-pr">'+IT[k].s+' · <strong>'+R(IT[k].p)+'</strong></small></div></div>'+qtd(k)+'</div>').join('')+'</div>';
   }else h+='<div class="fe-kh"><div><b>Sua festa</b><small>Confira e coloque tudo no carrinho de uma vez.</small></div></div>';
   h+='</div>';
   if(p.id==='fim')h+='<div class="fe-nav fe-nav2"><button type="button" class="btn lin" data-ir="'+(P-1)+'">← Voltar</button></div>';
   else h+='<div class="fe-nav">'+(P?'<button type="button" class="btn lin" data-ir="'+(P-1)+'">← Voltar</button>':'<span></span>')+'<div class="fe-nt"><small>Até agora</small><b>'+R(tot)+'</b></div><button type="button" class="btn pri" data-ir="'+(P+1)+'">'+'Próximo →'+'</button></div>';
-  window.gbFeCol=0;$('#feLista').innerHTML=h;
+  $('#feLista').innerHTML=h;
   s.querySelector('.fe-fim').style.display=p.id==='fim'?'':'none';
   resumo();
  }
