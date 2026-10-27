@@ -18,25 +18,8 @@
 		if (m) return { k: 'kit' + m[1], paleta: m[2] };
 		return null;
 	}
+	window.gbChave = chaveDe;
+	// 27/10: o cantinho já é o carrinho da loja; Finalizar compra vai direto pro checkout
 	var btn = document.querySelector('.gf .btn');
-	if (!btn || !window.GB) return;
-	btn.addEventListener('click', function (e) {
-		e.preventDefault();
-		var C = [];
-		try { C = JSON.parse(localStorage.getItem('glowbos_cart_D')) || []; } catch (x) {}
-		var itens = C.map(function (c) { var k = c.k ? { k: c.k, paleta: c.pal } : chaveDe(c.n); if (!k) return null; k.q = c.q; if (c.i && c.i.indexOf('data:image/jpeg') === 0) k.img = c.i; return k; }).filter(Boolean);
-		if (!itens.length) return;
-		btn.textContent = 'Indo pro checkout...';
-		var fd = new FormData();
-		fd.append('itens', JSON.stringify(itens));
-		fetch(GB.sync, { method: 'POST', body: fd, credentials: 'same-origin' })
-			.then(function (r) { return r.json(); })
-			.then(function (j) {
-				if (j && j.success) {
-					try { localStorage.removeItem('glowbos_cart_D'); } catch (x) {}
-					location.href = j.data.checkout;
-				} else { btn.textContent = 'Finalizar compra'; }
-			})
-			.catch(function () { btn.textContent = 'Finalizar compra'; });
-	});
+	if (btn) btn.addEventListener('click', function (e) { e.preventDefault(); btn.textContent = 'Indo pro checkout...'; location.href = '/finalizar-compra/'; });
 })();

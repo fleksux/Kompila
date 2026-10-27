@@ -50,5 +50,5 @@ wp_footer();
 $foot = ob_get_clean();
 
 $html = str_replace( '</head>', $head . '</head>', $html );
-$html = str_replace( '</body>', $ponte . $foot . '<script src="' . esc_url( $uri . '/ponte.js?v=7' ) . '"></script></body>', $html );
+$html = str_replace( '</body>', $ponte . $foot . '<script src="' . esc_url( $uri . '/ponte.js?v=8' ) . '"></script></body>', $html );
 echo $html; // phpcs:ignore WordPress.Security.EscapeOutput -- HTML do próprio tema.

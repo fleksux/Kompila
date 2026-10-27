@@ -1016,26 +1016,39 @@ if($('#packs'))$('#packs').innerHTML=PK.map(([i,n])=>`<article class="pk"><img s
 
 if($('#ufs'))$('#ufs').innerHTML=[['SP',32.5],['MG',16.4],['RJ',10.1],['RS',8.6],['PR',8.0],['Outros',24.4]].map(([u,v])=>`<div class="uf"><b>${u}</b><span><i style="width:${(v/32.5*100).toFixed(0)}%"></i></span><em>${v.toFixed(1).replace('.',',')}%</em></div>`).join('');
 
-let C=[];try{C=JSON.parse(localStorage.getItem('glowbos_cart_D'))||[]}catch(e){}
-const salva=()=>{try{localStorage.setItem('glowbos_cart_D',JSON.stringify(C))}catch(e){}};
+// 27/10: um carrinho só. O cantinho mostra o carrinho da loja (o mesmo das outras páginas e do checkout).
+let C=[],NONCE='';const API='/wp-json/wc/store/v1/cart';
+const TXT=document.createElement('textarea'),limpa=t=>{TXT.innerHTML=String(t||'').replace(/<[^>]*>/g,'');return TXT.value};
+const nomeDe=x=>limpa(x.name)+((x.item_data||[]).length?' · '+x.item_data.map(d=>limpa(d.value)).join(' · '):'');
+function carrega(){return fetch(API,{credentials:'same-origin'}).then(r=>{NONCE=r.headers.get('Nonce')||NONCE;return r.json()}).then(c=>{const m=Math.pow(10,(c.totals&&c.totals.currency_minor_unit)||2);
+ C=(c.items||[]).map(x=>({key:x.key,n:nomeDe(x),p:(+x.prices.price)/m,i:x.images&&x.images[0]?x.images[0].thumbnail:'',q:x.quantity}));pinta()}).catch(()=>{})}
 function pinta(){const q=C.reduce((a,c)=>a+c.q,0);$('#qt').textContent=q;$('#qt').style.display=q?'grid':'none';
  $('#gl').innerHTML=C.length?C.map((c,i)=>`<div class="it"><img src="${c.i}" alt=""><div><b>${c.n}</b><span>${R(c.p)}</span><div class="qq"><button data-i="${i}" data-d="-1" aria-label="Menos">−</button><em>${c.q}</em><button data-i="${i}" data-d="1" aria-label="Mais">+</button></div></div></div>`).join(''):'<p class="vz">Seu carrinho está vazio.<br>Escolha as cores da sua festa.</p>';
  $('#tot').textContent=R(C.reduce((a,c)=>a+c.p*c.q,0));
- $('#xs').style.display=(!C.length||C.find(c=>c.n==='Fita 5 m + dupla face'))?'none':'grid'}
-function poe(n,p,i){const e=C.find(c=>c.n===n);e?e.q++:C.push({n,p,i,q:1});salva();pinta()}
-window.gbPoe=(n,p,i)=>{poe(n,p,i);toast('✓ '+n+' no carrinho');setTimeout(abre,450)};
+ $('#xs').style.display=(!C.length||C.find(c=>/^Fita para arco/.test(c.n)))?'none':'grid'}
+// põe no carrinho da loja: [{k, q, paleta, img}] (a ponte sabe a chave de cada nome)
+// uma chamada por vez (várias juntas brigam pela sessão do carrinho e somem itens)
+let FILA=Promise.resolve();
+function manda(itens){itens=itens.filter(x=>x&&x.k);if(!itens.length)return FILA;const fd=new FormData();fd.append('itens',JSON.stringify(itens));
+ return FILA=FILA.then(()=>fetch(window.GB.sync,{method:'POST',body:fd,credentials:'same-origin'})).catch(()=>{}).then(()=>carrega())}
+const chave=(n,q,img)=>{const k=window.gbChave?window.gbChave(n):null;if(!k)return null;k.q=q||1;if(img&&String(img).indexOf('data:image/jpeg')===0)k.img=img;return k};
+function poe(n,p,i){return manda([chave(n,1,i)])}
+window.gbPoe=(n,p,i)=>{poe(n,p,i).then(()=>{toast('✓ '+n.split(' · ')[0]+' no carrinho');setTimeout(abre,250)})};
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
 function confete(){}
-const abre=()=>document.body.classList.add('gaberta'),fecha=()=>document.body.classList.remove('gaberta');
+const abre=()=>{carrega();document.body.classList.add('gaberta')},fecha=()=>document.body.classList.remove('gaberta');
 $('#cartBtn').onclick=e=>{e.preventDefault();abre()};$('#fecha').onclick=fecha;$('#vel').onclick=fecha;
 addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
-$('#gl').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;const i=+b.dataset.i;C[i].q+=+b.dataset.d;if(C[i].q<1)C.splice(i,1);salva();pinta()});
-$('#packs')&&$('#packs').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;poe(b.dataset.n,+b.dataset.p,b.dataset.i);const r=b.getBoundingClientRect();confete(r.left+r.width/2,r.top);toast('✓ '+b.dataset.n+' no carrinho');b.textContent='✓ Adicionado';setTimeout(()=>b.textContent='Comprar',1400)});
-window.gbPoeLista=(it,nome)=>{it.forEach(x=>{const e=C.find(c=>c.n===x.n);e?e.q+=x.q:C.push({n:x.n,p:x.p,i:x.i,q:x.q})});salva();pinta();toast('✓ Lista do arco '+nome+' no carrinho');setTimeout(abre,450)};
-// 26/10: item com a chave da loja e as cores (arco novo e Monte sua festa); soma no carrinho do cantinho
-window.gbPoeItem=(x,msg)=>{const e=C.find(c=>c.n===x.n&&c.pal===x.pal);e?e.q+=x.q:C.push({n:x.n,p:x.p,i:x.i,q:x.q,k:x.k,pal:x.pal});salva();pinta();if(msg!==false){toast('✓ '+(msg||x.n)+' no carrinho');setTimeout(abre,450)}};
-$('#addFita').onclick=()=>{poe('Fita 5 m + dupla face',11.98,'img/fita_arco_rose.webp');toast('✓ Fita adicionada')};
-pinta();
+$('#gl').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;const c=C[+b.dataset.i],q=c.q+(+b.dataset.d);
+ fetch(API+(q<1?'/remove-item':'/update-item'),{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','Nonce':NONCE},body:JSON.stringify(q<1?{key:c.key}:{key:c.key,quantity:q})}).then(()=>carrega())});
+$('#packs')&&$('#packs').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;poe(b.dataset.n,+b.dataset.p,b.dataset.i);toast('✓ '+b.dataset.n+' no carrinho');b.textContent='✓ Adicionado';setTimeout(()=>b.textContent='Comprar',1400)});
+window.gbPoeLista=(it,nome)=>{manda(it.map(x=>chave(x.n,x.q,x.i))).then(()=>{toast('✓ Lista do arco '+nome+' no carrinho');setTimeout(abre,250)})};
+// item com a chave da loja e as cores (arco novo e Monte sua festa)
+window.gbPoeItem=(x,msg)=>{const p=manda([{k:x.k,q:x.q,paleta:x.pal}]);if(msg!==false)p.then(()=>{toast('✓ '+(msg||x.n)+' no carrinho');setTimeout(abre,250)});return p};
+$('#addFita').onclick=()=>{manda([{k:'fita',q:1}]).then(()=>toast('✓ Fita adicionada'))};
+// o que ficou guardado no navegador da versão antiga vai pro carrinho da loja uma vez
+let V=[];try{V=JSON.parse(localStorage.getItem('glowbos_cart_D'))||[];localStorage.removeItem('glowbos_cart_D')}catch(e){}
+addEventListener('load',()=>{V.length?manda(V.map(c=>c.k?{k:c.k,q:c.q,paleta:c.pal}:chave(c.n,c.q,c.i))):carrega()});
 })();
 </script>
 <script>
