@@ -19,6 +19,7 @@ PAGINAS = {
     'crm/index.html': ('../', '../'),
     'loja/index.html': ('../', '../'),
     'design/index.html': ('../', '../'),
+    'cases/index.html': ('../', '../'),
     'trafego/index.html': ('../', '../'),
     'blog/index.html': ('../', '../'),
     'blog/barbearia-na-era-da-ia/index.html': ('../../', '../../'),
