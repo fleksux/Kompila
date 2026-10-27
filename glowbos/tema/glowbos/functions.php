@@ -471,6 +471,9 @@ add_filter( 'woocommerce_checkout_posted_data', function ( $d ) {
 	}
 	return $d;
 } );
+// 27/10: a conta é ligada ao pedido na hora da compra; sem isto o WooCommerce pedia login na tela
+// do pedido recebido e o cliente não via o código do Pix. A chave do pedido na URL já protege a página.
+add_filter( 'woocommerce_order_received_verify_known_shoppers', '__return_false' );
 add_action( 'woocommerce_checkout_order_processed', function ( $oid ) {
 	$o = wc_get_order( $oid );
 	if ( ! $o || $o->get_customer_id() ) {
