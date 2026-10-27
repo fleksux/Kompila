@@ -183,3 +183,13 @@
 @media (max-width:640px){.fe-m{grid-template-columns:1fr}.fe-m>img{width:96px;height:96px}}
 .fe-tn{width:auto;height:auto;background:none;font:800 30px/1 "Inter Tight";color:#B0124F}
 .fe-tn{width:auto;height:auto;background:none;font:800 30px/1 "Inter Tight";color:#B0124F}
+/* 27/10: tocar escolhe; quantidade no − e + embaixo de cada quadradinho */
+.fe-t{display:flex;flex-direction:column;border:1.5px solid #ece2e7;border-radius:12px;background:#fff;overflow:hidden}
+.fe-t.on{border-color:#F93388;background:#fff0f6}
+.fe-t .fe-tb{border:0;background:none;border-radius:0;height:66px;flex:none}
+.fe-t.on .fe-tb{background:none;cursor:default}
+.fe-st{display:flex;align-items:center;justify-content:space-between;height:34px;padding:0 5px 5px;margin-top:auto}
+.fe-st button{width:26px;height:26px;border-radius:8px;border:1.5px solid #f3a6c6;background:#fff;color:#B0124F;font:800 16px/1 Inter;cursor:pointer;padding:0}
+.fe-st b{font:800 15px Inter;color:#2a0f22}
+.fe-st0{justify-content:center;font:600 11.5px Inter;color:#a0909a;pointer-events:none}
+.fe-t em,.fe-tm2{display:none}
