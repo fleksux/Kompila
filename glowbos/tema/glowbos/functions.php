@@ -676,6 +676,61 @@ add_action( 'template_redirect', function () {
 	}
 } );
 
+// ===== 27/10: o carrinho do cantinho em todas as páginas (o mesmo da home): adicionou, ele abre do lado =====
+add_action( 'wp_footer', function () {
+	if ( is_front_page() || ( function_exists( 'is_checkout' ) && is_checkout() ) ) {
+		return;
+	}
+	?>
+	<div class="gbc-vel" id="gbcVel"></div>
+	<aside class="gbc" id="gbc" aria-label="Carrinho" aria-hidden="true">
+		<div class="gbc-h"><span>Seu carrinho</span><button type="button" id="gbcX" aria-label="Fechar">✕</button></div>
+		<div class="gbc-l" id="gbcL"></div>
+		<div class="gbc-f"><div class="gbc-md">🚚 Em SP e Grande SP, pago até 12h chega hoje até 21h</div><div class="gbc-t"><span>Total</span><b id="gbcT">R$ 0,00</b></div><a class="gbc-b" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">Finalizar compra</a><button type="button" class="gbc-c" id="gbcC">Continuar comprando</button></div>
+	</aside>
+	<style>
+	.gbc-vel{position:fixed;inset:0;background:rgba(74,35,64,.45);opacity:0;pointer-events:none;transition:.3s;z-index:400}
+	.gbc{position:fixed;top:0;right:0;bottom:0;width:min(430px,100%);background:#fff;z-index:401;transform:translateX(105%);transition:.38s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;font-family:Inter,sans-serif;color:#2a0f22}
+	.gbc-on .gbc-vel{opacity:1;pointer-events:auto}.gbc-on .gbc{transform:none}
+	.gbc-h{display:flex;justify-content:space-between;align-items:center;padding:24px 24px 18px;font:700 24px "Inter Tight"}
+	.gbc-h button{border:0;background:#fff0f6;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;color:#2a0f22}
+	.gbc-l{flex:1;overflow:auto;padding:0 24px}
+	.gbc-i{display:grid;grid-template-columns:70px 1fr;gap:14px;padding:12px 0;border-bottom:2px dashed #fff0f6}
+	.gbc-i img{width:70px;height:70px;object-fit:cover;border-radius:18px;background:#F7F3EA}
+	.gbc-i b{display:block;font-size:14.5px;line-height:1.3}.gbc-i span{font-weight:800;color:#5c5560;font-size:14px}
+	.gbc-q{display:flex;align-items:center;gap:10px;margin-top:6px}
+	.gbc-q button{width:30px;height:30px;border-radius:50%;border:0;background:#fff0f6;color:#ff1f7a;font-weight:800;cursor:pointer}
+	.gbc-q em{font-style:normal;font-weight:800}
+	.gbc-vz{text-align:center;color:#5c5560;margin-top:50px;font-weight:800}
+	.gbc-f{padding:18px 24px 24px;border-top:1px solid #f3eef1}
+	.gbc-md{font:600 13px Inter;color:#5c5560;margin-bottom:10px}
+	.gbc-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font:700 20px "Inter Tight"}
+	.gbc-b{display:flex;align-items:center;justify-content:center;height:54px;border-radius:14px;background:#ff1f7a;color:#fff!important;font:800 16px Inter;text-decoration:none}
+	.gbc-c{width:100%;margin-top:8px;height:44px;border:0;background:none;font:700 14px Inter;color:#5c5560;cursor:pointer}
+	</style>
+	<script>
+	(function(){var API='/wp-json/wc/store/v1/cart',NONCE='',C=[],T=document.createElement('textarea');
+	function q(i){return document.getElementById(i)}function limpa(t){T.innerHTML=String(t||'').replace(/<[^>]*>/g,'');return T.value}
+	function R(v){return 'R$ '+v.toFixed(2).replace('.',',')}
+	function conta(n){document.querySelectorAll('.gb-cart').forEach(function(c){var e=c.querySelector('.gb-qt');if(!e){e=document.createElement('em');e.className='gb-qt';c.appendChild(e)}e.textContent=n;e.style.display=n?'':'none'})}
+	function carrega(){return fetch(API,{credentials:'same-origin'}).then(function(r){NONCE=r.headers.get('Nonce')||NONCE;return r.json()}).then(function(c){var m=Math.pow(10,(c.totals&&c.totals.currency_minor_unit)||2);
+		C=(c.items||[]).map(function(x){return{key:x.key,n:limpa(x.name)+((x.item_data||[]).length?' · '+x.item_data.map(function(d){return limpa(d.value)}).join(' · '):''),p:(+x.prices.price)/m,i:x.images&&x.images[0]?x.images[0].thumbnail:'',q:x.quantity}});pinta()}).catch(function(){})}
+	function pinta(){var n=0,t=0;C.forEach(function(c){n+=c.q;t+=c.p*c.q});conta(n);q('gbcT').textContent=R(t);
+		q('gbcL').innerHTML=C.length?C.map(function(c,i){return '<div class="gbc-i"><img src="'+c.i+'" alt=""><div><b>'+c.n+'</b><span>'+R(c.p)+'</span><div class="gbc-q"><button data-i="'+i+'" data-d="-1" aria-label="Menos">−</button><em>'+c.q+'</em><button data-i="'+i+'" data-d="1" aria-label="Mais">+</button></div></div></div>'}).join(''):'<p class="gbc-vz">Seu carrinho está vazio.</p>'}
+	function abre(){carrega();document.body.classList.add('gbc-on');q('gbc').setAttribute('aria-hidden','false')}
+	function fecha(){document.body.classList.remove('gbc-on');q('gbc').setAttribute('aria-hidden','true')}
+	window.gbAbreCarrinho=abre;
+	q('gbcX').onclick=fecha;q('gbcVel').onclick=fecha;q('gbcC').onclick=fecha;
+	addEventListener('keydown',function(e){if(e.key==='Escape')fecha()});
+	q('gbcL').addEventListener('click',function(e){var b=e.target.closest('button[data-i]');if(!b)return;var c=C[+b.dataset.i],n=c.q+(+b.dataset.d);
+		fetch(API+(n<1?'/remove-item':'/update-item'),{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','Nonce':NONCE},body:JSON.stringify(n<1?{key:c.key}:{key:c.key,quantity:n})}).then(carrega)});
+	document.addEventListener('click',function(e){var a=e.target.closest('a.gb-cart');if(a){e.preventDefault();abre()}});
+	jQuery&&jQuery(document.body).on('added_to_cart',function(){abre()});
+	})();
+	</script>
+	<?php
+}, 30 );
+
 // ===== 27/10: busca de produtos no topo de todas as páginas (antes só a home tinha a lupa, e ela não buscava) =====
 function glowbos_busca_html() {
 	return '<button type="button" class="gb-lupa" aria-label="Buscar" onclick="var b=document.getElementById(\'gbBusca\');b.hidden=!b.hidden;if(!b.hidden)b.querySelector(\'input\').focus()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>';

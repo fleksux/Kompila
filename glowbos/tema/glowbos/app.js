@@ -41,6 +41,8 @@
 		});
 	}
 	function toast(t, link) {
+		// 27/10: pôs no carrinho = abre o carrinho do cantinho (o mesmo da home)
+		if (link && window.gbAbreCarrinho) { window.gbAbreCarrinho(); link = ''; }
 		var e = $('#gbToast'); if (!e) { e = document.createElement('div'); e.id = 'gbToast'; document.body.appendChild(e); }
 		var fe = /[?&]festa=1/.test(location.search); try { fe = fe || sessionStorage.getItem('gb_festa') === '1'; } catch (x) {}
 		// 26/10: veio do "Monte sua festa": o aviso leva de volta pra ele
@@ -72,7 +74,10 @@
 		$('#gbAdd').onclick = function () {
 			var b = this; b.disabled = true; b.textContent = 'Montando a foto...';
 			foto(SEQ.map(function (k) { return PAL[k][1]; })).then(function (img) {
-				var f = $('#gbForm'); f.paleta.value = SEQ.map(function (k) { return PAL[k][0]; }).join(', '); f.gb_img.value = img || ''; f.submit();
+				var f = $('#gbForm'); f.paleta.value = SEQ.map(function (k) { return PAL[k][0]; }).join(', '); f.gb_img.value = img || '';
+				// 27/10: põe no carrinho sem recarregar e abre o carrinho do cantinho
+				if (!window.gbAbreCarrinho || !window.fetch) { f.submit(); return; }
+				fetch(f.getAttribute('action') || location.href, { method: 'POST', body: new FormData(f), credentials: 'same-origin' }).then(function () { b.disabled = false; pinta(); window.gbAbreCarrinho(); }).catch(function () { f.submit(); });
 			});
 		};
 		pinta();
