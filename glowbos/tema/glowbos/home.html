@@ -1032,6 +1032,8 @@ addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
 $('#gl').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;const i=+b.dataset.i;C[i].q+=+b.dataset.d;if(C[i].q<1)C.splice(i,1);salva();pinta()});
 $('#packs')&&$('#packs').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;poe(b.dataset.n,+b.dataset.p,b.dataset.i);const r=b.getBoundingClientRect();confete(r.left+r.width/2,r.top);toast('✓ '+b.dataset.n+' no carrinho');b.textContent='✓ Adicionado';setTimeout(()=>b.textContent='Comprar',1400)});
 window.gbPoeLista=(it,nome)=>{it.forEach(x=>{const e=C.find(c=>c.n===x.n);e?e.q+=x.q:C.push({n:x.n,p:x.p,i:x.i,q:x.q})});salva();pinta();toast('✓ Lista do arco '+nome+' no carrinho');setTimeout(abre,450)};
+// 26/10: item com a chave da loja e as cores (arco novo e Monte sua festa); soma no carrinho do cantinho
+window.gbPoeItem=(x,msg)=>{const e=C.find(c=>c.n===x.n&&c.pal===x.pal);e?e.q+=x.q:C.push({n:x.n,p:x.p,i:x.i,q:x.q,k:x.k,pal:x.pal});salva();pinta();if(msg!==false){toast('✓ '+(msg||x.n)+' no carrinho');setTimeout(abre,450)}};
 $('#addFita').onclick=()=>{poe('Fita 5 m + dupla face',11.98,'img/fita_arco_rose.webp');toast('✓ Fita adicionada')};
 pinta();
 })();

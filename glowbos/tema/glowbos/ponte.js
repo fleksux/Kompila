@@ -24,7 +24,7 @@
 		e.preventDefault();
 		var C = [];
 		try { C = JSON.parse(localStorage.getItem('glowbos_cart_D')) || []; } catch (x) {}
-		var itens = C.map(function (c) { var k = chaveDe(c.n); if (!k) return null; k.q = c.q; if (c.i && c.i.indexOf('data:image/jpeg') === 0) k.img = c.i; return k; }).filter(Boolean);
+		var itens = C.map(function (c) { var k = c.k ? { k: c.k, paleta: c.pal } : chaveDe(c.n); if (!k) return null; k.q = c.q; if (c.i && c.i.indexOf('data:image/jpeg') === 0) k.img = c.i; return k; }).filter(Boolean);
 		if (!itens.length) return;
 		btn.textContent = 'Indo pro checkout...';
 		var fd = new FormData();

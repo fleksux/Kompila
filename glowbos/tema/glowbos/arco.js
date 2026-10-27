@@ -28,6 +28,9 @@
   const b=$('#maComprar');b.disabled=!ok;b.textContent=ok?'Colocar no carrinho':'Escolha as cores';
  }
  function tudo(){tamanhos();cores();divisao();compra();$('#maMsg').textContent=''}
+ // na home o arco vai pro carrinho do cantinho (soma com o resto e a ponte leva pra loja no Finalizar)
+ function texto(){return 'Arco '+t.n+' balões · '+POL.filter(p=>t.b[p]).map(p=>p+'": '+por[p].filter(k=>div[p][k]).map(k=>COR[k]+' '+div[p][k]).join(', ')).join(' · ')}
+ if(window.gbPoeItem){box.querySelector('#maComprar').onclick=()=>{if(!sel.length)return;window.gbPoeItem({n:'Arco '+t.n+' balões · '+sel.map(k=>COR[k]).join(', '),p:t.p,i:IMG+'arco_tam_'+t.n+'.webp',q:1,k:'kit'+t.n,pal:texto()},'Arco de '+t.n+' balões')};tudo();return}
  $('#maComprar').onclick=()=>{const b=$('#maComprar');b.disabled=true;b.textContent='Colocando no carrinho...';
   const fd=new FormData();fd.append('tam',t.n);fd.append('cores',JSON.stringify(sel));fd.append('por',JSON.stringify(por));
   fetch(D.add,{method:'POST',body:fd,credentials:'same-origin'}).then(r=>r.json()).then(j=>{if(j&&j.success){if(window.gbFesta&&window.gbFestaVolta){window.gbFestaVolta('Arco de '+t.n+' balões');compra()}else location.href=j.data.carrinho}else{$('#maMsg').textContent=(j&&j.data)||'Não deu certo, tente de novo.';compra()}}).catch(()=>{$('#maMsg').textContent='Não deu certo, tente de novo.';compra()})};
