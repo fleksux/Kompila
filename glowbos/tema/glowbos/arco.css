@@ -54,3 +54,54 @@
 .gb-arco-hd .gb-eb{display:inline-block;font:700 12px Inter;letter-spacing:.16em;text-transform:uppercase;color:var(--berry,#b0124f);margin-bottom:8px}
 .gb-arco-hd .gb-arco-sub{margin:0 0 6px}
 .gb-arco-hd p{margin:0;color:var(--vinho2);font-size:15px}
+/* 26/10: app novo (tamanho fixo, cores, divisão travada) */
+.gb-arco .ma-foto img{aspect-ratio:3/4;object-fit:cover;background:#f2efec}
+.ma-st{display:flex;align-items:center;gap:8px;font-weight:700;margin:18px 0 10px;color:var(--vinho)}
+.ma-st:first-child{margin-top:0}
+.ma-st i{width:24px;height:24px;border-radius:50%;background:var(--forte);color:#fff;font:800 13px/24px Inter;text-align:center;font-style:normal}
+.ma-st small{font-weight:500;color:var(--vinho2);font-size:13px}
+.ma-tam{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ma-tam button{border:1.5px solid #ece8eb;border-radius:12px;background:#fff;padding:10px 6px;cursor:pointer;font:inherit;text-align:center;color:var(--vinho)}
+.ma-tam button b{display:block;font:800 24px/1 "Inter Tight"}
+.ma-tam button span{display:block;font-size:12px;color:var(--vinho2)}
+.ma-tam button small{display:block;font-size:11.5px;color:var(--vinho2);margin-top:2px}
+.ma-tam button em{display:block;font-style:normal;font-weight:700;font-size:13.5px;color:var(--forte);margin-top:4px}
+.ma-tam button.on{border-color:var(--forte);background:#fff0f6}
+.gb-arco .ma-cores{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;margin:0}
+.gb-arco .ma-cores button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border:1.5px solid #ece8eb;border-radius:10px;padding:6px 4px;font-size:12px;font-weight:600;background:#fff;cursor:pointer;color:var(--vinho)}
+.gb-arco .ma-cores button img{height:34px;width:auto}
+.gb-arco .ma-cores button.on{border-color:var(--forte);background:#fff0f6}
+.gb-arco .ma-cores button.cheio{opacity:.4}
+.gb-arco .ma-cores button i{position:absolute;top:4px;right:6px;width:18px;height:18px;border-radius:50%;border:0;background:var(--forte);color:#fff;font:800 11px/18px Inter;font-style:normal;text-align:center}
+.gb-arco .ma-box{margin-top:0}
+.ma-vz{margin:0;font-size:14px;color:var(--vinho2)}
+.ma-dl+.ma-dl{margin-top:14px;padding-top:14px;border-top:1px solid #f1eef0}
+.ma-dh{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.ma-dh b{font:800 18px "Inter Tight"}
+.ma-dh span{font-size:13px;color:var(--vinho2)}
+.ma-dh em{margin-left:auto;font-style:normal;font-size:12.5px;font-weight:700;padding:2px 8px;border-radius:99px}
+.ma-dh em.ok{background:#e7f6ec;color:#17803d}
+.ma-dh em.nok{background:#fff0f6;color:var(--forte)}
+.ma-dc{display:grid;gap:6px}
+.ma-q{display:flex;align-items:center;gap:8px;font-size:14px}
+.ma-q img{height:24px;width:auto}
+.ma-q span{flex:1;font-weight:600}
+.ma-q button{width:32px;height:32px;border-radius:8px;border:1.5px solid #ece8eb;background:#fff;font:700 18px/1 Inter;cursor:pointer;color:var(--vinho)}
+.ma-q button:disabled{opacity:.35;cursor:default}
+.ma-q b{min-width:28px;text-align:center;font-size:16px}
+.gb-arco .ma-buy{gap:12px}
+.gb-arco .ma-buy .btn:disabled{opacity:.5;cursor:default}
+.ma-msg{margin:8px 0 0;color:var(--forte);font-size:14px;font-weight:600;min-height:0}
+.ma-msg:empty{display:none}
+@media(max-width:760px){.ma-tam button b{font-size:21px}.gb-arco .ma-buy{flex-wrap:wrap}.gb-arco .ma-buy .btn{width:100%;justify-content:center}}
+/* 26/10: o que vem no kit em uma linha por tamanho de balão */
+.gb-arco .ma-dl{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.gb-arco .ma-dl+.ma-dl{margin-top:10px;padding-top:10px}
+.gb-arco .ma-dh{margin:0;min-width:110px}
+.gb-arco .ma-dc{display:flex;flex-wrap:wrap;gap:6px}
+.gb-arco .ma-q{display:inline-flex;align-items:center;gap:4px;background:#f7f6f8;border-radius:99px;padding:3px 10px 3px 4px;font-size:13.5px;font-weight:600}
+.gb-arco .ma-q img{height:20px}
+.gb-arco button.ma-q{border:1.5px solid var(--forte);background:#fff0f6;cursor:pointer;font-family:inherit;color:var(--vinho)}
+.gb-arco button.ma-q.off{border-color:#ece8eb;background:#fff;color:#a39da1;text-decoration:line-through}
+.gb-arco button.ma-q.off img{opacity:.35}
+.gb-arco .ma-box>.ma-vz:first-child{margin-bottom:10px;font-size:13px}

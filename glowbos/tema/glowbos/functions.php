@@ -897,30 +897,56 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")fe()});
 it.querySelectorAll(".gm-cats a[data-gm]").forEach(function(a){a.addEventListener("mouseenter",function(){it.querySelectorAll(".gm-cats a").forEach(function(x){x.classList.remove("on")});a.classList.add("on");it.querySelectorAll(".gm-g").forEach(function(g){g.classList.toggle("on",g.dataset.gm===a.dataset.gm)})})})})();</script>';
 }
 
-// ===== App do arco na página de Arcos: escolhe pela foto, ajusta os metros, a lista vira pacotes no carrinho =====
+// ===== App do arco na página de Arcos (26/10, relatório etapa 1): tamanho fixo, cores e divisão travada =====
 add_action( 'wp_enqueue_scripts', function () {
 	if ( function_exists( 'is_product_category' ) && is_product_category( 'arcos' ) ) {
-		$v = wp_get_theme()->get( 'Version' ) . '.4';
-		wp_enqueue_style( 'glowbos-arco', get_template_directory_uri() . '/arco.css', array( 'glowbos' ), $v );
-		wp_enqueue_script( 'glowbos-arco', get_template_directory_uri() . '/arco.js', array(), $v, true );
+		$d = get_template_directory();
+		wp_enqueue_style( 'glowbos-arco', get_template_directory_uri() . '/arco.css', array( 'glowbos' ), (string) filemtime( $d . '/arco.css' ) );
+		wp_enqueue_script( 'glowbos-arco', get_template_directory_uri() . '/arco.js', array(), (string) filemtime( $d . '/arco.js' ), true );
 	}
 }, 33 );
+// tamanhos do arco: chave do produto, máximo de cores e balões por tamanho (planilha de custo do Alex, 26/10)
+function glowbos_arcos_tam() {
+	return array(
+		60  => array( 'kit60', 3, array( '12' => 24, '9' => 36 ) ),
+		80  => array( 'kit80', 3, array( '12' => 18, '9' => 36, '5' => 27 ) ),
+		100 => array( 'kit100', 4, array( '16' => 2, '12' => 6, '9' => 60, '5' => 30 ) ),
+		120 => array( 'kit120', 4, array( '16' => 4, '12' => 12, '9' => 72, '5' => 36 ) ),
+		145 => array( 'kit145', 4, array( '16' => 5, '12' => 14, '9' => 84, '5' => 42 ) ),
+		160 => array( 'kit160', 4, array( '16' => 5, '12' => 15, '9' => 93, '5' => 47 ) ),
+	);
+}
+// cores do arco: as mesmas dos pacotes sortidos (sem dourado, cinza, bege e azul royal)
+function glowbos_arcos_cores() {
+	return array( 'branco' => 'Branco', 'preto' => 'Preto', 'vermelho' => 'Vermelho', 'amarelo' => 'Amarelo', 'laranja' => 'Laranja', 'pink' => 'Pink', 'rosa' => 'Rosa', 'lilas' => 'Lilás', 'roxo' => 'Roxo', 'azul_cobalto' => 'Azul Cobalto', 'azul_celeste' => 'Azul Celeste', 'azul_baby' => 'Azul Baby', 'tiffany' => 'Tiffany', 'verde_agua' => 'Verde Água', 'verde_bandeira' => 'Verde Bandeira', 'verde_citrus' => 'Verde Citrus', 'marrom' => 'Marrom' );
+}
 function glowbos_arco_app() {
-	$img = get_template_directory_uri() . '/img/';
-	$add = add_query_arg( 'wc-ajax', 'glowbos_lista', home_url( '/' ) );
+	$img  = get_template_directory_uri() . '/img/';
+	$ids  = (array) get_option( 'glowbos_produtos', array() );
+	$tams = array();
+	foreach ( glowbos_arcos_tam() as $n => $t ) {
+		$p = empty( $ids[ $t[0] ] ) ? null : wc_get_product( $ids[ $t[0] ] );
+		if ( $p && $p->is_purchasable() ) {
+			$tams[] = array( 'n' => $n, 'c' => $t[1], 'b' => $t[2], 'p' => (float) $p->get_price() );
+		}
+	}
+	if ( ! $tams ) {
+		return;
+	}
 	?>
-	<section class="gb-arco" id="gbArco" data-img="<?php echo esc_url( $img ); ?>" data-add="<?php echo esc_url( $add ); ?>">
-		<div class="ma-hd"><div><b>Monte seu arco</b><p>Escolha pela foto, ajuste o tamanho da parede e a gente calcula os balões, com 10% de reserva.</p></div></div>
-		<div class="ma-tabs" id="maTabs"></div>
+	<section class="gb-arco" id="gbArco" data-img="<?php echo esc_url( $img ); ?>" data-add="<?php echo esc_url( add_query_arg( 'wc-ajax', 'glowbos_arco', home_url( '/' ) ) ); ?>" data-tam="<?php echo esc_attr( wp_json_encode( $tams ) ); ?>" data-cores="<?php echo esc_attr( wp_json_encode( glowbos_arcos_cores() ) ); ?>">
+		<div class="ma-hd"><div><b>Monte seu arco</b><p>Escolha o tamanho e as cores. A gente divide os balões entre elas e separa tudo pra você montar em casa.</p></div></div>
 		<div class="ma">
-			<div class="ma-foto" id="maFoto"><img class="at" id="maImg" src="<?php echo esc_url( $img . 'arco_09_candy_algodao.webp' ); ?>" alt="Arco de balões"><span class="ma-mont" id="maMont">Arraste os metros e veja o arco crescer</span></div>
+			<div class="ma-foto"><img id="maImg" src="<?php echo esc_url( $img . 'arco_tam_' . $tams[0]['n'] . '.webp' ); ?>" alt="Arco de balões"></div>
 			<div class="ma-cfg">
-				<div class="ma-arcos" id="maArcos"></div>
-				<div class="ma-box"><div class="ma-sl"><span>Tamanho do arco</span><b id="maMv">3 m</b></div><input id="maM" type="range" min="2" max="5" step=".5" value="3" aria-label="Tamanho do arco em metros"><div class="ma-esc"><span>2 m</span><span>5 m</span></div></div>
-				<div class="ma-box" id="maTab"></div>
-				<div class="ma-buy"><div><small>Sua lista sai por</small><b id="maTot">R$ 0,00</b><small id="maPk"></small></div></div>
-				<div class="ma-acoes"><button class="btn pri" id="maComprar">Comprar esta lista</button><button class="btn lin" id="maTrocar">Trocar as cores</button></div>
-				<div class="ma-cores" id="maCores" hidden></div>
+				<p class="ma-st"><i>1</i> O tamanho</p>
+				<div class="ma-tam" id="maTam"></div>
+				<p class="ma-st"><i>2</i> As cores <small id="maCnt"></small></p>
+				<div class="ma-cores" id="maCores"></div>
+				<p class="ma-st"><i>3</i> O que vem no kit</p>
+				<div class="ma-box" id="maDiv"></div>
+				<div class="ma-buy"><div><small id="maRes"></small><b id="maTot"></b></div><button class="btn pri" id="maComprar" disabled>Colocar no carrinho</button></div>
+				<p class="ma-msg" id="maMsg"></p>
 				<p class="mnote">Em São Paulo e Grande SP, pedido pago até 12h chega hoje até 21h.</p>
 			</div>
 		</div>
@@ -928,6 +954,42 @@ function glowbos_arco_app() {
 	<div class="gb-arco-hd"><span class="gb-eb">Novidades</span><h2 class="gb-arco-sub">Ou leve o kit pronto</h2><p>Kits com tudo separado pra montar em casa, com as cores que você escolher.</p></div>
 	<?php
 }
+// arco montado: confere tamanho e cores e divide cada tamanho de balão igual entre as cores marcadas nele (a sobra vai pras primeiras)
+add_action( 'wc_ajax_glowbos_arco', function () {
+	$n    = (int) ( $_POST['tam'] ?? 0 );
+	$sel  = json_decode( wp_unslash( $_POST['cores'] ?? '[]' ), true );
+	$tams = glowbos_arcos_tam();
+	$cor  = glowbos_arcos_cores();
+	$ids  = (array) get_option( 'glowbos_produtos', array() );
+	if ( empty( $tams[ $n ] ) || empty( $ids[ $tams[ $n ][0] ] ) || ! is_array( $sel ) || ! WC()->cart ) {
+		wp_send_json_error( 'Tamanho inválido.' );
+	}
+	list( , $max, $comp ) = $tams[ $n ];
+	$sel = array_values( array_unique( array_map( 'sanitize_key', $sel ) ) );
+	if ( ! $sel || count( $sel ) > $max || array_diff( $sel, array_keys( $cor ) ) ) {
+		wp_send_json_error( 'Escolha de 1 a ' . $max . ' cores.' );
+	}
+	// cores de cada tamanho de balão: as marcadas pelo cliente (dentro das escolhidas), ou todas
+	$por    = json_decode( wp_unslash( $_POST['por'] ?? '{}' ), true );
+	$linhas = array();
+	foreach ( $comp as $pol => $qtd ) {
+		$txt = array();
+		$c   = is_array( $por ) && ! empty( $por[ $pol ] ) ? array_values( array_intersect( $sel, array_map( 'sanitize_key', (array) $por[ $pol ] ) ) ) : array();
+		$c   = $c ? $c : $sel;
+		foreach ( $c as $i => $k ) {
+			$q = intdiv( $qtd, count( $c ) ) + ( $i < $qtd % count( $c ) ? 1 : 0 );
+			if ( $q ) {
+				$txt[] = $cor[ $k ] . ' ' . $q;
+			}
+		}
+		$linhas[] = $pol . '": ' . implode( ', ', $txt );
+	}
+	if ( WC()->session && ! WC()->session->has_session() ) {
+		WC()->session->set_customer_session_cookie( true );
+	}
+	$ok = WC()->cart->add_to_cart( (int) $ids[ $tams[ $n ][0] ], 1, 0, array(), array( 'glowbos_paleta' => 'Arco ' . $n . ' balões · ' . implode( ' · ', $linhas ) ) );
+	$ok ? wp_send_json_success( array( 'carrinho' => wc_get_cart_url() ) ) : wp_send_json_error( 'Não deu pra colocar no carrinho.' );
+} );
 // lista de pacotes do arco: soma ao carrinho (não apaga o que já está lá)
 add_action( 'wc_ajax_glowbos_lista', function () {
 	$itens = json_decode( wp_unslash( $_POST['itens'] ?? '[]' ), true );
