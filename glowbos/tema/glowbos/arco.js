@@ -30,6 +30,6 @@
  function tudo(){tamanhos();cores();divisao();compra();$('#maMsg').textContent=''}
  $('#maComprar').onclick=()=>{const b=$('#maComprar');b.disabled=true;b.textContent='Colocando no carrinho...';
   const fd=new FormData();fd.append('tam',t.n);fd.append('cores',JSON.stringify(sel));fd.append('por',JSON.stringify(por));
-  fetch(D.add,{method:'POST',body:fd,credentials:'same-origin'}).then(r=>r.json()).then(j=>{if(j&&j.success)location.href=j.data.carrinho;else{$('#maMsg').textContent=(j&&j.data)||'Não deu certo, tente de novo.';compra()}}).catch(()=>{$('#maMsg').textContent='Não deu certo, tente de novo.';compra()})};
+  fetch(D.add,{method:'POST',body:fd,credentials:'same-origin'}).then(r=>r.json()).then(j=>{if(j&&j.success){if(window.gbFesta&&window.gbFestaVolta){window.gbFestaVolta('Arco de '+t.n+' balões');compra()}else location.href=j.data.carrinho}else{$('#maMsg').textContent=(j&&j.data)||'Não deu certo, tente de novo.';compra()}}).catch(()=>{$('#maMsg').textContent='Não deu certo, tente de novo.';compra()})};
  tudo();
 })();

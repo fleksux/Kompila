@@ -24,6 +24,7 @@ $html = str_replace( '<!--MAIS_VENDIDOS-->', glowbos_mais_vendidos_html() . glow
 ob_start();
 glowbos_arco_app( false );
 $html = str_replace( '<!--ARCO_APP-->', ob_get_clean(), $html );
+$html = str_replace( '<!--FESTA-->', glowbos_festa_html(), $html );
 $gbn = strpos( $html, '<nav><a href="/categoria/' );
 if ( false !== $gbn ) {
 	$html = substr_replace( $html, glowbos_mega_html(), $gbn, strpos( $html, '</nav>', $gbn ) + 6 - $gbn );

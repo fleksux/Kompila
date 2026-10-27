@@ -38,7 +38,9 @@
 	}
 	function toast(t, link) {
 		var e = $('#gbToast'); if (!e) { e = document.createElement('div'); e.id = 'gbToast'; document.body.appendChild(e); }
-		e.innerHTML = t + (link ? ' <a href="' + link + '">Ver carrinho</a>' : ''); e.className = 'on'; clearTimeout(e._t); e._t = setTimeout(function () { e.className = ''; }, 4200);
+		var fe = /[?&]festa=1/.test(location.search); try { fe = fe || sessionStorage.getItem('gb_festa') === '1'; } catch (x) {}
+		// 26/10: veio do "Monte sua festa": o aviso leva de volta pra ele
+		e.innerHTML = t + (link ? (fe ? ' <a href="/?festa=1">Continuar a festa →</a>' : ' <a href="' + link + '">Ver carrinho</a>') : ''); e.className = 'on'; clearTimeout(e._t); e._t = setTimeout(function () { e.className = ''; }, 4200);
 	}
 	function contaMenu(n) { var c = $('.gb-cart'); if (!c) return; var q = c.querySelector('.gb-qt'); if (!q) { q = document.createElement('em'); q.className = 'gb-qt'; c.appendChild(q); } q.textContent = n; }
 

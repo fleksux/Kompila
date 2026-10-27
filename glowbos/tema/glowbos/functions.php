@@ -905,6 +905,11 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_enqueue_style( 'glowbos-arco', get_template_directory_uri() . '/arco.css', array( 'glowbos' ), (string) filemtime( $d . '/arco.css' ) );
 		wp_enqueue_script( 'glowbos-arco', get_template_directory_uri() . '/arco.js', array(), (string) filemtime( $d . '/arco.js' ), true );
 	}
+	if ( is_front_page() ) {
+		$d = get_template_directory();
+		wp_enqueue_style( 'glowbos-festa', get_template_directory_uri() . '/festa.css', array(), (string) filemtime( $d . '/festa.css' ) );
+		wp_enqueue_script( 'glowbos-festa', get_template_directory_uri() . '/festa.js', array(), (string) filemtime( $d . '/festa.js' ), true );
+	}
 }, 33 );
 // tamanhos do arco: chave do produto, máximo de cores e balões por tamanho (planilha de custo do Alex, 26/10)
 function glowbos_arcos_tam() {
@@ -1415,6 +1420,50 @@ function glowbos_linha_fechados_html() {
 @media (max-width:640px){.lj{padding-top:52px}.lj-l{margin:0 -16px;padding:4px 16px 14px;scroll-padding:0 16px}.lj-c{flex-basis:44%}.lj-s{display:none}.lj-h{align-items:flex-start}.lj-ac a{margin:6px 0 0}}
 </style>
 ' . $h . '<script>document.querySelectorAll(".lj").forEach(function(s){var l=s.querySelector(".lj-l");s.querySelectorAll(".lj-s").forEach(function(b){b.onclick=function(){l.scrollBy({left:+b.dataset.d*l.clientWidth*.9})}})});</script>';
+}
+
+// ===== 26/10: "Monte sua festa" na janela da home: balões → mesa → finalizar, cada item no montador que já existe =====
+function glowbos_festa_html() {
+	$mapa = (array) get_option( 'glowbos_produtos', array() );
+	$img  = get_template_directory_uri() . '/img/';
+	$p    = function ( $k ) use ( $mapa ) { return empty( $mapa[ $k ] ) ? null : wc_get_product( $mapa[ $k ] ); };
+	$de   = function ( $k ) use ( $p ) { $x = $p( $k ); return $x ? 'a partir de ' . wc_price( $x->get_price() ) : ''; };
+	$link = function ( $url ) { return esc_url( add_query_arg( 'festa', '1', $url ) ); };
+	// [título, frase, foto, preço, data-go (app da janela) ou link]
+	$card = function ( $t, $f, $foto, $preco, $go = '', $url = '' ) {
+		$abre = $go ? '<button type="button" class="fe-c" data-go="' . esc_attr( $go ) . '">' : '<a class="fe-c" href="' . $url . '">';
+		return $abre . '<span class="fe-f"><img src="' . esc_url( $foto ) . '" alt="" loading="lazy"></span><b>' . esc_html( $t ) . '</b><small>' . esc_html( $f ) . '</small><em>' . wp_kses_post( $preco ) . '</em>' . ( $go ? '</button>' : '</a>' );
+	};
+	$foto = function ( $k, $res ) use ( $p ) { $x = $p( $k ); $u = $x ? wp_get_attachment_image_url( $x->get_image_id(), 'medium' ) : ''; return $u ? $u : $res; };
+	$bal  = $card( 'Arco', 'De 60 a 160 balões, nas suas cores', $img . 'arco_tam_100.webp', $de( 'kit60' ), 'monte' );
+	$mini = $p( 'miniarco' );
+	if ( $mini ) {
+		$bal .= $card( 'Mini arco', 'O arco de mesa, 50 balões de 5"', $foto( 'miniarco', $img . 'banner_miniarco_m.webp' ), $de( 'miniarco' ), '', $link( $mini->get_permalink() ) );
+	}
+	$bal .= $card( 'Balões sortidos', 'De 50 a 125 balões de 8"', $img . 'banner_pacotes_m.webp', $de( 'pct50' ), 'pacotes' );
+	$crom = $p( 'metal5_25' );
+	if ( $crom ) {
+		$bal .= $card( 'Balões cromados', 'Metalizados de 5", nas cores que quiser', $img . 'banner_cromados_m.webp', $de( 'metal5_25' ), '', $link( $crom->get_permalink() ) );
+	}
+	$candy = get_term_by( 'slug', 'candy-colors', 'product_cat' );
+	if ( $candy ) {
+		$bal .= $card( 'Linha candy', 'Os tons pastel da festa', $img . 'banner_candy_m.webp', '', '', $link( get_term_link( $candy ) ) );
+	}
+	$mesa = '';
+	foreach ( array( 'prato20' => array( 'Pratinho 15 cm', '20 unidades, na cor da festa' ), 'prato30' => array( 'Pratos 15 cm', '30 unidades, na cor da festa' ), 'guardanapo' => array( 'Guardanapo', '50 folhas coloridas' ) ) as $k => $t ) {
+		$x = $p( $k );
+		if ( $x ) {
+			$mesa .= $card( $t[0], $t[1], $foto( $k, $img . 'banner_mesa_m.webp' ), wc_price( $x->get_price() ), '', $link( $x->get_permalink() ) );
+		}
+	}
+	$passos = '<ol class="fe-ps"><li data-p="1"><i>1</i>Os balões</li><li data-p="2"><i>2</i>A mesa</li><li data-p="3"><i>3</i>Finalizar</li></ol>';
+	return '<section class="sec" id="festa" data-loja="' . esc_url( rest_url( 'wc/store/v1/cart' ) ) . '" data-checkout="' . esc_url( wc_get_checkout_url() ) . '"><div class="w">'
+		. '<div class="ctr"><span class="eyebrow">Monte sua festa</span><h2 class="tt inf">A festa inteira em 3 passos.</h2></div>' . $passos
+		. '<p class="fe-ok" id="feOk" hidden></p>'
+		. '<div class="fe-p" data-p="1"><p class="fe-st">Escolha os balões. Pode pegar mais de um.</p><div class="fe-l">' . $bal . '</div><div class="fe-ac"><button type="button" class="btn pri" data-vai="2">Agora a mesa →</button></div></div>'
+		. '<div class="fe-p" data-p="2" hidden><p class="fe-st">Pratinho e guardanapo na cor dos balões.</p><div class="fe-l">' . $mesa . '</div><div class="fe-ac"><button type="button" class="btn lin" data-vai="1">← Balões</button><button type="button" class="btn pri" data-vai="3">Ver minha festa →</button></div></div>'
+		. '<div class="fe-p" data-p="3" hidden><p class="fe-st">Confira o que você escolheu.</p><div class="fe-r" id="feResumo"></div><div class="fe-tot"><span>Total</span><b id="feTot">R$ 0,00</b></div><div class="fe-ac"><button type="button" class="btn lin" data-vai="1">← Escolher mais</button><button type="button" class="btn pri" id="feFim">Finalizar compra</button></div><p class="mnote">Em São Paulo e Grande SP, pedido pago até 12h chega hoje até 21h.</p></div>'
+		. '</div></section>';
 }
 
 function glowbos_mais_vendidos_html() {
