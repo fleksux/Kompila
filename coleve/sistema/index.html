@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sistema Coleve</title>
 <meta name="robots" content="noindex">
-<script>if (location.pathname.includes('/area/')) document.write('<base href="' + location.pathname.replace(/area\/.*$/, '') + '">');</script>
+<script>if (location.pathname.includes('/feed/')) document.write('<base href="' + location.pathname.replace(/feed\/.*$/, '') + '">');</script>
 <meta name="theme-color" content="#1A71FF">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icones/apple_180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css?v=23">
+<link rel="stylesheet" href="sistema.css?v=24">
 </head>
 <body class="carregando">
 
 <header class="barra">
   <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
   <span class="barra__tag" id="tag">Sistema</span>
-  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" id="nav-inicio">Início</a><a href="area/" id="nav-area">Área interna</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a><a href="clientes/">Clientes</a></nav>
+  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" id="nav-inicio">Início</a><a href="feed/" id="nav-feed">Feed</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a><a href="clientes/">Clientes</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -71,14 +71,15 @@ const I = {
   cal:'<svg viewBox="0 0 24 24"><path d="M4 6h16v15H4zM4 10h16M8 3v4M16 3v4"/></svg>'
 };
 
-const modoArea = location.pathname.includes('/area/');
-document.getElementById(modoArea ? 'nav-area' : 'nav-inicio')?.setAttribute('aria-current', 'page');
-if (equipe && !modoArea) {
-  // ===== INÍCIO: o feed do dia (o que está com você + atividade do time) =====
+// Início = cards (o mapa do sistema); Feed = o que está acontecendo
+const modoFeed = location.pathname.includes('/feed/');
+document.getElementById(modoFeed ? 'nav-feed' : 'nav-inicio')?.setAttribute('aria-current', 'page');
+if (equipe && modoFeed) {
+  // ===== FEED: o dia (o que está com você + atividade do time) =====
   document.getElementById('nav').hidden = false;
   document.querySelector('main > .nota')?.remove();
   document.getElementById('modulos').remove();
-  document.getElementById('sec').textContent = 'Início';
+  document.getElementById('sec').textContent = 'Feed';
   document.getElementById('sub').textContent = 'O que está com você hoje.';
   const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const dBR = d => d ? d.split('-').reverse().slice(0, 2).join('/') : '';
@@ -126,7 +127,7 @@ if (equipe && !modoArea) {
       tarefas.length > 5 ? `<a class="fmais" href="tarefas/">Ver todas (${tarefas.length})</a>` : '') +
     bloco('Atividade do time', null, ativ.map(({ m, e }) => `<div class="fa"><span class="ico ico--leve">${e[0]}</span><p>${e[1]}</p><time datetime="${m.criado_em}">${quando(m.criado_em)}</time></div>`).join('') || '<p class="fv">Quando alguém pedir, enviar ou aprovar, aparece aqui.</p>');
 } else 
-if (modoArea && ['marketing', 'tecnologia'].includes(p.area)) {
+if (equipe && ['marketing', 'tecnologia'].includes(p.area)) {
   // mesma linguagem do início: 3 números + 6 cards iguais (grade de 3)
   document.getElementById('nav').hidden = false;
   document.getElementById('sec').textContent = 'Meu painel · marketing e sistema';
@@ -159,7 +160,7 @@ if (modoArea && ['marketing', 'tecnologia'].includes(p.area)) {
     (prox ? card('Fazer agora', esc(prox.titulo), I.cal, 'marketing/#' + prox.id, prox.status === 'ajuste' ? 'ajuste' : 'próximo') : card('Fazer agora', 'Fila zerada. Nada esperando por você.', I.cal, 'marketing/', 'em dia')) +
     card('Aprovações', `${esperando} esperando o Manu · ${aprovados} aprovad${aprovados === 1 ? 'a' : 'as'} para publicar${ajustes ? ` · ${ajustes} ajuste${ajustes > 1 ? 's' : ''}` : ''}.`, I.check, 'marketing/', String(esperando)) +
     card('Sistema Coleve', `${noAr} de ${T.length} etapas no ar.`, I.raio, 'tarefas/', pctS + '%', `<span class="mod__barra" aria-hidden="true"><i style="width:${pctS}%"></i></span>`);
-} else if (equipe && modoArea) {
+} else if (equipe) {
   document.getElementById('nav').hidden = false;
   document.getElementById('sub').textContent = 'Tarefas, clientes, documentos e ligações da Coleve em um lugar só.';
   const [emp, tar, obr] = await Promise.all([
