@@ -1,5 +1,6 @@
 // Sistema Coleve · quadro de tarefas (área interna)
 import { banco, quemSou } from '../conexao.js?v=2';
+import { anexar, baixar, TIPOS, reais } from '../documentos.js?v=1';
 
 const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
@@ -175,9 +176,63 @@ async function abre(id) {
   $('d-visivel').checked = t.visivel_cliente;
   $('d-status').innerHTML = COLUNAS.map(([st, nome]) => `<button type="button" data-st="${st}" class="${t.status === st ? 'is-ativo' : ''}">${nome}</button>`).join('');
   desenhaEnvolvidos(t);
+  $('d-docs').hidden = !t.empresa_id;
+  $('d-doc-lista').innerHTML = ''; $('d-entregar').hidden = true;
   $('gaveta').hidden = false;
   carregaDetalhe(id);
+  if (t.empresa_id) carregaDocs(id);
 }
+
+// ===== documentos da tarefa: anexa (vai pro Drive), envia ao cliente, protocolo =====
+Object.entries(TIPOS).forEach(([k, v]) => $('d-doc-tipo').insertAdjacentHTML('beforeend', `<option value="${k}">${v}</option>`));
+const horaBR = d => new Date(d).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+let docs = [];
+async function carregaDocs(id) {
+  const { data } = await banco.from('documento').select('id,nome,tipo,valor,vencimento,criado_em,protocolo(enviado_em,lido_em,destinatario)').eq('tarefa_id', id).order('criado_em');
+  if (aberta?.id !== id) return;
+  docs = data || [];
+  $('d-doc-lista').innerHTML = docs.map(d => {
+    const p = d.protocolo?.[0];
+    const st = !p ? '<em class="st st--novo">não enviado</em>' : p.lido_em ? `<em class="st st--lido">aberto ${horaBR(p.lido_em)}</em>` : `<em class="st st--env">enviado ${horaBR(p.enviado_em)}</em>`;
+    const meta = [TIPOS[d.tipo], d.valor != null ? reais(d.valor) : null, d.vencimento ? 'vence ' + dataBR(d.vencimento) : null, p ? 'para ' + esc(p.destinatario) : null].filter(Boolean).join(' · ');
+    return `<li><span class="d-docs__t"><b>${esc(d.nome)}</b><small>${meta}</small></span>${st}<button type="button" class="d-baixar" data-id="${d.id}">Baixar</button></li>`;
+  }).join('') || '<li class="vazio">Nenhum documento anexado.</li>';
+  const novos = docs.filter(d => !d.protocolo?.length).length;
+  $('d-entregar').hidden = !novos;
+  $('d-entregar').textContent = novos > 1 ? `Enviar ${novos} documentos ao cliente` : 'Enviar ao cliente';
+}
+$('d-arq').onchange = () => { $('d-arq-nome').textContent = $('d-arq').files[0]?.name || 'Escolher arquivo'; };
+$('d-anexo').onsubmit = async e => {
+  e.preventDefault();
+  const arq = $('d-arq').files[0]; if (!arq || !aberta) return;
+  const t = aberta, btn = $('d-anexar');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  try {
+    await anexar(t, arq, { tipo: $('d-doc-tipo').value, valor: $('d-doc-valor').value, vencimento: $('d-doc-venc').value },
+      p => { btn.textContent = `Enviando ${Math.round(p * 100)}%`; });
+    $('d-anexo').reset(); $('d-arq-nome').textContent = 'Escolher arquivo';
+    avisa('Anexado. Está na pasta da empresa no Drive.');
+    carregaDocs(t.id);
+  } catch (err) { avisa('Não deu para anexar: ' + err.message); }
+  btn.disabled = false; btn.textContent = 'Anexar';
+};
+$('d-doc-lista').addEventListener('click', async e => {
+  const b = e.target.closest('.d-baixar'); if (!b) return;
+  b.disabled = true; b.textContent = 'Baixando…';
+  try { await baixar(docs.find(d => d.id === b.dataset.id)); } catch (err) { avisa(err.message); }
+  b.disabled = false; b.textContent = 'Baixar';
+});
+$('d-entregar').onclick = async () => {
+  if (!aberta) return;
+  const t = aberta, b = $('d-entregar'); b.disabled = true;
+  const { data, error } = await banco.rpc('entregar_documentos', { p_tarefa: t.id });
+  b.disabled = false;
+  if (error) return avisa('Não deu para enviar: ' + error.message);
+  avisa(`${data} documento${data > 1 ? 's' : ''} enviado${data > 1 ? 's' : ''} ao cliente. Protocolo registrado.`);
+  t.status = 'enviado'; t.visivel_cliente = true; $('d-visivel').checked = true;
+  $('d-status').querySelectorAll('button').forEach(x => x.classList.toggle('is-ativo', x.dataset.st === 'enviado'));
+  carregaDocs(t.id); carregaDetalhe(t.id); desenha();
+};
 
 async function carregaDetalhe(id) {
   const [{ data: cs }, { data: hs }] = await Promise.all([
@@ -257,6 +312,7 @@ banco.channel('coleve-tarefas')
   .on('postgres_changes', { event: '*', schema: 'public', table: 'tarefa' }, () => { clearTimeout(espera); espera = setTimeout(carrega, 400); })
   .on('postgres_changes', { event: '*', schema: 'public', table: 'demanda' }, () => { clearTimeout(espera); espera = setTimeout(carrega, 400); })
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tarefa_comentario' }, ({ new: c }) => { if (aberta && c.tarefa_id === aberta.id) carregaDetalhe(aberta.id); })
+  .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'protocolo' }, () => { if (aberta?.empresa_id) carregaDocs(aberta.id); })
   .subscribe();
 
 await carrega();

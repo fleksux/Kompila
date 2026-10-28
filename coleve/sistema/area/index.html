@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css?v=21">
+<link rel="stylesheet" href="sistema.css?v=22">
 </head>
 <body class="carregando">
 
@@ -184,9 +184,33 @@ if (modoArea && ['marketing', 'tecnologia'].includes(p.area)) {
   const nomes = (emps || []).map(e => e.nome_fantasia || e.razao_social).join(', ');
   document.getElementById('sub').textContent = nomes ? 'Empresa: ' + nomes : 'Sua empresa ainda está sendo cadastrada pela Coleve.';
   document.getElementById('modulos').innerHTML =
-    mod('Documentos', 'Guias, apurações e contratos sempre à mão.', I.doc) +
     mod('Pedidos', 'Peça uma certidão, segunda via ou alteração.', I.pedido) +
     mod('Andamento', 'Veja quem está cuidando de cada entrega e o prazo.', I.tarefa);
+  // documentos que a Coleve enviou: o mais novo em cima, "novo" até o cliente abrir
+  const { baixar, TIPOS, reais } = await import('./documentos.js?v=1');
+  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const dBR = d => d ? d.split('-').reverse().join('/') : '';
+  const feed = document.getElementById('feed');
+  document.getElementById('modulos').before(feed);
+  const desenhaDocs = async () => {
+    const { data: docs } = await banco.from('documento').select('id,nome,tipo,valor,vencimento,competencia,criado_em,protocolo(lido_em)').eq('vindo_do_cliente', false).order('criado_em', { ascending: false }).limit(60);
+    const D = docs || [];
+    const novos = D.filter(d => !d.protocolo?.[0]?.lido_em).length;
+    feed.hidden = false;
+    feed.innerHTML = `<div class="fb"><p class="sec">Seus documentos${novos ? ` · ${novos} novo${novos > 1 ? 's' : ''}` : ''}</p><div class="fl">${D.map(d => {
+      const novo = !d.protocolo?.[0]?.lido_em;
+      const meta = [TIPOS[d.tipo], d.competencia ? 'referente a ' + dBR(d.competencia).slice(3) : null, d.valor != null ? reais(d.valor) : null, d.vencimento ? 'vence ' + dBR(d.vencimento) : null].filter(Boolean).join(' · ');
+      return `<button type="button" class="fi${novo ? ' fi--destaque' : ''}" data-id="${d.id}"><span class="ico">${I.doc}</span><span class="fi__t"><b>${esc(d.nome)}</b><small>${meta}</small></span><em>${novo ? 'novo' : 'baixar'}</em></button>`;
+    }).join('') || '<p class="fv">Quando a Coleve enviar uma guia ou documento, ele aparece aqui.</p>'}</div></div>`;
+    feed.onclick = async e => {
+      const b = e.target.closest('.fi'); if (!b) return;
+      const em = b.querySelector('em'); em.textContent = 'baixando';
+      try { await baixar(D.find(d => d.id === b.dataset.id)); em.textContent = 'baixar'; b.classList.remove('fi--destaque'); }
+      catch { em.textContent = 'tente de novo'; }
+    };
+  };
+  await desenhaDocs();
+  banco.channel('coleve-docs-cliente').on('postgres_changes', { event: '*', schema: 'public', table: 'documento' }, desenhaDocs).subscribe();
 }
 
 document.getElementById('sair').addEventListener('click', async () => {

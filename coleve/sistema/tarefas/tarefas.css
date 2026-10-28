@@ -129,3 +129,26 @@ body.carregando .quadro-pg{opacity:0}
 .env.is-on{border-color:var(--azul);color:var(--grafite);background:#E6EFFF}
 .env.is-on .mini{background:var(--azul)}
 .env:disabled{cursor:default}
+
+/* documentos da tarefa */
+.d-docs{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:8px}
+.d-docs li:not(.vazio){display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--nevoa);border-radius:12px;padding:8px 8px 8px 16px;min-height:56px}
+.d-docs__t{flex:1 1 180px;min-width:0;display:grid;gap:2px}
+.d-docs__t b{font-size:14px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.d-docs__t small{font-size:12px;color:var(--cinza)}
+.st{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px;white-space:nowrap}
+.st--novo{background:#FFF1E0;color:#a35a00}
+.st--env{background:#E6EFFF;color:var(--azul)}
+.st--lido{background:var(--lima);color:var(--grafite)}
+.d-baixar{height:44px;padding:0 16px;border:1.5px solid var(--linha);border-radius:999px;background:#fff;font:700 13px Gabarito,sans-serif;color:var(--grafite);cursor:pointer}
+.d-baixar:hover{border-color:var(--azul);color:var(--azul)}
+.d-anexo{display:grid;gap:8px;border:1.5px dashed var(--linha);border-radius:16px;padding:16px}
+.d-arq{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:12px;background:var(--nevoa);font-weight:700;font-size:14px;color:var(--azul);cursor:pointer;padding:0 16px;text-align:center;overflow:hidden}
+.d-arq input{position:absolute;opacity:0;width:1px;height:1px}
+.d-arq:focus-within{outline:3px solid var(--lima)}
+.d-anexo__campos{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px}
+.d-anexo__campos label{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--cinza)}
+.d-anexo__campos select,.d-anexo__campos input{height:44px;border:1.5px solid var(--linha);border-radius:10px;padding:0 8px;font:600 14px Gabarito,sans-serif;background:#fff;min-width:0;width:100%}
+.d-anexo .btn-a{height:44px;justify-self:end}
+.d-entregar{width:100%;margin-top:8px}
+@media (max-width:860px){.d-anexo__campos{grid-template-columns:1fr 1fr}.d-anexo__campos label:first-child{grid-column:1/-1}.d-anexo .btn-a{width:100%}}

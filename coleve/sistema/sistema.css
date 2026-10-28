@@ -255,3 +255,5 @@ body.com-painel .miolo{max-width:1180px;padding-top:24px}
 .fa time{font-size:13px;color:#9aa3b2;white-space:nowrap}
 .fv{color:#9aa3b2;font-size:14px;margin:0}
 @media (max-width:860px){.fi{padding:14px 16px;gap:12px}.fi__t b{font-size:15px}.fa{grid-template-columns:42px 1fr}.fa time{grid-column:2;margin-top:-8px}}
+button.fi{border:0;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.feed+.modulos{margin-top:32px}
