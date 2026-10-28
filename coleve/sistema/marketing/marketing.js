@@ -302,9 +302,42 @@ $('f-msg').addEventListener('submit', async e => {
   await banco.from('mensagem').insert({ canal_id: atual.canal_id, autor_id: P.id, texto });
   carregaChat();
 });
-banco.channel('coleve-mk').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensagem' }, ({ new: m }) => {
-  if (atual && m.canal_id === atual.canal_id) carregaChat();
-}).subscribe();
+// ===== tempo real: a tela atualiza sozinha =====
+const novidades = new Set();
+let espera;
+const recarrega = () => { clearTimeout(espera); espera = setTimeout(async () => {
+  await carrega();
+  novidades.forEach(id => document.querySelector(`.linha[data-id="${id}"], .quad[data-id="${id}"]`)?.classList.add('linha--nova'));
+  if (atual && !$('dm').hidden) {
+    atual = demandas.find(d => d.id === atual.id) || atual;
+    const { data: vs } = await banco.from('demanda_versao').select('*').eq('demanda_id', atual.id).order('numero');
+    versoes = vs || []; vSel = versoes.find(v => v.numero === vSel?.numero) || versoes.at(-1) || null;
+    await assina(versoes.flatMap(v => v.arquivos.map(a => a.arquivo)));
+    desenhaInfo(); desenhaVersoes(); desenhaIg();
+  }
+}, 400); };
+const nome1 = id => (pessoas.get(id)?.nome || 'Alguém').split(' ')[0];
+const toast = txt => {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = txt;
+  document.body.appendChild(t); setTimeout(() => t.classList.add('toast--sai'), 5000); setTimeout(() => t.remove(), 5600);
+};
+banco.channel('coleve-mk')
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensagem' }, ({ new: m }) => { if (atual && m.canal_id === atual.canal_id) carregaChat(); })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'demanda' }, ({ eventType, new: d }) => {
+    if (eventType === 'INSERT' && d.pedido_por !== P.id) { novidades.add(d.id); toast(`🆕 Novo pedido de ${nome1(d.pedido_por)}: ${d.titulo}`); }
+    recarrega();
+  })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'demanda_versao' }, ({ eventType, new: v, old: o }) => {
+    const t = demandas.find(d => d.id === v.demanda_id)?.titulo || 'post';
+    if (eventType === 'INSERT' && v.enviado_por !== P.id) { novidades.add(v.demanda_id); toast(`👀 ${nome1(v.enviado_por)} mandou a versão ${v.numero} de ${t}`); }
+    if (eventType === 'UPDATE' && v.decisao && v.decisao !== o?.decisao && v.decidido_por !== P.id) {
+      novidades.add(v.demanda_id); toast(v.decisao === 'aprovado' ? `✅ ${nome1(v.decidido_por)} aprovou ${t}` : `✏️ ${nome1(v.decidido_por)} pediu ajuste em ${t}`);
+    }
+    recarrega();
+  })
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'demanda_referencia' }, ({ new: r }) => { if (atual?.id === r.demanda_id) abre(atual.id); })
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'demanda_marca' }, () => { if (atual && !$('dm').hidden) desenhaIg(); })
+  .subscribe();
 
 async function statusDrive() {
   try { const st = await chamaDrive('status'); driveOn = st.conectado; driveEmail = st.email || ''; } catch { driveOn = false; }

@@ -185,4 +185,9 @@ body.carregando .mk{opacity:0}
 .aviso-drive--ok{background:#F2FFD6;color:#4b6100}
 .btn-pasta{margin-top:10px;height:36px;padding:0 14px;border:0;border-radius:999px;background:var(--nevoa);font:700 13px Gabarito,sans-serif;color:var(--grafite);cursor:pointer}
 .btn-pasta:hover{background:#E6EFFF;color:var(--azul)}
-@media (max-width:860px){#drive-pill{width:100%}.dp{width:100%;justify-content:center}}
+@media (max-width:860px){.mk__acoes{flex-wrap:wrap}#drive-pill{order:3;width:100%}.dp{width:100%;justify-content:center}}
+.linha--nova{outline:2px solid var(--lima)!important;animation:pisca 1.2s ease 3}
+@keyframes pisca{50%{box-shadow:0 0 0 6px rgb(185 252 1 / .45)}}
+.toast{position:fixed;left:20px;bottom:20px;z-index:80;max-width:min(420px,calc(100vw - 110px));background:var(--navy);color:#fff;font:700 15px Gabarito,sans-serif;border-radius:16px;padding:14px 18px;box-shadow:0 16px 40px rgb(7 26 68 / .35);animation:entraToast .3s ease;transition:opacity .5s,translate .5s}
+.toast--sai{opacity:0;translate:0 10px}
+@keyframes entraToast{from{opacity:0;translate:0 12px}}

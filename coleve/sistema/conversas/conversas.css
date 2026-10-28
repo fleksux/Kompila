@@ -144,3 +144,4 @@ body.modo-mini .msg{max-width:88%}
 body.modo-mini .fio__escrever{padding:8px 10px 12px}
 body.modo-mini .chat__lista-topo{padding:14px 14px 8px}
 body.modo-mini .chat__lista-topo h1{font-size:18px}
+@media (max-width:860px){body:has(.barra__nav){padding-bottom:0}.chat{margin-bottom:calc(68px + env(safe-area-inset-bottom))}}

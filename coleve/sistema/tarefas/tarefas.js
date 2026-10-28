@@ -173,5 +173,12 @@ $('d-novo').onsubmit = async e => {
   $('d-texto').value = ''; carregaDetalhe(aberta.id);
 };
 
+// tempo real: se alguém mexe numa tarefa, o quadro atualiza sozinho
+let espera;
+banco.channel('coleve-tarefas')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'tarefa' }, () => { clearTimeout(espera); espera = setTimeout(carrega, 400); })
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tarefa_comentario' }, ({ new: c }) => { if (aberta && c.tarefa_id === aberta.id) carregaDetalhe(aberta.id); })
+  .subscribe();
+
 await carrega();
 document.body.classList.remove('carregando');
