@@ -39,10 +39,17 @@ if (['admin', 'gestor'].includes(P.papel)) {
 }
 
 // listas dos filtros
-let equipe = [], tarefas = [];
+let equipe = [], tarefas = [], acompanha = new Map();
+const nomeDe = id => equipe.find(p => p.id === id)?.nome || '';
+// envolvidos: responsável primeiro, depois quem acompanha o card e quem acompanha tudo
+const envolvidos = t => {
+  const ids = [t.responsavel_id, ...(acompanha.get(t.id) || []), ...equipe.filter(p => p.acompanha_tudo).map(p => p.id)];
+  if (t.demanda) ids.push(t.demanda.pedido_por);
+  return [...new Set(ids.filter(Boolean))];
+};
 Object.entries(AREAS).forEach(([k, v]) => $('f-area').insertAdjacentHTML('beforeend', `<option value="${k}">${v}</option>`));
 const [{ data: pes }, { data: emps }] = await Promise.all([
-  banco.from('pessoa').select('id,nome').eq('tipo', 'equipe').eq('ativo', true).order('nome'),
+  banco.from('pessoa').select('id,nome,acompanha_tudo').eq('tipo', 'equipe').eq('ativo', true).order('nome'),
   banco.from('empresa').select('id,razao_social,nome_fantasia').eq('ativo', true).order('razao_social')
 ]);
 equipe = pes || [];
@@ -74,7 +81,9 @@ async function carrega() {
   const { data, error } = await banco.from('v_tarefa').select('*').neq('status', 'cancelado')
     .order('prazo', { ascending: true, nullsFirst: false }).limit(500);
   if (error) return avisa('Não deu para carregar as tarefas.');
-  const { data: ds } = await banco.from('v_demanda').select('id,titulo,formato,status,data_prevista,responsavel_id,responsavel_nome,pedido_por_nome').neq('status', 'cancelado');
+  const { data: ds } = await banco.from('v_demanda').select('id,titulo,formato,status,data_prevista,responsavel_id,responsavel_nome,pedido_por,pedido_por_nome').neq('status', 'cancelado');
+  const { data: ac } = await banco.from('tarefa_acompanha').select('tarefa_id,pessoa_id');
+  acompanha = new Map(); (ac || []).forEach(a => { if (!acompanha.has(a.tarefa_id)) acompanha.set(a.tarefa_id, new Set()); acompanha.get(a.tarefa_id).add(a.pessoa_id); });
   tarefas = [...data, ...(ds || []).map(comoCard)];
   desenha();
 }
@@ -110,7 +119,7 @@ function desenha() {
           <span class="area area--${t.area}">${AREAS[t.area]}</span>${t.ajuste ? '<span class="tag-aj">ajuste pedido</span>' : ''}${t.demanda && t.status === 'conferencia' ? '<span class="tag-esp">esperando aprovação</span>' : ''}
           <h3>${esc(t.titulo)}</h3>
           <p class="cartao__emp">${esc(t.empresa_nome)}${t.empresa_teste ? ' <em>teste</em>' : ''}</p>
-          <footer>${prazoTag(t)}<span class="mini" title="${esc(t.responsavel_nome || 'Sem responsável')}">${t.responsavel_nome ? iniciais(t.responsavel_nome) : '+'}</span></footer>
+          <footer>${prazoTag(t)}<span class="rostos-c">${envolvidos(t).slice(0, 4).map((id, i) => `<span class="mini${i === 0 && id === t.responsavel_id ? '' : ' mini--seg'}" title="${esc(nomeDe(id))}${i === 0 && id === t.responsavel_id ? ' · responsável' : ' · acompanha'}">${iniciais(nomeDe(id))}</span>`).join('') || '<span class="mini mini--vazio" title="Sem ninguém">+</span>'}</span></footer>
         </article>`).join('') || '<p class="col__vazio">Nada aqui</p>'}
       </div></div>`;
   }).join('');
@@ -165,6 +174,7 @@ async function abre(id) {
   $('d-resp').value = t.responsavel_id || '';
   $('d-visivel').checked = t.visivel_cliente;
   $('d-status').innerHTML = COLUNAS.map(([st, nome]) => `<button type="button" data-st="${st}" class="${t.status === st ? 'is-ativo' : ''}">${nome}</button>`).join('');
+  desenhaEnvolvidos(t);
   $('gaveta').hidden = false;
   carregaDetalhe(id);
 }
@@ -180,6 +190,22 @@ async function carregaDetalhe(id) {
   $('d-hist').innerHTML = (hs || []).map(h => `<li><span>${hora(h.criado_em)}</span>${esc(h.quem?.nome || 'Sistema')}: ${h.acao === 'status' ? `${nomeSt[h.detalhe.de] || h.detalhe.de} → ${nomeSt[h.detalhe.para] || h.detalhe.para}` : esc(h.acao)}</li>`).join('') || '<li class="vazio">Nada ainda.</li>';
 }
 
+function desenhaEnvolvidos(t) {
+  const seg = acompanha.get(t.id) || new Set();
+  $('d-envolvidos').innerHTML = equipe.map(p => {
+    const resp = p.id === t.responsavel_id, tudo = p.acompanha_tudo, marcado = resp || tudo || seg.has(p.id);
+    return `<button type="button" class="env${marcado ? ' is-on' : ''}" data-id="${p.id}" ${resp || tudo ? 'disabled' : ''}>
+      <span class="mini">${iniciais(p.nome)}</span>${esc(p.nome.split(' ')[0])}<small>${resp ? 'responsável' : tudo ? 'acompanha tudo' : marcado ? 'acompanha' : 'tocar p/ incluir'}</small></button>`;
+  }).join('');
+}
+$('d-envolvidos').addEventListener('click', async e => {
+  const b = e.target.closest('.env'); if (!b || b.disabled || !aberta) return;
+  const seg = acompanha.get(aberta.id) || new Set(); acompanha.set(aberta.id, seg);
+  const id = b.dataset.id;
+  if (seg.has(id)) { seg.delete(id); await banco.from('tarefa_acompanha').delete().eq('tarefa_id', aberta.id).eq('pessoa_id', id); }
+  else { seg.add(id); await banco.from('tarefa_acompanha').insert({ tarefa_id: aberta.id, pessoa_id: id }); }
+  desenhaEnvolvidos(aberta); desenha();
+});
 $('d-status').addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b || !aberta) return;
   await mudaStatus(aberta.id, b.dataset.st);
@@ -192,7 +218,7 @@ const salva = async campos => {
   avisa(error ? 'Não deu para salvar.' : 'Salvo.');
 };
 $('d-prazo').onchange = () => salva({ prazo: $('d-prazo').value || null });
-$('d-resp').onchange = () => salva({ responsavel_id: $('d-resp').value || null });
+$('d-resp').onchange = async () => { await salva({ responsavel_id: $('d-resp').value || null }); aberta.responsavel_id = $('d-resp').value || null; desenhaEnvolvidos(aberta); };
 $('d-visivel').onchange = () => salva({ visivel_cliente: $('d-visivel').checked });
 $('d-novo').onsubmit = async e => {
   e.preventDefault();
