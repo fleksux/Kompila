@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="icon" href="../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="sistema.css">
+</head>
+<body class="carregando">
+
+<header class="barra">
+  <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <span class="barra__tag" id="tag">Sistema</span>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="miolo">
+  <p class="sec" id="sec">Início</p>
+  <h1 class="h1">Olá, <b id="primeiro">…</b></h1>
+  <p class="sub" id="sub"></p>
+
+  <section class="numeros" id="numeros" hidden></section>
+
+  <section class="modulos" id="modulos"></section>
+
+  <p class="nota">O Sistema Coleve está sendo montado por partes. Os módulos acendem conforme ficam prontos.</p>
+</main>
+
+<script type="module">
+import { banco, quemSou } from './conexao.js';
+
+const eu = await quemSou().catch(() => null);
+if (!eu?.pessoa?.ativo) { location.replace('../entrar/'); throw 0; }
+const p = eu.pessoa;
+const equipe = p.tipo === 'equipe';
+const areas = { fiscal:'Fiscal', contabil:'Contábil', dp:'Departamento pessoal', bpo:'BPO financeiro', paralegal:'Paralegal', atendimento:'Atendimento' };
+
+document.getElementById('nome').textContent = p.nome;
+document.getElementById('primeiro').textContent = p.nome.split(' ')[0] + '.';
+document.getElementById('avatar').textContent = p.nome.split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
+document.getElementById('papel').textContent = equipe ? (p.papel === 'admin' ? 'Equipe · acesso total' : 'Equipe · ' + (areas[p.area] || p.papel)) : 'Cliente';
+document.getElementById('tag').textContent = equipe ? 'Área interna' : 'Área do cliente';
+document.getElementById('sec').textContent = equipe ? 'Área interna · equipe Coleve' : 'Área do cliente';
+
+const num = (n, t) => `<div class="num"><strong>${n}</strong><span>${t}</span></div>`;
+const mod = (t, d, ico) => `<article class="mod"><span class="ico">${ico}</span><h3>${t}</h3><p>${d}</p><em>Em montagem</em></article>`;
+const I = {
+  tarefa:'<svg viewBox="0 0 24 24"><path d="M4 6h3M4 12h3M4 18h3M10 6h10M10 12h10M10 18h10"/></svg>',
+  empresa:'<svg viewBox="0 0 24 24"><path d="M4 21V5l8-3v19M12 9h8v12M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/></svg>',
+  doc:'<svg viewBox="0 0 24 24"><path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5M8 13h8M8 17h6"/></svg>',
+  pedido:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Zm4 5h8M8 13h5"/></svg>',
+  fone:'<svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>',
+  cal:'<svg viewBox="0 0 24 24"><path d="M4 6h16v15H4zM4 10h16M8 3v4M16 3v4"/></svg>'
+};
+
+if (equipe) {
+  document.getElementById('sub').textContent = 'Tarefas, clientes, documentos e ligações da Coleve em um lugar só.';
+  const [emp, tar, obr] = await Promise.all([
+    banco.from('empresa').select('id', { count: 'exact', head: true }),
+    banco.from('tarefa').select('id', { count: 'exact', head: true }).neq('status', 'enviado'),
+    banco.from('obrigacao_tipo').select('codigo', { count: 'exact', head: true })
+  ]);
+  const nb = document.getElementById('numeros');
+  nb.innerHTML = num(emp.count ?? 0, 'empresas no sistema') + num(tar.count ?? 0, 'tarefas abertas') + num(obr.count ?? 0, 'obrigações no calendário');
+  nb.hidden = false;
+  document.getElementById('modulos').innerHTML =
+    mod('Tarefas', 'Quadro por área, com responsável, prazo e conferência.', I.tarefa) +
+    mod('Calendário de obrigações', 'Guias e declarações do mês geradas pelo regime de cada empresa.', I.cal) +
+    mod('Clientes', 'Ficha da empresa, responsáveis e checklist de onboarding.', I.empresa) +
+    mod('Documentos', 'Guias, apurações e o que o cliente mandou, com protocolo de envio.', I.doc) +
+    mod('Pedidos', 'Segunda via, certidão e alteração pedidas pelo cliente.', I.pedido) +
+    mod('Ligações', 'Discar para o cliente e registrar cada chamada na ficha.', I.fone);
+} else {
+  const { data: emps } = await banco.from('empresa').select('nome_fantasia,razao_social');
+  const nomes = (emps || []).map(e => e.nome_fantasia || e.razao_social).join(', ');
+  document.getElementById('sub').textContent = nomes ? 'Empresa: ' + nomes : 'Sua empresa ainda está sendo cadastrada pela Coleve.';
+  document.getElementById('modulos').innerHTML =
+    mod('Documentos', 'Guias, apurações e contratos sempre à mão.', I.doc) +
+    mod('Pedidos', 'Peça uma certidão, segunda via ou alteração.', I.pedido) +
+    mod('Andamento', 'Veja quem está cuidando de cada entrega e o prazo.', I.tarefa);
+}
+
+document.getElementById('sair').addEventListener('click', async () => {
+  await banco.auth.signOut();
+  location.replace('../entrar/');
+});
+document.body.classList.remove('carregando');
+</script>
+</body>
+</html>

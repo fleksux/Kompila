@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nova senha · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../entrar.css">
+<style>.lado{min-height:100vh}.acesso{grid-template-columns:1fr}.caixa__marca{display:block}</style>
+</head>
+<body>
+<main class="acesso">
+  <section class="lado">
+    <div class="caixa">
+      <img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" class="caixa__marca" width="900" height="270">
+      <h2 class="h2">Crie a sua <b>nova senha</b></h2>
+      <p class="caixa__sub">Pelo menos 8 caracteres. Use letras e números.</p>
+      <form class="form" id="form-senha" novalidate>
+        <label class="campo"><span>Nova senha</span><input type="password" name="senha" autocomplete="new-password" minlength="8"></label>
+        <label class="campo"><span>Repita a senha</span><input type="password" name="repete" autocomplete="new-password" minlength="8"></label>
+        <button class="btn btn--azul btn--largo" type="submit">Salvar e entrar</button>
+        <p class="aviso" role="status" aria-live="polite"></p>
+      </form>
+      <div class="ajuda"><p>Precisa de ajuda? <a href="https://wa.me/5511920027321?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20a%20senha%20do%20Sistema%20Coleve" target="_blank" rel="noopener">Fale no WhatsApp</a></p></div>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { banco } from '../../sistema/conexao.js';
+const form = document.getElementById('form-senha');
+const aviso = form.querySelector('.aviso');
+const botao = form.querySelector('button');
+const avisa = (t, ok = false) => { aviso.classList.toggle('ok', ok); aviso.textContent = t; };
+
+// o link do e-mail traz a sessão de troca de senha na URL
+let pronto = false;
+banco.auth.onAuthStateChange((ev, sessao) => { if (sessao) pronto = true; });
+setTimeout(async () => {
+  const { data: { session } } = await banco.auth.getSession();
+  if (!session && !pronto) { avisa('Este link expirou ou já foi usado. Peça um novo em "Esqueci a senha".'); botao.disabled = true; }
+}, 1500);
+
+form.addEventListener('submit', async ev => {
+  ev.preventDefault();
+  const s = form.senha.value, r = form.repete.value;
+  if (s.length < 8) { avisa('A senha precisa ter pelo menos 8 caracteres.'); form.senha.focus(); return; }
+  if (s !== r) { avisa('As duas senhas não são iguais.'); form.repete.focus(); return; }
+  botao.disabled = true; botao.textContent = 'Salvando...';
+  const { error } = await banco.auth.updateUser({ password: s });
+  if (error) { avisa('Não deu para salvar. Peça um novo link em "Esqueci a senha".'); botao.disabled = false; botao.textContent = 'Salvar e entrar'; return; }
+  avisa('Senha nova salva. Entrando...', true);
+  setTimeout(() => location.replace('../../sistema/'), 900);
+});
+</script>
+</body>
+</html>
