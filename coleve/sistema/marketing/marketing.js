@@ -66,6 +66,7 @@ function mandaProDrive(demandaId, sub, arquivo, progresso) {
     .then(f => ({ drive: f.id, nome: f.name, tipo: f.mimeType }));
 }
 async function sobe(pasta, arquivo, progresso) {
+  if (!driveOn) { try { driveOn = (await chamaDrive('status')).conectado; } catch { /* segue no banco */ } }
   if (driveOn) {
     const [demandaId, ...resto] = pasta.split('/');
     return mandaProDrive(demandaId, resto.join('/') || null, arquivo, progresso);
