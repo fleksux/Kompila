@@ -219,3 +219,11 @@ body.com-painel .miolo{max-width:1180px;padding-top:24px}
 @media (prefers-reduced-motion:reduce){.mg__cabo .mg__corrente{animation:none}.anel__v{transition:none}}
 @media (max-width:860px){.cx{padding:16px}.cx__h a{min-height:44px}.dg>.cx,.dg__lado .cx:last-child{height:auto}}
 @media (max-width:860px){.ativ li{grid-template-columns:36px 1fr;align-items:start}.ativ time{grid-column:2;margin-top:-10px}}
+.mod__barra{display:block;height:6px;border-radius:6px;background:var(--nevoa);margin-top:14px;overflow:hidden}
+.mod__barra i{display:block;height:100%;background:var(--azul);border-radius:6px}
+.mod p{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.mod--ativo{outline-color:var(--linha)!important}
+.mod--ativo:hover,.mod--ativo:focus-visible{outline-color:var(--azul)!important}
+.mod--ativo em{background:var(--nevoa)!important;color:var(--cinza)!important}
+.mod--ativo:hover em{background:var(--lima)!important;color:var(--grafite)!important}
+@media (max-width:860px){.numeros{grid-template-columns:repeat(3,1fr)!important;gap:8px}.num{padding:14px 12px}.num strong{font-size:28px}.num span{font-size:12px;line-height:1.25;display:block}}

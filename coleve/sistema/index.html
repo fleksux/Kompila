@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css?v=14">
+<link rel="stylesheet" href="sistema.css?v=17">
 </head>
 <body class="carregando">
 
@@ -59,6 +59,8 @@ const mod = (t, d, ico, href) => href
   ? `<a class="mod mod--ativo" href="${href}"><span class="ico">${ico}</span><h3>${t}</h3><p>${d}</p><em>Abrir</em></a>`
   : `<article class="mod"><span class="ico">${ico}</span><h3>${t}</h3><p>${d}</p><em>Em montagem</em></article>`;
 const I = {
+  raio:'<svg viewBox="0 0 24 24"><path d="M13 3 5 14h6l-1 7 8-11h-6l1-7Z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg>',
   tarefa:'<svg viewBox="0 0 24 24"><path d="M4 6h3M4 12h3M4 18h3M10 6h10M10 12h10M10 18h10"/></svg>',
   empresa:'<svg viewBox="0 0 24 24"><path d="M4 21V5l8-3v19M12 9h8v12M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/></svg>',
   doc:'<svg viewBox="0 0 24 24"><path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5M8 13h8M8 17h6"/></svg>',
@@ -69,112 +71,38 @@ const I = {
 
 const meuPainel = equipe && ['marketing', 'tecnologia'].includes(p.area);
 if (meuPainel) {
+  // mesma linguagem do início: 3 números + 6 cards iguais (grade de 3)
   document.getElementById('nav').hidden = false;
-  document.body.classList.add('com-painel');
-  document.getElementById('numeros').remove();
+  document.getElementById('sec').textContent = 'Meu painel · marketing e sistema';
+  document.getElementById('sub').textContent = 'O que está com você hoje.';
   document.querySelector('main > .nota')?.remove();
-  ['sec', 'sub'].forEach(id => document.getElementById(id).remove());
-  document.querySelector('main > .h1').remove();
-  const hoje = new Date().toISOString().slice(0, 10);
-  const dBR = d => d ? d.split('-').reverse().slice(0, 2).join('/') : '';
   const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const ini = n => (n || '?').split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
-  const IC = {
-    novo: '<path d="M12 5v14M5 12h14"/>', enviou: '<path d="M4 12 20 4l-6 16-3-7-7-1Z"/>', ok: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
-    ajuste: '<path d="M4 20h4L19 9l-4-4L4 16v4ZM14 6l4 4"/>', moveu: '<path d="M5 12h14M13 6l6 6-6 6"/>', alerta: '<path d="M12 8v5M12 16.5v.5M10.3 4.2 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0Z"/>', relogio: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>'
-  };
-  const ico = (k, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
-  const rel = new Intl.RelativeTimeFormat('pt-BR', { numeric: 'auto' });
-  const quando = d => { const m = Math.round((new Date(d) - Date.now()) / 60000); return Math.abs(m) < 60 ? rel.format(m, 'minute') : Math.abs(m) < 1440 ? rel.format(Math.round(m / 60), 'hour') : rel.format(Math.round(m / 1440), 'day'); };
-  // recado do banco vira frase: quem + ação + objeto
-  const evento = (texto, autor) => {
-    const q = `<b>${esc((autor || 'Alguém').split(' ')[0])}</b>`; let m;
-    if ((m = texto.match(/^\S+ Nova demanda: (.+?)(?: · para (\d\d\/\d\d))?$/))) return ['novo', `${q} pediu <span class="obj">${esc(m[1])}</span>${m[2] ? ` <span class="ap">para ${m[2]}</span>` : ''}`];
-    if ((m = texto.match(/^\S+ (.+?) · versão (\d+) esperando aprovação$/))) return ['enviou', `${q} mandou <span class="obj">${esc(m[1])}</span> para aprovação`];
-    if ((m = texto.match(/^\S+ Aprovado: (.+?) \(versão \d+\)$/))) return ['ok', `${q} aprovou <span class="obj">${esc(m[1])}</span>`];
-    if ((m = texto.match(/^\S+ Ajuste pedido em (.+?) \(versão \d+\)(?::\s*(.*))?$/))) return ['ajuste', `${q} pediu ajuste em <span class="obj">${esc(m[1])}</span>${m[2] ? ` <span class="ap">“${esc(m[2])}”</span>` : ''}`];
-    if ((m = texto.match(/^\S+ (.+?) → (.+)$/))) return ['moveu', `${q} moveu <span class="obj">${esc(m[1])}</span> para ${esc(m[2])}`];
-    return null;   // conversa solta não é atividade
-  };
-  const [{ data: ds }, { data: ts }, { data: cs }] = await Promise.all([
-    banco.from('v_demanda').select('id,titulo,status,data_prevista,formato,pedido_por_nome,arquivos_atuais,atualizado_em').eq('responsavel_id', p.id).neq('status', 'cancelado'),
-    banco.from('v_tarefa').select('id,titulo,status,prazo,atrasada,criado_em').eq('responsavel_id', p.id).is('empresa_id', null).neq('status', 'cancelado').order('criado_em'),
-    banco.from('canal').select('id,slug').in('slug', ['marketing', 'tecnologia'])
+  const [{ data: ds }, { data: ts }] = await Promise.all([
+    banco.from('v_demanda').select('id,titulo,status,data_prevista').eq('responsavel_id', p.id).neq('status', 'cancelado'),
+    banco.from('v_tarefa').select('id,titulo,status').eq('responsavel_id', p.id).is('empresa_id', null).neq('status', 'cancelado')
   ]);
-  const { data: ms } = await banco.from('mensagem').select('texto,criado_em,autor:pessoa(nome)').in('canal_id', (cs || []).map(c => c.id)).not('texto', 'is', null).order('criado_em', { ascending: false }).limit(30);
   const D = ds || [], T = ts || [];
   const n = f => D.filter(f).length;
-  const atrasoD = x => x.data_prevista && x.data_prevista < hoje && !['aprovado', 'publicado'].includes(x.status);
-  const ajustes = n(x => x.status === 'ajuste'), novos = n(x => x.status === 'pedido'), fazendo = n(x => x.status === 'produzindo');
-  const esperando = n(x => x.status === 'aprovacao'), aprovados = n(x => x.status === 'aprovado'), publicados = n(x => x.status === 'publicado');
-  const atrasados = n(atrasoD) + T.filter(x => x.atrasada).length;
-  const noAr = T.filter(x => x.status === 'enviado').length, emTeste = T.filter(x => x.status === 'conferencia').length;
-  const h = new Date().getHours(), saud = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
-  const dataHoje = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-  const resumo = [ajustes && `<b>${ajustes} ajuste${ajustes > 1 ? 's' : ''}</b> para refazer`, novos && `<b>${novos} pedidos</b> na fila`, esperando && `<b>${esperando}</b> esperando o Manu`, emTeste && `<b>${emTeste} etapa${emTeste > 1 ? 's' : ''}</b> do sistema em teste`].filter(Boolean);
-  const anel = (pct, cor) => `<svg class="anel" viewBox="0 0 120 120" role="img" aria-label="${pct}%"><circle cx="60" cy="60" r="50" class="anel__f"/><circle cx="60" cy="60" r="50" class="anel__v" style="stroke:${cor};stroke-dasharray:${(pct / 100 * 314.16).toFixed(1)} 314.16"/><text x="60" y="66" text-anchor="middle">${pct}%</text></svg>`;
-  const pctM = D.length ? Math.round(publicados / D.length * 100) : 0, pctS = T.length ? Math.round(noAr / T.length * 100) : 0;
-  const etapa = (num, rot, st, cls) => `<a class="mg__p ${cls || ''}" href="marketing/" title="${rot}"><span>${num}</span><small>${rot}</small></a>`;
   const fila = D.filter(x => ['ajuste', 'pedido', 'produzindo'].includes(x.status))
-    .sort((a, b) => (b.status === 'ajuste') - (a.status === 'ajuste') || atrasoD(b) - atrasoD(a) || (b.status === 'produzindo') - (a.status === 'produzindo') || (a.data_prevista || '9').localeCompare(b.data_prevista || '9'));
-  const FMT = { feed: 'Post', carrossel: 'Carrossel', story: 'Story', reels: 'Reels', outro: 'Material' };
-  const thumb = x => { const a = x.arquivos_atuais?.[0]; return a?.drive ? `https://drive.google.com/thumbnail?id=${a.drive}&sz=w400` : ''; };
-  const artes = D.filter(x => ['aprovacao', 'aprovado', 'publicado'].includes(x.status) && thumb(x)).sort((a, b) => b.atualizado_em.localeCompare(a.atualizado_em)).slice(0, 6);
+    .sort((a, b) => (b.status === 'ajuste') - (a.status === 'ajuste') || (b.status === 'produzindo') - (a.status === 'produzindo') || (a.data_prevista || '9').localeCompare(b.data_prevista || '9'));
+  const esperando = n(x => x.status === 'aprovacao'), aprovados = n(x => x.status === 'aprovado'), ajustes = n(x => x.status === 'ajuste');
+  const noAr = T.filter(x => x.status === 'enviado').length, pctS = T.length ? Math.round(noAr / T.length * 100) : 0;
+  const abertasT = T.filter(x => x.status !== 'enviado').length + fila.length;
+  const prox = fila[0];
 
-  document.getElementById('modulos').outerHTML = `
-  <section class="dash">
-    <header class="dh azul">
-      <svg class="dh__asa" viewBox="0 0 600 420" aria-hidden="true"><path d="M60 40 L520 300 a46 46 0 0 1 -60 70 L40 140 a46 46 0 0 1 20 -100Z"/><path d="M120 190 L430 365 a36 36 0 0 1 -48 52 L100 262 a36 36 0 0 1 20 -72Z" opacity=".55"/><circle cx="110" cy="345" r="38"/></svg>
-      <div class="dh__txt">
-        <p class="dh__data">${esc(dataHoje)}</p>
-        <h1>${saud}, <b>${esc(p.nome.split(' ')[0])}.</b></h1>
-        <p class="dh__res">${resumo.length ? 'Hoje você tem ' + resumo.join(', ').replace(/, ([^,]*)$/, ' e $1') + '.' : 'Tudo em dia por aqui.'}</p>
-        <div class="dh__bts"><a class="btn-l" href="marketing/">Fila de marketing</a><a class="btn-v" href="tarefas/">Sistema Coleve</a></div>
-      </div>
-      <div class="dh__aneis">
-        <div><a href="marketing/">${anel(pctM, '#B9FC01')}</a><span>marketing publicado<small>${publicados} de ${D.length}</small></span></div>
-        <div><a href="tarefas/">${anel(pctS, '#FFFFFF')}</a><span>sistema no ar<small>${noAr} de ${T.length}</small></span></div>
-      </div>
-    </header>
+  const nb = document.getElementById('numeros');
+  nb.innerHTML = num(fila.length, 'pedidos na fila') + num(esperando, 'esperando o Manu') + num(pctS + '%', 'do Sistema Coleve no ar');
+  nb.hidden = false;
 
-    ${ajustes || atrasados ? `<div class="alertas">${ajustes ? `<a class="al al--aj" href="marketing/">${ico('ajuste')}<span><b>${ajustes}</b> ajuste${ajustes > 1 ? 's' : ''} pedido${ajustes > 1 ? 's' : ''} pelo Manu</span></a>` : ''}${atrasados ? `<a class="al al--at" href="tarefas/">${ico('relogio')}<span><b>${atrasados}</b> atrasado${atrasados > 1 ? 's' : ''}</span></a>` : ''}</div>` : ''}
-
-    <article class="cx">
-      <header class="cx__h"><h2>A jornada do marketing</h2><a href="marketing/">Abrir</a></header>
-      <div class="mg">
-        <svg class="mg__cabo" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true"><path d="M20 20 C 200 4, 300 36, 500 20 S 800 4, 980 20"/><path class="mg__corrente" d="M20 20 C 200 4, 300 36, 500 20 S 800 4, 980 20"/></svg>
-        ${etapa(novos + ajustes, 'pedidos', '', ajustes ? 'mg__p--aj' : '')}
-        ${etapa(fazendo, 'fazendo', '', 'mg__p--fz')}
-        ${etapa(esperando, 'com o Manu', '', esperando ? 'mg__p--es' : '')}
-        ${etapa(aprovados, 'aprovados', '', '')}
-        ${etapa(publicados, 'publicados', '', 'mg__p--ok')}
-      </div>
-    </article>
-
-    <div class="dg">
-      <article class="cx">
-        <header class="cx__h"><h2>O que fazer agora</h2><span class="cx__n">${fila.length} na fila</span></header>
-        <ol class="fila">${fila.slice(0, 8).map((x, k) => `<li><a href="marketing/#${x.id}"><span class="fila__n">${k + 1}</span><span class="fila__t"><b>${esc(x.titulo)}</b><small><em class="fmt">${FMT[x.formato] || 'Peça'}</em>${x.status === 'ajuste' ? '<em class="tg-aj">ajuste</em>' : atrasoD(x) ? '<em class="tg-at">atrasado</em>' : x.status === 'produzindo' ? '<em class="tg-fz">fazendo</em>' : ''}${x.data_prevista ? 'para ' + dBR(x.data_prevista) : 'sem data'}</small></span><span class="fila__seta">›</span></a></li>`).join('') || '<li class="vazio-p">Fila zerada. Nada esperando por você.</li>'}</ol>
-        <a class="cx__pe" href="marketing/">Ver a fila completa${fila.length ? ` (${fila.length})` : ''}<span aria-hidden="true">›</span></a>
-      </article>
-
-      <div class="dg__lado">
-        <article class="cx">
-          <header class="cx__h"><h2>Últimas artes</h2><a href="marketing/">Feed</a></header>
-          <div class="artes">${artes.map(x => `<a href="marketing/#${x.id}" title="${esc(x.titulo)}"><img src="${thumb(x)}" alt="${esc(x.titulo)}" width="160" height="200" loading="lazy" referrerpolicy="no-referrer">${x.status === 'aprovacao' ? '<em>com o Manu</em>' : ''}</a>`).join('') || '<p class="vazio-p">Quando você enviar a primeira arte, ela aparece aqui.</p>'}</div>
-        </article>
-        <article class="cx">
-          <header class="cx__h"><h2>Atividade</h2></header>
-          <ul class="ativ">${(ms || []).map(m => ({ m, e: evento(m.texto, m.autor?.nome) })).filter(x => x.e).slice(0, 5).map(({ m, e }) => `<li><span class="ativ__ic ativ__ic--${e[0]}">${ico(e[0])}</span><p>${e[1]}</p><time datetime="${m.criado_em}">${quando(m.criado_em)}</time></li>`).join('') || '<li class="vazio-p">Quando alguém pedir, enviar ou aprovar, aparece aqui.</li>'}</ul>
-        </article>
-      </div>
-    </div>
-
-    <article class="cx">
-      <header class="cx__h"><h2>Sistema Coleve <small>${noAr} de ${T.length} no ar</small></h2><a href="tarefas/">Abrir</a></header>
-      <ol class="rota">${T.map(x => `<li class="rota__i rota--${x.status}"><i></i><span>${esc(x.titulo)}</span>${x.status === 'conferencia' ? '<em class="tg-fz">em teste</em>' : x.status === 'fazendo' ? '<em class="tg-fz">fazendo</em>' : x.prazo ? `<em class="tg-at">até ${dBR(x.prazo)}</em>` : ''}</li>`).join('')}</ol>
-    </article>
-  </section>`;
+  const card = (t, d, ico, href, etiqueta, extra = '') =>
+    `<a class="mod mod--ativo" href="${href}"><span class="ico">${ico}</span><h3>${t}</h3><p>${d}</p>${extra}<em>${etiqueta}</em></a>`;
+  document.getElementById('modulos').innerHTML =
+    card('Marketing', 'Peça, envie a arte e aprove. Tudo com a pasta no Drive.', I.doc, 'marketing/', `${fila.length} na fila`) +
+    card('Tarefas', 'Seus cards de marketing e do sistema, num quadro só.', I.tarefa, 'tarefas/', `${abertasT} abertas`) +
+    card('Conversas', 'Canais por área e conversa direta com o time.', I.pedido, 'conversas/', 'Abrir') +
+    (prox ? card('Fazer agora', esc(prox.titulo), I.cal, 'marketing/#' + prox.id, prox.status === 'ajuste' ? 'ajuste' : 'próximo') : card('Fazer agora', 'Fila zerada. Nada esperando por você.', I.cal, 'marketing/', 'em dia')) +
+    card('Aprovações', `${esperando} esperando o Manu · ${aprovados} aprovad${aprovados === 1 ? 'a' : 'as'} para publicar${ajustes ? ` · ${ajustes} ajuste${ajustes > 1 ? 's' : ''}` : ''}.`, I.check, 'marketing/', String(esperando)) +
+    card('Sistema Coleve', `${noAr} de ${T.length} etapas no ar.`, I.raio, 'tarefas/', pctS + '%', `<span class="mod__barra" aria-hidden="true"><i style="width:${pctS}%"></i></span>`);
 } else if (equipe) {
   document.getElementById('nav').hidden = false;
   document.getElementById('sub').textContent = 'Tarefas, clientes, documentos e ligações da Coleve em um lugar só.';
