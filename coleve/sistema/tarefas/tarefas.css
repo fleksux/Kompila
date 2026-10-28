@@ -84,7 +84,6 @@ body.carregando .quadro-pg{opacity:0}
 
 @media (max-width:860px){
   .barra__nav{margin-left:auto}
-  .barra__eu{margin-left:8px}
   .quadro-pg{padding:20px 16px 40px}
   .filtros input[type=search]{min-width:0;flex:1 1 100%}
   .filtros select{flex:1 1 45%}
@@ -93,3 +92,27 @@ body.carregando .quadro-pg{opacity:0}
   .gaveta__painel{padding:22px 18px}
   .d-campos{grid-template-columns:1fr}
 }
+
+/* minhas / + tarefa */
+.acoes-q{display:flex;gap:10px;align-items:center;margin-left:auto}
+.vista{display:flex;background:#fff;border-radius:999px;padding:4px;outline:1.5px solid var(--linha);outline-offset:-1.5px}
+.vista button{height:36px;padding:0 16px;border:0;border-radius:999px;background:none;font:700 14px Gabarito,sans-serif;color:var(--cinza);cursor:pointer}
+.vista button.is-ativo{background:var(--azul);color:#fff}
+.btn-lima-q{height:44px;padding:0 20px;border:0;border-radius:999px;background:var(--lima);color:var(--grafite);font:800 15px Gabarito,sans-serif;cursor:pointer}
+.area--marketing{background:#FFE8F4;color:#b0136b}
+.area--tecnologia{background:#E3F7F4;color:#0b766a}
+.area--atendimento{background:var(--nevoa);color:var(--cinza)}
+.cartao--mk{border-left-color:#d62976}
+.tag-aj,.tag-esp{display:inline-block;margin-left:6px;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 7px}
+.tag-aj{background:#FFE8EE;color:#b4123e}
+.tag-esp{background:#FFF1E0;color:#a35a00}
+.dlg-t{border:0;border-radius:20px;padding:24px;width:min(480px,94vw);box-shadow:0 30px 80px rgb(7 26 68 / .3)}
+.dlg-t::backdrop{background:rgb(7 26 68 / .35)}
+.dlg-t form{display:grid;gap:14px}
+.dlg-t h2{font-size:22px;font-weight:800;margin:0}
+.cp-t{display:grid;gap:6px;font-size:14px;font-weight:700}
+.cp-t input,.cp-t select{height:44px;border:1.5px solid var(--linha);border-radius:12px;padding:0 12px;font:400 15px Gabarito,sans-serif;background:var(--nevoa);width:100%}
+.cp-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.botoes-t{display:flex;justify-content:flex-end;gap:8px}
+@media (max-width:860px){.acoes-q{width:100%;margin:0}.vista{flex:1}.vista button{flex:1}.cp-2{grid-template-columns:1fr}}
+@media (max-width:860px){.barra__eu{margin-left:auto!important}body.modo-minhas .gerar,body.modo-minhas .filtros select,body.modo-minhas .filtros .chk{display:none!important}}

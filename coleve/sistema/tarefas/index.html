@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#1A71FF">
 <link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../sistema.css?v=10">
-<link rel="stylesheet" href="tarefas.css?v=4">
+<link rel="stylesheet" href="tarefas.css?v=6">
 </head>
 <body class="carregando">
 
@@ -33,6 +33,10 @@
       <p class="sec">Área interna · tarefas</p>
       <h1 class="h1">Tarefas <b id="total">do time</b></h1>
     </div>
+    <div class="acoes-q">
+      <div class="vista" id="vista-q" role="tablist" aria-label="Ver"><button role="tab" data-v="minhas">Minhas</button><button role="tab" data-v="todas">Todas</button></div>
+      <button class="btn-lima-q" id="nova-t" type="button">+ Tarefa</button>
+    </div>
     <div class="gerar" id="gerar" hidden>
       <label>Competência <input type="month" id="gerar-mes"></label>
       <button class="btn-a" id="gerar-btn" type="button">Gerar guias do mês</button>
@@ -51,6 +55,23 @@
 
   <section class="quadro" id="quadro" aria-label="Quadro de tarefas"></section>
 </main>
+
+<!-- nova tarefa -->
+<dialog class="dlg-t" id="dlg-t">
+  <form id="f-nova-t" method="dialog">
+    <h2>Nova tarefa</h2>
+    <label class="cp-t"><span>O que precisa ser feito?</span><input id="n-titulo" required placeholder="Ex.: Ajustar o site da Coleve no celular"></label>
+    <div class="cp-2">
+      <label class="cp-t"><span>Área</span><select id="n-area"></select></label>
+      <label class="cp-t"><span>Prazo</span><input type="date" id="n-prazo"></label>
+    </div>
+    <div class="cp-2">
+      <label class="cp-t"><span>Com quem</span><select id="n-resp"><option value="">Sem responsável</option></select></label>
+      <label class="cp-t"><span>Cliente</span><select id="n-emp"><option value="">Interno · Coleve</option></select></label>
+    </div>
+    <div class="botoes-t"><button class="sair" type="button" id="n-cancela">Cancelar</button><button class="btn-a" type="submit">Criar tarefa</button></div>
+  </form>
+</dialog>
 
 <!-- detalhe da tarefa -->
 <div class="gaveta" id="gaveta" hidden>
@@ -75,7 +96,7 @@
   </aside>
 </div>
 
-<script type="module" src="tarefas.js?v=6"></script>
+<script type="module" src="tarefas.js?v=8"></script>
 <script type="module" src="../chat-canto.js?v=3"></script>
 </body>
 </html>

@@ -52,22 +52,41 @@ equipe.forEach(p => {
 });
 (emps || []).forEach(e => $('f-emp').insertAdjacentHTML('beforeend', `<option value="${e.id}">${esc(e.nome_fantasia || e.razao_social)}</option>`));
 if (P.area && !['tecnologia', 'marketing'].includes(P.area)) $('f-area').value = P.area;   // cada um abre já na sua área
+// "Minhas": abre ligado para quem cuida de marketing e sistema
+let minhas = ['tecnologia', 'marketing'].includes(P.area);
+const desenhaMinhas = () => { document.body.classList.toggle('modo-minhas', minhas); document.querySelectorAll('#vista-q button').forEach(b => b.classList.toggle('is-ativo', (b.dataset.v === 'minhas') === minhas)); };
+document.getElementById('vista-q').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; minhas = b.dataset.v === 'minhas'; desenhaMinhas(); desenha(); });
+desenhaMinhas();
+
+// pedido de marketing vira card: o status anda sozinho com o fluxo do Marketing
+const ST_DEMANDA = { pedido: 'a_fazer', ajuste: 'a_fazer', produzindo: 'fazendo', aprovacao: 'conferencia', aprovado: 'pronto', publicado: 'enviado' };
+const FORMATO = { feed: 'Post', carrossel: 'Carrossel', story: 'Story', reels: 'Reels', outro: 'Peça' };
+const hojeISO = () => new Date().toISOString().slice(0, 10);
+const comoCard = d => ({
+  id: 'd:' + d.id, demanda: d, titulo: d.titulo, area: 'marketing', status: ST_DEMANDA[d.status] || 'a_fazer',
+  empresa_nome: FORMATO[d.formato] + ' · pedido por ' + (d.pedido_por_nome || '').split(' ')[0],
+  prazo: d.data_prevista, responsavel_id: d.responsavel_id, responsavel_nome: d.responsavel_nome,
+  ajuste: d.status === 'ajuste', urgente: d.status === 'ajuste',
+  atrasada: !!d.data_prevista && d.data_prevista < hojeISO() && !['aprovado', 'publicado'].includes(d.status)
+});
 
 async function carrega() {
   const { data, error } = await banco.from('v_tarefa').select('*').neq('status', 'cancelado')
     .order('prazo', { ascending: true, nullsFirst: false }).limit(500);
   if (error) return avisa('Não deu para carregar as tarefas.');
-  tarefas = data;
+  const { data: ds } = await banco.from('v_demanda').select('id,titulo,formato,status,data_prevista,responsavel_id,responsavel_nome,pedido_por_nome').neq('status', 'cancelado');
+  tarefas = [...data, ...(ds || []).map(comoCard)];
   desenha();
 }
 
 function filtradas() {
   const b = $('f-busca').value.trim().toLowerCase(), a = $('f-area').value, r = $('f-resp').value, e = $('f-emp').value, at = $('f-atraso').checked;
   return tarefas.filter(t =>
+    (!minhas || t.responsavel_id === P.id) &&
     (!b || (t.titulo + ' ' + t.empresa_nome).toLowerCase().includes(b)) &&
     (!a || t.area === a) &&
     (!r || (r === '-' ? !t.responsavel_id : t.responsavel_id === r)) &&
-    (!e || t.empresa_id === e) &&
+    (!e || (e === 'interno' ? !t.empresa_id && !t.demanda : t.empresa_id === e)) &&
     (!at || t.atrasada));
 }
 
@@ -87,8 +106,8 @@ function desenha() {
     return `<div class="col" data-status="${st}">
       <header><b>${nome}</b><span>${cs.length}</span></header>
       <div class="col__cards">${cs.map(t => `
-        <article class="cartao${t.atrasada ? ' cartao--atraso' : ''}${t.urgente ? ' cartao--urgente' : ''}" draggable="true" data-id="${t.id}" tabindex="0">
-          <span class="area area--${t.area}">${AREAS[t.area]}</span>
+        <article class="cartao${t.atrasada ? ' cartao--atraso' : ''}${t.urgente ? ' cartao--urgente' : ''}${t.demanda ? ' cartao--mk' : ''}" draggable="true" data-id="${t.id}" tabindex="0">
+          <span class="area area--${t.area}">${AREAS[t.area]}</span>${t.ajuste ? '<span class="tag-aj">ajuste pedido</span>' : ''}${t.demanda && t.status === 'conferencia' ? '<span class="tag-esp">esperando aprovação</span>' : ''}
           <h3>${esc(t.titulo)}</h3>
           <p class="cartao__emp">${esc(t.empresa_nome)}${t.empresa_teste ? ' <em>teste</em>' : ''}</p>
           <footer>${prazoTag(t)}<span class="mini" title="${esc(t.responsavel_nome || 'Sem responsável')}">${t.responsavel_nome ? iniciais(t.responsavel_nome) : '+'}</span></footer>
@@ -112,6 +131,13 @@ $('quadro').addEventListener('drop', async e => {
 
 async function mudaStatus(id, status) {
   const t = tarefas.find(x => x.id === id); if (!t || t.status === status) return;
+  if (t.demanda) {
+    if (status === 'fazendo' && t.status === 'a_fazer') {
+      t.status = 'fazendo'; desenha();
+      await banco.from('demanda').update({ status: 'produzindo' }).eq('id', t.demanda.id);
+    } else avisa('Esse é um pedido de marketing: envie a arte e a aprovação pelo Marketing. Ele anda sozinho aqui.');
+    return;
+  }
   const antes = t.status; t.status = status; desenha();
   const { error } = await banco.from('tarefa').update({ status }).eq('id', id);
   if (error) { t.status = antes; desenha(); avisa('Não deu para mudar o status.'); }
@@ -127,8 +153,11 @@ function fecha() { $('gaveta').hidden = true; aberta = null; carrega(); }
 
 async function abre(id) {
   const t = tarefas.find(x => x.id === id); if (!t) return;
+  if (t.demanda) { location.href = '../marketing/#' + t.demanda.id; return; }
   aberta = t;
   $('d-empresa').textContent = t.empresa_nome;
+  $('d-comp').closest('div').hidden = !t.competencia;
+  $('d-visivel').closest('div').hidden = !t.empresa_id;
   $('d-titulo').textContent = t.titulo;
   $('d-area').textContent = AREAS[t.area];
   $('d-comp').textContent = t.competencia ? dataBR(t.competencia).slice(3) : '-';
@@ -173,10 +202,34 @@ $('d-novo').onsubmit = async e => {
   $('d-texto').value = ''; carregaDetalhe(aberta.id);
 };
 
+// + Tarefa: coisa sua que não é guia nem post (ajustar o site, conectar o WhatsApp...)
+$('f-emp').insertAdjacentHTML('afterbegin', '<option value="interno">Interno · Coleve</option>');
+$('f-emp').querySelector('option[value=""]')?.after($('f-emp').querySelector('option[value=interno]'));
+Object.entries(AREAS).forEach(([k, v]) => $('n-area').insertAdjacentHTML('beforeend', `<option value="${k}">${v}</option>`));
+equipe.forEach(p => $('n-resp').insertAdjacentHTML('beforeend', `<option value="${p.id}">${esc(p.nome)}</option>`));
+(emps || []).forEach(e => $('n-emp').insertAdjacentHTML('beforeend', `<option value="${e.id}">${esc(e.nome_fantasia || e.razao_social)}</option>`));
+$('nova-t').onclick = () => {
+  $('f-nova-t').reset(); $('n-area').value = P.area || 'tecnologia'; $('n-resp').value = P.id; $('dlg-t').showModal(); $('n-titulo').focus();
+};
+$('n-cancela').onclick = () => $('dlg-t').close();
+$('f-nova-t').addEventListener('submit', async e => {
+  e.preventDefault();
+  const titulo = $('n-titulo').value.trim(); if (!titulo) return;
+  const empresa = $('n-emp').value || null;
+  const { error } = await banco.from('tarefa').insert({
+    titulo, origem: 'equipe', area: $('n-area').value, responsavel_id: $('n-resp').value || null,
+    prazo: $('n-prazo').value || null, prazo_original: $('n-prazo').value || null,
+    empresa_id: empresa, visivel_cliente: !!empresa, criado_por: P.id
+  });
+  if (error) { avisa('Não deu para criar a tarefa.'); return; }
+  $('dlg-t').close(); avisa('Tarefa criada.'); carrega();
+});
+
 // tempo real: se alguém mexe numa tarefa, o quadro atualiza sozinho
 let espera;
 banco.channel('coleve-tarefas')
   .on('postgres_changes', { event: '*', schema: 'public', table: 'tarefa' }, () => { clearTimeout(espera); espera = setTimeout(carrega, 400); })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'demanda' }, () => { clearTimeout(espera); espera = setTimeout(carrega, 400); })
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tarefa_comentario' }, ({ new: c }) => { if (aberta && c.tarefa_id === aberta.id) carregaDetalhe(aberta.id); })
   .subscribe();
 
