@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar · Sistema Coleve</title>
+<meta name="description" content="Acesso ao Sistema Coleve: documentos, pedidos e tarefas da sua contabilidade em um lugar só.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="icon" href="../img/icone.svg" type="image/svg+xml">
+<link rel="preload" href="../fonts/Gabarito-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="entrar.css">
+<script src="entrar.js" defer></script>
+</head>
+<body>
+<main class="acesso">
+
+  <!-- lado azul: o que o sistema faz -->
+  <aside class="painel azul">
+    <a href="../" class="painel__marca" aria-label="Voltar ao site da Coleve"><img src="../img/logo_ev_branco.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+    <div class="painel__txt">
+      <p class="sec">Sistema Coleve</p>
+      <h1 class="h1">Sua contabilidade <b>num lugar só.</b></h1>
+      <ul class="recursos">
+        <li><span class="ico"><svg viewBox="0 0 24 24"><path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5M8 13h8M8 17h6"/></svg></span><div><b>Documentos</b><small>Guias, apurações e contratos sempre à mão</small></div></li>
+        <li><span class="ico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Zm4 5h8M8 13h5"/></svg></span><div><b>Pedidos</b><small>Peça uma certidão ou alteração em dois cliques</small></div></li>
+        <li><span class="ico"><svg viewBox="0 0 24 24"><path d="M4 6h3M4 12h3M4 18h3M10 6h10M10 12h10M10 18h10"/><path d="m3.5 6 .9.9L6 5.3"/></svg></span><div><b>Tarefas</b><small>Veja quem está cuidando de cada entrega e o prazo</small></div></li>
+        <li><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3m12 0h3m-3.6-6.4-2.1 2.1M8 14a4 4 0 1 1 8 0v4H8v-4Zm-1 7h10"/></svg></span><div><b>Avisos</b><small>Prazo chegando, documento pendente, guia nova</small></div></li>
+      </ul>
+    </div>
+    <div class="painel__arte" aria-hidden="true"><img src="../img/cena_entrar.webp" alt="" width="1000" height="1126"></div>
+  </aside>
+
+  <!-- lado claro: o acesso -->
+  <section class="lado">
+    <div class="caixa">
+      <a href="../" class="voltar">← Voltar ao site</a>
+      <img src="../img/logo_ev.png" alt="Coleve eletromobilidade" class="caixa__marca" width="900" height="270">
+      <h2 class="h2">Entrar no <b>Sistema Coleve</b></h2>
+      <p class="caixa__sub">Use o e-mail cadastrado na Coleve.</p>
+
+      <div class="perfil" role="tablist" aria-label="Tipo de acesso">
+        <button type="button" role="tab" aria-selected="true" data-perfil="cliente" class="is-ativo">Sou cliente</button>
+        <button type="button" role="tab" aria-selected="false" data-perfil="equipe">Equipe Coleve</button>
+        <span class="perfil__fundo" aria-hidden="true"></span>
+      </div>
+
+      <form class="form" id="form-acesso" novalidate>
+        <label class="campo"><span>E-mail</span><input type="email" name="email" autocomplete="username" placeholder="voce@suaempresa.com.br"></label>
+        <label class="campo campo--senha"><span>Senha <a href="#" class="esqueci" id="esqueci">Esqueci a senha</a></span>
+          <span class="campo__in"><input type="password" name="senha" autocomplete="current-password" placeholder="Sua senha"><button type="button" class="olho" aria-label="Mostrar senha"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></span>
+        </label>
+        <label class="lembrar"><input type="checkbox" name="lembrar"><span></span>Manter conectado neste aparelho</label>
+        <button class="btn btn--azul btn--largo" type="submit">Entrar</button>
+        <p class="aviso" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="ajuda">
+        <p class="ajuda__cliente">Ainda não é cliente? <a href="../#diagnostico">Faça o diagnóstico grátis</a></p>
+        <p class="ajuda__equipe" hidden>Primeiro acesso da equipe? Peça o convite ao Emmanuel.</p>
+        <p>Precisa de ajuda? <a href="https://wa.me/5511920027321?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20para%20entrar%20no%20Sistema%20Coleve" target="_blank" rel="noopener">Fale no WhatsApp</a></p>
+      </div>
+    </div>
+    <p class="rodinha">Coleve Contabilidade · © 2026 · <a href="https://kompila.com.br" target="_blank" rel="noopener">Desenvolvido por <b>[ kompila ]</b></a></p>
+  </section>
+
+</main>
+</body>
+</html>
