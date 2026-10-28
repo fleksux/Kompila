@@ -131,7 +131,7 @@ $('f-nova').addEventListener('submit', async e => {
   $('cria').disabled = true; $('cria').textContent = 'Criando…';
   try {
     const { data: d, error } = await banco.from('demanda').insert({
-      titulo, formato: f.formato.value, data_prevista: f.data.value || null, briefing: f.briefing.value.trim() || null,
+      titulo, formato: f.formato.value, data_prevista: f.data.value || null, briefing: f.briefing.value.trim() || null, legenda: f.legenda.value.trim() || null,
       pedido_por: P.id, responsavel_id: responsavelPadrao
     }).select().single();
     if (error) throw error;
@@ -170,7 +170,7 @@ function desenhaInfo() {
   $('dm-status').innerHTML = `<span class="st ${cls}">${nome.replace(/s$/, '').replace('Pedidos novo', 'Pedido novo')}</span>`;
   $('dm-titulo').textContent = atual.titulo;
   $('dm-meta').textContent = `${FORMATOS[atual.formato]}${atual.data_prevista ? ' · para ' + dataBR(atual.data_prevista) : ''} · pedido por ${atual.pedido_por_nome || ''} · com ${atual.responsavel_nome || ''}`;
-  $('dm-brief').textContent = atual.briefing || 'Sem briefing.';
+  $('dm-brief').textContent = atual.briefing || 'Sem observações.';
   const ultima = versoes.at(-1);
   $('decide').hidden = !(atual.status === 'aprovacao' && ultima && !ultima.decisao);
   $('publicado').hidden = atual.status !== 'aprovado';
