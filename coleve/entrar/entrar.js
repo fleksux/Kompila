@@ -18,7 +18,7 @@ perfil.querySelectorAll('button').forEach(b => b.addEventListener('click', () =>
   const equipe = b.dataset.perfil === 'equipe';
   ajudaCliente.hidden = equipe;
   ajudaEquipe.hidden = !equipe;
-  form.email.placeholder = equipe ? 'voce@coleve.com.br' : 'voce@suaempresa.com.br';
+  form.email.placeholder = equipe ? 'seu usuário ou e-mail da Coleve' : 'voce@suaempresa.com.br ou seu usuário';
   avisa('');
 }));
 
@@ -33,7 +33,7 @@ olho.addEventListener('click', () => {
 // "manter conectado" fica lembrado neste aparelho
 try { form.lembrar.checked = localStorage.getItem('coleve_lembrar') !== '0'; } catch {}
 
-const carregaBanco = async () => (await import('../sistema/conexao.js'));
+const carregaBanco = async () => (await import('../sistema/conexao.js?v=2'));
 
 // já logado? vai direto pro sistema
 carregaBanco().then(async ({ quemSou }) => {
@@ -46,11 +46,11 @@ form.addEventListener('submit', async ev => {
   form.querySelectorAll('.erro').forEach(x => x.classList.remove('erro'));
   const email = form.email.value.trim().toLowerCase(), senha = form.senha.value;
   const faltas = [];
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) faltas.push(form.email);
+  if (!email || (email.includes('@') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) faltas.push(form.email);
   if (!senha) faltas.push(form.senha);
   if (faltas.length) {
     faltas.forEach(i => i.closest('.campo').classList.add('erro'));
-    avisa(faltas[0] === form.email ? 'Confira o e-mail.' : 'Digite a sua senha.');
+    avisa(faltas[0] === form.email ? 'Digite o seu e-mail ou usuário.' : 'Digite a sua senha.');
     faltas[0].focus();
     return;
   }
@@ -59,11 +59,10 @@ form.addEventListener('submit', async ev => {
   botao.disabled = true; botao.textContent = 'Entrando...'; avisa('');
 
   try {
-    const { banco, quemSou } = await carregaBanco();
-    const { error } = await banco.auth.signInWithPassword({ email, password: senha });
-    if (error) {
+    const { banco, quemSou, entrarCom } = await carregaBanco();
+    if (!(await entrarCom(email, senha))) {
       form.senha.closest('.campo').classList.add('erro');
-      avisa(/invalid/i.test(error.message) ? 'E-mail ou senha não conferem.' : 'Não deu para entrar agora. Tente de novo em instantes.');
+      avisa('Usuário, e-mail ou senha não conferem.');
       return;
     }
     const eu = await quemSou();
@@ -86,7 +85,7 @@ document.getElementById('esqueci').addEventListener('click', async ev => {
   const email = form.email.value.trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     form.email.closest('.campo').classList.add('erro');
-    avisa('Escreva o seu e-mail acima e clique de novo em "Esqueci a senha".');
+    avisa('Escreva o seu e-mail (não o usuário) acima e clique de novo em "Esqueci a senha". Se você só tem usuário, peça ao Alex para trocar a senha.');
     form.email.focus();
     return;
   }

@@ -1,6 +1,6 @@
 // Sistema Coleve · o "WhatsApp interno" no canto de toda tela da equipe.
 // Abre as conversas por cima (iframe em modo mini), sem sair do que está fazendo.
-import { banco, quemSou } from './conexao.js';
+import { banco, quemSou } from './conexao.js?v=2';
 
 const eu = await quemSou().catch(() => null);
 if (eu?.pessoa?.tipo === 'equipe') {

@@ -35,7 +35,7 @@
 </main>
 
 <script type="module">
-import { banco, quemSou } from './conexao.js';
+import { banco, quemSou } from './conexao.js?v=2';
 
 const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo) { location.replace('../entrar/'); throw 0; }
@@ -99,6 +99,6 @@ document.getElementById('sair').addEventListener('click', async () => {
 });
 document.body.classList.remove('carregando');
 </script>
-<script type="module" src="chat-canto.js?v=2"></script>
+<script type="module" src="chat-canto.js?v=3"></script>
 </body>
 </html>

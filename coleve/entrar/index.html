@@ -10,7 +10,7 @@
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
 <link rel="preload" href="../fonts/Gabarito-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="stylesheet" href="entrar.css">
-<script src="entrar.js" defer></script>
+<script src="entrar.js?v=2" defer></script>
 </head>
 <body>
 <main class="acesso">
@@ -37,7 +37,7 @@
       <a href="../" class="voltar">← Voltar ao site</a>
       <img src="../img/logo_ev.png" alt="Coleve eletromobilidade" class="caixa__marca" width="900" height="270">
       <h2 class="h2">Entrar no <b>Sistema Coleve</b></h2>
-      <p class="caixa__sub">Use o e-mail cadastrado na Coleve.</p>
+      <p class="caixa__sub">Use o seu e-mail ou o usuário que a Coleve passou.</p>
 
       <div class="perfil" role="tablist" aria-label="Tipo de acesso">
         <button type="button" role="tab" aria-selected="true" data-perfil="cliente" class="is-ativo">Sou cliente</button>
@@ -46,7 +46,7 @@
       </div>
 
       <form class="form" id="form-acesso" novalidate>
-        <label class="campo"><span>E-mail</span><input type="email" name="email" autocomplete="username" placeholder="voce@suaempresa.com.br"></label>
+        <label class="campo"><span>E-mail ou usuário</span><input type="text" name="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="voce@suaempresa.com.br ou seu usuário"></label>
         <label class="campo campo--senha"><span>Senha <a href="#" class="esqueci" id="esqueci">Esqueci a senha</a></span>
           <span class="campo__in"><input type="password" name="senha" autocomplete="current-password" placeholder="Sua senha"><button type="button" class="olho" aria-label="Mostrar senha"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></span>
         </label>

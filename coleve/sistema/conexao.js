@@ -18,6 +18,26 @@ export const raiz = new URL('../', import.meta.url).href;   // .../coleve/
 export async function quemSou() {
   const { data: { session } } = await banco.auth.getSession();
   if (!session) return null;
-  const { data: pessoa } = await banco.from('pessoa').select('id,nome,email,tipo,papel,area,ativo').eq('id', session.user.id).maybeSingle();
+  const { data: pessoa } = await banco.from('pessoa').select('id,nome,email,tipo,papel,area,ativo,usuario,trocar_senha').eq('id', session.user.id).maybeSingle();
+  // primeiro acesso (senha provisória): ninguém passa sem criar a própria senha
+  if (pessoa?.trocar_senha && !location.pathname.includes('/nova-senha/')) {
+    location.replace(new URL('../entrar/nova-senha/?primeiro=1', import.meta.url).href);
+    await new Promise(() => {});
+  }
   return { session, pessoa };
+}
+
+// entrar com usuário (sem @): o servidor acha o e-mail; com @, entra direto
+export async function entrarCom(login, senha) {
+  if (login.includes('@')) {
+    const { error } = await banco.auth.signInWithPassword({ email: login, password: senha });
+    return !error;
+  }
+  const r = await fetch(BANCO_URL + '/functions/v1/entrar', {
+    method: 'POST', headers: { apikey: ANON, 'Content-Type': 'application/json' }, body: JSON.stringify({ usuario: login, senha })
+  });
+  const d = await r.json().catch(() => ({}));
+  if (!d.access_token) return false;
+  const { error } = await banco.auth.setSession({ access_token: d.access_token, refresh_token: d.refresh_token });
+  return !error;
 }

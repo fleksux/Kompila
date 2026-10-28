@@ -28,7 +28,9 @@
   </section>
 </main>
 <script type="module">
-import { banco } from '../../sistema/conexao.js';
+import { banco } from '../../sistema/conexao.js?v=2';
+const primeiro = new URLSearchParams(location.search).has('primeiro');
+if (primeiro) { document.querySelector('.h2').innerHTML = 'Crie a <b>sua senha</b>'; document.querySelector('.caixa__sub').textContent = 'Primeiro acesso: troque a senha provisória por uma só sua. Pelo menos 8 caracteres.'; }
 const form = document.getElementById('form-senha');
 const aviso = form.querySelector('.aviso');
 const botao = form.querySelector('button');
@@ -50,6 +52,7 @@ form.addEventListener('submit', async ev => {
   botao.disabled = true; botao.textContent = 'Salvando...';
   const { error } = await banco.auth.updateUser({ password: s });
   if (error) { avisa('Não deu para salvar. Peça um novo link em "Esqueci a senha".'); botao.disabled = false; botao.textContent = 'Salvar e entrar'; return; }
+  await banco.rpc('senha_trocada');
   avisa('Senha nova salva. Entrando...', true);
   setTimeout(() => location.replace('../../sistema/'), 900);
 });
