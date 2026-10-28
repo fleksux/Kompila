@@ -213,10 +213,14 @@ function desenhaVersoes() {
 $('versoes').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; vSel = versoes.find(v => v.numero == b.dataset.n); quadro = 0; desenhaVersoes(); desenhaIg(); });
 
 async function desenhaIg() {
-  const ig = $('ig'); ig.classList.toggle('ig--story', ['story', 'reels'].includes(atual.formato));
+  // "Outro" é documento (tabela, PDF, proposta): mostra a peça inteira, sem a moldura do Instagram
+  const doc = atual.formato === 'outro';
+  const ig = $('ig'); ig.classList.toggle('ig--story', ['story', 'reels'].includes(atual.formato)); ig.classList.toggle('ig--doc', doc);
   const arqs = vSel?.arquivos || [];
+  $('ig-arqs').innerHTML = doc && arqs.length ? arqs.map((x, i) => `<button type="button" class="${i === quadro ? 'is-ativo' : ''}" data-q="${i}"><span class="ext">${esc((x.nome.split('.').pop() || '').toUpperCase())}</span><span class="nm">${/^image\//.test(x.tipo || '') ? 'Imagem' : /pdf/.test(x.tipo || '') ? 'PDF para imprimir' : esc(x.nome)}</span></button>`).join('') +
+    (arqs[quadro]?.drive ? `<a class="abrir" href="https://drive.google.com/file/d/${arqs[quadro].drive}/view" target="_blank" rel="noopener">Abrir</a>` : '') : '';
   if (!arqs.length) {
-    $('ig-midia').innerHTML = `<div class="ig__vazio"><b>${FORMATOS[atual.formato]}</b><span>Assim que a primeira versão subir, ela aparece aqui do jeito que fica no Instagram.</span></div>`;
+    $('ig-midia').innerHTML = `<div class="ig__vazio"><b>${FORMATOS[atual.formato]}</b><span>${doc ? 'Assim que a primeira versão subir, a peça aparece aqui inteira.' : 'Assim que a primeira versão subir, ela aparece aqui do jeito que fica no Instagram.'}</span></div>`;
     $('ig-pontos').innerHTML = ''; $('ig-leg').innerHTML = atual.briefing ? '' : ''; return;
   }
   const a = arqs[quadro];
@@ -232,6 +236,7 @@ async function desenhaIg() {
   $('ig-leg').innerHTML = leg ? `<b>coleve.contabilidade</b> ${curta.replace(/\n/g, '<br>')}` : '';
   $('ig-leg').querySelector('.ig__mais')?.addEventListener('click', () => { $('ig-leg').innerHTML = `<b>coleve.contabilidade</b> ${esc(leg).replace(/\n/g, '<br>')}`; });
 }
+$('ig-arqs').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (b) { quadro = +b.dataset.q; desenhaIg(); } });
 $('ig-midia').addEventListener('click', async e => {
   const s = e.target.closest('.ig__seta');
   if (s) { quadro += +s.dataset.d; desenhaIg(); return; }

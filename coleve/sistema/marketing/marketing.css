@@ -236,3 +236,20 @@ body.carregando .mk{opacity:0}
 .card-mk__pe{margin-top:auto;padding-top:16px;font-size:13px;color:var(--cinza)}
 @media (max-width:1000px){.linhas{grid-template-columns:1fr 1fr}}
 @media (max-width:860px){.linhas{grid-template-columns:1fr}.card-mk{min-height:0;padding:16px}.card-mk .capa{width:48px;height:60px}.card-mk b{font-size:16px}}
+
+/* formato "Outro" (documento): a peça inteira, sem moldura de Instagram */
+.ig__arqs:empty{display:none}
+.ig--doc{max-width:none;box-shadow:none;background:none;border-radius:0;overflow:visible;font-family:Gabarito,sans-serif}
+.ig--doc .ig__topo,.ig--doc .ig__acoes,.ig--doc .ig__leg{display:none}
+.ig--doc .ig__midia{aspect-ratio:auto;min-height:220px;background:#fff;border-radius:14px;outline:1px solid var(--linha);outline-offset:-1px}
+.ig--doc .ig__midia img{height:auto;object-fit:contain}
+.ig--doc .ig__midia iframe.drive{aspect-ratio:1536/1092;height:auto;background:#fff}
+.ig--doc .ig__n,.ig--doc .ig__seta{display:none}
+.ig__arqs{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
+.ig__arqs button{display:inline-flex;align-items:center;gap:8px;height:40px;max-width:100%;padding:0 14px 0 6px;border:0;border-radius:999px;background:var(--nevoa);font:700 13px Gabarito,sans-serif;color:var(--grafite);cursor:pointer}
+.ig__arqs button.is-ativo{background:#E6EFFF;outline:1.5px solid var(--azul);outline-offset:-1.5px}
+.ig__arqs .ext{display:grid;place-items:center;min-width:40px;height:28px;padding:0 6px;border-radius:999px;background:var(--azul);color:#fff;font-size:11px;font-weight:800}
+.ig__arqs .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.ig__arqs .abrir{margin-left:auto;display:inline-flex;align-items:center;height:40px;padding:0 18px;border-radius:999px;background:var(--lima);color:var(--grafite);font:800 14px Gabarito,sans-serif;text-decoration:none}
+@media (min-width:861px){.dm__painel:has(.ig--doc){grid-template-columns:minmax(0,640px) 1fr}}
+@media (max-width:860px){.ig__arqs .abrir{margin-left:0;flex:1 0 100%;justify-content:center;height:44px}.ig__arqs button{height:44px}}
