@@ -13,7 +13,7 @@
 <link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../sistema.css?v=30">
 <link rel="stylesheet" href="../tarefas/tarefas.css?v=9">
-<link rel="stylesheet" href="conversas.css?v=12">
+<link rel="stylesheet" href="conversas.css?v=13">
 </head>
 <body class="carregando">
 
@@ -38,7 +38,10 @@
   <aside class="chat__lista">
     <div class="chat__lista-topo">
       <h1>Conversas</h1>
-      <button class="nova" id="nova" type="button" aria-label="Nova conversa direta">+ Direta</button>
+      <div class="lista-acoes">
+        <button class="nova nova--2" id="nova" type="button" aria-label="Nova conversa direta">+ Direta</button>
+        <button class="nova" id="novo-grupo" type="button" aria-label="Novo grupo">+ Grupo</button>
+      </div>
     </div>
     <div class="chat__busca"><input type="search" id="busca" placeholder="Buscar canal ou pessoa" aria-label="Buscar canal ou pessoa"></div>
     <ul class="canais" id="canais"></ul>
@@ -55,6 +58,7 @@
       <button class="voltar-lista" id="voltar" type="button" aria-label="Voltar para os canais">←</button>
       <span class="fio__ico" id="f-ico">#</span>
       <div class="fio__titulo"><b id="f-nome"></b><small id="f-desc"></small></div>
+      <button class="membros-btn" id="membros-btn" type="button" hidden aria-label="Ver e adicionar pessoas do grupo"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.8"/><path d="M16 14.2c3.2.1 5.5 2.3 5.5 5.8"/></svg><span id="membros-n"></span></button>
       <div class="abas" role="tablist">
         <button role="tab" class="is-ativo" data-aba="conversa" aria-selected="true">Conversa</button>
         <button role="tab" data-aba="arquivos" aria-selected="false">Arquivos</button>
@@ -87,7 +91,33 @@
   </form>
 </dialog>
 
-<script type="module" src="conversas.js?v=13"></script>
+<!-- novo grupo -->
+<dialog class="dlg" id="dlg-grupo">
+  <form id="f-grupo">
+    <h2>Novo grupo</h2>
+    <label class="g-campo"><span>Nome do grupo</span><input id="g-nome" required maxlength="60" placeholder="Ex.: Lançamento do site" autocomplete="off"></label>
+    <p>Quem entra?</p>
+    <ul class="pessoas pessoas--marca" id="g-pessoas"></ul>
+    <p class="g-erro" id="g-erro" hidden></p>
+    <div class="dlg__acoes"><button class="sair" type="button" data-fecha>Cancelar</button><button class="btn-a" type="submit">Criar grupo</button></div>
+  </form>
+</dialog>
+
+<!-- pessoas do grupo -->
+<dialog class="dlg" id="dlg-membros">
+  <form id="f-membros">
+    <h2 id="m-nome"></h2>
+    <p id="m-sub"></p>
+    <ul class="pessoas" id="m-lista"></ul>
+    <div id="m-add-bloco">
+      <p>Adicionar ao grupo</p>
+      <ul class="pessoas pessoas--marca" id="m-add"></ul>
+    </div>
+    <div class="dlg__acoes"><button class="sair-grupo" type="button" id="m-sair">Sair do grupo</button><button class="sair" type="button" data-fecha>Fechar</button><button class="btn-a" type="submit" id="m-adicionar" hidden>Adicionar</button></div>
+  </form>
+</dialog>
+
+<script type="module" src="conversas.js?v=14"></script>
 <script type="module" src="../avisos.js?v=1"></script>
 </body>
 </html>

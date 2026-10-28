@@ -30,6 +30,12 @@ const formata = t => esc(t)
   .replace(/(^|\s)@([A-Za-zÀ-ú]+)/g, '$1<mark>@$2</mark>')
   .replace(/\n/g, '<br>');
 
+const ICO_GRUPO = '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.8"/><path d="M16 14.2c3.2.1 5.5 2.3 5.5 5.8"/></svg>';
+const icone = c => c.tipo === 'direto' ? iniciais(c.nome) : c.tipo === 'grupo' ? ICO_GRUPO : '#';
+const titulo = c => ['geral', 'area'].includes(c.tipo) ? '# ' + c.nome : c.nome;
+const primeiro = id => (pessoas.get(id) || 'Alguém').split(' ')[0];
+// recado automático do grupo (criou, adicionou, tirou, saiu) vira uma linha no meio, não balão
+const EVENTO = /^(criou o grupo com |adicionou |tirou |saiu do grupo$)/;
 const AREAS = { fiscal: 'Fiscal', contabil: 'Contábil', dp: 'Dep. pessoal', bpo: 'BPO financeiro', paralegal: 'Paralegal', atendimento: 'Atendimento', tecnologia: 'Tecnologia', marketing: 'Marketing' };
 $('nome').textContent = P.nome;
 $('avatar').textContent = iniciais(P.nome);
@@ -66,7 +72,7 @@ function desenhaCanais() {
   const lista = canais.filter(c => !b || c.nome.toLowerCase().includes(b));
   const grupo = (titulo, itens) => itens.length ? `<li class="canais__rot">${titulo}</li>` + itens.map(c => `
     <li><button class="canal${c.id === atual?.id ? ' is-ativo' : ''}${c.nao_lidas && c.id !== atual?.id ? ' tem-novo' : ''}" data-id="${c.id}">
-      <span class="canal__ico${c.tipo === 'direto' ? ' canal__ico--pessoa' : ''}">${c.tipo === 'direto' ? iniciais(c.nome) : '#'}</span>
+      <span class="canal__ico${c.tipo === 'direto' ? ' canal__ico--pessoa' : c.tipo === 'grupo' ? ' canal__ico--grupo' : ''}">${icone(c)}</span>
       <span class="canal__txt"><b>${esc(c.nome)}</b><small>${esc(c.ultima_txt || c.descricao || '')}</small></span>
       ${c.nao_lidas && c.id !== atual?.id ? `<span class="canal__n">${c.nao_lidas}</span>` : c.ultima_em ? `<span class="canal__h">${hora(c.ultima_em)}</span>` : ''}
     </button></li>`).join('') : '';
@@ -80,7 +86,8 @@ function desenhaCanais() {
     semConversa.map(([id, nome]) => `<li><button class="canal canal--novo" data-pessoa="${id}">
       <span class="canal__ico canal__ico--pessoa${online.has(id) ? ' on' : ''}">${iniciais(nome)}</span>
       <span class="canal__txt"><b>${esc(nome)}</b><small>${online.has(id) ? 'online agora · ' : ''}começar conversa</small></span></button></li>`).join('') +
-    grupo('Canais', lista.filter(c => c.tipo !== 'direto'));
+    grupo('Grupos', lista.filter(c => c.tipo === 'grupo')) +
+    grupo('Canais', lista.filter(c => c.tipo !== 'direto' && c.tipo !== 'grupo'));
   // bolinha verde nas diretas que já existem
   diretas.forEach(c => { const id = idDoOutro(c); if (id && online.has(id)) $('canais').querySelector(`[data-id="${c.id}"] .canal__ico`)?.classList.add('on'); });
 }
@@ -109,7 +116,22 @@ presenca.on('presence', { event: 'sync' }, async () => {
   }
   desenhaCanais(); topoOnline();
 }).subscribe(st => { if (st === 'SUBSCRIBED') presenca.track({ em: new Date().toISOString() }); });
+let membros = [];
+async function carregaMembros() {
+  if (atual?.tipo !== 'grupo') { membros = []; return; }
+  const { data } = await banco.rpc('membros_do_canal', { c: atual.id });
+  membros = data || [];
+  $('membros-n').textContent = membros.length;
+  topoOnline();
+}
 function topoOnline() {
+  if (atual?.tipo === 'grupo') {
+    const nomes = membros.map(m => m.id === P.id ? 'você' : m.nome.split(' ')[0]);
+    const on = membros.filter(m => m.id !== P.id && online.has(m.id)).length;
+    $('f-desc').textContent = (on ? on + ' online · ' : '') + nomes.join(', ');
+    $('f-desc').classList.toggle('on', false);
+    return;
+  }
   if (!atual || atual.tipo !== 'direto') return;
   const on = online.has(idDoOutro(atual));
   $('f-desc').textContent = on ? 'online agora' : 'offline · recebe aviso no celular';
@@ -124,12 +146,15 @@ async function abre(id) {
   $('chat').classList.add('tem-fio');
   $('vazio').hidden = true;
   ['topo', 'escrever'].forEach(x => $(x).hidden = false);
-  $('f-nome').textContent = atual.tipo === 'direto' ? atual.nome : '# ' + atual.nome;
+  $('f-nome').textContent = titulo(atual);
   $('f-desc').textContent = atual.tipo === 'direto' ? 'Conversa direta' : (atual.descricao || '');
+  $('membros-btn').hidden = atual.tipo !== 'grupo';
   $('f-desc').classList.remove('on'); $('f-ico').classList.remove('on'); topoOnline();
-  $('f-ico').textContent = atual.tipo === 'direto' ? iniciais(atual.nome) : '#';
+  $('f-ico').innerHTML = icone(atual);
   $('f-ico').classList.toggle('fio__ico--pessoa', atual.tipo === 'direto');
-  $('texto').placeholder = `Mensagem para ${atual.tipo === 'direto' ? atual.nome : '#' + atual.nome}`;
+  $('f-ico').classList.toggle('fio__ico--grupo', atual.tipo === 'grupo');
+  $('texto').placeholder = `Mensagem para ${atual.tipo === 'direto' || atual.tipo === 'grupo' ? atual.nome : '#' + atual.nome}`;
+  carregaMembros();
   mostraAba('conversa');
   await carregaMensagens();
   banco.rpc('marcar_lido', { c: id }).then(() => { atual.nao_lidas = 0; desenhaCanais(); });
@@ -153,13 +178,17 @@ async function carregaMensagens() {
   $('msgs').innerHTML = '<p class="carrega">Carregando…</p>';
   const { data } = await banco.from('mensagem').select('*').eq('canal_id', atual.id).order('criado_em', { ascending: false }).limit(150);
   ultimoDia = ''; ultimoAutor = ''; ultimaHora = 0;
-  $('msgs').innerHTML = (data || []).length ? '' : `<div class="fio__comeco"><span class="fio__ico">${atual.tipo === 'direto' ? iniciais(atual.nome) : '#'}</span><b>${esc(atual.tipo === 'direto' ? atual.nome : '# ' + atual.nome)}</b><p>Começo da conversa. ${atual.tipo === 'direto' ? 'Só vocês dois veem.' : 'Todo o time Coleve vê este canal. O cliente nunca vê.'}</p></div>`;
+  $('msgs').innerHTML = (data || []).length ? '' : `<div class="fio__comeco"><span class="fio__ico${atual.tipo === 'grupo' ? ' fio__ico--grupo' : ''}">${icone(atual)}</span><b>${esc(titulo(atual))}</b><p>Começo da conversa. ${atual.tipo === 'direto' ? 'Só vocês dois veem.' : atual.tipo === 'grupo' ? 'Só quem está no grupo vê.' : 'Todo o time Coleve vê este canal. O cliente nunca vê.'}</p></div>`;
   for (const m of (data || []).reverse()) await poe(m, false);
   rolaFim();
 }
 async function poe(m, anima = true) {
   const d = dia(m.criado_em);
   if (d !== ultimoDia) { $('msgs').insertAdjacentHTML('beforeend', `<div class="dia"><span>${d}</span></div>`); ultimoDia = d; ultimoAutor = ''; }
+  if (atual?.tipo === 'grupo' && !m.arquivo && EVENTO.test(m.texto || '')) {
+    $('msgs').insertAdjacentHTML('beforeend', `<div class="evento"><span>${esc(m.autor_id === P.id ? 'Você' : primeiro(m.autor_id))} ${esc(m.texto)}</span></div>`);
+    ultimoAutor = ''; return;
+  }
   const t = new Date(m.criado_em).getTime();
   const junto = m.autor_id === ultimoAutor && t - ultimaHora < 5 * 60e3;
   ultimoAutor = m.autor_id; ultimaHora = t;
@@ -257,7 +286,8 @@ banco.channel('coleve-conversas')
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensagem' }, async ({ new: m }) => {
     const c = canais.find(x => x.id === m.canal_id);
     if (!c) { await carregaCanais(); return; }
-    c.ultima_em = m.criado_em; c.ultima_txt = m.texto || '📎 ' + m.arquivo_nome;
+    c.ultima_em = m.criado_em; c.ultima_txt = (c.tipo === 'grupo' && m.autor_id !== P.id ? primeiro(m.autor_id) + ': ' : '') + (m.texto || '📎 ' + m.arquivo_nome);
+    if (c.tipo === 'grupo' && EVENTO.test(m.texto || '')) { if (m.texto.startsWith('saiu') || m.texto.startsWith('tirou')) setTimeout(carregaCanais, 800); if (atual?.id === c.id) setTimeout(carregaMembros, 300); }
     if (atual?.id === m.canal_id && (!MINI || document.visibilityState === 'visible')) {
       const embaixo = perto() || m.autor_id === P.id;
       $('msgs').querySelector('.fio__comeco')?.remove();
@@ -277,7 +307,7 @@ banco.channel('coleve-conversas')
 // aviso do navegador quando a aba está escondida
 function avisoNavegador(m, c) {
   if (document.visibilityState === 'visible' || !('Notification' in window) || Notification.permission !== 'granted') return;
-  const n = new Notification((pessoas.get(m.autor_id) || 'Equipe') + (c.tipo === 'direto' ? '' : ' em #' + c.nome), { body: m.texto || '📎 ' + m.arquivo_nome, icon: '../../img/icone.svg', tag: c.id });
+  const n = new Notification((pessoas.get(m.autor_id) || 'Equipe') + (c.tipo === 'direto' ? '' : c.tipo === 'grupo' ? ' em ' + c.nome : ' em #' + c.nome), { body: m.texto || '📎 ' + m.arquivo_nome, icon: '../../img/icone.svg', tag: c.id });
   n.onclick = () => { window.focus(); abre(c.id); };
 }
 document.addEventListener('click', () => { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); }, { once: true });
@@ -296,6 +326,64 @@ $('pessoas').addEventListener('click', async e => {
   $('dlg-nova').close();
   abreDireto(b.dataset.id);
 });
+
+// novo grupo: nome + quem entra
+const marcaveis = (ids, nomeDoCampo) => ids.map(([id, nome]) => `<li><label><span class="canal__ico canal__ico--pessoa${online.has(id) ? ' on' : ''}">${iniciais(nome)}</span>${esc(nome)}<input type="checkbox" name="${nomeDoCampo}" value="${id}"></label></li>`).join('');
+document.querySelectorAll('[data-fecha]').forEach(b => b.onclick = () => b.closest('dialog').close());
+$('novo-grupo').onclick = () => {
+  const outros = [...pessoas].filter(([id]) => id !== P.id);
+  $('g-nome').value = ''; $('g-erro').hidden = true;
+  $('g-pessoas').innerHTML = marcaveis(outros, 'p');
+  $('dlg-grupo').showModal(); $('g-nome').focus();
+};
+$('f-grupo').addEventListener('submit', async e => {
+  e.preventDefault();
+  const ids = [...$('g-pessoas').querySelectorAll('input:checked')].map(i => i.value);
+  const erro = t => { $('g-erro').textContent = t; $('g-erro').hidden = false; };
+  if (!ids.length) return erro('Marque pelo menos uma pessoa.');
+  const { data: id, error } = await banco.rpc('criar_grupo', { p_nome: $('g-nome').value, p_pessoas: ids });
+  if (error) return erro('Não deu para criar o grupo. Tente de novo.');
+  $('dlg-grupo').close();
+  await carregaCanais(); abre(id);
+});
+
+// pessoas do grupo: ver, adicionar, tirar, sair
+function desenhaMembros() {
+  const eu = membros.find(m => m.id === P.id);
+  const possoTirar = eu?.criou || P.papel === 'admin';
+  $('m-nome').textContent = atual.nome;
+  $('m-sub').textContent = membros.length === 1 ? 'Só você no grupo' : membros.length + ' pessoas no grupo';
+  $('m-lista').innerHTML = membros.map(m => `<li class="membro"><span class="canal__ico canal__ico--pessoa${online.has(m.id) ? ' on' : ''}">${iniciais(m.nome)}</span>
+    <span class="membro__txt">${esc(m.id === P.id ? m.nome + ' (você)' : m.nome)}<small>${[m.criou && 'criou o grupo', m.id !== P.id && online.has(m.id) && '<b class="on">online agora</b>'].filter(Boolean).join(' · ')}</small></span>
+    ${possoTirar && m.id !== P.id ? `<button type="button" class="membro__tirar" data-tirar="${m.id}">Tirar</button>` : ''}</li>`).join('');
+  const fora = [...pessoas].filter(([id]) => !membros.some(m => m.id === id));
+  $('m-add-bloco').hidden = !fora.length;
+  $('m-add').innerHTML = marcaveis(fora, 'a');
+  $('m-adicionar').hidden = true;
+}
+$('membros-btn').onclick = async () => { await carregaMembros(); desenhaMembros(); $('dlg-membros').showModal(); };
+$('m-add').addEventListener('change', () => { $('m-adicionar').hidden = !$('m-add').querySelector('input:checked'); });
+$('f-membros').addEventListener('submit', async e => {
+  e.preventDefault();
+  const ids = [...$('m-add').querySelectorAll('input:checked')].map(i => i.value);
+  if (!ids.length) return;
+  const { error } = await banco.rpc('adicionar_ao_grupo', { p_canal: atual.id, p_pessoas: ids });
+  if (error) return alert('Não deu para adicionar. Tente de novo.');
+  await carregaMembros(); desenhaMembros(); carregaCanais();
+});
+$('m-lista').addEventListener('click', async e => {
+  const b = e.target.closest('[data-tirar]'); if (!b) return;
+  const { error } = await banco.rpc('tirar_do_grupo', { p_canal: atual.id, p_pessoa: b.dataset.tirar });
+  if (error) return alert('Não deu para tirar. Tente de novo.');
+  await carregaMembros(); desenhaMembros(); carregaCanais();
+});
+$('m-sair').onclick = async () => {
+  if (!confirm('Sair do grupo ' + atual.nome + '? Você deixa de ver as mensagens.')) return;
+  const { error } = await banco.rpc('tirar_do_grupo', { p_canal: atual.id, p_pessoa: P.id });
+  if (error) return alert('Não deu para sair. Tente de novo.');
+  $('dlg-membros').close(); $('voltar').click(); await carregaCanais();
+  if (largo()) { const g = canais.find(c => c.slug === 'geral'); if (g) abre(g.id); }
+};
 
 await carregaCanais();
 // abre o canal do endereço (#fiscal) ou, no computador, o #geral
