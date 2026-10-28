@@ -9,7 +9,7 @@
 <link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../sistema.css?v=7">
 <link rel="stylesheet" href="../tarefas/tarefas.css?v=4">
-<link rel="stylesheet" href="marketing.css?v=3">
+<link rel="stylesheet" href="marketing.css?v=4">
 </head>
 <body class="carregando">
 
@@ -110,6 +110,8 @@
         <h3>Subir versão</h3>
         <label class="soltar-mk" id="soltar-mk"><input type="file" id="v-arquivos" multiple accept="image/*,video/*"><span>Arraste as imagens ou o vídeo aqui, ou clique. No carrossel, a ordem é a ordem dos arquivos.</span></label>
         <div class="v-prev" id="v-prev"></div>
+        <label class="cp"><span>Ou cole o link do seu Drive (vídeo pesado vai por aqui)</span><input id="v-drive" placeholder="https://drive.google.com/file/d/..."></label>
+        <p class="dica-drive">No Drive, deixe o arquivo como "Qualquer pessoa com o link pode ver".</p>
         <label class="cp"><span>Legenda</span><textarea id="v-leg" rows="4" placeholder="Legenda do post"></textarea></label>
         <button class="btn-a" id="v-envia" type="button">Mandar para aprovação</button>
         <p class="aviso-mk" id="aviso-v"></p>
@@ -120,7 +122,7 @@
       <p class="dm__brief" id="dm-brief"></p>
 
       <h3>Referências <button class="mais" id="ref-mais" type="button">+ adicionar</button></h3>
-      <form class="ref-nova" id="f-ref" hidden><input id="ref-link" placeholder="Cole um link ou escolha um arquivo"><input type="file" id="ref-arq" multiple><button class="btn-a" type="submit">Pôr</button></form>
+      <form class="ref-nova" id="f-ref" hidden><input id="ref-link" placeholder="Cole um link (Drive, Instagram, YouTube) ou escolha um arquivo"><input type="file" id="ref-arq" multiple><button class="btn-a" type="submit">Pôr</button></form>
       <div class="refs" id="refs"></div>
 
       <h3>Conversa desta demanda</h3>
@@ -130,7 +132,7 @@
   </section>
 </div>
 
-<script type="module" src="marketing.js?v=2"></script>
+<script type="module" src="marketing.js?v=3"></script>
 <script type="module" src="../chat-canto.js?v=2"></script>
 </body>
 </html>

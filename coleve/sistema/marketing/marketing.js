@@ -39,6 +39,10 @@ async function assina(caminhos) {
 }
 const link = c => links.get(c) || '';
 const ehVideo = t => /^video\//.test(t || '');
+// link do Google Drive: pega o id do arquivo; mostra pelo player do próprio Drive
+const idDrive = u => (String(u || '').match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]{20,})/) || String(u || '').match(/[?&]id=([\w-]{20,})/) || [])[1];
+const thumbDrive = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+const playerDrive = id => `https://drive.google.com/file/d/${id}/preview`;
 
 async function sobe(pasta, arquivo) {
   const caminho = `${pasta}/${crypto.randomUUID().slice(0, 8)}-${limpo(arquivo.name)}`;
@@ -58,6 +62,7 @@ async function carrega() {
 function capa(d) {
   const a = d.arquivos_atuais?.[0];
   if (!a) return `<span class="capa capa--vazia">${FORMATOS[d.formato]}</span>`;
+  if (a.drive) return `<img class="capa" src="${thumbDrive(a.drive)}" alt="" referrerpolicy="no-referrer">`;
   return ehVideo(a.tipo) ? `<video class="capa" src="${link(a.arquivo)}" muted preload="metadata"></video>` : `<img class="capa" src="${link(a.arquivo)}" alt="">`;
 }
 function desenha() {
@@ -160,7 +165,7 @@ async function desenhaIg() {
   const a = arqs[quadro];
   const { data: marcas } = await banco.from('demanda_marca').select('*').eq('versao_id', vSel.id).eq('quadro', quadro);
   $('ig-midia').innerHTML = `
-    ${ehVideo(a.tipo) ? `<video src="${link(a.arquivo)}" controls playsinline></video>` : `<img src="${link(a.arquivo)}" alt="${esc(a.nome)}">`}
+    ${a.drive ? `<iframe class="drive" src="${playerDrive(a.drive)}" allow="autoplay" title="${esc(a.nome)}"></iframe>` : ehVideo(a.tipo) ? `<video src="${link(a.arquivo)}" controls playsinline></video>` : `<img src="${link(a.arquivo)}" alt="${esc(a.nome)}">`}
     ${(marcas || []).map((m, i) => `<span class="marca" style="left:${m.x}%;top:${m.y}%" title="${esc(m.texto)}">${i + 1}<em>${esc(m.texto)}</em></span>`).join('')}
     ${arqs.length > 1 ? `<button class="ig__seta ig__seta--e" data-d="-1" ${quadro === 0 ? 'hidden' : ''} aria-label="Anterior">‹</button><button class="ig__seta ig__seta--d" data-d="1" ${quadro === arqs.length - 1 ? 'hidden' : ''} aria-label="Próxima">›</button><span class="ig__n">${quadro + 1}/${arqs.length}</span>` : ''}
     ${['story', 'reels'].includes(atual.formato) ? `<div class="ig__barras">${arqs.map((_, i) => `<i class="${i <= quadro ? 'on' : ''}"></i>`).join('')}</div>` : ''}`;
@@ -173,7 +178,7 @@ async function desenhaIg() {
 $('ig-midia').addEventListener('click', async e => {
   const s = e.target.closest('.ig__seta');
   if (s) { quadro += +s.dataset.d; desenhaIg(); return; }
-  if (!marcando || !vSel || e.target.closest('.marca') || e.target.tagName === 'VIDEO') return;
+  if (!marcando || !vSel || e.target.closest('.marca') || ['VIDEO', 'IFRAME'].includes(e.target.tagName)) return;
   const r = $('ig-midia').getBoundingClientRect();
   const x = ((e.clientX - r.left) / r.width * 100).toFixed(2), y = ((e.clientY - r.top) / r.height * 100).toFixed(2);
   pendente = { x, y, quadro };
@@ -218,14 +223,18 @@ $('v-arquivos').addEventListener('change', e => { poeNovos(e.target.files); e.ta
 $('v-prev').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { novos.splice(+b.dataset.i, 1); poeNovos([]); } });
 ['dragover', 'drop'].forEach(ev => $('soltar-mk').addEventListener(ev, e => { e.preventDefault(); if (ev === 'drop') poeNovos(e.dataTransfer.files); }));
 $('v-envia').onclick = async () => {
-  if (!novos.length) { $('aviso-v').textContent = 'Escolha pelo menos uma imagem ou vídeo.'; return; }
+  const drives = $('v-drive').value.split(/\s+/).map(idDrive).filter(Boolean);
+  if ($('v-drive').value.trim() && !drives.length) { $('aviso-v').textContent = 'Esse link não parece ser de um arquivo do Google Drive.'; return; }
+  if (!novos.length && !drives.length) { $('aviso-v').textContent = 'Escolha uma imagem ou vídeo, ou cole o link do Drive.'; return; }
   $('v-envia').disabled = true; $('v-envia').textContent = 'Subindo…';
   try {
     const numero = (versoes.at(-1)?.numero || 0) + 1;
     const arquivos = [];
     for (const f of novos) arquivos.push(await sobe(`${atual.id}/v${numero}`, f));
+    drives.forEach((id, i) => arquivos.push({ drive: id, nome: 'Drive ' + (i + 1), tipo: 'drive' }));
     const { error } = await banco.from('demanda_versao').insert({ demanda_id: atual.id, numero, arquivos, legenda: $('v-leg').value.trim() || null, enviado_por: P.id });
     if (error) throw error;
+    $('v-drive').value = '';
     await carrega(); abre(atual.id);
   } catch { $('aviso-v').textContent = 'Não deu para subir. Tente de novo.'; }
   finally { $('v-envia').disabled = false; $('v-envia').textContent = 'Mandar para aprovação'; }
@@ -233,7 +242,9 @@ $('v-envia').onclick = async () => {
 
 // referências
 function desenhaRefs(rs) {
-  $('refs').innerHTML = rs.length ? rs.map(r => r.link
+  $('refs').innerHTML = rs.length ? rs.map(r => r.link && idDrive(r.link)
+    ? `<a class="ref" href="${esc(r.link)}" target="_blank" rel="noopener"><img src="${thumbDrive(idDrive(r.link))}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'▶'}))"><b>Arquivo do Drive</b></a>`
+    : r.link
     ? `<a class="ref ref--link" href="${esc(r.link)}" target="_blank" rel="noopener"><span>🔗</span><b>${esc(r.link.replace(/^https?:\/\/(www\.)?/, '').slice(0, 48))}</b></a>`
     : `<a class="ref" href="${link(r.arquivo)}" target="_blank" rel="noopener">${/^image\//.test(r.tipo) ? `<img src="${link(r.arquivo)}" alt="">` : ehVideo(r.tipo) ? `<video src="${link(r.arquivo)}" muted preload="metadata"></video>` : '<span>📎</span>'}<b>${esc(r.nome)}</b></a>`).join('')
     : '<p class="vazio-mk">Sem referência ainda.</p>';
