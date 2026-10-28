@@ -2,7 +2,8 @@
 import { banco, quemSou } from '../conexao.js?v=2';
 
 const eu = await quemSou().catch(() => null);
-if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
+// sem login: o login abre na página inteira, nunca dentro da janelinha do chat
+if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { (window.top !== window ? window.top : window).location.replace(new URL('../../entrar/', location.href).href); throw 0; }
 const P = eu.pessoa;
 const MINI = new URLSearchParams(location.search).has('mini');
 if (MINI) document.body.classList.add('modo-mini');

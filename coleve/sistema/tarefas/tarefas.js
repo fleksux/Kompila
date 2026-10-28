@@ -62,6 +62,9 @@ equipe.forEach(p => {
 if (P.area && !['tecnologia', 'marketing'].includes(P.area)) $('f-area').value = P.area;   // cada um abre já na sua área
 // "Minhas": abre ligado para quem cuida de marketing e sistema
 let minhas = ['tecnologia', 'marketing'].includes(P.area);
+// vindo da ficha do cliente (?emp=<id>): todas as tarefas daquela empresa
+const empDaFicha = new URLSearchParams(location.search).get('emp');
+if (empDaFicha) { $('f-emp').value = empDaFicha; $('f-area').value = ''; minhas = false; }
 const desenhaMinhas = () => { document.body.classList.toggle('modo-minhas', minhas); document.querySelectorAll('#vista-q button').forEach(b => b.classList.toggle('is-ativo', (b.dataset.v === 'minhas') === minhas)); };
 document.getElementById('vista-q').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; minhas = b.dataset.v === 'minhas'; desenhaMinhas(); desenha(); });
 desenhaMinhas();

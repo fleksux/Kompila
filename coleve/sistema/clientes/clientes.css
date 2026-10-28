@@ -1,0 +1,38 @@
+/* clientes · mesmos tokens e cards do sistema.css */
+.topo-cl{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.topo-cl .sub{margin-bottom:24px}
+@media (max-width:860px){.topo-cl{gap:0}.topo-cl .btn-lima-q{margin-bottom:24px}}
+.miolo .filtros{margin-top:24px}
+.empresas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.emp{display:flex;flex-direction:column;gap:4px;text-align:left;font:inherit;color:inherit;background:#fff;border:0;border-radius:18px;outline:1.5px solid var(--linha);outline-offset:-1.5px;padding:24px;cursor:pointer;min-height:184px;transition:outline-color .2s,transform .2s}
+.emp:hover,.emp:focus-visible{outline-color:var(--azul);transform:translateY(-2px)}
+.emp--off{opacity:.6}
+.emp__topo{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.emp .ico{width:42px;height:42px;border-radius:12px;background:var(--azul);display:grid;place-items:center}
+.emp .ico svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.emp em{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--cinza);background:var(--nevoa);border-radius:999px;padding:4px 10px}
+.emp b{font-size:20px;font-weight:800;line-height:1.2}
+.emp small{color:var(--cinza);font-size:14px}
+.emp__pe{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:16px}
+.emp__n{font-size:13px;font-weight:700;color:var(--cinza)}
+.emp__n--atraso{color:#FE3E6D}
+.tag-teste{font-style:normal;font-size:10px;font-weight:800;text-transform:uppercase;background:var(--nevoa);color:var(--cinza);border-radius:6px;padding:2px 6px;vertical-align:middle}
+.gaveta .fmais{margin:0 0 8px}
+.ficha{display:grid;gap:12px}
+.ficha__fim{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.ficha__fim .btn-a{height:44px}
+.resp-grade{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.obrig{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.obrig__i{display:grid;grid-template-columns:20px 1fr;align-items:center;column-gap:8px;min-height:56px;padding:8px 12px;border:1.5px solid var(--linha);border-radius:12px;cursor:pointer;background:#fff}
+.obrig__i input{width:18px;height:18px;accent-color:var(--azul);grid-row:span 2}
+.obrig__i span{font-size:14px;font-weight:700;line-height:1.2}
+.obrig__i small{font-size:11px;color:var(--cinza)}
+.obrig__i.is-on{border-color:var(--azul);background:#E6EFFF}
+#e-contatos li span{margin-left:8px}
+@media (max-width:1000px){.empresas{grid-template-columns:1fr 1fr}}
+@media (max-width:860px){
+  .empresas,.resp-grade,.obrig{grid-template-columns:1fr}
+  .emp{min-height:0}
+  .topo-cl .btn-lima-q{width:100%}
+  .filtros select{flex:1 1 45%}
+}

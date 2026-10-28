@@ -12,14 +12,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css?v=22">
+<link rel="stylesheet" href="sistema.css?v=23">
 </head>
 <body class="carregando">
 
 <header class="barra">
   <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
   <span class="barra__tag" id="tag">Sistema</span>
-  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" id="nav-inicio">Início</a><a href="area/" id="nav-area">Área interna</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a></nav>
+  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" id="nav-inicio">Início</a><a href="area/" id="nav-area">Área interna</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a><a href="clientes/">Clientes</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -173,7 +173,7 @@ if (modoArea && ['marketing', 'tecnologia'].includes(p.area)) {
   document.getElementById('modulos').innerHTML =
     mod('Tarefas', 'Quadro por área, com responsável, prazo e conferência.', I.tarefa, 'tarefas/') +
     mod('Calendário de obrigações', 'Guias e declarações do mês geradas pelo regime de cada empresa. Roda sozinho todo dia 1º.', I.cal, 'tarefas/') +
-    mod('Clientes', 'Ficha da empresa, responsáveis e checklist de onboarding.', I.empresa) +
+    mod('Clientes', 'Ficha da empresa, regime, responsáveis, obrigações e documentos enviados.', I.empresa, 'clientes/') +
     mod('Documentos', 'Guias, apurações e o que o cliente mandou, com protocolo de envio.', I.doc) +
     mod('Pedidos', 'Segunda via, certidão e alteração pedidas pelo cliente.', I.pedido) +
     mod('Ligações', 'Discar para o cliente e registrar cada chamada na ficha.', I.fone);
