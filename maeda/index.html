@@ -506,6 +506,7 @@ function desenha() {
     : `<div class="vazio"><p>Seu pedido está vazio.</p>Toque em "Adicionar" nos pacotes ou nos pratos.</div>`
   const form = ks.length ? `<div class="form" id="form"><h4>Seus dados</h4>
     <label class="campo"><span>Nome</span><input name="nome" autocomplete="name" value="${esc(dados.nome)}"></label>
+    <label class="campo"><span>Seu WhatsApp (com DDD)</span><input name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 90000-0000" value="${esc(dados.telefone)}"></label>
     <div class="duas"><label class="campo"><span>Data</span><input name="data" type="date" value="${esc(dados.data)}"></label><label class="campo"><span>Pessoas (opcional)</span><input name="pessoas" inputmode="numeric" value="${esc(dados.pessoas)}"></label></div>
     <div class="modo"><label><input type="radio" name="modo" value="Retirada no ateliê" ${dados.modo !== 'Entrega' ? 'checked' : ''}> Retirada</label><label><input type="radio" name="modo" value="Entrega" ${dados.modo === 'Entrega' ? 'checked' : ''}> Entrega</label></div>
     <label class="campo" id="c-end" ${dados.modo === 'Entrega' ? '' : 'hidden'}><span>Endereço da entrega</span><input name="endereco" autocomplete="street-address" value="${esc(dados.endereco)}"></label>
@@ -516,16 +517,37 @@ function desenha() {
 function lerForm() {
   const f = $('#form'); if (!f) return dados
   const g = n => (f.querySelector(`[name="${n}"]`) || {}).value || ''
-  dados = { nome: g('nome').trim(), data: g('data'), pessoas: g('pessoas').trim(), modo: (f.querySelector('[name="modo"]:checked') || {}).value === 'Entrega' ? 'Entrega' : 'Retirada no ateliê', endereco: g('endereco').trim(), obs: g('obs').trim() }
+  dados = { nome: g('nome').trim(), telefone: g('telefone').trim(), data: g('data'), pessoas: g('pessoas').trim(), modo: (f.querySelector('[name="modo"]:checked') || {}).value === 'Entrega' ? 'Entrega' : 'Retirada no ateliê', endereco: g('endereco').trim(), obs: g('obs').trim() }
   try { localStorage.setItem(CH + ':dados', JSON.stringify(dados)) } catch (e) {}
   return dados
 }
-function enviar() {
-  const d = lerForm(), nome = $('#form [name="nome"]')
+// o pedido entra no CRM da Maeda (tela Pedidos) e depois abre o WhatsApp dela com o número do pedido
+const PEDIDO_URL = 'https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/pedido'
+let enviando = false
+async function enviar() {
+  if (enviando) return
+  const d = lerForm(), nome = $('#form [name="nome"]'), tel = $('#form [name="telefone"]'), dig = d.telefone.replace(/\D/g, '')
   if (!d.nome) { nome.classList.add('erro'); nome.focus(); toast('Coloca seu nome pra gente te chamar'); return }
+  if (dig.length < 10 || dig.length > 13) { tel.classList.add('erro'); tel.focus(); toast('Coloca seu WhatsApp com DDD'); return }
+  if (d.modo === 'Entrega' && d.endereco.length < 5) { const en = $('#form [name="endereco"]'); en.classList.add('erro'); en.focus(); toast('Coloca o endereço da entrega'); return }
+  const dt = d.data ? d.data.split('-').reverse().join('/') : 'a combinar'
   const linhas = Object.entries(pedido).map(([k, q]) => { const it = CAT[k]; return `• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(it.p * q)}` })
-  const txt = ['Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `Total estimado: ${brl(total())}`, '', `Nome: ${d.nome}`, `Data: ${d.data ? d.data.split('-').reverse().join('/') : 'a combinar'}`, d.pessoas ? `Pessoas: ${d.pessoas}` : null, d.modo + (d.modo === 'Entrega' && d.endereco ? ': ' + d.endereco : ''), d.obs ? `Obs.: ${d.obs}` : null].filter(x => x !== null)
-  window.open(zap(txt.join('\n')), '_blank', 'noopener')
+  const janela = window.open('', '_blank')
+  enviando = true; const bt = $('#enviar'); bt.textContent = 'Enviando...'
+  let numero = null
+  try {
+    const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+      chave: 'kmp_maeda', nome: d.nome, telefone: dig, tipo: d.modo === 'Entrega' ? 'entrega' : 'retirada', endereco: d.endereco, pagamento: 'Pix ou transferência',
+      obs: [`Data: ${dt}`, d.pessoas ? `Pessoas: ${d.pessoas}` : '', d.obs].filter(Boolean).join(' · '),
+      itens: Object.entries(pedido).map(([id, qtd]) => ({ id, qtd })) }) })
+    const j = await r.json().catch(() => ({}))
+    if (r.ok && j.numero) numero = j.numero
+  } catch (e) {}
+  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `Total estimado: ${brl(total())}`, '', `Nome: ${d.nome}`, `Data: ${dt}`, d.pessoas ? `Pessoas: ${d.pessoas}` : null, d.modo + (d.modo === 'Entrega' && d.endereco ? ': ' + d.endereco : ''), d.obs ? `Obs.: ${d.obs}` : null].filter(x => x !== null)
+  const url = zap(txt.join('\n'))
+  if (janela) janela.location.href = url; else location.href = url
+  enviando = false; bt.textContent = 'Enviar pedido pelo WhatsApp'
+  if (numero) { pedido = {}; salva(); marca(); fecha(); toast(`Pedido nº ${numero} registrado. Agora é só tocar em enviar no WhatsApp.`) }
 }
 function abre() { $('#toast').classList.remove('on'); desenha(); $('#pedido').classList.add('on'); $('#pedido').setAttribute('aria-hidden', 'false'); $('#veu').classList.add('on'); document.body.style.overflow = 'hidden' }
 function fecha() { lerForm(); $('#pedido').classList.remove('on'); $('#pedido').setAttribute('aria-hidden', 'true'); $('#veu').classList.remove('on'); document.body.style.overflow = '' }
