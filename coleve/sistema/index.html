@@ -5,20 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sistema Coleve</title>
 <meta name="robots" content="noindex">
+<script>if (location.pathname.includes('/area/')) document.write('<base href="' + location.pathname.replace(/area\/.*$/, '') + '">');</script>
 <meta name="theme-color" content="#1A71FF">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icones/apple_180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css?v=17">
+<link rel="stylesheet" href="sistema.css?v=21">
 </head>
 <body class="carregando">
 
 <header class="barra">
   <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
   <span class="barra__tag" id="tag">Sistema</span>
-  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" aria-current="page">Início</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a></nav>
+  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" id="nav-inicio">Início</a><a href="area/" id="nav-area">Área interna</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -34,6 +35,7 @@
   <section class="numeros" id="numeros" hidden></section>
 
   <section class="modulos" id="modulos"></section>
+  <section class="feed" id="feed" hidden></section>
 
   <p class="nota">O Sistema Coleve está sendo montado por partes. Os módulos acendem conforme ficam prontos.</p>
 </main>
@@ -69,8 +71,62 @@ const I = {
   cal:'<svg viewBox="0 0 24 24"><path d="M4 6h16v15H4zM4 10h16M8 3v4M16 3v4"/></svg>'
 };
 
-const meuPainel = equipe && ['marketing', 'tecnologia'].includes(p.area);
-if (meuPainel) {
+const modoArea = location.pathname.includes('/area/');
+document.getElementById(modoArea ? 'nav-area' : 'nav-inicio')?.setAttribute('aria-current', 'page');
+if (equipe && !modoArea) {
+  // ===== INÍCIO: o feed do dia (o que está com você + atividade do time) =====
+  document.getElementById('nav').hidden = false;
+  document.querySelector('main > .nota')?.remove();
+  document.getElementById('modulos').remove();
+  document.getElementById('sec').textContent = 'Início';
+  document.getElementById('sub').textContent = 'O que está com você hoje.';
+  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const dBR = d => d ? d.split('-').reverse().slice(0, 2).join('/') : '';
+  const hoje = new Date().toISOString().slice(0, 10);
+  const rel = new Intl.RelativeTimeFormat('pt-BR', { numeric: 'auto' });
+  const quando = d => { const m = Math.round((new Date(d) - Date.now()) / 60000); return Math.abs(m) < 60 ? rel.format(m, 'minute') : Math.abs(m) < 1440 ? rel.format(Math.round(m / 60), 'hour') : rel.format(Math.round(m / 1440), 'day'); };
+  const FMT = { feed: 'Post', carrossel: 'Carrossel', story: 'Story', reels: 'Reels', outro: 'Material' };
+  const [{ data: ds }, { data: ts }, { data: cs }] = await Promise.all([
+    banco.from('v_demanda').select('id,titulo,status,data_prevista,formato,responsavel_id,pedido_por,pedido_por_nome,responsavel_nome').neq('status', 'cancelado'),
+    banco.from('v_tarefa').select('id,titulo,status,prazo,atrasada,area,empresa_nome').eq('responsavel_id', p.id).neq('status', 'cancelado').neq('status', 'enviado').order('prazo', { nullsFirst: false }).limit(40),
+    banco.from('canal').select('id').in('slug', ['marketing', 'tecnologia', 'geral'])
+  ]);
+  const { data: ms } = await banco.from('mensagem').select('texto,criado_em,autor:pessoa(nome)').in('canal_id', (cs || []).map(c => c.id)).not('texto', 'is', null).order('criado_em', { ascending: false }).limit(40);
+  const D = ds || [];
+  const atrasoD = x => x.data_prevista && x.data_prevista < hoje && !['aprovado', 'publicado'].includes(x.status);
+  const paraAprovar = D.filter(x => x.pedido_por === p.id && x.status === 'aprovacao');
+  const minhaFila = D.filter(x => x.responsavel_id === p.id && ['ajuste', 'produzindo', 'pedido'].includes(x.status))
+    .sort((a, b) => (b.status === 'ajuste') - (a.status === 'ajuste') || atrasoD(b) - atrasoD(a) || (b.status === 'produzindo') - (a.status === 'produzindo') || (a.data_prevista || '9').localeCompare(b.data_prevista || '9'));
+  const tarefas = (ts || []).filter(x => x.status !== 'pronto');
+  const etq = { ajuste: 'ajuste', produzindo: 'fazendo', pedido: 'novo', aprovacao: 'aprovar' };
+  const item = (ico, titulo, meta, href, tag, cls = '') => `<a class="fi ${cls}" href="${href}"><span class="ico">${ico}</span><span class="fi__t"><b>${esc(titulo)}</b><small>${meta}</small></span>${tag ? `<em>${tag}</em>` : ''}</a>`;
+  const bloco = (titulo, n, itens, mais) => itens ? `<div class="fb"><p class="sec">${titulo}${n != null ? ` · ${n}` : ''}</p><div class="fl">${itens}</div>${mais || ''}</div>` : '';
+  const metaD = x => [FMT[x.formato] || 'Peça', x.data_prevista ? 'para ' + dBR(x.data_prevista) : null, 'pedido por ' + esc((x.pedido_por_nome || '').split(' ')[0])].filter(Boolean).join(' · ');
+  const nomeSt = { a_fazer: 'a fazer', fazendo: 'fazendo', conferencia: 'em teste' };
+
+  // atividade: recado do banco vira frase (quem + ação + objeto)
+  const evento = (texto, autor) => {
+    const q = `<b>${esc((autor || 'Alguém').split(' ')[0])}</b>`; let m;
+    if ((m = texto.match(/^\S+ Nova demanda: (.+?)(?: · para (\d\d\/\d\d))?$/))) return [I.doc, `${q} pediu <b>${esc(m[1])}</b>`];
+    if ((m = texto.match(/^\S+ (.+?) · versão (\d+) esperando aprovação$/))) return [I.pedido, `${q} mandou <b>${esc(m[1])}</b> para aprovação`];
+    if ((m = texto.match(/^\S+ Aprovado: (.+?) \(versão \d+\)$/))) return [I.check, `${q} aprovou <b>${esc(m[1])}</b>`];
+    if ((m = texto.match(/^\S+ Ajuste pedido em (.+?) \(versão \d+\)/))) return [I.tarefa, `${q} pediu ajuste em <b>${esc(m[1])}</b>`];
+    if ((m = texto.match(/^\S+ (.+?) → (.+)$/))) return [I.raio, `${q} moveu <b>${esc(m[1])}</b> para ${esc(m[2])}`];
+    return null;
+  };
+  const ativ = (ms || []).map(m => ({ m, e: evento(m.texto, m.autor?.nome) })).filter(x => x.e).slice(0, 6);
+
+  const feed = document.getElementById('feed');
+  feed.hidden = false;
+  feed.innerHTML =
+    bloco('Para você aprovar', paraAprovar.length, paraAprovar.map(x => item(I.check, x.titulo, metaD(x).replace(/pedido por \S+/, 'feito por ' + esc((x.responsavel_nome || '').split(' ')[0])), 'marketing/#' + x.id, 'aprovar', 'fi--destaque')).join('')) +
+    bloco('Fazer agora', minhaFila.length, minhaFila.slice(0, 6).map(x => item(I.doc, x.titulo, metaD(x), 'marketing/#' + x.id, x.status === 'ajuste' ? 'ajuste' : atrasoD(x) ? 'atrasado' : etq[x.status], x.status === 'ajuste' || atrasoD(x) ? 'fi--alerta' : '')).join('') || '<p class="fv">Nada na sua fila de marketing.</p>',
+      minhaFila.length > 6 ? `<a class="fmais" href="marketing/">Ver a fila completa (${minhaFila.length})</a>` : '') +
+    bloco('Tarefas', tarefas.length, tarefas.slice(0, 5).map(x => item(x.area === 'tecnologia' ? I.raio : I.tarefa, x.titulo, [esc(x.empresa_nome), x.prazo ? 'até ' + dBR(x.prazo) : null].filter(Boolean).join(' · '), 'tarefas/', x.atrasada ? 'atrasada' : nomeSt[x.status], x.atrasada ? 'fi--alerta' : '')).join(''),
+      tarefas.length > 5 ? `<a class="fmais" href="tarefas/">Ver todas (${tarefas.length})</a>` : '') +
+    bloco('Atividade do time', null, ativ.map(({ m, e }) => `<div class="fa"><span class="ico ico--leve">${e[0]}</span><p>${e[1]}</p><time datetime="${m.criado_em}">${quando(m.criado_em)}</time></div>`).join('') || '<p class="fv">Quando alguém pedir, enviar ou aprovar, aparece aqui.</p>');
+} else 
+if (modoArea && ['marketing', 'tecnologia'].includes(p.area)) {
   // mesma linguagem do início: 3 números + 6 cards iguais (grade de 3)
   document.getElementById('nav').hidden = false;
   document.getElementById('sec').textContent = 'Meu painel · marketing e sistema';
@@ -103,7 +159,7 @@ if (meuPainel) {
     (prox ? card('Fazer agora', esc(prox.titulo), I.cal, 'marketing/#' + prox.id, prox.status === 'ajuste' ? 'ajuste' : 'próximo') : card('Fazer agora', 'Fila zerada. Nada esperando por você.', I.cal, 'marketing/', 'em dia')) +
     card('Aprovações', `${esperando} esperando o Manu · ${aprovados} aprovad${aprovados === 1 ? 'a' : 'as'} para publicar${ajustes ? ` · ${ajustes} ajuste${ajustes > 1 ? 's' : ''}` : ''}.`, I.check, 'marketing/', String(esperando)) +
     card('Sistema Coleve', `${noAr} de ${T.length} etapas no ar.`, I.raio, 'tarefas/', pctS + '%', `<span class="mod__barra" aria-hidden="true"><i style="width:${pctS}%"></i></span>`);
-} else if (equipe) {
+} else if (equipe && modoArea) {
   document.getElementById('nav').hidden = false;
   document.getElementById('sub').textContent = 'Tarefas, clientes, documentos e ligações da Coleve em um lugar só.';
   const [emp, tar, obr] = await Promise.all([
