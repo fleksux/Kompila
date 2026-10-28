@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css?v=10">
+<link rel="stylesheet" href="sistema.css?v=11">
 </head>
 <body class="carregando">
 
@@ -67,7 +67,64 @@ const I = {
   cal:'<svg viewBox="0 0 24 24"><path d="M4 6h16v15H4zM4 10h16M8 3v4M16 3v4"/></svg>'
 };
 
-if (equipe) {
+const meuPainel = equipe && ['marketing', 'tecnologia'].includes(p.area);
+if (meuPainel) {
+  document.getElementById('nav').hidden = false;
+  document.getElementById('sec').textContent = 'Meu painel · marketing e sistema';
+  document.getElementById('sub').textContent = 'O que está com você no marketing e no Sistema Coleve.';
+  document.getElementById('numeros').remove();
+  document.querySelector('main > .nota')?.remove();
+  const hoje = new Date().toISOString().slice(0, 10);
+  const dBR = d => d ? d.split('-').reverse().slice(0, 2).join('/') : '';
+  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const [{ data: ds }, { data: ts }] = await Promise.all([
+    banco.from('v_demanda').select('id,titulo,status,data_prevista,formato,pedido_por_nome').eq('responsavel_id', p.id).neq('status', 'cancelado'),
+    banco.from('v_tarefa').select('id,titulo,status,prazo,atrasada').eq('responsavel_id', p.id).is('empresa_id', null).neq('status', 'cancelado')
+  ]);
+  const D = ds || [], T = ts || [];
+  const conta = (lista, f) => lista.filter(f).length;
+  const atrasoD = x => x.data_prevista && x.data_prevista < hoje && !['aprovado', 'publicado'].includes(x.status);
+  const tile = (n, rot, cls, href) => `<a class="pt ${cls}" href="${href}"><strong>${n}</strong><span>${rot}</span></a>`;
+  const linha = (titulo, meta, href, tag) => `<li><a href="${href}"><span>${esc(titulo)}</span><small>${tag ? `<em class="${tag[1]}">${tag[0]}</em>` : ''}${esc(meta)}</small></a></li>`;
+  const barra = (feito, total, rot) => {
+    const pct = total ? Math.round(feito / total * 100) : 0;
+    return `<div class="prog" title="${feito} de ${total} (${pct}%)"><div class="prog__top"><b>${pct}%</b><span>${rot}</span></div><div class="prog__trilho" role="img" aria-label="${pct}% ${rot}"><i style="width:${pct}%"></i></div><small>${feito} de ${total}</small></div>`;
+  };
+  // o que fazer agora: ajuste primeiro, depois atrasado, depois por data
+  const fila = D.filter(x => ['ajuste', 'pedido', 'produzindo'].includes(x.status))
+    .sort((a, b) => (b.status === 'ajuste') - (a.status === 'ajuste') || atrasoD(b) - atrasoD(a) || (a.data_prevista || '9').localeCompare(b.data_prevista || '9'));
+  const tagD = x => x.status === 'ajuste' ? ['ajuste pedido', 'tg-aj'] : atrasoD(x) ? ['atrasado', 'tg-at'] : x.status === 'produzindo' ? ['fazendo', 'tg-fz'] : null;
+  const sistemaAgora = T.filter(x => ['fazendo', 'conferencia'].includes(x.status)).concat(T.filter(x => x.status === 'a_fazer')).slice(0, 5);
+  const nomeSt = { a_fazer: 'a fazer', fazendo: 'fazendo', conferencia: 'em teste', pronto: 'pronto', enviado: 'no ar' };
+
+  document.getElementById('modulos').outerHTML = `
+  <section class="painel">
+    <div class="pts">
+      ${tile(conta(D, x => x.status === 'ajuste'), 'ajustes pedidos', conta(D, x => x.status === 'ajuste') ? 'pt--aj' : '', 'marketing/')}
+      ${tile(conta(D, x => x.status === 'pedido'), 'pedidos novos', '', 'marketing/')}
+      ${tile(conta(D, x => x.status === 'produzindo'), 'fazendo agora', '', 'marketing/')}
+      ${tile(conta(D, x => x.status === 'aprovacao'), 'esperando aprovação', '', 'marketing/')}
+      ${tile(conta(D, atrasoD) + conta(T, x => x.atrasada), 'atrasados', (conta(D, atrasoD) + conta(T, x => x.atrasada)) ? 'pt--at' : '', 'tarefas/')}
+    </div>
+
+    <div class="pcols">
+      <article class="pbox">
+        <header><span class="ico-p ico-p--mk"></span><h2>Marketing</h2><a href="marketing/">Abrir</a></header>
+        ${barra(conta(D, x => x.status === 'publicado'), D.length, 'dos materiais e posts publicados')}
+        <p class="pbox__rot">O que fazer agora</p>
+        <ul class="plista">${fila.slice(0, 6).map(x => linha(x.titulo, (x.data_prevista ? 'para ' + dBR(x.data_prevista) + ' · ' : '') + 'pedido por ' + (x.pedido_por_nome || '').split(' ')[0], 'marketing/#' + x.id, tagD(x))).join('') || '<li class="vazio-p">Nada na fila. 🎉</li>'}</ul>
+        ${fila.length > 6 ? `<a class="pmais" href="marketing/">+ ${fila.length - 6} na fila</a>` : ''}
+      </article>
+      <article class="pbox">
+        <header><span class="ico-p ico-p--ti"></span><h2>Sistema Coleve</h2><a href="tarefas/">Abrir</a></header>
+        ${barra(conta(T, x => x.status === 'enviado'), T.length, 'das etapas no ar')}
+        <p class="pbox__rot">Agora e em seguida</p>
+        <ul class="plista">${sistemaAgora.map(x => linha(x.titulo, nomeSt[x.status] + (x.prazo ? ' · até ' + dBR(x.prazo) : ''), 'tarefas/', x.status === 'conferencia' ? ['em teste', 'tg-fz'] : x.status === 'fazendo' ? ['fazendo', 'tg-fz'] : null)).join('') || '<li class="vazio-p">Nada aberto.</li>'}</ul>
+      </article>
+    </div>
+    <p class="nota">A contabilidade da Coleve (guias, clientes, documentos) fica com o time. Se precisar ver, está em Tarefas → Todas.</p>
+  </section>`;
+} else if (equipe) {
   document.getElementById('nav').hidden = false;
   document.getElementById('sub').textContent = 'Tarefas, clientes, documentos e ligações da Coleve em um lugar só.';
   const [emp, tar, obr] = await Promise.all([
