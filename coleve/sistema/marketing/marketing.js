@@ -41,10 +41,35 @@ const link = c => links.get(c) || '';
 const ehVideo = t => /^video\//.test(t || '');
 // link do Google Drive: pega o id do arquivo; mostra pelo player do próprio Drive
 const idDrive = u => (String(u || '').match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]{20,})/) || String(u || '').match(/[?&]id=([\w-]{20,})/) || [])[1];
-const thumbDrive = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+const thumbDrive = (id, w = 800) => `https://drive.google.com/thumbnail?id=${id}&sz=w${w}`;
 const playerDrive = id => `https://drive.google.com/file/d/${id}/preview`;
 
-async function sobe(pasta, arquivo) {
+// ===== Google Drive (o armário dos arquivos) =====
+let driveOn = false, driveEmail = '';
+async function chamaDrive(acao, extra = {}) {
+  const { data, error } = await banco.functions.invoke('drive', { body: { acao, ...extra } });
+  if (error || data?.erro) throw new Error(data?.erro || error?.message || 'Drive');
+  return data;
+}
+// manda o arquivo direto do navegador para a pasta da demanda no Drive (sem passar pelo banco)
+function mandaProDrive(demandaId, sub, arquivo, progresso) {
+  return chamaDrive('enviar', { demanda_id: demandaId, sub, nome: arquivo.name, tipo: arquivo.type || 'application/octet-stream', tamanho: arquivo.size })
+    .then(({ envio }) => new Promise((ok, falha) => {
+      const x = new XMLHttpRequest();
+      x.open('PUT', envio);
+      x.upload.onprogress = e => progresso?.(e.loaded / e.total);
+      x.onload = () => x.status < 300 ? ok(JSON.parse(x.responseText)) : falha(new Error('Drive ' + x.status));
+      x.onerror = () => falha(new Error('rede'));
+      x.send(arquivo);
+    }))
+    .then(f => chamaDrive('pronto', { arquivo_id: f.id }))
+    .then(f => ({ drive: f.id, nome: f.name, tipo: f.mimeType }));
+}
+async function sobe(pasta, arquivo, progresso) {
+  if (driveOn) {
+    const [demandaId, ...resto] = pasta.split('/');
+    return mandaProDrive(demandaId, resto.join('/') || null, arquivo, progresso);
+  }
   const caminho = `${pasta}/${crypto.randomUUID().slice(0, 8)}-${limpo(arquivo.name)}`;
   const { error } = await banco.storage.from('marketing').upload(caminho, arquivo, { contentType: arquivo.type || 'application/octet-stream' });
   if (error) throw error;
@@ -62,7 +87,7 @@ async function carrega() {
 function capa(d) {
   const a = d.arquivos_atuais?.[0];
   if (!a) return `<span class="capa capa--vazia">${FORMATOS[d.formato]}</span>`;
-  if (a.drive) return `<img class="capa" src="${thumbDrive(a.drive)}" alt="" referrerpolicy="no-referrer">`;
+  if (a.drive) return `<img class="capa" src="${thumbDrive(a.drive, 400)}" alt="" referrerpolicy="no-referrer">`;
   return ehVideo(a.tipo) ? `<video class="capa" src="${link(a.arquivo)}" muted preload="metadata"></video>` : `<img class="capa" src="${link(a.arquivo)}" alt="">`;
 }
 function desenha() {
@@ -93,6 +118,9 @@ document.querySelector('.vista').addEventListener('click', e => {
 });
 ['lista', 'feed'].forEach(id => $(id).addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) abre(b.dataset.id); }));
 
+// referência que foi pro Drive guarda o link do arquivo
+const refDe = a => a.drive ? { link: `https://drive.google.com/file/d/${a.drive}/view`, nome: a.nome, tipo: a.tipo } : a;
+
 // ===== nova demanda =====
 $('nova').onclick = () => { $('f-nova').reset(); $('aviso-nova').textContent = ''; $('dlg-nova').showModal(); };
 $('cancela-nova').onclick = () => $('dlg-nova').close();
@@ -108,7 +136,7 @@ $('f-nova').addEventListener('submit', async e => {
     }).select().single();
     if (error) throw error;
     const refs = f.links.value.split('\n').map(x => x.trim()).filter(Boolean).map(l => ({ demanda_id: d.id, link: l, criado_por: P.id }));
-    for (const a of f.arquivos.files) refs.push({ demanda_id: d.id, ...(await sobe(`${d.id}/ref`, a)), criado_por: P.id });
+    for (const a of f.arquivos.files) refs.push({ demanda_id: d.id, ...refDe(await sobe(`${d.id}/referencias`, a)), criado_por: P.id });
     if (refs.length) await banco.from('demanda_referencia').insert(refs);
     $('dlg-nova').close();
     await carrega(); abre(d.id);
@@ -165,7 +193,7 @@ async function desenhaIg() {
   const a = arqs[quadro];
   const { data: marcas } = await banco.from('demanda_marca').select('*').eq('versao_id', vSel.id).eq('quadro', quadro);
   $('ig-midia').innerHTML = `
-    ${a.drive ? `<iframe class="drive" src="${playerDrive(a.drive)}" allow="autoplay" title="${esc(a.nome)}"></iframe>` : ehVideo(a.tipo) ? `<video src="${link(a.arquivo)}" controls playsinline></video>` : `<img src="${link(a.arquivo)}" alt="${esc(a.nome)}">`}
+    ${a.drive && /^image\//.test(a.tipo || '') ? `<img src="${thumbDrive(a.drive, 1600)}" alt="${esc(a.nome)}" referrerpolicy="no-referrer">` : a.drive ? `<iframe class="drive" src="${playerDrive(a.drive)}" allow="autoplay" title="${esc(a.nome)}"></iframe>` : ehVideo(a.tipo) ? `<video src="${link(a.arquivo)}" controls playsinline></video>` : `<img src="${link(a.arquivo)}" alt="${esc(a.nome)}">`}
     ${(marcas || []).map((m, i) => `<span class="marca" style="left:${m.x}%;top:${m.y}%" title="${esc(m.texto)}">${i + 1}<em>${esc(m.texto)}</em></span>`).join('')}
     ${arqs.length > 1 ? `<button class="ig__seta ig__seta--e" data-d="-1" ${quadro === 0 ? 'hidden' : ''} aria-label="Anterior">‹</button><button class="ig__seta ig__seta--d" data-d="1" ${quadro === arqs.length - 1 ? 'hidden' : ''} aria-label="Próxima">›</button><span class="ig__n">${quadro + 1}/${arqs.length}</span>` : ''}
     ${['story', 'reels'].includes(atual.formato) ? `<div class="ig__barras">${arqs.map((_, i) => `<i class="${i <= quadro ? 'on' : ''}"></i>`).join('')}</div>` : ''}`;
@@ -230,7 +258,7 @@ $('v-envia').onclick = async () => {
   try {
     const numero = (versoes.at(-1)?.numero || 0) + 1;
     const arquivos = [];
-    for (const f of novos) arquivos.push(await sobe(`${atual.id}/v${numero}`, f));
+    for (const [i, f] of novos.entries()) arquivos.push(await sobe(`${atual.id}/v${numero}`, f, p => { $('aviso-v').textContent = `Subindo ${i + 1} de ${novos.length}: ${Math.round(p * 100)}%`; }));
     drives.forEach((id, i) => arquivos.push({ drive: id, nome: 'Drive ' + (i + 1), tipo: 'drive' }));
     const { error } = await banco.from('demanda_versao').insert({ demanda_id: atual.id, numero, arquivos, legenda: $('v-leg').value.trim() || null, enviado_por: P.id });
     if (error) throw error;
@@ -254,7 +282,7 @@ $('f-ref').addEventListener('submit', async e => {
   e.preventDefault();
   const novos = [];
   if ($('ref-link').value.trim()) novos.push({ demanda_id: atual.id, link: $('ref-link').value.trim(), criado_por: P.id });
-  for (const a of $('ref-arq').files) novos.push({ demanda_id: atual.id, ...(await sobe(`${atual.id}/ref`, a)), criado_por: P.id });
+  for (const a of $('ref-arq').files) novos.push({ demanda_id: atual.id, ...refDe(await sobe(`${atual.id}/referencias`, a)), criado_por: P.id });
   if (!novos.length) return;
   await banco.from('demanda_referencia').insert(novos);
   $('f-ref').reset(); $('f-ref').hidden = true; abre(atual.id);
@@ -277,6 +305,29 @@ $('f-msg').addEventListener('submit', async e => {
 banco.channel('coleve-mk').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensagem' }, ({ new: m }) => {
   if (atual && m.canal_id === atual.canal_id) carregaChat();
 }).subscribe();
+
+async function statusDrive() {
+  try { const st = await chamaDrive('status'); driveOn = st.conectado; driveEmail = st.email || ''; } catch { driveOn = false; }
+  $('drive-pill').innerHTML = driveOn
+    ? `<span class="dp dp--on">Drive ligado · ${esc(driveEmail)}</span>`
+    : P.papel === 'admin' ? `<button class="dp dp--btn" id="drive-ligar" type="button">Conectar meu Google Drive</button>` : `<span class="dp">Drive não conectado</span>`;
+  $('drive-ligar')?.addEventListener('click', async () => {
+    try { const { url } = await chamaDrive('url', { volta: location.href.split('#')[0].split('?')[0] }); location.href = url; }
+    catch (e) { alert('Não deu para abrir o Google: ' + e.message); }
+  });
+  $('abrir-pasta').hidden = !driveOn;
+}
+const q = new URLSearchParams(location.search);
+if (q.get('drive')) {
+  $('aviso-drive').textContent = q.get('drive') === 'ok' ? 'Drive conectado. A partir de agora os arquivos vão direto para Coleve / Marketing no seu Drive.' : 'O Drive não conectou: ' + (q.get('motivo') || 'tente de novo');
+  $('aviso-drive').className = 'aviso-drive ' + (q.get('drive') === 'ok' ? 'aviso-drive--ok' : '');
+  history.replaceState(null, '', location.pathname);
+}
+await statusDrive();
+$('abrir-pasta').onclick = async () => {
+  const w = window.open('about:blank', '_blank');
+  try { const { link } = await chamaDrive('pasta_demanda', { demanda_id: atual.id }); w.location = link; } catch (e) { w.close(); alert('Não deu para abrir a pasta: ' + e.message); }
+};
 
 await carrega();
 const alvo = location.hash.slice(1);
