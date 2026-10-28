@@ -4,6 +4,11 @@ import { banco, quemSou } from './conexao.js?v=2';
 
 const eu = await quemSou().catch(() => null);
 if (eu?.pessoa?.tipo === 'equipe') {
+  // marketing não vê dado de cliente: some o Clientes do menu (no celular, a barra fica com 5)
+  if (eu.pessoa.area === 'marketing' && !['admin', 'gestor'].includes(eu.pessoa.papel)) {
+    document.querySelectorAll('.barra__nav a[href$="clientes/"]').forEach(a => a.remove());
+    document.querySelectorAll('.barra__nav').forEach(n => n.style.setProperty('grid-template-columns', 'repeat(5,1fr)', 'important'));
+  }
   const base = new URL('conversas/?mini=1', import.meta.url).href;
   document.head.insertAdjacentHTML('beforeend', `<style>
     .cc-bot{position:fixed;right:20px;bottom:20px;z-index:60;width:60px;height:60px;border:0;border-radius:50%;background:#1A71FF;box-shadow:0 12px 30px rgb(26 113 255 / .4);cursor:pointer;display:grid;place-items:center;transition:transform .2s}

@@ -5,6 +5,7 @@ import { TIPOS, reais } from '../documentos.js?v=1';
 const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
 const P = eu.pessoa;
+if (P.area === 'marketing' && !['admin', 'gestor'].includes(P.papel)) { location.replace('../'); throw 0; }
 
 const REGIMES = { mei: 'MEI', simples: 'Simples Nacional', presumido: 'Lucro Presumido', real: 'Lucro Real' };
 const AREAS = { fiscal: 'Fiscal', contabil: 'Contábil', dp: 'Dep. pessoal', bpo: 'BPO financeiro', paralegal: 'Paralegal' };

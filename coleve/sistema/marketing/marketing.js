@@ -91,10 +91,27 @@ function capa(d) {
   if (a.drive) return `<img class="capa" src="${thumbDrive(a.drive, 400)}" alt="" referrerpolicy="no-referrer">`;
   return ehVideo(a.tipo) ? `<video class="capa" src="${link(a.arquivo)}" muted preload="metadata"></video>` : `<img class="capa" src="${link(a.arquivo)}" alt="">`;
 }
+// filtro por status no topo: cada grupo a um clique, com a contagem à vista
+let filtroSt = (() => { try { return sessionStorage.getItem('coleve_mk_st'); } catch { return null; } })();
+function desenhaFiltro() {
+  const n = st => demandas.filter(d => d.status === st).length;
+  if (!filtroSt) filtroSt = ['aprovacao', 'ajuste', 'produzindo'].find(st => n(st)) || 'pedido';
+  $('filtro-st').innerHTML = [...ORDEM, 'todos'].map(st => {
+    const [nome, cls] = st === 'todos' ? ['Todos', 'st-todos'] : STATUS[st];
+    const qt = st === 'todos' ? demandas.length : n(st);
+    return `<button type="button" role="tab" class="chip-st${filtroSt === st ? ' is-ativo' : ''}${!qt ? ' chip-st--zero' : ''}" data-st="${st}" aria-selected="${filtroSt === st}"><span class="st ${cls}">${nome}</span><b>${qt}</b></button>`;
+  }).join('');
+}
+$('filtro-st').addEventListener('click', e => {
+  const b = e.target.closest('.chip-st'); if (!b) return;
+  filtroSt = b.dataset.st; try { sessionStorage.setItem('coleve_mk_st', filtroSt); } catch { /* sem memória, segue */ }
+  desenha();
+});
 function desenha() {
-  $('lista').innerHTML = ORDEM.map(st => {
+  desenhaFiltro();
+  $('lista').innerHTML = ORDEM.filter(st => filtroSt === 'todos' || st === filtroSt).map(st => {
     const ds = demandas.filter(d => d.status === st);
-    if (!ds.length && !['aprovacao', 'pedido'].includes(st)) return '';
+    if (!ds.length && filtroSt === 'todos' && !['aprovacao', 'pedido'].includes(st)) return '';
     const [nome, cls] = STATUS[st];
     return `<section class="grupo-mk"><h2><span class="st ${cls}">${nome}</span><small>${ds.length}</small></h2>
       ${ds.length ? `<div class="linhas">${ds.map(d => `
@@ -103,7 +120,7 @@ function desenha() {
           <span class="linha__txt"><b>${esc(d.titulo)}</b>
             <small>${FORMATOS[d.formato]}${d.data_prevista ? ' · para ' + dataBR(d.data_prevista) : ''}${d.versao_atual ? ' · versão ' + d.versao_atual : ''}${d.referencias ? ' · ' + d.referencias + ' referência' + (d.referencias > 1 ? 's' : '') : ''}</small></span>
           <span class="linha__quem">pedido por ${esc((d.pedido_por_nome || '').split(' ')[0])}</span>
-        </button>`).join('')}</div>` : `<p class="vazio-mk">${st === 'aprovacao' ? 'Nada esperando aprovação.' : 'Nenhum pedido novo. Clique em "+ Nova demanda".'}</p>`}
+        </button>`).join('')}</div>` : `<p class="vazio-mk">${{ aprovacao: 'Nada esperando aprovação.', ajuste: 'Nenhum ajuste pedido.', pedido: 'Nenhum pedido novo. Clique em "+ Nova demanda".', produzindo: 'Nada em produção agora.', aprovado: 'Nenhum aprovado esperando publicação.', publicado: 'Nada publicado ainda.' }[st]}</p>`}
     </section>`;
   }).join('');
   const noFeed = demandas.filter(d => ['aprovacao', 'aprovado', 'publicado'].includes(d.status) && d.arquivos_atuais?.length)
@@ -115,7 +132,7 @@ document.querySelector('.vista').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   vista = b.dataset.v;
   document.querySelectorAll('.vista button').forEach(x => { x.classList.toggle('is-ativo', x === b); x.setAttribute('aria-selected', x === b); });
-  $('lista').hidden = vista !== 'lista'; $('feed').hidden = vista !== 'feed';
+  $('lista').hidden = $('filtro-st').hidden = vista !== 'lista'; $('feed').hidden = vista !== 'feed';
 });
 ['lista', 'feed'].forEach(id => $(id).addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) abre(b.dataset.id); }));
 

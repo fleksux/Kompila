@@ -5,6 +5,10 @@ const eu = await quemSou().catch(() => null);
 // sem login: o login abre na página inteira, nunca dentro da janelinha do chat
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { (window.top !== window ? window.top : window).location.replace(new URL('../../entrar/', location.href).href); throw 0; }
 const P = eu.pessoa;
+if (P.area === 'marketing' && !['admin', 'gestor'].includes(P.papel)) {
+  document.querySelectorAll('.barra__nav a[href$="clientes/"]').forEach(a => a.remove());
+  document.querySelectorAll('.barra__nav').forEach(n => n.style.setProperty('grid-template-columns', 'repeat(5,1fr)', 'important'));
+}
 const MINI = new URLSearchParams(location.search).has('mini');
 if (MINI) document.body.classList.add('modo-mini');
 const largo = () => !MINI && matchMedia('(min-width:861px)').matches;
