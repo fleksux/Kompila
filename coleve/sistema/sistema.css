@@ -59,6 +59,6 @@ img{display:block;max-width:100%;height:auto}
   .barra__marca{width:112px}
   .barra__eu{margin-left:auto}
   .sair{height:32px;padding:0 12px;font-size:13px}
-  .barra__nav{order:3;width:100%;margin:0 -14px;padding:6px 14px 10px;overflow-x:auto;scrollbar-width:none;gap:6px}
+  .barra__nav{order:3;width:100%;margin:0;padding:2px 0 10px;overflow-x:auto;scrollbar-width:none;gap:6px}
   .barra__nav a{flex:none;background:var(--nevoa);padding:7px 14px}
 }

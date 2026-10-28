@@ -128,3 +128,19 @@ body.carregando .chat{opacity:0}
   .fio__arqs{padding:12px}
   .arq-grade{grid-template-columns:1fr 1fr}
 }
+
+/* modo mini: dentro do painel do canto */
+body.modo-mini .barra{display:none}
+body.modo-mini .chat{grid-template-columns:1fr}
+body.modo-mini .chat__fio{display:none}
+body.modo-mini .chat.tem-fio .chat__lista{display:none}
+body.modo-mini .chat.tem-fio .chat__fio{display:flex}
+body.modo-mini .voltar-lista{display:grid;place-items:center}
+body.modo-mini .fio__topo{padding:10px 12px;gap:8px;flex-wrap:wrap}
+body.modo-mini .abas{order:3;width:100%}
+body.modo-mini .abas button{flex:1}
+body.modo-mini .fio__msgs{padding:12px 12px 6px}
+body.modo-mini .msg{max-width:88%}
+body.modo-mini .fio__escrever{padding:8px 10px 12px}
+body.modo-mini .chat__lista-topo{padding:14px 14px 8px}
+body.modo-mini .chat__lista-topo h1{font-size:18px}

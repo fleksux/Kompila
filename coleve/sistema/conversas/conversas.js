@@ -4,6 +4,9 @@ import { banco, quemSou } from '../conexao.js';
 const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
 const P = eu.pessoa;
+const MINI = new URLSearchParams(location.search).has('mini');
+if (MINI) document.body.classList.add('modo-mini');
+const largo = () => !MINI && matchMedia('(min-width:861px)').matches;
 
 const $ = id => document.getElementById(id);
 const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -54,6 +57,7 @@ function desenhaCanais() {
   const total = canais.reduce((s, c) => s + (c.id === atual?.id ? 0 : c.nao_lidas), 0);
   $('badge-nav').hidden = !total; $('badge-nav').textContent = total;
   document.title = (total ? `(${total}) ` : '') + 'Conversas · Sistema Coleve';
+  if (MINI) parent.postMessage({ coleveNaoLidas: total }, location.origin);
   const lista = canais.filter(c => !b || c.nome.toLowerCase().includes(b));
   const grupo = (titulo, itens) => itens.length ? `<li class="canais__rot">${titulo}</li>` + itens.map(c => `
     <li><button class="canal${c.id === atual?.id ? ' is-ativo' : ''}${c.nao_lidas && c.id !== atual?.id ? ' tem-novo' : ''}" data-id="${c.id}">
@@ -81,7 +85,7 @@ async function abre(id) {
   mostraAba('conversa');
   await carregaMensagens();
   banco.rpc('marcar_lido', { c: id }).then(() => { atual.nao_lidas = 0; desenhaCanais(); });
-  if (matchMedia('(min-width:861px)').matches) $('texto').focus();
+  if (largo()) $('texto').focus();
 }
 $('voltar').onclick = () => { $('chat').classList.remove('tem-fio'); atual = null; history.replaceState(null, '', location.pathname); desenhaCanais(); };
 
@@ -206,7 +210,7 @@ banco.channel('coleve-conversas')
     const c = canais.find(x => x.id === m.canal_id);
     if (!c) { await carregaCanais(); return; }
     c.ultima_em = m.criado_em; c.ultima_txt = m.texto || '📎 ' + m.arquivo_nome;
-    if (atual?.id === m.canal_id) {
+    if (atual?.id === m.canal_id && (!MINI || document.visibilityState === 'visible')) {
       const embaixo = perto() || m.autor_id === P.id;
       $('msgs').querySelector('.fio__comeco')?.remove();
       await poe(m);
@@ -250,6 +254,6 @@ $('pessoas').addEventListener('click', async e => {
 await carregaCanais();
 // abre o canal do endereço (#fiscal) ou, no computador, o #geral
 const alvo = location.hash.slice(1);
-const inicial = canais.find(c => c.slug === alvo || c.id === alvo) || (matchMedia('(min-width:861px)').matches ? canais.find(c => c.slug === 'geral') : null);
+const inicial = canais.find(c => c.slug === alvo || c.id === alvo) || (largo() ? canais.find(c => c.slug === 'geral') : null);
 if (inicial) await abre(inicial.id);
 document.body.classList.remove('carregando');
