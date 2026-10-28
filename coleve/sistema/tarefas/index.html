@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarefas · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css">
+<link rel="stylesheet" href="tarefas.css">
+</head>
+<body class="carregando">
+
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema">
+    <a href="../">Início</a>
+    <a href="./" aria-current="page">Tarefas</a>
+  </nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="quadro-pg">
+  <div class="topo-q">
+    <div>
+      <p class="sec">Área interna · tarefas</p>
+      <h1 class="h1">Tarefas <b id="total">do time</b></h1>
+    </div>
+    <div class="gerar" id="gerar" hidden>
+      <label>Competência <input type="month" id="gerar-mes"></label>
+      <button class="btn-a" id="gerar-btn" type="button">Gerar guias do mês</button>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <input type="search" id="f-busca" placeholder="Buscar tarefa ou cliente" aria-label="Buscar">
+    <select id="f-area" aria-label="Área"><option value="">Todas as áreas</option></select>
+    <select id="f-resp" aria-label="Responsável"><option value="">Todos os responsáveis</option><option value="-">Sem responsável</option></select>
+    <select id="f-emp" aria-label="Cliente"><option value="">Todos os clientes</option></select>
+    <label class="chk"><input type="checkbox" id="f-atraso"> Só atrasadas</label>
+  </div>
+
+  <p class="aviso-q" id="aviso" role="status" aria-live="polite"></p>
+
+  <section class="quadro" id="quadro" aria-label="Quadro de tarefas"></section>
+</main>
+
+<!-- detalhe da tarefa -->
+<div class="gaveta" id="gaveta" hidden>
+  <div class="gaveta__fundo" data-fecha></div>
+  <aside class="gaveta__painel" role="dialog" aria-modal="true" aria-labelledby="d-titulo">
+    <button class="gaveta__x" data-fecha aria-label="Fechar">×</button>
+    <p class="d-empresa" id="d-empresa"></p>
+    <h2 id="d-titulo"></h2>
+    <div class="d-status" id="d-status" role="group" aria-label="Status"></div>
+    <dl class="d-campos">
+      <div><dt>Área</dt><dd id="d-area"></dd></div>
+      <div><dt>Competência</dt><dd id="d-comp"></dd></div>
+      <div><dt>Prazo</dt><dd><input type="date" id="d-prazo"></dd></div>
+      <div><dt>Responsável</dt><dd><select id="d-resp"><option value="">Sem responsável</option></select></dd></div>
+      <div><dt>Visível ao cliente</dt><dd><label class="chk"><input type="checkbox" id="d-visivel"> sim</label></dd></div>
+    </dl>
+    <h3>Comentários da equipe</h3>
+    <ul class="d-coment" id="d-coment"></ul>
+    <form class="d-novo" id="d-novo"><textarea id="d-texto" rows="2" placeholder="Escreva um comentário interno"></textarea><button class="btn-a" type="submit">Comentar</button></form>
+    <h3>Histórico</h3>
+    <ul class="d-hist" id="d-hist"></ul>
+  </aside>
+</div>
+
+<script type="module" src="tarefas.js"></script>
+</body>
+</html>

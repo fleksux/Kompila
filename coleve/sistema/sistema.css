@@ -42,3 +42,12 @@ img{display:block;max-width:100%;height:auto}
   .miolo{padding:28px 16px 48px}
   .numeros,.modulos{grid-template-columns:1fr}
 }
+
+.mod--ativo{display:block;text-decoration:none;color:inherit;outline-color:var(--azul)!important;transition:transform .2s,box-shadow .2s}
+.mod--ativo:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgb(26 113 255 / .15)}
+.mod--ativo em{background:var(--lima)!important;color:var(--grafite)!important}
+.barra__nav{display:flex;gap:4px;margin-left:12px}
+.barra__nav[hidden]{display:none}
+.barra__nav a{padding:8px 14px;border-radius:999px;font-weight:700;font-size:14px;color:var(--cinza);text-decoration:none}
+.barra__nav a:hover{background:var(--nevoa)}
+.barra__nav a[aria-current]{background:var(--azul);color:#fff}

@@ -14,6 +14,7 @@
 <header class="barra">
   <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
   <span class="barra__tag" id="tag">Sistema</span>
+  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" aria-current="page">Início</a><a href="tarefas/">Tarefas</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -50,7 +51,9 @@ document.getElementById('tag').textContent = equipe ? 'Área interna' : 'Área d
 document.getElementById('sec').textContent = equipe ? 'Área interna · equipe Coleve' : 'Área do cliente';
 
 const num = (n, t) => `<div class="num"><strong>${n}</strong><span>${t}</span></div>`;
-const mod = (t, d, ico) => `<article class="mod"><span class="ico">${ico}</span><h3>${t}</h3><p>${d}</p><em>Em montagem</em></article>`;
+const mod = (t, d, ico, href) => href
+  ? `<a class="mod mod--ativo" href="${href}"><span class="ico">${ico}</span><h3>${t}</h3><p>${d}</p><em>Abrir</em></a>`
+  : `<article class="mod"><span class="ico">${ico}</span><h3>${t}</h3><p>${d}</p><em>Em montagem</em></article>`;
 const I = {
   tarefa:'<svg viewBox="0 0 24 24"><path d="M4 6h3M4 12h3M4 18h3M10 6h10M10 12h10M10 18h10"/></svg>',
   empresa:'<svg viewBox="0 0 24 24"><path d="M4 21V5l8-3v19M12 9h8v12M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/></svg>',
@@ -61,6 +64,7 @@ const I = {
 };
 
 if (equipe) {
+  document.getElementById('nav').hidden = false;
   document.getElementById('sub').textContent = 'Tarefas, clientes, documentos e ligações da Coleve em um lugar só.';
   const [emp, tar, obr] = await Promise.all([
     banco.from('empresa').select('id', { count: 'exact', head: true }),
@@ -71,8 +75,8 @@ if (equipe) {
   nb.innerHTML = num(emp.count ?? 0, 'empresas no sistema') + num(tar.count ?? 0, 'tarefas abertas') + num(obr.count ?? 0, 'obrigações no calendário');
   nb.hidden = false;
   document.getElementById('modulos').innerHTML =
-    mod('Tarefas', 'Quadro por área, com responsável, prazo e conferência.', I.tarefa) +
-    mod('Calendário de obrigações', 'Guias e declarações do mês geradas pelo regime de cada empresa.', I.cal) +
+    mod('Tarefas', 'Quadro por área, com responsável, prazo e conferência.', I.tarefa, 'tarefas/') +
+    mod('Calendário de obrigações', 'Guias e declarações do mês geradas pelo regime de cada empresa. Roda sozinho todo dia 1º.', I.cal, 'tarefas/') +
     mod('Clientes', 'Ficha da empresa, responsáveis e checklist de onboarding.', I.empresa) +
     mod('Documentos', 'Guias, apurações e o que o cliente mandou, com protocolo de envio.', I.doc) +
     mod('Pedidos', 'Segunda via, certidão e alteração pedidas pelo cliente.', I.pedido) +
