@@ -132,7 +132,8 @@ if (equipe && modoFeed) {
 if (equipe && ['marketing', 'tecnologia'].includes(p.area)) {
   // mesma linguagem do início: 3 números + 6 cards iguais (grade de 3)
   document.getElementById('nav').hidden = false;
-  document.getElementById('sec').textContent = 'Meu painel · marketing e sistema';
+  const doSistema = p.area === 'tecnologia' || p.papel === 'admin';   // o card do Sistema Coleve é de quem constrói o sistema
+  document.getElementById('sec').textContent = doSistema ? 'Meu painel · marketing e sistema' : 'Meu painel · marketing';
   document.getElementById('sub').textContent = 'O que está com você hoje.';
   document.querySelector('main > .nota')?.remove();
   const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -150,18 +151,18 @@ if (equipe && ['marketing', 'tecnologia'].includes(p.area)) {
   const prox = fila[0];
 
   const nb = document.getElementById('numeros');
-  nb.innerHTML = num(fila.length, 'pedidos na fila') + num(esperando, 'esperando o Manu') + num(pctS + '%', 'do Sistema Coleve no ar');
+  nb.innerHTML = num(fila.length, 'pedidos na fila') + num(esperando, 'esperando o Manu') + (doSistema ? num(pctS + '%', 'do Sistema Coleve no ar') : num(aprovados, 'aprovados para publicar'));
   nb.hidden = false;
 
   const card = (t, d, ico, href, etiqueta, extra = '') =>
     `<a class="mod mod--ativo" href="${href}"><span class="ico">${ico}</span><h3>${t}</h3><p>${d}</p>${extra}<em>${etiqueta}</em></a>`;
   document.getElementById('modulos').innerHTML =
     card('Marketing', 'Peça, envie a arte e aprove. Tudo com a pasta no Drive.', I.doc, 'marketing/', `${fila.length} na fila`) +
-    card('Tarefas', 'Seus cards de marketing e do sistema, num quadro só.', I.tarefa, 'tarefas/', `${abertasT} abertas`) +
-    card('Conversas', 'Canais por área e conversa direta com o time.', I.pedido, 'conversas/', 'Abrir') +
+    card('Tarefas', doSistema ? 'Seus cards de marketing e do sistema, num quadro só.' : 'Seu quadro: o que fazer, fazendo e pronto.', I.tarefa, 'tarefas/', `${abertasT} abertas`) +
+    card('Conversas', doSistema ? 'Canais por área e conversa direta com o time.' : 'Marketing, recado geral, conversa direta e grupos.', I.pedido, 'conversas/', 'Abrir') +
     (prox ? card('Fazer agora', esc(prox.titulo), I.cal, 'marketing/#' + prox.id, prox.status === 'ajuste' ? 'ajuste' : 'próximo') : card('Fazer agora', 'Fila zerada. Nada esperando por você.', I.cal, 'marketing/', 'em dia')) +
     card('Aprovações', `${esperando} esperando o Manu · ${aprovados} aprovad${aprovados === 1 ? 'a' : 'as'} para publicar${ajustes ? ` · ${ajustes} ajuste${ajustes > 1 ? 's' : ''}` : ''}.`, I.check, 'marketing/', String(esperando)) +
-    card('Sistema Coleve', `${noAr} de ${T.length} etapas no ar.`, I.raio, 'tarefas/', pctS + '%', `<span class="mod__barra" aria-hidden="true"><i style="width:${pctS}%"></i></span>`);
+    (doSistema ? card('Sistema Coleve', `${noAr} de ${T.length} etapas no ar.`, I.raio, 'tarefas/', pctS + '%', `<span class="mod__barra" aria-hidden="true"><i style="width:${pctS}%"></i></span>`) : '');
 } else if (equipe) {
   document.getElementById('nav').hidden = false;
   document.getElementById('sub').textContent = 'Tarefas, clientes, documentos e ligações da Coleve em um lugar só.';
