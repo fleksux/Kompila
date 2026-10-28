@@ -96,8 +96,13 @@ async function abreDireto(outro) {
 // quem está online agora (presença em tempo real; cada tela aberta do sistema conta)
 const online = new Set();
 const presenca = banco.channel('coleve-online', { config: { presence: { key: P.id } } });
-presenca.on('presence', { event: 'sync' }, () => {
+presenca.on('presence', { event: 'sync' }, async () => {
   online.clear(); Object.keys(presenca.presenceState()).forEach(id => online.add(id));
+  // entrou alguém que a lista ainda não conhece (pessoa nova no time): recarrega o time
+  if ([...online].some(id => !pessoas.has(id))) {
+    const { data } = await banco.from('pessoa').select('id,nome').eq('tipo', 'equipe').eq('ativo', true).order('nome');
+    (data || []).forEach(p => pessoas.set(p.id, p.nome));
+  }
   desenhaCanais(); topoOnline();
 }).subscribe(st => { if (st === 'SUBSCRIBED') presenca.track({ em: new Date().toISOString() }); });
 function topoOnline() {
