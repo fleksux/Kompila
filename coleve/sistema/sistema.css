@@ -261,3 +261,13 @@ button.fi{border:0;width:100%;text-align:left;font:inherit;color:inherit;cursor:
 /* menu em lugar fixo: o número de não lidas fica por cima, sem alargar o item */
 .barra__nav a{position:relative}
 .barra__nav .badge-nav{position:absolute;top:-4px;right:-4px;margin:0}
+
+/* desktop: o menu numa caixa navy da marca, itens com respiro */
+@media (min-width:861px){
+  .barra{gap:24px}
+  .barra__nav{margin-left:16px;gap:4px;padding:6px;background:var(--navy);border-radius:999px}
+  .barra__nav a{padding:10px 20px;color:rgb(255 255 255 / .72);transition:background .2s,color .2s}
+  .barra__nav a:hover{background:rgb(255 255 255 / .1);color:#fff}
+  .barra__nav a[aria-current]{background:var(--azul);color:#fff}
+  .barra__nav .badge-nav{box-shadow:0 0 0 2px var(--navy)}
+}

@@ -1,8 +1,5 @@
 /* quadro de tarefas · mesmos tokens do sistema.css */
-.barra__nav{display:flex;gap:4px;margin-left:12px}
-.barra__nav a{padding:8px 14px;border-radius:999px;font-weight:700;font-size:14px;color:var(--cinza);text-decoration:none}
-.barra__nav a:hover{background:var(--nevoa)}
-.barra__nav a[aria-current]{background:var(--azul);color:#fff}
+/* o menu de cima mora só no sistema.css */
 
 .quadro-pg{padding:28px 24px 48px;transition:opacity .3s}
 body.carregando .quadro-pg{opacity:0}
