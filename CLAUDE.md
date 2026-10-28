@@ -6,7 +6,7 @@ valem pros dois produtos e moram no repositório do CRM:
 - `~/Documents/GitHub/kompila-lead-recovery/PEDIDOS.md` (o que está pedido, em andamento, esperando o Alex e pronto)
 
 ## Publicar
-- Sempre os dois lugares: commit + push neste repositório (conta `fleksux`) **e** `rsync -a --exclude .git --exclude .DS_Store ./ /Volumes/Dados/KOMPILA/03_SITE/` (nunca `--delete`).
+- Sempre os dois lugares: commit + push neste repositório (conta `fleksux`) **e** `rsync -a --exclude .git --exclude .DS_Store ./ /Volumes/Dados/KOMPILA/05_SITE/` (nunca `--delete`).
 - Localhost: `http://localhost:8080` serve `03_SITE`.
 - Depois do push, conferir no ar (curl) antes de dizer que subiu.
 
