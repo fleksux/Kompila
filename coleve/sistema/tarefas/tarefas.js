@@ -5,7 +5,7 @@ const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
 const P = eu.pessoa;
 
-const AREAS = { fiscal: 'Fiscal', contabil: 'Contábil', dp: 'Dep. pessoal', bpo: 'BPO financeiro', paralegal: 'Paralegal', atendimento: 'Atendimento' };
+const AREAS = { fiscal: 'Fiscal', contabil: 'Contábil', dp: 'Dep. pessoal', bpo: 'BPO financeiro', paralegal: 'Paralegal', atendimento: 'Atendimento', tecnologia: 'Tecnologia', marketing: 'Marketing' };
 const COLUNAS = [
   ['a_fazer', 'A fazer'], ['fazendo', 'Fazendo'], ['conferencia', 'Conferência'], ['pronto', 'Pronto'], ['enviado', 'Enviado']
 ];
@@ -51,7 +51,7 @@ equipe.forEach(p => {
   $('d-resp').insertAdjacentHTML('beforeend', `<option value="${p.id}">${esc(p.nome)}</option>`);
 });
 (emps || []).forEach(e => $('f-emp').insertAdjacentHTML('beforeend', `<option value="${e.id}">${esc(e.nome_fantasia || e.razao_social)}</option>`));
-if (P.area) $('f-area').value = P.area;   // cada um abre já na sua área
+if (P.area && !['tecnologia', 'marketing'].includes(P.area)) $('f-area').value = P.area;   // cada um abre já na sua área
 
 async function carrega() {
   const { data, error } = await banco.from('v_tarefa').select('*').neq('status', 'cancelado')

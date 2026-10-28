@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+<title>Conversas · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=4">
+<link rel="stylesheet" href="../tarefas/tarefas.css?v=4">
+<link rel="stylesheet" href="conversas.css?v=4">
+</head>
+<body class="carregando">
+
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema">
+    <a href="../">Início</a>
+    <a href="../tarefas/">Tarefas</a>
+    <a href="./" aria-current="page">Conversas <span class="badge-nav" id="badge-nav" hidden></span></a>
+  </nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="chat" id="chat">
+  <!-- lista de canais -->
+  <aside class="chat__lista">
+    <div class="chat__lista-topo">
+      <h1>Conversas</h1>
+      <button class="nova" id="nova" type="button" aria-label="Nova conversa direta">+ Direta</button>
+    </div>
+    <div class="chat__busca"><input type="search" id="busca" placeholder="Buscar canal ou pessoa" aria-label="Buscar canal ou pessoa"></div>
+    <ul class="canais" id="canais"></ul>
+  </aside>
+
+  <!-- conversa aberta -->
+  <section class="chat__fio" id="fio" aria-live="polite">
+    <div class="fio__vazio" id="vazio">
+      <img src="../../img/icone.svg" alt="" width="64" height="64">
+      <p>Escolha um canal para conversar e trocar arquivos com o time.</p>
+    </div>
+
+    <header class="fio__topo" id="topo" hidden>
+      <button class="voltar-lista" id="voltar" type="button" aria-label="Voltar para os canais">←</button>
+      <span class="fio__ico" id="f-ico">#</span>
+      <div class="fio__titulo"><b id="f-nome"></b><small id="f-desc"></small></div>
+      <div class="abas" role="tablist">
+        <button role="tab" class="is-ativo" data-aba="conversa" aria-selected="true">Conversa</button>
+        <button role="tab" data-aba="arquivos" aria-selected="false">Arquivos</button>
+      </div>
+    </header>
+
+    <div class="fio__msgs" id="msgs" hidden></div>
+    <div class="fio__arqs" id="arqs" hidden></div>
+
+    <form class="fio__escrever" id="escrever" hidden>
+      <div class="anexo-prev" id="anexo-prev" hidden></div>
+      <div class="escrever__linha">
+        <label class="clipe" title="Anexar arquivo" aria-label="Anexar arquivo"><input type="file" id="arquivo" multiple hidden><svg viewBox="0 0 24 24"><path d="M21 11.5 12.5 20a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6L15 7"/></svg></label>
+        <textarea id="texto" rows="1" placeholder="Escreva uma mensagem" aria-label="Mensagem"></textarea>
+        <button class="enviar" type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="M4 12 20 4l-6 16-3-7-7-1Z"/></svg></button>
+      </div>
+    </form>
+
+    <div class="soltar" id="soltar" hidden>Solte para enviar o arquivo</div>
+  </section>
+</main>
+
+<!-- nova conversa direta -->
+<dialog class="dlg" id="dlg-nova">
+  <form method="dialog">
+    <h2>Conversa direta</h2>
+    <p>Com quem você quer falar?</p>
+    <ul class="pessoas" id="pessoas"></ul>
+    <button class="sair" value="cancel">Cancelar</button>
+  </form>
+</dialog>
+
+<script type="module" src="conversas.js?v=5"></script>
+</body>
+</html>

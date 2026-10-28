@@ -7,14 +7,14 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#1A71FF">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css">
+<link rel="stylesheet" href="sistema.css?v=4">
 </head>
 <body class="carregando">
 
 <header class="barra">
   <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
   <span class="barra__tag" id="tag">Sistema</span>
-  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" aria-current="page">Início</a><a href="tarefas/">Tarefas</a></nav>
+  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" aria-current="page">Início</a><a href="tarefas/">Tarefas</a><a href="conversas/">Conversas</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -41,7 +41,7 @@ const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo) { location.replace('../entrar/'); throw 0; }
 const p = eu.pessoa;
 const equipe = p.tipo === 'equipe';
-const areas = { fiscal:'Fiscal', contabil:'Contábil', dp:'Departamento pessoal', bpo:'BPO financeiro', paralegal:'Paralegal', atendimento:'Atendimento' };
+const areas = { fiscal:'Fiscal', contabil:'Contábil', dp:'Departamento pessoal', bpo:'BPO financeiro', paralegal:'Paralegal', atendimento:'Atendimento', tecnologia:'Tecnologia', marketing:'Marketing' };
 
 document.getElementById('nome').textContent = p.nome;
 document.getElementById('primeiro').textContent = p.nome.split(' ')[0] + '.';
@@ -81,6 +81,7 @@ if (equipe) {
     mod('Documentos', 'Guias, apurações e o que o cliente mandou, com protocolo de envio.', I.doc) +
     mod('Pedidos', 'Segunda via, certidão e alteração pedidas pelo cliente.', I.pedido) +
     mod('Ligações', 'Discar para o cliente e registrar cada chamada na ficha.', I.fone);
+  document.getElementById('modulos').insertAdjacentHTML('afterbegin', mod('Conversas', 'Canais por área e conversa direta, com troca de arquivos. O cliente nunca vê.', I.pedido, 'conversas/'));
 } else {
   const { data: emps } = await banco.from('empresa').select('nome_fantasia,razao_social');
   const nomes = (emps || []).map(e => e.nome_fantasia || e.razao_social).join(', ');

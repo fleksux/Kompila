@@ -1,3 +1,4 @@
+[hidden]{display:none!important}
 @font-face{font-family:Gabarito;src:url(../fonts/Gabarito-VariableFont_wght.ttf) format("truetype");font-weight:400 900;font-display:swap}
 :root{--azul:#1A71FF;--azul-2:#1259D6;--lima:#B9FC01;--navy:#071A44;--grafite:#282828;--cinza:#5B6474;--linha:#DCE4F2;--nevoa:#F1F4F9}
 *,*::before,*::after{box-sizing:border-box}
@@ -51,3 +52,13 @@ img{display:block;max-width:100%;height:auto}
 .barra__nav a{padding:8px 14px;border-radius:999px;font-weight:700;font-size:14px;color:var(--cinza);text-decoration:none}
 .barra__nav a:hover{background:var(--nevoa)}
 .barra__nav a[aria-current]{background:var(--azul);color:#fff}
+
+/* celular: logo e você na primeira linha, o menu inteiro embaixo */
+@media (max-width:860px){
+  .barra{flex-wrap:wrap;height:auto;padding:10px 14px 0;gap:8px 10px}
+  .barra__marca{width:112px}
+  .barra__eu{margin-left:auto}
+  .sair{height:32px;padding:0 12px;font-size:13px}
+  .barra__nav{order:3;width:100%;margin:0 -14px;padding:6px 14px 10px;overflow-x:auto;scrollbar-width:none;gap:6px}
+  .barra__nav a{flex:none;background:var(--nevoa);padding:7px 14px}
+}
