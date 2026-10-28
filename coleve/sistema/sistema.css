@@ -262,3 +262,9 @@ button.fi{border:0;width:100%;text-align:left;font:inherit;color:inherit;cursor:
 .barra__nav a{position:relative}
 .barra__nav .badge-nav{position:absolute;top:-4px;right:-4px;margin:0}
 
+/* checklist do cliente: cada linha é um botão de enviar arquivo */
+label.fi{cursor:pointer}
+.fi--ok em{background:var(--lima);color:var(--grafite)}
+.fi--envio:not(.fi--ok):not(.fi--alerta) em{background:#E6EFFF;color:var(--azul)}
+.sec--sub{margin-top:24px}
+@media (max-width:860px){.fi--envio{display:grid;grid-template-columns:42px 1fr;column-gap:12px;row-gap:8px}.fi--envio em{grid-column:2;justify-self:start}}

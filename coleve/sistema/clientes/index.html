@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../sistema.css?v=28">
+<link rel="stylesheet" href="../sistema.css?v=30">
 <link rel="stylesheet" href="../tarefas/tarefas.css?v=9">
-<link rel="stylesheet" href="clientes.css?v=2">
+<link rel="stylesheet" href="clientes.css?v=3">
 </head>
 <body class="carregando">
 
@@ -83,6 +83,10 @@
     <h3>Obrigações <small class="h3-dica">o calendário gera estas tarefas todo mês</small></h3>
     <div class="obrig" id="e-obrig"></div>
 
+    <h3>Checklist do mês <small class="h3-dica" id="e-check-mes">o que o cliente manda</small></h3>
+    <ul class="d-docs" id="e-check"></ul>
+    <div class="check-acoes"><button type="button" class="btn-a" id="e-whats">Copiar para WhatsApp</button><button type="button" class="sair" id="e-email">Ver e-mail</button></div>
+
     <h3>Contatos do cliente <small class="h3-dica">recebem os documentos na Área do cliente</small></h3>
     <ul class="d-coment" id="e-contatos"></ul>
 
@@ -110,7 +114,13 @@
   </form>
 </dialog>
 
-<script type="module" src="clientes.js?v=2"></script>
+<!-- e-mail do checklist com a cara da Coleve -->
+<dialog class="dlg-t dlg-email" id="dlg-email">
+  <div class="dlg-email__topo"><h2>E-mail do checklist</h2><div class="botoes-t"><button type="button" class="btn-a" id="email-copia">Copiar e-mail</button><button type="button" class="sair" id="email-fecha">Fechar</button></div></div>
+  <div class="dlg-email__corpo" id="email-corpo"></div>
+</dialog>
+
+<script type="module" src="clientes.js?v=3"></script>
 <script type="module" src="../chat-canto.js?v=5"></script>
 <script type="module" src="../avisos.js?v=1"></script>
 </body>

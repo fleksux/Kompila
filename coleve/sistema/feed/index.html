@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css?v=28">
+<link rel="stylesheet" href="sistema.css?v=30">
 </head>
 <body class="carregando">
 
@@ -183,14 +183,14 @@ if (equipe && ['marketing', 'tecnologia'].includes(p.area)) {
   document.getElementById('modulos').insertAdjacentHTML('afterbegin', mod('Marketing', 'Peça um post com referência, receba a versão na cara do Instagram e aprove.', I.doc, 'marketing/'));
   document.getElementById('modulos').insertAdjacentHTML('afterbegin', mod('Conversas', 'Canais por área e conversa direta, com troca de arquivos. O cliente nunca vê.', I.pedido, 'conversas/'));
 } else {
-  const { data: emps } = await banco.from('empresa').select('nome_fantasia,razao_social');
+  const { data: emps } = await banco.from('empresa').select('id,nome_fantasia,razao_social,segmento');
   const nomes = (emps || []).map(e => e.nome_fantasia || e.razao_social).join(', ');
   document.getElementById('sub').textContent = nomes ? 'Empresa: ' + nomes : 'Sua empresa ainda está sendo cadastrada pela Coleve.';
   document.getElementById('modulos').innerHTML =
     mod('Pedidos', 'Peça uma certidão, segunda via ou alteração.', I.pedido) +
     mod('Andamento', 'Veja quem está cuidando de cada entrega e o prazo.', I.tarefa);
   // documentos que a Coleve enviou: o mais novo em cima, "novo" até o cliente abrir
-  const { baixar, TIPOS, reais } = await import('./documentos.js?v=1');
+  const { baixar, TIPOS, reais, enviarPendencia, mesNome } = await import('./documentos.js?v=3');
   const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const dBR = d => d ? d.split('-').reverse().join('/') : '';
   const feed = document.getElementById('feed');
@@ -212,7 +212,39 @@ if (equipe && ['marketing', 'tecnologia'].includes(p.area)) {
       catch { em.textContent = 'tente de novo'; }
     };
   };
+  // o que mandar este mês: checklist do segmento, cada item com o botão de enviar (vai pro Drive da empresa)
+  const lista = document.createElement('section'); lista.className = 'feed'; feed.before(lista);
+  const { data: tipos } = await banco.from('pendencia_tipo').select('*').eq('ativo', true).order('ordem');
+  const hojeISO = new Date().toISOString().slice(0, 10);
+  const desenhaChecklist = async () => {
+    const { data: ps } = await banco.from('pendencia_cliente').select('empresa_id,tipo,competencia,prazo,recebido_em').order('competencia', { ascending: false });
+    lista.innerHTML = (emps || []).map(emp => {
+      const minhas = (ps || []).filter(p => p.empresa_id === emp.id && tipos.find(t => t.codigo === p.tipo)?.dia);
+      if (!minhas.length) return '';
+      const comp = minhas[0].competencia, ordem = p => tipos.find(t => t.codigo === p.tipo).ordem, doMes = minhas.filter(p => p.competencia === comp).sort((a, b) => ordem(a) - ordem(b));
+      const faltam = doMes.filter(p => !p.recebido_em).length;
+      const linha = (t, p, mes) => {
+        const ok = !!p?.recebido_em, atraso = !ok && p?.prazo && p.prazo < hojeISO;
+        const tag = ok ? 'enviado' : atraso ? 'enviar · atrasado' : p?.prazo ? 'enviar até ' + dBR(p.prazo).slice(0, 5) : 'enviar';
+        return `<label class="fi fi--envio${ok ? ' fi--ok' : atraso ? ' fi--alerta' : ''}"><span class="ico">${I.doc}</span>
+          <span class="fi__t"><b>${esc(t.nome)}</b><small>${esc((t.explica || '').replace(/\.$/, ''))}${t.formato ? ' · ' + esc(t.formato) : ''}</small></span><em>${tag}</em>
+          <input type="file" hidden data-emp="${emp.id}" data-tipo="${t.codigo}" data-comp="${mes}"></label>`;
+      };
+      const avulsos = tipos.filter(t => !t.dia && (!t.segmentos || t.segmentos.includes(emp.segmento)));
+      return `<div class="fb"><p class="sec">O que mandar · ${mesNome(comp)}${faltam ? ` · faltam ${faltam}` : ' · tudo enviado'}${emps.length > 1 ? ' · ' + esc(emp.nome_fantasia || emp.razao_social) : ''}</p>
+        <div class="fl">${doMes.map(p => linha(tipos.find(t => t.codigo === p.tipo), p, comp)).join('')}</div>
+        <p class="sec sec--sub">Quando acontecer</p><div class="fl">${avulsos.map(t => linha(t, null, hojeISO.slice(0, 8) + '01')).join('')}</div></div>`;
+    }).join('');
+  };
+  lista.addEventListener('change', async e => {
+    const inp = e.target.closest('input[type=file]'); const arq = inp?.files[0]; if (!arq) return;
+    const em = inp.closest('.fi').querySelector('em'); em.textContent = 'enviando';
+    try { await enviarPendencia(inp.dataset.emp, inp.dataset.tipo, inp.dataset.comp, arq, p => { em.textContent = Math.round(p * 100) + '%'; }); await desenhaChecklist(); }
+    catch { em.textContent = 'tente de novo'; }
+  });
+  await desenhaChecklist();
   await desenhaDocs();
+  banco.channel('coleve-pend-cliente').on('postgres_changes', { event: '*', schema: 'public', table: 'pendencia_cliente' }, desenhaChecklist).subscribe();
   banco.channel('coleve-docs-cliente').on('postgres_changes', { event: '*', schema: 'public', table: 'documento' }, desenhaDocs).subscribe();
 }
 

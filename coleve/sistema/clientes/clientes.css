@@ -36,3 +36,11 @@
   .topo-cl .btn-lima-q{width:100%}
   .filtros select{flex:1 1 45%}
 }
+.check-acoes{display:flex;gap:8px;margin-top:-8px}
+.check-acoes .btn-a,.check-acoes .sair{height:44px}
+.st--atraso{background:#FFE8EE;color:#b4123e}
+.dlg-email{width:min(680px,96vw);padding:0;background:#F1F4F9}
+.dlg-email__topo{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 20px;background:#fff;border-bottom:1px solid var(--linha);position:sticky;top:0}
+.dlg-email__topo h2{font-size:18px}
+.dlg-email__corpo{max-height:70vh;overflow:auto}
+@media (max-width:860px){.check-acoes{flex-direction:column}.dlg-email__topo{flex-direction:column;align-items:stretch}}

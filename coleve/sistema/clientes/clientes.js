@@ -1,6 +1,6 @@
 // Sistema Coleve · clientes (área interna): lista de empresas e a ficha de cada uma
 import { banco, quemSou } from '../conexao.js?v=2';
-import { TIPOS, reais } from '../documentos.js?v=1';
+import { TIPOS, reais, mesNome, checklistWhats, checklistEmail } from '../documentos.js?v=3';
 
 const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
@@ -97,13 +97,27 @@ async function abre(id) {
 }
 
 async function carregaFicha(id) {
-  const [{ data: tipos }, { data: liga }, { data: cont }, { data: docs }] = await Promise.all([
+  const [{ data: tipos }, { data: liga }, { data: cont }, { data: docs }, { data: pts }, { data: pend }] = await Promise.all([
     banco.from('obrigacao_tipo').select('codigo,nome,area,regimes').eq('ativo', true).order('area').order('nome'),
     banco.from('empresa_obrigacao').select('obrigacao,ativa').eq('empresa_id', id),
     banco.from('empresa_pessoa').select('funcao,pessoa:pessoa(nome,email,telefone)').eq('empresa_id', id),
-    banco.from('documento').select('nome,tipo,valor,competencia,protocolo(enviado_em,lido_em)').eq('empresa_id', id).eq('vindo_do_cliente', false).order('criado_em', { ascending: false }).limit(8)
+    banco.from('documento').select('nome,tipo,valor,competencia,protocolo(enviado_em,lido_em)').eq('empresa_id', id).eq('vindo_do_cliente', false).order('criado_em', { ascending: false }).limit(8),
+    banco.from('pendencia_tipo').select('*').eq('ativo', true).order('ordem'),
+    banco.from('pendencia_cliente').select('tipo,competencia,prazo,recebido_em').eq('empresa_id', id).order('competencia', { ascending: false })
   ]);
   if (aberta?.id !== id) return;
+  // checklist do mês: o mesmo conteúdo que vai no WhatsApp, no e-mail e na Área do cliente
+  const mensais = (pend || []).filter(p => pts.find(t => t.codigo === p.tipo)?.dia);
+  const comp = mensais[0]?.competencia;
+  checklist = comp ? {
+    empresa: aberta.nome_fantasia || aberta.razao_social, competencia: comp,
+    contato: (cont || [])[0]?.pessoa?.nome?.split(' ')[0] || '',
+    itens: mensais.filter(p => p.competencia === comp).sort((a, b) => pts.find(t => t.codigo === a.tipo).ordem - pts.find(t => t.codigo === b.tipo).ordem).map(p => { const t = pts.find(x => x.codigo === p.tipo); return { nome: t.nome, explica: t.explica, formato: t.formato, prazo: p.prazo, recebido: !!p.recebido_em }; })
+  } : null;
+  $('e-check-mes').textContent = comp ? mesNome(comp) + ' · ' + checklist.itens.filter(i => !i.recebido).length + ' faltando' : 'o que o cliente manda';
+  $('e-check').innerHTML = checklist ? checklist.itens.map(i => `<li><span class="d-docs__t"><b>${esc(i.nome)}</b><small>${esc(i.formato || '')}${i.prazo ? ' · até ' + dataBR(i.prazo).slice(0, 5) : ''}</small></span>${i.recebido ? '<em class="st st--lido">recebido</em>' : i.prazo && i.prazo < new Date().toISOString().slice(0, 10) ? '<em class="st st--atraso">atrasado</em>' : '<em class="st st--novo">falta</em>'}</li>`).join('')
+    : '<li class="vazio">O checklist aparece quando o mês for gerado em Tarefas.</li>';
+  $('e-whats').disabled = $('e-email').disabled = !checklist;
   const on = new Map((liga || []).map(o => [o.obrigacao, o.ativa]));
   // mostra as do regime e as que já estão ligadas
   const visiveis = (tipos || []).filter(o => o.regimes.includes(aberta.regime) || on.get(o.codigo));
@@ -153,6 +167,22 @@ $('e-obrig').addEventListener('change', async ev => {
   c.closest('.obrig__i').classList.toggle('is-on', c.checked);
   avisa(c.checked ? 'Ligada: entra no calendário do próximo mês.' : 'Desligada: o calendário não gera mais esta tarefa.');
 });
+
+// ===== checklist: copiar pro WhatsApp e ver/copiar o e-mail =====
+let checklist = null;
+$('e-whats').onclick = async () => {
+  if (!checklist) return;
+  await navigator.clipboard.writeText(checklistWhats(checklist));
+  avisa('Mensagem copiada. É só colar no WhatsApp do cliente.');
+};
+$('e-email').onclick = () => { if (!checklist) return; $('email-corpo').innerHTML = checklistEmail(checklist); $('dlg-email').showModal(); };
+$('email-fecha').onclick = () => $('dlg-email').close();
+$('email-copia').onclick = async () => {
+  const html = checklistEmail(checklist);
+  await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([checklistWhats(checklist)], { type: 'text/plain' }) })]);
+  $('email-copia').textContent = 'Copiado: cole no Gmail';
+  setTimeout(() => { $('email-copia').textContent = 'Copiar e-mail'; }, 3000);
+};
 
 // ===== nova empresa =====
 $('nova-e').onclick = () => { $('f-nova-e').reset(); $('n-erro').textContent = ''; $('dlg-e').showModal(); $('n-razao').focus(); };

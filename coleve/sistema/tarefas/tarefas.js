@@ -1,6 +1,6 @@
 // Sistema Coleve · quadro de tarefas (área interna)
 import { banco, quemSou } from '../conexao.js?v=2';
-import { anexar, baixar, TIPOS, reais } from '../documentos.js?v=1';
+import { anexar, baixar, TIPOS, reais } from '../documentos.js?v=3';
 
 const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
