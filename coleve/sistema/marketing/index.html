@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marketing · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=7">
+<link rel="stylesheet" href="../tarefas/tarefas.css?v=4">
+<link rel="stylesheet" href="marketing.css?v=3">
+</head>
+<body class="carregando">
+
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema">
+    <a href="../">Início</a>
+    <a href="../tarefas/">Tarefas</a>
+    <a href="./" aria-current="page">Marketing</a>
+    <a href="../conversas/">Conversas</a>
+  </nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="mk">
+  <div class="mk__topo">
+    <div>
+      <p class="sec">Área interna · marketing</p>
+      <h1 class="h1">Marketing <b>da Coleve</b></h1>
+      <p class="mk__sub">Peça um post, mande referência, aprove. Tudo aqui, nada escondido.</p>
+    </div>
+    <div class="mk__acoes">
+      <div class="vista" role="tablist" aria-label="Ver como">
+        <button role="tab" class="is-ativo" data-v="lista" aria-selected="true">Lista</button>
+        <button role="tab" data-v="feed" aria-selected="false">Feed</button>
+      </div>
+      <button class="btn-lima" id="nova" type="button">+ Nova demanda</button>
+    </div>
+  </div>
+
+  <div id="lista"></div>
+  <div id="feed" hidden></div>
+</main>
+
+<!-- nova demanda -->
+<dialog class="dlg mk-dlg" id="dlg-nova">
+  <form id="f-nova" method="dialog">
+    <h2>Nova demanda</h2>
+    <label class="cp"><span>O que você precisa?</span><input name="titulo" required placeholder="Ex.: Post sobre CNAE de eletroposto"></label>
+    <fieldset class="cp"><legend>Formato</legend>
+      <div class="pls">
+        <label><input type="radio" name="formato" value="feed" checked><span>Post</span></label>
+        <label><input type="radio" name="formato" value="carrossel"><span>Carrossel</span></label>
+        <label><input type="radio" name="formato" value="story"><span>Story</span></label>
+        <label><input type="radio" name="formato" value="reels"><span>Reels</span></label>
+        <label><input type="radio" name="formato" value="outro"><span>Outro</span></label>
+      </div>
+    </fieldset>
+    <label class="cp"><span>Para quando?</span><input type="date" name="data"></label>
+    <label class="cp"><span>Briefing</span><textarea name="briefing" rows="4" placeholder="O que o post tem que dizer, para quem, qual o objetivo"></textarea></label>
+    <label class="cp"><span>Links de referência (um por linha)</span><textarea name="links" rows="2" placeholder="https://instagram.com/p/..."></textarea></label>
+    <label class="cp cp--arq"><span>Arquivos de referência (vídeo, print, foto)</span><input type="file" name="arquivos" multiple></label>
+    <p class="aviso-mk" id="aviso-nova"></p>
+    <div class="dlg__botoes"><button class="sair" value="cancel" type="button" id="cancela-nova">Cancelar</button><button class="btn-a" type="submit" id="cria">Criar demanda</button></div>
+  </form>
+</dialog>
+
+<!-- demanda aberta -->
+<div class="dm" id="dm" hidden>
+  <div class="dm__fundo" data-fecha></div>
+  <section class="dm__painel" role="dialog" aria-modal="true" aria-labelledby="dm-titulo">
+    <button class="gaveta__x" data-fecha aria-label="Fechar">×</button>
+
+    <!-- como fica no Instagram -->
+    <div class="dm__insta">
+      <div class="versoes" id="versoes"></div>
+      <div class="ig" id="ig">
+        <header class="ig__topo"><span class="ig__av"><img src="../../img/icone.svg" alt=""></span><b>coleve.contabilidade</b><span class="ig__pts">•••</span></header>
+        <div class="ig__midia" id="ig-midia"></div>
+        <div class="ig__acoes"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12Z"/></svg><svg viewBox="0 0 24 24"><path d="m21 3-9.5 9.5M21 3l-6 18-3.5-8.5L3 9l18-6Z"/></svg><span class="ig__pontos" id="ig-pontos"></span><svg class="ig__salvar" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg></div>
+        <p class="ig__leg" id="ig-leg"></p>
+      </div>
+      <p class="dm__dica" id="dica-marca" hidden>Toque na imagem para marcar o que mudar.</p>
+    </div>
+
+    <!-- dados, decisão, briefing, referências, conversa -->
+    <div class="dm__info">
+      <p class="dm__status" id="dm-status"></p>
+      <h2 id="dm-titulo"></h2>
+      <p class="dm__meta" id="dm-meta"></p>
+
+      <div class="decide" id="decide" hidden>
+        <button class="btn-ok" id="aprovar" type="button">✓ Aprovar</button>
+        <button class="btn-ajuste" id="ajustar" type="button">✏️ Pedir ajuste</button>
+      </div>
+      <form class="ajuste" id="f-ajuste" hidden>
+        <div class="marca-linha" id="marca-linha" hidden><span class="marca marca--est">+</span><input id="marca-txt" placeholder="O que mudar no ponto marcado?"><button class="btn-a" type="button" id="marca-ok">Marcar</button></div>
+        <label class="cp"><span>O que precisa mudar?</span><textarea id="aj-texto" rows="3" placeholder="Escreva o ajuste. Para apontar um lugar, toque na imagem ao lado."></textarea></label>
+        <div class="dlg__botoes"><button class="sair" type="button" id="aj-cancela">Cancelar</button><button class="btn-a" type="submit">Mandar ajuste</button></div>
+      </form>
+      <div class="dm__ultimo" id="dm-ultimo"></div>
+
+      <div class="caixa-mk" id="caixa-versao">
+        <h3>Subir versão</h3>
+        <label class="soltar-mk" id="soltar-mk"><input type="file" id="v-arquivos" multiple accept="image/*,video/*"><span>Arraste as imagens ou o vídeo aqui, ou clique. No carrossel, a ordem é a ordem dos arquivos.</span></label>
+        <div class="v-prev" id="v-prev"></div>
+        <label class="cp"><span>Legenda</span><textarea id="v-leg" rows="4" placeholder="Legenda do post"></textarea></label>
+        <button class="btn-a" id="v-envia" type="button">Mandar para aprovação</button>
+        <p class="aviso-mk" id="aviso-v"></p>
+      </div>
+      <button class="btn-pub" id="publicado" type="button" hidden>Marcar como publicado</button>
+
+      <h3>Briefing</h3>
+      <p class="dm__brief" id="dm-brief"></p>
+
+      <h3>Referências <button class="mais" id="ref-mais" type="button">+ adicionar</button></h3>
+      <form class="ref-nova" id="f-ref" hidden><input id="ref-link" placeholder="Cole um link ou escolha um arquivo"><input type="file" id="ref-arq" multiple><button class="btn-a" type="submit">Pôr</button></form>
+      <div class="refs" id="refs"></div>
+
+      <h3>Conversa desta demanda</h3>
+      <div class="mini-chat" id="mini-chat"></div>
+      <form class="mini-escrever" id="f-msg"><input id="msg" placeholder="Escreva para o time" autocomplete="off"><button class="btn-a" type="submit">Enviar</button></form>
+    </div>
+  </section>
+</div>
+
+<script type="module" src="marketing.js?v=2"></script>
+<script type="module" src="../chat-canto.js?v=2"></script>
+</body>
+</html>

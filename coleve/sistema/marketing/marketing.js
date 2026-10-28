@@ -1,0 +1,273 @@
+// Sistema Coleve · marketing: demanda → versão → aprovação, com a Interface real do Instagram
+import { banco, quemSou } from '../conexao.js';
+
+const eu = await quemSou().catch(() => null);
+if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
+const P = eu.pessoa;
+
+const $ = id => document.getElementById(id);
+const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const iniciais = n => (n || '?').split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
+const dataBR = d => d ? d.split('-').reverse().slice(0, 2).join('/') : '';
+const hora = d => new Date(d).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+const limpo = n => n.normalize('NFD').replace(/[^\w.-]+/g, '_');
+const FORMATOS = { feed: 'Post', carrossel: 'Carrossel', story: 'Story', reels: 'Reels', outro: 'Outro' };
+const STATUS = {
+  aprovacao: ['Esperando aprovação', 'st-aprov'], ajuste: ['Ajustar', 'st-ajuste'], pedido: ['Pedidos novos', 'st-pedido'],
+  produzindo: ['Produzindo', 'st-prod'], aprovado: ['Aprovados', 'st-ok'], publicado: ['Publicados', 'st-pub']
+};
+const ORDEM = ['aprovacao', 'ajuste', 'pedido', 'produzindo', 'aprovado', 'publicado'];
+
+$('nome').textContent = P.nome;
+$('avatar').textContent = iniciais(P.nome);
+$('papel').textContent = P.papel === 'admin' ? 'Equipe · acesso total' : 'Equipe';
+$('sair').onclick = async () => { await banco.auth.signOut(); location.replace('../../entrar/'); };
+
+const pessoas = new Map();
+const { data: pes } = await banco.from('pessoa').select('id,nome,area').eq('tipo', 'equipe').eq('ativo', true);
+(pes || []).forEach(p => pessoas.set(p.id, p));
+const responsavelPadrao = (pes || []).find(p => ['marketing', 'tecnologia'].includes(p.area))?.id || P.id;
+
+// links assinados em lote
+const links = new Map();
+async function assina(caminhos) {
+  const faltam = [...new Set(caminhos.filter(c => c && !links.has(c)))];
+  if (faltam.length) {
+    const { data } = await banco.storage.from('marketing').createSignedUrls(faltam, 3600);
+    (data || []).forEach(d => links.set(d.path, d.signedUrl));
+  }
+}
+const link = c => links.get(c) || '';
+const ehVideo = t => /^video\//.test(t || '');
+
+async function sobe(pasta, arquivo) {
+  const caminho = `${pasta}/${crypto.randomUUID().slice(0, 8)}-${limpo(arquivo.name)}`;
+  const { error } = await banco.storage.from('marketing').upload(caminho, arquivo, { contentType: arquivo.type || 'application/octet-stream' });
+  if (error) throw error;
+  return { arquivo: caminho, nome: arquivo.name, tipo: arquivo.type };
+}
+
+// ===== lista e feed =====
+let demandas = [], vista = 'lista';
+async function carrega() {
+  const { data } = await banco.from('v_demanda').select('*').neq('status', 'cancelado').order('data_prevista', { ascending: true, nullsFirst: false });
+  demandas = data || [];
+  await assina(demandas.map(d => d.arquivos_atuais?.[0]?.arquivo));
+  desenha();
+}
+function capa(d) {
+  const a = d.arquivos_atuais?.[0];
+  if (!a) return `<span class="capa capa--vazia">${FORMATOS[d.formato]}</span>`;
+  return ehVideo(a.tipo) ? `<video class="capa" src="${link(a.arquivo)}" muted preload="metadata"></video>` : `<img class="capa" src="${link(a.arquivo)}" alt="">`;
+}
+function desenha() {
+  $('lista').innerHTML = ORDEM.map(st => {
+    const ds = demandas.filter(d => d.status === st);
+    if (!ds.length && !['aprovacao', 'pedido'].includes(st)) return '';
+    const [nome, cls] = STATUS[st];
+    return `<section class="grupo-mk"><h2><span class="st ${cls}">${nome}</span><small>${ds.length}</small></h2>
+      ${ds.length ? `<div class="linhas">${ds.map(d => `
+        <button class="linha" data-id="${d.id}">
+          ${capa(d)}
+          <span class="linha__txt"><b>${esc(d.titulo)}</b>
+            <small>${FORMATOS[d.formato]}${d.data_prevista ? ' · para ' + dataBR(d.data_prevista) : ''}${d.versao_atual ? ' · versão ' + d.versao_atual : ''}${d.referencias ? ' · ' + d.referencias + ' referência' + (d.referencias > 1 ? 's' : '') : ''}</small></span>
+          <span class="linha__quem">pedido por ${esc((d.pedido_por_nome || '').split(' ')[0])}</span>
+        </button>`).join('')}</div>` : `<p class="vazio-mk">${st === 'aprovacao' ? 'Nada esperando aprovação.' : 'Nenhum pedido novo. Clique em "+ Nova demanda".'}</p>`}
+    </section>`;
+  }).join('');
+  const noFeed = demandas.filter(d => ['aprovacao', 'aprovado', 'publicado'].includes(d.status) && d.arquivos_atuais?.length)
+    .sort((a, b) => (b.data_prevista || '').localeCompare(a.data_prevista || ''));
+  $('feed').innerHTML = `<div class="perfil-ig"><span class="ig__av ig__av--g"><img src="../../img/icone.svg" alt=""></span><div><b>coleve.contabilidade</b><small>Como os próximos posts ficam juntos no perfil</small></div></div>
+    <div class="grade-ig">${noFeed.map(d => `<button class="quad${d.status === 'aprovacao' ? ' quad--esp' : ''}" data-id="${d.id}">${capa(d)}${d.status === 'aprovacao' ? '<em>esperando</em>' : ''}${d.arquivos_atuais.length > 1 ? '<i>❐</i>' : ''}</button>`).join('') || '<p class="vazio-mk">Quando houver post com versão, ele aparece aqui na grade.</p>'}</div>`;
+}
+document.querySelector('.vista').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  vista = b.dataset.v;
+  document.querySelectorAll('.vista button').forEach(x => { x.classList.toggle('is-ativo', x === b); x.setAttribute('aria-selected', x === b); });
+  $('lista').hidden = vista !== 'lista'; $('feed').hidden = vista !== 'feed';
+});
+['lista', 'feed'].forEach(id => $(id).addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) abre(b.dataset.id); }));
+
+// ===== nova demanda =====
+$('nova').onclick = () => { $('f-nova').reset(); $('aviso-nova').textContent = ''; $('dlg-nova').showModal(); };
+$('cancela-nova').onclick = () => $('dlg-nova').close();
+$('f-nova').addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.target, titulo = f.titulo.value.trim();
+  if (!titulo) { $('aviso-nova').textContent = 'Escreva o que você precisa.'; return; }
+  $('cria').disabled = true; $('cria').textContent = 'Criando…';
+  try {
+    const { data: d, error } = await banco.from('demanda').insert({
+      titulo, formato: f.formato.value, data_prevista: f.data.value || null, briefing: f.briefing.value.trim() || null,
+      pedido_por: P.id, responsavel_id: responsavelPadrao
+    }).select().single();
+    if (error) throw error;
+    const refs = f.links.value.split('\n').map(x => x.trim()).filter(Boolean).map(l => ({ demanda_id: d.id, link: l, criado_por: P.id }));
+    for (const a of f.arquivos.files) refs.push({ demanda_id: d.id, ...(await sobe(`${d.id}/ref`, a)), criado_por: P.id });
+    if (refs.length) await banco.from('demanda_referencia').insert(refs);
+    $('dlg-nova').close();
+    await carrega(); abre(d.id);
+  } catch (err) { $('aviso-nova').textContent = 'Não deu para criar. Tente de novo.'; }
+  finally { $('cria').disabled = false; $('cria').textContent = 'Criar demanda'; }
+});
+
+// ===== demanda aberta =====
+let atual = null, versoes = [], vSel = null, quadro = 0, marcando = false, novos = [];
+async function abre(id) {
+  atual = demandas.find(d => d.id === id); if (!atual) return;
+  history.replaceState(null, '', '#' + id);
+  $('dm').hidden = false; document.body.style.overflow = 'hidden';
+  const [{ data: vs }, { data: rs }] = await Promise.all([
+    banco.from('demanda_versao').select('*').eq('demanda_id', id).order('numero'),
+    banco.from('demanda_referencia').select('*').eq('demanda_id', id).order('criado_em')
+  ]);
+  versoes = vs || [];
+  await assina([...versoes.flatMap(v => v.arquivos.map(a => a.arquivo)), ...(rs || []).map(r => r.arquivo)]);
+  vSel = versoes.at(-1) || null; quadro = 0; marcando = false; novos = [];
+  $('v-prev').innerHTML = ''; $('v-leg').value = atual.legenda || ''; $('aviso-v').textContent = '';
+  $('f-ajuste').hidden = true;
+  desenhaInfo(); desenhaVersoes(); desenhaIg(); desenhaRefs(rs || []); carregaChat();
+}
+function fecha() { $('dm').hidden = true; document.body.style.overflow = ''; atual = null; history.replaceState(null, '', location.pathname); carrega(); }
+document.querySelectorAll('[data-fecha]').forEach(x => x.addEventListener('click', fecha));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('dm').hidden && !document.querySelector('dialog[open]')) fecha(); });
+
+function desenhaInfo() {
+  const [nome, cls] = STATUS[atual.status] || [atual.status, ''];
+  $('dm-status').innerHTML = `<span class="st ${cls}">${nome.replace(/s$/, '').replace('Pedidos novo', 'Pedido novo')}</span>`;
+  $('dm-titulo').textContent = atual.titulo;
+  $('dm-meta').textContent = `${FORMATOS[atual.formato]}${atual.data_prevista ? ' · para ' + dataBR(atual.data_prevista) : ''} · pedido por ${atual.pedido_por_nome || ''} · com ${atual.responsavel_nome || ''}`;
+  $('dm-brief').textContent = atual.briefing || 'Sem briefing.';
+  const ultima = versoes.at(-1);
+  $('decide').hidden = !(atual.status === 'aprovacao' && ultima && !ultima.decisao);
+  $('publicado').hidden = atual.status !== 'aprovado';
+  $('caixa-versao').hidden = ['aprovado', 'publicado'].includes(atual.status);
+  $('dm-ultimo').innerHTML = ultima?.decisao
+    ? `<div class="decisao ${ultima.decisao === 'aprovado' ? 'decisao--ok' : 'decisao--aj'}"><b>${ultima.decisao === 'aprovado' ? '✓ Aprovado' : '✏️ Ajuste pedido'}</b> por ${esc(pessoas.get(ultima.decidido_por)?.nome || '')} · ${hora(ultima.decidido_em)}${ultima.comentario ? `<p>${esc(ultima.comentario)}</p>` : ''}</div>` : '';
+}
+function desenhaVersoes() {
+  $('versoes').innerHTML = versoes.length ? versoes.map(v => `<button class="${v === vSel ? 'is-ativo' : ''}" data-n="${v.numero}">v${v.numero}${v.decisao === 'aprovado' ? ' ✓' : v.decisao === 'ajuste' ? ' ✏️' : ''}</button>`).join('') : '';
+}
+$('versoes').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; vSel = versoes.find(v => v.numero == b.dataset.n); quadro = 0; desenhaVersoes(); desenhaIg(); });
+
+async function desenhaIg() {
+  const ig = $('ig'); ig.classList.toggle('ig--story', ['story', 'reels'].includes(atual.formato));
+  const arqs = vSel?.arquivos || [];
+  if (!arqs.length) {
+    $('ig-midia').innerHTML = `<div class="ig__vazio"><b>${FORMATOS[atual.formato]}</b><span>Assim que a primeira versão subir, ela aparece aqui do jeito que fica no Instagram.</span></div>`;
+    $('ig-pontos').innerHTML = ''; $('ig-leg').innerHTML = atual.briefing ? '' : ''; return;
+  }
+  const a = arqs[quadro];
+  const { data: marcas } = await banco.from('demanda_marca').select('*').eq('versao_id', vSel.id).eq('quadro', quadro);
+  $('ig-midia').innerHTML = `
+    ${ehVideo(a.tipo) ? `<video src="${link(a.arquivo)}" controls playsinline></video>` : `<img src="${link(a.arquivo)}" alt="${esc(a.nome)}">`}
+    ${(marcas || []).map((m, i) => `<span class="marca" style="left:${m.x}%;top:${m.y}%" title="${esc(m.texto)}">${i + 1}<em>${esc(m.texto)}</em></span>`).join('')}
+    ${arqs.length > 1 ? `<button class="ig__seta ig__seta--e" data-d="-1" ${quadro === 0 ? 'hidden' : ''} aria-label="Anterior">‹</button><button class="ig__seta ig__seta--d" data-d="1" ${quadro === arqs.length - 1 ? 'hidden' : ''} aria-label="Próxima">›</button><span class="ig__n">${quadro + 1}/${arqs.length}</span>` : ''}
+    ${['story', 'reels'].includes(atual.formato) ? `<div class="ig__barras">${arqs.map((_, i) => `<i class="${i <= quadro ? 'on' : ''}"></i>`).join('')}</div>` : ''}`;
+  $('ig-pontos').innerHTML = arqs.length > 1 ? arqs.map((_, i) => `<i class="${i === quadro ? 'on' : ''}"></i>`).join('') : '';
+  const leg = vSel.legenda || '';
+  const curta = leg.length > 125 ? esc(leg.slice(0, 125)) + `… <button class="ig__mais" type="button">mais</button>` : esc(leg);
+  $('ig-leg').innerHTML = leg ? `<b>coleve.contabilidade</b> ${curta.replace(/\n/g, '<br>')}` : '';
+  $('ig-leg').querySelector('.ig__mais')?.addEventListener('click', () => { $('ig-leg').innerHTML = `<b>coleve.contabilidade</b> ${esc(leg).replace(/\n/g, '<br>')}`; });
+}
+$('ig-midia').addEventListener('click', async e => {
+  const s = e.target.closest('.ig__seta');
+  if (s) { quadro += +s.dataset.d; desenhaIg(); return; }
+  if (!marcando || !vSel || e.target.closest('.marca') || e.target.tagName === 'VIDEO') return;
+  const r = $('ig-midia').getBoundingClientRect();
+  const x = ((e.clientX - r.left) / r.width * 100).toFixed(2), y = ((e.clientY - r.top) / r.height * 100).toFixed(2);
+  pendente = { x, y, quadro };
+  $('ig-midia').querySelector('.marca--nova')?.remove();
+  $('ig-midia').insertAdjacentHTML('beforeend', `<span class="marca marca--nova" style="left:${x}%;top:${y}%">+</span>`);
+  $('marca-linha').hidden = false; $('marca-txt').focus();
+});
+let pendente = null;
+$('marca-ok').onclick = async () => {
+  const texto = $('marca-txt').value.trim(); if (!texto || !pendente) return;
+  await banco.from('demanda_marca').insert({ versao_id: vSel.id, ...pendente, texto, autor_id: P.id });
+  pendente = null; $('marca-txt').value = ''; $('marca-linha').hidden = true; desenhaIg();
+};
+$('marca-txt').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('marca-ok').click(); } });
+
+// aprovar / ajustar
+$('aprovar').onclick = async () => {
+  const v = versoes.at(-1);
+  const { error } = await banco.from('demanda_versao').update({ decisao: 'aprovado', decidido_por: P.id, decidido_em: new Date().toISOString() }).eq('id', v.id);
+  if (!error) { atual.status = 'aprovado'; Object.assign(v, { decisao: 'aprovado', decidido_por: P.id, decidido_em: new Date().toISOString() }); desenhaInfo(); desenhaVersoes(); }
+};
+$('ajustar').onclick = () => { $('f-ajuste').hidden = false; marcando = true; $('dica-marca').hidden = false; $('ig').classList.add('ig--marcando'); vSel = versoes.at(-1); desenhaVersoes(); desenhaIg(); $('aj-texto').focus(); };
+$('aj-cancela').onclick = () => { $('f-ajuste').hidden = true; marcando = false; $('dica-marca').hidden = true; $('ig').classList.remove('ig--marcando'); };
+$('f-ajuste').addEventListener('submit', async e => {
+  e.preventDefault();
+  const v = versoes.at(-1), comentario = $('aj-texto').value.trim() || null;
+  const agora = new Date().toISOString();
+  const { error } = await banco.from('demanda_versao').update({ decisao: 'ajuste', comentario, decidido_por: P.id, decidido_em: agora }).eq('id', v.id);
+  if (error) return;
+  Object.assign(v, { decisao: 'ajuste', comentario, decidido_por: P.id, decidido_em: agora }); atual.status = 'ajuste';
+  $('aj-cancela').click(); $('aj-texto').value = ''; desenhaInfo(); desenhaVersoes();
+});
+$('publicado').onclick = async () => { await banco.from('demanda').update({ status: 'publicado' }).eq('id', atual.id); atual.status = 'publicado'; desenhaInfo(); };
+
+// nova versão
+const poeNovos = fs => {
+  novos.push(...[...fs].filter(f => f.size <= 50 * 1048576));
+  if ([...fs].some(f => f.size > 50 * 1048576)) $('aviso-v').textContent = 'Arquivo acima de 50 MB ficou de fora.';
+  $('v-prev').innerHTML = novos.map((f, i) => `<span class="chip-arq">${i + 1}. ${esc(f.name)}<button type="button" data-i="${i}" aria-label="Tirar">×</button></span>`).join('');
+};
+$('v-arquivos').addEventListener('change', e => { poeNovos(e.target.files); e.target.value = ''; });
+$('v-prev').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { novos.splice(+b.dataset.i, 1); poeNovos([]); } });
+['dragover', 'drop'].forEach(ev => $('soltar-mk').addEventListener(ev, e => { e.preventDefault(); if (ev === 'drop') poeNovos(e.dataTransfer.files); }));
+$('v-envia').onclick = async () => {
+  if (!novos.length) { $('aviso-v').textContent = 'Escolha pelo menos uma imagem ou vídeo.'; return; }
+  $('v-envia').disabled = true; $('v-envia').textContent = 'Subindo…';
+  try {
+    const numero = (versoes.at(-1)?.numero || 0) + 1;
+    const arquivos = [];
+    for (const f of novos) arquivos.push(await sobe(`${atual.id}/v${numero}`, f));
+    const { error } = await banco.from('demanda_versao').insert({ demanda_id: atual.id, numero, arquivos, legenda: $('v-leg').value.trim() || null, enviado_por: P.id });
+    if (error) throw error;
+    await carrega(); abre(atual.id);
+  } catch { $('aviso-v').textContent = 'Não deu para subir. Tente de novo.'; }
+  finally { $('v-envia').disabled = false; $('v-envia').textContent = 'Mandar para aprovação'; }
+};
+
+// referências
+function desenhaRefs(rs) {
+  $('refs').innerHTML = rs.length ? rs.map(r => r.link
+    ? `<a class="ref ref--link" href="${esc(r.link)}" target="_blank" rel="noopener"><span>🔗</span><b>${esc(r.link.replace(/^https?:\/\/(www\.)?/, '').slice(0, 48))}</b></a>`
+    : `<a class="ref" href="${link(r.arquivo)}" target="_blank" rel="noopener">${/^image\//.test(r.tipo) ? `<img src="${link(r.arquivo)}" alt="">` : ehVideo(r.tipo) ? `<video src="${link(r.arquivo)}" muted preload="metadata"></video>` : '<span>📎</span>'}<b>${esc(r.nome)}</b></a>`).join('')
+    : '<p class="vazio-mk">Sem referência ainda.</p>';
+}
+$('ref-mais').onclick = () => { $('f-ref').hidden = !$('f-ref').hidden; };
+$('f-ref').addEventListener('submit', async e => {
+  e.preventDefault();
+  const novos = [];
+  if ($('ref-link').value.trim()) novos.push({ demanda_id: atual.id, link: $('ref-link').value.trim(), criado_por: P.id });
+  for (const a of $('ref-arq').files) novos.push({ demanda_id: atual.id, ...(await sobe(`${atual.id}/ref`, a)), criado_por: P.id });
+  if (!novos.length) return;
+  await banco.from('demanda_referencia').insert(novos);
+  $('f-ref').reset(); $('f-ref').hidden = true; abre(atual.id);
+});
+
+// conversa da demanda
+async function carregaChat() {
+  if (!atual.canal_id) { $('mini-chat').innerHTML = ''; return; }
+  const { data } = await banco.from('mensagem').select('*').eq('canal_id', atual.canal_id).order('criado_em').limit(100);
+  $('mini-chat').innerHTML = (data || []).map(m => `<div class="mc${m.autor_id === P.id ? ' mc--minha' : ''}"><b>${esc((pessoas.get(m.autor_id)?.nome || '').split(' ')[0])}</b> <span>${hora(m.criado_em)}</span><p>${esc(m.texto || '📎 ' + m.arquivo_nome)}</p></div>`).join('') || '<p class="vazio-mk">Tire as dúvidas desta demanda aqui.</p>';
+  $('mini-chat').scrollTop = $('mini-chat').scrollHeight;
+}
+$('f-msg').addEventListener('submit', async e => {
+  e.preventDefault();
+  const texto = $('msg').value.trim(); if (!texto || !atual?.canal_id) return;
+  $('msg').value = '';
+  await banco.from('mensagem').insert({ canal_id: atual.canal_id, autor_id: P.id, texto });
+  carregaChat();
+});
+banco.channel('coleve-mk').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensagem' }, ({ new: m }) => {
+  if (atual && m.canal_id === atual.canal_id) carregaChat();
+}).subscribe();
+
+await carrega();
+const alvo = location.hash.slice(1);
+if (alvo && demandas.some(d => d.id === alvo)) abre(alvo);
+document.body.classList.remove('carregando');

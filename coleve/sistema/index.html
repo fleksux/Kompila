@@ -14,7 +14,7 @@
 <header class="barra">
   <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
   <span class="barra__tag" id="tag">Sistema</span>
-  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" aria-current="page">Início</a><a href="tarefas/">Tarefas</a><a href="conversas/">Conversas</a></nav>
+  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" aria-current="page">Início</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -81,6 +81,7 @@ if (equipe) {
     mod('Documentos', 'Guias, apurações e o que o cliente mandou, com protocolo de envio.', I.doc) +
     mod('Pedidos', 'Segunda via, certidão e alteração pedidas pelo cliente.', I.pedido) +
     mod('Ligações', 'Discar para o cliente e registrar cada chamada na ficha.', I.fone);
+  document.getElementById('modulos').insertAdjacentHTML('afterbegin', mod('Marketing', 'Peça um post com referência, receba a versão na cara do Instagram e aprove.', I.doc, 'marketing/'));
   document.getElementById('modulos').insertAdjacentHTML('afterbegin', mod('Conversas', 'Canais por área e conversa direta, com troca de arquivos. O cliente nunca vê.', I.pedido, 'conversas/'));
 } else {
   const { data: emps } = await banco.from('empresa').select('nome_fantasia,razao_social');
