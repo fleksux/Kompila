@@ -13,7 +13,7 @@
 <link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../sistema.css?v=28">
 <link rel="stylesheet" href="../tarefas/tarefas.css?v=9">
-<link rel="stylesheet" href="marketing.css?v=13">
+<link rel="stylesheet" href="marketing.css?v=16">
 </head>
 <body class="carregando">
 
@@ -41,17 +41,22 @@
       <p class="mk__sub">Peça um post, mande referência, aprove. Tudo aqui, nada escondido.</p>
     </div>
     <div class="mk__acoes">
-      <div class="vista" role="tablist" aria-label="Ver como">
-        <button role="tab" class="is-ativo" data-v="lista" aria-selected="true">Lista</button>
-        <button role="tab" data-v="feed" aria-selected="false">Feed</button>
-      </div>
       <span id="drive-pill"></span>
-      <button class="btn-lima" id="nova" type="button">+ Nova demanda</button>
     </div>
   </div>
 
   <p class="aviso-drive" id="aviso-drive"></p>
-  <div class="filtro-st" id="filtro-st" role="tablist" aria-label="Ver por status"></div>
+  <!-- barra do marketing: status à esquerda, ver como e nova demanda à direita -->
+  <div class="barra-mk">
+    <div class="filtro-st" id="filtro-st" role="tablist" aria-label="Ver por status"></div>
+    <div class="barra-mk__acoes">
+      <div class="vista" role="tablist" aria-label="Ver como">
+        <button role="tab" class="is-ativo" data-v="lista" aria-selected="true">Lista</button>
+        <button role="tab" data-v="feed" aria-selected="false">Feed</button>
+      </div>
+      <button class="btn-lima" id="nova" type="button">+ Nova demanda</button>
+    </div>
+  </div>
   <div id="lista"></div>
   <div id="feed" hidden></div>
 </main>
@@ -143,7 +148,7 @@
   </section>
 </div>
 
-<script type="module" src="marketing.js?v=12"></script>
+<script type="module" src="marketing.js?v=16"></script>
 <script type="module" src="../chat-canto.js?v=5"></script>
 <script type="module" src="../avisos.js?v=1"></script>
 </body>

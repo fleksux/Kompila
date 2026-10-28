@@ -92,11 +92,12 @@ function capa(d) {
   return ehVideo(a.tipo) ? `<video class="capa" src="${link(a.arquivo)}" muted preload="metadata"></video>` : `<img class="capa" src="${link(a.arquivo)}" alt="">`;
 }
 // filtro por status no topo: cada grupo a um clique, com a contagem à vista
-let filtroSt = (() => { try { return sessionStorage.getItem('coleve_mk_st'); } catch { return null; } })();
+// sem aba Todos: ela trazia de volta a lista enorme (Alex 28/10)
+let filtroSt = (() => { try { const v = sessionStorage.getItem('coleve_mk_st'); return v === 'todos' ? null : v; } catch { return null; } })();
 function desenhaFiltro() {
   const n = st => demandas.filter(d => d.status === st).length;
   if (!filtroSt) filtroSt = ['aprovacao', 'ajuste', 'produzindo'].find(st => n(st)) || 'pedido';
-  $('filtro-st').innerHTML = [...ORDEM, 'todos'].map(st => {
+  $('filtro-st').innerHTML = ORDEM.map(st => {
     const nome = { aprovacao: 'Esperando aprovação', ajuste: 'Ajustar', pedido: 'Pedidos novos', produzindo: 'Produzindo', aprovado: 'Aprovados', publicado: 'Publicados', todos: 'Todos' }[st];
     const qt = st === 'todos' ? demandas.length : n(st);
     const curto = { aprovacao: 'Esperando', pedido: 'Novos' }[st] || nome;
@@ -112,15 +113,15 @@ function desenha() {
   desenhaFiltro();
   $('lista').innerHTML = ORDEM.filter(st => filtroSt === 'todos' || st === filtroSt).map(st => {
     const ds = demandas.filter(d => d.status === st);
-    if (!ds.length && filtroSt === 'todos' && !['aprovacao', 'pedido'].includes(st)) return '';
+    if (!ds.length && filtroSt === 'todos') return '';   // em Todos, grupo vazio não aparece
     const [nome, cls] = STATUS[st];
-    return `<section class="grupo-mk">${filtroSt === 'todos' ? `<h2><span class="st ${cls}">${nome}</span><small>${ds.length}</small></h2>` : ''}
+    return `<section class="grupo-mk">${filtroSt === 'todos' ? `<h2 class="grupo-mk__t">${nome}<small>${ds.length}</small></h2>` : ''}
       ${ds.length ? `<div class="linhas">${ds.map(d => `
-        <button class="linha" data-id="${d.id}">
-          ${capa(d)}
-          <span class="linha__txt"><b>${esc(d.titulo)}</b>
-            <small>${[d.formato !== 'outro' ? FORMATOS[d.formato] : null, d.data_prevista ? 'para ' + dataBR(d.data_prevista) : null].filter(Boolean).join(' · ')}${d.versao_atual ? ' · versão ' + d.versao_atual : ''}${d.referencias ? ' · ' + d.referencias + ' referência' + (d.referencias > 1 ? 's' : '') : ''}</small></span>
-          <span class="linha__quem">pedido por ${esc((d.pedido_por_nome || '').split(' ')[0])}</span>
+        <button class="linha card-mk" data-id="${d.id}">
+          <span class="card-mk__topo">${d.arquivos_atuais?.length ? capa(d) : `<span class="ico"><svg viewBox="0 0 24 24"><path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5M8 13h8M8 17h6"/></svg></span>`}<em>${FORMATOS[d.formato]}</em></span>
+          <b>${esc(d.titulo)}</b>
+          <small>${[d.data_prevista ? 'para ' + dataBR(d.data_prevista) : null, d.versao_atual ? 'versão ' + d.versao_atual : null, d.referencias ? d.referencias + ' referência' + (d.referencias > 1 ? 's' : '') : null].filter(Boolean).join(' · ') || 'sem data'}</small>
+          <span class="card-mk__pe">pedido por ${esc((d.pedido_por_nome || '').split(' ')[0])}</span>
         </button>`).join('')}</div>` : `<p class="vazio-mk">${{ aprovacao: 'Nada esperando aprovação.', ajuste: 'Nenhum ajuste pedido.', pedido: 'Nenhum pedido novo. Clique em "+ Nova demanda".', produzindo: 'Nada em produção agora.', aprovado: 'Nenhum aprovado esperando publicação.', publicado: 'Nada publicado ainda.' }[st]}</p>`}
     </section>`;
   }).join('');
@@ -129,11 +130,12 @@ function desenha() {
   $('feed').innerHTML = `<div class="perfil-ig"><span class="ig__av ig__av--g"><img src="../../img/icone.svg" alt=""></span><div><b>coleve.contabilidade</b><small>Como os próximos posts ficam juntos no perfil</small></div></div>
     <div class="grade-ig">${noFeed.map(d => `<button class="quad${d.status === 'aprovacao' ? ' quad--esp' : ''}" data-id="${d.id}">${capa(d)}${d.status === 'aprovacao' ? '<em>esperando</em>' : ''}${d.arquivos_atuais.length > 1 ? '<i>❐</i>' : ''}</button>`).join('') || '<p class="vazio-mk">Quando houver post com versão, ele aparece aqui na grade.</p>'}</div>`;
 }
-document.querySelector('.vista').addEventListener('click', e => {
+document.querySelector('.barra-mk .vista').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   vista = b.dataset.v;
   document.querySelectorAll('.vista button').forEach(x => { x.classList.toggle('is-ativo', x === b); x.setAttribute('aria-selected', x === b); });
-  $('lista').hidden = $('filtro-st').hidden = vista !== 'lista'; $('feed').hidden = vista !== 'feed';
+  $('lista').hidden = vista !== 'lista'; $('feed').hidden = vista !== 'feed';
+  $('filtro-st').style.visibility = vista === 'lista' ? '' : 'hidden';
 });
 ['lista', 'feed'].forEach(id => $(id).addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) abre(b.dataset.id); }));
 
