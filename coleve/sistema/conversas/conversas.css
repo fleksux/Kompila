@@ -154,3 +154,7 @@ body.modo-mini{padding-bottom:0!important}
 .fio__ico{position:relative}
 .canal--novo .canal__txt small{color:var(--azul);font-weight:700}
 .fio__titulo small.on{color:#138A42;font-weight:700}
+/* lista nunca mais larga que a janela (texto longo vira reticências) */
+body.modo-mini .chat{grid-template-columns:minmax(0,1fr)}
+@media (max-width:860px){.chat{grid-template-columns:minmax(0,1fr)}}
+.chat__lista,.canal__txt{min-width:0}
