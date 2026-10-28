@@ -217,8 +217,12 @@ async function desenhaIg() {
   const doc = atual.formato === 'outro';
   const ig = $('ig'); ig.classList.toggle('ig--story', ['story', 'reels'].includes(atual.formato)); ig.classList.toggle('ig--doc', doc);
   const arqs = vSel?.arquivos || [];
-  $('ig-arqs').innerHTML = doc && arqs.length ? arqs.map((x, i) => `<button type="button" class="${i === quadro ? 'is-ativo' : ''}" data-q="${i}"><span class="ext">${esc((x.nome.split('.').pop() || '').toUpperCase())}</span><span class="nm">${/^image\//.test(x.tipo || '') ? 'Imagem' : /pdf/.test(x.tipo || '') ? 'PDF para imprimir' : esc(x.nome)}</span></button>`).join('') +
-    (arqs[quadro]?.drive ? `<a class="abrir" href="https://drive.google.com/file/d/${arqs[quadro].drive}/view" target="_blank" rel="noopener">Abrir</a>` : '') : '';
+  // baixar sempre à vista: o arquivo do Drive é "qualquer pessoa com o link", então baixa direto
+  const at = arqs[quadro];
+  const baixar = at?.drive ? `https://drive.google.com/uc?export=download&id=${at.drive}` : at?.arquivo ? link(at.arquivo) : '';
+  $('ig-arqs').innerHTML = !arqs.length ? '' :
+    (doc ? arqs.map((x, i) => `<button type="button" class="${i === quadro ? 'is-ativo' : ''}" data-q="${i}"><span class="ext">${esc((x.nome.split('.').pop() || '').toUpperCase())}</span><span class="nm">${/^image\//.test(x.tipo || '') ? 'Imagem' : /pdf/.test(x.tipo || '') ? 'PDF para imprimir' : esc(x.nome)}</span></button>`).join('') : '') +
+    (baixar ? `<a class="abrir" href="${baixar}" download="${esc(at.nome || '')}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Baixar${arqs.length > 1 ? ' ' + (doc ? (/pdf/.test(at.tipo || '') ? 'PDF' : 'imagem') : quadro + 1 + ' de ' + arqs.length) : ''}</a>` : '');
   if (!arqs.length) {
     $('ig-midia').innerHTML = `<div class="ig__vazio"><b>${FORMATOS[atual.formato]}</b><span>${doc ? 'Assim que a primeira versão subir, a peça aparece aqui inteira.' : 'Assim que a primeira versão subir, ela aparece aqui do jeito que fica no Instagram.'}</span></div>`;
     $('ig-pontos').innerHTML = ''; $('ig-leg').innerHTML = atual.briefing ? '' : ''; return;
