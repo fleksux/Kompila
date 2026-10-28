@@ -12,13 +12,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
-<link rel="stylesheet" href="sistema.css?v=25">
+<link rel="stylesheet" href="sistema.css?v=26">
 </head>
 <body class="carregando">
 
 <header class="barra">
   <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
-  <span class="barra__tag" id="tag">Sistema</span>
+  <span class="barra__tag" id="tag" hidden>Área do cliente</span>
   <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" id="nav-inicio">Área interna</a><a href="feed/" id="nav-feed">Feed</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a><a href="clientes/">Clientes</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
@@ -53,7 +53,9 @@ document.getElementById('nome').textContent = p.nome;
 document.getElementById('primeiro').textContent = p.nome.split(' ')[0] + '.';
 document.getElementById('avatar').textContent = p.nome.split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
 document.getElementById('papel').textContent = equipe ? (p.papel === 'admin' ? 'Equipe · acesso total' : 'Equipe · ' + (areas[p.area] || p.papel)) : 'Cliente';
-document.getElementById('tag').textContent = equipe ? 'Área interna' : 'Área do cliente';
+// a etiqueta só aparece pro cliente; na equipe ela empurrava o menu e ele mudava de lugar entre as páginas
+document.getElementById('tag').textContent = 'Área do cliente';
+document.getElementById('tag').hidden = equipe;
 document.getElementById('sec').textContent = equipe ? 'Área interna · equipe Coleve' : 'Área do cliente';
 
 const num = (n, t) => `<div class="num"><strong>${n}</strong><span>${t}</span></div>`;

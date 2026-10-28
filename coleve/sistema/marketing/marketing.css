@@ -195,13 +195,17 @@ body.carregando .mk{opacity:0}
 .btn-envia{height:48px!important;padding:0 24px!important;font-size:15px!important}
 #caixa-titulo{font-size:17px}
 
-/* filtro por status: tudo à vista, um clique */
-.filtro-st{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
-.chip-st{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 8px 0 8px;border:0;border-radius:999px;background:#fff;outline:1.5px solid var(--linha);outline-offset:-1.5px;font:inherit;cursor:pointer;transition:outline-color .2s}
-.chip-st b{min-width:28px;height:28px;padding:0 8px;border-radius:999px;background:var(--nevoa);color:var(--grafite);font-size:14px;font-weight:800;display:grid;place-items:center}
-.chip-st:hover{outline-color:var(--azul)}
-.chip-st.is-ativo{outline:2px solid var(--azul);outline-offset:-2px;background:#E6EFFF}
-.chip-st.is-ativo b{background:var(--azul);color:#fff}
-.chip-st--zero{opacity:.55}
-.st-todos{background:var(--nevoa);color:var(--grafite)}
-@media (max-width:860px){.filtro-st{gap:6px}.chip-st .st{padding:4px 10px}}
+/* filtro por status: abas sublinhadas (mesmo padrão do CRM), uma linha, número em cinza */
+.filtro-st{display:flex;gap:24px;border-bottom:1.5px solid var(--linha);margin-bottom:24px;flex-wrap:wrap;row-gap:0}
+.aba-st{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0;border:0;border-bottom:3px solid transparent;margin-bottom:-1.5px;background:none;font:700 15px Gabarito,sans-serif;color:var(--cinza);cursor:pointer;white-space:nowrap}
+.aba-st b{font-weight:700;color:#9aa3b2}
+.aba-st:hover{color:var(--grafite)}
+.aba-st.is-ativo{color:var(--azul);border-bottom-color:var(--azul)}
+.aba-st.is-ativo b{color:var(--azul)}
+.aba-st__c{display:none}
+@media (max-width:860px){
+  .filtro-st{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:0}
+  .aba-st{justify-content:center;gap:4px;font-size:13px;border-bottom:1.5px solid var(--linha);margin:0}
+  .aba-st.is-ativo{border-bottom:3px solid var(--azul)}
+  .aba-st__l{display:none}.aba-st__c{display:inline}
+}

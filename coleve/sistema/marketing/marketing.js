@@ -97,13 +97,14 @@ function desenhaFiltro() {
   const n = st => demandas.filter(d => d.status === st).length;
   if (!filtroSt) filtroSt = ['aprovacao', 'ajuste', 'produzindo'].find(st => n(st)) || 'pedido';
   $('filtro-st').innerHTML = [...ORDEM, 'todos'].map(st => {
-    const [nome, cls] = st === 'todos' ? ['Todos', 'st-todos'] : STATUS[st];
+    const nome = { aprovacao: 'Esperando aprovação', ajuste: 'Ajustar', pedido: 'Pedidos novos', produzindo: 'Produzindo', aprovado: 'Aprovados', publicado: 'Publicados', todos: 'Todos' }[st];
     const qt = st === 'todos' ? demandas.length : n(st);
-    return `<button type="button" role="tab" class="chip-st${filtroSt === st ? ' is-ativo' : ''}${!qt ? ' chip-st--zero' : ''}" data-st="${st}" aria-selected="${filtroSt === st}"><span class="st ${cls}">${nome}</span><b>${qt}</b></button>`;
+    const curto = { aprovacao: 'Esperando', pedido: 'Novos' }[st] || nome;
+    return `<button type="button" role="tab" class="aba-st${filtroSt === st ? ' is-ativo' : ''}" data-st="${st}" aria-selected="${filtroSt === st}"><span class="aba-st__l">${nome}</span><span class="aba-st__c">${curto}</span><b>${qt}</b></button>`;
   }).join('');
 }
 $('filtro-st').addEventListener('click', e => {
-  const b = e.target.closest('.chip-st'); if (!b) return;
+  const b = e.target.closest('.aba-st'); if (!b) return;
   filtroSt = b.dataset.st; try { sessionStorage.setItem('coleve_mk_st', filtroSt); } catch { /* sem memória, segue */ }
   desenha();
 });
@@ -113,12 +114,12 @@ function desenha() {
     const ds = demandas.filter(d => d.status === st);
     if (!ds.length && filtroSt === 'todos' && !['aprovacao', 'pedido'].includes(st)) return '';
     const [nome, cls] = STATUS[st];
-    return `<section class="grupo-mk"><h2><span class="st ${cls}">${nome}</span><small>${ds.length}</small></h2>
+    return `<section class="grupo-mk">${filtroSt === 'todos' ? `<h2><span class="st ${cls}">${nome}</span><small>${ds.length}</small></h2>` : ''}
       ${ds.length ? `<div class="linhas">${ds.map(d => `
         <button class="linha" data-id="${d.id}">
           ${capa(d)}
           <span class="linha__txt"><b>${esc(d.titulo)}</b>
-            <small>${FORMATOS[d.formato]}${d.data_prevista ? ' · para ' + dataBR(d.data_prevista) : ''}${d.versao_atual ? ' · versão ' + d.versao_atual : ''}${d.referencias ? ' · ' + d.referencias + ' referência' + (d.referencias > 1 ? 's' : '') : ''}</small></span>
+            <small>${[d.formato !== 'outro' ? FORMATOS[d.formato] : null, d.data_prevista ? 'para ' + dataBR(d.data_prevista) : null].filter(Boolean).join(' · ')}${d.versao_atual ? ' · versão ' + d.versao_atual : ''}${d.referencias ? ' · ' + d.referencias + ' referência' + (d.referencias > 1 ? 's' : '') : ''}</small></span>
           <span class="linha__quem">pedido por ${esc((d.pedido_por_nome || '').split(' ')[0])}</span>
         </button>`).join('')}</div>` : `<p class="vazio-mk">${{ aprovacao: 'Nada esperando aprovação.', ajuste: 'Nenhum ajuste pedido.', pedido: 'Nenhum pedido novo. Clique em "+ Nova demanda".', produzindo: 'Nada em produção agora.', aprovado: 'Nenhum aprovado esperando publicação.', publicado: 'Nada publicado ainda.' }[st]}</p>`}
     </section>`;
