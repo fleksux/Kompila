@@ -191,3 +191,6 @@ body.carregando .mk{opacity:0}
 .toast{position:fixed;left:20px;bottom:20px;z-index:80;max-width:min(420px,calc(100vw - 110px));background:var(--navy);color:#fff;font:700 15px Gabarito,sans-serif;border-radius:16px;padding:14px 18px;box-shadow:0 16px 40px rgb(7 26 68 / .35);animation:entraToast .3s ease;transition:opacity .5s,translate .5s}
 .toast--sai{opacity:0;translate:0 10px}
 @keyframes entraToast{from{opacity:0;translate:0 12px}}
+.enviado{margin-top:18px;background:#FFF1E0;color:#a35a00;border-radius:14px;padding:14px 16px;font-weight:700}
+.btn-envia{height:48px!important;padding:0 24px!important;font-size:15px!important}
+#caixa-titulo{font-size:17px}

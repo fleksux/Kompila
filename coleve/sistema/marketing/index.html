@@ -9,7 +9,7 @@
 <link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../sistema.css?v=10">
 <link rel="stylesheet" href="../tarefas/tarefas.css?v=4">
-<link rel="stylesheet" href="marketing.css?v=7">
+<link rel="stylesheet" href="marketing.css?v=8">
 </head>
 <body class="carregando">
 
@@ -108,16 +108,17 @@
         <label class="cp"><span>O que precisa mudar?</span><textarea id="aj-texto" rows="3" placeholder="Escreva o ajuste. Para apontar um lugar, toque na imagem ao lado."></textarea></label>
         <div class="dlg__botoes"><button class="sair" type="button" id="aj-cancela">Cancelar</button><button class="btn-a" type="submit">Mandar ajuste</button></div>
       </form>
+      <p class="enviado" id="enviado" hidden></p>
       <div class="dm__ultimo" id="dm-ultimo"></div>
 
       <div class="caixa-mk" id="caixa-versao">
-        <h3>Subir versão</h3>
+        <h3 id="caixa-titulo">Enviar arte</h3>
         <label class="soltar-mk" id="soltar-mk"><input type="file" id="v-arquivos" multiple accept="image/*,video/*"><span>Arraste as imagens ou o vídeo aqui, ou clique. No carrossel, a ordem é a ordem dos arquivos.</span></label>
         <div class="v-prev" id="v-prev"></div>
         <label class="cp"><span>Ou cole o link do seu Drive (vídeo pesado vai por aqui)</span><input id="v-drive" placeholder="https://drive.google.com/file/d/..."></label>
         <p class="dica-drive">No Drive, deixe o arquivo como "Qualquer pessoa com o link pode ver".</p>
         <label class="cp"><span>Legenda</span><textarea id="v-leg" rows="4" placeholder="Legenda do post"></textarea></label>
-        <button class="btn-a" id="v-envia" type="button">Mandar para aprovação</button>
+        <button class="btn-a btn-envia" id="v-envia" type="button">Enviar para aprovação</button>
         <p class="aviso-mk" id="aviso-v"></p>
       </div>
       <button class="btn-pub" id="publicado" type="button" hidden>Marcar como publicado</button>
@@ -136,7 +137,7 @@
   </section>
 </div>
 
-<script type="module" src="marketing.js?v=7"></script>
+<script type="module" src="marketing.js?v=8"></script>
 <script type="module" src="../chat-canto.js?v=3"></script>
 </body>
 </html>

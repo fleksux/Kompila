@@ -172,9 +172,17 @@ function desenhaInfo() {
   $('dm-meta').textContent = `${FORMATOS[atual.formato]}${atual.data_prevista ? ' · para ' + dataBR(atual.data_prevista) : ''} · pedido por ${atual.pedido_por_nome || ''} · com ${atual.responsavel_nome || ''}`;
   $('dm-brief').textContent = atual.briefing || 'Sem observações.';
   const ultima = versoes.at(-1);
-  $('decide').hidden = !(atual.status === 'aprovacao' && ultima && !ultima.decisao);
+  const esperando = atual.status === 'aprovacao' && ultima && !ultima.decisao;
+  // quem fez a arte envia; quem pediu aprova. Ninguém aprova a própria arte.
+  const souQuemFaz = esperando ? ultima.enviado_por === P.id : (atual.responsavel_id === P.id || atual.pedido_por !== P.id);
+  const quemAprova = (atual.pedido_por_nome || 'quem pediu').split(' ')[0];
+  $('decide').hidden = !(esperando && ultima.enviado_por !== P.id);
+  $('enviado').hidden = !(esperando && ultima.enviado_por === P.id);
+  $('enviado').innerHTML = `✓ Enviado · esperando <b>${esc(quemAprova)}</b> aprovar`;
   $('publicado').hidden = atual.status !== 'aprovado';
-  $('caixa-versao').hidden = ['aprovado', 'publicado'].includes(atual.status);
+  $('caixa-versao').hidden = ['aprovado', 'publicado'].includes(atual.status) || esperando || !souQuemFaz;
+  $('caixa-titulo').textContent = atual.status === 'ajuste' ? 'Enviar arte corrigida' : 'Enviar arte';
+  $('v-envia').textContent = `Enviar para ${quemAprova === 'quem pediu' ? 'aprovação' : quemAprova + ' aprovar'}`;
   $('dm-ultimo').innerHTML = ultima?.decisao
     ? `<div class="decisao ${ultima.decisao === 'aprovado' ? 'decisao--ok' : 'decisao--aj'}"><b>${ultima.decisao === 'aprovado' ? '✓ Aprovado' : '✏️ Ajuste pedido'}</b> por ${esc(pessoas.get(ultima.decidido_por)?.nome || '')} · ${hora(ultima.decidido_em)}${ultima.comentario ? `<p>${esc(ultima.comentario)}</p>` : ''}</div>` : '';
 }
@@ -265,7 +273,7 @@ $('v-envia').onclick = async () => {
     $('v-drive').value = '';
     await carrega(); abre(atual.id);
   } catch { $('aviso-v').textContent = 'Não deu para subir. Tente de novo.'; }
-  finally { $('v-envia').disabled = false; $('v-envia').textContent = 'Mandar para aprovação'; }
+  finally { $('v-envia').disabled = false; desenhaInfo(); }
 };
 
 // referências
