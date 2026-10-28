@@ -66,10 +66,47 @@ function desenhaCanais() {
       <span class="canal__txt"><b>${esc(c.nome)}</b><small>${esc(c.ultima_txt || c.descricao || '')}</small></span>
       ${c.nao_lidas && c.id !== atual?.id ? `<span class="canal__n">${c.nao_lidas}</span>` : c.ultima_em ? `<span class="canal__h">${hora(c.ultima_em)}</span>` : ''}
     </button></li>`).join('') : '';
-  $('canais').innerHTML = grupo('Canais', lista.filter(c => c.tipo !== 'direto')) + grupo('Diretas', lista.filter(c => c.tipo === 'direto'));
+  const diretas = lista.filter(c => c.tipo === 'direto');
+  const comConversa = new Set(diretas.map(c => c.outro_id || c.nome));
+  const semConversa = [...pessoas].filter(([id, nome]) => id !== P.id && !comConversa.has(id) && !comConversa.has(nome) && (!b || nome.toLowerCase().includes(b)));
+  // pessoas primeiro (falar com alguém é o mais comum), depois os canais por área
+  $('canais').innerHTML =
+    (diretas.length || semConversa.length ? '<li class="canais__rot">Pessoas</li>' : '') +
+    grupo('', diretas).replace('<li class="canais__rot"></li>', '') +
+    semConversa.map(([id, nome]) => `<li><button class="canal canal--novo" data-pessoa="${id}">
+      <span class="canal__ico canal__ico--pessoa${online.has(id) ? ' on' : ''}">${iniciais(nome)}</span>
+      <span class="canal__txt"><b>${esc(nome)}</b><small>${online.has(id) ? 'online agora · ' : ''}começar conversa</small></span></button></li>`).join('') +
+    grupo('Canais', lista.filter(c => c.tipo !== 'direto'));
+  // bolinha verde nas diretas que já existem
+  diretas.forEach(c => { const id = idDoOutro(c); if (id && online.has(id)) $('canais').querySelector(`[data-id="${c.id}"] .canal__ico`)?.classList.add('on'); });
 }
+const idDoOutro = c => c.outro_id || [...pessoas].find(([, nome]) => nome === c.nome)?.[0];
 $('busca').addEventListener('input', desenhaCanais);
-$('canais').addEventListener('click', e => { const b = e.target.closest('.canal'); if (b) abre(b.dataset.id); });
+$('canais').addEventListener('click', async e => {
+  const b = e.target.closest('.canal'); if (!b) return;
+  if (b.dataset.pessoa) return abreDireto(b.dataset.pessoa);
+  abre(b.dataset.id);
+});
+async function abreDireto(outro) {
+  const { data: id, error } = await banco.rpc('abrir_direto', { outro });
+  if (error) return alert('Não deu para abrir a conversa.');
+  await carregaCanais(); abre(id);
+}
+
+// quem está online agora (presença em tempo real; cada tela aberta do sistema conta)
+const online = new Set();
+const presenca = banco.channel('coleve-online', { config: { presence: { key: P.id } } });
+presenca.on('presence', { event: 'sync' }, () => {
+  online.clear(); Object.keys(presenca.presenceState()).forEach(id => online.add(id));
+  desenhaCanais(); topoOnline();
+}).subscribe(st => { if (st === 'SUBSCRIBED') presenca.track({ em: new Date().toISOString() }); });
+function topoOnline() {
+  if (!atual || atual.tipo !== 'direto') return;
+  const on = online.has(idDoOutro(atual));
+  $('f-desc').textContent = on ? 'online agora' : 'offline · recebe aviso no celular';
+  $('f-desc').classList.toggle('on', on);
+  $('f-ico').classList.toggle('on', on);
+}
 
 // abrir canal
 async function abre(id) {
@@ -80,6 +117,7 @@ async function abre(id) {
   ['topo', 'escrever'].forEach(x => $(x).hidden = false);
   $('f-nome').textContent = atual.tipo === 'direto' ? atual.nome : '# ' + atual.nome;
   $('f-desc').textContent = atual.tipo === 'direto' ? 'Conversa direta' : (atual.descricao || '');
+  $('f-desc').classList.remove('on'); $('f-ico').classList.remove('on'); topoOnline();
   $('f-ico').textContent = atual.tipo === 'direto' ? iniciais(atual.nome) : '#';
   $('f-ico').classList.toggle('fio__ico--pessoa', atual.tipo === 'direto');
   $('texto').placeholder = `Mensagem para ${atual.tipo === 'direto' ? atual.nome : '#' + atual.nome}`;
@@ -246,10 +284,8 @@ $('nova').onclick = () => {
 };
 $('pessoas').addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b) return;
-  const { data: id, error } = await banco.rpc('abrir_direto', { outro: b.dataset.id });
   $('dlg-nova').close();
-  if (error) return alert('Não deu para abrir a conversa.');
-  await carregaCanais(); abre(id);
+  abreDireto(b.dataset.id);
 });
 
 await carregaCanais();

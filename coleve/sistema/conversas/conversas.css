@@ -145,3 +145,12 @@ body.modo-mini .fio__escrever{padding:8px 10px 12px}
 body.modo-mini .chat__lista-topo{padding:14px 14px 8px}
 body.modo-mini .chat__lista-topo h1{font-size:18px}
 @media (max-width:860px){body:has(.barra__nav){padding-bottom:0}.chat{margin-bottom:calc(68px + env(safe-area-inset-bottom))}}
+body.modo-mini .chat{margin-bottom:0!important}
+body.modo-mini{padding-bottom:0!important}
+
+/* online agora: bolinha verde no rosto */
+.canal__ico--pessoa{position:relative}
+.canal__ico--pessoa.on::after,.fio__ico--pessoa.on::after{content:"";position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;background:#1FBF5C;box-shadow:0 0 0 2px #fff}
+.fio__ico{position:relative}
+.canal--novo .canal__txt small{color:var(--azul);font-weight:700}
+.fio__titulo small.on{color:#138A42;font-weight:700}

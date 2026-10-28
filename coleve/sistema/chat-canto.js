@@ -46,4 +46,8 @@ if (eu?.pessoa?.tipo === 'equipe') {
   banco.channel('coleve-canto').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensagem' },
     ({ new: m }) => { if (m.autor_id !== eu.pessoa.id && painel.hidden) n.textContent = (+n.textContent || 0) + 1; }).subscribe();
   conta();
+
+  // conta como online pros outros enquanto qualquer tela do sistema estiver aberta
+  const presenca = banco.channel('coleve-online', { config: { presence: { key: eu.pessoa.id } } });
+  presenca.subscribe(st => { if (st === 'SUBSCRIBED') presenca.track({ em: new Date().toISOString() }); });
 }
