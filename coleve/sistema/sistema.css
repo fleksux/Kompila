@@ -178,3 +178,44 @@ body.com-painel .miolo{max-width:1180px;padding-top:24px}
   .rota{grid-template-columns:1fr}
   .cx{padding:16px}
 }
+
+/* checklist UX/UI 28/10: régua 8, alturas iguais, foco, toque, hierarquia */
+.dash{gap:16px}
+.cx{padding:24px;display:flex;flex-direction:column}
+.cx__h{margin-bottom:16px;min-height:36px}
+.cx__h h2{font-size:18px}
+.cx__h a{min-height:36px;display:inline-flex;align-items:center;padding:0 14px}
+.dg{align-items:stretch}
+.dg>.cx{height:100%}
+.dg__lado{grid-template-rows:auto 1fr}
+.dg__lado .cx:last-child{height:100%}
+.fila{flex:1}
+.fila a{min-height:56px}
+.cx__pe{margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:12px;background:var(--nevoa);color:var(--azul);font-weight:800;font-size:14px;text-decoration:none;transition:background-color .2s}
+.cx__pe:hover{background:#E6EFFF}
+.cx__pe span{font-size:20px;line-height:1}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.al{display:flex;align-items:center;gap:12px;min-height:52px}
+.al .ic{width:22px;height:22px}
+.ativ{gap:16px}
+.ativ li{grid-template-columns:36px 1fr auto;align-items:center}
+.ativ__ic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center}
+.ativ__ic--novo{background:#E6EFFF;color:var(--azul)}
+.ativ__ic--enviou{background:#FFF1E0;color:#a35a00}
+.ativ__ic--ok{background:#F2FFD6;color:#4b6100}
+.ativ__ic--ajuste{background:#FFE8EE;color:#b4123e}
+.ativ__ic--moveu{background:#E3F7F4;color:#0b766a}
+.ativ p{font-size:14px;color:var(--cinza);line-height:1.4}
+.ativ p b{color:var(--grafite);font-weight:800}
+.ativ .obj{color:var(--grafite);font-weight:700}
+.ativ .ap{color:var(--cinza)}
+.ativ time{font-size:12px;color:#9aa3b2;font-variant-numeric:tabular-nums}
+.pt strong,.mg__p span,.prog__top b,.anel text{font-variant-numeric:tabular-nums}
+.dash a:focus-visible,.dash button:focus-visible{outline:3px solid var(--lima);outline-offset:2px;border-radius:12px}
+.dh a:focus-visible{outline-color:#fff}
+.btn-l,.btn-v{transition:transform .2s,background-color .2s}
+.btn-l:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgb(185 252 1 / .4)}
+.btn-v:hover{background:rgb(255 255 255 / .22)}
+@media (prefers-reduced-motion:reduce){.mg__cabo .mg__corrente{animation:none}.anel__v{transition:none}}
+@media (max-width:860px){.cx{padding:16px}.cx__h a{min-height:44px}.dg>.cx,.dg__lado .cx:last-child{height:auto}}
+@media (max-width:860px){.ativ li{grid-template-columns:36px 1fr;align-items:start}.ativ time{grid-column:2;margin-top:-10px}}
