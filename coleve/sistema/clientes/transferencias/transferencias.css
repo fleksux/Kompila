@@ -58,3 +58,5 @@
   .etapas{grid-template-columns:repeat(4,1fr);row-gap:12px}
   .sentido{grid-template-columns:1fr}
 }
+/* bolinha do chat não cobre o botão da gaveta */
+body:has(.gaveta:not([hidden])) .cc-bot{display:none}

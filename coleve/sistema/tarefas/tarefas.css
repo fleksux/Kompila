@@ -149,3 +149,9 @@ body.carregando .quadro-pg{opacity:0}
 .d-anexo .btn-a{height:44px;justify-self:end}
 .d-entregar{width:100%;margin-top:8px}
 @media (max-width:860px){.d-anexo__campos{grid-template-columns:1fr 1fr}.d-anexo__campos label:first-child{grid-column:1/-1}.d-anexo .btn-a{width:100%}}
+
+/* abas Quadro / Reuniões (mesmo desenho das abas de Clientes) */
+.abas-cl{display:flex;gap:24px;border-bottom:1.5px solid var(--linha);margin:4px 0 20px}
+.abas-cl a{display:flex;align-items:center;height:44px;margin-bottom:-1.5px;border-bottom:3px solid transparent;color:var(--cinza);font-weight:800;font-size:15px;text-decoration:none}
+.abas-cl a[aria-current]{color:var(--azul);border-bottom-color:var(--azul)}
+.abas-cl a:hover{color:var(--azul)}

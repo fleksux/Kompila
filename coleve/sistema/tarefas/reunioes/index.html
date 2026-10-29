@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reuniões · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icones/apple_180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Coleve">
+<link rel="icon" href="../../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../sistema.css?v=30">
+<link rel="stylesheet" href="../tarefas.css?v=10"><link rel="stylesheet" href="reunioes.css?v=1">
+</head>
+<body class="carregando">
+
+<header class="barra">
+  <a href="../../" class="barra__marca"><img src="../../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema">
+    <a href="../../">Área interna</a>
+    <a href="../../feed/">Feed</a>
+    <a href="../" aria-current="page">Tarefas</a>
+    <a href="../../marketing/">Marketing</a>
+    <a href="../../conversas/">Conversas</a>
+  <a href="../../clientes/">Clientes</a></nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="quadro-pg rn-pg">
+  <nav class="abas-cl" aria-label="Tarefas"><a href="../">Quadro</a><a href="./" aria-current="page">Reuniões</a></nav>
+  <div class="rn-topo">
+    <div>
+      <p class="sec">Área interna · tarefas</p>
+      <h1 class="h1">Reuniões <b id="total"></b></h1>
+      <p class="sub">Resumo executivo de cada reunião. O plano de ação vira tarefa de quem vai fazer, com prazo.</p>
+    </div>
+    <button class="btn-lima-q" id="nova" type="button">+ Reunião</button>
+  </div>
+  <p class="aviso-q" id="aviso" role="status"></p>
+  <section class="rn-lista" id="lista"></section>
+</main>
+
+<!-- resumo da reunião -->
+<div class="gaveta gaveta--rn" id="gaveta" hidden>
+  <div class="gaveta__fundo" data-fecha></div>
+  <aside class="gaveta__painel" role="dialog" aria-modal="true" aria-labelledby="r-titulo-h">
+    <button class="gaveta__x" data-fecha aria-label="Fechar">×</button>
+    <p class="d-empresa">Resumo executivo de reunião</p>
+    <h2 id="r-titulo-h">Nova reunião</h2>
+    <form id="f-r" class="rn-form">
+      <div class="cp-2"><label class="cp-t">Projeto ou área<input id="r-titulo" required placeholder="Ex.: Lançamento do site"></label><label class="cp-t">Data e horário<input type="datetime-local" id="r-quando" required></label></div>
+      <div class="cp-2"><label class="cp-t">Participantes<input id="r-part" placeholder="Nomes de quem participou"></label><label class="cp-t">Responsável pelo acompanhamento<select id="r-acomp"><option value="">Ninguém</option></select></label></div>
+      <div class="cp-2"><label class="cp-t">Cliente (se for reunião com cliente)<select id="r-empresa"><option value="">Reunião interna</option></select></label><label class="cp-t">Status geral<select id="r-status"><option value="a_fazer">A fazer</option><option value="andamento">Em andamento</option><option value="atencao">Em atenção</option><option value="concluido">Concluído</option></select></label></div>
+
+      <h3><span class="n">1</span>Objetivo da reunião</h3>
+      <textarea id="r-objetivo" rows="2" placeholder="Em 1 a 3 frases: o objetivo e o resultado esperado."></textarea>
+
+      <h3><span class="n">2</span>Assuntos tratados</h3>
+      <div class="linhas" data-lista="assuntos"></div>
+      <button type="button" class="mais" data-add="assuntos">+ assunto</button>
+
+      <h3><span class="n">3</span>O que foi definido</h3>
+      <textarea id="r-definido" rows="3" placeholder="Uma decisão por linha."></textarea>
+
+      <h3><span class="n">4</span>Plano de ação <small class="h3-dica">cada linha com responsável vira tarefa no quadro</small></h3>
+      <div class="linhas" data-lista="plano"></div>
+      <button type="button" class="mais" data-add="plano">+ tarefa</button>
+
+      <h3><span class="n">5</span>O que já foi feito</h3>
+      <textarea id="r-feito" rows="2" placeholder="Uma entrega por linha."></textarea>
+
+      <h3><span class="n">6</span>Pendências e assuntos em aberto</h3>
+      <div class="linhas" data-lista="pendencias"></div>
+      <button type="button" class="mais" data-add="pendencias">+ pendência</button>
+
+      <h3><span class="n">7</span>Pontos de atenção e riscos</h3>
+      <div class="linhas" data-lista="riscos"></div>
+      <button type="button" class="mais" data-add="riscos">+ risco</button>
+
+      <h3><span class="n">8</span>Informes e conhecimentos compartilhados</h3>
+      <textarea id="r-informes" rows="2" placeholder="Um informe por linha."></textarea>
+
+      <h3 id="h-reserv"><span class="n">9</span>Assuntos reservados <small class="h3-dica">só quem criou a reunião, admin e gestor leem</small></h3>
+      <textarea id="r-reservado" rows="2" placeholder="Fica fora do PDF e de quem não tem acesso."></textarea>
+
+      <h3><span class="n">10</span>Próximos passos <small class="h3-dica">também viram tarefa</small></h3>
+      <div class="linhas" data-lista="proximo"></div>
+      <button type="button" class="mais" data-add="proximo">+ passo</button>
+
+      <div class="cp-2 rn-fim"><label class="cp-t">Próximo acompanhamento<input type="date" id="r-prox"></label><label class="cp-t">Resultado esperado<input id="r-result" placeholder="Entrega ou objetivo que deve estar concluído"></label></div>
+
+      <div class="rn-botoes"><a class="sair" id="r-pdf" target="_blank" hidden>Ver PDF</a><button class="btn-a" type="submit" id="r-salva">Salvar e criar tarefas</button></div>
+    </form>
+  </aside>
+</div>
+
+<!-- versão para imprimir / PDF -->
+<article class="doc" id="doc" hidden></article>
+
+<script type="module" src="reunioes.js?v=1"></script>
+<script type="module" src="../../chat-canto.js?v=5"></script>
+<script type="module" src="../../avisos.js?v=1"></script>
+</body>
+</html>
