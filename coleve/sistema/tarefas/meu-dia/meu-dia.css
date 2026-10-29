@@ -1,0 +1,68 @@
+/* Sistema Coleve · Meu dia (time box): blocos numa linha do tempo, cronômetro e Pomodoro */
+.md-pg{max-width:980px;margin:0 auto}
+.md-topo{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.md-topo .sub{color:var(--cinza);margin-top:6px;max-width:560px}
+.md-ctrl{display:flex;gap:8px;flex-wrap:wrap}
+.md-ctrl select,.md-ctrl input{height:44px;border:1.5px solid var(--linha);border-radius:999px;padding:0 16px;font:700 14px Gabarito,sans-serif;background:#fff;color:var(--grafite)}
+.md-num{grid-template-columns:repeat(4,1fr)}
+.link-b{border:0;background:none;padding:0;font:700 14px Gabarito,sans-serif;color:var(--azul);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+/* Pomodoro do bloco que está rodando */
+.pomo{display:flex;align-items:center;gap:14px;background:var(--azul);color:#fff;border-radius:18px;padding:14px 20px;margin-bottom:12px}
+.pomo--pausa{background:var(--lima);color:var(--grafite)}
+.pomo__ico{flex:none;width:44px;height:44px;border-radius:50%;background:rgb(255 255 255 / .18);display:grid;place-items:center}
+.pomo__ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pomo__t{flex:1;display:grid}
+.pomo__t b{font-size:17px}
+.pomo__t small{font-size:13px;opacity:.85}
+.pomo strong{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* blocos */
+.md-lista{display:grid;gap:10px}
+.bl{display:grid;grid-template-columns:72px 1fr;gap:16px;background:#fff;border-radius:18px;outline:1.5px solid var(--linha);outline-offset:-1.5px;padding:18px 20px}
+.bl--on{outline:2px solid var(--azul)}
+.bl--ok{background:#FAFDF2}
+.bl__hora{font-size:20px;font-weight:800;color:var(--azul);display:grid;align-content:start;gap:2px;font-variant-numeric:tabular-nums}
+.bl__hora small{font-size:13px;color:var(--cinza);font-weight:700}
+.bl__corpo{display:grid;gap:10px;min-width:0}
+.bl__topo{display:flex;align-items:flex-start;gap:12px}
+.bl__t{flex:1;min-width:0;display:grid;gap:2px}
+.bl__t b{font-size:17px;font-weight:800;line-height:1.25}
+.bl__t small{font-size:13px;color:var(--cinza)}
+.play{flex:none;width:48px;height:48px;border:0;border-radius:50%;background:var(--azul);color:#fff;display:grid;place-items:center;cursor:pointer}
+.bl--on .play{background:var(--grafite)}
+.play svg{width:20px;height:20px;fill:currentColor;stroke:currentColor;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.bl__tempo{display:flex;align-items:baseline;gap:8px}
+.bl__real{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.bl__prev{font-size:13px;color:var(--cinza);font-weight:600}
+.acima{color:#C0352B}
+.bl__barra{display:block;height:6px;border-radius:999px;background:var(--nevoa);overflow:hidden}
+.bl__barra i{display:block;height:100%;background:var(--azul);border-radius:999px}
+.bl__barra.acima i{background:#FE3E6D}
+.bl__st{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ck{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1.5px solid var(--linha);border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;background:#fff}
+.ck:has(input:checked){border-color:#9BD600;background:#F4FBE3}
+.ck input{width:16px;height:16px;accent-color:var(--azul)}
+.ck--off{opacity:.6;cursor:default}
+.bl__tira{margin-left:auto;font-size:13px;color:var(--cinza)}
+.refl{display:grid;gap:8px;background:var(--nevoa);border-radius:14px;padding:12px 14px}
+.refl p{margin:0;font-size:13px;font-weight:700}
+.refl__sn{display:flex;gap:16px;font-size:14px}
+.refl__sn label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.refl .cp-t{font-size:12px}
+.refl input:not([type]){background:#fff}
+
+/* gestor: o time todo */
+.md-tab{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:16px;overflow:hidden;outline:1.5px solid var(--linha);outline-offset:-1.5px;font-size:14px}
+.md-tab th{background:var(--nevoa);text-align:left;padding:12px 14px;font-size:12px;font-weight:800;color:var(--cinza);text-transform:uppercase;letter-spacing:.04em}
+.md-tab td{padding:12px 14px;border-top:1px solid var(--linha);font-weight:600}
+.md-tab td.acima{color:#C0352B}
+
+@media (max-width:860px){
+  .md-num{grid-template-columns:1fr 1fr}
+  .md-ctrl{width:100%}.md-ctrl > *{flex:1}
+  .bl{grid-template-columns:1fr;gap:8px;padding:16px}
+  .bl__hora{display:flex;align-items:baseline;gap:8px;font-size:16px}
+  .md-time{overflow-x:auto}
+}
+@media (max-width:860px){.numeros.md-num{grid-template-columns:1fr 1fr!important}}

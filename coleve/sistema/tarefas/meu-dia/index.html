@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meu dia · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icones/apple_180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Coleve">
+<link rel="icon" href="../../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../sistema.css?v=30">
+<link rel="stylesheet" href="../tarefas.css?v=10"><link rel="stylesheet" href="meu-dia.css?v=1">
+</head>
+<body class="carregando">
+
+<header class="barra">
+  <a href="../../" class="barra__marca"><img src="../../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema">
+    <a href="../../">Área interna</a>
+    <a href="../../feed/">Feed</a>
+    <a href="../" aria-current="page">Tarefas</a>
+    <a href="../../marketing/">Marketing</a>
+    <a href="../../conversas/">Conversas</a>
+  <a href="../../clientes/">Clientes</a></nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="quadro-pg md-pg">
+  <nav class="abas-cl" aria-label="Tarefas"><a href="../">Quadro</a><a href="../reunioes/">Reuniões</a><a href="./" aria-current="page">Meu dia</a></nav>
+  <div class="md-topo">
+    <div>
+      <p class="sec">Área interna · time box</p>
+      <h1 class="h1" id="md-titulo">Meu dia</h1>
+      <p class="sub">Cada bloco é uma atividade com hora marcada. Rode o cronômetro, faça em ciclos de 25 minutos e marque os três passos.</p>
+    </div>
+    <div class="md-ctrl">
+      <select id="quem" aria-label="De quem" hidden></select>
+      <input type="date" id="dia" aria-label="Dia">
+      <button class="btn-lima-q" id="novo" type="button">+ Bloco</button>
+    </div>
+  </div>
+  <section class="numeros md-num" id="numeros"></section>
+  <section class="pomo" id="pomo" hidden></section>
+  <p class="aviso-q" id="aviso" role="status"></p>
+  <section class="md-lista" id="lista"></section>
+  <section class="md-time" id="time" hidden></section>
+</main>
+
+<dialog class="dlg-t" id="dlg-b">
+  <form id="f-b">
+    <h2>Novo bloco</h2>
+    <label class="cp-t">Tarefa do quadro (opcional)<select id="b-tarefa"><option value="">Atividade avulsa</option></select></label>
+    <label class="cp-t">Serviço ou atividade<input id="b-servico" required placeholder="Ex.: Conferir DAS da Eletroposto Teste"></label>
+    <label class="cp-t" id="b-emp-l">Empresa<select id="b-empresa"><option value="">Coleve (interno)</option></select></label>
+    <div class="cp-2"><label class="cp-t">Início<input type="time" id="b-inicio"></label><label class="cp-t">Fim<input type="time" id="b-fim"></label></div>
+    <label class="cp-t">Tempo previsto (minutos)<input type="number" id="b-prev" min="5" step="5" value="25" required></label>
+    <div class="botoes-t"><button type="button" class="sair" id="b-cancela">Cancelar</button><button class="btn-a" type="submit">Criar bloco</button></div>
+  </form>
+</dialog>
+
+<script type="module" src="meu-dia.js?v=1"></script>
+<script type="module" src="../../chat-canto.js?v=5"></script>
+<script type="module" src="../../avisos.js?v=1"></script>
+</body>
+</html>
