@@ -44,3 +44,14 @@
 .dlg-email__topo h2{font-size:18px}
 .dlg-email__corpo{max-height:70vh;overflow:auto}
 @media (max-width:860px){.check-acoes{flex-direction:column}.dlg-email__topo{flex-direction:column;align-items:stretch}}
+
+/* onboarding interno: lista de passos, mesmo cartão das obrigações, uma coluna */
+.onb{display:grid;gap:8px}
+.onb__barra{display:block;height:8px;border-radius:999px;background:var(--nevoa);overflow:hidden;margin-bottom:4px}
+.onb__barra i{display:block;height:100%;background:var(--lima);border-radius:999px;transition:width .3s}
+.onb__i{display:grid;grid-template-columns:20px 1fr;align-items:center;column-gap:10px;min-height:56px;padding:8px 12px;border:1.5px solid var(--linha);border-radius:12px;cursor:pointer;background:#fff}
+.onb__i input{width:18px;height:18px;accent-color:var(--azul);grid-row:span 2}
+.onb__i span{font-size:14px;font-weight:700;line-height:1.25}
+.onb__i small{font-size:12px;color:var(--cinza)}
+.onb__i.is-on{background:#F4FBE3;border-color:#cfe98a}
+.onb__i.is-on span{text-decoration:line-through;color:var(--cinza)}

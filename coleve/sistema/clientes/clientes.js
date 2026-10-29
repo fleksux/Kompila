@@ -106,6 +106,7 @@ async function carregaFicha(id) {
     banco.from('pendencia_cliente').select('tipo,competencia,prazo,recebido_em').eq('empresa_id', id).order('competencia', { ascending: false })
   ]);
   if (aberta?.id !== id) return;
+  desenhaOnboarding(id);
   // checklist do mês: o mesmo conteúdo que vai no WhatsApp, no e-mail e na Área do cliente
   const mensais = (pend || []).filter(p => pts.find(t => t.codigo === p.tipo)?.dia);
   const comp = mensais[0]?.competencia;
@@ -130,6 +131,23 @@ async function carregaFicha(id) {
     return `<li><span class="d-docs__t"><b>${esc(d.nome)}</b><small>${[TIPOS[d.tipo], d.competencia ? dataBR(d.competencia).slice(3) : null, d.valor != null ? reais(d.valor) : null].filter(Boolean).join(' · ')}</small></span>${st}</li>`;
   }).join('') || '<li class="vazio">Nada enviado ainda.</li>';
 }
+
+// ===== onboarding interno: os passos da equipe quando o cliente entra (tarefas origem onboarding) =====
+async function desenhaOnboarding(id) {
+  const { data: ps } = await banco.from('tarefa').select('id,titulo,area,status,responsavel:pessoa!tarefa_responsavel_id_fkey(nome)').eq('empresa_id', id).eq('origem', 'onboarding').neq('status', 'cancelado').order('criado_em');
+  if (aberta?.id !== id) return;
+  const feitos = (ps || []).filter(p => p.status === 'enviado').length;
+  $('e-onb-n').textContent = ps?.length ? `${feitos} de ${ps.length} feitos` : 'o que a equipe faz quando o cliente entra';
+  $('e-onb').innerHTML = ps?.length ? `<span class="onb__barra" aria-hidden="true"><i style="width:${Math.round(feitos / ps.length * 100)}%"></i></span>` +
+    ps.map(p => `<label class="onb__i${p.status === 'enviado' ? ' is-on' : ''}"><input type="checkbox" data-t="${p.id}"${p.status === 'enviado' ? ' checked' : ''}><span>${esc(p.titulo)}</span><small>${AREAS[p.area] || { atendimento: 'Atendimento', tecnologia: 'Tecnologia', marketing: 'Marketing' }[p.area] || p.area}${p.responsavel?.nome ? ' · ' + esc(p.responsavel.nome.split(' ')[0]) : ''}</small></label>`).join('')
+    : '<p class="fv">Sem passos de onboarding para esta empresa.</p>';
+}
+$('e-onb').addEventListener('change', async ev => {
+  const c = ev.target.closest('input[data-t]'); if (!c || !aberta) return;
+  const { error } = await banco.from('tarefa').update({ status: c.checked ? 'enviado' : 'a_fazer' }).eq('id', c.dataset.t);
+  if (error) { c.checked = !c.checked; return avisa('Não deu para marcar o passo.'); }
+  desenhaOnboarding(aberta.id);
+});
 
 $('e-ficha').onsubmit = async ev => {
   ev.preventDefault(); if (!aberta) return;
