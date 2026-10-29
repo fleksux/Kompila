@@ -55,3 +55,9 @@
 .onb__i small{font-size:12px;color:var(--cinza)}
 .onb__i.is-on{background:#F4FBE3;border-color:#cfe98a}
 .onb__i.is-on span{text-decoration:line-through;color:var(--cinza)}
+
+/* abas Empresas / Transferências: sublinhadas, uma linha, mesma altura nas duas páginas */
+.abas-cl{display:flex;gap:24px;border-bottom:1.5px solid var(--linha);margin:4px 0 20px}
+.abas-cl a{display:flex;align-items:center;height:44px;margin-bottom:-1.5px;border-bottom:3px solid transparent;color:var(--cinza);font-weight:800;font-size:15px;text-decoration:none}
+.abas-cl a[aria-current]{color:var(--azul);border-bottom-color:var(--azul)}
+.abas-cl a:hover{color:var(--azul)}

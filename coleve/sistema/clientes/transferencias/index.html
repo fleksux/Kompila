@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transferências · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icones/apple_180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Coleve">
+<link rel="icon" href="../../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../sistema.css?v=30">
+<link rel="stylesheet" href="../../tarefas/tarefas.css?v=9">
+<link rel="stylesheet" href="../clientes.css?v=5"><link rel="stylesheet" href="transferencias.css?v=2">
+</head>
+<body class="carregando">
+
+<header class="barra">
+  <a href="../../" class="barra__marca"><img src="../../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema"><a href="../../">Área interna</a><a href="../../feed/">Feed</a><a href="../../tarefas/">Tarefas</a><a href="../../marketing/">Marketing</a><a href="../../conversas/">Conversas</a><a href="../" aria-current="page">Clientes</a></nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="miolo">
+  <p class="sec">Área interna · clientes</p>
+  <nav class="abas-cl" aria-label="Clientes"><a href="../">Empresas</a><a href="./" aria-current="page">Transferências</a></nav>
+  <div class="topo-cl">
+    <div>
+      <h1 class="h1">Transferências <b id="total"></b></h1>
+      <p class="sub">Contador anterior, Coleve e novo contador: documentos conferidos, certificado e protocolo de cada troca.</p>
+    </div>
+    <button class="btn-lima-q" id="nova-t" type="button">+ Transferência</button>
+  </div>
+
+  <section class="numeros" id="numeros"></section>
+  <p class="aviso-q" id="aviso" role="status"></p>
+  <section class="empresas" id="lista"></section>
+</main>
+
+<!-- uma transferência -->
+<div class="gaveta gaveta--tt" id="gaveta" hidden>
+  <div class="gaveta__fundo" data-fecha></div>
+  <aside class="gaveta__painel" role="dialog" aria-modal="true" aria-labelledby="t-titulo">
+    <button class="gaveta__x" data-fecha aria-label="Fechar">×</button>
+    <p class="d-empresa" id="t-sentido"></p>
+    <h2 id="t-titulo"></h2>
+    <p class="tt-rota" id="t-rota"></p>
+
+    <ol class="etapas" id="t-etapas"></ol>
+    <div class="tt-acoes" id="t-acoes"></div>
+
+    <h3>Pedir ao contador anterior <small class="h3-dica" id="t-pede-n"></small></h3>
+    <div class="tt-pede"><p id="t-pede-txt"></p><button type="button" class="btn-a" id="t-copia">Copiar pedido</button></div>
+
+    <h3>Checklist documental <small class="h3-dica" id="t-check-n"></small></h3>
+    <ul class="tt-check" id="t-check"></ul>
+
+    <h3>Certificado digital <small class="h3-dica">só o controle: senha e arquivo do certificado não entram no sistema</small></h3>
+    <ul class="d-docs" id="t-cert"></ul>
+    <form class="tt-cert-form" id="f-cert">
+      <div class="cp-2"><label class="cp-t">Titular<input id="c-titular" required></label><label class="cp-t">Tipo<select id="c-tipo"><option>A1</option><option>A3</option></select></label></div>
+      <div class="cp-2"><label class="cp-t">Validade<input type="date" id="c-validade" required></label><label class="cp-t">Quem pode usar<input id="c-quem" placeholder="Ex.: Manu e fiscal"></label></div>
+      <label class="cp-t">Para quê<input id="c-final" placeholder="Ex.: e-CAC, eSocial, emissão de notas"></label>
+      <div class="botoes-t"><button class="btn-a" type="submit">Adicionar certificado</button></div>
+    </form>
+
+    <h3>Dados da transferência</h3>
+    <form class="ficha" id="f-dados">
+      <div class="cp-2"><label class="cp-t">Contador de origem<input id="d-origem"></label><label class="cp-t">Contador de destino<input id="d-destino"></label></div>
+      <div class="cp-2"><label class="cp-t">Responsável na Coleve<select id="d-resp"><option value="">Sem responsável</option></select></label><label class="cp-t">Data prevista<input type="date" id="d-data"></label></div>
+      <label class="cp-t">Motivo<input id="d-motivo"></label>
+      <label class="cp-t">Observações e pendências<textarea id="d-obs" rows="3"></textarea></label>
+      <div class="ficha__fim"><span></span><button class="btn-a" type="submit">Salvar</button></div>
+    </form>
+
+    <h3>Histórico</h3>
+    <ul class="d-coment" id="t-hist"></ul>
+  </aside>
+</div>
+
+<!-- nova transferência -->
+<dialog class="dlg-t" id="dlg-t">
+  <form id="f-nova">
+    <h2>Nova transferência</h2>
+    <div class="sentido" role="radiogroup" aria-label="Sentido">
+      <label><input type="radio" name="sentido" value="entrada" checked><span><b>Entrada</b><small>o cliente vem de outro contador</small></span></label>
+      <label><input type="radio" name="sentido" value="saida"><span><b>Saída</b><small>o cliente vai para outro contador</small></span></label>
+    </div>
+    <label class="cp-t">Empresa<select id="n-empresa" required></select></label>
+    <p class="h3-dica" style="margin:-6px 0 0">Empresa nova? Cadastre primeiro em <a href="../">Clientes</a>.</p>
+    <label class="cp-t" id="n-outro-l">Contador anterior<input id="n-outro" placeholder="Nome do escritório"></label>
+    <div class="cp-2"><label class="cp-t">Responsável na Coleve<select id="n-resp"></select></label><label class="cp-t">Data prevista<input type="date" id="n-data"></label></div>
+    <p class="h3-dica" id="n-erro" role="alert"></p>
+    <div class="botoes-t"><button type="button" class="sair" id="n-cancela">Cancelar</button><button class="btn-a" type="submit">Abrir transferência</button></div>
+  </form>
+</dialog>
+
+<script type="module" src="transferencias.js?v=2"></script>
+<script type="module" src="../../chat-canto.js?v=5"></script>
+<script type="module" src="../../avisos.js?v=1"></script>
+</body>
+</html>

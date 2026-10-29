@@ -1,0 +1,60 @@
+/* Sistema Coleve · transferências técnicas: mesmo cartão e gaveta de Clientes */
+.ico--saida{background:var(--grafite)!important}
+.tt-barra{display:block;height:6px;border-radius:999px;background:var(--nevoa);overflow:hidden;margin-top:12px}
+.tt-barra i{display:block;height:100%;background:var(--lima);border-radius:999px}
+.gaveta--tt .gaveta__painel{width:min(640px,100%)}
+.tt-rota{color:var(--cinza);font-size:14px;margin:-8px 0 16px}
+.link-b{border:0;background:none;padding:0;font:700 13px Gabarito,sans-serif;color:var(--azul);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+/* etapas: 7 passos numa trilha */
+.etapas{list-style:none;padding:0;margin:0 0 12px;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;counter-reset:e}
+.etapas li{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:11px;font-weight:700;line-height:1.2;color:var(--cinza)}
+.etapas li span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--nevoa);font-size:12px;font-weight:800}
+.etapas li.ok span{background:var(--lima);color:var(--grafite)}
+.etapas li.agora{color:var(--azul)}
+.etapas li.agora span{background:var(--azul);color:#fff;box-shadow:0 0 0 4px #E6EFFF}
+.etapas li.opc{opacity:.45}
+.tt-acoes{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.tt-acoes .btn-a,.tt-acoes .sair{height:44px}
+
+.tt-pede{background:var(--nevoa);border-radius:14px;padding:14px 16px;display:grid;gap:12px}
+.tt-pede p{white-space:pre-line;font-size:14px;margin:0}
+.tt-pede .btn-a{justify-self:end;height:44px}
+
+/* checklist: uma categoria por cartão */
+.tt-check{list-style:none;padding:0;margin:0 0 8px;display:grid;gap:8px}
+.tt-i{border:1.5px solid var(--linha);border-radius:14px;padding:12px 14px;display:grid;gap:8px;background:#fff}
+.tt-i--aprovado{background:#F4FBE3;border-color:#cfe98a}
+.tt-i--recusado{border-color:#f5b8c8}
+.tt-i__topo{display:flex;align-items:center;gap:10px}
+.tt-i__topo .tt-anexa{height:40px;margin:0;display:inline-flex;align-items:center;cursor:pointer}
+.tt-i__t{flex:1;min-width:0;display:grid;gap:2px}
+.tt-i__t b{font-size:15px;font-weight:800}
+.tt-i__t small{font-size:12px;color:var(--cinza)}
+.tt-i__motivo{margin:0;font-size:13px;color:#b4123e;font-weight:600}
+.tt-i__ok{margin:0;font-size:12px;color:var(--cinza)}
+.tt-arqs{list-style:none;padding:0;margin:0;display:grid;gap:4px}
+.tt-arqs li{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.tt-arqs small{color:var(--cinza);white-space:nowrap}
+.tt-i__acoes{display:flex;justify-content:flex-end;align-items:center;gap:8px;flex-wrap:wrap}
+.tt-i__acoes .sair,.tt-i__acoes .btn-a{height:40px;margin:0;display:inline-flex;align-items:center;cursor:pointer}
+.tt-recusa{display:flex;gap:8px}
+.tt-recusa input{flex:1;height:40px;border:1.5px solid var(--linha);border-radius:12px;padding:0 12px;font:500 14px Gabarito,sans-serif}
+
+.tt-cert-form{display:grid;gap:10px;margin-bottom:8px}
+.d-coment small{color:var(--cinza);font-size:12px;margin-left:6px}
+
+/* nova: sentido em dois cartões */
+.sentido{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sentido label{cursor:pointer}
+.sentido input{position:absolute;opacity:0}
+.sentido span{display:grid;gap:2px;border:1.5px solid var(--linha);border-radius:14px;padding:12px 14px;min-height:64px}
+.sentido b{font-size:15px}
+.sentido small{font-size:12px;color:var(--cinza)}
+.sentido input:checked + span{border-color:var(--azul);background:#E6EFFF}
+.sentido input:focus-visible + span{outline:2px solid var(--azul);outline-offset:2px}
+
+@media (max-width:860px){
+  .etapas{grid-template-columns:repeat(4,1fr);row-gap:12px}
+  .sentido{grid-template-columns:1fr}
+}
