@@ -30,6 +30,7 @@ body.kr h1 em,body.kr h2 em{font-style:normal}
 .kr-nav .kr-drop .kr-menu a:hover b{color:#12803F}
 @media(max-width:1200px){.kr-nav ul{gap:18px;font-size:14px}}
 @media(max-width:900px){.kr-nav ul{display:none}}
+@media(max-width:480px){.kr-nav .kr-box{gap:8px}.kr-nav .kr-logo{font-size:18px}.kr-nav .k-dir{display:flex;align-items:center;gap:2px}.kr-nav .kr-btn{height:40px;padding:0 12px;font-size:13px}}
 
 /* rodapé (igual ao da home) */
 .kr-foot{background:#0A0B0E;color:#8E959D;padding:56px 0;font:15px Inter,system-ui,sans-serif}
