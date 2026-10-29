@@ -1221,6 +1221,9 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
   .csb{grid-template-columns:1fr;gap:16px}
 }
 @media(max-width:600px){.lizb .ctas .btn{width:100%}.hub .head,.cases .head,.mais .head{margin-bottom:32px}}
+/* regua: margens iguais */
+@media(min-width:901px){.hero .in{width:min(1200px,88vw)}}
+@media(min-width:701px){#diagnostico{width:min(1200px,88%);margin:0 auto;padding:88px 48px}#diagnostico .shell{width:100%!important}}
 </style>
 <link rel="canonical" href="https://kompila.com.br/">
 <meta name="robots" content="index,follow,max-image-preview:large">
@@ -1623,13 +1626,6 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 <!-- /partes:rodape -->
 
 
-<!-- CHAT -->
-<div class="kchat" id="kchat">
-  <header id="kchatH"><svg class="bub"><use href="#i-chat"/></svg><b><span class="b">[</span> kompila <span style="color:#ffb224">.agente</span> <span class="b">]</span></b><small>responde em segundos</small><button type="button" class="kx" aria-label="fechar">×</button></header>
-  <div class="msgs" id="kmsgs"><div class="m bot">Oi. Para entender se o Lead Recovery faz sentido para sua operação, preciso de quatro informações rápidas. Quantos leads chegam por mês?</div></div>
-  <div class="opts" id="kopts"></div>
-  <a class="wa" id="kwa" href="#" target="_blank" rel="noopener">Continuar no WhatsApp →</a>
-</div>
 
 <script>
 /* reveal */
@@ -1649,8 +1645,6 @@ Object.keys(RG).forEach(function(id){var inp=$(id),fr=inp.closest('.fr');if(!fr)
  inp.addEventListener('input',function(){rg.value=num(id)})});
 if(matchMedia('(max-width:700px)').matches){var pot=document.querySelector('.cwrap .res .pot'),wrap=document.querySelector('.cwrap');if(pot&&wrap){var box=document.createElement('div');box.className='cpot';box.appendChild(pot);wrap.insertBefore(box,wrap.firstChild)}var sm=document.querySelector('.cwrap .form .sh small');if(sm)sm.textContent='arraste e veja o número mudar'}
 calc()})();
-/* chat roteirizado */
-(function(){var box=document.getElementById('kchat'),h=document.getElementById('kchatH'),msgs=document.getElementById('kmsgs'),opts=document.getElementById('kopts'),wa=document.getElementById('kwa');var step=0,ans=[];var script=[{q:'Quantos leads chegam por mês?',o:['Até 200','De 200 a 1.000','De 1.000 a 5.000','Mais de 5.000','Não sei']},{q:'Onde esses leads chegam?',o:['WhatsApp','Landing page','Meta Ads','Google Ads','Vários canais']},{q:'Qual CRM vocês usam?',o:['HubSpot','Salesforce','Kommo','Pipedrive','Outro','Nenhum']},{q:'Onde você acredita que está o maior problema?',o:['Demora no atendimento','Leads sem responsável','Falta de acompanhamento','Base antiga abandonada','Relatórios confusos','Ainda não sei']}];function add(t,me){var d=document.createElement('div');d.className='m '+(me?'me':'bot');d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}function render(){opts.innerHTML='';(script[step]?script[step].o:[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.addEventListener('click',function(){answer(o)});opts.appendChild(b)})}function answer(v){add(v,true);ans[step]=v;step++;setTimeout(function(){if(script[step]){add(script[step].q);render()}else{add('Pelos dados informados, já conseguimos preparar uma conversa inicial sobre sua operação.');var msg='Olá, vim pelo site da Kompila e quero entender quantos leads estão parados na minha operação.\n\nRecebemos aproximadamente: '+ans[0]+'\nOs leads chegam por: '+ans[1]+'\nUtilizamos: '+ans[2]+'\nNosso principal problema é: '+ans[3]+'\n\nQuero conhecer o Diagnóstico.';wa.href='https://wa.me/5511967342512?text='+encodeURIComponent(msg);box.classList.add('done')}},500)}render();h.addEventListener('click',function(e){if(e.target.closest('.kx')){box.classList.remove('open');return}box.classList.toggle('open')})})();
 </script>
 <script>(function(){var hero=document.querySelector('.hero'),n=document.getElementById('nav'),last=0,img=document.getElementById('heroBg');function show(){hero.classList.add('bgin')}if(img&&img.complete&&img.naturalWidth)show();else if(img){img.addEventListener('load',show);img.addEventListener('error',show)}addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('hide',y>last&&y>140);last=y},{passive:true})})();</script>
 <script>

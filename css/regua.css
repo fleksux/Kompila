@@ -56,7 +56,7 @@ body.kr.kr-texto h2{font-size:22px!important;line-height:1.25!important;font-wei
 }
 /* as páginas de produto usam .shell com width:min(--shell, ...): a régua troca pra 1.200 */
 body.kr .shell{width:min(1200px,100% - 2*var(--gut,24px))!important;max-width:none}
-@media(max-width:1299px){body.kr .shell{width:min(1200px,88%)!important}}
+@media(max-width:1299px){body.kr .shell{width:min(1200px,88%)!important}.kr-nav .kr-box,.kr-foot .kr-box{max-width:none;width:min(1200px,88%);padding-left:0;padding-right:0}}
 html:has(body.kr),body.kr{overflow-x:clip}
 
 /* ícone do Instagram (03/10) */
