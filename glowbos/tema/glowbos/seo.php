@@ -23,7 +23,7 @@ function glowbos_seo_desc() {
 		'perguntas-frequentes'    => 'Dúvidas sobre balões, cores, tamanhos, gás hélio, quantos balões vão num arco, entrega no mesmo dia e trocas na Glowbos.',
 		'como-montar'             => 'Passo a passo pra montar um arco de balões desconstruído em casa: quantos balões usar, como encher, prender na fita e fixar na parede.',
 		'sobre'                   => 'A Glowbos é a loja própria da Mayara Festas, nota 4,9 na Shopee com mais de 121 mil vendidos. Balões e kits de festa com entrega no mesmo dia em SP.',
-		'contato'                 => 'Fale com a Glowbos pelo WhatsApp (11) 94523-1106 ou pelo e-mail contato@glowbos.com.br.',
+		'contato'                 => 'Fale com a Glowbos pelo WhatsApp (11) 92067-2139 ou pelo e-mail contato@glowbos.com.br.',
 		'acompanhar-pedido'       => 'Acompanhe o seu pedido da Glowbos com o número do pedido e o e-mail da compra.',
 		'politica-de-privacidade' => 'Como a Glowbos usa e protege os seus dados.',
 		'termos-de-uso'           => 'Termos de uso da loja Glowbos.',
@@ -150,8 +150,8 @@ add_filter( 'glowbos_dados_loja', function ( $loja ) {
 		'taxID'        => '45.147.944/0001-24',
 		'address'      => array( '@type' => 'PostalAddress', 'addressLocality' => 'Santo André', 'addressRegion' => 'SP', 'addressCountry' => 'BR' ),
 		'email'        => 'contato@glowbos.com.br',
-		'telephone'    => '+55 11 94523-1106',
-		'contactPoint' => array( '@type' => 'ContactPoint', 'contactType' => 'customer service', 'telephone' => '+55 11 94523-1106', 'email' => 'contato@glowbos.com.br', 'availableLanguage' => 'pt-BR' ),
+		'telephone'    => '+55 11 92067-2139',
+		'contactPoint' => array( '@type' => 'ContactPoint', 'contactType' => 'customer service', 'telephone' => '+55 11 92067-2139', 'email' => 'contato@glowbos.com.br', 'availableLanguage' => 'pt-BR' ),
 		'sameAs'       => array( 'https://www.instagram.com/glowbosbaloes/', 'https://shopee.com.br/shop/414535277' ),
 	);
 } );

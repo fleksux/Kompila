@@ -29,6 +29,6 @@ $svg    = function ( $d ) { return '<svg viewBox="0 0 24 24" fill="none" stroke=
 		<a href="<?php echo esc_url( wc_get_account_endpoint_url( 'orders' ) ); ?>"><?php echo $svg( '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>' ); // phpcs:ignore ?><b>Meus pedidos</b><small>Status, nota e repetir compra</small></a>
 		<a href="<?php echo esc_url( wc_get_account_endpoint_url( 'edit-address' ) ); ?>"><?php echo $svg( '<path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>' ); // phpcs:ignore ?><b>Endereços</b><small>Onde a festa chega</small></a>
 		<a href="<?php echo esc_url( wc_get_account_endpoint_url( 'edit-account' ) ); ?>"><?php echo $svg( '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>' ); // phpcs:ignore ?><b>Meus dados</b><small>Nome, e-mail e senha</small></a>
-		<a href="https://wa.me/5511945231106?text=Ol%C3%A1%21%20Preciso%20de%20ajuda%20com%20meu%20pedido%20na%20Glowbos" target="_blank" rel="noopener"><?php echo $svg( '<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19.2Z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/>' ); // phpcs:ignore ?><b>Ajuda</b><small>Fale com a gente no WhatsApp</small></a>
+		<a href="https://wa.me/5511920672139?text=Ol%C3%A1%21%20Preciso%20de%20ajuda%20com%20meu%20pedido%20na%20Glowbos" target="_blank" rel="noopener"><?php echo $svg( '<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19.2Z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/>' ); // phpcs:ignore ?><b>Ajuda</b><small>Fale com a gente no WhatsApp</small></a>
 	</div>
 </div>
