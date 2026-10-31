@@ -1,4 +1,4 @@
-/* Pixel da Meta da Kompila (conjunto de dados "Kompila Vendas").
+/* Pixel da Meta da Kompila (conjunto de dados "Kompila Vendas") e Google Analytics 4 (propriedade kompila.com.br, conta kompila.ai, 31/10/2026).
    Marca: visita (PageView), clique pra falar com a Liz ou no WhatsApp (Contact) e formulário enviado (Lead).
    As vendas fechadas chegam pelo servidor, pelo CRM (Conversions API). */
 (function () {
@@ -11,6 +11,13 @@
   fbq('init', PIXEL);
   fbq('track', 'PageView');
 
+  // Google Analytics 4: visita e os mesmos momentos do pixel (contato e formulário), pra o Google saber de onde vem quem chama
+  var GA = 'G-L4B7092014';
+  var g = document.createElement('script'); g.async = true; g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA; document.head.appendChild(g);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  gtag('js', new Date()); gtag('config', GA);
+
   var marcado = {};
   function uma(chave, fn) { if (marcado[chave]) return; marcado[chave] = 1; fn(); }
 
@@ -19,9 +26,9 @@
     if (!a) return;
     var href = a.getAttribute('href') || '';
     if (a.hasAttribute('data-liz') || href === '#liz') {
-      uma('liz', function () { fbq('track', 'Contact', { content_name: 'Liz no site' }); });
+      uma('liz', function () { fbq('track', 'Contact', { content_name: 'Liz no site' }); gtag('event', 'contato', { canal: 'Liz no site' }); });
     } else if (/wa\.me|api\.whatsapp\.com/.test(href)) {
-      uma('wa', function () { fbq('track', 'Contact', { content_name: 'WhatsApp' }); });
+      uma('wa', function () { fbq('track', 'Contact', { content_name: 'WhatsApp' }); gtag('event', 'contato', { canal: 'WhatsApp' }); });
     }
   }, true);
 
@@ -36,6 +43,6 @@
 
   document.addEventListener('submit', function (ev) {
     var nome = (ev.target && (ev.target.getAttribute('name') || ev.target.id)) || 'formulario';
-    fbq('track', 'Lead', { content_name: nome });
+    fbq('track', 'Lead', { content_name: nome }); gtag('event', 'generate_lead', { formulario: nome });
   }, true);
 })();
