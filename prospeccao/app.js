@@ -154,7 +154,16 @@ async function chamar(fn, corpo) {
   return data
 }
 
-async function rodarBusca(cidade, nicho, todas = false, quero = 60) {
+async function rodarBusca(cidade, nicho, todas = false, quero = 60, novaMesmo = false) {
+  // já pesquisou essa cidade e esse nicho? abre o que já tem e não gasta nada
+  if (!novaMesmo) {
+    const { data: ja } = await sb.from('buscas').select('*').ilike('cidade', cidade.trim()).ilike('nicho', nicho.trim()).neq('status', 'erro').order('criada_em', { ascending: false }).limit(1)
+    if (ja?.length) {
+      await abrirBusca(ja[0])
+      liz(`Você já pesquisou <b>${esc(nicho)} em ${esc(cidade.split(',')[0])}</b> em ${new Date(ja[0].criada_em).toLocaleDateString('pt-BR')}. Abri o resultado, sem gastar nada. Quer empresas novas? Usa o <b>Buscar mais</b>.`, 9000)
+      return
+    }
+  }
   montarCanvas({ cidade, nicho, status: 'buscando', olhadas: 0, novas: 0, com_dor: 0 }, true)
   vivo(true, 'Liz procurando')
   try {
@@ -200,7 +209,7 @@ function acompanhar() {
     if (busca.status === 'pronta' || busca.status === 'erro') {
       clearInterval(poll)
       const n = diags.filter(x => x.status === 'pronto').length
-      fim(`Pronto. ${n} capivara${n === 1 ? '' : 's'} pra você olhar. Clica numa empresa pra abrir.`)
+      fim(`Pronto. ${n} capivara${n === 1 ? '' : 's'} pra você olhar. ${mob() ? 'Toca' : 'Clica'} numa empresa pra abrir.`)
     }
   }
   passo(); poll = setInterval(passo, 4000)
@@ -216,8 +225,10 @@ function layout() {
     : { A: { x: 0, y: 0, w: 420 }, B: { x: 500, y: 0, w: 1040 }, C: { x: 0, y: 360, w: 1540 } }
 }
 function montarCanvas(b, animar) {
-  busca = { ...b }; diags = []; L = layout()
+  busca = { ...b }; diags = []; L = layout(); assinatura = ''
   $('fname').textContent = b.cidade === 'Lista' ? `/ Lista · ${b.nicho}` : `/ ${b.nicho} · ${b.cidade.split(',')[0]}`
+  if (mob()) return montarCelular(b)
+  vp.hidden = false; $('mobv').hidden = true
   world.querySelectorAll('.frame,#liz,.cred').forEach(n => n.remove()); wires.innerHTML = ''
   const fr = (id, r, label, html, ghost) => { const d = document.createElement('div'); d.className = 'frame' + (ghost ? ' ghost' : ''); d.id = id; Object.assign(d.style, { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px' }); d.innerHTML = `<div class="fl"><b>${label}</b></div><div class="fb"></div><div class="fc">${html}</div>`; world.appendChild(d); return d }
   const lista = b.cidade === 'Lista'
@@ -240,6 +251,22 @@ function montarCanvas(b, animar) {
     setTimeout(() => $('fC').classList.add('on'), 3300)
   } else { ['fA', 'fB', 'fC'].forEach(i => $(i).classList.add('on')); voar(trabalho(), 0); lizEm(L.B.x + 200, L.B.y + 40) }
 }
+// celular: página normal que rola com o dedo (o canvas solto trava no toque)
+function montarCelular(b) {
+  vp.hidden = true; const m = $('mobv'); m.hidden = false
+  const lista = b.cidade === 'Lista'
+  const nodes = [['olhadas', lista ? 'na lista' : 'olhadas'], ['novas', lista ? 'achadas' : 'novas'], ['com_dor', 'com oportunidade', 1], ['capivaras', 'capivaras'], ['aprovadas', 'aprovadas']]
+  m.innerHTML = `<section class="m-br"><img src="img/liz_fala_3d.png" alt="Liz"><div style="min-width:0"><div class="say" id="say">${lista ? 'Lendo a sua lista.' : 'Procurando no Google Maps.'}</div>
+      <div class="chips">${lista ? `<span class="chip">${IC.arq}${esc(b.nicho)}</span>` : `<span class="chip">${IC.nicho}${esc(b.nicho)}</span><span class="chip">${IC.pin}${esc(b.cidade.split(',')[0])}</span>`}</div></div></section>
+    <div class="m-fun">${nodes.map(([k, t, hl]) => `<div class="node${hl ? ' hl' : ''}" id="n_${k}"><div class="v">0</div><div class="k">${t}</div></div>`).join('')}</div>
+    <div class="m-acoes" id="mAcoes"></div>
+    <div class="m-tit"><span>Capivaras</span><button data-lista>Ver todas em lista</button></div>
+    <div class="cards" id="cards"></div>
+    <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div>`
+  m.scrollTop = 0
+}
+document.addEventListener('click', e => { if (e.target.closest('[data-lista]')) abrirLista() })
+
 function atualizarFunil() {
   if (!busca || !$('n_olhadas')) return
   const cap = diags.filter(d => d.status === 'pronto').length, apr = diags.filter(d => d.decisao === 'aprovada').length
@@ -249,13 +276,20 @@ function atualizarFunil() {
   document.querySelectorAll('.node').forEach(n => n.classList.toggle('vivo', n.id === 'n_' + etapa))
   const say = $('say')
   const resto = Math.max(0, (busca.novas || 0) - diags.length)
+  if (mob()) {
+    if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.` : busca.status === 'erro' ? 'Travei nessa busca.' : busca.status === 'diagnosticando' ? `Montando as capivaras: <em>${cap}</em> prontas.` : say.innerHTML
+    const ac = $('mAcoes')
+    if (ac) ac.innerHTML = busca.status === 'erro' ? '<button class="btn go" id="bDeNovo">Tentar de novo</button>'
+      : busca.status === 'pronta' ? `${resto ? `<button class="btn line" id="bResto">Capivara das outras ${resto} · ~US$ ${(resto * 0.035).toFixed(2).replace('.', ',')}</button>` : ''}${busca.cidade !== 'Lista' ? `<div class="m-mais"><span>Buscar mais novas:</span>${[12, 30, 60].map(n => `<button class="btn line" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : ''
+    return
+  }
   if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.${resto ? `<br><button class="btn line sm" id="bResto" style="margin-top:12px">Fazer capivara das outras ${resto} · ~US$ ${(resto * 0.035).toFixed(2).replace('.', ',')}</button>` : ''}${busca.cidade !== 'Lista' ? `<div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--mu);font-weight:400">Buscar mais novas:</span>${[12, 30, 60].map(n => `<button class="btn line sm" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : busca.status === 'erro' ? 'Travei nessa busca. <button class="btn go sm" id="bDeNovo" style="margin-top:12px">Tentar de novo</button>' : busca.status === 'diagnosticando' ? `Montando as capivaras: <em>${cap}</em> prontas.` : say.innerHTML
 }
 document.addEventListener('click', e => {
   const n = e.target.dataset?.mais; if (!n || !busca) return
   const { cidade, nicho } = busca; clearInterval(poll); fecharCapivara(); vistos.clear()
   liz(`Bora: mais ${n} ${esc(nicho)} em ${esc(cidade.split(',')[0])}, só as que você ainda não tem.`)
-  rodarBusca(cidade, nicho, false, +n)
+  rodarBusca(cidade, nicho, false, +n, true)
 })
 document.addEventListener('click', async e => {
   if (e.target.id !== 'bResto' || !busca?.id) return
@@ -281,8 +315,12 @@ document.addEventListener('click', async e => {
 function conta(el, de, ate) { const t = performance.now(); (function s(n) { const k = Math.max(0, Math.min(1, (n - t) / 900)); el.textContent = Math.round(de + (ate - de) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(s) })(t) }
 
 const vistos = new Set()
+let assinatura = ''
 function desenharCards() {
   const box = $('cards'); if (!box) return
+  const sig = diags.map(d => d.id + d.status + d.decisao).join('|')
+  if (sig === assinatura) return
+  assinatura = sig
   box.innerHTML = diags.map((d, i) => {
     const c = d.capivara || {}, e = d.empresa || {}
     if (d.status !== 'pronto') return `<div class="co lendo" data-i="${i}"><div class="co-h"><div style="flex:1"><div class="nm">${esc(e.nome)}</div><div class="lo">${esc(e.bairro || e.cidade || '')}</div></div><span class="ang a-${d.angulo || 'nenhum'}">${ANG[d.angulo] || ''}</span></div>
@@ -300,13 +338,15 @@ function desenharCards() {
   const nova = diags.findIndex(d => d.status === 'pronto' && !vistos.has(d.id))
   if (nova >= 0) {
     diags.filter(d => d.status === 'pronto').forEach(d => vistos.add(d.id))
-    const el = box.querySelector(`.co[data-i="${nova}"]`)
+    const el = mob() ? null : box.querySelector(`.co[data-i="${nova}"]`)
+    if (mob()) dizer(frase(diags[nova]))
     if (el) { const fC = $('fC'); lizEm(fC.offsetLeft + el.offsetLeft + el.offsetWidth - 60, fC.offsetTop + el.offsetTop + 40); setTimeout(() => dizer(frase(diags[nova])), 900) }
   }
   desenharFios()
 }
 const frase = d => { const c = d.capivara || {}, n = (c.nome || '').split(' - ')[0]; return c.angulo === 'crescimento' ? `${n} é forte. Abordagem de crescimento.` : c.angulo === 'dor' ? `${n} perde cliente por falta de resposta.` : `${n} precisa de canal próprio.` }
 function desenharFios() {
+  if (mob()) return
   const n = $('n_com_dor'), fB = $('fB'), fC = $('fC'), cards = [...document.querySelectorAll('#cards .co')].slice(0, mob() ? 1 : 3)
   if (!n || !cards.length || wires.childElementCount === cards.length) return
   wires.innerHTML = ''
@@ -365,7 +405,15 @@ async function urls(paths) {
   return p => cache[p] || null
 }
 const BL = [['gmn', 'gmn', 'Google Meu Negócio'], ['site', 'site', 'Site'], ['anuncios', 'ads', 'Anúncios'], ['instagram', 'ig', 'Instagram'], ['contato', 'ct', 'Contato'], ['empresa', 'emp', 'Empresa']]
-async function abrirCapivara(d) {
+// botão voltar do celular fecha o que estiver por cima e devolve pro mesmo ponto
+function empilha(camada) { if (history.state?.camada !== camada) history.pushState({ camada }, '') }
+addEventListener('popstate', () => {
+  const c = history.state?.camada
+  $('hist').classList.remove('on')
+  if (c === 'lista') abrirLista(false)
+  else if (!c) { $('capO').classList.remove('on'); $('cap').classList.remove('on') }
+})
+async function abrirCapivara(d, empilhar = true) {
   const c = d.capivara, id = c.identidade || {}
   const u = await urls([id.print_celular, id.print_computador, ...(id.fotos || [])])
   const o = Math.round(314 - 314 * (c.nota || 0) / 100), site = c.blocos?.site, url = site?.link || ''
@@ -398,6 +446,7 @@ async function abrirCapivara(d) {
   <section class="ab"><div class="msg"><div class="h">Mensagem sugerida pela Liz<b>sai por ${esc(c.canal)}</b></div><div id="msgBox"><p>${esc(d.abordagem || c.abordagem)}</p></div></div><div class="decd" id="decd"></div></section>
   <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   desenharDecisao(d)
+  if (empilhar) empilha('cap')
   $('capX').onclick = fecharCapivara
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
@@ -428,13 +477,16 @@ async function decidir(d, decisao) {
   d.decisao = decisao; desenharDecisao(d); desenharCards(); atualizarFunil()
   if (decisao === 'aprovada') liz(`Aprovada: ${esc(d.capivara.nome)}. Fica guardada pra abordagem por ${esc(d.capivara.canal)}.`)
 }
-function fecharCapivara() { $('capO').classList.remove('on'); $('cap').classList.remove('on') }
+function fecharCapivara() {
+  if (history.state?.camada) return history.back() // o popstate fecha (ou volta pra lista)
+  $('capO').classList.remove('on'); $('cap').classList.remove('on')
+}
 $('capO').onclick = fecharCapivara
 addEventListener('keydown', e => { if (e.key === 'Escape') { fecharCapivara(); $('hist').classList.remove('on') } })
 
 /* ======================= lista simples ======================= */
-let filtroLista = 'todas'
-async function abrirLista() {
+let filtroLista = 'todas', rolagemLista = 0
+async function abrirLista(empilhar = true) {
   if (!busca?.id) return liz('Faz uma busca primeiro que eu monto a lista.')
   const { data } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(nome, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
   const todos = data || []
@@ -451,8 +503,9 @@ async function abrirLista() {
       <div class="mo"><span class="ang a-${d.angulo || 'nenhum'}">${ANG[d.angulo] || ''}</span><div>${esc(d.motivo || '')}</div></div>
       <div class="ac">${tem ? `<button class="btn go sm" data-abre="${d.id}">Abrir capivara</button>` : fila ? '<span class="lendo-tag"><i></i>Liz montando…</span>' : `<button class="btn line sm" data-faz="${d.id}">Fazer capivara</button>`}</div></div>` }).join('') || '<div class="vazio" style="color:var(--mu)">Nada nesse filtro.</div>'}</div>`
   $('capX').onclick = fecharCapivara
-  $('cap').querySelectorAll('.filt button').forEach(b => b.onclick = () => { filtroLista = b.dataset.f; abrirLista() })
+  $('cap').querySelectorAll('.filt button').forEach(b => b.onclick = () => { filtroLista = b.dataset.f; rolagemLista = 0; abrirLista(false) })
   $('cap').querySelectorAll('[data-abre]').forEach(b => b.onclick = () => abrirCapivara(todos.find(d => d.id === b.dataset.abre)))
+  $('cap').scrollTop = rolagemLista; $('cap').onscroll = () => { rolagemLista = $('cap').scrollTop }
   $('cap').querySelectorAll('[data-faz]').forEach(b => b.onclick = async () => {
     b.disabled = true; b.textContent = 'Mandando…'
     await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', b.dataset.faz)
@@ -461,6 +514,7 @@ async function abrirLista() {
     busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar()
     b.outerHTML = '<span class="lendo-tag"><i></i>Liz montando…</span>'
   })
+  if (empilhar) empilha('lista')
   $('lCsv').onclick = () => baixarCsv(todos)
   if ($('lCopia')) $('lCopia').onclick = async () => { const t = grupos.insta.map(d => '@' + d.empresa.instagram).join('\n'); try { await navigator.clipboard.writeText(t); $('lCopia').textContent = `✓ ${grupos.insta.length} @ copiados` } catch { liz('Não consegui copiar. Usa o Baixar planilha.') } }
   if ($('lLer')) $('lLer').onclick = async () => { $('lLer').disabled = true; $('lLer').textContent = 'Lendo os sites…'; try { const c = await chamar('contatos', { busca_id: busca.id }); liz(`Li ${c.lidas} sites: ${c.instagram} com Instagram, ${c.email} com e-mail.`); filtroLista = 'insta'; abrirLista() } catch (er) { liz('Não consegui ler agora: ' + esc(er.message)); $('lLer').disabled = false; $('lLer').textContent = 'Buscar Instagrams' } }
@@ -483,10 +537,13 @@ async function carregarHist() {
   $('hist').innerHTML = (data || []).length ? data.map(b => `<div class="hi" data-id="${b.id}"><b>${esc(b.cidade === 'Lista' ? 'Lista · ' + b.nicho : b.nicho + ' · ' + b.cidade.split(',')[0])}</b><small>${new Date(b.criada_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · ${b.olhadas} olhadas · ${{ pronta: 'pronta', erro: 'deu erro' }[b.status] || 'em andamento'}</small></div>`).join('') : '<div class="vazio">Nenhuma busca ainda.</div>'
   $('hist').querySelectorAll('.hi').forEach(el => el.onclick = () => abrirBusca(data.find(b => b.id === el.dataset.id)))
 }
-$('bHist').onclick = e => { e.stopPropagation(); $('hist').classList.toggle('on') }
+$('histX').hidden = false
+$('histX').onclick = () => { if (history.state?.camada === 'hist') history.back(); else $('hist').classList.remove('on') }
+$('bHist').onclick = e => { e.stopPropagation(); const on = !$('hist').classList.contains('on'); $('hist').classList.toggle('on', on); if (on && mob()) empilha('hist') }
 document.addEventListener('click', e => { if (!e.target.closest('#hist,#bHist')) $('hist').classList.remove('on') })
 $('bNova').onclick = () => { clearInterval(poll); fecharCapivara(); pergunta(1) }
 async function abrirBusca(b) {
+  if (history.state?.camada === 'hist') history.replaceState(null, '')
   $('hist').classList.remove('on'); $('ask').hidden = true; document.body.classList.remove('fora'); fecharCapivara()
   vistos.clear(); montarCanvas({ ...b }, false); busca = { ...b }
   ;(await sb.from('diagnosticos').select('id').eq('busca_id', b.id).eq('status', 'pronto')).data?.forEach(x => vistos.add(x.id))
@@ -498,13 +555,14 @@ async function abrirBusca(b) {
 function comando(t) {
   const s = t.trim(); if (!s) return
   const m = s.match(/^(?:quero\s+|procura\s+|busca\s+)?(?:mais\s+(\d+)\s+)?(.+?)\s+(?:em|no|na)\s+(.+)$/i)
-  if (m) { clearInterval(poll); fecharCapivara(); vistos.clear(); const q = m[1] ? Math.min(120, +m[1]) : 60; esc_ = { cidade: m[3].replace(/[?.!]$/, ''), nicho: m[2].charAt(0).toUpperCase() + m[2].slice(1) }; liz(`Bora: ${m[1] ? 'mais ' + q + ' ' : ''}${esc(esc_.nicho)} em ${esc(esc_.cidade)}.`); rodarBusca(esc_.cidade, esc_.nicho, false, q); return }
+  if (m) { clearInterval(poll); fecharCapivara(); vistos.clear(); const q = m[1] ? Math.min(120, +m[1]) : 60; esc_ = { cidade: m[3].replace(/[?.!]$/, ''), nicho: m[2].charAt(0).toUpperCase() + m[2].slice(1) }; liz(`Bora: ${m[1] ? 'mais ' + q + ' ' : ''}${esc(esc_.nicho)} em ${esc(esc_.cidade)}.`); rodarBusca(esc_.cidade, esc_.nicho, false, q, !!m[1]); return }
   if (/lista|planilha|excel|csv/i.test(s)) { pergunta(1); setTimeout(() => $('arq').click(), 300); return }
   liz('Por enquanto eu entendo pedido assim: <b>padaria em Santos</b>, <b>mais 12 padaria em Santos</b>, ou "sobe uma lista". O resto eu aprendo em breve.')
 }
 $('inp').onkeydown = e => { if (e.key === 'Enter') { comando($('inp').value); $('inp').value = '' } }
 $('bEnv').onclick = () => { comando($('inp').value); $('inp').value = '' }
 
-addEventListener('resize', () => { if (busca && $('fA')) { const st = { ...busca }; const d = diags; montarCanvas(st, false); busca = st; diags = d; atualizarFunil(); desenharCards() } })
+let eraCelular = mob()
+addEventListener('resize', () => { if (mob() === eraCelular) return; eraCelular = mob(); if (busca && $('n_olhadas')) { const st = { ...busca }; const d = diags; montarCanvas(st, false); busca = st; diags = d; atualizarFunil(); desenharCards() } })
 sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.reload() })
 iniciar()

@@ -87,7 +87,7 @@ svg{display:block;flex:none}
 #liz.talk .chat{opacity:1;transform:none}
 
 /* ---------- barras fixas ---------- */
-.top{position:fixed;top:16px;left:16px;right:16px;z-index:20;display:flex;align-items:center;gap:8px;pointer-events:none}
+.top{position:fixed;top:16px;left:16px;right:16px;z-index:32;display:flex;align-items:center;gap:8px;pointer-events:none}
 .top>*{pointer-events:auto}
 .pill{flex:none;height:44px;display:flex;align-items:center;gap:12px;padding:0 16px;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh)}
 .logo{font-family:var(--mono);font-weight:700;font-size:15px;white-space:nowrap}.logo i{font-style:normal;color:var(--gd)}
@@ -305,8 +305,34 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .li.vazio{opacity:.55}
 @media (max-width:700px){ .li{grid-template-columns:48px 1fr;gap:8px 12px}.li .ct,.li .mo{grid-column:2}.li .ac{grid-column:1/-1;justify-content:stretch}.li .ac .btn{width:100%;height:44px} }
 
+/* celular: página que rola, sem canvas */
+#mobv{position:fixed;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:68px 12px 104px;background:var(--bg)}
+.m-br{display:flex;gap:12px;align-items:center;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh);padding:16px}
+.m-br img{width:64px;flex:none}
+.m-br .say{font-size:17px;font-weight:700;line-height:1.3}
+.m-br .say em{font-style:normal;color:var(--gd)}
+.m-br .chips{margin-top:8px}
+.m-acoes{margin-top:12px;display:grid;gap:8px}
+.m-acoes .btn{height:44px;width:100%}
+.m-mais{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.m-mais span{font-size:13px;color:var(--mu);width:100%}
+.m-mais .btn{flex:1;width:auto}
+.m-fun{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.m-fun .node{padding:12px 10px}
+.m-fun .node .v{font-size:22px}
+.m-fun .node .s{display:none}
+.m-fun .node:nth-child(4),.m-fun .node:nth-child(5){grid-column:span 1}
+.m-tit{display:flex;align-items:center;justify-content:space-between;margin:24px 4px 8px;font-size:13px;font-weight:500;color:var(--mu)}
+.m-tit button{height:36px;padding:0 12px;border-radius:var(--r8);border:1px solid var(--line2);font-size:13px;color:var(--tx);background:#fff}
+#mobv .cards{grid-template-columns:1fr;padding:0;gap:12px}
+#mobv .co{padding:16px}
+@media (max-width:700px){ .hist{position:fixed;top:0;left:0;right:0;bottom:0;max-height:none;border-radius:0;padding:64px 12px 24px;z-index:34} .hist .hi{padding:14px 12px;border-bottom:1px solid var(--line);border-radius:0} .hist .hi b{font-size:15px} .hist-x{display:flex!important} }
+.hist:not(.on)~.hist-x{display:none!important}
+.hist-x{display:none;position:fixed;top:12px;right:12px;width:44px;height:44px;border-radius:50%;background:#F1F2EF;align-items:center;justify-content:center;z-index:36}
+.hist-x svg{width:18px;height:18px}
+
 /* histórico */
-.hist{position:fixed;top:72px;left:16px;z-index:21;width:320px;max-height:60vh;overflow:auto;background:var(--w);border-radius:var(--r12);box-shadow:0 16px 48px rgba(10,11,14,.16);padding:8px;opacity:0;transform:translateY(-8px);pointer-events:none;transition:all .25s}
+.hist{position:fixed;top:72px;left:16px;z-index:33;width:320px;max-height:60vh;overflow:auto;background:var(--w);border-radius:var(--r12);box-shadow:0 16px 48px rgba(10,11,14,.16);padding:8px;opacity:0;transform:translateY(-8px);pointer-events:none;transition:all .25s}
 .hist.on{opacity:1;transform:none;pointer-events:auto}
 .hist .hi{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:var(--r8);cursor:pointer}
 .hist .hi:hover{background:#F4F4F1}
