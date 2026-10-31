@@ -59,7 +59,7 @@ async function iniciar() {
   if (usuario.user_metadata?.avatar_url) $('av').src = usuario.user_metadata.avatar_url; else inicial()
   $('av').title = $('avL').title = usuario.email
   vivo(false, 'Liz parada')
-  carregarHist()
+  carregarHist(); contarCaptacao()
   pergunta(1)
 }
 
@@ -154,13 +154,24 @@ async function chamar(fn, corpo) {
   return data
 }
 
+// "Veterinário", "veterinario", "Vetirinario" e "Veterinários" viram a mesma chave
+const chave = t => String(t || '').split(',')[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(Boolean).map(w => w.length > 3 ? w.replace(/(oes|aes|es|s)$/, '') : w).join(' ')
+function distancia(a, b) {
+  const m = a.length, n = b.length, d = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)])
+  for (let j = 1; j <= n; j++) d[0][j] = j
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1))
+  return d[m][n]
+}
+const parecida = (a, b) => { a = chave(a); b = chave(b); return a === b || (Math.min(a.length, b.length) >= 5 && distancia(a, b) <= 2) }
+
 async function rodarBusca(cidade, nicho, todas = false, quero = 60, novaMesmo = false) {
-  // já pesquisou essa cidade e esse nicho? abre o que já tem e não gasta nada
+  // já pesquisou essa cidade e esse nicho (mesmo escrito diferente)? abre o que já tem e não gasta nada
   if (!novaMesmo) {
-    const { data: ja } = await sb.from('buscas').select('*').ilike('cidade', cidade.trim()).ilike('nicho', nicho.trim()).neq('status', 'erro').order('criada_em', { ascending: false }).limit(1)
-    if (ja?.length) {
-      await abrirBusca(ja[0])
-      liz(`Você já pesquisou <b>${esc(nicho)} em ${esc(cidade.split(',')[0])}</b> em ${new Date(ja[0].criada_em).toLocaleDateString('pt-BR')}. Abri o resultado, sem gastar nada. Quer empresas novas? Usa o <b>Buscar mais</b>.`, 9000)
+    const { data: antigas } = await sb.from('buscas').select('*').neq('cidade', 'Lista').neq('status', 'erro').order('criada_em', { ascending: false }).limit(200)
+    const ja = (antigas || []).find(b => chave(b.cidade) === chave(cidade) && parecida(b.nicho, nicho))
+    if (ja) {
+      await abrirBusca(ja)
+      liz(`Você já pesquisou <b>${esc(ja.nicho)} em ${esc(ja.cidade.split(',')[0])}</b> em ${new Date(ja.criada_em).toLocaleDateString('pt-BR')}. Abri o resultado, sem gastar nada. Quer empresas novas? Usa o <b>Buscar mais</b>.`, 9000)
       return
     }
   }
@@ -234,7 +245,7 @@ function montarCanvas(b, animar) {
   const lista = b.cidade === 'Lista'
   fr('fA', L.A, 'Briefing', `<div class="br"><div style="flex:1;min-width:0"><div class="per">${new Date().toLocaleDateString('pt-BR')} · agora</div><div class="say" id="say">${lista ? 'Lendo a sua lista.' : 'Procurando no Google Maps.'}</div>
     <div class="chips">${lista ? `<span class="chip">${IC.arq}${esc(b.nicho)}</span>` : `<span class="chip">${IC.nicho}${esc(b.nicho)}</span><span class="chip">${IC.pin}${esc(b.cidade)}</span>`}</div></div><img src="img/liz_fala_3d.png" alt="Liz"></div>`)
-  const nodes = [['olhadas', lista ? 'na lista' : 'empresas olhadas', lista ? 'da sua planilha' : 'Google Maps'], ['novas', lista ? 'achadas' : 'novas', lista ? 'no Google ou pelo site' : 'sem repetir'], ['com_dor', 'com oportunidade', 'dor, canal ou crescimento', 1], ['capivaras', 'capivaras', 'prontas pra você'], ['aprovadas', 'aprovadas', 'nada sai sem seu ok']]
+  const nodes = [['olhadas', lista ? 'na lista' : 'empresas olhadas', lista ? 'da sua planilha' : 'Google Maps'], ['novas', lista ? 'achadas' : 'novas', lista ? 'no Google ou pelo site' : 'sem repetir'], ['com_dor', 'com oportunidade', 'dor, canal ou crescimento', 1], ['capivaras', 'capivaras', 'prontas pra você'], ['aprovadas', 'na captação', 'as que você escolheu']]
   const fl = nodes.map(([k, t, s, hl]) => `<div class="node${hl ? ' hl' : ''}" id="n_${k}"><div class="v">0</div><div class="k">${t}</div><div class="s">${s}</div></div>`)
   fr('fB', L.B, 'Funil', mob() ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${fl.join('')}</div>` : `<div class="flow">${fl.join(`<div class="arr">${IC.arr}</div>`)}</div>`)
   fr('fC', L.C, 'Capivaras · clica numa empresa pra abrir', '<div class="cards" id="cards"></div>', true)
@@ -255,7 +266,7 @@ function montarCanvas(b, animar) {
 function montarCelular(b) {
   vp.hidden = true; const m = $('mobv'); m.hidden = false
   const lista = b.cidade === 'Lista'
-  const nodes = [['olhadas', lista ? 'na lista' : 'olhadas'], ['novas', lista ? 'achadas' : 'novas'], ['com_dor', 'com oportunidade', 1], ['capivaras', 'capivaras'], ['aprovadas', 'aprovadas']]
+  const nodes = [['olhadas', lista ? 'na lista' : 'olhadas'], ['novas', lista ? 'achadas' : 'novas'], ['com_dor', 'com oportunidade', 1], ['capivaras', 'capivaras'], ['aprovadas', 'na captação']]
   m.innerHTML = `<section class="m-br"><img src="img/liz_fala_3d.png" alt="Liz"><div style="min-width:0"><div class="say" id="say">${lista ? 'Lendo a sua lista.' : 'Procurando no Google Maps.'}</div>
       <div class="chips">${lista ? `<span class="chip">${IC.arq}${esc(b.nicho)}</span>` : `<span class="chip">${IC.nicho}${esc(b.nicho)}</span><span class="chip">${IC.pin}${esc(b.cidade.split(',')[0])}</span>`}</div></div></section>
     <div class="m-fun">${nodes.map(([k, t, hl]) => `<div class="node${hl ? ' hl' : ''}" id="n_${k}"><div class="v">0</div><div class="k">${t}</div></div>`).join('')}</div>
@@ -331,7 +342,7 @@ function desenharCards() {
     return `<div class="co${d.decisao === 'pulada' ? ' pulada' : ''}" data-i="${i}"><div class="co-h"><div style="flex:1;min-width:0"><div class="nm">${esc(c.nome || e.nome)}</div><div class="lo">${esc([c.bairro, (c.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</div></div>
       <div class="ring"><svg viewBox="0 0 52 52"><circle class="b" cx="26" cy="26" r="22"/><circle class="f" cx="26" cy="26" r="22" style="stroke-dashoffset:${o}"/></svg><div class="n">${c.nota ?? d.nota_dor}</div></div></div>
       <div class="res">${esc(c.resumo)}</div><div class="mini3">${mini}</div>
-      <div class="rod"><span class="ang a-${c.angulo || d.angulo}">${ANG[c.angulo || d.angulo] || ''}</span>${d.decisao !== 'pendente' ? `<span class="dec ${d.decisao}">${{ aprovada: '✓ Aprovada', pulada: 'Pulada', ajustar: 'Ajustada' }[d.decisao] || ''}</span>` : ''}</div></div>`
+      <div class="rod"><span class="ang a-${c.angulo || d.angulo}">${ANG[c.angulo || d.angulo] || ''}</span>${d.decisao !== 'pendente' ? `<span class="dec ${d.decisao}">${{ aprovada: '★ Na captação', pulada: 'Pulada', ajustar: 'Ajustada' }[d.decisao] || ''}</span>` : ''}</div></div>`
   }).join('')
   box.querySelectorAll('.co:not(.lendo)').forEach(el => el.onclick = () => abrirCapivara(diags[+el.dataset.i]))
   // cursor da liz visita a capivara que acabou de ficar pronta
@@ -411,6 +422,7 @@ addEventListener('popstate', () => {
   const c = history.state?.camada
   $('hist').classList.remove('on')
   if (c === 'lista') abrirLista(false)
+  else if (c === 'capt') abrirCaptacao(false)
   else if (!c) { $('capO').classList.remove('on'); $('cap').classList.remove('on') }
 })
 async function abrirCapivara(d, empilhar = true) {
@@ -452,9 +464,9 @@ async function abrirCapivara(d, empilhar = true) {
 }
 function desenharDecisao(d) {
   const box = $('decd')
-  if (d.decisao === 'aprovada') { box.innerHTML = `<div class="q">Decidido.</div><div class="feito">${IC.ok}Aprovada. Ela entra na fila de abordagem.</div><button class="btn ghost" id="dDes">Desfazer</button>`; $('dDes').onclick = () => decidir(d, 'pendente'); return }
+  if (d.decisao === 'aprovada') { box.innerHTML = `<div class="q">Decidido.</div><div class="feito">${IC.ok}Está na sua captação.</div><button class="btn line" id="dVer">Ver minha captação</button><button class="btn ghost" id="dDes">Tirar da captação</button>`; $('dDes').onclick = () => decidir(d, 'pendente'); $('dVer').onclick = () => abrirCaptacao(); return }
   if (d.decisao === 'pulada') { box.innerHTML = `<div class="q">Decidido.</div><div class="feito" style="background:#F1F2EF;color:var(--mu)">Pulada. Não volta a aparecer.</div><button class="btn ghost" id="dDes">Desfazer</button>`; $('dDes').onclick = () => decidir(d, 'pendente'); return }
-  box.innerHTML = `<div class="q">Nada sai sem o seu ok.</div><button class="btn ok" id="dOk">${IC.ok}Aprovar</button><button class="btn adj" id="dAj">Ajustar a mensagem</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
+  box.innerHTML = `<div class="q">Nada sai sem o seu ok.</div><button class="btn ok" id="dOk">${IC.ok}Adicionar à captação</button><button class="btn adj" id="dAj">Ajustar a mensagem</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
   $('dOk').onclick = () => decidir(d, 'aprovada')
   $('dPu').onclick = () => decidir(d, 'pulada')
   $('dAj').onclick = () => {
@@ -475,7 +487,8 @@ async function decidir(d, decisao) {
   const { error } = await sb.from('diagnosticos').update({ decisao, decidida_em: decisao === 'pendente' ? null : new Date().toISOString() }).eq('id', d.id)
   if (error) { const e = $('dErr'); if (e) e.textContent = 'Não salvou. Tenta de novo.'; if (btn) btn.disabled = false; return }
   d.decisao = decisao; desenharDecisao(d); desenharCards(); atualizarFunil()
-  if (decisao === 'aprovada') liz(`Aprovada: ${esc(d.capivara.nome)}. Fica guardada pra abordagem por ${esc(d.capivara.canal)}.`)
+  if (decisao === 'aprovada') liz(`<b>${esc(d.capivara.nome)}</b> entrou na sua captação. Abordagem por ${esc(d.capivara.canal)}.`)
+  contarCaptacao()
 }
 function fecharCapivara() {
   if (history.state?.camada) return history.back() // o popstate fecha (ou volta pra lista)
@@ -531,10 +544,63 @@ function baixarCsv(todos) {
 }
 $('bLista').onclick = abrirLista
 
+/* ======================= minha captação ======================= */
+const ETAPAS = [['a_contatar', 'A contatar'], ['contatado', 'Contatado'], ['respondeu', 'Respondeu'], ['reuniao', 'Reunião'], ['cliente', 'Cliente'], ['perdido', 'Perdido']]
+let filtroCapt = 'todas'
+async function contarCaptacao() {
+  const { count } = await sb.from('diagnosticos').select('id', { count: 'exact', head: true }).eq('decisao', 'aprovada').not('etapa', 'in', '(cliente,perdido)')
+  $('nCapt').hidden = !count; $('nCapt').textContent = count || ''
+}
+async function abrirCaptacao(empilhar = true) {
+  const { data } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, abordagem, capivara, etapa, etapa_em, anotacao, decidida_em, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').order('decidida_em', { ascending: false })
+  const todos = data || []
+  const lst = filtroCapt === 'todas' ? todos : todos.filter(d => d.etapa === filtroCapt)
+  const cont = Object.fromEntries(ETAPAS.map(([k]) => [k, todos.filter(d => d.etapa === k).length]))
+  const zap = n => { const d = String(n || '').replace(/\D/g, ''); return d.length >= 10 ? (d.startsWith('55') ? d : '55' + d) : null }
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Minha captação</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
+    <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} pra captar` : 'Minha captação'}</h2>${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}
+      <div class="filt"><button data-f="todas" class="${filtroCapt === 'todas' ? 'on' : ''}">Todas<span>${todos.length}</span></button>${ETAPAS.map(([k, t]) => `<button data-f="${k}" class="${filtroCapt === k ? 'on' : ''}">${t}<span>${cont[k]}</span></button>`).join('')}</div></div>
+    ${todos.length ? lst.map(d => { const e = d.empresa || {}, c = d.capivara || {}, w = zap(e.whatsapp) || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? zap(e.telefone) : null), msg = d.abordagem || c.abordagem || ''
+      return `<div class="cp" data-id="${d.id}"><div class="cp-h"><div><b>${esc(e.nome)}</b><small>${esc(d.busca?.cidade === 'Lista' ? 'Lista · ' + d.busca.nicho : (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0])}${e.bairro ? ' · ' + esc(e.bairro) : ''}</small></div><span class="nt">${d.nota_dor ?? ''}</span></div>
+        <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
+        <div class="cp-ac"><button data-abre>${IC.eye}Capivara</button><button data-copia>Copiar mensagem</button>
+          ${e.instagram ? `<a class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">${IC.ig}@${esc(e.instagram)}</a>` : ''}
+          ${w ? `<a href="https://wa.me/${w}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
+          ${e.telefone ? `<a href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">${IC.ct}Ligar</a>` : ''}
+          ${e.email ? `<a href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}</div>
+        <textarea data-nota placeholder="Anotação (ex: falei com a Ana, retornar segunda)">${esc(d.anotacao || '')}</textarea></div>` }).join('') || '<div class="cp-vazio">Nenhuma empresa nessa etapa.</div>'
+      : '<div class="cp-vazio">Sua captação está vazia.<br>Abre uma capivara e toca em <b>Adicionar à captação</b>.</div>'}</div>`
+  $('capX').onclick = fecharCapivara
+  if (empilhar) empilha('capt')
+  $('cap').querySelectorAll('.filt button').forEach(b => b.onclick = () => { filtroCapt = b.dataset.f; abrirCaptacao(false) })
+  $('cap').querySelectorAll('.cp').forEach(el => {
+    const d = todos.find(x => x.id === el.dataset.id)
+    el.querySelectorAll('[data-et]').forEach(b => b.onclick = async () => {
+      el.querySelectorAll('[data-et]').forEach(x => x.classList.toggle('on', x === b))
+      const { error } = await sb.from('diagnosticos').update({ etapa: b.dataset.et, etapa_em: new Date().toISOString() }).eq('id', d.id)
+      if (error) return liz('Não salvou a etapa. Tenta de novo.')
+      d.etapa = b.dataset.et; contarCaptacao()
+    })
+    el.querySelector('[data-abre]').onclick = () => abrirCapivara(d)
+    el.querySelector('[data-copia]').onclick = async e => { try { await navigator.clipboard.writeText(d.abordagem || d.capivara?.abordagem || ''); e.target.textContent = '✓ Copiada' } catch { liz('Não consegui copiar.') } }
+    let tm; el.querySelector('[data-nota]').oninput = ev => { clearTimeout(tm); tm = setTimeout(async () => { await sb.from('diagnosticos').update({ anotacao: ev.target.value }).eq('id', d.id) }, 700) }
+  })
+  if ($('cCsv')) $('cCsv').onclick = () => {
+    const cel = v => `"${String(v ?? '').replace(/"/g, '""')}"`
+    const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Oportunidade', 'Ângulo', 'Mensagem', 'Anotação'].map(cel).join(';')]
+    todos.forEach(d => { const e = d.empresa || {}; linhas.push([e.nome, d.busca?.nicho, e.bairro, e.cidade, (ETAPAS.find(x => x[0] === d.etapa) || [])[1], e.telefone, e.whatsapp, e.instagram ? '@' + e.instagram : '', e.email, e.site, d.nota_dor, ANG[d.angulo] || '', d.abordagem || d.capivara?.abordagem, d.anotacao].map(cel).join(';')) })
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + linhas.join('\n')], { type: 'text/csv;charset=utf-8' })); a.download = `captacao_kompila_${new Date().toISOString().slice(0, 10)}.csv`; a.click()
+  }
+  $('capO').classList.add('on'); $('cap').classList.add('on')
+}
+$('bCapt').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(), history.state?.camada ? 60 : 0) }
+
 /* ======================= histórico ======================= */
 async function carregarHist() {
   const { data } = await sb.from('buscas').select('id, cidade, nicho, status, olhadas, com_dor, criada_em').order('criada_em', { ascending: false }).limit(30)
   $('hist').innerHTML = (data || []).length ? data.map(b => `<div class="hi" data-id="${b.id}"><b>${esc(b.cidade === 'Lista' ? 'Lista · ' + b.nicho : b.nicho + ' · ' + b.cidade.split(',')[0])}</b><small>${new Date(b.criada_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · ${b.olhadas} olhadas · ${{ pronta: 'pronta', erro: 'deu erro' }[b.status] || 'em andamento'}</small></div>`).join('') : '<div class="vazio">Nenhuma busca ainda.</div>'
+  $('hist').insertAdjacentHTML('beforeend', `<button class="sair so-cel" id="bSair2">Sair da conta (${esc(usuario?.email || '')})</button>`)
+  $('bSair2').onclick = async () => { await sb.auth.signOut(); location.reload() }
   $('hist').querySelectorAll('.hi').forEach(el => el.onclick = () => abrirBusca(data.find(b => b.id === el.dataset.id)))
 }
 $('histX').hidden = false
