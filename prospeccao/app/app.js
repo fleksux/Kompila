@@ -83,7 +83,7 @@ function pergunta(passo) {
   $('askc').innerHTML = `${passo === 2 ? `<div class="pick">${PIN}${esc(esc_.cidade)}</div>` : ''}<div class="stp">${q.stp}</div><h2>${q.h}</h2>
     <div class="fld"><input type="text" id="aq" placeholder="${q.ph}" autocomplete="off"><button class="btn go lg" id="ab">${q.bt}</button></div>
     <div class="err" id="ae"></div><div class="sg">${q.sg.map(x => `<button>${x}</button>`).join('')}</div>
-    ${passo === 2 ? `<div class="ou">capivara de quantas?</div><div class="sg" id="qt"><button data-t="0" class="on">As 14 melhores · ~${reais(14 * CAPIVARA_USD)}</button><button data-t="1">Todas · ~${reais(60 * CAPIVARA_USD)}</button></div>` : ''}
+    ${passo === 2 ? `<div class="ou">capivara de quantas?</div><div class="sg" id="qt"><button data-t="0" class="on">As 5 melhores · ~${reais(5 * CAPIVARA_USD)}</button><button data-t="1">Todas · ~${reais(60 * CAPIVARA_USD)}</button></div>` : ''}
     ${passo === 1 ? `<div class="ou">ou</div><div class="drop" id="drop"><div class="di">${IC.arq}</div><div><b>Sobe uma lista</b><small>Excel ou CSV com empresa, site ou cidade. Conta pessoal eu descarto.</small></div></div>` : ''}`
   const aq = $('aq'); if (!mob()) aq.focus()
   const vai = v => {
