@@ -429,6 +429,7 @@ addEventListener('popstate', () => {
   if (c === 'lista') abrirLista(false)
   else if (c === 'capt') abrirCaptacao(false)
   else if (c === 'fila') abrirFila(false)
+  if (c !== 'ind' && !$('indO').hidden) fecharIndicar()
   else if (!c) { $('capO').classList.remove('on'); $('cap').classList.remove('on') }
 })
 async function abrirCapivara(d, empilhar = true) {
@@ -842,6 +843,42 @@ $('bEnv').onclick = () => { comando($('inp').value); $('inp').value = '' }
 let eraCelular = mob()
 addEventListener('resize', () => { if (mob() === eraCelular) return; eraCelular = mob(); if (busca && $('n_olhadas')) { const st = { ...busca }; const d = diags; montarCanvas(st, false); busca = st; diags = d; atualizarFunil(); desenharCards() } })
 sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.reload() })
+/* ======================= indicar: 1 mês grátis quando o indicado vira cliente ======================= */
+const SITE = 'https://kompila.com.br/prospeccao/'
+const ST_IND = { pediu_acesso: ['Pediu acesso', ''], entrou: ['Entrou', 'en'], pagou: ['Virou cliente · 1 mês grátis pra você', 'ok'] }
+async function meuCodigo() {
+  const { data } = await sb.from('indicador').select('codigo').maybeSingle()
+  if (data) return data.codigo
+  const nome = (usuario?.user_metadata?.full_name || usuario?.email || '').trim()
+  const base = nome.split(/[\s@.]/)[0].normalize('NFD').replace(/[^a-zA-Z0-9]/g, '').toLowerCase().slice(0, 10) || 'kp'
+  for (let i = 0; i < 4; i++) {
+    const codigo = base + Math.random().toString(36).slice(2, 6)
+    const { error } = await sb.from('indicador').insert({ codigo, nome })
+    if (!error) return codigo
+  }
+  throw new Error('Não consegui criar o seu link agora.')
+}
+async function abrirIndicar(empilhar = true) {
+  const codigo = await meuCodigo(), link = SITE + '?ind=' + codigo
+  const { data } = await sb.from('indicacao').select('nome, empresa, status, criado_em').order('criado_em', { ascending: false })
+  const lst = data || [], ganhos = lst.filter(x => x.status === 'pagou').length
+  const texto = `Tô usando a prospecção da Kompila: ela acha empresas da cidade, lê Google, site e Instagram de cada uma e já entrega a mensagem pronta. Pede acesso por aqui: ${link}`
+  $('indB').innerHTML = `<div class="ind-k">[ LIZ ]</div>
+    <h2>Conhece alguém que vive atrás de cliente? Me apresenta.</h2>
+    <p>Quando a pessoa que você indicar virar cliente, você ganha <b>1 mês grátis</b> da prospecção.</p>
+    <div class="ind-l"><span>${esc(link.replace('https://', ''))}</span><button class="btn go sm" id="indCp">Copiar</button></div>
+    <a class="btn ok ind-w" href="https://wa.me/?text=${encodeURIComponent(texto)}" target="_blank" rel="noopener">Mandar no WhatsApp</a>
+    <div class="ind-h"><b>Suas indicações</b><span>${lst.length}${ganhos ? ` · ${ganhos} mês${ganhos === 1 ? '' : 'es'} grátis` : ''}</span></div>
+    ${lst.length ? `<div class="ind-lst">${lst.map(x => `<div><span><b>${esc(x.nome)}</b>${x.empresa ? ' · ' + esc(x.empresa) : ''}</span><i class="${ST_IND[x.status]?.[1] || ''}">${ST_IND[x.status]?.[0] || ''}</i></div>`).join('')}</div>` : '<div class="ind-v">Ninguém ainda. Quem pedir acesso pelo seu link aparece aqui.</div>'}`
+  $('indCp').onclick = async () => { try { await navigator.clipboard.writeText(link); $('indCp').textContent = '✓ Copiado' } catch { liz('Não consegui copiar. Segura o dedo no link.') } }
+  $('indO').hidden = false; requestAnimationFrame(() => $('indO').classList.add('on'))
+  if (empilhar) empilha('ind')
+}
+function fecharIndicar() { $('indO').classList.remove('on'); setTimeout(() => $('indO').hidden = true, 300) }
+$('bInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
+$('indX').onclick = () => history.state?.camada === 'ind' ? history.back() : fecharIndicar()
+$('indO').onclick = e => { if (e.target === $('indO')) $('indX').onclick() }
+
 /* ======================= carregando: a Liz avisa enquanto busca ======================= */
 let cargas = 0, cargaT
 function carregando(on, tx) {
@@ -855,6 +892,7 @@ abrirSeq = comCarga(abrirSeq, 'Aguarde, estou abrindo a empresa.')
 abrirCaptacao = comCarga(abrirCaptacao, 'Aguarde, estou carregando o seu pipeline.')
 abrirLista = comCarga(abrirLista, 'Aguarde, estou carregando os resultados.')
 abrirFila = comCarga(abrirFila, 'Aguarde, estou montando a fila de envio.')
+abrirIndicar = comCarga(abrirIndicar, 'Aguarde, estou buscando o seu link.')
 abrirBusca = comCarga(abrirBusca, 'Aguarde, estou carregando os resultados.')
 iniciar = comCarga(iniciar, 'Aguarde, estou abrindo a prospecção.')
 iniciar()

@@ -531,3 +531,29 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .foto.post span{display:inline-flex;align-items:center;gap:4px}
 .foto.post span svg{width:12px;height:12px;color:#C93676}
 @media (max-width:700px){ .fotos{grid-template-columns:1fr 1fr!important;gap:8px} .foto{height:180px} .foto span{left:8px;bottom:8px;right:8px;width:fit-content;max-width:calc(100% - 16px)} }
+
+/* indicar (31/10): Liz saindo da caixa, molde do Indicar do CRM */
+.ind-o{position:fixed;inset:0;z-index:50;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;padding:96px 16px 24px;background:rgba(10,11,14,.32);backdrop-filter:blur(4px);opacity:0;transition:opacity .3s}
+.ind-o.on{opacity:1}
+.ind-o[hidden]{display:none}
+.ind{position:relative;width:min(460px,100%);background:var(--w);border-radius:20px;box-shadow:0 30px 80px rgba(10,11,14,.3);padding:72px 24px 20px;transform:translateY(24px) scale(.96);transition:transform .45s cubic-bezier(.2,1.4,.4,1)}
+.ind-o.on .ind{transform:none}
+.ind-liz{position:absolute;left:50%;top:-84px;width:140px;transform:translateX(-50%);filter:drop-shadow(0 16px 24px rgba(10,11,14,.25));animation:lizFlutua 2.4s ease-in-out infinite}
+.ind-x{position:absolute;top:12px;right:12px}
+.ind-k{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--gd);text-align:center}
+.ind h2{font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.01em;text-align:center;margin:6px 0 8px}
+.ind p{font-size:14px;color:var(--mu);text-align:center;line-height:1.5}
+.ind p b{color:var(--tx)}
+.ind-l{display:flex;align-items:center;gap:8px;margin-top:16px;padding:6px 6px 6px 12px;border:1px solid var(--line2);border-radius:var(--r8);background:var(--s)}
+.ind-l span{flex:1;min-width:0;font-family:var(--mono);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ind-w{display:flex;width:100%;height:46px;justify-content:center;align-items:center;margin-top:8px;text-decoration:none;font-size:15px}
+.ind-h{display:flex;justify-content:space-between;align-items:baseline;margin-top:20px;padding-top:14px;border-top:1px solid var(--line);font-size:13px}
+.ind-h span{font-family:var(--mono);font-size:12px;color:var(--mu)}
+.ind-lst{display:flex;flex-direction:column;gap:6px;margin-top:10px;max-height:200px;overflow:auto}
+.ind-lst div{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px}
+.ind-lst span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mu)}
+.ind-lst span b{color:var(--tx);font-weight:600}
+.ind-lst i{font-style:normal;font-size:11px;font-weight:600;padding:3px 8px;border-radius:10px;background:#F1F2EF;color:var(--mu);white-space:nowrap}
+.ind-lst i.en{background:#EAF2FF;color:#2F6FDB}
+.ind-lst i.ok{background:var(--gs);color:var(--gd)}
+.ind-v{margin-top:10px;font-size:13px;color:var(--mu2)}
