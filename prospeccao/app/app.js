@@ -560,7 +560,7 @@ function baixarCsv(todos) {
   a.download = `prospeccao_${(busca.nicho + '_' + busca.cidade).toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`
   a.click(); URL.revokeObjectURL(a.href)
 }
-$('bLista').onclick = abrirLista
+$('bLista').onclick = () => abrirLista()
 
 /* ======================= pipeline (minha captação) ======================= */
 const ETAPAS = [['a_contatar', 'A contatar'], ['contatado', 'Contatado'], ['respondeu', 'Respondeu'], ['reuniao', 'Reunião'], ['cliente', 'Cliente'], ['perdido', 'Perdido']]
@@ -841,4 +841,19 @@ $('bEnv').onclick = () => { comando($('inp').value); $('inp').value = '' }
 let eraCelular = mob()
 addEventListener('resize', () => { if (mob() === eraCelular) return; eraCelular = mob(); if (busca && $('n_olhadas')) { const st = { ...busca }; const d = diags; montarCanvas(st, false); busca = st; diags = d; atualizarFunil(); desenharCards() } })
 sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.reload() })
+/* ======================= carregando: a Liz avisa enquanto busca ======================= */
+let cargas = 0, cargaT
+function carregando(on, tx) {
+  cargas = Math.max(0, cargas + (on ? 1 : -1)); clearTimeout(cargaT)
+  if (!cargas) return $('carga').hidden = true
+  if (tx) $('cargaTx').textContent = tx
+  cargaT = setTimeout(() => { if (cargas) $('carga').hidden = false }, 180) // carga rápida não pisca
+}
+const comCarga = (f, tx) => async (...a) => { carregando(true, tx); try { return await f(...a) } finally { carregando(false) } }
+abrirSeq = comCarga(abrirSeq, 'Aguarde, estou abrindo a empresa.')
+abrirCaptacao = comCarga(abrirCaptacao, 'Aguarde, estou carregando o seu pipeline.')
+abrirLista = comCarga(abrirLista, 'Aguarde, estou carregando os resultados.')
+abrirFila = comCarga(abrirFila, 'Aguarde, estou montando a fila de envio.')
+abrirBusca = comCarga(abrirBusca, 'Aguarde, estou carregando os resultados.')
+iniciar = comCarga(iniciar, 'Aguarde, estou abrindo a prospecção.')
 iniciar()

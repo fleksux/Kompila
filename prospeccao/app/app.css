@@ -515,3 +515,15 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .fl-prox{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--mu)}
 .fl-prox b{color:var(--tx);font-weight:600}
 @media (max-width:700px){ .fl-top{grid-template-columns:auto 1fr;padding:10px 12px}.fl-top label{grid-column:1/-1} .fl-c{padding:16px} .fl-h b{font-size:19px} .fl-ac .btn{height:52px} }
+
+/* carregando com a Liz (31/10) */
+.carga{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(243,243,240,.55);backdrop-filter:blur(6px);animation:cargaIn .25s ease}
+.carga[hidden]{display:none}
+.carga-c{display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--w);border-radius:20px;box-shadow:0 30px 80px rgba(10,11,14,.18);padding:24px 32px 22px;max-width:calc(100% - 32px);text-align:center}
+.carga-c img{width:96px;animation:lizFlutua 1.6s ease-in-out infinite}
+.carga-c b{font-size:15px;font-weight:600}
+.pts{display:flex;gap:6px}.pts i{width:7px;height:7px;border-radius:50%;background:var(--g);animation:pt 1s ease-in-out infinite}
+.pts i:nth-child(2){animation-delay:.15s}.pts i:nth-child(3){animation-delay:.3s}
+@keyframes lizFlutua{50%{transform:translateY(-8px)}}
+@keyframes pt{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:none}}
+@keyframes cargaIn{from{opacity:0}}
