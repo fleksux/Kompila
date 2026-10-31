@@ -25,6 +25,11 @@ const IC = {
   arq: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 14l3-3 3 3M12 11v6"/></svg>',
 }
 const star = on => `<svg viewBox="0 0 24 24" fill="${on ? '#F5B83D' : '#E1E1DC'}"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z"/></svg>`
+// custo em reais: a IA cobra em dólar, a tela mostra real com o câmbio do dia
+const CAPIVARA_USD = 0.036 // média medida em uso_ia, 31/10
+let DOLAR = 5.44 // câmbio de 30/10; troca pelo do dia assim que a AwesomeAPI responde
+fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL').then(r => r.json()).then(j => { const v = +j?.USDBRL?.bid; if (v > 1) DOLAR = v }).catch(() => {})
+const reais = usd => 'R$ ' + (usd * DOLAR).toFixed(2).replace('.', ',')
 const ANG = { dor: 'Dor', canal: 'Falta de canal', crescimento: 'Crescimento', nenhum: 'Fora do perfil' }
 
 /* ======================= estado ======================= */
@@ -78,7 +83,7 @@ function pergunta(passo) {
   $('askc').innerHTML = `${passo === 2 ? `<div class="pick">${PIN}${esc(esc_.cidade)}</div>` : ''}<div class="stp">${q.stp}</div><h2>${q.h}</h2>
     <div class="fld"><input type="text" id="aq" placeholder="${q.ph}" autocomplete="off"><button class="btn go lg" id="ab">${q.bt}</button></div>
     <div class="err" id="ae"></div><div class="sg">${q.sg.map(x => `<button>${x}</button>`).join('')}</div>
-    ${passo === 2 ? `<div class="ou">capivara de quantas?</div><div class="sg" id="qt"><button data-t="0" class="on">As 14 melhores · ~US$ 0,50</button><button data-t="1">Todas · ~US$ 2</button></div>` : ''}
+    ${passo === 2 ? `<div class="ou">capivara de quantas?</div><div class="sg" id="qt"><button data-t="0" class="on">As 14 melhores · ~${reais(14 * CAPIVARA_USD)}</button><button data-t="1">Todas · ~${reais(60 * CAPIVARA_USD)}</button></div>` : ''}
     ${passo === 1 ? `<div class="ou">ou</div><div class="drop" id="drop"><div class="di">${IC.arq}</div><div><b>Sobe uma lista</b><small>Excel ou CSV com empresa, site ou cidade. Conta pessoal eu descarto.</small></div></div>` : ''}`
   const aq = $('aq'); if (!mob()) aq.focus()
   const vai = v => {
@@ -291,10 +296,10 @@ function atualizarFunil() {
     if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.` : busca.status === 'erro' ? 'Travei nessa busca.' : busca.status === 'diagnosticando' ? `Montando as capivaras: <em>${cap}</em> prontas.` : say.innerHTML
     const ac = $('mAcoes')
     if (ac) ac.innerHTML = busca.status === 'erro' ? '<button class="btn go" id="bDeNovo">Tentar de novo</button>'
-      : busca.status === 'pronta' ? `${resto ? `<button class="btn line" id="bResto">Capivara das outras ${resto} · ~US$ ${(resto * 0.035).toFixed(2).replace('.', ',')}</button>` : ''}${busca.cidade !== 'Lista' ? `<div class="m-mais"><span>Buscar mais novas:</span>${[12, 30, 60].map(n => `<button class="btn line" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : ''
+      : busca.status === 'pronta' ? `${resto ? `<button class="btn line" id="bResto">Capivara das outras ${resto} · ~${reais(resto * CAPIVARA_USD)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div class="m-mais"><span>Buscar mais novas:</span>${[12, 30, 60].map(n => `<button class="btn line" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : ''
     return
   }
-  if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.${resto ? `<br><button class="btn line sm" id="bResto" style="margin-top:12px">Fazer capivara das outras ${resto} · ~US$ ${(resto * 0.035).toFixed(2).replace('.', ',')}</button>` : ''}${busca.cidade !== 'Lista' ? `<div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--mu);font-weight:400">Buscar mais novas:</span>${[12, 30, 60].map(n => `<button class="btn line sm" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : busca.status === 'erro' ? 'Travei nessa busca. <button class="btn go sm" id="bDeNovo" style="margin-top:12px">Tentar de novo</button>' : busca.status === 'diagnosticando' ? `Montando as capivaras: <em>${cap}</em> prontas.` : say.innerHTML
+  if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.${resto ? `<br><button class="btn line sm" id="bResto" style="margin-top:12px">Fazer capivara das outras ${resto} · ~${reais(resto * CAPIVARA_USD)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--mu);font-weight:400">Buscar mais novas:</span>${[12, 30, 60].map(n => `<button class="btn line sm" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : busca.status === 'erro' ? 'Travei nessa busca. <button class="btn go sm" id="bDeNovo" style="margin-top:12px">Tentar de novo</button>' : busca.status === 'diagnosticando' ? `Montando as capivaras: <em>${cap}</em> prontas.` : say.innerHTML
 }
 document.addEventListener('click', e => {
   const n = e.target.dataset?.mais; if (!n || !busca) return
@@ -469,7 +474,7 @@ function desenharDecisao(d) {
   if (d.decisao === 'pulada') { box.innerHTML = `<div class="q">Decidido.</div><div class="feito" style="background:#F1F2EF;color:var(--mu)">Pulada. Não volta a aparecer.</div><button class="btn ghost" id="dDes">Desfazer</button>`; $('dDes').onclick = () => decidir(d, 'pendente'); return }
   if (!temCap(d)) {
     const fila = d.status === 'na_fila' || d.status === 'lendo'
-    box.innerHTML = `<div class="q">${fila ? 'Liz montando a capivara…' : 'Quer a capivara completa?'}</div>${fila ? '<span class="lendo-tag"><i></i>Lendo site, Google e fotos. Leva uns 40 segundos.</span>' : '<button class="btn go" id="dCap">Fazer capivara · ~US$ 0,04</button>'}<button class="btn ok" id="dOk">${IC.ok}Adicionar à captação</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
+    box.innerHTML = `<div class="q">${fila ? 'Liz montando a capivara…' : 'Quer a capivara completa?'}</div>${fila ? '<span class="lendo-tag"><i></i>Lendo site, Google e fotos. Leva uns 40 segundos.</span>' : `<button class="btn go" id="dCap">Fazer capivara · ~${reais(CAPIVARA_USD)}</button>`}<button class="btn ok" id="dOk">${IC.ok}Adicionar à captação</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
     $('dOk').onclick = () => decidir(d, 'aprovada'); $('dPu').onclick = () => decidir(d, 'pulada')
     if ($('dCap')) $('dCap').onclick = async () => { $('dCap').disabled = true; $('dCap').textContent = 'Mandando pra Liz…'; await fazerUma(d); desenharDecisao(d); esperarCapivara(d.id) }
     return
