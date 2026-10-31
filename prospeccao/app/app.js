@@ -26,7 +26,7 @@ const IC = {
 }
 const star = on => `<svg viewBox="0 0 24 24" fill="${on ? '#F5B83D' : '#E1E1DC'}"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z"/></svg>`
 // custo em reais: a IA cobra em dólar, a tela mostra real com o câmbio do dia
-const CAPIVARA_USD = 0.036 // média medida em uso_ia, 31/10
+const CAPIVARA_USD = 0.016 // Sonnet 5.5, média medida no teste de 31/10 (Opus era 0.036)
 let DOLAR = 5.44 // câmbio de 30/10; troca pelo do dia assim que a AwesomeAPI responde
 fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL').then(r => r.json()).then(j => { const v = +j?.USDBRL?.bid; if (v > 1) DOLAR = v }).catch(() => {})
 const reais = usd => 'R$ ' + (usd * DOLAR).toFixed(2).replace('.', ',')
@@ -457,7 +457,7 @@ async function abrirCapivara(d, empilhar = true) {
     <div class="mini"><h4>Marca <span>do site</span></h4><div class="marca"><div class="logo-t">${id.logo ? `<img src="${esc(id.logo)}" alt="" onerror="this.remove()">` : ''}</div><div class="fn"><b>${esc((c.nome || '').split(' - ')[0])}</b><br>${id.fonte ? 'Fonte: ' + esc(id.fonte) : 'Fonte não medida'}</div></div>
       ${(id.paleta || []).length ? `<div class="pal">${id.paleta.map(h => `<div class="cor"><i style="background:${esc(h)}"></i>${esc(h)}</div>`).join('')}</div>` : '<div class="fn" style="margin-top:12px;color:var(--mu2)">Sem site pra medir cores.</div>'}</div>
     <div class="mini"><h4>Velocidade no celular <span>PageSpeed</span></h4>${vel != null ? `<div class="vel"><div class="gauge"><svg viewBox="0 0 72 72"><circle class="b" cx="36" cy="36" r="32"/><circle class="f" cx="36" cy="36" r="32" style="stroke:${velCor};stroke-dashoffset:${Math.round(201 - 201 * vel / 100)}"/></svg><b style="color:${velCor}">${vel}</b></div><div class="tx"><b>${vel >= 90 ? 'Rápido' : vel >= 50 ? 'Médio' : 'Lento'}</b>O conteúdo principal aparece em ${esc(id.carregamento || '?')} no celular.</div></div>` : '<div class="fn" style="color:var(--mu2)">Sem site pra medir.</div>'}</div>
-    <div class="olho"><div class="ai">${IC.eye}</div><div><small>O que o Opus 5.5 viu</small>${esc(id.leitura_visual)}</div></div></div></section>
+    <div class="olho"><div class="ai">${IC.eye}</div><div><small>O que a IA viu nas imagens</small>${esc(id.leitura_visual)}</div></div></div></section>
   ${fotos.length ? `<div class="fotos" style="grid-template-columns:repeat(${fotos.length},1fr)">${fotos.map((f, i) => `<div class="foto"><img src="${f}" alt=""><span>Foto ${i + 1} · Google</span></div>`).join('')}</div>` : ''}
   <div class="sec"><h2>A capivara</h2></div><section class="grid">${BL.map(bloco).join('')}</section>
   ${(c.avaliacoes || []).length ? `<div class="sec"><h2>O que dizem no Google</h2></div><section class="revs">${c.avaliacoes.map(a => `<div class="rv${a.etiqueta ? ' bad' : ''}"><div class="m"><span class="stars">${[1, 2, 3, 4, 5].map(i => star(i <= a.estrelas)).join('')}</span>${esc((a.data || '').slice(0, 10).split('-').reverse().join('/'))}</div>${esc((a.texto || '').slice(0, 260))}${(a.texto || '').length > 260 ? '…' : ''}${a.etiqueta ? `<span class="tg">${esc(a.etiqueta)}</span>` : ''}</div>`).join('')}</section>` : ''}
