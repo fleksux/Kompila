@@ -530,3 +530,4 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .foto.post{display:block;text-decoration:none;color:inherit}
 .foto.post span{display:inline-flex;align-items:center;gap:4px}
 .foto.post span svg{width:12px;height:12px;color:#C93676}
+@media (max-width:700px){ .fotos{grid-template-columns:1fr 1fr!important;gap:8px} .foto{height:180px} .foto span{left:8px;bottom:8px;right:8px;width:fit-content;max-width:calc(100% - 16px)} }
