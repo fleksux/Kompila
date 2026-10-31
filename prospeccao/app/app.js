@@ -428,6 +428,7 @@ addEventListener('popstate', () => {
   $('hist').classList.remove('on')
   if (c === 'lista') abrirLista(false)
   else if (c === 'capt') abrirCaptacao(false)
+  else if (c === 'fila') abrirFila(false)
   else if (!c) { $('capO').classList.remove('on'); $('cap').classList.remove('on') }
 })
 async function abrirCapivara(d, empilhar = true) {
@@ -599,7 +600,7 @@ async function abrirCaptacao(empilhar = true) {
   $('cap').dataset.seq = ''
   $('cap').classList.add('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Pipeline</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
-    <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
+    <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Fila de envio · ${de('a_contatar').length}</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
     ${todos.length ? `<div class="pk">${kpi.map(([t, k, v, s]) => `<div class="pk-i t-${t}"><i></i><div><b>${v}</b><span>${k}</span><small>${s}</small></div></div>`).join('')}</div>
     <div class="pt" id="pTabs">${ETAPAS.map(([k, t], i) => `<button data-col="${i}">${t}<span>${de(k).length}</span></button>`).join('')}</div>
     <div class="pb" id="pBoard">${ETAPAS.map(([k, t]) => `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${de(k).length}</span></header><div class="pcol-b">${de(k).map(cartao).join('') || `<div class="pv">${k === 'a_contatar' ? 'Abre uma capivara e toca em Adicionar à captação.' : 'Arrasta uma empresa pra cá.'}</div>`}</div></section>`).join('')}</div>`
@@ -641,6 +642,7 @@ async function abrirCaptacao(empilhar = true) {
       col.ondrop = e => { e.preventDefault(); col.classList.remove('alvo'); mover(todos.find(x => x.id === e.dataTransfer.getData('text/plain')), col.dataset.et) }
     })
   }
+  if ($('cFila')) $('cFila').onclick = () => abrirFila()
   if ($('cCsv')) $('cCsv').onclick = () => {
     const cel = v => `"${String(v ?? '').replace(/"/g, '""')}"`
     const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Temperatura', 'Desde', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Oportunidade', 'Ângulo', 'Mensagem', 'Anotação'].map(cel).join(';')]
@@ -650,6 +652,70 @@ async function abrirCaptacao(empilhar = true) {
   $('capO').classList.add('on'); $('cap').classList.add('on')
 }
 $('bCapt').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(), history.state?.camada ? 60 : 0) }
+
+/* ======================= fila de envio: um toque por empresa ======================= */
+// nada sai sozinho: a fila abre o WhatsApp com a mensagem pronta e quem aperta enviar é você
+const LIMITES = [10, 20, 30, 50]
+const lerLimite = () => { try { return +localStorage.getItem('kp_limite') || 30 } catch { return 30 } }
+const modeloMsg = e => `Oi, tudo bem? Aqui é ${(usuario?.user_metadata?.full_name || '').split(' ')[0] || 'o pessoal'}, da Kompila. Encontrei vocês no Google e tenho uma ideia rápida pra ${e.nome}. Posso te mandar?`
+let fila = [], fpos = 0, passouLimite = false
+async function abrirFila(empilhar = true) {
+  const hoje = new Date(); hoje.setHours(0, 0, 0, 0)
+  const [{ data }, { count }] = await Promise.all([
+    sb.from('diagnosticos').select('id, nota_dor, abordagem, capivara, etapa, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('etapa', 'a_contatar').order('nota_dor', { ascending: false }),
+    sb.from('diagnosticos').select('id', { count: 'exact', head: true }).eq('decisao', 'aprovada').eq('etapa', 'contatado').gte('etapa_em', hoje.toISOString()),
+  ])
+  fila = data || []; fpos = 0
+  desenharFila(count || 0)
+  if (empilhar) empilha('fila')
+  $('capO').classList.add('on'); $('cap').classList.add('on')
+}
+function desenharFila(feitos) {
+  const lim = lerLimite(), d = fila[fpos], cheio = feitos >= lim && !passouLimite
+  $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
+  const topo = `<div class="fl-top"><div><b>${feitos}</b> de ${lim} hoje</div><div class="fl-bar"><i style="width:${Math.min(100, feitos / lim * 100)}%"></i></div>
+    <label>Limite por dia <select id="fLim">${LIMITES.map(n => `<option${n === lim ? ' selected' : ''}>${n}</option>`).join('')}</select></label></div>`
+  let corpo
+  if (!fila.length) corpo = '<div class="cp-vazio">Ninguém esperando contato.<br>Passa nas capivaras e toca em <b>Adicionar à captação</b>.</div>'
+  else if (fpos >= fila.length) corpo = `<div class="cp-vazio">Acabou a fila de hoje. ${feitos} contatada${feitos === 1 ? '' : 's'}.<br>Quem responder, você move pra <b>Respondeu</b> no pipeline.</div><button class="btn line" id="fPipe" style="width:100%">Ver o pipeline</button>`
+  else if (cheio) corpo = `<div class="cp-vazio">Bateu o limite de hoje: <b>${lim} contatos</b>.<br>Mandar muita mensagem fria no mesmo dia é o que faz o WhatsApp bloquear o número.</div><button class="btn ghost" id="fMais" style="width:100%">Continuar mesmo assim</button>`
+  else {
+    const e = d.empresa || {}, c = d.capivara || {}, msg = d.abordagem || c.abordagem || modeloMsg(e)
+    const w = zap(e.whatsapp) || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? zap(e.telefone) : null), prox = fila[fpos + 1]
+    corpo = `<div class="fl-c">
+      <div class="fl-h"><div><small>${fpos + 1} de ${fila.length} na fila</small><b>${esc(c.nome || e.nome)}</b><span>${esc(d.busca?.cidade === 'Lista' ? 'Lista · ' + d.busca.nicho : (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0])}${e.bairro ? ' · ' + esc(e.bairro) : ''}</span></div><span class="nt">${d.nota_dor ?? ''}</span></div>
+      <label class="fl-l">Mensagem${d.abordagem || c.abordagem ? ' da capivara' : ' padrão (essa empresa não tem capivara)'} · dá pra mexer</label>
+      <textarea id="fMsg">${esc(msg)}</textarea>
+      <div class="fl-ac">${w ? `<a class="btn ok" id="fZap" href="https://wa.me/${w}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Abrir no WhatsApp</a>` : `<div class="fl-sem">Sem WhatsApp. ${e.telefone ? 'O telefone é fixo: liga ou chama no Insta.' : 'Chama no Insta ou por e-mail.'}</div>`}
+        <div class="fl-alt">${e.telefone ? `<a class="btn line" data-feito href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">Ligar</a>` : ''}${e.instagram ? `<a class="btn line ig" data-copia data-feito href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Copiar e abrir Insta</a>` : ''}${e.email ? `<a class="btn line" data-feito href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}</div>
+        <button class="btn ghost" id="fPula">Pular por agora</button></div>
+      <div class="fl-ok" id="fOk" hidden>${IC.ok}Marcada como contatada. Indo pra próxima…</div>
+      ${prox ? `<div class="fl-prox">Próxima: <b>${esc(prox.capivara?.nome || prox.empresa?.nome)}</b></div>` : ''}</div>`
+  }
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Fila de envio</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b fl">${topo}${corpo}
+    <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
+  $('capX').onclick = fecharCapivara
+  $('fLim').onchange = ev => { try { localStorage.setItem('kp_limite', ev.target.value) } catch {} desenharFila(feitos) }
+  if ($('fPipe')) $('fPipe').onclick = () => abrirCaptacao()
+  if ($('fMais')) $('fMais').onclick = () => { passouLimite = true; desenharFila(feitos) }
+  if (!d || cheio) return
+  const msgAtual = () => $('fMsg').value.trim()
+  $('fMsg').oninput = () => { const z = $('fZap'); if (z) z.href = z.href.split('?')[0] + '?text=' + encodeURIComponent(msgAtual()) }
+  const contatou = async () => {
+    const t = msgAtual(), mudou = t !== (d.abordagem || d.capivara?.abordagem || '')
+    $('fOk').hidden = false
+    const { error } = await sb.from('diagnosticos').update({ etapa: 'contatado', etapa_em: new Date().toISOString(), ...(mudou && t ? { abordagem: t } : {}) }).eq('id', d.id)
+    if (error) { $('fOk').hidden = true; return liz('Não marquei como contatada. Tenta de novo.') }
+    contarCaptacao()
+    setTimeout(() => { fila.splice(fpos, 1); desenharFila(feitos + 1); $('cap').scrollTop = 0 }, 1200)
+  }
+  if ($('fZap')) $('fZap').addEventListener('click', contatou)
+  $('cap').querySelectorAll('[data-feito]').forEach(a => a.addEventListener('click', async () => {
+    if (a.hasAttribute('data-copia')) { try { await navigator.clipboard.writeText(msgAtual()) } catch {} }
+    contatou()
+  }))
+  $('fPula').onclick = () => { fila.push(fila.splice(fpos, 1)[0]); if (fila.length === 1) fpos = 1; desenharFila(feitos) }
+}
 
 /* ======================= uma empresa por vez: arrasta pro lado ======================= */
 let seq = [], pos = 0
