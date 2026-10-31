@@ -2,59 +2,369 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prospecção · Kompila</title>
-<link rel="icon" href="img/liz_rosto_3d.png">
+<meta name="description" content="Você fala o nicho e a cidade. A Liz lê o Google, o site e as avaliações de cada empresa e te entrega quem tem motivo pra comprar, com a mensagem pronta.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --carb:#0A0B0E; --off:#E9EBEE; --papel:#F2F3EF; --w:#fff;
+  --g:#2FD67B; --gd:#12803F; --gs:#E6F7EE; --amb:#FFB224;
+  --tx:#0A0B0E; --mu:#5F6473; --mu2:#9A9EAA; --line:#E2E3DE;
+  --r8:8px; --r12:12px; --r20:20px;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sh:0 1px 2px rgba(10,11,14,.05),0 12px 32px rgba(10,11,14,.07);
+  --painel:440px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--tx);background:var(--papel);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+svg{display:block;flex:none}
+a{color:inherit}
+
+/* ---------- vitrine (esquerda) ---------- */
+.vit{margin-right:var(--painel);position:relative;overflow:hidden}
+.vit::before{content:"";position:fixed;inset:0;right:var(--painel);background-image:radial-gradient(rgba(10,11,14,.07) 1px,transparent 1.2px);background-size:24px 24px;pointer-events:none;mask:linear-gradient(180deg,#000 0,#000 60%,transparent 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.55}
+.b1{width:520px;height:420px;top:-120px;right:-120px;background:radial-gradient(circle,#9FF2C4,transparent 70%)}
+.b2{width:460px;height:380px;top:280px;left:-180px;background:radial-gradient(circle,#D9CCFF,transparent 70%)}
+.wrap{position:relative;max-width:860px;margin:0 auto;padding:0 48px}
+
+.topo{display:flex;align-items:center;justify-content:space-between;height:88px}
+.marca{font-family:var(--mono);font-weight:600;font-size:16px;text-decoration:none}
+.marca i{font-style:normal;color:var(--gd)}
+.topo nav{display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(10px);box-shadow:0 1px 2px rgba(10,11,14,.05)}
+.topo nav a{height:32px;display:flex;align-items:center;padding:0 14px;border-radius:999px;font-size:13px;color:var(--mu);text-decoration:none}
+.topo nav a:hover{background:#fff;color:var(--tx)}
+
+.hero{padding:72px 0 48px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px 0 6px;border-radius:999px;background:#fff;box-shadow:var(--sh);font-size:13px;color:var(--mu)}
+.eyebrow b{font-family:var(--mono);font-weight:600;font-size:11px;color:#fff;background:var(--carb);border-radius:999px;padding:3px 8px}
+.hero h1{margin-top:24px;font-size:64px;line-height:1.02;font-weight:800;letter-spacing:-.045em;max-width:720px}
+.hero h1 em{font-style:normal;background:linear-gradient(100deg,#12803F 10%,#2FD67B 60%,#8BE9B5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{margin-top:24px;font-size:19px;line-height:1.55;color:var(--mu);max-width:600px}
+.hero p.sub b{color:var(--tx);font-weight:600}
+
+.busca{margin-top:32px;display:flex;align-items:center;gap:12px;max-width:600px;padding:8px 8px 8px 20px;border-radius:999px;background:#fff;box-shadow:0 2px 4px rgba(10,11,14,.05),0 20px 48px rgba(18,128,63,.14);border:1px solid rgba(47,214,123,.35);cursor:text}
+.busca svg{width:20px;height:20px;color:var(--gd)}
+.busca .tx{flex:1;font-size:17px;color:var(--tx);white-space:nowrap;overflow:hidden}
+.busca .tx .cur{display:inline-block;width:2px;height:20px;background:var(--gd);vertical-align:-4px;margin-left:2px;animation:pisca 1s steps(1) infinite}
+@keyframes pisca{50%{opacity:0}}
+.ir{height:48px;display:inline-flex;align-items:center;gap:10px;padding:0 6px 0 20px;border-radius:999px;background:var(--carb);color:#fff;font-size:15px;font-weight:600;text-decoration:none;border:0;cursor:pointer;white-space:nowrap}
+.ir i{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;transition:transform .3s}
+.ir i svg{width:16px;height:16px;color:var(--carb)}
+.ir:hover i{transform:rotate(-45deg)}
+.prova{display:flex;align-items:center;gap:12px;margin-top:24px;font-size:14px;color:var(--mu)}
+.prova .num{font-family:var(--mono);font-weight:600;color:var(--tx)}
+.prova .num i{font-style:normal;color:var(--gd)}
+
+/* faixa que passa */
+.faixa{position:relative;margin:24px 0 0;padding:20px 0;border-block:1px solid var(--line);overflow:hidden;mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.faixa .trilho{display:flex;gap:12px;width:max-content;animation:passa 40s linear infinite}
+.faixa span{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;background:#fff;box-shadow:0 1px 2px rgba(10,11,14,.05);font-size:14px;white-space:nowrap}
+.faixa span i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--mu2)}
+@keyframes passa{to{transform:translateX(-50%)}}
+
+/* seções */
+section.s{padding:96px 0 0}
+.rot{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--gd);letter-spacing:.04em}
+.s h2{margin-top:12px;font-size:44px;line-height:1.06;font-weight:800;letter-spacing:-.035em;max-width:680px}
+.s p.lead{margin-top:16px;font-size:17px;line-height:1.6;color:var(--mu);max-width:600px}
+
+.passos{margin-top:40px;display:grid;gap:16px}
+.passo{position:relative;display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:start;padding:24px;border-radius:var(--r20);background:#fff;box-shadow:var(--sh);overflow:hidden}
+.passo .n{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-family:var(--mono);font-size:22px;font-weight:600;color:#fff}
+.passo:nth-child(1) .n{background:linear-gradient(135deg,#6AA2FF,#2F6FE0);box-shadow:0 10px 24px rgba(47,111,224,.3)}
+.passo:nth-child(2) .n{background:linear-gradient(135deg,#9C86FF,#5B3FD0);box-shadow:0 10px 24px rgba(91,63,208,.3)}
+.passo:nth-child(3) .n{background:linear-gradient(135deg,#6BEBA6,#12803F);box-shadow:0 10px 24px rgba(18,128,63,.3)}
+.passo h3{font-size:20px;font-weight:700;letter-spacing:-.015em}
+.passo p{margin-top:6px;font-size:15px;line-height:1.55;color:var(--mu)}
+.passo .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.passo .tags span{height:26px;display:inline-flex;align-items:center;padding:0 10px;border-radius:999px;background:var(--papel);font-size:12px;color:var(--mu)}
+
+.vitrine{position:relative;margin-top:40px;border-radius:24px;overflow:hidden;box-shadow:0 30px 80px rgba(10,11,14,.16);background:#fff}
+.vitrine img{display:block;width:100%;height:560px;object-fit:cover;object-position:top}
+.vitrine::after{content:"";position:absolute;inset:auto 0 0;height:160px;background:linear-gradient(transparent,var(--papel))}
+.vitrine .selo{position:absolute;right:20px;top:20px;z-index:1;font-family:var(--mono);font-size:11px;background:var(--carb);color:var(--off);padding:6px 10px;border-radius:999px}
+.lista-cap{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:12px 24px}
+.lista-cap div{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
+.lista-cap svg{width:20px;height:20px;color:var(--gd);margin-top:1px}
+
+.angulos{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ang{position:relative;padding:24px;border-radius:var(--r20);background:#fff;box-shadow:var(--sh);overflow:hidden}
+.ang::before{content:"";position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;filter:blur(30px);opacity:.6;background:var(--cor)}
+.ang>*{position:relative}
+.ang .ch{display:inline-flex;height:26px;align-items:center;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600}
+.ang h3{margin-top:16px;font-size:19px;font-weight:700;line-height:1.25;letter-spacing:-.015em}
+.ang p{margin-top:8px;font-size:14px;line-height:1.55;color:var(--mu)}
+.ang.dor{--cor:#FFC9CB}.ang.dor .ch{background:#FDECEC;color:#C2363B}
+.ang.canal{--cor:#FFE3A8}.ang.canal .ch{background:#FFF4DC;color:#A56A00}
+.ang.cres{--cor:#B6F2D0}.ang.cres .ch{background:var(--gs);color:var(--gd)}
+
+.dupla{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cartao{padding:28px;border-radius:var(--r20);background:#fff;box-shadow:var(--sh)}
+.cartao.esc{background:var(--carb);color:var(--off)}
+.cartao h3{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.cartao p{margin-top:10px;font-size:15px;line-height:1.55;color:var(--mu)}
+.cartao.esc p{color:#A8ADB8}
+.igs{margin-top:20px;display:grid;gap:8px}
+.igs div{display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;border-radius:var(--r8);background:rgba(255,255,255,.06);font-size:14px}
+.igs i{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#FEC053,#F2203E 45%,#B81AA0);flex:none}
+.igs span{margin-left:auto;font-family:var(--mono);font-size:11px;color:#7D8290}
+.planilha{margin-top:20px;border:1px solid var(--line);border-radius:var(--r12);overflow:hidden;font-size:13px}
+.planilha div{display:grid;grid-template-columns:1.4fr 1fr .8fr;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.planilha div:first-child{border-top:0;background:var(--papel);font-family:var(--mono);font-size:11px;color:var(--mu)}
+.planilha .riscado{color:var(--mu2);text-decoration:line-through}
+
+.fecho{margin:96px 0 0;padding:48px;border-radius:28px;background:radial-gradient(500px 300px at 90% 0%,rgba(47,214,123,.35),transparent 70%),var(--carb);color:var(--off);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;overflow:hidden}
+.fecho h2{font-size:40px;line-height:1.06;font-weight:800;letter-spacing:-.035em;color:#fff}
+.fecho p{margin-top:12px;color:#A8ADB8;font-size:16px;line-height:1.55}
+.fecho img{width:150px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.4))}
+.fecho .ir{margin-top:20px;background:var(--g);color:var(--carb)}
+.cred{display:flex;justify-content:center;padding:48px 0 64px}
+.cred a{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:var(--r8);background:var(--carb);color:#8A90A0;font-size:12px;text-decoration:none}
+.cred b{font-family:var(--mono);color:#fff}.cred b i{font-style:normal;color:var(--g)}
+
+/* ---------- painel de entrada (direita) ---------- */
+.painel{position:fixed;top:0;right:0;bottom:0;width:var(--painel);background:var(--carb);color:var(--off);display:flex;flex-direction:column;justify-content:safe center;padding:32px 40px;overflow:auto;z-index:10}
+.painel::before{content:"";position:absolute;width:420px;height:420px;top:-140px;left:-80px;border-radius:50%;background:radial-gradient(circle,rgba(47,214,123,.28),transparent 65%);filter:blur(20px);pointer-events:none}
+.painel::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.2px);background-size:22px 22px;pointer-events:none;mask:radial-gradient(circle at 50% 30%,#000,transparent 75%)}
+.painel>*{position:relative;z-index:1}
+.liz3d{width:112px;margin:0 auto -6px;filter:drop-shadow(0 18px 30px rgba(47,214,123,.25));animation:flutua 5s ease-in-out infinite}
+@keyframes flutua{50%{transform:translateY(-8px)}}
+.pcard{border-radius:var(--r20);padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(8px)}
+.pcard .k{font-family:var(--mono);font-size:11px;color:var(--g);letter-spacing:.04em}
+.pcard h2{margin-top:8px;font-size:26px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1.15}
+.pcard p{margin-top:8px;font-size:14px;line-height:1.5;color:#A8ADB8}
+.gbtn{margin-top:20px;width:100%;height:48px;display:flex;align-items:center;justify-content:center;gap:12px;border-radius:12px;background:#fff;color:var(--carb);font:inherit;font-size:15px;font-weight:600;border:0;cursor:pointer;transition:transform .15s,box-shadow .2s}
+.gbtn:hover{box-shadow:0 0 0 4px rgba(47,214,123,.35)}
+.gbtn:active{transform:scale(.98)}
+.gbtn svg{width:20px;height:20px}
+.ou{display:flex;align-items:center;gap:12px;margin:20px 0 8px;font-size:12px;color:#6E7380}
+.ou::before,.ou::after{content:"";height:1px;flex:1;background:rgba(255,255,255,.1)}
+.campo{display:block;margin-top:10px}
+.campo span{display:block;font-size:12px;color:#8A90A0;margin-bottom:6px}
+.campo input{width:100%;height:42px;padding:0 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#fff;font:inherit;font-size:15px;outline:0;transition:border-color .2s}
+.campo input:focus{border-color:var(--g)}
+.campo input::placeholder{color:#5D6270}
+.quero{margin-top:16px;width:100%;height:48px;border-radius:12px;border:0;cursor:pointer;font:inherit;font-size:15px;font-weight:600;color:var(--carb);background:linear-gradient(180deg,#4BE58F,#22C46C);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 10px 24px rgba(47,214,123,.3)}
+.err{min-height:18px;margin-top:8px;font-size:13px;color:#FF8A8E}
+.feito{display:none;margin-top:16px;padding:16px;border-radius:12px;background:rgba(47,214,123,.12);color:#9FF2C4;font-size:14px;line-height:1.5}
+.pcard.ok form{display:none}.pcard.ok .feito{display:block}
+.pnota{margin-top:16px;font-size:12px;color:#6E7380;text-align:center;line-height:1.5}
+
+/* barra do celular */
+.barra-m{display:none}
+
+/* entrada animada */
+.aparece{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.aparece.on{opacity:1;transform:none}
+
+@media (max-height:760px) and (min-width:861px){ .liz3d{width:84px} .pcard h2{font-size:22px} .campo span{margin-bottom:4px} .campo{margin-top:8px} .pnota{display:none} }
+@media (max-width:1100px){ :root{--painel:380px} .wrap{padding:0 32px} .hero h1{font-size:52px} .angulos{grid-template-columns:1fr} }
+@media (max-width:860px){
+  .vit{margin-right:0}.vit::before{right:0}
+  .painel{position:fixed;top:auto;left:0;right:0;bottom:0;width:auto;max-height:88vh;border-radius:24px 24px 0 0;transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.7,.2,1);justify-content:flex-start;padding:24px 16px 32px}
+  .painel.on{transform:none}
+  .painel .fechar{display:flex}
+  .liz3d{width:96px}
+  .barra-m{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:9;gap:8px;padding:8px;border-radius:999px;background:rgba(10,11,14,.92);backdrop-filter:blur(10px);box-shadow:0 16px 40px rgba(10,11,14,.3)}
+  .barra-m button{flex:1;height:44px;border-radius:999px;border:0;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+  .barra-m .e{background:#fff;color:var(--carb)}.barra-m .q{background:var(--g);color:var(--carb)}
+  .wrap{padding:0 16px}
+  .topo nav{display:none}
+  .hero{padding:32px 0 32px;text-align:center}
+  .hero h1{font-size:38px;letter-spacing:-.04em}
+  .hero p.sub{font-size:16px;margin-inline:auto}
+  .busca{padding-left:16px}.busca .tx{font-size:15px;text-align:left}.eyebrow{font-size:12px;height:auto;padding:4px 12px 4px 4px;text-align:left}.ir span{display:none}.ir{padding:0 6px}
+  .prova{justify-content:center;flex-wrap:wrap;text-align:center}
+  section.s{padding-top:64px;text-align:center}
+  .s h2{font-size:30px;margin-inline:auto}.s p.lead{margin-inline:auto}
+  .passo{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .passo .tags{justify-content:center}
+  .vitrine img{height:380px}
+  .lista-cap{grid-template-columns:1fr;text-align:left}
+  .dupla{grid-template-columns:1fr;text-align:left}
+  .fecho{grid-template-columns:1fr;padding:32px 24px;text-align:center;justify-items:center}
+  .fecho h2{font-size:28px}
+  .cred{padding-bottom:96px}
+}
+.painel .fechar{display:none;position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:#fff;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.aparece{opacity:1;transform:none}}
+</style>
+<link rel="canonical" href="https://kompila.com.br/prospeccao/">
+<meta property="og:title" content="Prospecção · Kompila">
+<meta property="og:description" content="Você fala o nicho e a cidade. A Liz lê o Google, o site e as avaliações de cada empresa e te entrega quem tem motivo pra comprar, com a mensagem pronta.">
+<meta property="og:image" content="https://kompila.com.br/prospeccao/img/landing_capivara.png">
+<link rel="icon" href="img/liz_rosto_3d.png">
 </head>
-<body class="fora">
+<body>
 
-<div id="vp"><div id="world"><svg id="wires"></svg></div></div>
-<main id="mobv" hidden></main>
+<div class="vit">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="wrap">
+    <header class="topo">
+      <a class="marca" href="https://kompila.com.br/">[ <i>kompila</i> ]</a>
+      <nav><a href="#como">Como funciona</a><a href="#capivara">A capivara</a><a href="#lista">Lista de Instagram</a></nav>
+    </header>
 
-<div class="top">
-  <div class="pill"><div class="logo">[ <i>kompila</i> ]</div><div class="sepv"></div><div class="file">Prospecção <span id="fname"></span></div></div>
-  <div class="pill" style="padding:0 4px" id="pHist" hidden><button class="ibtn" id="bHist" title="Buscas anteriores" aria-label="Buscas anteriores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 109-9 9.7 9.7 0 00-6.7 2.8L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg></button><button class="ibtn" id="bCapt" title="Minha captação" aria-label="Minha captação"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><span class="bdg" id="nCapt" hidden></span></button><button class="ibtn" id="bLista" title="Ver como lista" aria-label="Ver como lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg></button><button class="ibtn" id="bNova" title="Nova busca" aria-label="Nova busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
-  <div class="pill" style="margin-left:auto" id="pUser" hidden><div class="live"><div class="dot off" id="dot"></div><span id="liveTx">Liz parada</span></div><img class="av" id="av" alt="" referrerpolicy="no-referrer"><span class="av av-l" id="avL" hidden></span><button class="ibtn" id="bSair" title="Sair" aria-label="Sair"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 4H5a1 1 0 00-1 1v14a1 1 0 001 1h4M16 17l5-5-5-5M21 12H9"/></svg></button></div>
-  <div class="pill" style="padding:0 4px" id="pZoom" hidden><button class="ibtn" id="zf" title="Ver tudo" aria-label="Ver tudo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
-</div>
-<div class="hist" id="hist"></div>
-<button class="hist-x" id="histX" aria-label="Fechar" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <section class="hero">
+      <div class="eyebrow aparece"><b>prospecção</b>IA sob medida pra pequena e média empresa</div>
+      <h1 class="aparece">Quais empresas da sua cidade valem a sua <em>ligação</em> hoje?</h1>
+      <p class="sub aparece">Você fala o nicho e a cidade. A Liz lê o Google, o site e as avaliações de cada empresa e te entrega <b>quem tem motivo pra comprar</b>, com a mensagem pronta. Nada sai sem o seu ok.</p>
+      <div class="busca aparece" id="busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><div class="tx" id="dig"></div><button class="ir" data-entrar><span>Começar</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button></div>
+      <div class="prova aparece"><span class="num">[ <i>60</i> ] empresas lidas em pouco mais de 1 minuto</span><span>no nosso teste com padarias de Santos</span></div>
+    </section>
+  </div>
 
-<!-- login -->
-<div class="over" id="login" hidden>
-  <div class="card">
-    <img src="img/liz_fala_3d.png" alt="Liz">
-    <div>
-      <div class="stp">Prospecção da Kompila</div>
-      <h2>Oi, eu sou a Liz.<br>Bora achar <em>cliente bom</em> hoje?</h2>
-      <p class="sub">Eu procuro empresas, leio o Google, o site e as avaliações, e te entrego a capivara de cada uma com a abordagem pronta. Nada sai sem o seu ok.</p>
-      <button class="gbtn" id="bGoogle"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 01-2.2 3.3v2.7h3.5c2.1-1.9 3.3-4.7 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.7c-1 .7-2.3 1.1-3.8 1.1-2.9 0-5.4-2-6.3-4.6H2.1v2.8A11 11 0 0012 23z"/><path fill="#FBBC05" d="M5.7 14.1a6.6 6.6 0 010-4.2V7.1H2.1a11 11 0 000 9.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.1-3.1A11 11 0 002.1 7.1l3.6 2.8C6.6 7.3 9.1 5.4 12 5.4z"/></svg>Entrar com o Google</button>
-      <div class="err" id="loginErr"></div>
-    </div>
+  <div class="faixa"><div class="trilho" id="faixa"></div></div>
+
+  <div class="wrap">
+    <section class="s" id="como">
+      <div class="rot aparece">COMO FUNCIONA</div>
+      <h2 class="aparece">Três passos. Você só decide no último.</h2>
+      <div class="passos">
+        <div class="passo aparece"><div class="n">1</div><div><h3>Você diz o nicho e a cidade</h3><p>Ou sobe a sua lista de clientes em Excel. Conta pessoal, como e-mail de Gmail e MEI com nome de pessoa, fica de fora sozinha.</p><div class="tags"><span>pet shop em Mogi</span><span>clínica em Campinas</span><span>sua planilha</span></div></div></div>
+        <div class="passo aparece"><div class="n">2</div><div><h3>A Liz lê cada empresa</h3><p>Nota e avaliações no Google, o site no celular e no computador, se tem WhatsApp, se anuncia, o Instagram e as fotos da loja.</p><div class="tags"><span>Google Meu Negócio</span><span>site</span><span>anúncios</span><span>Instagram</span></div></div></div>
+        <div class="passo aparece"><div class="n">3</div><div><h3>Você recebe a capivara e aprova</h3><p>Cada empresa vem com o motivo pra abordar, a prova e a mensagem pronta no canal certo. Você aprova, ajusta ou pula.</p><div class="tags"><span>aprovar</span><span>ajustar</span><span>pular</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="s" id="capivara">
+      <div class="rot aparece">A CAPIVARA</div>
+      <h2 class="aparece">Tudo o que você precisa saber antes de ligar.</h2>
+      <p class="lead aparece">Uma página por empresa, com o que dá pra ver de fora e o que isso significa pra você vender.</p>
+      <div class="vitrine aparece"><span class="selo">exemplo · empresa fictícia</span><img src="img/landing_capivara.png" alt="Exemplo de capivara de uma padaria: nota de oportunidade, resumo, print do site, fotos e blocos de diagnóstico"></div>
+      <div class="lista-cap">
+        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Print do site no celular e no computador, com a velocidade medida</div>
+        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>O que falta: WhatsApp, chat, pedido online, site próprio</div>
+        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Se já anuncia: pixel da Meta e tag do Google no site</div>
+        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>As avaliações que mostram o problema, com data</div>
+        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Marca, cores e fotos da loja, pra você chegar sabendo com quem fala</div>
+        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>A mensagem pronta por e-mail, direct ou roteiro de ligação</div>
+      </div>
+    </section>
+
+    <section class="s">
+      <div class="rot aparece">QUEM VALE A ABORDAGEM</div>
+      <h2 class="aparece">Empresa boa também é cliente.</h2>
+      <p class="lead aparece">Não é só quem tem reclamação. Cada empresa entra por um dos três motivos, e a mensagem muda junto.</p>
+      <div class="angulos">
+        <div class="ang dor aparece"><span class="ch">Dor</span><h3>Perde cliente por não responder</h3><p>Avaliação de quem mandou mensagem, ligou ou tentou encomendar e ficou sem resposta.</p></div>
+        <div class="ang canal aparece"><span class="ch">Falta de canal</span><h3>Não tem por onde ser chamada</h3><p>Sem site próprio, só Facebook ou Instagram no lugar, sem WhatsApp na página.</p></div>
+        <div class="ang cres aparece"><span class="ch">Crescimento</span><h3>Está cheia de cliente</h3><p>Nota alta e muita avaliação. A conversa é sobre atender mais gente sem contratar.</p></div>
+      </div>
+    </section>
+
+    <section class="s" id="lista">
+      <div class="rot aparece">SÓ A LISTA</div>
+      <h2 class="aparece">Precisa só dos contatos? Também tem.</h2>
+      <div class="dupla">
+        <div class="cartao esc aparece"><h3>Instagram, e-mail e WhatsApp</h3><p>De todas as empresas da busca, quando estão no site delas. Sem custo de capivara.</p>
+          <div class="igs"><div><i></i>@padaria.exemplo<span>Gonzaga</span></div><div><i></i>@emporio.exemplo<span>Boqueirão</span></div><div><i></i>@confeitaria.exemplo<span>Embaré</span></div></div></div>
+        <div class="cartao aparece"><h3>Numa planilha pronta</h3><p>Abre no Excel. Conta pessoal da sua lista sai riscada antes de qualquer busca.</p>
+          <div class="planilha"><div><span>EMPRESA</span><span>INSTAGRAM</span><span>ÂNGULO</span></div><div><span>Padaria Exemplo</span><span>@padaria.exemplo</span><span>Dor</span></div><div><span>Empório Exemplo</span><span>@emporio.exemplo</span><span>Crescimento</span></div><div class="riscado"><span>12.345.678 Fulano</span><span>MEI</span><span>fora</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="fecho aparece">
+      <div><h2>Me diz o nicho e a cidade.</h2><p>Em pouco mais de um minuto você tem as empresas que valem a ligação, com a mensagem pronta.</p><button class="ir" data-entrar><span>Começar agora</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button></div>
+      <img src="img/liz_fala_3d.png" alt="Liz">
+    </section>
+    <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div>
   </div>
 </div>
 
-<!-- pergunta -->
-<div class="over" id="ask" hidden><div class="card"><img src="img/liz_fala_3d.png" alt="Liz"><div id="askc"></div></div></div>
-<input type="file" id="arq" accept=".xlsx,.xls,.csv" hidden>
+<!-- painel de entrada -->
+<aside class="painel" id="painel">
+  <button class="fechar" id="pFechar" aria-label="Fechar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <img class="liz3d" src="img/liz_fala_3d.png" alt="Liz">
+  <div class="pcard" id="pcard">
+    <div class="k">[ PROSPECÇÃO ]</div>
+    <h2>Já tem acesso?</h2>
+    <p>Entra com a mesma conta Google que a gente liberou.</p>
+    <button class="gbtn" id="gbtn"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 01-2.2 3.3v2.7h3.5c2.1-1.9 3.3-4.7 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.7c-1 .7-2.3 1.1-3.8 1.1-2.9 0-5.4-2-6.3-4.6H2.1v2.8A11 11 0 0012 23z"/><path fill="#FBBC05" d="M5.7 14.1a6.6 6.6 0 010-4.2V7.1H2.1a11 11 0 000 9.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.1-3.1A11 11 0 002.1 7.1l3.6 2.8C6.6 7.3 9.1 5.4 12 5.4z"/></svg>Entrar com o Google</button>
+    <div class="ou">ainda não tem acesso?</div>
+    <form id="fq" novalidate>
+      <label class="campo"><span>Seu nome</span><input name="nome" autocomplete="name" placeholder="Como te chamamos"></label>
+      <label class="campo"><span>Empresa</span><input name="empresa" autocomplete="organization" placeholder="Nome da sua empresa"></label>
+      <label class="campo"><span>WhatsApp</span><input name="whats" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 99999-9999"></label>
+      <button class="quero" type="submit">Quero testar</button>
+      <div class="err" id="ferr"></div>
+    </form>
+    <div class="feito"><b>Recebido.</b><br>A gente te chama no WhatsApp pra liberar o seu acesso.</div>
+  </div>
+  <p class="pnota">Seus dados ficam só com a Kompila.</p>
+</aside>
+<div class="barra-m"><button class="e" data-entrar>Entrar</button><button class="q" data-quero>Quero testar</button></div>
 
-<div class="reply" id="reply"><div class="in"><img src="img/liz_rosto_3d.png" alt=""><div id="replyTx"></div></div></div>
-<div class="bar">
-  <img src="img/liz_rosto_3d.png" alt="">
-  <input id="inp" placeholder="Fala com a Liz. Ex: padaria em Santos" autocomplete="off">
-  <button class="btn go" id="bEnv">Enviar</button>
-</div>
-
-<div class="cap-o" id="capO"></div>
-<aside class="cap" id="cap" aria-label="Capivara"></aside>
-
+<script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
+<script src="/js/pixel.js" defer></script>
+<script src="/js/anima.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="config.js"></script>
-<script src="app.js"></script>
+<script src="app/config.js"></script>
+<script>
+// busca que se digita sozinha
+const ex = ['padaria em Santos', 'pet shop em Mogi das Cruzes', 'clínica odontológica em Campinas', 'imobiliária em Ribeirão Preto', 'academia em São Paulo']
+const dig = document.getElementById('dig'); let ei = 0, ci = 0, apagando = false
+;(function escreve() {
+  const t = ex[ei]
+  if (!apagando) { ci++; if (ci > t.length) { apagando = true; return setTimeout(escreve, 1600) } }
+  else { ci--; if (ci === 0) { apagando = false; ei = (ei + 1) % ex.length } }
+  dig.innerHTML = t.slice(0, ci) + '<span class="cur"></span>'
+  setTimeout(escreve, apagando ? 28 : 55)
+})()
+// faixa de nichos
+const nichos = ['Padaria', 'Pet shop', 'Clínica odontológica', 'Imobiliária', 'Academia', 'Pizzaria', 'Hotel', 'Energia solar', 'Oficina', 'Contabilidade', 'Loja de roupa', 'Estética']
+const cid = ['Santos', 'Mogi das Cruzes', 'Campinas', 'São Paulo', 'Ribeirão Preto', 'Curitiba']
+const itens = nichos.map((n, i) => `<span>${n}<i>${cid[i % cid.length]}</i></span>`).join('')
+document.getElementById('faixa').innerHTML = itens + itens
+// entrada ao rolar
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target) } }), { threshold: .12 })
+document.querySelectorAll('.aparece').forEach((el, i) => { el.style.transitionDelay = (el.closest('.hero') ? i * 90 : 0) + 'ms'; io.observe(el) })
+// painel no celular
+const painel = document.getElementById('painel'), celular = () => innerWidth <= 860
+function abrePainel(foco) { if (celular()) painel.classList.add('on'); if (foco === 'quero') document.querySelector('#fq input').focus({ preventScroll: true }); else document.getElementById('gbtn').focus({ preventScroll: true }) }
+document.querySelectorAll('[data-entrar]').forEach(b => b.onclick = () => abrePainel('entrar'))
+document.querySelectorAll('[data-quero]').forEach(b => b.onclick = () => abrePainel('quero'))
+document.getElementById('busca').onclick = e => { if (!e.target.closest('.ir')) abrePainel('entrar') }
+document.getElementById('pFechar').onclick = () => painel.classList.remove('on')
+// login de verdade: o Google volta direto pro app
+const sb = supabase.createClient(KP_CONFIG.url, KP_CONFIG.anon)
+const APP = location.origin + '/prospeccao/app/'
+document.getElementById('gbtn').onclick = async () => {
+  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: APP } })
+  if (error) alertaDesenho('Não abriu o login. Tenta de novo.')
+}
+sb.auth.getSession().then(({ data: { session } }) => {
+  if (!session) return
+  const nome = (session.user.user_metadata?.full_name || session.user.email || '').split(' ')[0]
+  document.querySelector('.pcard h2').textContent = `Bem-vindo de volta${nome ? ', ' + nome : ''}.`
+  document.querySelector('.pcard p').textContent = 'Você já está conectado.'
+  const b = document.getElementById('gbtn'); b.innerHTML = 'Abrir a prospecção'; b.onclick = () => location.href = APP
+  document.querySelectorAll('[data-entrar]').forEach(x => x.onclick = () => location.href = APP)
+})
+document.getElementById('fq').onsubmit = e => {
+  e.preventDefault()
+  const f = new FormData(e.target), nome = f.get('nome').trim(), emp = f.get('empresa').trim(), w = f.get('whats').replace(/\D/g, '')
+  const err = document.getElementById('ferr')
+  if (!nome) { err.textContent = 'Me fala o seu nome.'; return e.target.nome.focus() }
+  if (!emp) { err.textContent = 'Qual é a empresa?'; return e.target.empresa.focus() }
+  if (w.length < 10) { err.textContent = 'Confere o WhatsApp com DDD.'; return e.target.whats.focus() }
+  err.textContent = ''
+  const bt = e.target.querySelector('.quero'); bt.disabled = true; bt.textContent = 'Enviando…'
+  const CH = 'kmp_kompila'
+  let sessao; try { sessao = localStorage.getItem('liz_sessao_' + CH) } catch (_) {}
+  if (!sessao) { const a = new Uint8Array(16); crypto.getRandomValues(a); sessao = Array.from(a, x => x.toString(16).padStart(2, '0')).join(''); try { localStorage.setItem('liz_sessao_' + CH, sessao) } catch (_) {} }
+  const utm = { utm_source: 'prospeccao', utm_medium: 'site', utm_campaign: 'prospeccao_teste', utm_content: emp.slice(0, 80) }
+  new URLSearchParams(location.search).forEach((v, k) => { if (/^utm_/.test(k)) utm[k] = v })
+  fetch('https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/chat_site', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chave: CH, sessao, url: location.href, utm, nome, telefone: w }) })
+    .then(r => r.json().then(j => { if (!r.ok) throw new Error(j.erro || 'erro') }))
+    .then(() => document.getElementById('pcard').classList.add('ok'))
+    .catch(() => { bt.disabled = false; bt.textContent = 'Quero testar'; err.textContent = 'Não enviou agora. Tenta de novo?' })
+}
+function alertaDesenho(t) { const b = document.getElementById('gbtn'); const o = b.innerHTML; b.textContent = t; setTimeout(() => b.innerHTML = o, 1800) }
+</script>
 </body>
 </html>
