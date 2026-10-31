@@ -25,6 +25,8 @@ function glowbos_crm_hex() { return bin2hex( random_bytes( 16 ) ); }
 add_action( 'wp_head', function () {
 	if ( is_admin() ) return;
 	echo '<script src="https://crm.kompila.com.br/acessos.js" data-chave="' . esc_attr( GLOWBOS_CRM_CHAVE ) . '" defer></script>' . "\n";
+	// 31/10: medição avançada (formulário com desistência, cliques, rolagem, grupo de página) no Google Analytics que a loja já tem e no CRM
+	echo '<script src="https://crm.kompila.com.br/medicao.js" data-ga="G-11H893WBQ3" defer></script>' . "\n";
 }, 99 );
 
 /* manda um "formulário do site" pro CRM (vira lead com a primeira fala "Preencheu o formulário do site (<rotulo>)") */
