@@ -527,3 +527,6 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 @keyframes lizFlutua{50%{transform:translateY(-8px)}}
 @keyframes pt{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:none}}
 @keyframes cargaIn{from{opacity:0}}
+.foto.post{display:block;text-decoration:none;color:inherit}
+.foto.post span{display:inline-flex;align-items:center;gap:4px}
+.foto.post span svg{width:12px;height:12px;color:#C93676}
