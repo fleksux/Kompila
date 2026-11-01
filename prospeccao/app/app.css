@@ -628,3 +628,10 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .fl-addr input{flex:1;min-width:0;height:40px;border:1px solid var(--line2);border-radius:var(--r8);padding:0 12px;font:inherit;font-size:15px;outline:0;background:#fff}
 .fl-addr input:focus{border-color:var(--a)}
 .fl-addr .btn{flex:none;height:40px}
+.pf-free{margin-top:12px;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh);padding:16px 20px}
+.pf-free-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:13px;color:var(--mu)}
+.pf-free-h b{font-family:var(--mono);font-size:16px;color:var(--tx)}
+.pf-free-h b i{font-style:normal;font-size:12px;color:var(--mu)}
+.pf-free-b{height:7px;border-radius:4px;background:var(--line);margin-top:10px;overflow:hidden}
+.pf-free-b em{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#7BF0B0,#14A35A)}
+.pf-free small.neg{display:block;margin-top:8px;font-size:12px}

@@ -929,6 +929,7 @@ async function abrirPerfil(empilhar = true) {
     ${g ? `<div class="pf-t">Gestão da prospecção · ${mes}</div>
     <div class="pf-g">${card(g.contas, 'contas', `${g.novas_mes} nova${g.novas_mes === 1 ? '' : 's'} no mês`)}${card(g.ativas_mes, 'ativas no mês', 'fizeram busca')}${card(g.pagantes, 'pagantes', `${g.mes_gratis} em mês grátis`)}${card(reais(Number(g.custo_usd_mes)), 'gasto total de IA', `${g.buscas_mes} busca${g.buscas_mes === 1 ? '' : 's'} · ${g.raiox_mes} Raio-X`)}</div>
     ${g.pedidos ? `<div class="pf-al">${g.pedidos} pessoa${g.pedidos === 1 ? '' : 's'} pediu acesso por indicação e está esperando.</div>` : ''}
+    <div class="pf-free"><div class="pf-free-h"><span>Gasto com contas Free no mês</span><b>${brlC(g.custo_free_centavos || 0)} <i>de ${brlC(g.teto_free_centavos || 0)}</i></b></div><div class="pf-free-b"><em style="width:${Math.min(100, (g.custo_free_centavos || 0) / (g.teto_free_centavos || 1) * 100)}%"></em></div>${(g.custo_free_centavos || 0) >= (g.teto_free_centavos || 0) ? '<small class="neg">Teto atingido: contas Free pausadas até virar o mês.</small>' : ''}</div>
     <a class="btn go pf-crm" href="https://crm.kompila.com.br/kompila/prospeccao" target="_blank" rel="noopener">Abrir o controle completo no CRM</a>` : ''}
     <button class="pf-sair" id="pfSair">Sair da conta</button>
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
