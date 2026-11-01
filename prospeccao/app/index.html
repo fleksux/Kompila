@@ -55,8 +55,18 @@
 <div class="cap-o" id="capO"></div>
 <aside class="cap" id="cap" aria-label="Raio-X"></aside>
 
+<div class="over" id="pagar" hidden><div class="pay-card" role="dialog" aria-label="Pagamento">
+  <button class="ibtn pay-x" id="payX" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="pay-head"><img src="img/liz_rosto_3d.png" alt=""><div><div class="pay-k" id="payPlano">Assinar</div><h3 id="payTit">Pagamento</h3></div></div>
+  <div id="payBrick"></div>
+  <div class="err" id="payErr"></div>
+  <div class="pay-sec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>Pagamento seguro. O número do cartão vai direto pro Mercado Pago, a Kompila não vê.</div>
+  <button class="pay-redir" id="payRedir" type="button">Prefere pagar na página do Mercado Pago?</button>
+</div></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>

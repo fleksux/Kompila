@@ -943,13 +943,7 @@ async function abrirPerfil(empilhar = true) {
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
   $('pfPipe').onclick = () => abrirCaptacao()
   $('pfSair').onclick = async () => { await sb.auth.signOut(); location.reload() }
-  $('cap').querySelectorAll('[data-assinar]').forEach(b => b.onclick = async () => {
-    b.disabled = true; const o = b.textContent; b.textContent = 'Abrindo o pagamento…'
-    try { const { data, error } = await sb.functions.invoke('mp_assinar', { body: { plano: b.dataset.assinar } })
-      if (error || !data?.init_point) throw new Error(data?.erro || 'Não consegui abrir o pagamento agora.')
-      location.href = data.init_point
-    } catch (e) { b.disabled = false; b.textContent = o; liz(esc(e.message)) }
-  })
+  $('cap').querySelectorAll('[data-assinar]').forEach(b => b.onclick = () => abrirPagamento(b.dataset.assinar))
   $('cap').querySelectorAll('.pf-aviso').forEach(el => {
     const id = el.dataset.av
     el.querySelector('[data-teto]').onclick = async () => { await sb.rpc('gestor_config', { p_chave: 'teto_free', p_centavos: (g.teto_free_centavos || 0) + 10000 }); await sb.rpc('aviso_visto', { p_id: id }); liz('Teto solto. Free volta a aceitar novos.'); abrirPerfil(false) }
@@ -960,6 +954,53 @@ async function abrirPerfil(empilhar = true) {
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
 ;['av', 'avL'].forEach(id => { $(id).style.cursor = 'pointer'; $(id).onclick = () => abrirPerfil() })
+
+/* ======================= checkout transparente (cartão na tela, Mercado Pago) ======================= */
+const VALORP = { comeco: 147, escala: 340 }
+let mpInstance = null, payBrick = null, payPlano = null
+async function abrirPagamento(plano) {
+  if (!VALORP[plano]) return
+  payPlano = plano
+  $('payPlano').textContent = plano === 'comeco' ? 'Plano Começo' : 'Plano Escala'
+  $('payTit').textContent = `R$ ${VALORP[plano]}/mês`
+  $('payErr').textContent = ''
+  $('payBrick').innerHTML = '<div class="pay-load">Abrindo o pagamento seguro…</div>'
+  $('pagar').hidden = false
+  let pub = null
+  try { const { data } = await sb.functions.invoke('mp_assinar', { body: { pubkey: true } }); pub = data?.public_key } catch (_) {}
+  if (!pub || typeof MercadoPago === 'undefined') { $('payBrick').innerHTML = ''; $('payErr').textContent = 'Formulário indisponível agora. Use o botão abaixo pra pagar no Mercado Pago.'; return }
+  try {
+    if (!mpInstance) mpInstance = new MercadoPago(pub, { locale: 'pt-BR' })
+    if (payBrick) { try { payBrick.unmount() } catch (_) {} payBrick = null }
+    $('payBrick').innerHTML = ''
+    payBrick = await mpInstance.bricks().create('cardPayment', 'payBrick', {
+      initialization: { amount: VALORP[plano], payer: { email: usuario?.email || '' } },
+      customization: { paymentMethods: { maxInstallments: 1 }, visual: { hideFormTitle: true, style: { customVariables: { baseColor: '#12803F', formBackgroundColor: '#ffffff', borderRadiusMedium: '10px', borderRadiusLarge: '12px' } } } },
+      callbacks: {
+        onReady: () => {},
+        onError: () => { $('payErr').textContent = 'Deu um problema no formulário do cartão. Tenta de novo.' },
+        onSubmit: async (formData) => {
+          $('payErr').textContent = 'Processando o pagamento…'
+          try {
+            const { data, error } = await sb.functions.invoke('mp_assinar', { body: { plano, card_token: formData.token, payer_email: formData.payer?.email } })
+            if (error || !data?.ok) throw new Error(data?.erro || 'Não consegui cobrar o cartão. Confere os dados.')
+            $('pagar').hidden = true
+            liz(data.status === 'authorized' ? 'Assinatura ativa! Já pode usar à vontade.' : 'Pagamento em análise. Assim que aprovar, seu plano libera.')
+            abrirPerfil(false)
+          } catch (e) { $('payErr').textContent = e.message }
+        },
+      },
+    })
+  } catch (_) { $('payBrick').innerHTML = ''; $('payErr').textContent = 'Formulário indisponível agora. Use o botão abaixo pra pagar no Mercado Pago.' }
+}
+async function redirecionarPagamento() {
+  if (!payPlano) return
+  $('payErr').textContent = 'Abrindo o Mercado Pago…'
+  try { const { data, error } = await sb.functions.invoke('mp_assinar', { body: { plano: payPlano } }); if (error || !data?.init_point) throw new Error(data?.erro || 'Não consegui abrir agora.'); location.href = data.init_point }
+  catch (e) { $('payErr').textContent = e.message }
+}
+$('payX').onclick = () => { $('pagar').hidden = true; if (payBrick) { try { payBrick.unmount() } catch (_) {} payBrick = null } }
+$('payRedir').onclick = redirecionarPagamento
 
 /* ======================= indicar: 1 mês grátis quando o indicado vira cliente ======================= */
 const SITE = 'https://kompila.com.br/prospeccao/'
