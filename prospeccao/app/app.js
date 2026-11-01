@@ -429,6 +429,7 @@ addEventListener('popstate', () => {
   if (c === 'lista') abrirLista(false)
   else if (c === 'capt') abrirCaptacao(false)
   else if (c === 'fila') abrirFila(false)
+  else if (c === 'perfil') abrirPerfil(false)
   if (c !== 'ind' && !$('indO').hidden) fecharIndicar()
   else if (!c) { $('capO').classList.remove('on'); $('cap').classList.remove('on') }
 })
@@ -843,6 +844,45 @@ $('bEnv').onclick = () => { comando($('inp').value); $('inp').value = '' }
 let eraCelular = mob()
 addEventListener('resize', () => { if (mob() === eraCelular) return; eraCelular = mob(); if (busca && $('n_olhadas')) { const st = { ...busca }; const d = diags; montarCanvas(st, false); busca = st; diags = d; atualizarFunil(); desenharCards() } })
 sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.reload() })
+/* ======================= perfil: meu uso e, pro gestor, a prospecção inteira ======================= */
+const PLANO_TXT = { free: ['Free', 'testando'], mes_gratis: ['Mês grátis', 'ganho por indicação'], pagante: ['Pagante', 'cliente'], cancelou: ['Cancelado', ''] }
+async function abrirPerfil(empilhar = true) {
+  const ini = new Date(); ini.setDate(1); ini.setHours(0, 0, 0, 0); const desde = ini.toISOString()
+  const [uso, bus, ig, pl, gest] = await Promise.all([
+    sb.from('uso_ia').select('etapa, custo_usd').gte('criado_em', desde),
+    sb.from('buscas').select('id', { count: 'exact', head: true }).gte('criada_em', desde),
+    sb.from('consulta_meta').select('id', { count: 'exact', head: true }).gte('criado_em', desde),
+    sb.from('assinatura').select('plano, meses_gratis').maybeSingle(),
+    sb.rpc('sou_gestor'),
+  ])
+  const u = uso.data || [], gasto = u.reduce((t, x) => t + Number(x.custo_usd || 0), 0)
+  const plano = pl.data?.plano || 'free', mg = pl.data?.meses_gratis || 0
+  const g = gest.data ? (await sb.rpc('resumo_gestor')).data : null
+  const nome = usuario?.user_metadata?.full_name || usuario?.email || ''
+  const mes = new Date().toLocaleDateString('pt-BR', { month: 'long' })
+  const card = (v, k, s = '') => `<div class="pf-c"><b>${v}</b><span>${k}</span>${s ? `<small>${s}</small>` : ''}</div>`
+  $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Meu perfil</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b pf">
+    <header class="pf-h">${$('av').hidden ? `<span class="pf-av">${esc(nome.charAt(0).toUpperCase())}</span>` : `<img class="pf-av" src="${esc($('av').src)}" alt="" referrerpolicy="no-referrer">`}
+      <div><h2>${esc(nome)}</h2><small>${esc(usuario?.email || '')}</small></div><span class="pf-pl p-${plano}">${PLANO_TXT[plano][0]}${mg ? ` · ${mg} mês${mg === 1 ? '' : 'es'} grátis` : ''}</span></header>
+    <div class="pf-t">Meu uso em ${mes}</div>
+    <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(ig.count || 0, 'perfis do Instagram')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
+    <div class="pf-ac"><button class="btn line" id="pfInd">Indicar e ganhar 1 mês</button><button class="btn line" id="pfPipe">Ver meu pipeline</button></div>
+    ${g ? `<div class="pf-t">Gestão da prospecção · ${mes}</div>
+    <div class="pf-g">${card(g.contas, 'contas', `${g.novas_mes} nova${g.novas_mes === 1 ? '' : 's'} no mês`)}${card(g.ativas_mes, 'ativas no mês', 'fizeram busca')}${card(g.pagantes, 'pagantes', `${g.mes_gratis} em mês grátis`)}${card(reais(Number(g.custo_usd_mes)), 'gasto total de IA', `${g.buscas_mes} busca${g.buscas_mes === 1 ? '' : 's'} · ${g.raiox_mes} Raio-X`)}</div>
+    ${g.pedidos ? `<div class="pf-al">${g.pedidos} pessoa${g.pedidos === 1 ? '' : 's'} pediu acesso por indicação e está esperando.</div>` : ''}
+    <a class="btn go pf-crm" href="https://crm.kompila.com.br/kompila/prospeccao" target="_blank" rel="noopener">Abrir o controle completo no CRM</a>` : ''}
+    <button class="pf-sair" id="pfSair">Sair da conta</button>
+    <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
+  $('capX').onclick = fecharCapivara
+  $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
+  $('pfPipe').onclick = () => abrirCaptacao()
+  $('pfSair').onclick = async () => { await sb.auth.signOut(); location.reload() }
+  if (empilhar) empilha('perfil')
+  $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+}
+;['av', 'avL'].forEach(id => { $(id).style.cursor = 'pointer'; $(id).onclick = () => abrirPerfil() })
+
 /* ======================= indicar: 1 mês grátis quando o indicado vira cliente ======================= */
 const SITE = 'https://kompila.com.br/prospeccao/'
 const ST_IND = { pediu_acesso: ['Pediu acesso', ''], entrou: ['Entrou', 'en'], pagou: ['Virou cliente · 1 mês grátis pra você', 'ok'] }
@@ -893,6 +933,7 @@ abrirCaptacao = comCarga(abrirCaptacao, 'Aguarde, estou carregando o seu pipelin
 abrirLista = comCarga(abrirLista, 'Aguarde, estou carregando os resultados.')
 abrirFila = comCarga(abrirFila, 'Aguarde, estou montando a fila de envio.')
 abrirIndicar = comCarga(abrirIndicar, 'Aguarde, estou buscando o seu link.')
+abrirPerfil = comCarga(abrirPerfil, 'Aguarde, estou somando os números.')
 abrirBusca = comCarga(abrirBusca, 'Aguarde, estou carregando os resultados.')
 iniciar = comCarga(iniciar, 'Aguarde, estou abrindo a prospecção.')
 iniciar()

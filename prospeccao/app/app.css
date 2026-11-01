@@ -557,3 +557,24 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .ind-lst i.en{background:#EAF2FF;color:#2F6FDB}
 .ind-lst i.ok{background:var(--gs);color:var(--gd)}
 .ind-v{margin-top:10px;font-size:13px;color:var(--mu2)}
+
+/* perfil (01/11) */
+.cap-b.pf{max-width:720px;margin:0 auto}
+.pf-h{display:flex;align-items:center;gap:14px;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh);padding:18px 20px}
+.pf-av{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none;display:grid;place-items:center;background:linear-gradient(135deg,#4BE58F,#14A35A);color:#fff;font-weight:700;font-size:20px}
+.pf-h>div{flex:1;min-width:0}
+.pf-h h2{font-size:18px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pf-h small{font-size:13px;color:var(--mu)}
+.pf-pl{flex:none;font-size:12px;font-weight:600;padding:5px 10px;border-radius:12px;background:#F1F2EF;color:var(--mu)}
+.pf-pl.p-pagante{background:var(--gs);color:var(--gd)}.pf-pl.p-mes_gratis{background:#EAF2FF;color:#2F6FDB}.pf-pl.p-cancelou{background:var(--rs);color:var(--r)}
+.pf-t{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px}
+.pf-g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pf-c{background:var(--w);border-radius:var(--r12);box-shadow:var(--sh);padding:14px 16px}
+.pf-c b{display:block;font-family:var(--mono);font-size:24px;font-weight:700;line-height:1.15}
+.pf-c span{display:block;font-size:13px;font-weight:500;margin-top:2px}
+.pf-c small{display:block;font-size:11.5px;color:var(--mu);margin-top:2px}
+.pf-ac{display:flex;gap:8px;margin-top:12px}.pf-ac .btn{flex:1;height:42px}
+.pf-al{margin-top:10px;padding:10px 14px;border-radius:var(--r8);background:var(--as);color:var(--a);font-size:13px;font-weight:500}
+.pf-crm{display:flex;justify-content:center;align-items:center;height:44px;margin-top:12px;text-decoration:none}
+.pf-sair{display:block;margin:28px auto 0;font-size:13px;color:var(--mu);text-decoration:underline}
+@media (max-width:700px){ .pf-g{grid-template-columns:1fr 1fr} .pf-h{flex-wrap:wrap} .pf-ac{flex-direction:column} .pf-ac .btn{flex:none;height:46px} }
