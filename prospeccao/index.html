@@ -113,6 +113,8 @@ section.s{padding:96px 0 0}
 .igs div{display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;border-radius:var(--r8);background:rgba(255,255,255,.06);font-size:14px}
 .igs i{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#FEC053,#F2203E 45%,#B81AA0);flex:none}
 .igs span{margin-left:auto;font-family:var(--mono);font-size:11px;color:#7D8290}
+.igs .mais{justify-content:center;background:transparent;height:auto;padding:8px 0 0;color:#7BF0B0;font-family:var(--mono);font-size:12px}
+.planilha .mais{display:block;text-align:center;background:var(--papel);font-family:var(--mono);font-size:11px;color:var(--mu)}
 .planilha{margin-top:20px;border:1px solid var(--line);border-radius:var(--r12);overflow:hidden;font-size:13px}
 .planilha div{display:grid;grid-template-columns:1.4fr 1fr .8fr;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
 .planilha div:first-child{border-top:0;background:var(--papel);font-family:var(--mono);font-size:11px;color:var(--mu)}
@@ -299,12 +301,13 @@ section.s{padding:96px 0 0}
 
     <section class="s" id="lista">
       <div class="rot aparece">SÓ A LISTA</div>
-      <h2 class="aparece">Precisa só dos contatos? Também tem.</h2>
+      <h2 class="aparece">Precisa só dos contatos? Leva a lista inteira.</h2>
+      <p class="lead aparece">Numa busca só, dezenas de empresas com Instagram, e-mail e WhatsApp, prontas pra exportar. Sem Raio-X, sem custo por empresa.</p>
       <div class="dupla">
         <div class="cartao esc aparece"><h3>Instagram, e-mail e WhatsApp</h3><p>De todas as empresas da busca, quando estão no site delas. Sem custo de Raio-X.</p>
-          <div class="igs"><div><i></i>@padaria.exemplo<span>Gonzaga</span></div><div><i></i>@emporio.exemplo<span>Boqueirão</span></div><div><i></i>@confeitaria.exemplo<span>Embaré</span></div></div></div>
+          <div class="igs"><div><i></i>@padaria.exemplo<span>Gonzaga</span></div><div><i></i>@emporio.exemplo<span>Boqueirão</span></div><div><i></i>@confeitaria.exemplo<span>Embaré</span></div><div><i></i>@cafe.exemplo<span>Ponta da Praia</span></div><div><i></i>@doceria.exemplo<span>Aparecida</span></div><div class="mais">+ 55 empresas na mesma busca</div></div></div>
         <div class="cartao aparece"><h3>Numa planilha pronta</h3><p>Abre no Excel. Conta pessoal da sua lista sai riscada antes de qualquer busca.</p>
-          <div class="planilha"><div><span>EMPRESA</span><span>INSTAGRAM</span><span>ÂNGULO</span></div><div><span>Padaria Exemplo</span><span>@padaria.exemplo</span><span>Dor</span></div><div><span>Empório Exemplo</span><span>@emporio.exemplo</span><span>Crescimento</span></div><div class="riscado"><span>12.345.678 Fulano</span><span>MEI</span><span>fora</span></div></div></div>
+          <div class="planilha"><div><span>EMPRESA</span><span>INSTAGRAM</span><span>ÂNGULO</span></div><div><span>Padaria Exemplo</span><span>@padaria.exemplo</span><span>Dor</span></div><div><span>Empório Exemplo</span><span>@emporio.exemplo</span><span>Crescimento</span></div><div><span>Confeitaria Exemplo</span><span>@confeitaria.exemplo</span><span>Canal</span></div><div class="riscado"><span>12.345.678 Fulano</span><span>MEI</span><span>fora</span></div><div class="mais">+ 56 linhas · exporta em 1 clique</div></div></div>
       </div>
     </section>
 
