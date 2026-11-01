@@ -733,8 +733,10 @@ function desenharFila(feitos) {
       <div class="fl-h"><div><small>${fpos + 1} de ${fila.length} na fila</small><b>${esc(c.nome || e.nome)}</b><span>${esc(d.busca?.cidade === 'Lista' ? 'Lista · ' + d.busca.nicho : (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0])}${e.bairro ? ' · ' + esc(e.bairro) : ''}</span></div><span class="nt">${d.nota_dor ?? ''}</span></div>
       <label class="fl-l">Mensagem${d.abordagem || c.abordagem ? ' do Raio-X' : ' padrão (essa empresa não tem Raio-X)'} · dá pra mexer</label>
       <textarea id="fMsg">${esc(msg)}</textarea>
-      <div class="fl-ac">${w ? `<a class="btn ok" id="fZap" href="https://wa.me/${w}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Abrir no WhatsApp</a>` : `<div class="fl-sem">Sem WhatsApp. ${e.telefone ? 'O telefone é fixo: liga ou chama no Insta.' : 'Chama no Insta ou por e-mail.'}</div>`}
-        <div class="fl-alt">${e.telefone ? `<a class="btn line" data-feito href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">Ligar</a>` : ''}${e.instagram ? `<a class="btn line ig" data-copia data-feito href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Copiar e abrir Insta</a>` : ''}${e.email ? `<a class="btn line" data-feito href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}</div>
+      <div class="fl-ct">${e.instagram ? `<a href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener" class="ig">${IC.ig}@${esc(e.instagram)}</a>` : ''}${e.telefone ? `<span>${esc(e.telefone)}</span>` : ''}${e.email ? `<span>${esc(e.email)}</span>` : ''}</div>
+      ${w ? '' : `<div class="fl-add"><label>Não achei WhatsApp. Abre o Insta, pega o número e cola aqui:</label><div class="fl-addr"><input id="fAdd" inputmode="tel" placeholder="(11) 90000-0000" value="${esc(e.whatsapp || '')}"><button class="btn line sm" id="fAddB">Salvar</button></div></div>`}
+      <div class="fl-ac">${w ? `<a class="btn ok" id="fZap" href="https://wa.me/${w}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Enviar no WhatsApp</a>` : ''}
+        <div class="fl-alt">${e.telefone ? `<a class="btn line" data-feito href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">Ligar</a>` : ''}${e.email ? `<a class="btn line" data-feito href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}</div>
         <button class="btn ghost" id="fPula">Pular por agora</button></div>
       <div class="fl-ok" id="fOk" hidden>${IC.ok}Marcada como contatada. Indo pra próxima…</div>
       ${prox ? `<div class="fl-prox">Próxima: <b>${esc(prox.capivara?.nome || prox.empresa?.nome)}</b></div>` : ''}</div>`
@@ -746,6 +748,14 @@ function desenharFila(feitos) {
   if ($('fPipe')) $('fPipe').onclick = () => abrirCaptacao()
   if ($('fMais')) $('fMais').onclick = () => { passouLimite = true; desenharFila(feitos) }
   if (!d || cheio) return
+  if ($('fAddB')) $('fAddB').onclick = async () => {
+    const num = ($('fAdd').value || '').replace(/\D/g, '')
+    if (num.length < 10) return liz('Confere o número com DDD.')
+    $('fAddB').disabled = true; $('fAddB').textContent = 'Salvando…'
+    const { error } = await sb.from('empresas').update({ whatsapp: num }).eq('id', d.empresa.id)
+    if (error) { $('fAddB').disabled = false; $('fAddB').textContent = 'Salvar'; return liz('Não salvou o número. Tenta de novo.') }
+    d.empresa.whatsapp = num; desenharFila(feitos)
+  }
   const msgAtual = () => $('fMsg').value.trim()
   $('fMsg').oninput = () => { const z = $('fZap'); if (z) z.href = z.href.split('?')[0] + '?text=' + encodeURIComponent(msgAtual()) }
   const contatou = async () => {
