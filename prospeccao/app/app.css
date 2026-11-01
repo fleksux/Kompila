@@ -635,3 +635,7 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .pf-free-b{height:7px;border-radius:4px;background:var(--line);margin-top:10px;overflow:hidden}
 .pf-free-b em{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#7BF0B0,#14A35A)}
 .pf-free small.neg{display:block;margin-top:8px;font-size:12px}
+.pf-aviso{margin-top:12px;padding:14px 16px;border-radius:var(--r12);background:var(--as);border:1px solid #F0D78A}
+.pf-aviso>div:first-child{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;color:#7A5200;line-height:1.45}
+.pf-aviso svg{width:16px;height:16px;flex:none;margin-top:1px;color:var(--a)}
+.pf-aviso-ac{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}

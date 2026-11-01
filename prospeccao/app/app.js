@@ -912,6 +912,7 @@ async function abrirPerfil(empilhar = true) {
   const u = uso.data || [], gasto = u.reduce((t, x) => t + Number(x.custo_usd || 0), 0)
   const plano = pl.data?.plano || 'free', mg = pl.data?.meses_gratis || 0
   const g = gest.data ? (await sb.rpc('resumo_gestor')).data : null
+  const avisos = gest.data ? ((await sb.rpc('avisos_gestor')).data || []) : []
   await carregarSaldo()
   const movs = SALDO.isento ? [] : ((await sb.from('movimento_saldo').select('centavos, tipo, descricao, criado_em').order('criado_em', { ascending: false }).limit(6)).data || [])
   const nome = usuario?.user_metadata?.full_name || usuario?.email || ''
@@ -929,6 +930,7 @@ async function abrirPerfil(empilhar = true) {
     ${g ? `<div class="pf-t">Gestão da prospecção · ${mes}</div>
     <div class="pf-g">${card(g.contas, 'contas', `${g.novas_mes} nova${g.novas_mes === 1 ? '' : 's'} no mês`)}${card(g.ativas_mes, 'ativas no mês', 'fizeram busca')}${card(g.pagantes, 'pagantes', `${g.mes_gratis} em mês grátis`)}${card(reais(Number(g.custo_usd_mes)), 'gasto total de IA', `${g.buscas_mes} busca${g.buscas_mes === 1 ? '' : 's'} · ${g.raiox_mes} Raio-X`)}</div>
     ${g.pedidos ? `<div class="pf-al">${g.pedidos} pessoa${g.pedidos === 1 ? '' : 's'} pediu acesso por indicação e está esperando.</div>` : ''}
+    ${avisos.length ? avisos.map(av => `<div class="pf-aviso" data-av="${av.id}"><div>${IC.at}<span>${esc(av.texto)}</span></div><div class="pf-aviso-ac"><button class="btn line sm" data-teto>Soltar +R$ 100 de teto</button><button class="btn ghost sm" data-tirafree>Tirar Free do site</button><button class="btn ghost sm" data-visto>Ok, vi</button></div></div>`).join('') : ''}
     <div class="pf-free"><div class="pf-free-h"><span>Gasto com contas Free no mês</span><b>${brlC(g.custo_free_centavos || 0)} <i>de ${brlC(g.teto_free_centavos || 0)}</i></b></div><div class="pf-free-b"><em style="width:${Math.min(100, (g.custo_free_centavos || 0) / (g.teto_free_centavos || 1) * 100)}%"></em></div>${(g.custo_free_centavos || 0) >= (g.teto_free_centavos || 0) ? '<small class="neg">Teto atingido: contas Free pausadas até virar o mês.</small>' : ''}</div>
     <a class="btn go pf-crm" href="https://crm.kompila.com.br/kompila/prospeccao" target="_blank" rel="noopener">Abrir o controle completo no CRM</a>` : ''}
     <button class="pf-sair" id="pfSair">Sair da conta</button>
@@ -937,6 +939,12 @@ async function abrirPerfil(empilhar = true) {
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
   $('pfPipe').onclick = () => abrirCaptacao()
   $('pfSair').onclick = async () => { await sb.auth.signOut(); location.reload() }
+  $('cap').querySelectorAll('.pf-aviso').forEach(el => {
+    const id = el.dataset.av
+    el.querySelector('[data-teto]').onclick = async () => { await sb.rpc('gestor_config', { p_chave: 'teto_free', p_centavos: (g.teto_free_centavos || 0) + 10000 }); await sb.rpc('aviso_visto', { p_id: id }); liz('Teto solto. Free volta a aceitar novos.'); abrirPerfil(false) }
+    el.querySelector('[data-tirafree]').onclick = async () => { await sb.rpc('gestor_config', { p_chave: 'free_no_site', p_centavos: 0 }); await sb.rpc('aviso_visto', { p_id: id }); liz('Tirei o Free do site. Só planos pagos aparecem.'); abrirPerfil(false) }
+    el.querySelector('[data-visto]').onclick = async () => { await sb.rpc('aviso_visto', { p_id: id }); abrirPerfil(false) }
+  })
   if (empilhar) empilha('perfil')
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }

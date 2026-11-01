@@ -292,7 +292,7 @@ section.s{padding:96px 0 0}
       <h2 class="aparece">Comece de graça. Pague quando valer a pena.</h2>
       <p class="lead aparece">Você testa com R$ 5 por nossa conta. Gostou, escolhe um plano. Lista é a empresa pra varrer; Raio-X é a empresa pronta pra abordar, com a mensagem feita pra ela.</p>
       <div class="planos">
-        <div class="plano aparece">
+        <div class="plano aparece" id="planoFree">
           <div class="pn">Free</div><div class="pp"><b>R$ 0</b></div>
           <div class="pd">Pra experimentar sem compromisso.</div>
           <ul><li>R$ 5 de saldo de boas-vindas</li><li>~300 empresas na lista ou 8 Raio-X</li><li>Mensagem pronta pra cada empresa</li><li>Pipeline e Instagram incluídos</li></ul>
@@ -379,6 +379,7 @@ document.getElementById('busca').onclick = e => { if (!e.target.closest('.ir')) 
 document.getElementById('pFechar').onclick = () => painel.classList.remove('on')
 // login de verdade: o Google volta direto pro app
 const sb = supabase.createClient(KP_CONFIG.url, KP_CONFIG.anon)
+sb.rpc('site_free').then(({ data }) => { if (data && (!data.no_site || !data.tem_vaga)) { const f = document.getElementById('planoFree'); if (f) f.remove() } }).catch(() => {})
 const APP = location.origin + '/prospeccao/app/'
 document.getElementById('gbtn').onclick = async () => {
   const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: APP } })
