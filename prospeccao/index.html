@@ -200,10 +200,14 @@ section.s{padding:96px 0 0}
 @media (max-width:1100px){ :root{--painel:380px} .wrap{padding:0 32px} .hero h1{font-size:52px} .angulos{grid-template-columns:1fr} }
 @media (max-width:860px){
   .vit{margin-right:0}.vit::before{right:0}
-  .painel{position:fixed;top:auto;left:0;right:0;bottom:0;width:auto;max-height:88vh;border-radius:24px 24px 0 0;transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.7,.2,1);justify-content:flex-start;padding:24px 16px 32px}
-  .painel.on{transform:none}
+  .painel{position:fixed;top:auto;left:0;right:0;bottom:0;width:auto;max-height:92vh;border-radius:24px 24px 0 0;transform:translateY(105%);transition:transform .45s cubic-bezier(.2,.7,.2,1);justify-content:flex-start;padding:18px 16px calc(20px + env(safe-area-inset-bottom));overflow-y:auto}
+  .painel.on{transform:none;box-shadow:0 0 0 100vmax rgba(10,11,14,.74)}
   .painel .fechar{display:flex}
-  .liz3d{width:96px}
+  .liz3d{width:64px;margin:0 auto -2px}
+  .pcard{padding:20px}
+  .lizq{font-size:19px;min-height:auto;margin-top:6px}
+  .passos{margin-top:12px}
+  #entrada p{font-size:13px}
   .barra-m{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:9;gap:8px;padding:8px;border-radius:999px;background:rgba(10,11,14,.92);backdrop-filter:blur(10px);box-shadow:0 16px 40px rgba(10,11,14,.3)}
   .barra-m button{flex:1;height:44px;border-radius:999px;border:0;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
   .barra-m .e{background:#fff;color:var(--carb)}.barra-m .q{background:var(--g);color:var(--carb)}
