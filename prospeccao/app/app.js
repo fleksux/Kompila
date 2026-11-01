@@ -906,7 +906,7 @@ async function abrirPerfil(empilhar = true) {
     sb.from('uso_ia').select('etapa, custo_usd').gte('criado_em', desde),
     sb.from('buscas').select('id', { count: 'exact', head: true }).gte('criada_em', desde),
     sb.from('consulta_meta').select('id', { count: 'exact', head: true }).gte('criado_em', desde),
-    sb.from('assinatura').select('plano, meses_gratis').maybeSingle(),
+    sb.from('assinatura').select('plano, plano_id, meses_gratis').maybeSingle(),
     sb.rpc('sou_gestor'),
   ])
   const u = uso.data || [], gasto = u.reduce((t, x) => t + Number(x.custo_usd || 0), 0)
@@ -922,6 +922,9 @@ async function abrirPerfil(empilhar = true) {
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Meu perfil</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b pf">
     <header class="pf-h">${$('av').hidden ? `<span class="pf-av">${esc(nome.charAt(0).toUpperCase())}</span>` : `<img class="pf-av" src="${esc($('av').src)}" alt="" referrerpolicy="no-referrer">`}
       <div><h2>${esc(nome)}</h2><small>${esc(usuario?.email || '')}</small></div><span class="pf-pl p-${plano}">${PLANO_TXT[plano][0]}${mg ? ` · ${mg} mês${mg === 1 ? '' : 'es'} grátis` : ''}</span></header>
+    ${(!SALDO.isento && pl.data?.plano !== 'pagante') ? `<div class="pf-t">Virar cliente</div>
+    <div class="pf-pl2"><button class="btn ok" data-assinar="comeco">Assinar Começo · R$ 147/mês</button><button class="btn line" data-assinar="escala">Assinar Escala · R$ 340/mês</button></div>
+    <p class="pf-pl2n">Pagamento seguro no Mercado Pago. Cobra todo mês, cancela quando quiser. ${BTN_COMO}</p>` : ''}
     <div class="pf-sd"><div><small>Seu saldo dá pra</small><b>${SALDO.isento ? 'usar à vontade' : `${rende().listas} listas simples`}</b><span>${SALDO.isento ? 'Conta isenta: nada é descontado.' : `até ${emp(rende().listas)} empresas, ou ${rende().avulsos} empresas com Raio-X · saldo ${brlC(SALDO.saldo)}`}</span></div>${BTN_COMO}</div>
     ${movs.length ? `<div class="pf-mv">${movs.map(m => `<div><span>${esc(m.descricao || m.tipo)}</span><small>${new Date(m.criado_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</small><b class="${m.centavos < 0 ? 'neg' : 'pos'}">${m.centavos < 0 ? '−' : '+'} ${brlC(Math.abs(m.centavos))}</b></div>`).join('')}</div>` : ''}
     <div class="pf-t">Meu uso em ${mes}</div>
@@ -939,6 +942,13 @@ async function abrirPerfil(empilhar = true) {
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
   $('pfPipe').onclick = () => abrirCaptacao()
   $('pfSair').onclick = async () => { await sb.auth.signOut(); location.reload() }
+  $('cap').querySelectorAll('[data-assinar]').forEach(b => b.onclick = async () => {
+    b.disabled = true; const o = b.textContent; b.textContent = 'Abrindo o pagamento…'
+    try { const { data, error } = await sb.functions.invoke('mp_assinar', { body: { plano: b.dataset.assinar } })
+      if (error || !data?.init_point) throw new Error(data?.erro || 'Não consegui abrir o pagamento agora.')
+      location.href = data.init_point
+    } catch (e) { b.disabled = false; b.textContent = o; liz(esc(e.message)) }
+  })
   $('cap').querySelectorAll('.pf-aviso').forEach(el => {
     const id = el.dataset.av
     el.querySelector('[data-teto]').onclick = async () => { await sb.rpc('gestor_config', { p_chave: 'teto_free', p_centavos: (g.teto_free_centavos || 0) + 10000 }); await sb.rpc('aviso_visto', { p_id: id }); liz('Teto solto. Free volta a aceitar novos.'); abrirPerfil(false) }

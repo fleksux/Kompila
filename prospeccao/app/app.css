@@ -639,3 +639,7 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .pf-aviso>div:first-child{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;color:#7A5200;line-height:1.45}
 .pf-aviso svg{width:16px;height:16px;flex:none;margin-top:1px;color:var(--a)}
 .pf-aviso-ac{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.pf-pl2{display:flex;gap:8px;flex-wrap:wrap}
+.pf-pl2 .btn{flex:1;min-width:160px;height:46px}
+.pf-pl2n{font-size:12.5px;color:var(--mu);margin-top:8px}
+@media (max-width:700px){ .pf-pl2{flex-direction:column} .pf-pl2 .btn{flex:none} }
