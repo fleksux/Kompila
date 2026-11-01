@@ -484,7 +484,8 @@ btA.onclick = avanca
 async function finaliza() {
   btA.disabled = true; btA.textContent = 'Só um instante…'
   try {
-    await sb.rpc('salvar_intake', { p_sessao: SESSAO, p_nome: resp.nome, p_empresa: resp.empresa, p_whats: resp.whats, p_vende: resp.vende, p_nicho: resp.nicho, p_cidade: resp.cidade, p_como: resp.como, p_indicado: IND || '' })
+    const { error } = await sb.rpc('salvar_intake', { p_sessao: SESSAO, p_nome: resp.nome || '', p_empresa: resp.empresa || '', p_whats: resp.whats || '', p_vende: resp.vende || '', p_nicho: resp.nicho || '', p_cidade: resp.cidade || '', p_como: resp.como || '', p_indicado: IND || '' })
+    if (error) throw error
     if (IND) sb.rpc('registrar_indicacao', { p_codigo: IND, p_nome: resp.nome, p_empresa: resp.empresa, p_telefone: resp.whats }).then(() => {}, () => {})
     fetch('https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/chat_site', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chave: CH, sessao: SESSAO, url: location.href, utm: { utm_source: 'prospeccao', utm_medium: IND ? 'indicacao' : 'site', utm_campaign: 'prospeccao_cadastro', utm_content: (resp.empresa || '').slice(0, 80) }, nome: resp.nome, telefone: resp.whats }) }).catch(() => {})
     document.getElementById('fimq').innerHTML = `Pronto, ${resp.nome}! Já te liberei. 🎉`
