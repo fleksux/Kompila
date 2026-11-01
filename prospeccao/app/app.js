@@ -36,13 +36,14 @@ const brlC = c => 'R$ ' + (c / 100).toFixed(2).replace('.', ',')
 const custoRaiox = () => ''   // 01/11 (Alex): a tela mostra o que dá pra fazer, não o preço; o preço fica no "?"
 // quanto o saldo rende: listas simples ou Raio-X (na busca nova, 1 lista + o resto em Raio-X)
 const rende = (c = SALDO.saldo) => ({ listas: Math.floor(c / SALDO.busca), raiox: Math.max(0, Math.floor((c - SALDO.busca) / SALDO.raiox)), avulsos: Math.floor(c / SALDO.raiox) })
+const emp = n => (n * 60).toLocaleString('pt-BR')   // cada lista simples traz até 60 empresas
 const BTN_COMO = '<button class="como" data-como title="Como funciona" aria-label="Como funciona">?</button>'
 function comoFunciona() {
   const ini = 500, r0 = rende(ini)
   $('indB').innerHTML = `<div class="ind-k">[ COMO FUNCIONA ]</div><h2>Você paga só pelo que usa.</h2>
     <div class="cf"><div><b>Lista simples</b><span>Até 60 empresas da cidade e do nicho, cada uma com potencial, motivo e os contatos que estão no site.</span><em>${brlC(SALDO.busca)} por busca</em></div>
     <div><b>Raio-X</b><span>Uma empresa completa: Google, site com prints e velocidade, anúncios, Instagram com números, avaliações e a mensagem pronta pra mandar.</span><em>${brlC(SALDO.raiox)} por empresa</em></div></div>
-    <p>Conta nova ganha <b>${brlC(ini)}</b> pra testar: dá pra ${r0.listas} listas simples ou ${r0.raiox} empresas com Raio-X. Pesquisar de novo o que você já pesquisou não desconta nada. Quando o saldo acabar, a Kompila recarrega pra você.</p>
+    <p>Conta nova ganha <b>${brlC(ini)}</b> pra testar: dá pra ${r0.listas} listas simples (até ${emp(r0.listas)} empresas) ou ${r0.raiox} empresas com Raio-X completo. Cada lista traz até 60 empresas; cidade pequena ou nicho raro pode trazer menos. Pesquisar de novo o que você já pesquisou não desconta nada. Quando o saldo acabar, a Kompila recarrega pra você.</p>
     ${SALDO.isento ? '<p><b>Sua conta é isenta:</b> usa à vontade, nada é descontado.</p>' : `<p>Seu saldo agora: <b>${brlC(SALDO.saldo)}</b>.</p>`}`
   $('indO').hidden = false; requestAnimationFrame(() => $('indO').classList.add('on'))
 }
@@ -52,7 +53,7 @@ async function boasVindas() {
   const { count } = await sb.from('buscas').select('id', { count: 'exact', head: true })
   if (count) return
   const r0 = rende()
-  setTimeout(() => liz(`Bem-vindo! Faça suas primeiras <b>${r0.listas} listas simples</b> ou <b>${r0.raiox} empresas com Raio-X</b> por nossa conta. ${BTN_COMO}`, 12000), 1500)
+  setTimeout(() => liz(`Bem-vindo! Faça suas primeiras <b>${r0.listas} listas simples (até ${emp(r0.listas)} empresas)</b> ou <b>${r0.raiox} empresas com Raio-X completo</b> por nossa conta. ${BTN_COMO}`, 12000), 1500)
 }
 async function carregarSaldo() { const { data } = await sb.rpc('meu_saldo'); if (data) SALDO = data; return SALDO }
 const ANG = { dor: 'Atendimento', canal: 'Presença digital', crescimento: 'Crescimento', nenhum: 'Fora do perfil' }
@@ -136,7 +137,7 @@ const custoModo = m => SALDO.busca + MODOS.find(x => x[0] === m)[3] * SALDO.raio
 function saldoDepois() {
   if (SALDO.isento) return `Sua conta é isenta: usa à vontade. ${BTN_COMO}`
   const m = esc_.modo || 'completa', c = custoModo(m), r0 = rende()
-  const base = `Seu saldo dá pra <b>${r0.listas} lista${r0.listas === 1 ? '' : 's'} simples</b> ou <b>${r0.raiox} empresa${r0.raiox === 1 ? '' : 's'} com Raio-X</b>. ${BTN_COMO}`
+  const base = `Seu saldo dá pra <b>${r0.listas} lista${r0.listas === 1 ? '' : 's'} simples (até ${emp(r0.listas)} empresas)</b> ou <b>${r0.raiox} empresa${r0.raiox === 1 ? '' : 's'} com Raio-X</b>. ${BTN_COMO}`
   return SALDO.saldo >= c || m === 'todas' ? base : `<span class="neg">Seu saldo não cobre essa opção.</span> ${base}`
 }
 function modosHtml() {
@@ -910,7 +911,7 @@ async function abrirPerfil(empilhar = true) {
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Meu perfil</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b pf">
     <header class="pf-h">${$('av').hidden ? `<span class="pf-av">${esc(nome.charAt(0).toUpperCase())}</span>` : `<img class="pf-av" src="${esc($('av').src)}" alt="" referrerpolicy="no-referrer">`}
       <div><h2>${esc(nome)}</h2><small>${esc(usuario?.email || '')}</small></div><span class="pf-pl p-${plano}">${PLANO_TXT[plano][0]}${mg ? ` · ${mg} mês${mg === 1 ? '' : 'es'} grátis` : ''}</span></header>
-    <div class="pf-sd"><div><small>Seu saldo dá pra</small><b>${SALDO.isento ? 'usar à vontade' : `${rende().listas} listas simples`}</b><span>${SALDO.isento ? 'Conta isenta: nada é descontado.' : `ou ${rende().avulsos} Raio-X · saldo ${brlC(SALDO.saldo)}`}</span></div>${BTN_COMO}</div>
+    <div class="pf-sd"><div><small>Seu saldo dá pra</small><b>${SALDO.isento ? 'usar à vontade' : `${rende().listas} listas simples`}</b><span>${SALDO.isento ? 'Conta isenta: nada é descontado.' : `até ${emp(rende().listas)} empresas, ou ${rende().avulsos} empresas com Raio-X · saldo ${brlC(SALDO.saldo)}`}</span></div>${BTN_COMO}</div>
     ${movs.length ? `<div class="pf-mv">${movs.map(m => `<div><span>${esc(m.descricao || m.tipo)}</span><small>${new Date(m.criado_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</small><b class="${m.centavos < 0 ? 'neg' : 'pos'}">${m.centavos < 0 ? '−' : '+'} ${brlC(Math.abs(m.centavos))}</b></div>`).join('')}</div>` : ''}
     <div class="pf-t">Meu uso em ${mes}</div>
     <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(ig.count || 0, 'perfis do Instagram')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
