@@ -164,6 +164,23 @@ section.s{padding:96px 0 0}
 .aparece.on{opacity:1;transform:none}
 
 @media (max-height:760px) and (min-width:861px){ .liz3d{width:84px} .pcard h2{font-size:22px} .campo span{margin-bottom:4px} .campo{margin-top:8px} .pnota{display:none} }
+.planos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.plano{position:relative;display:flex;flex-direction:column;padding:28px 24px;border-radius:var(--r20);background:#fff;border:1px solid var(--line);box-shadow:var(--sh)}
+.plano.destaque{border-color:var(--g);box-shadow:0 0 0 2px var(--g),0 20px 50px rgba(47,214,123,.18)}
+.plano .selo{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;font-weight:700;color:#06110A;background:var(--g);padding:4px 12px;border-radius:12px;white-space:nowrap}
+.plano .pn{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--gd);letter-spacing:.04em;text-transform:uppercase}
+.plano .pp{margin:10px 0 4px;display:flex;align-items:baseline;gap:4px}
+.plano .pp b{font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.plano .pp span{font-size:15px;color:var(--mu)}
+.plano .pd{font-size:14px;color:var(--mu);margin-bottom:18px}
+.plano ul{list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.plano li{position:relative;padding-left:26px;font-size:14.5px;line-height:1.45}
+.plano li::before{content:'';position:absolute;left:0;top:3px;width:16px;height:16px;border-radius:50%;background:var(--gs);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2312803F' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E");background-size:11px;background-repeat:no-repeat;background-position:center}
+.plano .pb{height:48px;border-radius:12px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;border:1px solid var(--line)}
+.plano .pb.go{background:var(--carb);color:#fff;border-color:var(--carb)}
+.plano .pb.line{background:#fff;color:var(--tx)}
+.plano .pb:hover{opacity:.9}
+@media (max-width:860px){ .planos{grid-template-columns:1fr;max-width:420px;margin-inline:auto} .plano.destaque{order:-1} }
 @media (max-width:1100px){ :root{--painel:380px} .wrap{padding:0 32px} .hero h1{font-size:52px} .angulos{grid-template-columns:1fr} }
 @media (max-width:860px){
   .vit{margin-right:0}.vit::before{right:0}
@@ -208,7 +225,7 @@ section.s{padding:96px 0 0}
   <div class="wrap">
     <header class="topo">
       <a class="marca" href="https://kompila.com.br/">[ <i>kompila</i> ]</a>
-      <nav><a href="#como">Como funciona</a><a href="#raio-x">O Raio-X</a><a href="#lista">Lista de Instagram</a></nav>
+      <nav><a href="#como">Como funciona</a><a href="#raio-x">O Raio-X</a><a href="#planos">Planos</a></nav>
     </header>
 
     <section class="hero">
@@ -267,6 +284,33 @@ section.s{padding:96px 0 0}
           <div class="igs"><div><i></i>@padaria.exemplo<span>Gonzaga</span></div><div><i></i>@emporio.exemplo<span>Boqueirão</span></div><div><i></i>@confeitaria.exemplo<span>Embaré</span></div></div></div>
         <div class="cartao aparece"><h3>Numa planilha pronta</h3><p>Abre no Excel. Conta pessoal da sua lista sai riscada antes de qualquer busca.</p>
           <div class="planilha"><div><span>EMPRESA</span><span>INSTAGRAM</span><span>ÂNGULO</span></div><div><span>Padaria Exemplo</span><span>@padaria.exemplo</span><span>Dor</span></div><div><span>Empório Exemplo</span><span>@emporio.exemplo</span><span>Crescimento</span></div><div class="riscado"><span>12.345.678 Fulano</span><span>MEI</span><span>fora</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="s" id="planos">
+      <div class="rot aparece">PLANOS</div>
+      <h2 class="aparece">Comece de graça. Pague quando valer a pena.</h2>
+      <p class="lead aparece">Você testa com R$ 5 por nossa conta. Gostou, escolhe um plano. Lista é a empresa pra varrer; Raio-X é a empresa pronta pra abordar, com a mensagem feita pra ela.</p>
+      <div class="planos">
+        <div class="plano aparece">
+          <div class="pn">Free</div><div class="pp"><b>R$ 0</b></div>
+          <div class="pd">Pra experimentar sem compromisso.</div>
+          <ul><li>R$ 5 de saldo de boas-vindas</li><li>~300 empresas na lista ou 8 Raio-X</li><li>Mensagem pronta pra cada empresa</li><li>Pipeline e Instagram incluídos</li></ul>
+          <button class="pb line" data-quero>Começar grátis</button>
+        </div>
+        <div class="plano destaque aparece">
+          <div class="selo">mais escolhido</div>
+          <div class="pn">Começo</div><div class="pp"><b>R$ 147</b><span>/mês</span></div>
+          <div class="pd">Pra quem prospecta todo dia.</div>
+          <ul><li>Até <b>1.500 empresas</b> na lista por mês</li><li><b>100 Raio-X</b> por mês</li><li>Mensagem pronta e pipeline completo</li><li>Instagram com números de cada empresa</li><li>Passou da cota? Segue no avulso</li></ul>
+          <button class="pb go" data-quero>Quero o Começo</button>
+        </div>
+        <div class="plano aparece">
+          <div class="pn">Escala</div><div class="pp"><b>R$ 340</b><span>/mês</span></div>
+          <div class="pd">Pra equipe ou volume alto.</div>
+          <ul><li>Até <b>4.000 empresas</b> na lista por mês</li><li><b>250 Raio-X</b> por mês</li><li>Tudo do Começo</li><li>Prioridade no atendimento</li></ul>
+          <button class="pb line" data-quero>Quero o Escala</button>
+        </div>
       </div>
     </section>
 
