@@ -155,6 +155,22 @@ section.s{padding:96px 0 0}
 .feito{display:none;margin-top:16px;padding:16px;border-radius:12px;background:rgba(47,214,123,.12);color:#9FF2C4;font-size:14px;line-height:1.5}
 .pcard.ok form{display:none}.pcard.ok .feito{display:block}
 .pnota{margin-top:16px;font-size:12px;color:#6E7380;text-align:center;line-height:1.5}
+.lizq{font-size:20px;font-weight:700;color:#fff;line-height:1.3;letter-spacing:-.02em;margin-top:10px;min-height:52px}
+#passo{margin-top:14px}
+#passo input{width:100%;height:46px;padding:0 14px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#fff;font:inherit;font-size:15px}
+#passo input:focus{border-color:var(--g);outline:none}
+#passo input::placeholder{color:#5D6270}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{padding:9px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#C9CDD6;font:inherit;font-size:14px;cursor:pointer;transition:.15s}
+.chips button:hover{border-color:var(--g);color:#fff}
+.chips button.on{background:var(--g);color:var(--carb);border-color:var(--g);font-weight:600}
+.passos{display:flex;gap:6px;justify-content:center;margin-top:14px}
+.passos i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18);transition:.2s}
+.passos i.on{background:var(--g);width:18px;border-radius:4px}
+.jatem{display:block;margin:12px auto 0;background:none;border:0;color:#8A90A0;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.jatem:hover{color:#fff}
+#entrada .lizq{min-height:auto}
+#entrada p{margin-top:8px;font-size:14px;color:#A8ADB8;line-height:1.5}
 
 /* barra do celular */
 .barra-m{display:none}
@@ -180,7 +196,7 @@ section.s{padding:96px 0 0}
 .plano .pb.go{background:var(--carb);color:#fff;border-color:var(--carb)}
 .plano .pb.line{background:#fff;color:var(--tx)}
 .plano .pb:hover{opacity:.9}
-@media (max-width:860px){ .planos{grid-template-columns:1fr;max-width:420px;margin-inline:auto} .plano.destaque{order:-1} }
+@media (max-width:860px){ .planos{grid-template-columns:1fr;max-width:420px;margin-inline:auto} .plano.destaque{order:-1} .plano{text-align:left} }
 @media (max-width:1100px){ :root{--painel:380px} .wrap{padding:0 32px} .hero h1{font-size:52px} .angulos{grid-template-columns:1fr} }
 @media (max-width:860px){
   .vit{margin-right:0}.vit::before{right:0}
@@ -328,19 +344,23 @@ section.s{padding:96px 0 0}
   <img class="liz3d" src="img/liz_fala_3d.png" alt="Liz">
   <div class="pcard" id="pcard">
     <div class="k">[ PROSPECÇÃO ]</div>
-    <h2>Já tem acesso?</h2>
-    <p>Entra com a mesma conta Google que a gente liberou.</p>
-    <button class="gbtn" id="gbtn"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 01-2.2 3.3v2.7h3.5c2.1-1.9 3.3-4.7 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.7c-1 .7-2.3 1.1-3.8 1.1-2.9 0-5.4-2-6.3-4.6H2.1v2.8A11 11 0 0012 23z"/><path fill="#FBBC05" d="M5.7 14.1a6.6 6.6 0 010-4.2V7.1H2.1a11 11 0 000 9.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.1-3.1A11 11 0 002.1 7.1l3.6 2.8C6.6 7.3 9.1 5.4 12 5.4z"/></svg>Entrar com o Google</button>
-    <div class="ou">ainda não tem acesso?</div>
-    <div class="indicado" id="indicado" hidden></div>
-    <form id="fq" novalidate>
-      <label class="campo"><span>Seu nome</span><input name="nome" autocomplete="name" placeholder="Como te chamamos"></label>
-      <label class="campo"><span>Empresa</span><input name="empresa" autocomplete="organization" placeholder="Nome da sua empresa"></label>
-      <label class="campo"><span>WhatsApp</span><input name="whats" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 99999-9999"></label>
-      <button class="quero" type="submit">Quero testar</button>
+    <!-- conversa direcionada com a Liz (lógica pura, sem IA) -->
+    <div id="conversa">
+      <div class="lizq" id="lizq">Oi! Eu sou a Liz 👋<br>Como posso te chamar?</div>
+      <div class="indicado" id="indicado" hidden></div>
+      <div id="passo"></div>
       <div class="err" id="ferr"></div>
-    </form>
-    <div class="feito"><b>Recebido.</b><br>A gente te chama no WhatsApp pra liberar o seu acesso.</div>
+      <button class="quero" id="btAvanca" type="button">Continuar</button>
+      <div class="passos" id="passos"></div>
+      <button class="jatem" id="jatem" type="button">já tenho acesso</button>
+    </div>
+    <!-- entrada pelo Google: fim da conversa, "já tenho acesso" ou já logado -->
+    <div id="entrada" hidden>
+      <div class="lizq" id="fimq">Pronto! Já te liberei. 🎉</div>
+      <p id="fimsub">Entra com a sua conta Google pra começar a prospectar.</p>
+      <button class="gbtn" id="gbtn"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 01-2.2 3.3v2.7h3.5c2.1-1.9 3.3-4.7 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.7c-1 .7-2.3 1.1-3.8 1.1-2.9 0-5.4-2-6.3-4.6H2.1v2.8A11 11 0 0012 23z"/><path fill="#FBBC05" d="M5.7 14.1a6.6 6.6 0 010-4.2V7.1H2.1a11 11 0 000 9.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.1-3.1A11 11 0 002.1 7.1l3.6 2.8C6.6 7.3 9.1 5.4 12 5.4z"/></svg>Entrar com o Google</button>
+      <button class="jatem" id="voltar" type="button">voltar pra conversa</button>
+    </div>
   </div>
   <p class="pnota">Seus dados ficam só com a Kompila.</p>
 </aside>
@@ -372,55 +392,108 @@ const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting
 document.querySelectorAll('.aparece').forEach((el, i) => { el.style.transitionDelay = (el.closest('.hero') ? i * 90 : 0) + 'ms'; io.observe(el) })
 // painel no celular
 const painel = document.getElementById('painel'), celular = () => innerWidth <= 860
-function abrePainel(foco) { if (celular()) painel.classList.add('on'); if (foco === 'quero') document.querySelector('#fq input').focus({ preventScroll: true }); else document.getElementById('gbtn').focus({ preventScroll: true }) }
+const conversa = document.getElementById('conversa'), entrada = document.getElementById('entrada')
+function verEntrada(sim) { conversa.hidden = !!sim; entrada.hidden = !sim }
+function abrePainel(foco) { if (celular()) painel.classList.add('on'); if (foco === 'entrar') { verEntrada(true); document.getElementById('gbtn').focus({ preventScroll: true }) } else { verEntrada(false); const i = document.querySelector('#passo input'); if (i) i.focus({ preventScroll: true }) } }
 document.querySelectorAll('[data-entrar]').forEach(b => b.onclick = () => abrePainel('entrar'))
 document.querySelectorAll('[data-quero]').forEach(b => b.onclick = () => abrePainel('quero'))
-document.getElementById('busca').onclick = e => { if (!e.target.closest('.ir')) abrePainel('entrar') }
+document.getElementById('busca').onclick = () => abrePainel('quero')
 document.getElementById('pFechar').onclick = () => painel.classList.remove('on')
-// login de verdade: o Google volta direto pro app
+
 const sb = supabase.createClient(KP_CONFIG.url, KP_CONFIG.anon)
 sb.rpc('site_free').then(({ data }) => { if (data && (!data.no_site || !data.tem_vaga)) { const f = document.getElementById('planoFree'); if (f) f.remove() } }).catch(() => {})
 const APP = location.origin + '/prospeccao/app/'
-document.getElementById('gbtn').onclick = async () => {
-  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: APP } })
-  if (error) alertaDesenho('Não abriu o login. Tenta de novo.')
-}
-sb.auth.getSession().then(({ data: { session } }) => {
-  if (!session) return
-  const nome = (session.user.user_metadata?.full_name || session.user.email || '').split(' ')[0]
-  document.querySelector('.pcard h2').textContent = `Bem-vindo de volta${nome ? ', ' + nome : ''}.`
-  document.querySelector('.pcard p').textContent = 'Você já está conectado.'
-  const b = document.getElementById('gbtn'); b.innerHTML = 'Abrir a prospecção'; b.onclick = () => location.href = APP
-  document.querySelectorAll('[data-entrar]').forEach(x => x.onclick = () => location.href = APP)
-})
-// link de indicação (?ind=codigo): guarda o código e mostra quem indicou
+
+// sessão do navegador (liga a conversa à conta depois do login)
+const CH = 'kmp_kompila'; let SESSAO; try { SESSAO = localStorage.getItem('liz_sessao_' + CH) } catch (_) {}
+if (!SESSAO) { const a = new Uint8Array(16); crypto.getRandomValues(a); SESSAO = Array.from(a, x => x.toString(16).padStart(2, '0')).join(''); try { localStorage.setItem('liz_sessao_' + CH, SESSAO) } catch (_) {} }
+
+// indicação (?ind=codigo)
 let IND = new URLSearchParams(location.search).get('ind')
 try { if (IND) localStorage.setItem('kp_ind', IND); else IND = localStorage.getItem('kp_ind') } catch (_) {}
 if (IND && /^[a-z0-9]{4,20}$/i.test(IND)) sb.rpc('quem_indicou', { p_codigo: IND }).then(({ data }) => {
   if (!data) return
-  const el = document.getElementById('indicado'); el.textContent = `${data} te indicou. Pede o seu acesso aqui embaixo.`; el.hidden = false
+  const el = document.getElementById('indicado'); el.textContent = `${data} te indicou. Faz seu cadastro aqui que eu te libero.`; el.hidden = false
 })
-document.getElementById('fq').onsubmit = e => {
-  e.preventDefault()
-  const f = new FormData(e.target), nome = f.get('nome').trim(), emp = f.get('empresa').trim(), w = f.get('whats').replace(/\D/g, '')
-  const err = document.getElementById('ferr')
-  if (!nome) { err.textContent = 'Me fala o seu nome.'; return e.target.nome.focus() }
-  if (!emp) { err.textContent = 'Qual é a empresa?'; return e.target.empresa.focus() }
-  if (w.length < 10) { err.textContent = 'Confere o WhatsApp com DDD.'; return e.target.whats.focus() }
-  err.textContent = ''
-  const bt = e.target.querySelector('.quero'); bt.disabled = true; bt.textContent = 'Enviando…'
-  const CH = 'kmp_kompila'
-  let sessao; try { sessao = localStorage.getItem('liz_sessao_' + CH) } catch (_) {}
-  if (!sessao) { const a = new Uint8Array(16); crypto.getRandomValues(a); sessao = Array.from(a, x => x.toString(16).padStart(2, '0')).join(''); try { localStorage.setItem('liz_sessao_' + CH, sessao) } catch (_) {} }
-  const utm = { utm_source: 'prospeccao', utm_medium: IND ? 'indicacao' : 'site', utm_campaign: IND ? 'prospeccao_indicacao' : 'prospeccao_teste', utm_content: emp.slice(0, 80), ...(IND ? { utm_term: IND } : {}) }
-  if (IND) sb.rpc('registrar_indicacao', { p_codigo: IND, p_nome: nome, p_empresa: emp, p_telefone: w }).then(() => {}, () => {})
-  new URLSearchParams(location.search).forEach((v, k) => { if (/^utm_/.test(k)) utm[k] = v })
-  fetch('https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/chat_site', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chave: CH, sessao, url: location.href, utm, nome, telefone: w }) })
-    .then(r => r.json().then(j => { if (!r.ok) throw new Error(j.erro || 'erro') }))
-    .then(() => document.getElementById('pcard').classList.add('ok'))
-    .catch(() => { bt.disabled = false; bt.textContent = 'Quero testar'; err.textContent = 'Não enviou agora. Tenta de novo?' })
-}
+
+// entrar com o Google
 function alertaDesenho(t) { const b = document.getElementById('gbtn'); const o = b.innerHTML; b.textContent = t; setTimeout(() => b.innerHTML = o, 1800) }
+document.getElementById('gbtn').onclick = async () => {
+  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: APP } })
+  if (error) alertaDesenho('Não abriu o login. Tenta de novo.')
+}
+document.getElementById('jatem').onclick = () => { document.getElementById('fimq').textContent = 'Que bom te ver!'; document.getElementById('fimsub').textContent = 'Entra com a mesma conta Google que você já usa.'; verEntrada(true) }
+document.getElementById('voltar').onclick = () => verEntrada(false)
+
+// já logado: vai direto pra "abrir a prospecção"
+sb.auth.getSession().then(({ data: { session } }) => {
+  if (!session) return
+  const nome = (session.user.user_metadata?.full_name || session.user.email || '').split(' ')[0]
+  document.getElementById('fimq').textContent = `Bem-vindo de volta${nome ? ', ' + nome : ''}.`
+  document.getElementById('fimsub').textContent = 'Você já está conectado.'
+  const b = document.getElementById('gbtn'); b.innerHTML = 'Abrir a prospecção'; b.onclick = () => location.href = APP
+  document.querySelectorAll('[data-entrar],[data-quero]').forEach(x => x.onclick = () => { if (celular()) painel.classList.add('on'); verEntrada(true) })
+  document.getElementById('busca').onclick = () => { if (celular()) painel.classList.add('on'); verEntrada(true) }
+  verEntrada(true)
+})
+
+// ===== conversa direcionada da Liz (lógica pura, sem IA) =====
+const PASSOS = [
+  { k: 'nome', tipo: 'texto', q: () => 'Oi! Eu sou a Liz 👋<br>Como posso te chamar?', ph: 'Seu nome', auto: 'name' },
+  { k: 'empresa', tipo: 'texto', q: r => `Prazer, ${r.nome}! Qual o nome da sua empresa?`, ph: 'Nome da empresa', auto: 'organization' },
+  { k: 'vende', tipo: 'texto', q: r => `O que a ${r.empresa} vende?`, ph: 'Ex: bolos e doces, consultoria, roupas...' },
+  { k: 'nicho', tipo: 'texto', q: () => 'Que tipo de cliente você quer alcançar?', ph: 'Ex: padarias, clínicas, restaurantes...' },
+  { k: 'cidade', tipo: 'texto', q: () => 'Em qual cidade ou região você quer prospectar?', ph: 'Ex: Santos, Grande SP...' },
+  { k: 'como', tipo: 'chips', q: () => 'Como você consegue cliente hoje?', ops: ['Indicação', 'Anúncio', 'Instagram', 'Boca a boca', 'Ainda não tenho um jeito'] },
+  { k: 'whats', tipo: 'tel', q: r => `Por fim, ${r.nome}: seu WhatsApp. É só pra te achar se precisar.`, ph: '(11) 99999-9999', auto: 'tel' },
+]
+const resp = {}; let pi = 0
+const lizq = document.getElementById('lizq'), passoEl = document.getElementById('passo'), passosEl = document.getElementById('passos'), errEl = document.getElementById('ferr'), btA = document.getElementById('btAvanca')
+const pontos = () => passosEl.innerHTML = PASSOS.map((_, i) => `<i class="${i <= pi ? 'on' : ''}"></i>`).join('')
+function mascaraTel(v) { v = v.replace(/\D/g, '').slice(0, 11); if (v.length > 10) return v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'); if (v.length > 6) return v.replace(/(\d{2})(\d{4,5})(\d{0,4})/, '($1) $2-$3'); if (v.length > 2) return v.replace(/(\d{2})(\d{0,5})/, '($1) $2'); return v }
+function desenhaPasso() {
+  const p = PASSOS[pi]; errEl.textContent = ''
+  lizq.innerHTML = typeof p.q === 'function' ? p.q(resp) : p.q
+  if (p.tipo === 'chips') {
+    passoEl.innerHTML = `<div class="chips">${p.ops.map(o => `<button type="button" data-chip="${o}">${o}</button>`).join('')}</div>`
+    btA.style.display = 'none'
+    passoEl.querySelectorAll('[data-chip]').forEach(b => b.onclick = () => { resp[p.k] = b.dataset.chip; avanca() })
+  } else {
+    const val = resp[p.k] ? String(resp[p.k]).replace(/"/g, '&quot;') : ''
+    passoEl.innerHTML = `<input id="inp" ${p.auto ? `autocomplete="${p.auto}"` : ''} ${p.tipo === 'tel' ? 'type="tel" inputmode="tel"' : ''} placeholder="${p.ph}" value="${val}">`
+    btA.style.display = ''
+    const inp = document.getElementById('inp')
+    if (p.tipo === 'tel') inp.oninput = () => { inp.value = mascaraTel(inp.value) }
+    inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); avanca() } }
+    setTimeout(() => inp.focus({ preventScroll: true }), 40)
+  }
+  pontos()
+}
+function avanca() {
+  const p = PASSOS[pi]
+  if (p.tipo !== 'chips') {
+    const inp = document.getElementById('inp'), v = (inp?.value || '').trim()
+    if (p.tipo === 'tel') { if (v.replace(/\D/g, '').length < 10) { errEl.textContent = 'Confere o WhatsApp com DDD.'; return } }
+    else if (!v) { errEl.textContent = 'Me conta isso rapidinho 🙂'; return }
+    resp[p.k] = p.tipo === 'tel' ? v.replace(/\D/g, '') : v
+  }
+  errEl.textContent = ''
+  if (pi < PASSOS.length - 1) { pi++; desenhaPasso() } else finaliza()
+}
+btA.onclick = avanca
+async function finaliza() {
+  btA.disabled = true; btA.textContent = 'Só um instante…'
+  try {
+    await sb.rpc('salvar_intake', { p_sessao: SESSAO, p_nome: resp.nome, p_empresa: resp.empresa, p_whats: resp.whats, p_vende: resp.vende, p_nicho: resp.nicho, p_cidade: resp.cidade, p_como: resp.como, p_indicado: IND || '' })
+    if (IND) sb.rpc('registrar_indicacao', { p_codigo: IND, p_nome: resp.nome, p_empresa: resp.empresa, p_telefone: resp.whats }).then(() => {}, () => {})
+    fetch('https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/chat_site', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chave: CH, sessao: SESSAO, url: location.href, utm: { utm_source: 'prospeccao', utm_medium: IND ? 'indicacao' : 'site', utm_campaign: 'prospeccao_cadastro', utm_content: (resp.empresa || '').slice(0, 80) }, nome: resp.nome, telefone: resp.whats }) }).catch(() => {})
+    document.getElementById('fimq').innerHTML = `Pronto, ${resp.nome}! Já te liberei. 🎉`
+    document.getElementById('fimsub').textContent = 'Entra com a sua conta Google e os seus primeiros R$ 5 já estão lá pra testar.'
+    btA.disabled = false; btA.textContent = 'Continuar'
+    verEntrada(true)
+  } catch (_) { btA.disabled = false; btA.textContent = 'Continuar'; errEl.textContent = 'Não consegui agora. Tenta de novo?' }
+}
+desenhaPasso()
 </script>
 </body>
 </html>

@@ -82,6 +82,7 @@ async function iniciar() {
     return
   }
   usuario = session.user
+  try { const s = localStorage.getItem('liz_sessao_kmp_kompila'); if (s && !localStorage.getItem('kp_intake_ligado')) sb.rpc('ligar_intake', { p_sessao: s }).then(() => { try { localStorage.setItem('kp_intake_ligado', '1') } catch (_) {} }, () => {}) } catch (_) {}
   history.replaceState(null, '', location.pathname)
   $('login').hidden = true
   $('pUser').hidden = $('pHist').hidden = $('pZoom').hidden = false
@@ -483,8 +484,8 @@ async function abrirCapivara(d, empilhar = true) {
   const o = Math.round(314 - 314 * (c.nota || 0) / 100), site = c.blocos?.site, url = site?.link || ''
   const palco = id.print_computador || id.print_celular
     ? `<div class="palco"><div class="tit">${IC.site}<b>Print do site</b> · computador e celular</div>
-      ${id.print_computador && u(id.print_computador) ? `<div class="shot"><div class="sb"><i></i><i></i><i></i><span>${esc(url.replace(/^https?:\/\//, ''))}</span></div><img src="${u(id.print_computador)}" alt=""></div>` : ''}
-      ${id.print_celular && u(id.print_celular) ? `<div class="cel"><img src="${u(id.print_celular)}" alt=""></div>` : ''}</div>`
+      ${id.print_computador && u(id.print_computador) ? `<div class="shot"><div class="sb"><i></i><i></i><i></i><span>${esc(url.replace(/^https?:\/\//, ''))}</span></div><img src="${u(id.print_computador)}" alt="" onerror="this.closest('.shot').remove()"></div>` : ''}
+      ${id.print_celular && u(id.print_celular) ? `<div class="cel"><img src="${u(id.print_celular)}" alt="" onerror="this.closest('.cel').remove()"></div>` : ''}</div>`
     : `<div class="palco"><div class="semprint"><div><b>${site?.status_txt === 'Só rede social' ? 'Sem site próprio' : 'Sem print do site'}</b>${site?.status_txt === 'Só rede social' ? 'No lugar do site ela usa ' + esc(site.linhas?.[1]?.valor || 'rede social') + '.' : 'O site não abriu, bloqueou a leitura ou não existe.'}</div></div></div>`
   const vel = id.velocidade, velCor = vel >= 90 ? '#14A35A' : vel >= 50 ? '#B7790A' : '#D93D42'
   const bloco = ([k, ic, tit]) => { const b = c.blocos?.[k]; if (!b) return ''; return `<article class="bl"><div class="bl-h"><div class="ico ${ic}">${IC[ic]}</div><div><b>${tit}</b><small>${esc(b.sub || '')}</small></div><span class="st ${b.status}">${esc(b.status_txt)}</span></div>
@@ -504,7 +505,7 @@ async function abrirCapivara(d, empilhar = true) {
       ${(id.paleta || []).length ? `<div class="pal">${id.paleta.map(h => `<div class="cor"><i style="background:${esc(h)}"></i>${esc(h)}</div>`).join('')}</div>` : '<div class="fn" style="margin-top:12px;color:var(--mu2)">Sem site pra medir cores.</div>'}</div>
     <div class="mini"><h4>Velocidade no celular <span>PageSpeed</span></h4>${vel != null ? `<div class="vel"><div class="gauge"><svg viewBox="0 0 72 72"><circle class="b" cx="36" cy="36" r="32"/><circle class="f" cx="36" cy="36" r="32" style="stroke:${velCor};stroke-dashoffset:${Math.round(201 - 201 * vel / 100)}"/></svg><b style="color:${velCor}">${vel}</b></div><div class="tx"><b>${vel >= 90 ? 'Rápido' : vel >= 50 ? 'Médio' : 'Lento'}</b>O conteúdo principal aparece em ${esc(id.carregamento || '?')} no celular.</div></div>` : '<div class="fn" style="color:var(--mu2)">Sem site pra medir.</div>'}</div>
     <div class="olho"><div class="ai">${IC.eye}</div><div><small>O que a IA viu nas imagens</small>${esc(id.leitura_visual)}</div></div></div></section>
-  ${(() => { const post = id.post_topo && u(id.post_topo), itens = [...fotos.map((f, i) => `<div class="foto"><img src="${f}" alt=""><span>Foto ${i + 1} · Google</span></div>`), ...(post ? [`<a class="foto post" href="${esc(id.post_topo_link || '#')}" target="_blank" rel="noopener"><img src="${post}" alt=""><span>${IC.ig}Top do Insta · ${id.post_topo_curtidas ?? 0} curtidas</span></a>`] : [])]
+  ${(() => { const post = id.post_topo && u(id.post_topo), itens = [...fotos.map((f, i) => `<div class="foto"><img src="${f}" alt="" onerror="this.closest('.foto').remove()"><span>Foto ${i + 1} · Google</span></div>`), ...(post ? [`<a class="foto post" href="${esc(id.post_topo_link || '#')}" target="_blank" rel="noopener"><img src="${post}" alt="" onerror="this.closest('.foto').remove()"><span>${IC.ig}Top do Insta · ${id.post_topo_curtidas ?? 0} curtidas</span></a>`] : [])]
     return itens.length ? `<div class="fotos" style="grid-template-columns:repeat(${itens.length},1fr)">${itens.join('')}</div>` : '' })()}
   <div class="sec"><h2>O Raio-X</h2></div><section class="grid">${BL.map(bloco).join('')}</section>
   ${(c.avaliacoes || []).length ? `<div class="sec"><h2>O que dizem no Google</h2></div><section class="revs">${c.avaliacoes.map(a => `<div class="rv${a.etiqueta ? ' bad' : ''}"><div class="m"><span class="stars">${[1, 2, 3, 4, 5].map(i => star(i <= a.estrelas)).join('')}</span>${esc((a.data || '').slice(0, 10).split('-').reverse().join('/'))}</div>${esc((a.texto || '').slice(0, 260))}${(a.texto || '').length > 260 ? '…' : ''}${a.etiqueta ? `<span class="tg">${esc(a.etiqueta)}</span>` : ''}</div>`).join('')}</section>` : ''}
