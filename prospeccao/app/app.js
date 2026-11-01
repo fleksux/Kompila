@@ -1,5 +1,5 @@
 // kompila prospecção · app (31/10/2026)
-// Login Google → Liz pergunta (cidade + nicho, ou lista) → canvas ao vivo → capivara de cada empresa.
+// Login Google → Liz pergunta (cidade + nicho, ou lista) → canvas ao vivo → Raio-X de cada empresa.
 const sb = supabase.createClient(KP_CONFIG.url, KP_CONFIG.anon)
 const $ = id => document.getElementById(id)
 const esc = t => String(t ?? '').replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[m])
@@ -30,7 +30,7 @@ const CAPIVARA_USD = 0.016 // Sonnet 5.5, média medida no teste de 31/10 (Opus 
 let DOLAR = 5.44 // câmbio de 30/10; troca pelo do dia assim que a AwesomeAPI responde
 fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL').then(r => r.json()).then(j => { const v = +j?.USDBRL?.bid; if (v > 1) DOLAR = v }).catch(() => {})
 const reais = usd => 'R$ ' + (usd * DOLAR).toFixed(2).replace('.', ',')
-const ANG = { dor: 'Dor', canal: 'Falta de canal', crescimento: 'Crescimento', nenhum: 'Fora do perfil' }
+const ANG = { dor: 'Atendimento', canal: 'Presença digital', crescimento: 'Crescimento', nenhum: 'Fora do perfil' }
 
 /* ======================= estado ======================= */
 let usuario = null, busca = null, diags = [], poll = null, cache = {}
@@ -83,7 +83,7 @@ function pergunta(passo) {
   $('askc').innerHTML = `${passo === 2 ? `<div class="pick">${PIN}${esc(esc_.cidade)}</div>` : ''}<div class="stp">${q.stp}</div><h2>${q.h}</h2>
     <div class="fld"><input type="text" id="aq" placeholder="${q.ph}" autocomplete="off"><button class="btn go lg" id="ab">${q.bt}</button></div>
     <div class="err" id="ae"></div><div class="sg">${q.sg.map(x => `<button>${x}</button>`).join('')}</div>
-    ${passo === 2 ? `<div class="ou">capivara de quantas?</div><div class="sg" id="qt"><button data-t="0" class="on">As 5 melhores · ~${reais(5 * CAPIVARA_USD)}</button><button data-t="1">Todas · ~${reais(60 * CAPIVARA_USD)}</button></div>` : ''}
+    ${passo === 2 ? `<div class="ou">Raio-X de quantas?</div><div class="sg" id="qt"><button data-t="0" class="on">As 5 melhores · ~${reais(5 * CAPIVARA_USD)}</button><button data-t="1">Todas · ~${reais(60 * CAPIVARA_USD)}</button></div>` : ''}
     ${passo === 1 ? `<div class="ou">ou</div><div class="drop" id="drop"><div class="di">${IC.arq}</div><div><b>Sobe uma lista</b><small>Excel ou CSV com empresa, site ou cidade. Conta pessoal eu descarto.</small></div></div>` : ''}`
   const aq = $('aq'); if (!mob()) aq.focus()
   const vai = v => {
@@ -141,7 +141,7 @@ async function lerArquivo(arq) {
 function mostrarLista(nome, itens, fora) {
   const MAX = 50
   $('askc').innerHTML = `<div class="stp">Lista</div><h2>Achei <em>${itens.length} empresas</em> em "${esc(nome)}".</h2>
-    <p class="sub">Descartei ${fora.length} conta${fora.length === 1 ? '' : 's'} pessoa${fora.length === 1 ? 'l' : 'is'}. ${itens.length > MAX ? `Vou analisar as primeiras ${MAX} agora, o resto fica pra próxima rodada.` : 'Vou achar cada uma no Google e montar a capivara.'}</p>
+    <p class="sub">Descartei ${fora.length} conta${fora.length === 1 ? '' : 's'} pessoa${fora.length === 1 ? 'l' : 'is'}. ${itens.length > MAX ? `Vou analisar as primeiras ${MAX} agora, o resto fica pra próxima rodada.` : 'Vou achar cada uma no Google e montar o Raio-X.'}</p>
     <div class="prev">${itens.slice(0, MAX).map(i => `<div class="pr"><b>${esc(i.nome || i.site)}</b><span>${esc(i.nome && i.site ? i.site : i.cidade || '')}</span></div>`).join('')}${fora.slice(0, 20).map(f => `<div class="pr fora">${esc(f.t)} <span>${f.m}</span></div>`).join('')}</div>
     <div class="fld"><button class="btn ghost lg" id="lv">Voltar</button><button class="btn go lg" id="lg" style="flex:1">Analisar ${Math.min(itens.length, MAX)} empresas</button></div>`
   $('lv').onclick = () => pergunta(1)
@@ -196,7 +196,7 @@ async function rodarLista(nome, itens) {
   try {
     const r = await chamar('importar', { nome_lista: nome, itens })
     busca = { id: r.busca_id, cidade: 'Lista', nicho: nome, status: 'peneirando', olhadas: r.na_lista, novas: r.achadas_no_google + r.so_pelo_site, com_dor: 0 }
-    atualizarFunil(); dizer(`Achei ${r.achadas_no_google} no Google${r.so_pelo_site ? ` e ${r.so_pelo_site} só pelo site` : ''}.${r.nao_e_empresa ? ` ${r.nao_e_empresa} não parecem empresa.` : ''} Montando as capivaras.`)
+    atualizarFunil(); dizer(`Achei ${r.achadas_no_google} no Google${r.so_pelo_site ? ` e ${r.so_pelo_site} só pelo site` : ''}.${r.nao_e_empresa ? ` ${r.nao_e_empresa} não parecem empresa.` : ''} Montando os Raio-X.`)
     await peneirar(true)
   } catch (e) { erro(e) }
 }
@@ -205,8 +205,8 @@ async function peneirar(todas) {
   busca.com_dor = a.com_dor; atualizarFunil()
   // contatos de todas (Instagram, e-mail, WhatsApp): grátis, roda em paralelo com as capivaras
   chamar('contatos', { busca_id: busca.id }).then(c => c?.instagram && setTimeout(() => dizer(`Achei o Instagram de ${c.instagram} empresas. Tá na lista.`), 6000)).catch(() => {})
-  if (!a.finalistas) return fim('Nenhuma empresa com oportunidade forte aqui. Bora outro nicho?')
-  dizer(`${a.finalistas} empresas merecem capivara. Já estou montando, uma por uma.`)
+  if (!a.finalistas) return fim('Nenhuma empresa com potencial forte aqui. Bora outro nicho?')
+  dizer(`${a.finalistas} empresas merecem Raio-X. Já estou montando, uma por uma.`)
   acompanhar()
 }
 function erro(e) { vivo(false, 'Liz parada'); liz(`Travei aqui: ${esc(e.message)}`, 8000); if (busca) { busca.status = 'erro'; atualizarFunil() } }
@@ -225,7 +225,7 @@ function acompanhar() {
     if (busca.status === 'pronta' || busca.status === 'erro') {
       clearInterval(poll)
       const n = diags.filter(x => x.status === 'pronto').length
-      fim(`Pronto. ${n} capivara${n === 1 ? '' : 's'} pra você olhar. ${mob() ? 'Toca' : 'Clica'} numa empresa pra abrir.`)
+      fim(`Pronto. ${n} Raio-X pra você olhar. ${mob() ? 'Toca' : 'Clica'} numa empresa pra abrir.`)
     }
   }
   passo(); poll = setInterval(passo, 4000)
@@ -250,10 +250,10 @@ function montarCanvas(b, animar) {
   const lista = b.cidade === 'Lista'
   fr('fA', L.A, 'Briefing', `<div class="br"><div style="flex:1;min-width:0"><div class="per">${new Date().toLocaleDateString('pt-BR')} · agora</div><div class="say" id="say">${lista ? 'Lendo a sua lista.' : 'Procurando no Google Maps.'}</div>
     <div class="chips">${lista ? `<span class="chip">${IC.arq}${esc(b.nicho)}</span>` : `<span class="chip">${IC.nicho}${esc(b.nicho)}</span><span class="chip">${IC.pin}${esc(b.cidade)}</span>`}</div></div><img src="img/liz_fala_3d.png" alt="Liz"></div>`)
-  const nodes = [['olhadas', lista ? 'na lista' : 'empresas olhadas', lista ? 'da sua planilha' : 'Google Maps'], ['novas', lista ? 'achadas' : 'novas', lista ? 'no Google ou pelo site' : 'sem repetir'], ['com_dor', 'com oportunidade', 'dor, canal ou crescimento', 1], ['capivaras', 'capivaras', 'prontas pra você'], ['aprovadas', 'na captação', 'as que você escolheu']]
+  const nodes = [['olhadas', lista ? 'na lista' : 'empresas olhadas', lista ? 'da sua planilha' : 'Google Maps'], ['novas', lista ? 'achadas' : 'novas', lista ? 'no Google ou pelo site' : 'sem repetir'], ['com_dor', 'com potencial', 'atendimento, presença ou crescimento', 1], ['capivaras', 'Raio-X', 'prontos pra você'], ['aprovadas', 'no pipeline', 'as que você escolheu']]
   const fl = nodes.map(([k, t, s, hl]) => `<div class="node${hl ? ' hl' : ''}" id="n_${k}"><div class="v">0</div><div class="k">${t}</div><div class="s">${s}</div></div>`)
-  fr('fB', L.B, 'Funil', mob() ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${fl.join('')}</div>` : `<div class="flow">${fl.join(`<div class="arr">${IC.arr}</div>`)}</div>`)
-  fr('fC', L.C, 'Capivaras · clica numa empresa pra abrir', '<div class="cards" id="cards"></div>', true)
+  fr('fB', L.B, 'Triagem', mob() ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${fl.join('')}</div>` : `<div class="flow">${fl.join(`<div class="arr">${IC.arr}</div>`)}</div>`)
+  fr('fC', L.C, 'Raio-X · clica numa empresa pra abrir', '<div class="cards" id="cards"></div>', true)
   const lz = document.createElement('div'); lz.id = 'liz'
   lz.innerHTML = `<div class="cs"><svg viewBox="0 0 24 24"><path d="M3 2l17 9.5-7.5 1.8L8.5 21z" fill="#2FD67B" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg><div class="tag"><img src="img/liz_rosto_3d.png" alt="">Liz</div><div class="chat" id="chat"></div></div>`
   world.appendChild(lz)
@@ -271,12 +271,12 @@ function montarCanvas(b, animar) {
 function montarCelular(b) {
   vp.hidden = true; const m = $('mobv'); m.hidden = false
   const lista = b.cidade === 'Lista'
-  const nodes = [['olhadas', lista ? 'na lista' : 'olhadas'], ['novas', lista ? 'achadas' : 'novas'], ['com_dor', 'com oportunidade', 1], ['capivaras', 'capivaras'], ['aprovadas', 'na captação']]
+  const nodes = [['olhadas', lista ? 'na lista' : 'olhadas'], ['novas', lista ? 'achadas' : 'novas'], ['com_dor', 'com potencial', 1], ['capivaras', 'Raio-X'], ['aprovadas', 'no pipeline']]
   m.innerHTML = `<section class="m-br"><img src="img/liz_fala_3d.png" alt="Liz"><div style="min-width:0"><div class="say" id="say">${lista ? 'Lendo a sua lista.' : 'Procurando no Google Maps.'}</div>
       <div class="chips">${lista ? `<span class="chip">${IC.arq}${esc(b.nicho)}</span>` : `<span class="chip">${IC.nicho}${esc(b.nicho)}</span><span class="chip">${IC.pin}${esc(b.cidade.split(',')[0])}</span>`}</div></div></section>
     <div class="m-fun">${nodes.map(([k, t, hl]) => `<div class="node${hl ? ' hl' : ''}" id="n_${k}"><div class="v">0</div><div class="k">${t}</div></div>`).join('')}</div>
     <div class="m-acoes" id="mAcoes"></div>
-    <div class="m-tit"><span>Capivaras</span><button data-lista>Ver todas em lista</button></div>
+    <div class="m-tit"><span>Raio-X</span><button data-lista>Ver todas em lista</button></div>
     <div class="cards" id="cards"></div>
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div>`
   m.scrollTop = 0
@@ -293,13 +293,13 @@ function atualizarFunil() {
   const say = $('say')
   const resto = Math.max(0, (busca.novas || 0) - diags.length)
   if (mob()) {
-    if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.` : busca.status === 'erro' ? 'Travei nessa busca.' : busca.status === 'diagnosticando' ? `Montando as capivaras: <em>${cap}</em> prontas.` : say.innerHTML
+    if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.` : busca.status === 'erro' ? 'Travei nessa busca.' : busca.status === 'diagnosticando' ? `Montando os Raio-X: <em>${cap}</em> prontas.` : say.innerHTML
     const ac = $('mAcoes')
     if (ac) ac.innerHTML = busca.status === 'erro' ? '<button class="btn go" id="bDeNovo">Tentar de novo</button>'
-      : busca.status === 'pronta' ? `${resto ? `<button class="btn line" id="bResto">Capivara das outras ${resto} · ~${reais(resto * CAPIVARA_USD)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div class="m-mais"><span>Buscar mais novas:</span>${[12, 30, 60].map(n => `<button class="btn line" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : ''
+      : busca.status === 'pronta' ? `${resto ? `<button class="btn line" id="bResto">Raio-X das outras ${resto} · ~${reais(resto * CAPIVARA_USD)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div class="m-mais"><span>Encontrar mais empresas:</span>${[12, 30, 60].map(n => `<button class="btn line" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : ''
     return
   }
-  if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.${resto ? `<br><button class="btn line sm" id="bResto" style="margin-top:12px">Fazer capivara das outras ${resto} · ~${reais(resto * CAPIVARA_USD)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--mu);font-weight:400">Buscar mais novas:</span>${[12, 30, 60].map(n => `<button class="btn line sm" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : busca.status === 'erro' ? 'Travei nessa busca. <button class="btn go sm" id="bDeNovo" style="margin-top:12px">Tentar de novo</button>' : busca.status === 'diagnosticando' ? `Montando as capivaras: <em>${cap}</em> prontas.` : say.innerHTML
+  if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.${resto ? `<br><button class="btn line sm" id="bResto" style="margin-top:12px">Fazer Raio-X das outras ${resto} · ~${reais(resto * CAPIVARA_USD)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--mu);font-weight:400">Encontrar mais empresas:</span>${[12, 30, 60].map(n => `<button class="btn line sm" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : busca.status === 'erro' ? 'Travei nessa busca. <button class="btn go sm" id="bDeNovo" style="margin-top:12px">Tentar de novo</button>' : busca.status === 'diagnosticando' ? `Montando os Raio-X: <em>${cap}</em> prontas.` : say.innerHTML
 }
 document.addEventListener('click', e => {
   const n = e.target.dataset?.mais; if (!n || !busca) return
@@ -315,10 +315,10 @@ document.addEventListener('click', async e => {
 // empresas que ficaram sem capivara nesta busca: entram na fila uma a uma
 async function fazerResto() {
   const { data: sem } = await sb.from('diagnosticos').select('id').eq('busca_id', busca.id).eq('status', 'pronto').eq('capivara', '{}')
-  if (!sem?.length) return liz('Todas já têm capivara.')
+  if (!sem?.length) return liz('Todas já têm Raio-X.')
   await sb.from('diagnosticos').update({ status: 'na_fila' }).in('id', sem.map(x => x.id))
   await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id)
-  busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); dizer(`Bora: mais ${sem.length} capivaras.`)
+  busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); dizer(`Bora: mais ${sem.length} Raio-X.`)
   for (const x of sem) { sb.functions.invoke('diagnosticar', { body: { diagnostico_id: x.id } }); await espera(400) }
   acompanhar()
 }
@@ -347,7 +347,7 @@ function desenharCards() {
     return `<div class="co${d.decisao === 'pulada' ? ' pulada' : ''}" data-i="${i}"><div class="co-h"><div style="flex:1;min-width:0"><div class="nm">${esc(c.nome || e.nome)}</div><div class="lo">${esc([c.bairro, (c.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</div></div>
       <div class="ring"><svg viewBox="0 0 52 52"><circle class="b" cx="26" cy="26" r="22"/><circle class="f" cx="26" cy="26" r="22" style="stroke-dashoffset:${o}"/></svg><div class="n">${c.nota ?? d.nota_dor}</div></div></div>
       <div class="res">${esc(c.resumo)}</div><div class="mini3">${mini}</div>
-      <div class="rod"><span class="ang a-${c.angulo || d.angulo}">${ANG[c.angulo || d.angulo] || ''}</span>${d.decisao !== 'pendente' ? `<span class="dec ${d.decisao}">${{ aprovada: '★ Na captação', pulada: 'Pulada', ajustar: 'Ajustada' }[d.decisao] || ''}</span>` : ''}</div></div>`
+      <div class="rod"><span class="ang a-${c.angulo || d.angulo}">${ANG[c.angulo || d.angulo] || ''}</span>${d.decisao !== 'pendente' ? `<span class="dec ${d.decisao}">${{ aprovada: '★ No pipeline', pulada: 'Pulada', ajustar: 'Ajustada' }[d.decisao] || ''}</span>` : ''}</div></div>`
   }).join('')
   box.querySelectorAll('.co:not(.lendo)').forEach(el => el.onclick = () => abrirSeq(diags[+el.dataset.i].id))
   // cursor da liz visita a capivara que acabou de ficar pronta
@@ -447,11 +447,11 @@ async function abrirCapivara(d, empilhar = true) {
     <div class="bl-f"><span>Fonte: ${esc(b.fonte)}</span>${b.link ? `<a class="lnk" href="${esc(b.link)}" target="_blank" rel="noopener">${esc(b.link_txt || 'Abrir')}${IC.ext}</a>` : ''}</div></article>` }
   const fotos = (id.fotos || []).map(f => u(f)).filter(Boolean)
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
-  $('cap').innerHTML = `<div class="cap-x"><span class="t">Capivara · ${esc(c.nome)}</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Raio-X · ${esc(c.nome)}</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
   <header class="hd"><div><div class="k">${esc(c.categoria || '')}${c.categoria ? ' · ' : ''}${esc((c.cidade || '').split(',')[0])}</div><h1>${esc(c.nome)}</h1>
     <div class="lo">${IC.pin}${esc([c.bairro, c.cidade].filter(Boolean).join(' · '))}</div>
     <div class="sel">${(c.selos || []).map(s => `<span class="sp ${s.t}">${s.t === 'ok' ? IC.ok : s.t === 'at' ? IC.at : IC.bad}${esc(s.txt)}</span>`).join('')}</div></div>
-    <div class="dor" style="--o:${o}"><svg viewBox="0 0 112 112"><defs><linearGradient id="gdor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7BF0B0"/><stop offset="1" stop-color="#14A35A"/></linearGradient></defs><circle class="b" cx="56" cy="56" r="50"/><circle class="f" cx="56" cy="56" r="50"/></svg><div class="n"><div><b>${c.nota ?? d.nota_dor}</b><span>oportunidade</span></div></div></div></header>
+    <div class="dor" style="--o:${o}"><svg viewBox="0 0 112 112"><defs><linearGradient id="gdor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7BF0B0"/><stop offset="1" stop-color="#14A35A"/></linearGradient></defs><circle class="b" cx="56" cy="56" r="50"/><circle class="f" cx="56" cy="56" r="50"/></svg><div class="n"><div><b>${c.nota ?? d.nota_dor}</b><span>potencial</span></div></div></div></header>
   <section class="liz"><img src="img/liz_rosto_3d.png" alt="Liz"><div><div class="t">${esc(c.resumo)}</div>${c.prova ? `<div class="prova"><div class="m">Avaliação no Google</div>${esc(c.prova)}</div>` : c.motivo ? `<div class="prova"><div class="m">Por que entrou</div>${esc(c.motivo)}</div>` : ''}</div></section>
   <div class="sec"><h2>Identidade</h2></div>
   <section class="idt">${palco}<div class="lado">
@@ -461,7 +461,7 @@ async function abrirCapivara(d, empilhar = true) {
     <div class="olho"><div class="ai">${IC.eye}</div><div><small>O que a IA viu nas imagens</small>${esc(id.leitura_visual)}</div></div></div></section>
   ${(() => { const post = id.post_topo && u(id.post_topo), itens = [...fotos.map((f, i) => `<div class="foto"><img src="${f}" alt=""><span>Foto ${i + 1} · Google</span></div>`), ...(post ? [`<a class="foto post" href="${esc(id.post_topo_link || '#')}" target="_blank" rel="noopener"><img src="${post}" alt=""><span>${IC.ig}Top do Insta · ${id.post_topo_curtidas ?? 0} curtidas</span></a>`] : [])]
     return itens.length ? `<div class="fotos" style="grid-template-columns:repeat(${itens.length},1fr)">${itens.join('')}</div>` : '' })()}
-  <div class="sec"><h2>A capivara</h2></div><section class="grid">${BL.map(bloco).join('')}</section>
+  <div class="sec"><h2>O Raio-X</h2></div><section class="grid">${BL.map(bloco).join('')}</section>
   ${(c.avaliacoes || []).length ? `<div class="sec"><h2>O que dizem no Google</h2></div><section class="revs">${c.avaliacoes.map(a => `<div class="rv${a.etiqueta ? ' bad' : ''}"><div class="m"><span class="stars">${[1, 2, 3, 4, 5].map(i => star(i <= a.estrelas)).join('')}</span>${esc((a.data || '').slice(0, 10).split('-').reverse().join('/'))}</div>${esc((a.texto || '').slice(0, 260))}${(a.texto || '').length > 260 ? '…' : ''}${a.etiqueta ? `<span class="tg">${esc(a.etiqueta)}</span>` : ''}</div>`).join('')}</section>` : ''}
   <div class="sec"><h2>Abordagem</h2></div>
   <section class="ab"><div class="msg"><div class="h">Mensagem sugerida pela Liz<b>sai por ${esc(c.canal)}</b></div><div id="msgBox"><p>${esc(d.abordagem || c.abordagem)}</p></div></div><div class="decd" id="decd"></div></section>
@@ -473,16 +473,16 @@ async function abrirCapivara(d, empilhar = true) {
 }
 function desenharDecisao(d) {
   const box = $('decd')
-  if (d.decisao === 'aprovada') { box.innerHTML = `<div class="q">Decidido.</div><div class="feito">${IC.ok}Está na sua captação.</div><button class="btn line" id="dVer">Ver o pipeline</button><button class="btn ghost" id="dDes">Tirar da captação</button>`; $('dDes').onclick = () => decidir(d, 'pendente'); $('dVer').onclick = () => abrirCaptacao(); return }
+  if (d.decisao === 'aprovada') { box.innerHTML = `<div class="q">Decidido.</div><div class="feito">${IC.ok}Está no seu pipeline.</div><button class="btn line" id="dVer">Ver o pipeline</button><button class="btn ghost" id="dDes">Tirar do pipeline</button>`; $('dDes').onclick = () => decidir(d, 'pendente'); $('dVer').onclick = () => abrirCaptacao(); return }
   if (d.decisao === 'pulada') { box.innerHTML = `<div class="q">Decidido.</div><div class="feito" style="background:#F1F2EF;color:var(--mu)">Pulada. Não volta a aparecer.</div><button class="btn ghost" id="dDes">Desfazer</button>`; $('dDes').onclick = () => decidir(d, 'pendente'); return }
   if (!temCap(d)) {
     const fila = d.status === 'na_fila' || d.status === 'lendo'
-    box.innerHTML = `<div class="q">${fila ? 'Liz montando a capivara…' : 'Quer a capivara completa?'}</div>${fila ? '<span class="lendo-tag"><i></i>Lendo site, Google e fotos. Leva uns 40 segundos.</span>' : `<button class="btn go" id="dCap">Fazer capivara · ~${reais(CAPIVARA_USD)}</button>`}<button class="btn ok" id="dOk">${IC.ok}Adicionar à captação</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
+    box.innerHTML = `<div class="q">${fila ? 'Liz montando o Raio-X…' : 'Quer o Raio-X completo?'}</div>${fila ? '<span class="lendo-tag"><i></i>Lendo site, Google e fotos. Leva uns 40 segundos.</span>' : `<button class="btn go" id="dCap">Fazer Raio-X · ~${reais(CAPIVARA_USD)}</button>`}<button class="btn ok" id="dOk">${IC.ok}Adicionar ao pipeline</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
     $('dOk').onclick = () => decidir(d, 'aprovada'); $('dPu').onclick = () => decidir(d, 'pulada')
     if ($('dCap')) $('dCap').onclick = async () => { $('dCap').disabled = true; $('dCap').textContent = 'Mandando pra Liz…'; await fazerUma(d); desenharDecisao(d); esperarCapivara(d.id) }
     return
   }
-  box.innerHTML = `<div class="q">Nada sai sem o seu ok.</div><button class="btn ok" id="dOk">${IC.ok}Adicionar à captação</button><button class="btn adj" id="dAj">Ajustar a mensagem</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
+  box.innerHTML = `<div class="q">Nada sai sem o seu ok.</div><button class="btn ok" id="dOk">${IC.ok}Adicionar ao pipeline</button><button class="btn adj" id="dAj">Ajustar a mensagem</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
   $('dOk').onclick = () => decidir(d, 'aprovada')
   $('dPu').onclick = () => decidir(d, 'pulada')
   $('dAj').onclick = () => {
@@ -528,13 +528,13 @@ async function abrirLista(empilhar = true) {
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Lista · ${esc(busca.cidade === 'Lista' ? busca.nicho : busca.nicho + ' · ' + busca.cidade)}</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
     <div class="lst-top"><h2>${todos.length} empresas</h2>${faltaLer ? '<button class="btn go sm" id="lLer">Buscar Instagrams</button>' : ''}${grupos.insta.length ? `<button class="btn line sm" id="lCopia">Copiar os ${grupos.insta.length} @</button>` : ''}<button class="btn line sm" id="lCsv">Baixar planilha</button>
-      <div class="filt">${[['todas', 'Todas'], ['insta', 'Com Instagram'], ['capivara', 'Com capivara'], ['sem', 'Sem capivara'], ['fora', 'Fora do perfil']].map(([k, t]) => `<button data-f="${k}" class="${filtroLista === k ? 'on' : ''}">${t}<span>${grupos[k].length}</span></button>`).join('')}</div></div>
+      <div class="filt">${[['todas', 'Todas'], ['insta', 'Com Instagram'], ['capivara', 'Com Raio-X'], ['sem', 'Sem Raio-X'], ['fora', 'Fora do perfil']].map(([k, t]) => `<button data-f="${k}" class="${filtroLista === k ? 'on' : ''}">${t}<span>${grupos[k].length}</span></button>`).join('')}</div></div>
     ${lst.map(d => { const e = d.empresa || {}, tem = Object.keys(d.capivara || {}).length, fila = d.status === 'na_fila' || d.status === 'lendo'
-      return `<div class="li${d.angulo === 'nenhum' ? ' vazio' : ''}"><div class="nt">${d.nota_dor ?? '–'}<small>oport.</small></div>
+      return `<div class="li${d.angulo === 'nenhum' ? ' vazio' : ''}"><div class="nt">${d.nota_dor ?? '–'}<small>potencial</small></div>
       <div class="nm"><b>${esc(e.nome)}</b><small>${esc([e.bairro, (e.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}${e.nota ? ` · ${String(e.nota).replace('.', ',')} ★ (${e.total_avaliacoes})` : ''}</small></div>
       <div class="ct">${e.instagram ? `<a href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener" style="color:#C93676;font-weight:500">@${esc(e.instagram)}</a>` : e.contatos_lidos_em ? '<span>sem Instagram no site</span><br>' : ''}${e.telefone ? esc(e.telefone) : 'sem telefone'}${e.email ? `<a href="mailto:${esc(e.email)}">${esc(e.email)}</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">${esc(e.site.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a>` : '<span>sem site</span>'}</div>
       <div class="mo"><span class="ang a-${d.angulo || 'nenhum'}">${ANG[d.angulo] || ''}</span><div>${esc(d.motivo || '')}</div></div>
-      <div class="ac">${tem ? `<button class="btn go sm" data-abre="${d.id}">Abrir capivara</button>` : fila ? '<span class="lendo-tag"><i></i>Liz montando…</span>' : `<button class="btn line sm" data-faz="${d.id}">Fazer capivara</button>`}</div></div>` }).join('') || '<div class="vazio" style="color:var(--mu)">Nada nesse filtro.</div>'}</div>`
+      <div class="ac">${tem ? `<button class="btn go sm" data-abre="${d.id}">Abrir Raio-X</button>` : fila ? '<span class="lendo-tag"><i></i>Liz montando…</span>' : `<button class="btn line sm" data-faz="${d.id}">Fazer Raio-X</button>`}</div></div>` }).join('') || '<div class="vazio" style="color:var(--mu)">Nada nesse filtro.</div>'}</div>`
   $('capX').onclick = fecharCapivara
   $('cap').querySelectorAll('.filt button').forEach(b => b.onclick = () => { filtroLista = b.dataset.f; rolagemLista = 0; abrirLista(false) })
   $('cap').querySelectorAll('[data-abre]').forEach(b => b.onclick = () => abrirSeq(b.dataset.abre))
@@ -555,7 +555,7 @@ async function abrirLista(empilhar = true) {
 }
 function baixarCsv(todos) {
   const cel = v => `"${String(v ?? '').replace(/"/g, '""')}"`
-  const linhas = [['Empresa', 'Bairro', 'Cidade', 'Telefone', 'Instagram', 'E-mail', 'WhatsApp', 'Site', 'Nota Google', 'Avaliações', 'Ângulo', 'Oportunidade', 'Motivo', 'Tem capivara', 'Decisão'].map(cel).join(';')]
+  const linhas = [['Empresa', 'Bairro', 'Cidade', 'Telefone', 'Instagram', 'E-mail', 'WhatsApp', 'Site', 'Nota Google', 'Avaliações', 'Assunto', 'Potencial', 'Motivo', 'Tem Raio-X', 'Decisão'].map(cel).join(';')]
   todos.forEach(d => { const e = d.empresa || {}; linhas.push([e.nome, e.bairro, e.cidade, e.telefone, e.instagram ? '@' + e.instagram : '', e.email, e.whatsapp, e.site, e.nota, e.total_avaliacoes, ANG[d.angulo] || '', d.nota_dor, d.motivo, Object.keys(d.capivara || {}).length ? 'sim' : 'não', d.decisao].map(cel).join(';')) })
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob(['\ufeff' + linhas.join('\n')], { type: 'text/csv;charset=utf-8' }))
@@ -596,17 +596,17 @@ async function abrirCaptacao(empilhar = true) {
         ${prox && d.etapa !== 'cliente' && d.etapa !== 'perdido' ? `<button class="vai" data-vai="${prox[0]}" title="Passar pra ${prox[1]}">${prox[1]}${IC.arr}</button>` : ''}</div>
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
-        <div class="cp-ac"><button data-abre>${IC.eye}Capivara</button><button data-copia>Copiar mensagem</button></div>
+        <div class="cp-ac"><button data-abre>${IC.eye}Raio-X</button><button data-copia>Copiar mensagem</button></div>
         <textarea data-nota placeholder="Anotação (ex: falei com a Ana, retornar segunda)">${esc(d.anotacao || '')}</textarea></div></div>`
   }
   $('cap').dataset.seq = ''
   $('cap').classList.add('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Pipeline</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
-    <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Fila de envio · ${de('a_contatar').length}</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
+    <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Abordagens do dia · ${de('a_contatar').length}</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
     ${todos.length ? `<div class="pk">${kpi.map(([t, k, v, s]) => `<div class="pk-i t-${t}"><i></i><div><b>${v}</b><span>${k}</span><small>${s}</small></div></div>`).join('')}</div>
     <div class="pt" id="pTabs">${ETAPAS.map(([k, t], i) => `<button data-col="${i}">${t}<span>${de(k).length}</span></button>`).join('')}</div>
-    <div class="pb" id="pBoard">${ETAPAS.map(([k, t]) => `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${de(k).length}</span></header><div class="pcol-b">${de(k).map(cartao).join('') || `<div class="pv">${k === 'a_contatar' ? 'Abre uma capivara e toca em Adicionar à captação.' : 'Arrasta uma empresa pra cá.'}</div>`}</div></section>`).join('')}</div>`
-    : '<div class="cp-vazio">Seu pipeline está vazio.<br>Abre uma capivara e toca em <b>Adicionar à captação</b>.</div>'}</div>`
+    <div class="pb" id="pBoard">${ETAPAS.map(([k, t]) => `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${de(k).length}</span></header><div class="pcol-b">${de(k).map(cartao).join('') || `<div class="pv">${k === 'a_contatar' ? 'Abre um Raio-X e toca em Adicionar ao pipeline.' : 'Arrasta uma empresa pra cá.'}</div>`}</div></section>`).join('')}</div>`
+    : '<div class="cp-vazio">Seu pipeline está vazio.<br>Abre um Raio-X e toca em <b>Adicionar ao pipeline</b>.</div>'}</div>`
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('capt')
   const board = $('pBoard')
@@ -647,7 +647,7 @@ async function abrirCaptacao(empilhar = true) {
   if ($('cFila')) $('cFila').onclick = () => abrirFila()
   if ($('cCsv')) $('cCsv').onclick = () => {
     const cel = v => `"${String(v ?? '').replace(/"/g, '""')}"`
-    const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Temperatura', 'Desde', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Oportunidade', 'Ângulo', 'Mensagem', 'Anotação'].map(cel).join(';')]
+    const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Temperatura', 'Desde', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Potencial', 'Assunto', 'Mensagem', 'Anotação'].map(cel).join(';')]
     todos.forEach(d => { const e = d.empresa || {}; linhas.push([e.nome, d.busca?.nicho, e.bairro, e.cidade, (ETAPAS.find(x => x[0] === d.etapa) || [])[1], TEMP[d.etapa]?.[1], new Date(quando(d)).toLocaleDateString('pt-BR'), e.telefone, e.whatsapp, e.instagram ? '@' + e.instagram : '', e.email, e.site, d.nota_dor, ANG[d.angulo] || '', d.abordagem || d.capivara?.abordagem, d.anotacao].map(cel).join(';')) })
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + linhas.join('\n')], { type: 'text/csv;charset=utf-8' })); a.download = `pipeline_kompila_${new Date().toISOString().slice(0, 10)}.csv`; a.click()
   }
@@ -678,7 +678,7 @@ function desenharFila(feitos) {
   const topo = `<div class="fl-top"><div><b>${feitos}</b> de ${lim} hoje</div><div class="fl-bar"><i style="width:${Math.min(100, feitos / lim * 100)}%"></i></div>
     <label>Limite por dia <select id="fLim">${LIMITES.map(n => `<option${n === lim ? ' selected' : ''}>${n}</option>`).join('')}</select></label></div>`
   let corpo
-  if (!fila.length) corpo = '<div class="cp-vazio">Ninguém esperando contato.<br>Passa nas capivaras e toca em <b>Adicionar à captação</b>.</div>'
+  if (!fila.length) corpo = '<div class="cp-vazio">Ninguém esperando contato.<br>Passa nos Raio-X e toca em <b>Adicionar ao pipeline</b>.</div>'
   else if (fpos >= fila.length) corpo = `<div class="cp-vazio">Acabou a fila de hoje. ${feitos} contatada${feitos === 1 ? '' : 's'}.<br>Quem responder, você move pra <b>Respondeu</b> no pipeline.</div><button class="btn line" id="fPipe" style="width:100%">Ver o pipeline</button>`
   else if (cheio) corpo = `<div class="cp-vazio">Bateu o limite de hoje: <b>${lim} contatos</b>.<br>Mandar muita mensagem fria no mesmo dia é o que faz o WhatsApp bloquear o número.</div><button class="btn ghost" id="fMais" style="width:100%">Continuar mesmo assim</button>`
   else {
@@ -686,7 +686,7 @@ function desenharFila(feitos) {
     const w = zap(e.whatsapp) || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? zap(e.telefone) : null), prox = fila[fpos + 1]
     corpo = `<div class="fl-c">
       <div class="fl-h"><div><small>${fpos + 1} de ${fila.length} na fila</small><b>${esc(c.nome || e.nome)}</b><span>${esc(d.busca?.cidade === 'Lista' ? 'Lista · ' + d.busca.nicho : (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0])}${e.bairro ? ' · ' + esc(e.bairro) : ''}</span></div><span class="nt">${d.nota_dor ?? ''}</span></div>
-      <label class="fl-l">Mensagem${d.abordagem || c.abordagem ? ' da capivara' : ' padrão (essa empresa não tem capivara)'} · dá pra mexer</label>
+      <label class="fl-l">Mensagem${d.abordagem || c.abordagem ? ' do Raio-X' : ' padrão (essa empresa não tem Raio-X)'} · dá pra mexer</label>
       <textarea id="fMsg">${esc(msg)}</textarea>
       <div class="fl-ac">${w ? `<a class="btn ok" id="fZap" href="https://wa.me/${w}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Abrir no WhatsApp</a>` : `<div class="fl-sem">Sem WhatsApp. ${e.telefone ? 'O telefone é fixo: liga ou chama no Insta.' : 'Chama no Insta ou por e-mail.'}</div>`}
         <div class="fl-alt">${e.telefone ? `<a class="btn line" data-feito href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">Ligar</a>` : ''}${e.instagram ? `<a class="btn line ig" data-copia data-feito href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Copiar e abrir Insta</a>` : ''}${e.email ? `<a class="btn line" data-feito href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}</div>
@@ -694,7 +694,7 @@ function desenharFila(feitos) {
       <div class="fl-ok" id="fOk" hidden>${IC.ok}Marcada como contatada. Indo pra próxima…</div>
       ${prox ? `<div class="fl-prox">Próxima: <b>${esc(prox.capivara?.nome || prox.empresa?.nome)}</b></div>` : ''}</div>`
   }
-  $('cap').innerHTML = `<div class="cap-x"><span class="t">Fila de envio</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b fl">${topo}${corpo}
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Abordagens do dia</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b fl">${topo}${corpo}
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   $('capX').onclick = fecharCapivara
   $('fLim').onchange = ev => { try { localStorage.setItem('kp_limite', ev.target.value) } catch {} desenharFila(feitos) }
@@ -768,10 +768,10 @@ function abrirFicha(d, empilhar = true) {
   const linha = (ok, l, v) => `<div class="r"><span class="d ${ok ? 'ok' : 'neu'}">${ok ? '✓' : '–'}</span><span class="l">${l}</span><span class="v">${v}</span></div>`
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">${esc(e.nome)}</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
-  <header class="hd"><div><div class="k">Sem capivara ainda</div><h1>${esc(e.nome)}</h1><div class="lo">${IC.pin}${esc([e.bairro, e.cidade].filter(Boolean).join(' · '))}</div>
+  <header class="hd"><div><div class="k">Sem Raio-X ainda</div><h1>${esc(e.nome)}</h1><div class="lo">${IC.pin}${esc([e.bairro, e.cidade].filter(Boolean).join(' · '))}</div>
     <div class="sel"><span class="ang a-${d.angulo || 'nenhum'}">${ANG[d.angulo] || ''}</span></div></div>
-    <div class="dor" style="--o:${o}"><svg viewBox="0 0 112 112"><defs><linearGradient id="gdor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7BF0B0"/><stop offset="1" stop-color="#14A35A"/></linearGradient></defs><circle class="b" cx="56" cy="56" r="50"/><circle class="f" cx="56" cy="56" r="50"/></svg><div class="n"><div><b>${d.nota_dor ?? '–'}</b><span>oportunidade</span></div></div></div></header>
-  <section class="liz"><img src="img/liz_rosto_3d.png" alt="Liz"><div><div class="t">${esc(d.motivo || 'A peneira não deixou motivo pra essa.')}</div><div class="prova"><div class="m">O que eu já sei</div>Li só a ficha do Google. A capivara lê o site, as fotos e as avaliações e escreve a abordagem.</div></div></section>
+    <div class="dor" style="--o:${o}"><svg viewBox="0 0 112 112"><defs><linearGradient id="gdor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7BF0B0"/><stop offset="1" stop-color="#14A35A"/></linearGradient></defs><circle class="b" cx="56" cy="56" r="50"/><circle class="f" cx="56" cy="56" r="50"/></svg><div class="n"><div><b>${d.nota_dor ?? '–'}</b><span>potencial</span></div></div></div></header>
+  <section class="liz"><img src="img/liz_rosto_3d.png" alt="Liz"><div><div class="t">${esc(d.motivo || 'A triagem não deixou motivo pra essa.')}</div><div class="prova"><div class="m">O que eu já sei</div>Li só a ficha do Google. O Raio-X lê o site, as fotos e as avaliações e escreve a abordagem.</div></div></section>
   <section class="grid"><article class="bl"><div class="bl-h"><div class="ico ct">${IC.ct}</div><div><b>Contato</b><small>do Google e do site</small></div></div><div class="rows">
     ${linha(e.nota, 'Google', e.nota ? `${String(e.nota).replace('.', ',')} ★ · ${e.total_avaliacoes} avaliações` : 'sem nota')}
     ${linha(e.telefone, 'Telefone', e.telefone ? `<a href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">${esc(e.telefone)}</a>` : 'não tem')}
@@ -779,7 +779,7 @@ function abrirFicha(d, empilhar = true) {
     ${linha(e.instagram, 'Instagram', e.instagram ? `<a href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : 'não achei')}
     ${e.email ? linha(1, 'E-mail', `<a href="mailto:${esc(e.email)}">${esc(e.email)}</a>`) : ''}</div>
     ${e.google_maps_url ? `<div class="bl-f"><span>Fonte: Google Maps</span><a class="lnk" href="${esc(e.google_maps_url)}" target="_blank" rel="noopener">Abrir no Maps${IC.ext}</a></div>` : ''}</article></section>
-  <section class="ab"><div class="msg"><div class="h">Abordagem</div><p style="color:var(--mu)">Sai junto com a capivara.</p></div><div class="decd" id="decd"></div></section>
+  <section class="ab"><div class="msg"><div class="h">Abordagem</div><p style="color:var(--mu)">Sai junto com o Raio-X.</p></div><div class="decd" id="decd"></div></section>
   <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   desenharDecisao(d)
   if (empilhar) empilha('cap')
