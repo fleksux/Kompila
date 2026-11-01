@@ -536,7 +536,7 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .ind-o{position:fixed;inset:0;z-index:50;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;padding:96px 16px 24px;background:rgba(10,11,14,.32);backdrop-filter:blur(4px);opacity:0;transition:opacity .3s}
 .ind-o.on{opacity:1}
 .ind-o[hidden]{display:none}
-.ind{position:relative;width:min(460px,100%);background:var(--w);border-radius:20px;box-shadow:0 30px 80px rgba(10,11,14,.3);padding:72px 24px 20px;transform:translateY(24px) scale(.96);transition:transform .45s cubic-bezier(.2,1.4,.4,1)}
+.ind{position:relative;width:min(460px,100%);background:var(--w);border-radius:20px;box-shadow:0 30px 80px rgba(10,11,14,.3);padding:104px 24px 20px;transform:translateY(24px) scale(.96);transition:transform .45s cubic-bezier(.2,1.4,.4,1)}
 .ind-o.on .ind{transform:none}
 .ind-liz{position:absolute;left:50%;top:-84px;width:140px;transform:translateX(-50%);filter:drop-shadow(0 16px 24px rgba(10,11,14,.25));animation:lizFlutua 2.4s ease-in-out infinite}
 .ind-x{position:absolute;top:12px;right:12px}
@@ -604,3 +604,15 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .pf-mv b{font-family:var(--mono);font-size:13px}
 .pf-mv .pos{color:var(--gd)}
 .md span,.md b,.md small{text-align:left}
+/* ? de como funciona (01/11) */
+.como{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid currentColor;font-size:12px;font-weight:700;line-height:1;vertical-align:middle;opacity:.7;cursor:pointer;margin-left:4px;color:inherit;background:transparent}
+.como:hover{opacity:1}
+.pf-sd .como{color:#fff;flex:none;width:28px;height:28px;font-size:14px}
+.pf-sd span{display:block;text-align:left;margin-top:2px}
+.pf-sd b{font-size:22px}
+.cf{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.cf div{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r8);text-align:left}
+.cf b{display:block;font-size:14px}
+.cf span{display:block;font-size:13px;color:var(--mu);margin:2px 0 6px;line-height:1.45}
+.cf em{font-style:normal;font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--gd)}
+.ind p+p{margin-top:8px}
