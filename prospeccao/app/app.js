@@ -30,6 +30,11 @@ const CAPIVARA_USD = 0.016 // Sonnet 5.5, média medida no teste de 31/10 (Opus 
 let DOLAR = 5.44 // câmbio de 30/10; troca pelo do dia assim que a AwesomeAPI responde
 fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL').then(r => r.json()).then(j => { const v = +j?.USDBRL?.bid; if (v > 1) DOLAR = v }).catch(() => {})
 const reais = usd => 'R$ ' + (usd * DOLAR).toFixed(2).replace('.', ',')
+// saldo do cliente em reais (preços decididos pelo Alex em 01/11: busca R$ 0,50, Raio-X R$ 0,50, conta nova R$ 20; contas de 01/11 isentas)
+let SALDO = { isento: false, saldo: 0, busca: 50, raiox: 50 }
+const brlC = c => 'R$ ' + (c / 100).toFixed(2).replace('.', ',')
+const custoRaiox = n => SALDO.isento ? '' : ` · ${brlC(n * SALDO.raiox)}`
+async function carregarSaldo() { const { data } = await sb.rpc('meu_saldo'); if (data) SALDO = data; return SALDO }
 const ANG = { dor: 'Atendimento', canal: 'Presença digital', crescimento: 'Crescimento', nenhum: 'Fora do perfil' }
 
 /* ======================= estado ======================= */
@@ -64,6 +69,7 @@ async function iniciar() {
   if (usuario.user_metadata?.avatar_url) $('av').src = usuario.user_metadata.avatar_url; else inicial()
   $('av').title = $('avL').title = usuario.email
   vivo(false, 'Liz parada')
+  carregarSaldo()
   carregarHist(); contarCaptacao()
   pergunta(1)
 }
@@ -83,19 +89,19 @@ function pergunta(passo) {
   $('askc').innerHTML = `${passo === 2 ? `<div class="pick">${PIN}${esc(esc_.cidade)}</div>` : ''}<div class="stp">${q.stp}</div><h2>${q.h}</h2>
     <div class="fld"><input type="text" id="aq" placeholder="${q.ph}" autocomplete="off"><button class="btn go lg" id="ab">${q.bt}</button></div>
     <div class="err" id="ae"></div><div class="sg">${q.sg.map(x => `<button>${x}</button>`).join('')}</div>
-    ${passo === 2 ? `<div class="ou">Raio-X de quantas?</div><div class="sg" id="qt"><button data-t="0" class="on">As 5 melhores · ~${reais(5 * CAPIVARA_USD)}</button><button data-t="1">Todas · ~${reais(60 * CAPIVARA_USD)}</button></div>` : ''}
+    ${passo === 2 ? modosHtml() : ''}
     ${passo === 1 ? `<div class="ou">ou</div><div class="drop" id="drop"><div class="di">${IC.arq}</div><div><b>Sobe uma lista</b><small>Excel ou CSV com empresa, site ou cidade. Conta pessoal eu descarto.</small></div></div>` : ''}`
   const aq = $('aq'); if (!mob()) aq.focus()
   const vai = v => {
     v = (v || '').trim()
     if (!v) { $('ae').textContent = passo === 1 ? 'Me fala uma cidade pra eu começar.' : 'Me fala um nicho pra eu começar.'; aq.focus(); return }
     if (passo === 1) { esc_.cidade = cid.find(c => c.toLowerCase().startsWith(v.toLowerCase())) || v; pergunta(2) }
-    else { esc_.nicho = v.charAt(0).toUpperCase() + v.slice(1); fecharPergunta(); rodarBusca(esc_.cidade, esc_.nicho, esc_.todas) }
+    else { esc_.nicho = v.charAt(0).toUpperCase() + v.slice(1); fecharPergunta(); rodarBusca(esc_.cidade, esc_.nicho, esc_.modo || 'completa') }
   }
   $('ab').onclick = () => vai(aq.value)
   aq.onkeydown = e => { if (e.key === 'Enter') vai(aq.value) }
-  $('askc').querySelectorAll('.sg:not(#qt) button').forEach(b => b.onclick = () => vai(b.textContent))
-  $('askc').querySelectorAll('#qt button').forEach(b => b.onclick = () => { $('askc').querySelectorAll('#qt button').forEach(x => x.classList.toggle('on', x === b)); esc_.todas = b.dataset.t === '1' })
+  $('askc').querySelectorAll('.sg button').forEach(b => b.onclick = () => vai(b.textContent))
+  $('askc').querySelectorAll('.md').forEach(b => b.onclick = () => { esc_.modo = b.dataset.m; $('askc').querySelectorAll('.md').forEach(x => x.classList.toggle('on', x === b)); $('mdS').innerHTML = saldoDepois() })
   const dr = $('drop')
   if (dr) {
     dr.onclick = () => $('arq').click()
@@ -103,6 +109,18 @@ function pergunta(passo) {
     dr.ondragleave = () => dr.classList.remove('on')
     dr.ondrop = e => { e.preventDefault(); dr.classList.remove('on'); if (e.dataTransfer.files[0]) lerArquivo(e.dataTransfer.files[0]) }
   }
+}
+// lista simples, pesquisa completa (Raio-X das 5 melhores) ou completa de todas: o cliente escolhe quanto do saldo gasta
+const MODOS = [['lista', 'Lista simples', 'até 60 empresas com potencial, contato e Instagram', 0], ['completa', 'Pesquisa completa', 'a lista + Raio-X das 5 melhores', 5], ['todas', 'Completa de todas', 'a lista + Raio-X de todas (até 60)', 60]]
+const custoModo = m => SALDO.busca + MODOS.find(x => x[0] === m)[3] * SALDO.raiox
+function saldoDepois() {
+  if (SALDO.isento) return 'Sua conta é isenta: não desconta nada.'
+  const m = esc_.modo || 'completa', c = custoModo(m), d = SALDO.saldo - c
+  return `Seu saldo: <b>${brlC(SALDO.saldo)}</b> → ${d >= 0 ? `depois${m === 'todas' ? ' (no máximo)' : ''}: <b>${brlC(d)}</b>` : `<span class="neg">falta ${brlC(-d)}</span>`}`
+}
+function modosHtml() {
+  esc_.modo = esc_.modo || 'completa'
+  return `<div class="ou">como você quer?</div><div class="mds">${MODOS.map(([k, t, s, n]) => `<button class="md${esc_.modo === k ? ' on' : ''}" data-m="${k}"><i></i><span><b>${t}</b><small>${s}</small></span><em>${SALDO.isento ? 'incluso' : (n === 60 ? 'até ' : '') + brlC(SALDO.busca + n * SALDO.raiox)}</em></button>`).join('')}</div><div class="mds-s" id="mdS">${saldoDepois()}</div>`
 }
 function fecharPergunta() { $('ask').classList.add('bye'); setTimeout(() => $('ask').hidden = true, 700); document.body.classList.remove('fora') }
 const hora = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' }
@@ -143,7 +161,7 @@ function mostrarLista(nome, itens, fora) {
   $('askc').innerHTML = `<div class="stp">Lista</div><h2>Achei <em>${itens.length} empresas</em> em "${esc(nome)}".</h2>
     <p class="sub">Descartei ${fora.length} conta${fora.length === 1 ? '' : 's'} pessoa${fora.length === 1 ? 'l' : 'is'}. ${itens.length > MAX ? `Vou analisar as primeiras ${MAX} agora, o resto fica pra próxima rodada.` : 'Vou achar cada uma no Google e montar o Raio-X.'}</p>
     <div class="prev">${itens.slice(0, MAX).map(i => `<div class="pr"><b>${esc(i.nome || i.site)}</b><span>${esc(i.nome && i.site ? i.site : i.cidade || '')}</span></div>`).join('')}${fora.slice(0, 20).map(f => `<div class="pr fora">${esc(f.t)} <span>${f.m}</span></div>`).join('')}</div>
-    <div class="fld"><button class="btn ghost lg" id="lv">Voltar</button><button class="btn go lg" id="lg" style="flex:1">Analisar ${Math.min(itens.length, MAX)} empresas</button></div>`
+    <div class="fld"><button class="btn ghost lg" id="lv">Voltar</button><button class="btn go lg" id="lg" style="flex:1">Analisar ${Math.min(itens.length, MAX)} empresas${SALDO.isento ? '' : ` · até ${brlC(SALDO.busca + Math.min(itens.length, MAX) * SALDO.raiox)}`}</button></div>`
   $('lv').onclick = () => pergunta(1)
   $('lg').onclick = () => { fecharPergunta(); rodarLista(nome, itens.slice(0, MAX)) }
 }
@@ -169,7 +187,8 @@ function distancia(a, b) {
 }
 const parecida = (a, b) => { a = chave(a); b = chave(b); return a === b || (Math.min(a.length, b.length) >= 5 && distancia(a, b) <= 2) }
 
-async function rodarBusca(cidade, nicho, todas = false, quero = 60, novaMesmo = false) {
+async function rodarBusca(cidade, nicho, modo = 'completa', quero = 60, novaMesmo = false) {
+  if (modo === true) modo = 'todas'; if (!modo) modo = 'completa'
   // já pesquisou essa cidade e esse nicho (mesmo escrito diferente)? abre o que já tem e não gasta nada
   if (!novaMesmo) {
     const { data: antigas } = await sb.from('buscas').select('*').neq('cidade', 'Lista').neq('status', 'erro').order('criada_em', { ascending: false }).limit(200)
@@ -187,7 +206,8 @@ async function rodarBusca(cidade, nicho, todas = false, quero = 60, novaMesmo = 
     busca = { id: b.busca_id, cidade, nicho, status: 'peneirando', olhadas: b.olhadas, novas: b.novas, com_dor: 0 }
     atualizarFunil(); dizer(`Olhei ${b.olhadas} empresas. ${b.ja_tinha ? b.ja_tinha + ' você já tinha, então ' : ''}${b.novas} são novas${b.novas < quero ? ` (pedi ${quero}, mas a cidade não tem mais que isso nesse nicho)` : ''}. Lendo as avaliações agora.`)
     if (!b.novas) return fim('Nenhuma empresa nova nessa busca. Tenta outro nicho ou outra cidade.')
-    await peneirar(todas)
+    carregarSaldo()
+    await peneirar(modo)
   } catch (e) { erro(e) }
 }
 async function rodarLista(nome, itens) {
@@ -197,19 +217,21 @@ async function rodarLista(nome, itens) {
     const r = await chamar('importar', { nome_lista: nome, itens })
     busca = { id: r.busca_id, cidade: 'Lista', nicho: nome, status: 'peneirando', olhadas: r.na_lista, novas: r.achadas_no_google + r.so_pelo_site, com_dor: 0 }
     atualizarFunil(); dizer(`Achei ${r.achadas_no_google} no Google${r.so_pelo_site ? ` e ${r.so_pelo_site} só pelo site` : ''}.${r.nao_e_empresa ? ` ${r.nao_e_empresa} não parecem empresa.` : ''} Montando os Raio-X.`)
-    await peneirar(true)
+    carregarSaldo()
+    await peneirar('todas')
   } catch (e) { erro(e) }
 }
-async function peneirar(todas) {
-  const a = await chamar('analisar', { busca_id: busca.id, todas })
+async function peneirar(modo) {
+  const a = await chamar('analisar', { busca_id: busca.id, modo })
   busca.com_dor = a.com_dor; atualizarFunil()
   // contatos de todas (Instagram, e-mail, WhatsApp): grátis, roda em paralelo com as capivaras
   chamar('contatos', { busca_id: busca.id }).then(c => c?.instagram && setTimeout(() => dizer(`Achei o Instagram de ${c.instagram} empresas. Tá na lista.`), 6000)).catch(() => {})
+  if (modo === 'lista') return fim(`Lista pronta: ${a.olhadas} empresas com potencial e motivo. Abre em Empresas encontradas e pede o Raio-X de quem interessar.`)
   if (!a.finalistas) return fim('Nenhuma empresa com potencial forte aqui. Bora outro nicho?')
   dizer(`${a.finalistas} empresas merecem Raio-X. Já estou montando, uma por uma.`)
   acompanhar()
 }
-function erro(e) { vivo(false, 'Liz parada'); liz(`Travei aqui: ${esc(e.message)}`, 8000); if (busca) { busca.status = 'erro'; atualizarFunil() } }
+function erro(e) { vivo(false, 'Liz parada'); liz(/saldo/i.test(e.message) ? esc(e.message) : `Travei aqui: ${esc(e.message)}`, 8000); if (busca) { busca.status = 'erro'; atualizarFunil() } }
 function fim(t) { vivo(false, 'Liz parada'); dizer(t); carregarHist() }
 
 function acompanhar() {
@@ -296,10 +318,10 @@ function atualizarFunil() {
     if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.` : busca.status === 'erro' ? 'Travei nessa busca.' : busca.status === 'diagnosticando' ? `Montando os Raio-X: <em>${cap}</em> prontas.` : say.innerHTML
     const ac = $('mAcoes')
     if (ac) ac.innerHTML = busca.status === 'erro' ? '<button class="btn go" id="bDeNovo">Tentar de novo</button>'
-      : busca.status === 'pronta' ? `${resto ? `<button class="btn line" id="bResto">Raio-X das outras ${resto} · ~${reais(resto * CAPIVARA_USD)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div class="m-mais"><span>Encontrar mais empresas:</span>${[12, 30, 60].map(n => `<button class="btn line" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : ''
+      : busca.status === 'pronta' ? `${resto ? `<button class="btn line" id="bResto">Raio-X das outras ${resto}${custoRaiox(resto)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div class="m-mais"><span>Encontrar mais empresas:</span>${[12, 30, 60].map(n => `<button class="btn line" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : ''
     return
   }
-  if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.${resto ? `<br><button class="btn line sm" id="bResto" style="margin-top:12px">Fazer Raio-X das outras ${resto} · ~${reais(resto * CAPIVARA_USD)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--mu);font-weight:400">Encontrar mais empresas:</span>${[12, 30, 60].map(n => `<button class="btn line sm" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : busca.status === 'erro' ? 'Travei nessa busca. <button class="btn go sm" id="bDeNovo" style="margin-top:12px">Tentar de novo</button>' : busca.status === 'diagnosticando' ? `Montando os Raio-X: <em>${cap}</em> prontas.` : say.innerHTML
+  if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.${resto ? `<br><button class="btn line sm" id="bResto" style="margin-top:12px">Fazer Raio-X das outras ${resto}${custoRaiox(resto)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--mu);font-weight:400">Encontrar mais empresas:</span>${[12, 30, 60].map(n => `<button class="btn line sm" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : busca.status === 'erro' ? 'Travei nessa busca. <button class="btn go sm" id="bDeNovo" style="margin-top:12px">Tentar de novo</button>' : busca.status === 'diagnosticando' ? `Montando os Raio-X: <em>${cap}</em> prontas.` : say.innerHTML
 }
 document.addEventListener('click', e => {
   const n = e.target.dataset?.mais; if (!n || !busca) return
@@ -478,7 +500,7 @@ function desenharDecisao(d) {
   if (d.decisao === 'pulada') { box.innerHTML = `<div class="q">Decidido.</div><div class="feito" style="background:#F1F2EF;color:var(--mu)">Pulada. Não volta a aparecer.</div><button class="btn ghost" id="dDes">Desfazer</button>`; $('dDes').onclick = () => decidir(d, 'pendente'); return }
   if (!temCap(d)) {
     const fila = d.status === 'na_fila' || d.status === 'lendo'
-    box.innerHTML = `<div class="q">${fila ? 'Liz montando o Raio-X…' : 'Quer o Raio-X completo?'}</div>${fila ? '<span class="lendo-tag"><i></i>Lendo site, Google e fotos. Leva uns 40 segundos.</span>' : `<button class="btn go" id="dCap">Fazer Raio-X · ~${reais(CAPIVARA_USD)}</button>`}<button class="btn ok" id="dOk">${IC.ok}Adicionar ao pipeline</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
+    box.innerHTML = `<div class="q">${fila ? 'Liz montando o Raio-X…' : 'Quer o Raio-X completo?'}</div>${fila ? '<span class="lendo-tag"><i></i>Lendo site, Google e fotos. Leva uns 40 segundos.</span>' : `<button class="btn go" id="dCap">Fazer Raio-X${custoRaiox(1)}</button>`}<button class="btn ok" id="dOk">${IC.ok}Adicionar ao pipeline</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
     $('dOk').onclick = () => decidir(d, 'aprovada'); $('dPu').onclick = () => decidir(d, 'pulada')
     if ($('dCap')) $('dCap').onclick = async () => { $('dCap').disabled = true; $('dCap').textContent = 'Mandando pra Liz…'; await fazerUma(d); desenharDecisao(d); esperarCapivara(d.id) }
     return
@@ -858,6 +880,8 @@ async function abrirPerfil(empilhar = true) {
   const u = uso.data || [], gasto = u.reduce((t, x) => t + Number(x.custo_usd || 0), 0)
   const plano = pl.data?.plano || 'free', mg = pl.data?.meses_gratis || 0
   const g = gest.data ? (await sb.rpc('resumo_gestor')).data : null
+  await carregarSaldo()
+  const movs = SALDO.isento ? [] : ((await sb.from('movimento_saldo').select('centavos, tipo, descricao, criado_em').order('criado_em', { ascending: false }).limit(6)).data || [])
   const nome = usuario?.user_metadata?.full_name || usuario?.email || ''
   const mes = new Date().toLocaleDateString('pt-BR', { month: 'long' })
   const card = (v, k, s = '') => `<div class="pf-c"><b>${v}</b><span>${k}</span>${s ? `<small>${s}</small>` : ''}</div>`
@@ -865,6 +889,8 @@ async function abrirPerfil(empilhar = true) {
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Meu perfil</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b pf">
     <header class="pf-h">${$('av').hidden ? `<span class="pf-av">${esc(nome.charAt(0).toUpperCase())}</span>` : `<img class="pf-av" src="${esc($('av').src)}" alt="" referrerpolicy="no-referrer">`}
       <div><h2>${esc(nome)}</h2><small>${esc(usuario?.email || '')}</small></div><span class="pf-pl p-${plano}">${PLANO_TXT[plano][0]}${mg ? ` · ${mg} mês${mg === 1 ? '' : 'es'} grátis` : ''}</span></header>
+    <div class="pf-sd"><div><small>Saldo</small><b>${SALDO.isento ? 'Sem limite' : brlC(SALDO.saldo)}</b></div><span>${SALDO.isento ? 'Conta isenta: nada é descontado.' : `Busca ${brlC(SALDO.busca)} · Raio-X ${brlC(SALDO.raiox)}`}</span></div>
+    ${movs.length ? `<div class="pf-mv">${movs.map(m => `<div><span>${esc(m.descricao || m.tipo)}</span><small>${new Date(m.criado_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</small><b class="${m.centavos < 0 ? 'neg' : 'pos'}">${m.centavos < 0 ? '−' : '+'} ${brlC(Math.abs(m.centavos))}</b></div>`).join('')}</div>` : ''}
     <div class="pf-t">Meu uso em ${mes}</div>
     <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(ig.count || 0, 'perfis do Instagram')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
     <div class="pf-ac"><button class="btn line" id="pfInd">Indicar e ganhar 1 mês</button><button class="btn line" id="pfPipe">Ver meu pipeline</button></div>
