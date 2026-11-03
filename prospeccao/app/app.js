@@ -86,7 +86,7 @@ async function iniciar() {
   history.replaceState(null, '', location.pathname)
   $('login').hidden = true
   $('pUser').hidden = $('pHist').hidden = $('pZoom').hidden = false
-  badgeConv(); setInterval(badgeConv, 30000)
+  badgeConv(); setInterval(badgeConv, 15000)
   const inicial = () => { $('av').hidden = true; $('avL').hidden = false; $('avL').textContent = (usuario.user_metadata?.full_name || usuario.email || '?').trim().charAt(0).toUpperCase() }
   $('av').onerror = inicial
   if (usuario.user_metadata?.avatar_url) $('av').src = usuario.user_metadata.avatar_url; else inicial()
@@ -719,7 +719,7 @@ $('bCapt').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(),
 const DISP_ST = { pausada: ['Pausada', 'pausada'], rodando: ['Rodando', 'rodando'], concluida: ['Concluída', 'ok'], cancelada: ['Encerrada', 'off'] }
 const CHIP_DP = { na_fila: ['na fila', 'f'], enviando: ['enviando…', 'g'], enviado: ['enviado ✓', 'e'], entregue: ['entregue ✓✓', 'e'], lido: ['lido ✓✓', 'e'], respondeu: ['respondeu', 'r'], falhou: ['falhou', 'x'], parou: ['parou', 'x'] }
 const tfmt = t => { t = String(t || '').replace(/^55/, ''); return t.length === 11 ? t.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : t.length === 10 ? t.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3') : t }
-let dispTimer = null
+let dispTimer = null, convTimer = null
 async function abrirDisparo(empilhar = true) {
   const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(1)
   const camp = cs && cs[0]
@@ -816,8 +816,9 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
   const all = msgs || [], byTel = {}
   all.forEach(m => { (byTel[m.telefone] = byTel[m.telefone] || []).push(m) })
   const respSet = new Set(all.filter(m => m.direcao === 'in').map(m => m.telefone))
-  const tels = Object.keys(byTel).sort((a, b) => new Date(byTel[b][byTel[b].length - 1].criado_em) - new Date(byTel[a][byTel[a].length - 1].criado_em))
-  const nResp = respSet.size
+  const ordenar = () => Object.keys(byTel).sort((a, b) => new Date(byTel[b][byTel[b].length - 1].criado_em) - new Date(byTel[a][byTel[a].length - 1].criado_em))
+  let tels = ordenar()
+  let sel = null, ultimo = all.length ? all[all.length - 1].criado_em : ''
 
   const ehFone = t => /^55\d{10,11}$/.test(t)
   const nomeDe = t => (byTel[t].find(m => m.nome) || {}).nome || ''
@@ -842,24 +843,29 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     const { data: ev } = await sb.from('envio').select('diagnostico_id').eq('telefone', tel).not('diagnostico_id', 'is', null).order('enviado_em', { ascending: false, nullsFirst: false }).limit(1)
     const did = ev?.[0]?.diagnostico_id
     if (!did) { box.innerHTML = '<span class="tp t-ganho">Cliente</span>'; return }  // contatos deste número já são clientes
-    const { data: dg } = await sb.from('diagnosticos').select('id, etapa, etapa_em, decidida_em, empresa:empresas(nome)').eq('id', did).maybeSingle()
+    const { data: dg } = await sb.from('diagnosticos').select('id, etapa, etapa_em, decidida_em, nota_dor, angulo, motivo, anotacao, empresa:empresas(nome)').eq('id', did).maybeSingle()
     if (!dg) { box.innerHTML = ''; return }
     const render = () => {
       const t = TEMP[dg.etapa] || ['', 'Lead']
       const quando = dg.etapa_em || dg.decidida_em, n = dias(quando)
       const momento = quando ? (n === 0 ? 'nesta fase hoje' : `nesta fase há ${n} dia${n > 1 ? 's' : ''}`) : ''
-      box.innerHTML = `<span class="tp t-${t[0]}">${t[1] || 'Lead'}</span>${dg.empresa?.nome ? `<span class="cv2-emp">${esc(dg.empresa.nome)}</span>` : ''}${momento ? `<span class="cv2-tempo">${momento}</span>` : ''}<span class="cv2-et">${ETAPAS.map(([k, tx]) => `<button data-et="${k}" class="${dg.etapa === k ? 'on' : ''}">${tx}</button>`).join('')}</span>`
+      const dor = dg.nota_dor != null ? `<span class="cv2-dor"${dg.motivo ? ` title="${esc(dg.motivo)}"` : ''}><b>${dg.nota_dor}</b> ${ANG[dg.angulo] || 'potencial'}</span>` : ''
+      box.innerHTML = `<div class="cv2-fr"><span class="tp t-${t[0]}">${t[1] || 'Lead'}</span>${dg.empresa?.nome ? `<span class="cv2-emp">${esc(dg.empresa.nome)}</span>` : ''}${momento ? `<span class="cv2-tempo">${momento}</span>` : ''}<span class="cv2-et">${ETAPAS.map(([k, tx]) => `<button data-et="${k}" class="${dg.etapa === k ? 'on' : ''}">${tx}</button>`).join('')}</span></div>
+        <div class="cv2-dados">${dor}<input class="cv2-anot" placeholder="Anotação (ex: falei com a Ana, retornar segunda)" autocomplete="off"></div>`
       box.querySelectorAll('[data-et]').forEach(b => b.onclick = async () => {
         const nv = b.dataset.et
         const { error } = await sb.from('diagnosticos').update({ etapa: nv, etapa_em: new Date().toISOString() }).eq('id', dg.id)
         if (error) return liz('Não consegui mover a fase.')
         dg.etapa = nv; dg.etapa_em = new Date().toISOString(); render()
       })
+      const anot = box.querySelector('.cv2-anot')
+      if (anot) { anot.value = dg.anotacao || ''; let tm; anot.oninput = e => { dg.anotacao = e.target.value; clearTimeout(tm); tm = setTimeout(() => sb.from('diagnosticos').update({ anotacao: e.target.value }).eq('id', dg.id), 700) } }
     }
     render()
   }
 
   const selecionar = tel => {
+    sel = tel
     $('cap').querySelectorAll('.cv2-row').forEach(r => r.classList.toggle('on', r.dataset.tel === tel))
     const th = byTel[tel]
     const bolhas = th.map(m => `<div class="cv-b ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}<span class="cv-t">${hora(m.criado_em)}</span></div>`).join('')
@@ -895,17 +901,40 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     const pre = ult.direcao === 'in' ? '' : '<span class="cv-vc">você:</span> '
     return `<button class="cv-row cv2-row" data-tel="${esc(tel)}">${avatar(tel)}<span class="cv-main"><span class="cv-nome">${label(tel)}</span><span class="cv-prev">${pre}${snip}</span></span><span class="cv-meta"><span class="cv-time">${hora(ult.criado_em)}</span>${resp ? '<span class="cv-dot"></span>' : ''}</span></button>`
   }
+  const listaHTML = () => { const nr = respSet.size; return `<p class="cv-lead">${nr ? `<b>${nr}</b> ${nr === 1 ? 'respondeu' : 'responderam'} · ` : ''}${tels.length} ${tels.length === 1 ? 'conversa' : 'conversas'}</p>${tels.map(row).join('')}` }
+  const bindLista = () => $('cap').querySelectorAll('.cv2-row').forEach(el => { el.onclick = () => selecionar(el.dataset.tel); el.classList.toggle('on', el.dataset.tel === sel) })
+  const renderLista = () => { tels = ordenar(); const l = $('cap').querySelector('.cv2-list'); if (!l) return; l.innerHTML = listaHTML(); bindLista() }
+
+  // atualiza sozinho: a cada 2s puxa só o que chegou depois da última mensagem
+  async function atualizar() {
+    const cap = $('cap')
+    if (!cap.classList.contains('on') || !cap.querySelector('.cv2')) { clearInterval(convTimer); convTimer = null; return }
+    const { data: novos } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em').gt('criado_em', ultimo).order('criado_em', { ascending: true })
+    if (!novos || !novos.length) return
+    ultimo = novos[novos.length - 1].criado_em
+    for (const m of novos) {
+      (byTel[m.telefone] = byTel[m.telefone] || []).push(m)
+      if (m.direcao === 'in') respSet.add(m.telefone)
+      if (m.telefone === sel && m.direcao === 'in') {
+        const sc = cap.querySelector('.cv-scroll')
+        if (sc) { const b = document.createElement('div'); b.className = 'cv-b in'; b.innerHTML = `${esc(m.texto)}<span class="cv-t">${hora(m.criado_em)}</span>`; const perto = sc.scrollHeight - sc.scrollTop - sc.clientHeight < 80; sc.appendChild(b); if (perto) sc.scrollTop = sc.scrollHeight }
+      }
+    }
+    renderLista()
+  }
+
   const body = tels.length
-    ? `<div class="cv2"><div class="cv2-list"><p class="cv-lead">${nResp ? `<b>${nResp}</b> ${nResp === 1 ? 'respondeu' : 'responderam'} · ` : ''}${tels.length} ${tels.length === 1 ? 'conversa' : 'conversas'}</p>${tels.map(row).join('')}</div><div class="cv2-chat"><div class="cv2-nada">Escolhe uma conversa à esquerda.</div></div></div>`
+    ? `<div class="cv2"><div class="cv2-list">${listaHTML()}</div><div class="cv2-chat"><div class="cv2-nada">Escolhe uma conversa à esquerda.</div></div></div>`
     : `<div class="cp-vazio">Nenhuma conversa ainda.<br>Dispara uma campanha e as respostas aparecem aqui.</div>`
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Conversas</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b cv2wrap">${body}</div>`
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('conversas')
-  $('cap').querySelectorAll('.cv2-row').forEach(el => { el.onclick = () => selecionar(el.dataset.tel) })
+  bindLista()
   const first = abrirTel && byTel[abrirTel] ? abrirTel : (!mob() && tels.length ? tels[0] : null)
   if (first) selecionar(first)
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+  clearInterval(convTimer); convTimer = setInterval(atualizar, 2000)
 }
 
 /* ======================= fila de envio: um toque por empresa ======================= */
