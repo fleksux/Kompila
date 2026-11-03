@@ -537,7 +537,8 @@ function desenha() {
   const form = ks.length ? `<div class="form" id="form"><h4>Seus dados</h4>
     <label class="campo"><span>Nome</span><input name="nome" autocomplete="name" value="${esc(dados.nome)}"></label>
     <label class="campo"><span>Seu WhatsApp (com DDD)</span><input name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 90000-0000" value="${esc(dados.telefone)}"></label>
-    <div class="duas"><label class="campo"><span>Data</span><input name="data" type="date" value="${esc(dados.data)}"></label><label class="campo"><span>Pessoas (opcional)</span><input name="pessoas" inputmode="numeric" value="${esc(dados.pessoas)}"></label></div>
+    <div class="duas"><label class="campo"><span>Data</span><input name="data" type="date" value="${esc(dados.data)}"></label><label class="campo"><span>Horário</span><input name="hora" type="time" step="900" value="${esc(dados.hora || '')}"></label></div>
+    <label class="campo"><span>Pessoas (opcional)</span><input name="pessoas" inputmode="numeric" value="${esc(dados.pessoas)}"></label>
     <div class="modo"><label><input type="radio" name="modo" value="Retirada no ateliê" ${dados.modo !== 'Entrega' ? 'checked' : ''}> Retirada</label><label><input type="radio" name="modo" value="Entrega" ${dados.modo === 'Entrega' ? 'checked' : ''}> Entrega</label></div>
     <label class="campo" id="c-end" ${dados.modo === 'Entrega' ? '' : 'hidden'}><span>Endereço da entrega</span><input name="endereco" autocomplete="street-address" value="${esc(dados.endereco)}"></label>
     <label class="campo"><span>Observações</span><textarea name="obs" rows="2" placeholder="Opção do pacote, horário, restrições">${esc(dados.obs)}</textarea></label></div>` : ''
@@ -547,7 +548,7 @@ function desenha() {
 function lerForm() {
   const f = $('#form'); if (!f) return dados
   const g = n => (f.querySelector(`[name="${n}"]`) || {}).value || ''
-  dados = { nome: g('nome').trim(), telefone: g('telefone').trim(), data: g('data'), pessoas: g('pessoas').trim(), modo: (f.querySelector('[name="modo"]:checked') || {}).value === 'Entrega' ? 'Entrega' : 'Retirada no ateliê', endereco: g('endereco').trim(), obs: g('obs').trim() }
+  dados = { nome: g('nome').trim(), telefone: g('telefone').trim(), data: g('data'), hora: g('hora'), pessoas: g('pessoas').trim(), modo: (f.querySelector('[name="modo"]:checked') || {}).value === 'Entrega' ? 'Entrega' : 'Retirada no ateliê', endereco: g('endereco').trim(), obs: g('obs').trim() }
   try { localStorage.setItem(CH + ':dados', JSON.stringify(dados)) } catch (e) {}
   return dados
 }
@@ -560,7 +561,7 @@ async function enviar() {
   if (!d.nome) { nome.classList.add('erro'); nome.focus(); toast('Coloca seu nome pra gente te chamar'); return }
   if (dig.length < 10 || dig.length > 13) { tel.classList.add('erro'); tel.focus(); toast('Coloca seu WhatsApp com DDD'); return }
   if (d.modo === 'Entrega' && d.endereco.length < 5) { const en = $('#form [name="endereco"]'); en.classList.add('erro'); en.focus(); toast('Coloca o endereço da entrega'); return }
-  const dt = d.data ? d.data.split('-').reverse().join('/') : 'a combinar'
+  const dt = (d.data ? d.data.split('-').reverse().join('/') : 'a combinar') + (d.hora ? ` às ${d.hora}` : '')
   const linhas = Object.entries(pedido).map(([k, q]) => { const it = CAT[k]; return `• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(it.p * q)}` })
   const janela = window.open('', '_blank')
   enviando = true; const bt = $('#enviar'); bt.textContent = 'Enviando...'
@@ -568,7 +569,7 @@ async function enviar() {
   try {
     const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
       chave: 'kmp_maeda', nome: d.nome, telefone: dig, tipo: d.modo === 'Entrega' ? 'entrega' : 'retirada', endereco: d.endereco, pagamento: 'Pix ou transferência',
-      obs: [`Data: ${dt}`, d.pessoas ? `Pessoas: ${d.pessoas}` : '', d.obs].filter(Boolean).join(' · '),
+      obs: [d.pessoas ? `Pessoas: ${d.pessoas}` : '', d.obs].filter(Boolean).join(' · '), entrega_dia: d.data || undefined, entrega_hora: d.hora || undefined,
       itens: Object.entries(pedido).map(([k, qtd]) => ({ id: CAT[k].id || k, qtd, ...(CAT[k].obs ? { obs: CAT[k].obs } : {}) })) }) })
     const j = await r.json().catch(() => ({}))
     if (r.ok && j.numero) numero = j.numero
