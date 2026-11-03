@@ -80,6 +80,13 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .comp li{list-style:none;font-size:14.5px;padding:5px 0;border-bottom:1px dashed var(--linha)}
 .comp li span{display:block;font-size:13px;color:var(--cinza)}
 .comp .ou{font-size:12.5px;font-weight:600;color:var(--ouro-escuro);text-transform:uppercase;letter-spacing:.12em;padding:4px 0}
+.escolha-ou{margin-top:12px}
+.esc-set+.esc-set{margin-top:12px}
+.escolha-ou p{font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ouro-escuro);margin:0 0 8px}
+.escolha-ou p.falta{color:#B5552A}
+.opcs{display:flex;flex-wrap:wrap;gap:8px}
+.opc{min-height:44px;padding:10px 14px;border:1px solid var(--linha);background:#fff;font-size:14.5px;text-align:left;line-height:1.25}
+.opc.on{border-color:var(--ouro-escuro);background:var(--ouro-escuro);color:#fff}
 .comp .nota{font-size:13px;color:var(--cinza);background:var(--fundo);padding:10px 12px;margin-top:10px}
 .add{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:50px;background:var(--ouro-escuro);color:#fff;font-size:15.5px;font-weight:600}
 .pac .add{margin-top:12px}
@@ -379,6 +386,7 @@ const zap = t => `https://wa.me/${M.contato.whatsapp}?text=${encodeURIComponent(
 // tudo que entra no pedido tem uma chave
 const CAT = {}
 const reg = (k, o) => (CAT[k] = o, k)
+const ESC = {}   // pacote com "ou" → opções
 
 const info = `<span><b>Pagamento:</b> Pix ou transferência</span><span><b>Entrega:</b> retirada no ateliê ou entrega (frete à parte)</span><span><b>NF:</b> em torno de 14%</span>`
 $('#info-natal').innerHTML = info
@@ -399,8 +407,19 @@ const grupoHTML = (g, sid) => `${g.t ? `<div class="grupo-t">${esc(g.t)}${g.nota
 // ---------- natal ----------
 const pacs = M.natal.pacotes
 $('#pacs').innerHTML = pacs.map(p => {
-  const k = reg(`natal:${p.id}`, { n: `Natal · ${p.n}`, det: p.pessoas, p: p.p })
-  const temOu = p.grupos.some(([, it]) => it.some(x => x[3]))
+  // "ou" (02/11): o prato que tem alternativa vira escolha no card; cada escolha é um item do pedido com a opção na obs
+  // cada 'ou' abre uma escolha e os 'alt' seguintes entram nela (o pacote 5 tem duas)
+  const sets = []; p.grupos.forEach(([t, it]) => it.forEach(x => { if (x[3] === 'ou') sets.push({ t, ops: [x[0]] }); else if (x[3] === 'alt' && sets.length) sets[sets.length - 1].ops.push(x[0]) }))
+  const temOu = sets.length > 0
+  const k = temOu ? `natal:${p.id}` : reg(`natal:${p.id}`, { n: `Natal · ${p.n}`, det: p.pessoas, p: p.p })
+  const curto = n => n.split(/,| marinad| assad| com miolo/)[0]
+  if (temOu) {
+    ESC[k] = sets
+    const combos = sets.reduce((acc, st) => acc.flatMap(c => st.ops.map(o => [...c, o])), [[]])
+    combos.forEach(c => reg(`${k}|${c.join(' + ')}`, { id: k, n: `Natal · ${p.n}`, det: `${p.pessoas} · ${c.map(curto).join(' + ')}`, p: p.p, obs: `Escolha: ${c.join(' + ')}` }))
+  }
+  const rotulo = (st, i) => sets.length > 1 ? `Prato principal ${i + 1}: escolha um` : (/prato/i.test(st.t) ? 'Escolha o prato principal' : 'Escolha uma opção')
+  const escolha = temOu ? `<div class="escolha-ou" data-esc="${k}">${sets.map((st, i) => `<div class="esc-set"><p>${rotulo(st, i)}</p><div class="opcs">${st.ops.map(o => `<button type="button" class="opc" data-opc="${esc(o)}">${esc(curto(o))}</button>`).join('')}</div></div>`).join('')}</div>` : ''
   const comp = p.grupos.map(([t, it]) => `<h4>${esc(t)}</h4><ul>${it.map(x => (x[3] === 'alt' ? '<li class="ou">ou</li>' : '') + `<li>${esc(x[0])}${x[1] ? `<span>${esc(x[1])}</span>` : ''}</li>`).join('')}</ul>`).join('')
   return `<article class="pac" id="p-${p.id}">
     <div class="f"><img src="img/${p.foto}" alt="${esc(p.n)}" loading="lazy"></div>
@@ -408,7 +427,8 @@ $('#pacs').innerHTML = pacs.map(p => {
       <div class="topo-c"><h3>${esc(p.n)}</h3><span class="preco">${brl(p.p)}</span></div>
       <span class="quem">${esc(p.pessoas)}</span>
       <button class="ver" data-ver aria-expanded="false">Ver composição <i>+</i></button>
-      <div class="comp-w"><div class="comp">${comp}<p class="nota">${esc(M.natal.farofinha)}${temOu ? ' Onde aparece "ou", você escolhe uma opção e escreve nas observações do pedido.' : ''}</p></div></div>
+      <div class="comp-w"><div class="comp">${comp}<p class="nota">${esc(M.natal.farofinha)}${temOu ? ' Onde aparece "ou", você escolhe a opção logo abaixo.' : ''}</p></div></div>
+      ${escolha}
       <button class="add" data-add="${k}">Adicionar ao pedido <span>+</span></button>
       <a class="zap-link" href="${zap(`Olá, Maeda! Tenho interesse no ${p.n} (${p.pessoas}), ${brl(p.p)}.`)}" target="_blank" rel="noopener">Tirar dúvida no WhatsApp</a>
     </div></article>`
@@ -472,16 +492,26 @@ function marca() {
   $('#barra-total').textContent = brl(total())
   document.body.classList.toggle('com-barra', !!n)
   $$('[data-add]').forEach(b => {
-    const ok = !!pedido[b.dataset.add]
+    const q = ESC[b.dataset.add] ? Object.keys(pedido).filter(x => x.startsWith(b.dataset.add + '|')).reduce((a, x) => a + pedido[x], 0) : pedido[b.dataset.add]
+    const ok = !!q
     b.classList.toggle('ok', ok)
-    if (b.classList.contains('add')) b.innerHTML = ok ? `No pedido (${pedido[b.dataset.add]}) <span>+</span>` : 'Adicionar ao pedido <span>+</span>'
-    else b.textContent = ok ? `✓ ${pedido[b.dataset.add]} no pedido` : 'Adicionar'
+    if (b.classList.contains('add')) b.innerHTML = ok ? `No pedido (${q}) <span>+</span>` : 'Adicionar ao pedido <span>+</span>'
+    else b.textContent = ok ? `✓ ${q} no pedido` : 'Adicionar'
   })
 }
 let tt
 function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('on'), 1800) }
 let origem = null
 function add(k) {
+  if (ESC[k]) {
+    const box = document.querySelector(`[data-esc="${k}"]`), escolhas = []
+    for (const st of box.querySelectorAll('.esc-set')) {
+      const on = st.querySelector('.opc.on')
+      if (!on) { st.querySelector('p').classList.add('falta'); st.scrollIntoView({ block: 'center', behavior: 'smooth' }); return toast('Escolha o prato principal antes de adicionar') }
+      escolhas.push(on.dataset.opc)
+    }
+    k = `${k}|${escolhas.join(' + ')}`
+  }
   const it = CAT[k]; if (!it) return
   pedido[k] = (pedido[k] || 0) + (pedido[k] ? 1 : (it.min || 1))
   salva(); marca(); toast(`${it.n} no pedido`)
@@ -539,7 +569,7 @@ async function enviar() {
     const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
       chave: 'kmp_maeda', nome: d.nome, telefone: dig, tipo: d.modo === 'Entrega' ? 'entrega' : 'retirada', endereco: d.endereco, pagamento: 'Pix ou transferência',
       obs: [`Data: ${dt}`, d.pessoas ? `Pessoas: ${d.pessoas}` : '', d.obs].filter(Boolean).join(' · '),
-      itens: Object.entries(pedido).map(([id, qtd]) => ({ id, qtd })) }) })
+      itens: Object.entries(pedido).map(([k, qtd]) => ({ id: CAT[k].id || k, qtd, ...(CAT[k].obs ? { obs: CAT[k].obs } : {}) })) }) })
     const j = await r.json().catch(() => ({}))
     if (r.ok && j.numero) numero = j.numero
   } catch (e) {}
@@ -553,6 +583,8 @@ function abre() { $('#toast').classList.remove('on'); desenha(); $('#pedido').cl
 function fecha() { lerForm(); $('#pedido').classList.remove('on'); $('#pedido').setAttribute('aria-hidden', 'true'); $('#veu').classList.remove('on'); document.body.style.overflow = '' }
 
 document.addEventListener('click', e => {
+  const o = e.target.closest('[data-opc]')
+  if (o) { o.parentElement.querySelectorAll('.opc').forEach(x => x.classList.toggle('on', x === o)); o.closest('.esc-set').querySelector('p').classList.remove('falta'); return }
   const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-ver],[data-abre-pedido],[data-fecha],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
   if (!t) { if (e.target.id === 'luz') $('#luz').classList.remove('on'); return }
   if (t.matches('[data-add]')) { origem = t; return add(t.dataset.add) }
