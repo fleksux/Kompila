@@ -888,6 +888,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
       const b = document.createElement('div'); b.className = 'cv-b out'
       b.innerHTML = `${esc(val)}<span class="cv-t">${hora(new Date().toISOString())}</span>`
       sc.appendChild(b); sc.scrollTop = sc.scrollHeight; inp.value = ''; inp.focus()
+      carregarFase(tel)  // refresca a fase: 'a contatar' já virou 'contatado' no servidor
     }
     btn.onclick = enviar
     inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); enviar() } }
