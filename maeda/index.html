@@ -387,6 +387,21 @@ const zap = t => `https://wa.me/${M.contato.whatsapp}?text=${encodeURIComponent(
 const CAT = {}
 const reg = (k, o) => (CAT[k] = o, k)
 const ESC = {}   // pacote com "ou" → opções
+// de onde a pessoa veio (03/11): ?de= do link (whats, insta, site...), utm_source, ou o site anterior. Vale a primeira da visita.
+const ORIGEM = (() => {
+  const nomes = { whats: 'WhatsApp', whatsapp: 'WhatsApp', wa: 'WhatsApp', zap: 'WhatsApp', insta: 'Instagram', instagram: 'Instagram', ig: 'Instagram', face: 'Facebook', facebook: 'Facebook', fb: 'Facebook', site: 'Site da Maeda', google: 'Google', liz: 'Liz' }
+  let o = ''
+  try { o = sessionStorage.getItem('maeda-origem') || '' } catch (e) {}
+  if (o) return o
+  const q = new URLSearchParams(location.search), de = (q.get('de') || q.get('utm_source') || '').toLowerCase().trim()
+  if (de) o = nomes[de] || de.slice(0, 30)
+  else {
+    let h = ''; try { h = new URL(document.referrer).hostname } catch (e) {}
+    o = /instagram/.test(h) ? 'Instagram' : /facebook|fb\./.test(h) ? 'Facebook' : /maedagastronomia/.test(h) ? 'Site da Maeda' : /google\./.test(h) ? 'Google' : /bing\./.test(h) ? 'Bing' : /chatgpt|openai/.test(h) ? 'ChatGPT' : /perplexity/.test(h) ? 'Perplexity' : /whatsapp/.test(h) ? 'WhatsApp' : h && !/kompila\.com\.br/.test(h) ? h.replace(/^www\./, '') : 'Link direto'
+  }
+  try { sessionStorage.setItem('maeda-origem', o) } catch (e) {}
+  return o
+})()
 
 const info = `<span><b>Pagamento:</b> Pix ou transferência</span><span><b>Entrega:</b> retirada no ateliê ou entrega (frete à parte)</span><span><b>NF:</b> em torno de 14%</span>`
 $('#info-natal').innerHTML = info
@@ -569,7 +584,7 @@ async function enviar() {
   try {
     const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
       chave: 'kmp_maeda', nome: d.nome, telefone: dig, tipo: d.modo === 'Entrega' ? 'entrega' : 'retirada', endereco: d.endereco, pagamento: 'Pix ou transferência',
-      obs: [d.pessoas ? `Pessoas: ${d.pessoas}` : '', d.obs].filter(Boolean).join(' · '), entrega_dia: d.data || undefined, entrega_hora: d.hora || undefined,
+      obs: [d.pessoas ? `Pessoas: ${d.pessoas}` : '', d.obs].filter(Boolean).join(' · '), entrega_dia: d.data || undefined, entrega_hora: d.hora || undefined, origem_link: ORIGEM,
       itens: Object.entries(pedido).map(([k, qtd]) => ({ id: CAT[k].id || k, qtd, ...(CAT[k].obs ? { obs: CAT[k].obs } : {}) })) }) })
     const j = await r.json().catch(() => ({}))
     if (r.ok && j.numero) numero = j.numero
