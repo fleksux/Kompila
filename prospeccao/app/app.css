@@ -712,6 +712,10 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .cv-h b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cv-tel{font-weight:400;color:var(--mu2);font-size:12px;font-family:var(--mono)}
 .cv-h small{display:block;font-size:12.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.cv-reply{display:flex;gap:8px;align-items:center;margin-top:8px}
+.cv-in{flex:1;min-width:0;height:38px;border:1px solid var(--line2);border-radius:20px;padding:0 14px;font:inherit;font-size:14px;outline:0;background:#fff;color:var(--tx)}
+.cv-in:focus{border-color:var(--tx)}
+.cv-send{flex:none;height:38px}
 .dp-chip{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;transition:background .3s}
 .dp-chip.c-f{background:var(--s);color:var(--mu)}
 .dp-chip.c-g{background:var(--as);color:var(--a)}

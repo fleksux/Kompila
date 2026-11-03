@@ -791,20 +791,39 @@ async function abrirDisparo(empilhar = true) {
 
 /* ======================= conversas (inbox) ======================= */
 async function abrirConversas(empilhar = true) {
-  const { data: evs } = await sb.from('envio').select('empresa_nome, telefone, mensagem, resposta, status, enviado_em, respondido_em')
-    .order('respondido_em', { ascending: false, nullsFirst: false }).order('enviado_em', { ascending: false, nullsFirst: false })
-  const seen = new Set(), lista = []
-  for (const e of (evs || [])) { if (!e.telefone || seen.has(e.telefone)) continue; seen.add(e.telefone); lista.push(e) }
-  const nResp = lista.filter(e => e.resposta).length
-  const row = e => { const resp = !!e.resposta, snip = String(resp ? e.resposta : e.mensagem || '').replace(/\s+/g, ' ').slice(0, 64); return `<div class="dp-it" data-tel="${esc(e.telefone)}"><div class="dp-it-top"><div class="cv-h"><b>${esc(e.empresa_nome || 'Contato')} <span class="cv-tel">${esc(tfmt(e.telefone))}</span></b><small>${resp ? '↩ ' : 'você: '}${esc(snip)}</small></div><span class="dp-chip c-${resp ? 'r' : 'e'}">${resp ? 'respondeu' : 'enviado'}</span></div><div class="dp-conv"><div class="dp-msg out">${esc(e.mensagem || '')}</div>${resp ? `<div class="dp-msg in">${esc(e.resposta)}</div>` : ''}</div></div>` }
-  const body = lista.length
-    ? `<p class="dp-lead">${nResp ? `<b>${nResp}</b> ${nResp === 1 ? 'respondeu' : 'responderam'}. ` : ''}Toca num contato pra ver a conversa.</p><div class="dp-list">${lista.map(row).join('')}</div>`
+  const { data: msgs } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em').order('criado_em', { ascending: true })
+  const all = msgs || [], byTel = {}
+  all.forEach(m => { (byTel[m.telefone] = byTel[m.telefone] || []).push(m) })
+  const respSet = new Set(all.filter(m => m.direcao === 'in').map(m => m.telefone))
+  const tels = Object.keys(byTel).sort((a, b) => new Date(byTel[b][byTel[b].length - 1].criado_em) - new Date(byTel[a][byTel[a].length - 1].criado_em))
+  const nResp = respSet.size
+  const row = tel => {
+    const th = byTel[tel], ult = th[th.length - 1], nome = (th.find(m => m.nome) || {}).nome || 'Contato', resp = respSet.has(tel)
+    const snip = String(ult.texto || '').replace(/\s+/g, ' ').slice(0, 64)
+    return `<div class="dp-it" data-tel="${esc(tel)}"><div class="dp-it-top"><div class="cv-h"><b>${esc(nome)} <span class="cv-tel">${esc(tfmt(tel))}</span></b><small>${ult.direcao === 'in' ? '↩ ' : 'você: '}${esc(snip)}</small></div><span class="dp-chip c-${resp ? 'r' : 'e'}">${resp ? 'respondeu' : 'enviado'}</span></div><div class="dp-conv">${th.map(m => `<div class="dp-msg ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}</div>`).join('')}<div class="cv-reply"><input class="cv-in" placeholder="Responder…" autocomplete="off"><button class="cv-send btn ok sm">Enviar</button></div></div></div>`
+  }
+  const body = tels.length
+    ? `<p class="dp-lead">${nResp ? `<b>${nResp}</b> ${nResp === 1 ? 'respondeu' : 'responderam'}. ` : ''}Toca num contato pra ver e responder.</p><div class="dp-list">${tels.map(row).join('')}</div>`
     : `<div class="cp-vazio">Nenhuma conversa ainda.<br>Dispara uma campanha e as respostas aparecem aqui.</div>`
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Conversas</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${body}</div>`
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('conversas')
-  $('cap').querySelectorAll('.dp-it').forEach(el => { const top = el.querySelector('.dp-it-top'); if (top) top.onclick = () => el.classList.toggle('aberto') })
+  $('cap').querySelectorAll('.dp-it').forEach(el => {
+    el.querySelector('.dp-it-top').onclick = () => el.classList.toggle('aberto')
+    const inp = el.querySelector('.cv-in'), btn = el.querySelector('.cv-send'), tel = el.dataset.tel
+    const enviar = async () => {
+      const val = (inp.value || '').trim(); if (!val) return
+      btn.disabled = true
+      const { data, error } = await sb.functions.invoke('responder', { body: { telefone: tel, texto: val } })
+      btn.disabled = false
+      if (error || data?.erro) return liz(esc(data?.erro || 'Não consegui enviar.'))
+      const b = document.createElement('div'); b.className = 'dp-msg out'; b.textContent = val
+      el.querySelector('.cv-reply').before(b); inp.value = ''; inp.focus()
+    }
+    if (btn) btn.onclick = enviar
+    if (inp) inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); enviar() } }
+  })
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
 
