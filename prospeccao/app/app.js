@@ -790,40 +790,77 @@ async function abrirDisparo(empilhar = true) {
 }
 
 /* ======================= conversas (inbox) ======================= */
-async function abrirConversas(empilhar = true) {
+const AVCORES = ['#1FA463', '#2D6CDF', '#E0803B', '#9B51E0', '#D94F6B', '#17A2B8', '#C99A2E', '#5A6472']
+const CVIC = {
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>',
+  user: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8.3" r="4"/><path d="M4.2 20c.6-4 3.9-6 7.8-6s7.2 2 7.8 6z"/></svg>',
+  send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>'
+}
+async function abrirConversas(empilhar = true, abrirTel = null) {
   const { data: msgs } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em').order('criado_em', { ascending: true })
   const all = msgs || [], byTel = {}
   all.forEach(m => { (byTel[m.telefone] = byTel[m.telefone] || []).push(m) })
   const respSet = new Set(all.filter(m => m.direcao === 'in').map(m => m.telefone))
   const tels = Object.keys(byTel).sort((a, b) => new Date(byTel[b][byTel[b].length - 1].criado_em) - new Date(byTel[a][byTel[a].length - 1].criado_em))
   const nResp = respSet.size
-  const row = tel => {
-    const th = byTel[tel], ult = th[th.length - 1], nome = (th.find(m => m.nome) || {}).nome || 'Contato', resp = respSet.has(tel)
-    const snip = String(ult.texto || '').replace(/\s+/g, ' ').slice(0, 64)
-    return `<div class="dp-it" data-tel="${esc(tel)}"><div class="dp-it-top"><div class="cv-h"><b>${esc(nome)} <span class="cv-tel">${esc(tfmt(tel))}</span></b><small>${ult.direcao === 'in' ? '↩ ' : 'você: '}${esc(snip)}</small></div><span class="dp-chip c-${resp ? 'r' : 'e'}">${resp ? 'respondeu' : 'enviado'}</span></div><div class="dp-conv">${th.map(m => `<div class="dp-msg ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}</div>`).join('')}<div class="cv-reply"><input class="cv-in" placeholder="Responder…" autocomplete="off"><button class="cv-send btn ok sm">Enviar</button></div></div></div>`
+
+  const ehFone = t => /^55\d{10,11}$/.test(t)
+  const nomeDe = t => (byTel[t].find(m => m.nome) || {}).nome || ''
+  const label = t => { const n = nomeDe(t); return n ? esc(n) : (ehFone(t) ? esc(tfmt(t)) : 'Contato') }
+  const subDe = t => { const n = nomeDe(t); return n && ehFone(t) ? esc(tfmt(t)) : '' }
+  const inic = t => { const n = nomeDe(t); if (!n) return ''; const p = n.trim().split(/\s+/); return (p[0][0] + (p[1] ? p[1][0] : '')).toUpperCase() }
+  const cor = t => AVCORES[[...t].reduce((a, c) => a + c.charCodeAt(0), 0) % AVCORES.length]
+  const hora = iso => {
+    const d = new Date(iso), hoje = new Date()
+    const hm = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    if (d.toDateString() === hoje.toDateString()) return hm
+    const o = new Date(hoje); o.setDate(o.getDate() - 1)
+    if (d.toDateString() === o.toDateString()) return 'ontem'
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
   }
-  const body = tels.length
-    ? `<p class="dp-lead">${nResp ? `<b>${nResp}</b> ${nResp === 1 ? 'respondeu' : 'responderam'}. ` : ''}Toca num contato pra ver e responder.</p><div class="dp-list">${tels.map(row).join('')}</div>`
-    : `<div class="cp-vazio">Nenhuma conversa ainda.<br>Dispara uma campanha e as respostas aparecem aqui.</div>`
-  $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
-  $('cap').innerHTML = `<div class="cap-x"><span class="t">Conversas</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${body}</div>`
-  $('capX').onclick = fecharCapivara
-  if (empilhar) empilha('conversas')
-  $('cap').querySelectorAll('.dp-it').forEach(el => {
-    el.querySelector('.dp-it-top').onclick = () => el.classList.toggle('aberto')
-    const inp = el.querySelector('.cv-in'), btn = el.querySelector('.cv-send'), tel = el.dataset.tel
+  const avatar = t => `<span class="cv-av" style="background:${cor(t)}">${inic(t) || CVIC.user}</span>`
+
+  const abrir = tel => {
+    const th = byTel[tel]
+    const bolhas = th.map(m => `<div class="cv-b ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}<span class="cv-t">${hora(m.criado_em)}</span></div>`).join('')
+    $('cap').querySelector('.cap-b').innerHTML = `<div class="cv-thread">
+        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b>${label(tel)}</b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div></div>
+        <div class="cv-scroll">${bolhas}</div>
+        <div class="cv-comp"><input class="cv-in" placeholder="Mensagem" autocomplete="off"><button class="cv-send" aria-label="Enviar">${CVIC.send}</button></div>
+      </div>`
+    const sc = $('cap').querySelector('.cv-scroll'); sc.scrollTop = sc.scrollHeight
+    $('cap').querySelector('.cv-back').onclick = () => abrirConversas(false)
+    const inp = $('cap').querySelector('.cv-in'), btn = $('cap').querySelector('.cv-send')
     const enviar = async () => {
       const val = (inp.value || '').trim(); if (!val) return
       btn.disabled = true
       const { data, error } = await sb.functions.invoke('responder', { body: { telefone: tel, texto: val } })
       btn.disabled = false
       if (error || data?.erro) return liz(esc(data?.erro || 'Não consegui enviar.'))
-      const b = document.createElement('div'); b.className = 'dp-msg out'; b.textContent = val
-      el.querySelector('.cv-reply').before(b); inp.value = ''; inp.focus()
+      const b = document.createElement('div'); b.className = 'cv-b out'
+      b.innerHTML = `${esc(val)}<span class="cv-t">${hora(new Date().toISOString())}</span>`
+      sc.appendChild(b); sc.scrollTop = sc.scrollHeight; inp.value = ''; inp.focus()
     }
-    if (btn) btn.onclick = enviar
-    if (inp) inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); enviar() } }
-  })
+    btn.onclick = enviar
+    inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); enviar() } }
+    inp.focus()
+  }
+
+  const row = tel => {
+    const th = byTel[tel], ult = th[th.length - 1], resp = respSet.has(tel)
+    const snip = esc(String(ult.texto || '').replace(/\s+/g, ' ').slice(0, 60))
+    const pre = ult.direcao === 'in' ? '' : '<span class="cv-vc">você:</span> '
+    return `<button class="cv-row" data-tel="${esc(tel)}">${avatar(tel)}<span class="cv-main"><span class="cv-nome">${label(tel)}</span><span class="cv-prev">${pre}${snip}</span></span><span class="cv-meta"><span class="cv-time">${hora(ult.criado_em)}</span>${resp ? '<span class="cv-dot"></span>' : ''}</span></button>`
+  }
+  const body = tels.length
+    ? `<p class="cv-lead">${nResp ? `<b>${nResp}</b> ${nResp === 1 ? 'respondeu' : 'responderam'} · ` : ''}${tels.length} ${tels.length === 1 ? 'conversa' : 'conversas'}</p><div class="cv-list">${tels.map(row).join('')}</div>`
+    : `<div class="cp-vazio">Nenhuma conversa ainda.<br>Dispara uma campanha e as respostas aparecem aqui.</div>`
+  $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Conversas</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b cv">${body}</div>`
+  $('capX').onclick = fecharCapivara
+  if (empilhar) empilha('conversas')
+  $('cap').querySelectorAll('.cv-row').forEach(el => { el.onclick = () => abrir(el.dataset.tel) })
+  if (abrirTel && byTel[abrirTel]) abrir(abrirTel)
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
 
