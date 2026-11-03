@@ -86,6 +86,7 @@ async function iniciar() {
   history.replaceState(null, '', location.pathname)
   $('login').hidden = true
   $('pUser').hidden = $('pHist').hidden = $('pZoom').hidden = false
+  badgeConv(); setInterval(badgeConv, 30000)
   const inicial = () => { $('av').hidden = true; $('avL').hidden = false; $('avL').textContent = (usuario.user_metadata?.full_name || usuario.email || '?').trim().charAt(0).toUpperCase() }
   $('av').onerror = inicial
   if (usuario.user_metadata?.avatar_url) $('av').src = usuario.user_metadata.avatar_url; else inicial()
@@ -609,6 +610,18 @@ function baixarCsv(todos) {
   a.click(); URL.revokeObjectURL(a.href)
 }
 $('bLista').onclick = () => abrirLista()
+$('bConv').onclick = () => abrirConversas()
+// contador de quem respondeu desde a última vez que você abriu as conversas
+const convVisto = () => { try { return localStorage.getItem('kp_conv_visto') || '' } catch { return '' } }
+async function badgeConv() {
+  try {
+    const { data } = await sb.from('conversa').select('telefone, criado_em').eq('direcao', 'in').order('criado_em', { ascending: false }).limit(300)
+    const visto = convVisto(), novos = new Set()
+    for (const m of (data || [])) { if (!visto || m.criado_em > visto) novos.add(m.telefone) }
+    const el = $('nConv'); if (!el) return
+    el.hidden = !novos.size; el.textContent = novos.size > 9 ? '9+' : (novos.size || '')
+  } catch (_) {}
+}
 
 /* ======================= pipeline (minha captação) ======================= */
 const ETAPAS = [['a_contatar', 'A contatar'], ['contatado', 'Contatado'], ['respondeu', 'Respondeu'], ['reuniao', 'Reunião'], ['cliente', 'Cliente'], ['perdido', 'Perdido']]
@@ -797,6 +810,8 @@ const CVIC = {
   send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>'
 }
 async function abrirConversas(empilhar = true, abrirTel = null) {
+  try { localStorage.setItem('kp_conv_visto', new Date().toISOString()) } catch (_) {}
+  { const nc = $('nConv'); if (nc) { nc.hidden = true; nc.textContent = '' } }
   const { data: msgs } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em').order('criado_em', { ascending: true })
   const all = msgs || [], byTel = {}
   all.forEach(m => { (byTel[m.telefone] = byTel[m.telefone] || []).push(m) })
