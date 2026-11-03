@@ -712,7 +712,7 @@ async function abrirDisparo(empilhar = true) {
   const camp = cs && cs[0]
   let body = ''
   if (camp) {
-    const { data: evs } = await sb.from('envio').select('id, empresa_nome, telefone, status').eq('campanha_id', camp.id).order('ordem', { ascending: true })
+    const { data: evs } = await sb.from('envio').select('id, empresa_nome, telefone, status, mensagem, resposta').eq('campanha_id', camp.id).order('ordem', { ascending: true })
     const es = evs || [], ct = s => es.filter(e => e.status === s).length
     const total = es.length, fila = ct('na_fila'), falhou = ct('falhou')
     const enviados = ct('enviado') + ct('entregue') + ct('lido') + ct('respondeu'), resp = ct('respondeu')
@@ -723,7 +723,7 @@ async function abrirDisparo(empilhar = true) {
       <div class="dp-bar"><i id="dpBar" style="width:${pct}%"></i></div>
       <div class="dp-k"><div><b id="dpEnv">${enviados}</b><span>enviados</span></div><div><b id="dpFila">${fila}</b><span>na fila</span></div><div><b id="dpResp">${resp}</b><span>responderam</span></div></div>
       ${rod ? `<div class="dp-live" id="dpLive"><i class="dp-pulse"></i> disparando… a tela atualiza sozinha</div>` : ''}
-      <div class="dp-list" id="dpList">${es.map(e => `<div class="dp-it" data-ev="${e.id}"><div><b>${esc(e.empresa_nome || 'Contato')}</b><small>${esc(tfmt(e.telefone))}</small></div><span class="dp-chip c-${(CHIP_DP[e.status] || ['', ''])[1]}">${(CHIP_DP[e.status] || [e.status])[0]}</span></div>`).join('')}</div>
+      <div class="dp-list" id="dpList">${es.map(e => `<div class="dp-it" data-ev="${e.id}"><div class="dp-it-top"><div><b>${esc(e.empresa_nome || 'Contato')}</b><small>${esc(tfmt(e.telefone))}</small></div><span class="dp-chip c-${(CHIP_DP[e.status] || ['', ''])[1]}">${(CHIP_DP[e.status] || [e.status])[0]}</span></div><div class="dp-conv"><div class="dp-msg out">${esc(e.mensagem || '')}</div><div class="dp-msg in" data-in>${e.resposta ? esc(e.resposta) : ''}</div></div></div>`).join('')}</div>
       <div class="dp-cfg">Manda 1 a cada <b>${camp.intervalo_min} min</b> (com variação), das <b>${camp.hora_ini}h às ${camp.hora_fim}h</b>, ${(camp.dias || []).length === 7 ? 'todos os dias' : (camp.dias || []).map(x => DIAS[x]).join(', ')}, até <b>${camp.limite_dia}/dia</b>.${falhou ? ` <span class="dp-ferr">${falhou} falhou</span>` : ''}</div>
       ${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>`
             : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado.</label><button class="btn ok lg" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}
@@ -752,6 +752,7 @@ async function abrirDisparo(empilhar = true) {
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
+  if ($('dpList')) $('dpList').querySelectorAll('.dp-it').forEach(el => { const top = el.querySelector('.dp-it-top'); if (top) top.onclick = () => el.classList.toggle('aberto') })
   if ($('dCriarL')) $('dCriarL').onclick = async () => {
     const nums = [...new Set(($('dNums').value || '').split(/[\s,;]+/).map(x => x.replace(/\D/g, '')).filter(Boolean).map(x => { x = x.replace(/^0+/, ''); if (x.length === 10 || x.length === 11) x = '55' + x; return x }).filter(x => x.length >= 12 && x.length <= 13))]
     if (!nums.length) return liz('Põe pelo menos um número com DDD.')
@@ -779,11 +780,11 @@ async function abrirDisparo(empilhar = true) {
   clearInterval(dispTimer)
   if (camp && camp.status === 'rodando') dispTimer = setInterval(async () => {
     if (!document.getElementById('dpList')) { clearInterval(dispTimer); return }
-    const { data: evs } = await sb.from('envio').select('id, status').eq('campanha_id', camp.id)
+    const { data: evs } = await sb.from('envio').select('id, status, resposta').eq('campanha_id', camp.id)
     const es = evs || [], ct = s => es.filter(e => e.status === s).length
     const total = es.length, fila = ct('na_fila'), env = ct('enviado') + ct('entregue') + ct('lido') + ct('respondeu'), resp = ct('respondeu')
     if ($('dpEnv')) { $('dpEnv').textContent = env; $('dpFila').textContent = fila; $('dpResp').textContent = resp; $('dpBar').style.width = (total ? Math.round(env / total * 100) : 0) + '%' }
-    es.forEach(e => { const el = document.querySelector('.dp-it[data-ev="' + e.id + '"] .dp-chip'); if (el) { const c = CHIP_DP[e.status] || [e.status, '']; el.textContent = c[0]; el.className = 'dp-chip c-' + c[1] } })
+    es.forEach(e => { const row = document.querySelector('.dp-it[data-ev="' + e.id + '"]'); if (!row) return; const el = row.querySelector('.dp-chip'); if (el) { const c = CHIP_DP[e.status] || [e.status, '']; el.textContent = c[0]; el.className = 'dp-chip c-' + c[1] } const inb = row.querySelector('[data-in]'); if (inb && e.resposta && inb.textContent !== e.resposta) inb.textContent = e.resposta })
     if (!fila) { clearInterval(dispTimer); if ($('dpLive')) $('dpLive').innerHTML = '✓ todos enviados' }
   }, 3000)
 }
