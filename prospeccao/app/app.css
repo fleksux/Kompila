@@ -655,3 +655,11 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .pf-pl2 .btn{flex:1;min-width:160px;height:46px}
 .pf-pl2n{font-size:12.5px;color:var(--mu);margin-top:8px}
 @media (max-width:700px){ .pf-pl2{flex-direction:column} .pf-pl2 .btn{flex:none} }
+
+/* acabamento: seta própria no select (adeus seta nativa do SO), no padrão do app */
+.fl-top select{
+  -webkit-appearance:none; appearance:none; padding:0 26px 0 8px;
+  background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7080' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>") no-repeat right 7px center;
+  background-size:13px; cursor:pointer;
+}
+.fl-top select:focus{border-color:var(--tx)}
