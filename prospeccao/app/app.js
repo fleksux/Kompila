@@ -954,6 +954,7 @@ async function abrirPerfil(empilhar = true) {
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
 ;['av', 'avL'].forEach(id => { $(id).style.cursor = 'pointer'; $(id).onclick = () => abrirPerfil() })
+;$('bAjustes').onclick = () => abrirPerfil()
 
 /* ======================= checkout transparente (cartão na tela, Mercado Pago) ======================= */
 const VALORP = { comeco: 147, escala: 340 }
