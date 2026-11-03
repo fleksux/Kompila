@@ -119,7 +119,7 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .bar img{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#F1F2EF}
 .bar input{flex:1;min-width:0;height:44px;border:0;outline:0;background:none;font:inherit;font-size:15px;color:var(--tx)}
 .bar input::placeholder{color:var(--mu2)}
-.reply{position:fixed;left:50%;bottom:96px;transform:translate(-50%,12px);z-index:19;width:min(720px,calc(100% - 32px));opacity:0;pointer-events:none;transition:all .4s cubic-bezier(.2,.7,.2,1)}
+.reply{position:fixed;left:50%;bottom:96px;transform:translate(-50%,12px);z-index:70;width:min(720px,calc(100% - 32px));opacity:0;pointer-events:none;transition:all .4s cubic-bezier(.2,.7,.2,1)}
 .reply.on{opacity:1;transform:translate(-50%,0)}
 .reply .in{display:flex;gap:12px;padding:16px;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh);border-left:3px solid var(--g);font-size:14px;line-height:1.5}
 .reply img{width:36px;height:36px;border-radius:50%;object-fit:cover}

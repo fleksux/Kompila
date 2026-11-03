@@ -740,7 +740,7 @@ async function abrirDisparo(empilhar = true) {
       <div class="dp-cfg">Manda 1 a cada <b>${camp.intervalo_min} min</b> (com variação), das <b>${camp.hora_ini}h às ${camp.hora_fim}h</b>, ${(camp.dias || []).length === 7 ? 'todos os dias' : (camp.dias || []).map(x => DIAS[x]).join(', ')}, até <b>${camp.limite_dia}/dia</b>.${falhou ? ` <span class="dp-ferr">${falhou} falhou</span>` : ''}</div>
       ${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>`
             : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado.</label><button class="btn ok lg" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}
-      <button class="btn ghost sm" id="dFim" style="width:100%;margin-top:8px">Encerrar campanha</button>`
+      <button class="btn ghost sm" id="dFim" style="width:100%;margin-top:8px">Encerrar disparos</button>`
   } else {
     const { data: ds } = await sb.from('diagnosticos').select('etapa, decisao, empresa:empresas(whatsapp, telefone)').eq('decisao', 'aprovada')
     const prontos = (ds || []).filter(d => (d.etapa || 'a_contatar') === 'a_contatar' && (d.empresa?.whatsapp || /^\(?\d{2}\)?\s?9/.test(d.empresa?.telefone || ''))).length
@@ -757,7 +757,7 @@ async function abrirDisparo(empilhar = true) {
       <textarea id="dMsg" class="dp-ta" rows="3">Oi, tudo bem?</textarea>
       ${cad}
       <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
-      <button class="btn ok lg" id="dCriarL" style="width:100%">Montar campanha</button>
+      <button class="btn ok lg" id="dCriarL" style="width:100%">Montar disparos</button>
       ${prontos ? `<button class="btn line sm" id="dUsarRaiox" style="width:100%;margin-top:8px">ou usar meus ${prontos} Raio-X aprovados (abordagem pronta)</button>` : ''}`
   }
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
@@ -773,7 +773,7 @@ async function abrirDisparo(empilhar = true) {
     $('dCriarL').disabled = true; $('dCriarL').textContent = 'Montando…'
     const dias = $('dDias').value === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]
     const { data: c, error } = await sb.from('campanha').insert({ nome: 'Minha lista ' + new Date().toLocaleDateString('pt-BR'), status: 'pausada', intervalo_min: +$('dInt').value, limite_dia: +$('dLim').value, hora_ini: +$('dHi').value, hora_fim: +$('dHf').value, dias }).select('id').single()
-    if (error) { $('dCriarL').disabled = false; $('dCriarL').textContent = 'Montar campanha'; return liz(esc(error.message)) }
+    if (error) { $('dCriarL').disabled = false; $('dCriarL').textContent = 'Montar disparos'; return liz(esc(error.message)) }
     const { error: e2 } = await sb.from('envio').insert(nums.map((tel, i) => ({ campanha_id: c.id, empresa_nome: 'Contato', telefone: tel, mensagem: msg, ordem: i + 1, status: 'na_fila' })))
     if (e2) return liz(esc(e2.message))
     recarrega()
