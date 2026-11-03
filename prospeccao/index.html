@@ -356,6 +356,7 @@ section.s{padding:96px 0 0}
     <div id="conversa">
       <div class="lizq" id="lizq">Oi! Eu sou a Liz 👋<br>Como posso te chamar?</div>
       <div class="indicado" id="indicado" hidden></div>
+      <input id="kp_url" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;width:1px;height:1px;opacity:0;left:-9999px;pointer-events:none">
       <div id="passo"></div>
       <div class="err" id="ferr"></div>
       <button class="quero" id="btAvanca" type="button">Continuar</button>
@@ -492,6 +493,11 @@ btA.onclick = avanca
 async function finaliza() {
   btA.disabled = true; btA.textContent = 'Só um instante…'
   try {
+    const trap = document.getElementById('kp_url')
+    if (trap && trap.value) { // robô caiu na isca: finge que deu certo, não grava nada
+      document.getElementById('fimq').innerHTML = 'Pronto! Já te liberei. 🎉'
+      btA.disabled = false; btA.textContent = 'Continuar'; verEntrada(true); return
+    }
     const { error } = await sb.rpc('salvar_intake', { p_sessao: SESSAO, p_nome: resp.nome || '', p_empresa: resp.empresa || '', p_whats: resp.whats || '', p_vende: resp.vende || '', p_nicho: resp.nicho || '', p_cidade: resp.cidade || '', p_como: resp.como || '', p_indicado: IND || '' })
     if (error) throw error
     if (IND) sb.rpc('registrar_indicacao', { p_codigo: IND, p_nome: resp.nome, p_empresa: resp.empresa, p_telefone: resp.whats }).then(() => {}, () => {})
