@@ -834,17 +834,42 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
   }
   const avatar = t => `<span class="cv-av" style="background:${cor(t)}">${inic(t) || CVIC.user}</span>`
+  const mob = () => matchMedia('(max-width:720px)').matches
 
-  const abrir = tel => {
+  // fase do lead no pipeline: telefone -> envio -> diagnostico (contato pessoal não tem fase)
+  async function carregarFase(tel) {
+    const box = $('cap').querySelector('.cv2-fase'); if (!box) return
+    const { data: ev } = await sb.from('envio').select('diagnostico_id').eq('telefone', tel).not('diagnostico_id', 'is', null).order('enviado_em', { ascending: false, nullsFirst: false }).limit(1)
+    const did = ev?.[0]?.diagnostico_id
+    if (!did) { box.innerHTML = '<span class="tp t-ganho">Cliente</span>'; return }  // contatos deste número já são clientes
+    const { data: dg } = await sb.from('diagnosticos').select('id, etapa, empresa:empresas(nome)').eq('id', did).maybeSingle()
+    if (!dg) { box.innerHTML = ''; return }
+    const render = () => {
+      const t = TEMP[dg.etapa] || ['', 'Lead']
+      box.innerHTML = `<span class="tp t-${t[0]}">${t[1] || 'Lead'}</span>${dg.empresa?.nome ? `<span class="cv2-emp">${esc(dg.empresa.nome)}</span>` : ''}<span class="cv2-et">${ETAPAS.map(([k, tx]) => `<button data-et="${k}" class="${dg.etapa === k ? 'on' : ''}">${tx}</button>`).join('')}</span>`
+      box.querySelectorAll('[data-et]').forEach(b => b.onclick = async () => {
+        const nv = b.dataset.et
+        const { error } = await sb.from('diagnosticos').update({ etapa: nv, etapa_em: new Date().toISOString() }).eq('id', dg.id)
+        if (error) return liz('Não consegui mover a fase.')
+        dg.etapa = nv; render()
+      })
+    }
+    render()
+  }
+
+  const selecionar = tel => {
+    $('cap').querySelectorAll('.cv2-row').forEach(r => r.classList.toggle('on', r.dataset.tel === tel))
     const th = byTel[tel]
     const bolhas = th.map(m => `<div class="cv-b ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}<span class="cv-t">${hora(m.criado_em)}</span></div>`).join('')
-    $('cap').querySelector('.cap-b').innerHTML = `<div class="cv-thread">
+    $('cap').querySelector('.cv2-chat').innerHTML = `<div class="cv-thread">
         <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b>${label(tel)}</b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div></div>
+        <div class="cv2-fase"></div>
         <div class="cv-scroll">${bolhas}</div>
         <div class="cv-comp"><input class="cv-in" placeholder="Mensagem" autocomplete="off"><button class="cv-send" aria-label="Enviar">${CVIC.send}</button></div>
       </div>`
+    $('cap').querySelector('.cv2').classList.add('aberta')
     const sc = $('cap').querySelector('.cv-scroll'); sc.scrollTop = sc.scrollHeight
-    $('cap').querySelector('.cv-back').onclick = () => abrirConversas(false)
+    $('cap').querySelector('.cv-back').onclick = () => $('cap').querySelector('.cv2').classList.remove('aberta')
     const inp = $('cap').querySelector('.cv-in'), btn = $('cap').querySelector('.cv-send')
     const enviar = async () => {
       const val = (inp.value || '').trim(); if (!val) return
@@ -858,24 +883,26 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     }
     btn.onclick = enviar
     inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); enviar() } }
-    inp.focus()
+    if (!mob()) inp.focus()
+    carregarFase(tel)
   }
 
   const row = tel => {
     const th = byTel[tel], ult = th[th.length - 1], resp = respSet.has(tel)
-    const snip = esc(String(ult.texto || '').replace(/\s+/g, ' ').slice(0, 60))
+    const snip = esc(String(ult.texto || '').replace(/\s+/g, ' ').slice(0, 42))
     const pre = ult.direcao === 'in' ? '' : '<span class="cv-vc">você:</span> '
-    return `<button class="cv-row" data-tel="${esc(tel)}">${avatar(tel)}<span class="cv-main"><span class="cv-nome">${label(tel)}</span><span class="cv-prev">${pre}${snip}</span></span><span class="cv-meta"><span class="cv-time">${hora(ult.criado_em)}</span>${resp ? '<span class="cv-dot"></span>' : ''}</span></button>`
+    return `<button class="cv-row cv2-row" data-tel="${esc(tel)}">${avatar(tel)}<span class="cv-main"><span class="cv-nome">${label(tel)}</span><span class="cv-prev">${pre}${snip}</span></span><span class="cv-meta"><span class="cv-time">${hora(ult.criado_em)}</span>${resp ? '<span class="cv-dot"></span>' : ''}</span></button>`
   }
   const body = tels.length
-    ? `<p class="cv-lead">${nResp ? `<b>${nResp}</b> ${nResp === 1 ? 'respondeu' : 'responderam'} · ` : ''}${tels.length} ${tels.length === 1 ? 'conversa' : 'conversas'}</p><div class="cv-list">${tels.map(row).join('')}</div>`
+    ? `<div class="cv2"><div class="cv2-list"><p class="cv-lead">${nResp ? `<b>${nResp}</b> ${nResp === 1 ? 'respondeu' : 'responderam'} · ` : ''}${tels.length} ${tels.length === 1 ? 'conversa' : 'conversas'}</p>${tels.map(row).join('')}</div><div class="cv2-chat"><div class="cv2-nada">Escolhe uma conversa à esquerda.</div></div></div>`
     : `<div class="cp-vazio">Nenhuma conversa ainda.<br>Dispara uma campanha e as respostas aparecem aqui.</div>`
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
-  $('cap').innerHTML = `<div class="cap-x"><span class="t">Conversas</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b cv">${body}</div>`
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Conversas</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b cv2wrap">${body}</div>`
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('conversas')
-  $('cap').querySelectorAll('.cv-row').forEach(el => { el.onclick = () => abrir(el.dataset.tel) })
-  if (abrirTel && byTel[abrirTel]) abrir(abrirTel)
+  $('cap').querySelectorAll('.cv2-row').forEach(el => { el.onclick = () => selecionar(el.dataset.tel) })
+  const first = abrirTel && byTel[abrirTel] ? abrirTel : (!mob() && tels.length ? tels[0] : null)
+  if (first) selecionar(first)
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
 
