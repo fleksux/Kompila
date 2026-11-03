@@ -380,7 +380,7 @@ const zap = t => `https://wa.me/${M.contato.whatsapp}?text=${encodeURIComponent(
 const CAT = {}
 const reg = (k, o) => (CAT[k] = o, k)
 
-const info = `<span><b>Pagamento:</b> Pix ou transferência</span><span><b>Entrega:</b> retirada no ateliê ou entrega (frete à parte)</span><span><b>NF:</b> 18,45%</span>`
+const info = `<span><b>Pagamento:</b> Pix ou transferência</span><span><b>Entrega:</b> retirada no ateliê ou entrega (frete à parte)</span><span><b>NF:</b> em torno de 14%</span>`
 $('#info-natal').innerHTML = info
 $('#info-rot').innerHTML = info
 
@@ -512,7 +512,7 @@ function desenha() {
     <label class="campo" id="c-end" ${dados.modo === 'Entrega' ? '' : 'hidden'}><span>Endereço da entrega</span><input name="endereco" autocomplete="street-address" value="${esc(dados.endereco)}"></label>
     <label class="campo"><span>Observações</span><textarea name="obs" rows="2" placeholder="Opção do pacote, horário, restrições">${esc(dados.obs)}</textarea></label></div>` : ''
   $('#pedido').innerHTML = `<header><h3>Meu pedido</h3><button data-fecha>Continuar escolhendo</button></header><div class="rola">${lista}${form}</div>
-    ${ks.length ? `<footer><div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Enviar pedido pelo WhatsApp</button><p class="aviso">Frete e NF (18,45%) à parte. A equipe confirma disponibilidade e valor final.</p></footer>` : ''}`
+    ${ks.length ? `<footer><div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Enviar pedido pelo WhatsApp</button><p class="aviso">Frete e NF (em torno de 14%) à parte. A equipe confirma disponibilidade e valor final.</p></footer>` : ''}`
 }
 function lerForm() {
   const f = $('#form'); if (!f) return dados

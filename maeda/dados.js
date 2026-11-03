@@ -15,7 +15,7 @@ window.MAEDA = {
     ['Pagamento', 'Pix ou transferência.'],
     ['Entrega', 'Retirada no ateliê ou entrega. Frete não incluso.'],
     ['Pesos', 'Todos os pesos são aproximados.'],
-    ['Nota fiscal', 'NF = 18,45%.']
+    ['Nota fiscal', 'NF em torno de 14%.']
   ],
 
   rotisserie: [
