@@ -704,13 +704,15 @@ $('bCapt').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(),
 
 /* ======================= disparo automático em cadência ======================= */
 const DISP_ST = { pausada: ['Pausada', 'pausada'], rodando: ['Rodando', 'rodando'], concluida: ['Concluída', 'ok'], cancelada: ['Encerrada', 'off'] }
+const CHIP_DP = { na_fila: ['na fila', 'f'], enviando: ['enviando…', 'g'], enviado: ['enviado ✓', 'e'], entregue: ['entregue ✓✓', 'e'], lido: ['lido ✓✓', 'e'], respondeu: ['respondeu', 'r'], falhou: ['falhou', 'x'], parou: ['parou', 'x'] }
+const tfmt = t => { t = String(t || '').replace(/^55/, ''); return t.length === 11 ? t.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : t.length === 10 ? t.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3') : t }
 let dispTimer = null
 async function abrirDisparo(empilhar = true) {
   const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(1)
   const camp = cs && cs[0]
   let body = ''
   if (camp) {
-    const { data: evs } = await sb.from('envio').select('status').eq('campanha_id', camp.id)
+    const { data: evs } = await sb.from('envio').select('id, empresa_nome, telefone, status').eq('campanha_id', camp.id).order('ordem', { ascending: true })
     const es = evs || [], ct = s => es.filter(e => e.status === s).length
     const total = es.length, fila = ct('na_fila'), falhou = ct('falhou')
     const enviados = ct('enviado') + ct('entregue') + ct('lido') + ct('respondeu'), resp = ct('respondeu')
@@ -721,6 +723,7 @@ async function abrirDisparo(empilhar = true) {
       <div class="dp-bar"><i id="dpBar" style="width:${pct}%"></i></div>
       <div class="dp-k"><div><b id="dpEnv">${enviados}</b><span>enviados</span></div><div><b id="dpFila">${fila}</b><span>na fila</span></div><div><b id="dpResp">${resp}</b><span>responderam</span></div></div>
       ${rod ? `<div class="dp-live" id="dpLive"><i class="dp-pulse"></i> disparando… a tela atualiza sozinha</div>` : ''}
+      <div class="dp-list" id="dpList">${es.map(e => `<div class="dp-it" data-ev="${e.id}"><div><b>${esc(e.empresa_nome || 'Contato')}</b><small>${esc(tfmt(e.telefone))}</small></div><span class="dp-chip c-${(CHIP_DP[e.status] || ['', ''])[1]}">${(CHIP_DP[e.status] || [e.status])[0]}</span></div>`).join('')}</div>
       <div class="dp-cfg">Manda 1 a cada <b>${camp.intervalo_min} min</b> (com variação), das <b>${camp.hora_ini}h às ${camp.hora_fim}h</b>, ${(camp.dias || []).length === 7 ? 'todos os dias' : (camp.dias || []).map(x => DIAS[x]).join(', ')}, até <b>${camp.limite_dia}/dia</b>.${falhou ? ` <span class="dp-ferr">${falhou} falhou</span>` : ''}</div>
       ${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>`
             : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado.</label><button class="btn ok lg" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}
@@ -775,14 +778,14 @@ async function abrirDisparo(empilhar = true) {
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
   clearInterval(dispTimer)
   if (camp && camp.status === 'rodando') dispTimer = setInterval(async () => {
-    if (!document.getElementById('dpEnv')) { clearInterval(dispTimer); return }
-    const { data: evs } = await sb.from('envio').select('status').eq('campanha_id', camp.id)
+    if (!document.getElementById('dpList')) { clearInterval(dispTimer); return }
+    const { data: evs } = await sb.from('envio').select('id, status').eq('campanha_id', camp.id)
     const es = evs || [], ct = s => es.filter(e => e.status === s).length
     const total = es.length, fila = ct('na_fila'), env = ct('enviado') + ct('entregue') + ct('lido') + ct('respondeu'), resp = ct('respondeu')
-    $('dpEnv').textContent = env; $('dpFila').textContent = fila; $('dpResp').textContent = resp
-    $('dpBar').style.width = (total ? Math.round(env / total * 100) : 0) + '%'
-    if (!fila) { clearInterval(dispTimer); if ($('dpLive')) $('dpLive').innerHTML = '✓ fila concluída' }
-  }, 4000)
+    if ($('dpEnv')) { $('dpEnv').textContent = env; $('dpFila').textContent = fila; $('dpResp').textContent = resp; $('dpBar').style.width = (total ? Math.round(env / total * 100) : 0) + '%' }
+    es.forEach(e => { const el = document.querySelector('.dp-it[data-ev="' + e.id + '"] .dp-chip'); if (el) { const c = CHIP_DP[e.status] || [e.status, '']; el.textContent = c[0]; el.className = 'dp-chip c-' + c[1] } })
+    if (!fila) { clearInterval(dispTimer); if ($('dpLive')) $('dpLive').innerHTML = '✓ todos enviados' }
+  }, 3000)
 }
 
 /* ======================= fila de envio: um toque por empresa ======================= */
