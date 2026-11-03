@@ -816,8 +816,14 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
   const all = msgs || [], byTel = {}
   all.forEach(m => { (byTel[m.telefone] = byTel[m.telefone] || []).push(m) })
   const respSet = new Set(all.filter(m => m.direcao === 'in').map(m => m.telefone))
+  // quem é LEAD = está no pipe (tem envio com diagnóstico). O resto é PESSOAL.
+  const { data: evs } = await sb.from('envio').select('telefone').not('diagnostico_id', 'is', null)
+  const leadSet = new Set((evs || []).map(e => e.telefone))
+  const ehLead = t => leadSet.has(t)
   const ordenar = () => Object.keys(byTel).sort((a, b) => new Date(byTel[b][byTel[b].length - 1].criado_em) - new Date(byTel[a][byTel[a].length - 1].criado_em))
   let tels = ordenar()
+  let aba = tels.some(ehLead) ? 'leads' : 'pessoal'
+  const visiveis = () => tels.filter(t => aba === 'leads' ? ehLead(t) : !ehLead(t))
   let sel = null, ultimo = all.length ? all[all.length - 1].criado_em : ''
 
   const ehFone = t => /^55\d{10,11}$/.test(t)
@@ -902,8 +908,17 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     const pre = ult.direcao === 'in' ? '' : '<span class="cv-vc">você:</span> '
     return `<button class="cv-row cv2-row" data-tel="${esc(tel)}">${avatar(tel)}<span class="cv-main"><span class="cv-nome">${label(tel)}</span><span class="cv-prev">${pre}${snip}</span></span><span class="cv-meta"><span class="cv-time">${hora(ult.criado_em)}</span>${resp ? '<span class="cv-dot"></span>' : ''}</span></button>`
   }
-  const listaHTML = () => { const nr = respSet.size; return `<p class="cv-lead">${nr ? `<b>${nr}</b> ${nr === 1 ? 'respondeu' : 'responderam'} · ` : ''}${tels.length} ${tels.length === 1 ? 'conversa' : 'conversas'}</p>${tels.map(row).join('')}` }
-  const bindLista = () => $('cap').querySelectorAll('.cv2-row').forEach(el => { el.onclick = () => selecionar(el.dataset.tel); el.classList.toggle('on', el.dataset.tel === sel) })
+  const listaHTML = () => {
+    const vis = visiveis(), nLead = tels.filter(ehLead).length, nPess = tels.length - nLead
+    const abas = `<div class="cv-abas"><button data-aba="leads" class="${aba === 'leads' ? 'on' : ''}">Leads <span>${nLead}</span></button><button data-aba="pessoal" class="${aba === 'pessoal' ? 'on' : ''}">Pessoal <span>${nPess}</span></button></div>`
+    const vazio = `<div class="cv-abavazia">${aba === 'leads' ? 'Nenhum lead aqui. Os leads do pipe aparecem aqui quando você fala com eles.' : 'Nenhuma conversa pessoal.'}</div>`
+    return abas + (vis.length ? vis.map(row).join('') : vazio)
+  }
+  const bindLista = () => {
+    const cap = $('cap')
+    cap.querySelectorAll('.cv2-row').forEach(el => { el.onclick = () => selecionar(el.dataset.tel); el.classList.toggle('on', el.dataset.tel === sel) })
+    cap.querySelectorAll('.cv-abas [data-aba]').forEach(b => b.onclick = () => { if (aba === b.dataset.aba) return; aba = b.dataset.aba; renderLista() })
+  }
   const renderLista = () => { tels = ordenar(); const l = $('cap').querySelector('.cv2-list'); if (!l) return; l.innerHTML = listaHTML(); bindLista() }
 
   // atualiza sozinho: a cada 2s puxa só o que chegou depois da última mensagem
@@ -932,7 +947,9 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('conversas')
   bindLista()
-  const first = abrirTel && byTel[abrirTel] ? abrirTel : (!mob() && tels.length ? tels[0] : null)
+  if (abrirTel && byTel[abrirTel]) aba = ehLead(abrirTel) ? 'leads' : 'pessoal'
+  const vis0 = visiveis()
+  const first = abrirTel && byTel[abrirTel] ? abrirTel : (!mob() && vis0.length ? vis0[0] : null)
   if (first) selecionar(first)
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
   clearInterval(convTimer); convTimer = setInterval(atualizar, 2000)
