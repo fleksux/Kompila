@@ -688,3 +688,9 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .dp-aviso{font-size:13px;color:var(--a);background:var(--as);border-radius:10px;padding:10px 12px;margin-bottom:14px}
 .dp-ok{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:4px 0 12px;cursor:pointer;line-height:1.4}
 .dp-ok input{width:18px;height:18px;flex:none;accent-color:var(--g);margin-top:1px}
+.dp-lbl{display:block;font-size:13px;color:var(--mu);margin:12px 0 6px;font-weight:600}
+.dp-ta{width:100%;min-height:92px;border:1px solid var(--line2);border-radius:var(--r8);padding:10px 12px;font:inherit;font-size:15px;line-height:1.5;outline:0;resize:vertical;background:#fff;color:var(--tx)}
+.dp-ta:focus{border-color:var(--tx)} #dMsg{min-height:64px}
+.dp-pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--g);margin-right:6px;vertical-align:middle;animation:dpp 1.1s ease-in-out infinite}
+@keyframes dpp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.dp-live{display:flex;align-items:center;gap:2px;font-size:12.5px;color:var(--gd);background:var(--gs);border-radius:10px;padding:9px 12px;margin:12px 0 0;font-weight:600}

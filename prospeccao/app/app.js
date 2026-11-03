@@ -704,6 +704,7 @@ $('bCapt').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(),
 
 /* ======================= disparo automático em cadência ======================= */
 const DISP_ST = { pausada: ['Pausada', 'pausada'], rodando: ['Rodando', 'rodando'], concluida: ['Concluída', 'ok'], cancelada: ['Encerrada', 'off'] }
+let dispTimer = null
 async function abrirDisparo(empilhar = true) {
   const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(1)
   const camp = cs && cs[0]
@@ -716,9 +717,10 @@ async function abrirDisparo(empilhar = true) {
     const pct = total ? Math.round(enviados / total * 100) : 0, rod = camp.status === 'rodando'
     const DIAS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb']
     body = `
-      <div class="dp-top"><span class="dp-badge s-${DISP_ST[camp.status][1]}">${rod ? '● ' : '❚❚ '}${DISP_ST[camp.status][0]}</span><h3>${esc(camp.nome)}</h3></div>
-      <div class="dp-bar"><i style="width:${pct}%"></i></div>
-      <div class="dp-k"><div><b>${enviados}</b><span>enviados</span></div><div><b>${fila}</b><span>na fila</span></div><div><b>${resp}</b><span>responderam</span></div></div>
+      <div class="dp-top"><span class="dp-badge s-${DISP_ST[camp.status][1]}">${rod ? '<i class="dp-pulse"></i>' : '❚❚ '}${DISP_ST[camp.status][0]}</span><h3>${esc(camp.nome)}</h3></div>
+      <div class="dp-bar"><i id="dpBar" style="width:${pct}%"></i></div>
+      <div class="dp-k"><div><b id="dpEnv">${enviados}</b><span>enviados</span></div><div><b id="dpFila">${fila}</b><span>na fila</span></div><div><b id="dpResp">${resp}</b><span>responderam</span></div></div>
+      ${rod ? `<div class="dp-live" id="dpLive"><i class="dp-pulse"></i> disparando… a tela atualiza sozinha</div>` : ''}
       <div class="dp-cfg">Manda 1 a cada <b>${camp.intervalo_min} min</b> (com variação), das <b>${camp.hora_ini}h às ${camp.hora_fim}h</b>, ${(camp.dias || []).length === 7 ? 'todos os dias' : (camp.dias || []).map(x => DIAS[x]).join(', ')}, até <b>${camp.limite_dia}/dia</b>.${falhou ? ` <span class="dp-ferr">${falhou} falhou</span>` : ''}</div>
       ${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>`
             : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado.</label><button class="btn go" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}
@@ -726,35 +728,61 @@ async function abrirDisparo(empilhar = true) {
   } else {
     const { data: ds } = await sb.from('diagnosticos').select('etapa, decisao, empresa:empresas(whatsapp, telefone)').eq('decisao', 'aprovada')
     const prontos = (ds || []).filter(d => (d.etapa || 'a_contatar') === 'a_contatar' && (d.empresa?.whatsapp || /^\(?\d{2}\)?\s?9/.test(d.empresa?.telefone || ''))).length
-    body = prontos
-      ? `<p class="dp-lead"><b>${prontos}</b> empresa${prontos === 1 ? '' : 's'} aprovada${prontos === 1 ? '' : 's'} com WhatsApp, pronta${prontos === 1 ? '' : 's'} pra disparar. Cada uma recebe a abordagem personalizada que a Liz escreveu.</p>
-      <div class="dp-form">
+    const cad = `<div class="dp-form">
         <label>Intervalo entre envios<select id="dInt"><option value="3">a cada 3 min</option><option value="5" selected>a cada 5 min</option><option value="8">a cada 8 min</option><option value="12">a cada 12 min</option></select></label>
         <label>Máximo por dia<select id="dLim"><option value="30">30 por dia</option><option value="60" selected>60 por dia</option><option value="100">100 por dia</option><option value="150">150 por dia</option></select></label>
         <div class="dp-row"><label>Das <select id="dHi">${Array.from({ length: 24 }, (_, h) => `<option ${h === 9 ? 'selected' : ''}>${h}</option>`).join('')}</select> h</label><label>às <select id="dHf">${Array.from({ length: 24 }, (_, h) => `<option value="${h + 1}" ${h + 1 === 18 ? 'selected' : ''}>${h + 1}</option>`).join('')}</select> h</label></div>
         <label>Dias<select id="dDias"><option value="semana" selected>segunda a sexta</option><option value="todos">todos os dias</option></select></label>
-      </div>
+      </div>`
+    body = `<p class="dp-lead">Cola os números que você quer prospectar, um por linha. Cada um recebe a sua mensagem, no ritmo que você escolher.</p>
+      <label class="dp-lbl">Números (um por linha)</label>
+      <textarea id="dNums" class="dp-ta" placeholder="11 99999-0000&#10;11 98888-7777"></textarea>
+      <label class="dp-lbl">Mensagem</label>
+      <textarea id="dMsg" class="dp-ta" rows="3">Oi, tudo bem?</textarea>
+      ${cad}
       <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
-      <button class="btn go" id="dCriar" style="width:100%">Montar campanha</button>`
-      : `<div class="cp-vazio">Nenhum Raio-X aprovado com WhatsApp pra contatar.<br>Aprove alguns no Raio-X e volta aqui.</div>`
+      <button class="btn go" id="dCriarL" style="width:100%">Montar campanha</button>
+      ${prontos ? `<button class="btn line sm" id="dUsarRaiox" style="width:100%;margin-top:8px">ou usar meus ${prontos} Raio-X aprovados (abordagem pronta)</button>` : ''}`
   }
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Disparo automático</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${body}</div>`
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
-  if ($('dCriar')) $('dCriar').onclick = async () => {
-    $('dCriar').disabled = true; $('dCriar').textContent = 'Montando…'
+  if ($('dCriarL')) $('dCriarL').onclick = async () => {
+    const nums = [...new Set(($('dNums').value || '').split(/[\s,;]+/).map(x => x.replace(/\D/g, '')).filter(Boolean).map(x => { x = x.replace(/^0+/, ''); if (x.length === 10 || x.length === 11) x = '55' + x; return x }).filter(x => x.length >= 12 && x.length <= 13))]
+    if (!nums.length) return liz('Põe pelo menos um número com DDD.')
+    const msg = ($('dMsg').value || '').trim() || 'Oi, tudo bem?'
+    $('dCriarL').disabled = true; $('dCriarL').textContent = 'Montando…'
+    const dias = $('dDias').value === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]
+    const { data: c, error } = await sb.from('campanha').insert({ nome: 'Minha lista ' + new Date().toLocaleDateString('pt-BR'), status: 'pausada', intervalo_min: +$('dInt').value, limite_dia: +$('dLim').value, hora_ini: +$('dHi').value, hora_fim: +$('dHf').value, dias }).select('id').single()
+    if (error) { $('dCriarL').disabled = false; $('dCriarL').textContent = 'Montar campanha'; return liz(esc(error.message)) }
+    const { error: e2 } = await sb.from('envio').insert(nums.map((tel, i) => ({ campanha_id: c.id, empresa_nome: 'Contato', telefone: tel, mensagem: msg, ordem: i + 1, status: 'na_fila' })))
+    if (e2) return liz(esc(e2.message))
+    recarrega()
+  }
+  if ($('dUsarRaiox')) $('dUsarRaiox').onclick = async () => {
+    $('dUsarRaiox').disabled = true; $('dUsarRaiox').textContent = 'Montando…'
     const dias = $('dDias').value === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]
     const { error } = await sb.rpc('criar_campanha', { p_nome: 'Prospecção ' + new Date().toLocaleDateString('pt-BR'), p_intervalo: +$('dInt').value, p_limite: +$('dLim').value, p_hora_ini: +$('dHi').value, p_hora_fim: +$('dHf').value, p_dias: dias })
-    if (error) { $('dCriar').disabled = false; $('dCriar').textContent = 'Montar campanha'; return liz(esc(error.message)) }
+    if (error) { $('dUsarRaiox').disabled = false; return liz(esc(error.message)) }
     recarrega()
   }
   if ($('dCiente')) $('dCiente').onchange = e => { $('dLiga').disabled = !e.target.checked }
   if ($('dLiga')) $('dLiga').onclick = async () => { await sb.from('campanha').update({ status: 'rodando' }).eq('id', camp.id); liz('Disparo ligado. Vou mandando no ritmo combinado.'); recarrega() }
   if ($('dPausa')) $('dPausa').onclick = async () => { await sb.from('campanha').update({ status: 'pausada' }).eq('id', camp.id); recarrega() }
-  if ($('dFim')) $('dFim').onclick = async () => { await sb.from('campanha').update({ status: 'cancelada' }).eq('id', camp.id); liz('Campanha encerrada.'); recarrega() }
+  if ($('dFim')) $('dFim').onclick = async () => { clearInterval(dispTimer); await sb.from('campanha').update({ status: 'cancelada' }).eq('id', camp.id); liz('Campanha encerrada.'); recarrega() }
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+  clearInterval(dispTimer)
+  if (camp && camp.status === 'rodando') dispTimer = setInterval(async () => {
+    if (!document.getElementById('dpEnv')) { clearInterval(dispTimer); return }
+    const { data: evs } = await sb.from('envio').select('status').eq('campanha_id', camp.id)
+    const es = evs || [], ct = s => es.filter(e => e.status === s).length
+    const total = es.length, fila = ct('na_fila'), env = ct('enviado') + ct('entregue') + ct('lido') + ct('respondeu'), resp = ct('respondeu')
+    $('dpEnv').textContent = env; $('dpFila').textContent = fila; $('dpResp').textContent = resp
+    $('dpBar').style.width = (total ? Math.round(env / total * 100) : 0) + '%'
+    if (!fila) { clearInterval(dispTimer); if ($('dpLive')) $('dpLive').innerHTML = '✓ fila concluída' }
+  }, 4000)
 }
 
 /* ======================= fila de envio: um toque por empresa ======================= */
@@ -986,7 +1014,7 @@ async function abrirPerfil(empilhar = true) {
     ${movs.length ? `<div class="pf-mv">${movs.map(m => `<div><span>${esc(m.descricao || m.tipo)}</span><small>${new Date(m.criado_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</small><b class="${m.centavos < 0 ? 'neg' : 'pos'}">${m.centavos < 0 ? '−' : '+'} ${brlC(Math.abs(m.centavos))}</b></div>`).join('')}</div>` : ''}
     <div class="pf-t">Meu uso em ${mes}</div>
     <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(ig.count || 0, 'perfis do Instagram')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
-    <div class="pf-ac"><button class="btn line" id="pfInd">Indicar e ganhar 1 mês</button><button class="btn line" id="pfPipe">Ver meu pipeline</button></div>
+    <div class="pf-ac"><button class="btn go" id="pfDisp">Disparo automático</button><button class="btn line" id="pfInd">Indicar e ganhar 1 mês</button><button class="btn line" id="pfPipe">Ver meu pipeline</button></div>
     ${g ? `<div class="pf-t">Gestão da prospecção · ${mes}</div>
     <div class="pf-g">${card(g.contas, 'contas', `${g.novas_mes} nova${g.novas_mes === 1 ? '' : 's'} no mês`)}${card(g.ativas_mes, 'ativas no mês', 'fizeram busca')}${card(g.pagantes, 'pagantes', `${g.mes_gratis} em mês grátis`)}${card(reais(Number(g.custo_usd_mes)), 'gasto total de IA', `${g.buscas_mes} busca${g.buscas_mes === 1 ? '' : 's'} · ${g.raiox_mes} Raio-X`)}</div>
     ${g.pedidos ? `<div class="pf-al">${g.pedidos} pessoa${g.pedidos === 1 ? '' : 's'} pediu acesso por indicação e está esperando.</div>` : ''}
@@ -996,6 +1024,7 @@ async function abrirPerfil(empilhar = true) {
     <button class="pf-sair" id="pfSair">Sair da conta</button>
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   $('capX').onclick = fecharCapivara
+  $('pfDisp').onclick = () => abrirDisparo()
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
   $('pfPipe').onclick = () => abrirCaptacao()
   $('pfSair').onclick = async () => { await sb.auth.signOut(); location.reload() }
