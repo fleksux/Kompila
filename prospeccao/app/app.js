@@ -842,16 +842,18 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     const { data: ev } = await sb.from('envio').select('diagnostico_id').eq('telefone', tel).not('diagnostico_id', 'is', null).order('enviado_em', { ascending: false, nullsFirst: false }).limit(1)
     const did = ev?.[0]?.diagnostico_id
     if (!did) { box.innerHTML = '<span class="tp t-ganho">Cliente</span>'; return }  // contatos deste número já são clientes
-    const { data: dg } = await sb.from('diagnosticos').select('id, etapa, empresa:empresas(nome)').eq('id', did).maybeSingle()
+    const { data: dg } = await sb.from('diagnosticos').select('id, etapa, etapa_em, decidida_em, empresa:empresas(nome)').eq('id', did).maybeSingle()
     if (!dg) { box.innerHTML = ''; return }
     const render = () => {
       const t = TEMP[dg.etapa] || ['', 'Lead']
-      box.innerHTML = `<span class="tp t-${t[0]}">${t[1] || 'Lead'}</span>${dg.empresa?.nome ? `<span class="cv2-emp">${esc(dg.empresa.nome)}</span>` : ''}<span class="cv2-et">${ETAPAS.map(([k, tx]) => `<button data-et="${k}" class="${dg.etapa === k ? 'on' : ''}">${tx}</button>`).join('')}</span>`
+      const quando = dg.etapa_em || dg.decidida_em, n = dias(quando)
+      const momento = quando ? (n === 0 ? 'nesta fase hoje' : `nesta fase há ${n} dia${n > 1 ? 's' : ''}`) : ''
+      box.innerHTML = `<span class="tp t-${t[0]}">${t[1] || 'Lead'}</span>${dg.empresa?.nome ? `<span class="cv2-emp">${esc(dg.empresa.nome)}</span>` : ''}${momento ? `<span class="cv2-tempo">${momento}</span>` : ''}<span class="cv2-et">${ETAPAS.map(([k, tx]) => `<button data-et="${k}" class="${dg.etapa === k ? 'on' : ''}">${tx}</button>`).join('')}</span>`
       box.querySelectorAll('[data-et]').forEach(b => b.onclick = async () => {
         const nv = b.dataset.et
         const { error } = await sb.from('diagnosticos').update({ etapa: nv, etapa_em: new Date().toISOString() }).eq('id', dg.id)
         if (error) return liz('Não consegui mover a fase.')
-        dg.etapa = nv; render()
+        dg.etapa = nv; dg.etapa_em = new Date().toISOString(); render()
       })
     }
     render()
