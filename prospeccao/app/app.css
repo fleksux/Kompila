@@ -585,11 +585,24 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .pf-c b{display:block;font-family:var(--mono);font-size:24px;font-weight:700;line-height:1.15}
 .pf-c span{display:block;font-size:13px;font-weight:500;margin-top:2px}
 .pf-c small{display:block;font-size:11.5px;color:var(--mu);margin-top:2px}
-.pf-ac{display:flex;gap:8px;margin-top:12px}.pf-ac .btn{flex:1;height:42px}
+.pf-ac{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.pfx{display:flex;align-items:center;gap:11px;min-height:58px;padding:0 14px;border-radius:14px;border:1px solid rgba(10,11,14,.05);font-weight:600;font-size:14px;color:var(--tx);text-align:left;cursor:pointer;line-height:1.2;transition:transform .12s,box-shadow .12s}
+.pfx:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(10,11,14,.09)}
+.pfx:active{transform:translateY(0)}
+.pfx .ico{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;color:#fff;flex:none;box-shadow:0 2px 6px rgba(10,11,14,.14)}
+.pfx .ico svg{width:19px;height:19px}
+.pfx.disp{background:linear-gradient(135deg,#E6F7EE,#F6FCF9)}
+.pfx.disp .ico{background:linear-gradient(145deg,#2BD174,#1FA463)}
+.pfx.conv{background:linear-gradient(135deg,#E8F0FE,#F6FAFF)}
+.pfx.conv .ico{background:linear-gradient(145deg,#5B97F7,#2D6CDF)}
+.pfx.ind{background:linear-gradient(135deg,#FDF3E1,#FEFBF4)}
+.pfx.ind .ico{background:linear-gradient(145deg,#F4BA4E,#E0803B)}
+.pfx.pipe{background:linear-gradient(135deg,#F1E9FD,#FAF7FE)}
+.pfx.pipe .ico{background:linear-gradient(145deg,#B277EC,#9B51E0)}
 .pf-al{margin-top:10px;padding:10px 14px;border-radius:var(--r8);background:var(--as);color:var(--a);font-size:13px;font-weight:500}
 .pf-crm{display:flex;justify-content:center;align-items:center;height:44px;margin-top:12px;text-decoration:none}
 .pf-sair{display:block;margin:28px auto 0;font-size:13px;color:var(--mu);text-decoration:underline}
-@media (max-width:700px){ .pf-g{grid-template-columns:1fr 1fr} .pf-h{flex-wrap:wrap} .pf-ac{flex-direction:column} .pf-ac .btn{flex:none;height:46px} }
+@media (max-width:700px){ .pf-g{grid-template-columns:1fr 1fr} .pf-h{flex-wrap:wrap} .pf-ac{grid-template-columns:1fr} }
 
 /* modo da busca e saldo (01/11) */
 .mds{display:flex;flex-direction:column;gap:8px;text-align:left}
