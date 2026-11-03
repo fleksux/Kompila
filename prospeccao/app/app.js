@@ -1169,7 +1169,7 @@ async function abrirPerfil(empilhar = true) {
     <div class="pf-ac">
       <button class="pfx disp" id="pfDisp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>Disparo automático</button>
       <button class="pfx conv" id="pfConv"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 4V5a1 1 0 0 1 1-1z"/></svg></span>Conversas</button>
-      <button class="pfx ind" id="pfInd"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 7h-2.2a3 3 0 1 0-5.8-1 3 3 0 1 0-5.8 1H4a1 1 0 0 0-1 1v3h18V8a1 1 0 0 0-1-1ZM4 12v7a1 1 0 0 0 1 1h6v-8H4Zm9 8h6a1 1 0 0 0 1-1v-7h-7v8Z"/></svg></span>Indicar e ganhar 1 mês</button>
+      <button class="pfx indi" id="pfInd"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 7h-2.2a3 3 0 1 0-5.8-1 3 3 0 1 0-5.8 1H4a1 1 0 0 0-1 1v3h18V8a1 1 0 0 0-1-1ZM4 12v7a1 1 0 0 0 1 1h6v-8H4Zm9 8h6a1 1 0 0 0 1-1v-7h-7v8Z"/></svg></span>Indicar e ganhar 1 mês</button>
       <button class="pfx pipe" id="pfPipe"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="5" height="16" rx="1.2"/><rect x="9.5" y="4" width="5" height="11" rx="1.2"/><rect x="16" y="4" width="5" height="14" rx="1.2"/></svg></span>Ver meu pipeline</button>
     </div>
     ${g ? `<div class="pf-t">Gestão da prospecção · ${mes}</div>
