@@ -789,6 +789,25 @@ async function abrirDisparo(empilhar = true) {
   }, 3000)
 }
 
+/* ======================= conversas (inbox) ======================= */
+async function abrirConversas(empilhar = true) {
+  const { data: evs } = await sb.from('envio').select('empresa_nome, telefone, mensagem, resposta, status, enviado_em, respondido_em')
+    .order('respondido_em', { ascending: false, nullsFirst: false }).order('enviado_em', { ascending: false, nullsFirst: false })
+  const seen = new Set(), lista = []
+  for (const e of (evs || [])) { if (!e.telefone || seen.has(e.telefone)) continue; seen.add(e.telefone); lista.push(e) }
+  const nResp = lista.filter(e => e.resposta).length
+  const row = e => { const resp = !!e.resposta, snip = String(resp ? e.resposta : e.mensagem || '').replace(/\s+/g, ' ').slice(0, 64); return `<div class="dp-it" data-tel="${esc(e.telefone)}"><div class="dp-it-top"><div class="cv-h"><b>${esc(e.empresa_nome || 'Contato')} <span class="cv-tel">${esc(tfmt(e.telefone))}</span></b><small>${resp ? '↩ ' : 'você: '}${esc(snip)}</small></div><span class="dp-chip c-${resp ? 'r' : 'e'}">${resp ? 'respondeu' : 'enviado'}</span></div><div class="dp-conv"><div class="dp-msg out">${esc(e.mensagem || '')}</div>${resp ? `<div class="dp-msg in">${esc(e.resposta)}</div>` : ''}</div></div>` }
+  const body = lista.length
+    ? `<p class="dp-lead">${nResp ? `<b>${nResp}</b> ${nResp === 1 ? 'respondeu' : 'responderam'}. ` : ''}Toca num contato pra ver a conversa.</p><div class="dp-list">${lista.map(row).join('')}</div>`
+    : `<div class="cp-vazio">Nenhuma conversa ainda.<br>Dispara uma campanha e as respostas aparecem aqui.</div>`
+  $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Conversas</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${body}</div>`
+  $('capX').onclick = fecharCapivara
+  if (empilhar) empilha('conversas')
+  $('cap').querySelectorAll('.dp-it').forEach(el => { const top = el.querySelector('.dp-it-top'); if (top) top.onclick = () => el.classList.toggle('aberto') })
+  $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+}
+
 /* ======================= fila de envio: um toque por empresa ======================= */
 // nada sai sozinho: a fila abre o WhatsApp com a mensagem pronta e quem aperta enviar é você
 const LIMITES = [10, 20, 30, 50]
@@ -1018,7 +1037,7 @@ async function abrirPerfil(empilhar = true) {
     ${movs.length ? `<div class="pf-mv">${movs.map(m => `<div><span>${esc(m.descricao || m.tipo)}</span><small>${new Date(m.criado_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</small><b class="${m.centavos < 0 ? 'neg' : 'pos'}">${m.centavos < 0 ? '−' : '+'} ${brlC(Math.abs(m.centavos))}</b></div>`).join('')}</div>` : ''}
     <div class="pf-t">Meu uso em ${mes}</div>
     <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(ig.count || 0, 'perfis do Instagram')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
-    <div class="pf-ac"><button class="btn go" id="pfDisp">Disparo automático</button><button class="btn line" id="pfInd">Indicar e ganhar 1 mês</button><button class="btn line" id="pfPipe">Ver meu pipeline</button></div>
+    <div class="pf-ac"><button class="btn go" id="pfDisp">Disparo automático</button><button class="btn line" id="pfConv">Conversas</button><button class="btn line" id="pfInd">Indicar e ganhar 1 mês</button><button class="btn line" id="pfPipe">Ver meu pipeline</button></div>
     ${g ? `<div class="pf-t">Gestão da prospecção · ${mes}</div>
     <div class="pf-g">${card(g.contas, 'contas', `${g.novas_mes} nova${g.novas_mes === 1 ? '' : 's'} no mês`)}${card(g.ativas_mes, 'ativas no mês', 'fizeram busca')}${card(g.pagantes, 'pagantes', `${g.mes_gratis} em mês grátis`)}${card(reais(Number(g.custo_usd_mes)), 'gasto total de IA', `${g.buscas_mes} busca${g.buscas_mes === 1 ? '' : 's'} · ${g.raiox_mes} Raio-X`)}</div>
     ${g.pedidos ? `<div class="pf-al">${g.pedidos} pessoa${g.pedidos === 1 ? '' : 's'} pediu acesso por indicação e está esperando.</div>` : ''}
@@ -1029,6 +1048,7 @@ async function abrirPerfil(empilhar = true) {
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   $('capX').onclick = fecharCapivara
   $('pfDisp').onclick = () => abrirDisparo()
+  $('pfConv').onclick = () => abrirConversas()
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
   $('pfPipe').onclick = () => abrirCaptacao()
   $('pfSair').onclick = async () => { await sb.auth.signOut(); location.reload() }
