@@ -648,7 +648,7 @@ async function abrirCaptacao(empilhar = true) {
   $('cap').dataset.seq = ''
   $('cap').classList.add('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Pipeline</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
-    <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Abordagens do dia · ${de('a_contatar').length}</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
+    <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Abordagens do dia · ${de('a_contatar').length}</button>` : ''}${de('a_contatar').length ? `<button class="btn line sm" id="cDisp">Disparo automático</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
     ${todos.length ? `<div class="pk">${kpi.map(([t, k, v, s]) => `<div class="pk-i t-${t}"><i></i><div><b>${v}</b><span>${k}</span><small>${s}</small></div></div>`).join('')}</div>
     <div class="pt" id="pTabs">${ETAPAS.map(([k, t], i) => `<button data-col="${i}">${t}<span>${de(k).length}</span></button>`).join('')}</div>
     <div class="pb" id="pBoard">${ETAPAS.map(([k, t]) => `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${de(k).length}</span></header><div class="pcol-b">${de(k).map(cartao).join('') || `<div class="pv">${k === 'a_contatar' ? 'Abre um Raio-X e toca em Adicionar ao pipeline.' : 'Arrasta uma empresa pra cá.'}</div>`}</div></section>`).join('')}</div>`
@@ -691,6 +691,7 @@ async function abrirCaptacao(empilhar = true) {
     })
   }
   if ($('cFila')) $('cFila').onclick = () => abrirFila()
+  if ($('cDisp')) $('cDisp').onclick = () => abrirDisparo()
   if ($('cCsv')) $('cCsv').onclick = () => {
     const cel = v => `"${String(v ?? '').replace(/"/g, '""')}"`
     const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Temperatura', 'Desde', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Potencial', 'Assunto', 'Mensagem', 'Anotação'].map(cel).join(';')]
@@ -700,6 +701,61 @@ async function abrirCaptacao(empilhar = true) {
   $('capO').classList.add('on'); $('cap').classList.add('on')
 }
 $('bCapt').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(), history.state?.camada ? 60 : 0) }
+
+/* ======================= disparo automático em cadência ======================= */
+const DISP_ST = { pausada: ['Pausada', 'pausada'], rodando: ['Rodando', 'rodando'], concluida: ['Concluída', 'ok'], cancelada: ['Encerrada', 'off'] }
+async function abrirDisparo(empilhar = true) {
+  const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(1)
+  const camp = cs && cs[0]
+  let body = ''
+  if (camp) {
+    const { data: evs } = await sb.from('envio').select('status').eq('campanha_id', camp.id)
+    const es = evs || [], ct = s => es.filter(e => e.status === s).length
+    const total = es.length, fila = ct('na_fila'), falhou = ct('falhou')
+    const enviados = ct('enviado') + ct('entregue') + ct('lido') + ct('respondeu'), resp = ct('respondeu')
+    const pct = total ? Math.round(enviados / total * 100) : 0, rod = camp.status === 'rodando'
+    const DIAS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb']
+    body = `
+      <div class="dp-top"><span class="dp-badge s-${DISP_ST[camp.status][1]}">${rod ? '● ' : '❚❚ '}${DISP_ST[camp.status][0]}</span><h3>${esc(camp.nome)}</h3></div>
+      <div class="dp-bar"><i style="width:${pct}%"></i></div>
+      <div class="dp-k"><div><b>${enviados}</b><span>enviados</span></div><div><b>${fila}</b><span>na fila</span></div><div><b>${resp}</b><span>responderam</span></div></div>
+      <div class="dp-cfg">Manda 1 a cada <b>${camp.intervalo_min} min</b> (com variação), das <b>${camp.hora_ini}h às ${camp.hora_fim}h</b>, ${(camp.dias || []).length === 7 ? 'todos os dias' : (camp.dias || []).map(x => DIAS[x]).join(', ')}, até <b>${camp.limite_dia}/dia</b>.${falhou ? ` <span class="dp-ferr">${falhou} falhou</span>` : ''}</div>
+      ${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>`
+            : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado.</label><button class="btn go" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}
+      <button class="btn ghost sm" id="dFim" style="width:100%;margin-top:8px">Encerrar campanha</button>`
+  } else {
+    const { data: ds } = await sb.from('diagnosticos').select('etapa, decisao, empresa:empresas(whatsapp, telefone)').eq('decisao', 'aprovada')
+    const prontos = (ds || []).filter(d => (d.etapa || 'a_contatar') === 'a_contatar' && (d.empresa?.whatsapp || /^\(?\d{2}\)?\s?9/.test(d.empresa?.telefone || ''))).length
+    body = prontos
+      ? `<p class="dp-lead"><b>${prontos}</b> empresa${prontos === 1 ? '' : 's'} aprovada${prontos === 1 ? '' : 's'} com WhatsApp, pronta${prontos === 1 ? '' : 's'} pra disparar. Cada uma recebe a abordagem personalizada que a Liz escreveu.</p>
+      <div class="dp-form">
+        <label>Intervalo entre envios<select id="dInt"><option value="3">a cada 3 min</option><option value="5" selected>a cada 5 min</option><option value="8">a cada 8 min</option><option value="12">a cada 12 min</option></select></label>
+        <label>Máximo por dia<select id="dLim"><option value="30">30 por dia</option><option value="60" selected>60 por dia</option><option value="100">100 por dia</option><option value="150">150 por dia</option></select></label>
+        <div class="dp-row"><label>Das <select id="dHi">${Array.from({ length: 24 }, (_, h) => `<option ${h === 9 ? 'selected' : ''}>${h}</option>`).join('')}</select> h</label><label>às <select id="dHf">${Array.from({ length: 24 }, (_, h) => `<option value="${h + 1}" ${h + 1 === 18 ? 'selected' : ''}>${h + 1}</option>`).join('')}</select> h</label></div>
+        <label>Dias<select id="dDias"><option value="semana" selected>segunda a sexta</option><option value="todos">todos os dias</option></select></label>
+      </div>
+      <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
+      <button class="btn go" id="dCriar" style="width:100%">Montar campanha</button>`
+      : `<div class="cp-vazio">Nenhum Raio-X aprovado com WhatsApp pra contatar.<br>Aprove alguns no Raio-X e volta aqui.</div>`
+  }
+  $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Disparo automático</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${body}</div>`
+  $('capX').onclick = fecharCapivara
+  if (empilhar) empilha('disparo')
+  const recarrega = () => abrirDisparo(false)
+  if ($('dCriar')) $('dCriar').onclick = async () => {
+    $('dCriar').disabled = true; $('dCriar').textContent = 'Montando…'
+    const dias = $('dDias').value === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]
+    const { error } = await sb.rpc('criar_campanha', { p_nome: 'Prospecção ' + new Date().toLocaleDateString('pt-BR'), p_intervalo: +$('dInt').value, p_limite: +$('dLim').value, p_hora_ini: +$('dHi').value, p_hora_fim: +$('dHf').value, p_dias: dias })
+    if (error) { $('dCriar').disabled = false; $('dCriar').textContent = 'Montar campanha'; return liz(esc(error.message)) }
+    recarrega()
+  }
+  if ($('dCiente')) $('dCiente').onchange = e => { $('dLiga').disabled = !e.target.checked }
+  if ($('dLiga')) $('dLiga').onclick = async () => { await sb.from('campanha').update({ status: 'rodando' }).eq('id', camp.id); liz('Disparo ligado. Vou mandando no ritmo combinado.'); recarrega() }
+  if ($('dPausa')) $('dPausa').onclick = async () => { await sb.from('campanha').update({ status: 'pausada' }).eq('id', camp.id); recarrega() }
+  if ($('dFim')) $('dFim').onclick = async () => { await sb.from('campanha').update({ status: 'cancelada' }).eq('id', camp.id); liz('Campanha encerrada.'); recarrega() }
+  $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+}
 
 /* ======================= fila de envio: um toque por empresa ======================= */
 // nada sai sozinho: a fila abre o WhatsApp com a mensagem pronta e quem aperta enviar é você
