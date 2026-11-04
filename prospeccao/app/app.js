@@ -812,7 +812,7 @@ const CVIC = {
 async function abrirConversas(empilhar = true, abrirTel = null) {
   try { localStorage.setItem('kp_conv_visto', new Date().toISOString()) } catch (_) {}
   { const nc = $('nConv'); if (nc) { nc.hidden = true; nc.textContent = '' } }
-  const { data: msgs } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em, pessoal').order('criado_em', { ascending: true })
+  const { data: msgs } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em, pessoal, fone').order('criado_em', { ascending: true })
   const all = msgs || [], byTel = {}
   all.forEach(m => { (byTel[m.telefone] = byTel[m.telefone] || []).push(m) })
   const respSet = new Set(all.filter(m => m.direcao === 'in').map(m => m.telefone))
@@ -828,8 +828,9 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
 
   const ehFone = t => /^55\d{10,11}$/.test(t)
   const nomeDe = t => (byTel[t].find(m => m.nome) || {}).nome || ''
-  const label = t => { const n = nomeDe(t); return n ? esc(n) : (ehFone(t) ? esc(tfmt(t)) : 'Contato') }
-  const subDe = t => { const n = nomeDe(t); return n && ehFone(t) ? esc(tfmt(t)) : '' }
+  const foneDe = t => { const f = (byTel[t].find(m => m.fone) || {}).fone || t; return ehFone(f) ? f : '' }
+  const label = t => { const n = nomeDe(t); return n ? esc(n) : (foneDe(t) ? esc(tfmt(foneDe(t))) : 'Contato') }
+  const subDe = t => { const f = foneDe(t); return f ? esc(tfmt(f)) : '' }
   const inic = t => { const n = nomeDe(t); if (!n) return ''; const p = n.trim().split(/\s+/); return (p[0][0] + (p[1] ? p[1][0] : '')).toUpperCase() }
   const cor = t => AVCORES[[...t].reduce((a, c) => a + c.charCodeAt(0), 0) % AVCORES.length]
   const hora = iso => {
@@ -951,7 +952,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
   async function atualizar() {
     const cap = $('cap')
     if (!cap.classList.contains('on') || !cap.querySelector('.cv2')) { clearInterval(convTimer); convTimer = null; return }
-    const { data: novos } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em').gt('criado_em', ultimo).order('criado_em', { ascending: true })
+    const { data: novos } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em, fone').gt('criado_em', ultimo).order('criado_em', { ascending: true })
     if (!novos || !novos.length) return
     ultimo = novos[novos.length - 1].criado_em
     for (const m of novos) {
