@@ -812,17 +812,17 @@ const CVIC = {
 async function abrirConversas(empilhar = true, abrirTel = null) {
   try { localStorage.setItem('kp_conv_visto', new Date().toISOString()) } catch (_) {}
   { const nc = $('nConv'); if (nc) { nc.hidden = true; nc.textContent = '' } }
-  const { data: msgs } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em').order('criado_em', { ascending: true })
+  const { data: msgs } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em, pessoal').order('criado_em', { ascending: true })
   const all = msgs || [], byTel = {}
   all.forEach(m => { (byTel[m.telefone] = byTel[m.telefone] || []).push(m) })
   const respSet = new Set(all.filter(m => m.direcao === 'in').map(m => m.telefone))
-  // quem é LEAD = está no pipe (tem envio com diagnóstico). O resto é PESSOAL.
-  const { data: evs } = await sb.from('envio').select('telefone').not('diagnostico_id', 'is', null)
-  const leadSet = new Set((evs || []).map(e => e.telefone))
-  const ehLead = t => leadSet.has(t)
+  // É o número de prospecção: todo contato é LEAD por padrão. Vira PESSOAL só quando você marca.
+  const pessoalSet = new Set(all.filter(m => m.pessoal).map(m => m.telefone))
+  const ehPessoal = t => pessoalSet.has(t)
+  const ehLead = t => !ehPessoal(t)
   const ordenar = () => Object.keys(byTel).sort((a, b) => new Date(byTel[b][byTel[b].length - 1].criado_em) - new Date(byTel[a][byTel[a].length - 1].criado_em))
   let tels = ordenar()
-  let aba = tels.some(ehLead) ? 'leads' : 'pessoal'
+  let aba = 'leads'
   const visiveis = () => tels.filter(t => aba === 'leads' ? ehLead(t) : !ehLead(t))
   let sel = null, ultimo = all.length ? all[all.length - 1].criado_em : ''
 
@@ -876,7 +876,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     const th = byTel[tel]
     const bolhas = th.map(m => `<div class="cv-b ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}<span class="cv-t">${hora(m.criado_em)}</span></div>`).join('')
     $('cap').querySelector('.cv2-chat').innerHTML = `<div class="cv-thread">
-        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b class="cv-nome-ed" title="Clique pra editar o nome">${label(tel)}</b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div></div>
+        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b class="cv-nome-ed" title="Clique pra editar o nome">${label(tel)}</b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div><button class="cv-tag ${ehPessoal(tel) ? 'pess' : ''}" title="Trocar entre Lead e Pessoal">${ehPessoal(tel) ? 'Pessoal' : 'Lead'}</button></div>
         <div class="cv2-fase"></div>
         <div class="cv-scroll">${bolhas}</div>
         <div class="cv-comp"><input class="cv-in" placeholder="Mensagem" autocomplete="off"><button class="cv-send" aria-label="Enviar">${CVIC.send}</button></div>
@@ -898,6 +898,16 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     }
     btn.onclick = enviar
     inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); enviar() } }
+    // marcar como Pessoal (ou voltar pra Lead). Clica na tag no topo.
+    const tag = $('cap').querySelector('.cv-thead .cv-tag')
+    if (tag) tag.onclick = async () => {
+      const novo = !ehPessoal(tel)
+      try { await sb.from('conversa').update({ pessoal: novo }).eq('telefone', tel) } catch (_) {}
+      if (novo) pessoalSet.add(tel); else pessoalSet.delete(tel)
+      byTel[tel].forEach(m => (m.pessoal = novo))
+      if ((aba === 'leads' && novo) || (aba === 'pessoal' && !novo)) { renderLista(); $('cap').querySelector('.cv2').classList.remove('aberta') }
+      else { renderLista(); selecionar(tel) }
+    }
     // editar o nome do contato (clica no nome, igual WhatsApp)
     const whoB = $('cap').querySelector('.cv-who .cv-nome-ed')
     if (whoB) whoB.onclick = () => {

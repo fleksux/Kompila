@@ -750,6 +750,9 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .cv-nome-ed{cursor:text}
 .cv-nome-ed:hover{text-decoration:underline dotted var(--mu2);text-underline-offset:3px}
 .cv-nome-inp{font:inherit;font-size:14.5px;font-weight:600;color:var(--tx);background:var(--w);border:1px solid var(--tx);border-radius:7px;padding:3px 8px;outline:none;max-width:220px}
+.cv-tag{flex:none;margin-left:auto;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.02em;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--w);color:#1FA463}
+.cv-tag.pess{color:var(--mu2)}
+.cv-tag:hover{border-color:currentColor}
 .cv-scroll{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:8px;background:var(--s)}
 .cv-b{max-width:64%;padding:9px 13px;border-radius:12px;font-size:13.5px;line-height:1.45;word-break:break-word}
 .cv-b .cv-t{display:block;font-size:10.5px;margin-top:4px;text-align:right}
