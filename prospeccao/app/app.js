@@ -888,7 +888,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     const th = byTel[tel]
     const bolhas = th.map(m => `<div class="cv-b ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}<span class="cv-t">${hora(m.criado_em)}</span></div>`).join('')
     $('cap').querySelector('.cv2-chat').innerHTML = `<div class="cv-thread">
-        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b class="cv-nome-ed" title="Clique pra editar o nome">${label(tel)}<svg class="cv-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div><button class="cv-tag" title="Classificar este contato">${ehPessoal(tel) ? 'Mover pra Leads' : 'Marcar como pessoal'}</button></div>
+        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b class="cv-nome-ed" title="Clique pra editar o nome">${label(tel)}<svg class="cv-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div><button class="cv-tag" title="Classificar este contato">${ehPessoal(tel) ? 'Mover pra Leads' : 'Marcar como pessoal'}</button><button class="cv-del" title="Apagar esta conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>
         <div class="cv2-fase"></div>
         <div class="cv-scroll">${bolhas}</div>
         <div class="cv-comp"><input class="cv-in" placeholder="Mensagem" autocomplete="off"><button class="cv-send" aria-label="Enviar">${CVIC.send}</button></div>
@@ -921,6 +921,18 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
       byTel[tel].forEach(m => (m.pessoal = novo))
       if ((aba === 'leads' && novo) || (aba === 'pessoal' && !novo)) { renderLista(); $('cap').querySelector('.cv2').classList.remove('aberta') }
       else { renderLista(); selecionar(tel) }
+    }
+    // apagar a conversa (pra testar de novo do zero). Dois toques pra não apagar sem querer.
+    const del = $('cap').querySelector('.cv-thead .cv-del')
+    if (del) { const ico = del.innerHTML; let armado = false
+      del.onclick = async () => {
+        if (!armado) { armado = true; del.classList.add('on'); del.textContent = 'Apagar?'; setTimeout(() => { if (del && armado) { armado = false; del.classList.remove('on'); del.innerHTML = ico } }, 3000); return }
+        del.disabled = true
+        try { await sb.from('conversa').delete().eq('telefone', tel) } catch (_) {}
+        delete byTel[tel]; tels = tels.filter(t => t !== tel); sel = null
+        renderLista(); $('cap').querySelector('.cv2').classList.remove('aberta')
+        liz('Conversa apagada. Pode testar de novo.')
+      }
     }
     // editar o nome do contato (clica no nome, igual WhatsApp)
     const whoB = $('cap').querySelector('.cv-who .cv-nome-ed')
