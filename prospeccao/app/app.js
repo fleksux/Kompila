@@ -1226,6 +1226,7 @@ async function abrirPerfil(empilhar = true) {
     <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(ig.count || 0, 'perfis do Instagram')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
     <div class="pf-ac">
       <button class="pfx wapp" id="pfWapp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.1c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.7-.9c.2-.2.3-.2.6-.1l1.9.9c.3.1.5.2.5.4.1.2.1.9-.1 1.5Z"/></svg></span>Conectar WhatsApp</button>
+      <button class="pfx robo" id="pfRobo"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="13" r="1.5" fill="#fff"/><circle cx="15" cy="13" r="1.5" fill="#fff"/><path d="M12 3v4M8 19v2M16 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Robô de atendimento</button>
       <button class="pfx disp" id="pfDisp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>Disparo automático</button>
       <button class="pfx conv" id="pfConv"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 4V5a1 1 0 0 1 1-1z"/></svg></span>Conversas</button>
       <button class="pfx indi" id="pfInd"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 7h-2.2a3 3 0 1 0-5.8-1 3 3 0 1 0-5.8 1H4a1 1 0 0 0-1 1v3h18V8a1 1 0 0 0-1-1ZM4 12v7a1 1 0 0 0 1 1h6v-8H4Zm9 8h6a1 1 0 0 0 1-1v-7h-7v8Z"/></svg></span>Indicar e ganhar 1 mês</button>
@@ -1241,6 +1242,7 @@ async function abrirPerfil(empilhar = true) {
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   $('capX').onclick = fecharCapivara
   $('pfWapp').onclick = () => abrirConectar()
+  $('pfRobo').onclick = () => abrirAtendimento()
   $('pfDisp').onclick = () => abrirDisparo()
   $('pfConv').onclick = () => abrirConversas()
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
@@ -1288,6 +1290,32 @@ async function abrirConectar() {
     parar(); window.__cnTimer = setInterval(poll, 2500); poll()
   }
   $('cnGerar').onclick = gerar
+  $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+}
+
+/* ======================= robô de atendimento (config do dono) ======================= */
+async function abrirAtendimento() {
+  const { data: canal } = await sb.from('canal_whatsapp').select('sessao, saudacao, instrucoes, atende').maybeSingle()
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Robô de atendimento</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b at">
+    ${!canal ? `<p class="at-vazio">Conecte um WhatsApp primeiro (botão Conectar WhatsApp), aí você configura o robô aqui.</p>` : `
+    <label class="at-l">Saudação <span>a primeira mensagem do disparo</span></label>
+    <input class="at-in" id="atSaud" placeholder="Olá, {saudacao}, tudo bem?" value="${esc(canal.saudacao || '')}" autocomplete="off">
+    <small class="at-hint">Escreva <b>{saudacao}</b> onde quiser que vire bom dia / boa tarde / boa noite pela hora.</small>
+    <label class="at-l">Como o robô atende <span>o negócio, o que vende, o tom, quando passar pra equipe</span></label>
+    <textarea class="at-tx" id="atInstr" placeholder="Ex: Somos a Ótica Brasil, de São Paulo. Vendemos óculos de grau e de sol. Atenda educado e direto, pergunte o que a pessoa procura. Quando ela quiser comprar ou experimentar, diga que a equipe fala com ela pra combinar. Nunca passe preço, a equipe confirma.">${esc(canal.instrucoes || '')}</textarea>
+    <label class="at-toggle"><input type="checkbox" id="atLiga" ${canal.atende ? 'checked' : ''}><span>Robô responde sozinho quando o lead responder</span></label>
+    <button class="btn go" id="atSalvar">Salvar</button>
+    <p class="at-aviso">Com o robô ligado, ele responde os leads no seu número sem você. Deixe desligado até testar.</p>`}
+  </div>`
+  $('capX').onclick = () => abrirPerfil(false)
+  if (canal) $('atSalvar').onclick = async () => {
+    const saudacao = $('atSaud').value.trim(), instrucoes = $('atInstr').value.trim(), atende = $('atLiga').checked
+    const b = $('atSalvar'); b.disabled = true
+    const { error } = await sb.from('canal_whatsapp').update({ saudacao: saudacao || null, instrucoes: instrucoes || null, atende }).eq('sessao', canal.sessao)
+    b.disabled = false
+    if (error) return liz('Não consegui salvar.')
+    liz(atende ? 'Salvo. Robô ligado: ele responde os leads.' : 'Salvo. Robô desligado por enquanto.')
+  }
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
 ;['av', 'avL'].forEach(id => { $(id).style.cursor = 'pointer'; $(id).onclick = () => abrirPerfil() })
