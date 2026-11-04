@@ -651,7 +651,7 @@ async function abrirCaptacao(empilhar = true) {
       <div class="pc-h"><div><b>${esc(c.nome || e.nome)}</b><small>${esc(d.busca?.cidade === 'Lista' ? 'Lista · ' + d.busca.nicho : (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0])}</small></div><span class="nt">${d.nota_dor ?? ''}</span></div>
       <div class="pc-m"><span class="tp t-${TEMP[d.etapa]?.[0]}">${TEMP[d.etapa]?.[1] || ''}</span><span class="${frio ? 'esf' : ''}">${frio ? `sem resposta ${haDias(n)}` : (d.etapa === 'a_contatar' ? 'entrou ' : '') + haDias(n)}</span></div>
       ${d.anotacao ? `<div class="pc-n">${esc(d.anotacao)}</div>` : ''}
-      <div class="pc-ac">${w ? `<a data-contato href="https://wa.me/${w}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}${e.telefone ? `<a data-contato href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">Ligar</a>` : ''}${e.instagram ? `<a data-contato class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Insta</a>` : ''}${e.email && !w ? `<a data-contato href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}
+      <div class="pc-ac">${w ? `<a data-contato data-abrir="${w}" href="#" class="wpp">WhatsApp</a>` : ''}${e.telefone ? `<a data-contato href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">Ligar</a>` : ''}${e.instagram ? `<a data-contato class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Insta</a>` : ''}${e.email && !w ? `<a data-contato href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}
         ${prox && d.etapa !== 'cliente' && d.etapa !== 'perdido' ? `<button class="vai" data-vai="${prox[0]}" title="Passar pra ${prox[1]}">${prox[1]}${IC.arr}</button>` : ''}</div>
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
@@ -692,6 +692,7 @@ async function abrirCaptacao(empilhar = true) {
       el.querySelector('[data-vai]')?.addEventListener('click', () => mover(d, el.querySelector('[data-vai]').dataset.vai))
       // abriu o WhatsApp, ligou ou chamou no Insta: já conta como contatado
       el.querySelectorAll('[data-contato]').forEach(a => a.addEventListener('click', () => { if (d.etapa === 'a_contatar') setTimeout(() => mover(d, 'contatado'), 400) }))
+      el.querySelectorAll('[data-abrir]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); abrirConversas(true, a.dataset.abrir) }))
       el.querySelectorAll('[data-et]').forEach(b => b.onclick = () => mover(d, b.dataset.et))
       el.querySelector('[data-abre]').onclick = () => { seq = []; abrirCapivara(d) }
       el.querySelector('[data-copia]').onclick = async e => { try { await navigator.clipboard.writeText(d.abordagem || d.capivara?.abordagem || ''); e.target.textContent = '✓ Copiada' } catch { liz('Não consegui copiar.') } }
@@ -815,12 +816,14 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
   const { data: msgs } = await sb.from('conversa').select('telefone, nome, direcao, texto, criado_em, pessoal, fone').order('criado_em', { ascending: true })
   const all = msgs || [], byTel = {}
   all.forEach(m => { (byTel[m.telefone] = byTel[m.telefone] || []).push(m) })
+  if (abrirTel && !byTel[abrirTel]) byTel[abrirTel] = []  // abrir uma conversa nova (ainda sem histórico)
   const respSet = new Set(all.filter(m => m.direcao === 'in').map(m => m.telefone))
   // É o número de prospecção: todo contato é LEAD por padrão. Vira PESSOAL só quando você marca.
   const pessoalSet = new Set(all.filter(m => m.pessoal).map(m => m.telefone))
   const ehPessoal = t => pessoalSet.has(t)
   const ehLead = t => !ehPessoal(t)
-  const ordenar = () => Object.keys(byTel).sort((a, b) => new Date(byTel[b][byTel[b].length - 1].criado_em) - new Date(byTel[a][byTel[a].length - 1].criado_em))
+  const ult0 = t => byTel[t][byTel[t].length - 1] || {}
+  const ordenar = () => Object.keys(byTel).sort((a, b) => new Date(ult0(b).criado_em || 0) - new Date(ult0(a).criado_em || 0))
   let tels = ordenar()
   let aba = 'leads'
   const visiveis = () => tels.filter(t => aba === 'leads' ? ehLead(t) : !ehLead(t))
@@ -940,7 +943,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
   }
 
   const row = tel => {
-    const th = byTel[tel], ult = th[th.length - 1], resp = respSet.has(tel)
+    const th = byTel[tel], ult = th[th.length - 1] || { texto: '', criado_em: new Date().toISOString(), direcao: 'out' }, resp = respSet.has(tel)
     const snip = esc(String(ult.texto || '').replace(/\s+/g, ' ').slice(0, 42))
     const pre = ult.direcao === 'in' ? '' : '<span class="cv-vc">você:</span> '
     return `<button class="cv-row cv2-row" data-tel="${esc(tel)}">${avatar(tel)}<span class="cv-main"><span class="cv-nome">${label(tel)}</span><span class="cv-prev">${pre}${snip}</span></span><span class="cv-meta"><span class="cv-time">${hora(ult.criado_em)}</span>${resp ? '<span class="cv-dot"></span>' : ''}</span></button>`
