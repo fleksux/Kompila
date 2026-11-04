@@ -855,3 +855,14 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .dp-chip.c-e{background:var(--gs);color:var(--gd)}
 .dp-chip.c-r{background:#E0F2FE;color:#075985}
 .dp-chip.c-x{background:var(--rs);color:var(--r)}
+
+/* ícones flutuantes na home: conversa e agenda */
+.fab{position:fixed;right:18px;bottom:18px;z-index:30;display:flex;flex-direction:column;gap:12px;align-items:center}
+.fab-b{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:#fff;cursor:pointer;border:none;box-shadow:0 8px 20px rgba(10,11,14,.22);position:relative;transition:transform .12s}
+.fab-b:hover{transform:translateY(-2px)}
+.fab-b:active{transform:translateY(0)}
+.fab-b svg{width:24px;height:24px}
+.fab-b.cv{background:linear-gradient(145deg,#2BD174,#1FA463)}
+.fab-b.ag{background:linear-gradient(145deg,#5B97F7,#2D6CDF)}
+.fab-b .bdg{position:absolute;top:-3px;right:-3px}
+body:has(#capO.on) .fab{display:none}

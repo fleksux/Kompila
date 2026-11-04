@@ -85,7 +85,7 @@ async function iniciar() {
   try { const s = localStorage.getItem('liz_sessao_kmp_kompila'); if (s && !localStorage.getItem('kp_intake_ligado')) sb.rpc('ligar_intake', { p_sessao: s }).then(() => { try { localStorage.setItem('kp_intake_ligado', '1') } catch (_) {} }, () => {}) } catch (_) {}
   history.replaceState(null, '', location.pathname)
   $('login').hidden = true
-  $('pUser').hidden = $('pHist').hidden = $('pZoom').hidden = false
+  $('pUser').hidden = $('pHist').hidden = $('pZoom').hidden = $('fab').hidden = false
   badgeConv(); setInterval(badgeConv, 15000)
   const inicial = () => { $('av').hidden = true; $('avL').hidden = false; $('avL').textContent = (usuario.user_metadata?.full_name || usuario.email || '?').trim().charAt(0).toUpperCase() }
   $('av').onerror = inicial
@@ -611,6 +611,8 @@ function baixarCsv(todos) {
 }
 $('bLista').onclick = () => abrirLista()
 $('bConv').onclick = () => abrirConversas()
+$('fabConv').onclick = () => abrirConversas()
+$('fabAg').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(), history.state?.camada ? 60 : 0) }
 // contador de quem respondeu desde a última vez que você abriu as conversas
 const convVisto = () => { try { return localStorage.getItem('kp_conv_visto') || '' } catch { return '' } }
 async function badgeConv() {
