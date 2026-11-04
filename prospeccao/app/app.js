@@ -1211,6 +1211,7 @@ async function abrirPerfil(empilhar = true) {
     <div class="pf-t">Meu uso em ${mes}</div>
     <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(ig.count || 0, 'perfis do Instagram')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
     <div class="pf-ac">
+      <button class="pfx wapp" id="pfWapp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.1c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.7-.9c.2-.2.3-.2.6-.1l1.9.9c.3.1.5.2.5.4.1.2.1.9-.1 1.5Z"/></svg></span>Conectar WhatsApp</button>
       <button class="pfx disp" id="pfDisp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>Disparo automático</button>
       <button class="pfx conv" id="pfConv"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 4V5a1 1 0 0 1 1-1z"/></svg></span>Conversas</button>
       <button class="pfx indi" id="pfInd"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 7h-2.2a3 3 0 1 0-5.8-1 3 3 0 1 0-5.8 1H4a1 1 0 0 0-1 1v3h18V8a1 1 0 0 0-1-1ZM4 12v7a1 1 0 0 0 1 1h6v-8H4Zm9 8h6a1 1 0 0 0 1-1v-7h-7v8Z"/></svg></span>Indicar e ganhar 1 mês</button>
@@ -1225,6 +1226,7 @@ async function abrirPerfil(empilhar = true) {
     <button class="pf-sair" id="pfSair">Sair da conta</button>
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   $('capX').onclick = fecharCapivara
+  $('pfWapp').onclick = () => abrirConectar()
   $('pfDisp').onclick = () => abrirDisparo()
   $('pfConv').onclick = () => abrirConversas()
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
@@ -1238,6 +1240,40 @@ async function abrirPerfil(empilhar = true) {
     el.querySelector('[data-visto]').onclick = async () => { await sb.rpc('aviso_visto', { p_id: id }); abrirPerfil(false) }
   })
   if (empilhar) empilha('perfil')
+  $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+}
+
+/* ======================= conectar WhatsApp (QR pelo app) ======================= */
+async function abrirConectar() {
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Conectar WhatsApp</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b cn">
+    <p class="cn-int">Conecte o número que vai <b>disparar e conversar</b>. Use um chip dedicado, nunca seu WhatsApp pessoal.</p>
+    <div class="cn-box" id="cnBox"><button class="btn go" id="cnGerar">Gerar QR Code</button></div>
+    <ol class="cn-passos"><li>No celular do chip, abra o WhatsApp</li><li>Toque em <b>Aparelhos conectados</b></li><li><b>Conectar um aparelho</b></li><li>Aponte a câmera pro QR aqui</li></ol>
+    <p class="cn-alerta">Conectar um número novo <b>desconecta</b> o que estiver ligado agora.</p>
+  </div>`
+  $('capX').onclick = () => { if (window.__cnTimer) { clearInterval(window.__cnTimer); window.__cnTimer = null } abrirPerfil(false) }
+  const box = () => $('cap').querySelector('#cnBox')
+  const parar = () => { if (window.__cnTimer) { clearInterval(window.__cnTimer); window.__cnTimer = null } }
+  const poll = async () => {
+    const cap = $('cap'); if (!cap.classList.contains('on') || !cap.querySelector('.cn')) { parar(); return }
+    const { data } = await sb.functions.invoke('conectar', { body: { acao: 'estado' } })
+    if (!data || !box()) return
+    if (data.status === 'WORKING') {
+      parar()
+      box().innerHTML = `<div class="cn-ok"><div class="cn-check">✓</div><b>Conectado</b><span>${data.numero ? esc(tfmt(data.numero)) : ''}</span></div>`
+      liz('WhatsApp conectado. Pode disparar e conversar por esse número.')
+      return
+    }
+    if (data.qr) box().innerHTML = `<img class="cn-qr" src="${data.qr}" alt="QR Code"><span class="cn-esc">Deixe aberto e escaneie no celular</span>`
+    else box().innerHTML = `<div class="cn-wait">Preparando o QR...</div>`
+  }
+  const gerar = async () => {
+    box().innerHTML = `<div class="cn-wait">Preparando o QR...</div>`
+    const { data, error } = await sb.functions.invoke('conectar', { body: { acao: 'iniciar' } })
+    if (error || data?.erro) { box().innerHTML = `<button class="btn go" id="cnGerar">Gerar QR Code</button>`; $('cnGerar').onclick = gerar; return liz(esc(data?.erro || 'Não consegui iniciar a conexão.')) }
+    parar(); window.__cnTimer = setInterval(poll, 2500); poll()
+  }
+  $('cnGerar').onclick = gerar
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
 ;['av', 'avL'].forEach(id => { $(id).style.cursor = 'pointer'; $(id).onclick = () => abrirPerfil() })
