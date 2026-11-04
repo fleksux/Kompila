@@ -876,7 +876,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     const th = byTel[tel]
     const bolhas = th.map(m => `<div class="cv-b ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}<span class="cv-t">${hora(m.criado_em)}</span></div>`).join('')
     $('cap').querySelector('.cv2-chat').innerHTML = `<div class="cv-thread">
-        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b class="cv-nome-ed" title="Clique pra editar o nome">${label(tel)}</b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div><button class="cv-tag ${ehPessoal(tel) ? 'pess' : ''}" title="Trocar entre Lead e Pessoal">${ehPessoal(tel) ? 'Pessoal' : 'Lead'}</button></div>
+        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b class="cv-nome-ed" title="Clique pra editar o nome">${label(tel)}</b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div><button class="cv-tag" title="Classificar este contato">${ehPessoal(tel) ? 'Mover pra Leads' : 'Marcar como pessoal'}</button></div>
         <div class="cv2-fase"></div>
         <div class="cv-scroll">${bolhas}</div>
         <div class="cv-comp"><input class="cv-in" placeholder="Mensagem" autocomplete="off"><button class="cv-send" aria-label="Enviar">${CVIC.send}</button></div>
