@@ -632,12 +632,12 @@ const dias = t => t ? Math.floor((Date.now() - new Date(t)) / 864e5) : 0
 const haDias = n => n <= 0 ? 'hoje' : n === 1 ? 'ontem' : `há ${n} dias`
 const zap = n => { const d = String(n || '').replace(/\D/g, ''); return d.length >= 10 ? (d.startsWith('55') ? d : '55' + d) : null }
 async function contarCaptacao() {
-  const { count } = await sb.from('diagnosticos').select('id', { count: 'exact', head: true }).eq('decisao', 'aprovada').not('etapa', 'in', '(cliente,perdido)')
+  const { count } = await sb.from('diagnosticos').select('id', { count: 'exact', head: true }).eq('decisao', 'aprovada').eq('arquivado', false).not('etapa', 'in', '(cliente,perdido)')
   $('nCapt').hidden = !count; $('nCapt').textContent = count || ''
 }
 let colunaPipe = 0
 async function abrirCaptacao(empilhar = true) {
-  const { data } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, abordagem, capivara, etapa, etapa_em, anotacao, decidida_em, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').order('decidida_em', { ascending: false })
+  const { data } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, abordagem, capivara, etapa, etapa_em, anotacao, decidida_em, telefone, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false })
   const todos = data || []
   const de = k => todos.filter(d => d.etapa === k)
   const quando = d => d.etapa_em || d.decidida_em
@@ -645,7 +645,7 @@ async function abrirCaptacao(empilhar = true) {
   const kpi = [['frio', 'Frios', de('a_contatar').length, 'a contatar'], ['morno', 'Mornos', de('contatado').length, esfriando.length ? `${esfriando.length} esfriando` : 'esperando resposta'], ['quente', 'Quentes', de('respondeu').length + de('reuniao').length, 'responderam'], ['ganho', 'Clientes', de('cliente').length, 'fechados']]
   const cartao = d => {
     const e = d.empresa || {}, c = d.capivara || {}, msg = d.abordagem || c.abordagem || ''
-    const w = zap(e.whatsapp) || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? zap(e.telefone) : null)
+    const w = zap(e.whatsapp) || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? zap(e.telefone) : null) || zap(d.telefone)
     const n = dias(quando(d)), frio = d.etapa === 'contatado' && n >= ESFRIA, prox = ETAPAS[ETAPAS.findIndex(x => x[0] === d.etapa) + 1]
     return `<div class="pc" draggable="true" data-id="${d.id}">
       <div class="pc-h"><div><b>${esc(c.nome || e.nome)}</b><small>${esc(d.busca?.cidade === 'Lista' ? 'Lista · ' + d.busca.nicho : (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0])}</small></div><span class="nt">${d.nota_dor ?? ''}</span></div>
@@ -847,11 +847,19 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
   // fase do lead no pipeline: telefone -> envio -> diagnostico (contato pessoal não tem fase)
   async function carregarFase(tel) {
     const box = $('cap').querySelector('.cv2-fase'); if (!box) return
+    // 1) lead que veio do disparo (ligado por um envio)
     const { data: ev } = await sb.from('envio').select('diagnostico_id').eq('telefone', tel).not('diagnostico_id', 'is', null).order('enviado_em', { ascending: false, nullsFirst: false }).limit(1)
-    const did = ev?.[0]?.diagnostico_id
-    if (!did) { box.innerHTML = '<span class="tp t-ganho">Cliente</span>'; return }  // contatos deste número já são clientes
-    const { data: dg } = await sb.from('diagnosticos').select('id, etapa, etapa_em, decidida_em, nota_dor, angulo, motivo, anotacao, empresa:empresas(nome)').eq('id', did).maybeSingle()
-    if (!dg) { box.innerHTML = ''; return }
+    let dg = null
+    if (ev?.[0]?.diagnostico_id) { const r = await sb.from('diagnosticos').select('id, etapa, etapa_em, decidida_em, nota_dor, angulo, motivo, anotacao, empresa:empresas(nome)').eq('id', ev[0].diagnostico_id).maybeSingle(); dg = r.data }
+    // 2) lead que entrou pela conversa (ligado direto pelo telefone)
+    if (!dg) { const r = await sb.from('diagnosticos').select('id, etapa, etapa_em, decidida_em, nota_dor, angulo, motivo, anotacao').eq('telefone', tel).eq('origem', 'conversa').eq('arquivado', false).order('criado_em', { ascending: false }).limit(1).maybeSingle(); dg = r.data }
+    // 3) ainda não está no pipe: oferece virar lead (só se não for pessoal)
+    if (!dg) {
+      box.innerHTML = ehPessoal(tel) ? '' : `<button class="cv2-virar" id="cvVirar">+ Virar lead (pro pipe)</button>`
+      const bv = $('cvVirar')
+      if (bv) bv.onclick = async () => { bv.disabled = true; const nm = nomeDe(tel) || (foneDe(tel) ? tfmt(foneDe(tel)) : 'Contato'); const { error } = await sb.from('diagnosticos').insert({ telefone: tel, etapa: 'respondeu', origem: 'conversa', decisao: 'aprovada', decidida_em: new Date().toISOString(), capivara: { nome: nm } }); if (error) { bv.disabled = false; return liz('Não consegui virar lead.') } liz('Virou lead. Agora ele está no pipe.'); carregarFase(tel) }
+      return
+    }
     const render = () => {
       const t = TEMP[dg.etapa] || ['', 'Lead']
       const quando = dg.etapa_em || dg.decidida_em, n = dias(quando)
@@ -904,6 +912,8 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     if (tag) tag.onclick = async () => {
       const novo = !ehPessoal(tel)
       try { await sb.from('conversa').update({ pessoal: novo }).eq('telefone', tel) } catch (_) {}
+      // pessoal sai do pipe: arquiva o lead que entrou pela conversa (desarquiva ao voltar pra lead)
+      try { await sb.from('diagnosticos').update({ arquivado: novo }).eq('telefone', tel).eq('origem', 'conversa') } catch (_) {}
       if (novo) pessoalSet.add(tel); else pessoalSet.delete(tel)
       byTel[tel].forEach(m => (m.pessoal = novo))
       if ((aba === 'leads' && novo) || (aba === 'pessoal' && !novo)) { renderLista(); $('cap').querySelector('.cv2').classList.remove('aberta') }
