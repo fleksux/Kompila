@@ -612,6 +612,9 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .at-in:focus,.at-tx:focus{border-color:var(--tx)}
 .at-hint{display:block;margin-top:6px;font-size:12px;color:var(--mu2)}
 .at-tx{width:100%;min-height:160px;font:inherit;font-size:14px;line-height:1.5;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--w);outline:none;resize:vertical}
+.at-pt{width:100%;min-height:50px;font:inherit;font-size:13.5px;line-height:1.45;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--w);outline:none;resize:vertical;margin-bottom:8px}
+.at-pt:focus{border-color:var(--tx)}
+#atSeg{min-height:90px}
 .at-toggle{display:flex;align-items:center;gap:10px;margin:18px 0;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer}
 .at-toggle input{width:20px;height:20px;accent-color:#1FA463}
 .at-aviso{margin-top:14px;font-size:12.5px;color:var(--mu);background:var(--as);padding:10px 14px;border-radius:10px}

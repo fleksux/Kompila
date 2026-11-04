@@ -1307,14 +1307,22 @@ async function abrirConectar() {
 
 /* ======================= robô de atendimento (config do dono) ======================= */
 async function abrirAtendimento() {
-  const { data: canal } = await sb.from('canal_whatsapp').select('sessao, saudacao, instrucoes, atende').maybeSingle()
+  const { data: canal } = await sb.from('canal_whatsapp').select('sessao, saudacao, instrucoes, atende, portes, segmentos').maybeSingle()
+  const pt = (canal && canal.portes) || {}, sg = (canal && canal.segmentos) || {}
+  const segTxt = Object.entries(sg).map(([k, v]) => `${k}: ${v}`).join('\n')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Robô de atendimento</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b at">
     ${!canal ? `<p class="at-vazio">Conecte um WhatsApp primeiro (botão Conectar WhatsApp), aí você configura o robô aqui.</p>` : `
     <label class="at-l">Saudação <span>a primeira mensagem do disparo</span></label>
     <input class="at-in" id="atSaud" placeholder="Olá, {saudacao}, tudo bem?" value="${esc(canal.saudacao || '')}" autocomplete="off">
     <small class="at-hint">Escreva <b>{saudacao}</b> onde quiser que vire bom dia / boa tarde / boa noite pela hora.</small>
-    <label class="at-l">Como o robô atende <span>o negócio, o que vende, o tom, quando passar pra equipe</span></label>
-    <textarea class="at-tx" id="atInstr" placeholder="Ex: Somos a Ótica Brasil, de São Paulo. Vendemos óculos de grau e de sol. Atenda educado e direto, pergunte o que a pessoa procura. Quando ela quiser comprar ou experimentar, diga que a equipe fala com ela pra combinar. Nunca passe preço, a equipe confirma.">${esc(canal.instrucoes || '')}</textarea>
+    <label class="at-l">Como o robô vende <span>o negócio, o que vende, o tom, quando passar pra equipe</span></label>
+    <textarea class="at-tx" id="atInstr" placeholder="Ex: Somos a Ótica Brasil...">${esc(canal.instrucoes || '')}</textarea>
+    <label class="at-l">Abordagem por porte <span>o tom pra cada tamanho de empresa</span></label>
+    <textarea class="at-pt" id="atPp" placeholder="Pequeno: leve e rápido, qualifica em uma pergunta">${esc(pt.pequeno || '')}</textarea>
+    <textarea class="at-pt" id="atPm" placeholder="Médio: confiante, mostra como escala a operação">${esc(pt.medio || '')}</textarea>
+    <textarea class="at-pt" id="atPg" placeholder="Grande: formal e consultivo, trata como decisão estratégica">${esc(pt.grande || '')}</textarea>
+    <label class="at-l">Ganchos por segmento <span>um por linha: setor: gancho</span></label>
+    <textarea class="at-tx" id="atSeg" placeholder="padaria: fala da fila e do pedido pelo WhatsApp&#10;contabilidade: fala do tempo gasto com documento e cobrança">${esc(segTxt)}</textarea>
     <label class="at-toggle"><input type="checkbox" id="atLiga" ${canal.atende ? 'checked' : ''}><span>Robô responde sozinho quando o lead responder</span></label>
     <button class="btn go" id="atSalvar">Salvar</button>
     <p class="at-aviso">Com o robô ligado, ele responde os leads no seu número sem você. Deixe desligado até testar.</p>`}
@@ -1322,8 +1330,11 @@ async function abrirAtendimento() {
   $('capX').onclick = () => abrirPerfil(false)
   if (canal) $('atSalvar').onclick = async () => {
     const saudacao = $('atSaud').value.trim(), instrucoes = $('atInstr').value.trim(), atende = $('atLiga').checked
+    const portes = { pequeno: $('atPp').value.trim(), medio: $('atPm').value.trim(), grande: $('atPg').value.trim() }
+    const segmentos = {}
+    $('atSeg').value.split('\n').forEach(l => { const i = l.indexOf(':'); if (i > 0) { const k = l.slice(0, i).trim().toLowerCase(), v = l.slice(i + 1).trim(); if (k && v) segmentos[k] = v } })
     const b = $('atSalvar'); b.disabled = true
-    const { error } = await sb.from('canal_whatsapp').update({ saudacao: saudacao || null, instrucoes: instrucoes || null, atende }).eq('sessao', canal.sessao)
+    const { error } = await sb.from('canal_whatsapp').update({ saudacao: saudacao || null, instrucoes: instrucoes || null, atende, portes, segmentos }).eq('sessao', canal.sessao)
     b.disabled = false
     if (error) return liz('Não consegui salvar.')
     liz(atende ? 'Salvo. Robô ligado: ele responde os leads.' : 'Salvo. Robô desligado por enquanto.')
