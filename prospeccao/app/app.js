@@ -639,7 +639,7 @@ async function contarCaptacao() {
 }
 let colunaPipe = 0
 async function abrirCaptacao(empilhar = true) {
-  const { data } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, abordagem, capivara, etapa, etapa_em, anotacao, decidida_em, telefone, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false })
+  const { data } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, abordagem, capivara, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false })
   const todos = data || []
   const de = k => todos.filter(d => d.etapa === k)
   const quando = d => d.etapa_em || d.decidida_em
@@ -648,12 +648,20 @@ async function abrirCaptacao(empilhar = true) {
   const cartao = d => {
     const e = d.empresa || {}, c = d.capivara || {}, msg = d.abordagem || c.abordagem || ''
     const w = zap(e.whatsapp) || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? zap(e.telefone) : null) || zap(d.telefone)
+    // número do card: empresa do Google ou, se o lead entrou por conversa, o telefone do próprio diagnóstico
+    const tel = e.telefone || d.telefone || ''
+    const telDig = String(tel).replace(/\D/g, ''), telHref = telDig.length >= 12 && telDig.startsWith('55') ? '+' + telDig : telDig
+    // nunca fica sem nome: contato > empresa > número formatado > "Contato"
+    const titulo = c.nome || e.nome || (tel ? tfmt(tel) : 'Contato')
+    const sub = d.busca?.cidade === 'Lista' ? 'Lista · ' + (d.busca.nicho || '')
+      : (e.nome || d.busca) ? (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0]
+      : [d.segmento, tel ? tfmt(tel) : ''].filter(Boolean).join(' · ')
     const n = dias(quando(d)), frio = d.etapa === 'contatado' && n >= ESFRIA, prox = ETAPAS[ETAPAS.findIndex(x => x[0] === d.etapa) + 1]
     return `<div class="pc" draggable="true" data-id="${d.id}">
-      <div class="pc-h"><div><b>${esc(c.nome || e.nome)}</b><small>${esc(d.busca?.cidade === 'Lista' ? 'Lista · ' + d.busca.nicho : (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0])}</small></div><span class="nt">${d.nota_dor ?? ''}</span></div>
+      <div class="pc-h"><div><b>${esc(titulo)}</b><small>${esc(sub)}</small></div><span class="nt">${d.nota_dor ?? ''}</span></div>
       <div class="pc-m"><span class="tp t-${TEMP[d.etapa]?.[0]}">${TEMP[d.etapa]?.[1] || ''}</span><span class="${frio ? 'esf' : ''}">${frio ? `sem resposta ${haDias(n)}` : (d.etapa === 'a_contatar' ? 'entrou ' : '') + haDias(n)}</span></div>
       ${d.anotacao ? `<div class="pc-n">${esc(d.anotacao)}</div>` : ''}
-      <div class="pc-ac">${w ? `<a data-contato data-abrir="${w}" href="#" class="wpp">WhatsApp</a>` : ''}${e.telefone ? `<a data-contato href="tel:${esc(e.telefone.replace(/[^\d+]/g, ''))}">Ligar</a>` : ''}${e.instagram ? `<a data-contato class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Insta</a>` : ''}${e.email && !w ? `<a data-contato href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}
+      <div class="pc-ac">${w ? `<a data-contato data-abrir="${w}" href="#" class="wpp">WhatsApp</a>` : ''}${telHref ? `<a data-contato href="tel:${esc(telHref)}">Ligar</a>` : ''}${e.instagram ? `<a data-contato class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Insta</a>` : ''}${e.email && !w ? `<a data-contato href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}
         ${prox && d.etapa !== 'cliente' && d.etapa !== 'perdido' ? `<button class="vai" data-vai="${prox[0]}" title="Passar pra ${prox[1]}">${prox[1]}${IC.arr}</button>` : ''}</div>
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
