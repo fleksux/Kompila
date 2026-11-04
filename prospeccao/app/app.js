@@ -876,7 +876,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     const th = byTel[tel]
     const bolhas = th.map(m => `<div class="cv-b ${m.direcao === 'out' ? 'out' : 'in'}">${esc(m.texto)}<span class="cv-t">${hora(m.criado_em)}</span></div>`).join('')
     $('cap').querySelector('.cv2-chat').innerHTML = `<div class="cv-thread">
-        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b class="cv-nome-ed" title="Clique pra editar o nome">${label(tel)}</b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div><button class="cv-tag" title="Classificar este contato">${ehPessoal(tel) ? 'Mover pra Leads' : 'Marcar como pessoal'}</button></div>
+        <div class="cv-thead"><button class="ibtn cv-back" aria-label="Voltar">${CVIC.back}</button>${avatar(tel)}<div class="cv-who"><b class="cv-nome-ed" title="Clique pra editar o nome">${label(tel)}<svg class="cv-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></b>${subDe(tel) ? `<small>${subDe(tel)}</small>` : ''}</div><button class="cv-tag" title="Classificar este contato">${ehPessoal(tel) ? 'Mover pra Leads' : 'Marcar como pessoal'}</button></div>
         <div class="cv2-fase"></div>
         <div class="cv-scroll">${bolhas}</div>
         <div class="cv-comp"><input class="cv-in" placeholder="Mensagem" autocomplete="off"><button class="cv-send" aria-label="Enviar">${CVIC.send}</button></div>
@@ -917,8 +917,8 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
       const salvar = async () => {
         if (feito) return; feito = true
         const nv = ed.value.trim()
-        try { await sb.from('conversa').update({ nome: nv || null }).eq('telefone', tel) } catch (_) {}
-        byTel[tel].forEach(m => (m.nome = nv || null))
+        try { await sb.from('conversa').update({ nome: nv || null, nome_manual: !!nv }).eq('telefone', tel) } catch (_) {}
+        byTel[tel].forEach(m => { m.nome = nv || null; m.nome_manual = !!nv })
         selecionar(tel); renderLista()
       }
       ed.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); salvar() } else if (e.key === 'Escape') { feito = true; selecionar(tel) } }
