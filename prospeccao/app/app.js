@@ -628,7 +628,7 @@ function ligarEnr(root, e, depois) {
     fimCarregando('enr')
     if (error || data?.erro) { ENR.msg[e.id] = { t: 'ruim', h: esc(data?.erro || 'Não consegui buscar agora. Tenta de novo.') }; return depois() }
     Object.assign(e, data.novo)
-    const NOME = { whatsapp: 'WhatsApp', instagram: 'Instagram', email: 'E-mail', site: 'Site' }, ach = Object.entries(data.novo).map(([k, v]) => `<b>${NOME[k]}</b> ${esc(k === 'whatsapp' ? tfmt(v) : v)}`)
+    const NOME = { whatsapp: 'WhatsApp', instagram: 'Instagram', email: 'E-mail', site: 'Site' }, ach = Object.entries(data.novo).filter(([k]) => NOME[k]).map(([k, v]) => `<b>${NOME[k]}</b> ${esc(k === 'whatsapp' ? tfmt(v) : v)}`)
     const CN = { confirmado: 'CNPJ confirmado pelo telefone e nome.', provavel: 'CNPJ provável: confira abaixo.', ambiguo: 'Achei mais de um CNPJ: escolha abaixo.', nao_achei: 'Não achei o CNPJ na base.', sem_base: 'A base de CNPJ não respondeu agora.' }
     const cn = data.cnpj?.status
     const h = [ach.length ? `Achei ${ach.join(', ')}.` : data.sem_site ? 'Sem site pra ler.' : data.nao_abriu ? 'Não consegui abrir o site.' : 'Nada novo no site.', cn ? CN[cn] : ''].filter(Boolean).join(' ')
