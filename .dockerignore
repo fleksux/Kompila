@@ -1,0 +1,7 @@
+# fora do site publicado: histórico, instruções internas e material de referência
+.git
+.gitignore
+.dockerignore
+CLAUDE.md
+.DS_Store
+glowbos/instagram/referencias
