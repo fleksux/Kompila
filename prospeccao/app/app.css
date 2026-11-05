@@ -1133,3 +1133,5 @@ body:has(#capO.on) .fab{display:none}
 }
 
 .fi-ac a{color:var(--tx);text-decoration:none}
+
+.cn-risco{margin-top:8px;padding:10px 12px;background:#FDECEC;border-radius:var(--r8);font-size:12px;line-height:1.45;color:#8A1F23;text-align:left}

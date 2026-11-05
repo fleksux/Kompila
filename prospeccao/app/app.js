@@ -1054,7 +1054,7 @@ async function abrirDisparo(empilhar = true) {
       <div class="dp-list" id="dpList">${es.map(e => `<div class="dp-it" data-ev="${e.id}"><div class="dp-it-top"><div><b>${esc(e.empresa_nome || 'Contato')}</b><small>${esc(tfmt(e.telefone))}</small></div><span class="dp-chip c-${(CHIP_DP[e.status] || ['', ''])[1]}">${(CHIP_DP[e.status] || [e.status])[0]}</span></div><div class="dp-conv"><div class="dp-msg out">${esc(e.mensagem || '')}</div><div class="dp-msg in" data-in>${e.resposta ? esc(e.resposta) : ''}</div></div></div>`).join('')}</div>
       <div class="dp-cfg">Manda 1 a cada <b>${camp.intervalo_min} min</b> (com variação), das <b>${camp.hora_ini}h às ${camp.hora_fim}h</b>, ${(camp.dias || []).length === 7 ? 'todos os dias' : (camp.dias || []).map(x => DIAS[x]).join(', ')}, até <b>${camp.limite_dia}/dia</b>.${falhou ? ` <span class="dp-ferr">${falhou} falhou</span>` : ''}</div>
       ${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>`
-            : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado.</label><button class="btn ok lg" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}
+            : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado, sem a API oficial, e o WhatsApp pode banir esse número. O risco é meu.</label><button class="btn ok lg" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}
       <button class="btn ghost sm" id="dFim" style="width:100%;margin-top:8px">Encerrar disparos</button>`
   } else {
     const { data: ds } = await sb.from('diagnosticos').select('etapa, decisao, empresa:empresas(whatsapp, telefone)').eq('decisao', 'aprovada')
@@ -1610,6 +1610,7 @@ async function abrirConectar() {
     <div class="cn-box" id="cnBox"><button class="btn go" id="cnGerar">Gerar QR Code</button></div>
     <ol class="cn-passos"><li>No celular do chip, abra o WhatsApp</li><li>Toque em <b>Aparelhos conectados</b></li><li><b>Conectar um aparelho</b></li><li>Aponte a câmera pro QR aqui</li></ol>
     <p class="cn-alerta">Conectar um número novo <b>desconecta</b> o que estiver ligado agora.</p>
+    <p class="cn-risco"><b>Regra do jogo:</b> essa conexão não usa a API oficial do WhatsApp. O WhatsApp pode restringir ou banir o número, principalmente com disparo em volume. O risco é real e fica com o dono do número. Use um chip só pra isso.</p>
   </div>`
   $('capX').onclick = () => { if (window.__cnTimer) { clearInterval(window.__cnTimer); window.__cnTimer = null } abrirPerfil(false) }
   const box = () => $('cap').querySelector('#cnBox')
