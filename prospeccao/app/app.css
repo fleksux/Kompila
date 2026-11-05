@@ -1254,3 +1254,9 @@ body:has(#capO.on) .fab{display:none}
 #qlN{font:600 13px var(--mono);color:var(--mu)}
 #qlCsv{margin-top:8px}
 
+/* gestão: custo por conta */
+.pf-cc{margin-top:0}
+.pf-cc small{display:block;margin-top:2px}
+.pf-cct{flex:none;font:700 15px var(--mono)}
+.pf-ccn{margin:8px 0 0;font-size:12px;line-height:1.45;color:var(--mu)}
+
