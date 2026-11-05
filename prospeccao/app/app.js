@@ -638,9 +638,34 @@ async function contarCaptacao() {
   $('nCapt').hidden = !count; $('nCapt').textContent = count || ''
 }
 let colunaPipe = 0
+// filtro do pipeline: sobrevive ao redesenho (mover etapa, voltar da conversa)
+const pipeF = { q: '', resp: false, lim: {} }
+const POR_COLUNA = 50
+const semAcento = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+// mesma pessoa, formatos diferentes: sem 55 e sem o 9 extra (DDD + 8 últimos). LID não vira chave.
+const chaveTel = t => { let d = String(t || '').replace(/\D/g, ''); if (d.length >= 12 && d.startsWith('55')) d = d.slice(2); return d.length === 10 || d.length === 11 ? d.slice(0, 2) + d.slice(-8) : null }
+const esperandoTxt = t => { const m = Math.max(0, Math.floor((Date.now() - new Date(t)) / 6e4)); if (m < 1) return 'Escreveu agora'; if (m < 60) return `Esperando há ${m} min`; if (m < 1440) return `Esperando há ${Math.floor(m / 60)}h`; const n = Math.floor(m / 1440); return `Esperando há ${n} dia${n === 1 ? '' : 's'}` }
+// o banco devolve no máximo 1000 linhas por vez: busca em páginas pra ninguém ficar de fora
+async function leadsDoPipe() {
+  const out = []
+  for (let i = 0; ; i += 1000) {
+    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, abordagem, capivara, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
+    if (error) { liz('Não consegui carregar todo o pipeline. Tenta de novo.'); break }
+    out.push(...(data || []))
+    if (!data || data.length < 1000) break
+  }
+  return out
+}
 async function abrirCaptacao(empilhar = true) {
-  const { data } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, abordagem, capivara, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false })
-  const todos = data || []
+  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.lim = {} }
+  const [todos, resAg] = await Promise.all([leadsDoPipe(), sb.rpc('aguardando_resposta')])
+  // quem está esperando resposta, ligado ao cartão pelo envio ou pelo telefone
+  const porId = new Map(), porTel = new Map()
+  const aguardando = resAg.data || []
+  aguardando.forEach(a => { if (a.diagnostico_id) porId.set(a.diagnostico_id, a); [a.telefone, a.fone].forEach(t => { const k = chaveTel(t); if (k) porTel.set(k, a) }) })
+  const esperaDe = d => porId.get(d.id) || [d.empresa?.whatsapp, d.empresa?.telefone, d.telefone].map(chaveTel).filter(Boolean).map(k => porTel.get(k)).find(Boolean) || null
+  const noPipe = new Set(); todos.forEach(d => { const a = esperaDe(d); if (a) noPipe.add(a.telefone) })
+  const foraDoPipe = aguardando.filter(a => !noPipe.has(a.telefone)).length
   const de = k => todos.filter(d => d.etapa === k)
   const quando = d => d.etapa_em || d.decidida_em
   const esfriando = todos.filter(d => d.etapa === 'contatado' && dias(quando(d)) >= ESFRIA)
@@ -656,9 +681,11 @@ async function abrirCaptacao(empilhar = true) {
     const sub = d.busca?.cidade === 'Lista' ? 'Lista · ' + (d.busca.nicho || '')
       : (e.nome || d.busca) ? (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0]
       : [d.segmento, tel ? tfmt(tel) : ''].filter(Boolean).join(' · ')
-    const n = dias(quando(d)), frio = d.etapa === 'contatado' && n >= ESFRIA, prox = ETAPAS[ETAPAS.findIndex(x => x[0] === d.etapa) + 1]
+    const es = esperaDe(d)
+    const n = dias(quando(d)), frio = !es && d.etapa === 'contatado' && n >= ESFRIA, prox = ETAPAS[ETAPAS.findIndex(x => x[0] === d.etapa) + 1]
     return `<div class="pc" draggable="true" data-id="${d.id}">
       <div class="pc-h"><div><b>${esc(titulo)}</b><small>${esc(sub)}</small></div><span class="nt">${d.nota_dor ?? ''}</span></div>
+      ${es ? `<button class="pc-esp" data-abrir="${esc(es.telefone)}"><span>${esperandoTxt(es.desde)}</span><b>Responder</b></button>` : ''}
       <div class="pc-m"><span class="tp t-${TEMP[d.etapa]?.[0]}">${TEMP[d.etapa]?.[1] || ''}</span><span class="${frio ? 'esf' : ''}">${frio ? `sem resposta ${haDias(n)}` : (d.etapa === 'a_contatar' ? 'entrou ' : '') + haDias(n)}</span></div>
       ${d.anotacao ? `<div class="pc-n">${esc(d.anotacao)}</div>` : ''}
       <div class="pc-ac">${w ? `<a data-contato data-abrir="${w}" href="#" class="wpp">WhatsApp</a>` : ''}${telHref ? `<a data-contato href="tel:${esc(telHref)}">Ligar</a>` : ''}${e.instagram ? `<a data-contato class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Insta</a>` : ''}${e.email && !w ? `<a data-contato href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}
@@ -673,8 +700,10 @@ async function abrirCaptacao(empilhar = true) {
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Pipeline</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
     <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Abordagens do dia · ${de('a_contatar').length}</button>` : ''}${de('a_contatar').length ? `<button class="btn line sm" id="cDisp">Disparo automático</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
     ${todos.length ? `<div class="pk">${kpi.map(([t, k, v, s]) => `<div class="pk-i t-${t}"><i></i><div><b>${v}</b><span>${k}</span><small>${s}</small></div></div>`).join('')}</div>
+    <div class="pf"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pQ" type="search" placeholder="Buscar nome, empresa, telefone ou @" aria-label="Buscar no pipeline" autocomplete="off" value="${esc(pipeF.q)}"></label><button class="pf-resp" id="pResp" aria-pressed="${pipeF.resp}" ${noPipe.size || pipeF.resp ? '' : 'disabled'}>Responder<span>${todos.filter(esperaDe).length}</span></button></div>
+    <div class="pf-i" id="pInfo" hidden></div>
     <div class="pt" id="pTabs">${ETAPAS.map(([k, t], i) => `<button data-col="${i}">${t}<span>${de(k).length}</span></button>`).join('')}</div>
-    <div class="pb" id="pBoard">${ETAPAS.map(([k, t]) => `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${de(k).length}</span></header><div class="pcol-b">${de(k).map(cartao).join('') || `<div class="pv">${k === 'a_contatar' ? 'Abre um Raio-X e toca em Adicionar ao pipeline.' : 'Arrasta uma empresa pra cá.'}</div>`}</div></section>`).join('')}</div>`
+    <div class="pb" id="pBoard"></div>`
     : '<div class="cp-vazio">Seu pipeline está vazio.<br>Abre um Raio-X e toca em <b>Adicionar ao pipeline</b>.</div>'}</div>`
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('capt')
@@ -693,7 +722,7 @@ async function abrirCaptacao(empilhar = true) {
     const marca = i => abas.forEach((b, j) => b.classList.toggle('on', j === i))
     abas.forEach((b, i) => b.onclick = () => { board.scrollTo({ left: board.children[i].offsetLeft - board.offsetLeft, behavior: 'smooth' }); marca(i) })
     board.onscroll = () => { const w = board.children[0].offsetWidth + 12; colunaPipe = Math.round(board.scrollLeft / w); marca(colunaPipe) }
-    board.scrollLeft = mob() ? colunaPipe * (board.children[0].offsetWidth + 12) : 0; marca(mob() ? colunaPipe : -1)
+    const ligar = () => {
     board.querySelectorAll('.pc').forEach(el => {
       const d = todos.find(x => x.id === el.dataset.id)
       el.onclick = e => { if (!e.target.closest('a,button,textarea')) el.classList.toggle('aberto') }
@@ -713,6 +742,36 @@ async function abrirCaptacao(empilhar = true) {
       col.ondragleave = () => col.classList.remove('alvo')
       col.ondrop = e => { e.preventDefault(); col.classList.remove('alvo'); mover(todos.find(x => x.id === e.dataTransfer.getData('text/plain')), col.dataset.et) }
     })
+    board.querySelectorAll('[data-mais]').forEach(b => b.onclick = () => { const k = b.dataset.mais; pipeF.lim[k] = (pipeF.lim[k] || POR_COLUNA) + POR_COLUNA; const y = board.scrollLeft; pintar(); board.scrollLeft = y })
+    }
+    // busca: tudo o que identifica o lead, sem acento e sem maiúscula
+    const textoBusca = new Map(todos.map(d => { const e = d.empresa || {}, a = esperaDe(d); return [d.id, semAcento([d.capivara?.nome, e.nome, e.instagram, e.email, e.cidade, e.bairro, d.busca?.nicho, d.segmento, d.anotacao, a?.nome].filter(Boolean).join(' '))] }))
+    const fonesBusca = new Map(todos.map(d => { const e = d.empresa || {}, a = esperaDe(d); return [d.id, [e.whatsapp, e.telefone, d.telefone, a?.telefone, a?.fone].map(t => String(t || '').replace(/\D/g, '').replace(/^55(?=\d{10})/, '')).join(' ')] }))
+    const pintar = (rolar = false) => {
+      const q = semAcento(pipeF.q.trim()).replace(/^@/, ''), soNumero = /^[\d\s()+-]+$/.test(q), qd = soNumero ? q.replace(/\D/g, '').replace(/^55(?=\d{10})/, '') : ''
+      const bate = d => (!pipeF.resp || esperaDe(d)) && (!q || (soNumero ? qd.length >= 3 && fonesBusca.get(d.id).includes(qd) : textoBusca.get(d.id).includes(q)))
+      const filtrando = !!q || pipeF.resp
+      let total = 0, primeira = -1
+      board.innerHTML = ETAPAS.map(([k, t], i) => {
+        // quem espera há mais tempo vem primeiro, pra não ficar escondido depois do limite da coluna
+        const lista = de(k).filter(bate).sort((a, b) => (esperaDe(a)?.desde || '~').localeCompare(esperaDe(b)?.desde || '~'))
+        total += lista.length; if (lista.length && primeira < 0) primeira = i
+        abas[i].querySelector('span').textContent = lista.length
+        const lim = pipeF.lim[k] || POR_COLUNA, resto = lista.length - lim
+        const vazio = filtrando ? 'Ninguém aqui.' : k === 'a_contatar' ? 'Abre um Raio-X e toca em Adicionar ao pipeline.' : 'Arrasta uma empresa pra cá.'
+        return `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${lista.length}</span></header><div class="pcol-b">${lista.slice(0, lim).map(cartao).join('') || `<div class="pv">${vazio}</div>`}${resto > 0 ? `<button class="pv-mais" data-mais="${k}">Ver mais ${Math.min(resto, POR_COLUNA)} de ${resto}</button>` : ''}</div></section>`
+      }).join('')
+      ligar()
+      const info = $('pInfo'), fora = pipeF.resp && foraDoPipe
+      info.hidden = !filtrando && !foraDoPipe
+      info.innerHTML = `${filtrando ? (total ? `${total} de ${todos.length} no pipeline` : 'Ninguém encontrado no pipeline') : ''}${foraDoPipe && (fora || !filtrando) ? `<button id="pFora">${foraDoPipe} esperando em Conversas, fora do pipeline</button>` : ''}`
+      if ($('pFora')) $('pFora').onclick = () => abrirConversas()
+      if (rolar && primeira >= 0) { colunaPipe = primeira; board.scrollLeft = board.children[primeira].offsetLeft - board.offsetLeft; marca(mob() ? primeira : -1) }
+    }
+    pintar()
+    board.scrollLeft = mob() ? colunaPipe * (board.children[0].offsetWidth + 12) : 0; marca(mob() ? colunaPipe : -1)
+    let tq; $('pQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { pipeF.q = e.target.value; pipeF.lim = {}; pintar(true) }, 150) }
+    $('pResp').onclick = e => { pipeF.resp = !pipeF.resp; pipeF.lim = {}; e.currentTarget.setAttribute('aria-pressed', pipeF.resp); pintar(true) }
   }
   if ($('cFila')) $('cFila').onclick = () => abrirFila()
   if ($('cDisp')) $('cDisp').onclick = () => abrirDisparo()
