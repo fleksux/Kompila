@@ -1034,3 +1034,26 @@ body:has(#capO.on) .fab{display:none}
 
 /* o nome da busca não fica no topo: o menu nunca muda de lugar */
 #fname{display:none}
+
+/* dados da empresa e seleção em lote */
+.rc{display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:var(--s);border-radius:var(--r8);font-size:13px;line-height:1.35}
+.rc small{font-size:12px;color:var(--mu)}
+.rc-t{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px;font-size:12px}
+.rc-ok,.rc-pv{padding:1px 8px;border-radius:9px;font-size:11px;font-weight:600}
+.rc-ok{background:var(--gs);color:var(--gd)}.rc-pv{background:#FFF4E2;color:#7A4E05}
+.rc-ruim{color:#B4282D!important;font-weight:600}
+.rc-fix{align-self:flex-start;margin-top:4px;font-size:12px;font-weight:600;color:var(--gd);cursor:pointer}
+.rc-q{gap:6px}
+.rc-q>b{font-size:12px}
+.rc-q button{display:block;width:100%;padding:8px 10px;background:#fff;border:1px solid var(--line2);border-radius:6px;text-align:left;cursor:pointer}
+.rc-q button:hover{border-color:var(--gd)}
+.rc-q button span{display:block;font-size:13px;font-weight:600}
+.lc-sel{flex:none;display:grid;place-items:center;width:20px;height:20px;margin-top:1px;cursor:pointer}
+.lc-sel input,.lv-selt input{width:16px;height:16px;accent-color:var(--gd);cursor:pointer}
+.lv-selt{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.lv-resb{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.lv-en[hidden]{display:none}
+@media (max-width:700px){
+  .lc-sel{width:32px;height:32px;margin:-6px 0 0 -6px}.lc-sel input,.lv-selt input{width:20px;height:20px}
+  .lv-res{flex-wrap:wrap}
+}

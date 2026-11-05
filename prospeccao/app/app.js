@@ -556,11 +556,28 @@ addEventListener('keydown', e => { if (e.key === 'Escape') { fecharCapivara(); $
 /* ======================= enriquecer: dentro do card de cada empresa ======================= */
 const ENR = { aberto: new Set(), msg: {} }
 const enrBotao = (e) => e?.id ? `<button class="btn line sm" data-enr="${e.id}" aria-expanded="${ENR.aberto.has(e.id)}">Enriquecer</button>` : ''
+const cnpjFmt = c => String(c || '').replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')
+const anoDe = d => String(d || '').slice(0, 4)
+function enrDados(e) {
+  if (!e?.cnpj_status || e.cnpj_status === 'nao_achei') return ''
+  if (e.cnpj_status === 'ambiguo') return `<div class="rc rc-q"><b>Qual destas é a empresa?</b>${(e.cnpj_opcoes || []).map((o, i) => `<button data-op="${i}"><span>${esc(o.fantasia || o.razao || 'Sem nome fantasia')}</span><small>${esc(cnpjFmt(o.cnpj))}${o.atividade ? ' · ' + esc(o.atividade) : ''}${o.abertura ? ' · desde ' + anoDe(o.abertura) : ''}</small></button>`).join('')}</div>`
+  const r = e.receita || {}, prov = e.cnpj_status === 'provavel', ruim = r.situacao && !/ativa/i.test(r.situacao)
+  return `<div class="rc"><div class="rc-t"><b>Dados da empresa</b><span class="${prov ? 'rc-pv' : 'rc-ok'}">${prov ? 'Provável' : 'Confirmado'}</span></div>
+    ${r.razao ? `<div>${esc(r.razao)}</div>` : r.mei ? '<div>MEI</div>' : ''}<small>${[cnpjFmt(r.cnpj), r.porte, r.abertura ? 'desde ' + anoDe(r.abertura) : ''].filter(Boolean).map(esc).join(' · ')}</small>
+    ${r.atividade ? `<small>${esc(r.atividade)}</small>` : ''}${ruim ? `<small class="rc-ruim">Situação: ${esc(r.situacao)}</small>` : ''}
+    ${prov ? `<button class="rc-fix" data-rc-ok>É essa</button>` : ''}</div>`
+}
+function ligarDados(root, e, depois) {
+  if (!e?.id) return
+  const salvar = async d => { const { error } = await sb.from('empresas').update(d).eq('id', e.id); if (error) return liz('Não salvou. Tenta de novo.'); Object.assign(e, d); depois() }
+  root.querySelectorAll('[data-op]').forEach(b => b.onclick = ev => { ev.stopPropagation(); const o = e.cnpj_opcoes[+b.dataset.op]; salvar({ cnpj: o.cnpj, cnpj_status: 'escolhido', receita: o, cnpj_opcoes: null }) })
+  root.querySelector('[data-rc-ok]')?.addEventListener('click', ev => { ev.stopPropagation(); salvar({ cnpj_status: 'escolhido' }) })
+}
 function enrPainel(e) {
   if (!e?.id || !ENR.aberto.has(e.id)) return ''
   const m = ENR.msg[e.id]
   const campo = (k, t, ph, modo = 'text') => `<label><span>${t}</span><input data-c="${k}" type="${modo}" placeholder="${ph}" value="${esc(e[k] || '')}" autocomplete="off"></label>`
-  return `<div class="enr" data-enr-p="${e.id}"><button class="btn go sm enr-b" data-enr-buscar>Buscar no site da empresa</button>
+  return `<div class="enr" data-enr-p="${e.id}"><button class="btn go sm enr-b" data-enr-buscar>Buscar site e CNPJ</button>
     ${m ? `<div class="enr-m ${m.t}">${m.h}</div>` : ''}
     ${campo('whatsapp', 'WhatsApp', '(11) 90000-0000', 'tel')}${campo('instagram', 'Instagram', '@perfil')}${campo('email', 'E-mail', 'contato@empresa.com', 'email')}${campo('site', 'Site', 'https://')}
     <div class="enr-ac"><button class="btn ok sm" data-enr-salvar>Salvar</button><button class="btn ghost sm" data-enr-fechar>Fechar</button></div></div>`
@@ -587,21 +604,24 @@ function ligarEnr(root, e, depois) {
     if (error || data?.erro) { ENR.msg[e.id] = { t: 'ruim', h: esc(data?.erro || 'Não consegui buscar agora. Tenta de novo.') }; return depois() }
     Object.assign(e, data.novo)
     const NOME = { whatsapp: 'WhatsApp', instagram: 'Instagram', email: 'E-mail', site: 'Site' }, ach = Object.entries(data.novo).map(([k, v]) => `<b>${NOME[k]}</b> ${esc(k === 'whatsapp' ? tfmt(v) : v)}`)
-    const h = ach.length ? `Achei ${ach.join(', ')}.` : data.sem_site ? 'Essa empresa não tem site pra eu ler. Preencha o que você achar e salve.' : data.nao_abriu ? 'Não consegui abrir o site dela. Preencha o que você achar e salve.' : 'Não achei nada novo no site. Preencha o que você achar e salve.'
-    ENR.msg[e.id] = { t: ach.length ? 'ok' : 'ruim', h }; depois()
+    const CN = { confirmado: 'CNPJ confirmado pelo telefone e nome.', provavel: 'CNPJ provável: confira abaixo.', ambiguo: 'Achei mais de um CNPJ: escolha abaixo.', nao_achei: 'Não achei o CNPJ na base.', sem_base: 'A base de CNPJ não respondeu agora.' }
+    const cn = data.cnpj?.status
+    const h = [ach.length ? `Achei ${ach.join(', ')}.` : data.sem_site ? 'Sem site pra ler.' : data.nao_abriu ? 'Não consegui abrir o site.' : 'Nada novo no site.', cn ? CN[cn] : ''].filter(Boolean).join(' ')
+    const bom = ach.length || ['confirmado', 'provavel', 'ambiguo'].includes(cn)
+    ENR.msg[e.id] = { t: bom ? 'ok' : 'ruim', h }; depois()
   }
 }
 
 /* ======================= lista na home: cards e filtros ======================= */
-const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], lendo: false, buscaId: null, armado: false }
+const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], buscaId: null, armado: false, sel: new Set(), timer: null }
 const ehCelular = e => /^\(?\d{2}\)?\s?9/.test(e.telefone || '')
-const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site], ['nota', 'Nota 4 ou mais', e => +e.nota >= 4]]
+const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site], ['nota', 'Nota 4 ou mais', e => +e.nota >= 4], ['cnpj', 'Com CNPJ', e => !!e.cnpj]]
 const LV_ORD = { potencial: (a, b) => (b.nota_dor ?? -1) - (a.nota_dor ?? -1), nota: (a, b) => (+b.empresa?.nota || 0) - (+a.empresa?.nota || 0), avaliacoes: (a, b) => (+b.empresa?.total_avaliacoes || 0) - (+a.empresa?.total_avaliacoes || 0), nome: (a, b) => String(a.empresa?.nome || '').localeCompare(String(b.empresa?.nome || ''), 'pt-BR') }
 const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (![...filtros].every(k => LV_FILTROS.find(x => x[0] === k)[2](e))) return false; const q = semAcento(LV.q.trim()).replace(/^@/, ''); if (!q) return true; const dg = q.replace(/\D/g, ''); return semAcento([e.nome, e.bairro, e.instagram, e.email, e.site].join(' ')).includes(q) || (/^[\d\s()+-]+$/.test(q) && dg.length >= 3 && String((e.telefone || '') + ' ' + (e.whatsapp || '')).replace(/\D/g, '').includes(dg)) }
 async function abrirListaHome() {
   if (!busca?.id) return
-  if (LV.buscaId !== busca.id) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.buscaId = busca.id }
-  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
+  if (LV.buscaId !== busca.id) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.sel = new Set(); LV.buscaId = busca.id }
+  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
   LV.todos = data || []; LV.armado = false
   $('ask').hidden = true; document.body.classList.remove('fora')
@@ -609,30 +629,49 @@ async function abrirListaHome() {
   const titulo = busca.cidade === 'Lista' ? busca.nicho : `${busca.nicho} em ${(busca.cidade || '').split(',')[0]}`
   $('lv').innerHTML = `<div class="lv-in">
     <div class="lv-top"><div><h1>${esc(titulo)}</h1><p>${LV.todos.length} empresa${LV.todos.length === 1 ? '' : 's'} nesta lista</p></div><div class="lv-ac"><button class="btn line sm" id="lvCsv">Baixar planilha</button><button class="btn line sm" id="lvMais">Encontrar mais</button></div></div>
-    ${LV.lendo ? '<div class="lv-en"><span><b>Lendo os sites</b> pra achar Instagram, e-mail e WhatsApp. A lista atualiza sozinha.</span></div>' : ''}
+    <div class="lv-en" id="lvProg" hidden></div>
     <div class="lv-fil"><div class="lv-lin"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lvQ" type="search" placeholder="Buscar nome, bairro, telefone ou @" aria-label="Buscar na lista" autocomplete="off" value="${esc(LV.q)}"></label>
       <label class="lv-ord">Ordenar<select id="lvOrd" aria-label="Ordenar">${[['potencial', 'Potencial'], ['nota', 'Nota no Google'], ['avaliacoes', 'Mais avaliações'], ['nome', 'Nome']].map(([k, t]) => `<option value="${k}"${LV.ord === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
       <div class="lv-chips" id="lvChips"></div></div>
-    <div class="lv-res"><span id="lvN"></span><button class="btn ok sm" id="lvAddT" hidden></button></div>
+    <div class="lv-res"><label class="lv-selt"><input type="checkbox" id="lvSelT"><span id="lvN"></span></label><div class="lv-resb"><button class="btn line sm" id="lvEnrT" hidden></button><button class="btn ok sm" id="lvAddT" hidden></button></div></div>
     <div class="lv-g" id="lvG"></div>
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   $('lv').hidden = false
-  lvPintar()
+  lvPintar(); lvAcompanhar()
   $('lvCsv').onclick = () => baixarCsv(LV.todos)
   $('lvMais').onclick = () => abrirLista()
   let tq; $('lvQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { LV.q = e.target.value; lvPintar() }, 150) }
   $('lvOrd').onchange = e => { LV.ord = e.target.value; lvPintar() }
 }
+// progresso da fila: atualiza a contagem e redesenha quando termina
+async function lvAcompanhar() {
+  clearInterval(LV.timer)
+  const ids = LV.todos.map(d => d.empresa?.id).filter(Boolean)
+  const olhar = async () => {
+    const p = $('lvProg'); if ($('lv').hidden || !p) return clearInterval(LV.timer)
+    const pendentes = []; for (let i = 0; i < ids.length; i += 150) { const { data } = await sb.from('enriq_fila').select('empresa_id').in('status', ['fila', 'lendo']).in('empresa_id', ids.slice(i, i + 150)); pendentes.push(...(data || [])) }
+    const estava = !p.hidden
+    p.hidden = !pendentes.length
+    if (pendentes.length) p.innerHTML = `<span><b>Enriquecendo:</b> faltam ${pendentes.length}. Pode fechar a tela que continua.</span>`
+    else { clearInterval(LV.timer); if (estava) { liz('Enriquecimento pronto.'); abrirListaHome() } }
+  }
+  await olhar(); if ($('lvProg') && !$('lvProg').hidden) LV.timer = setInterval(olhar, 8000)
+}
 function lvPintar() {
   const lst = LV.todos.filter(d => lvPassa(d)).sort(LV_ORD[LV.ord])
   $('lvChips').innerHTML = LV_FILTROS.map(([k, t]) => { const n = LV.todos.filter(d => lvPassa(d, new Set([...LV.f, k]))).length; return `<button data-f="${k}" aria-pressed="${LV.f.has(k)}">${t}<span>${n}</span></button>` }).join('')
-  $('lvN').textContent = lst.length === LV.todos.length ? 'Mostrando todas' : `Mostrando ${lst.length} de ${LV.todos.length}`
+  const idsLst = lst.map(d => d.empresa?.id).filter(Boolean), marcadas = idsLst.filter(i => LV.sel.has(i))
+  $('lvN').textContent = marcadas.length ? `${marcadas.length} selecionada${marcadas.length === 1 ? '' : 's'} de ${lst.length}` : `Selecionar todas (${lst.length})`
+  const st = $('lvSelT'); st.checked = !!idsLst.length && marcadas.length === idsLst.length; st.indeterminate = !!marcadas.length && !st.checked
+  st.onchange = () => { idsLst.forEach(i => st.checked ? LV.sel.add(i) : LV.sel.delete(i)); lvPintar() }
+  const be = $('lvEnrT'); be.hidden = !marcadas.length; be.textContent = `Enriquecer ${marcadas.length} selecionada${marcadas.length === 1 ? '' : 's'}`
+  be.onclick = async () => { be.disabled = true; const { data: n, error } = await sb.rpc('enfileirar_enriq', { p_empresas: marcadas }); be.disabled = false; if (error) return liz(esc(error.message)); LV.sel = new Set(); liz(n ? `${n} empresa${n === 1 ? '' : 's'} na fila. Pode fechar a tela que continua.` : 'Essas empresas já estão na fila.'); lvPintar(); lvAcompanhar() }
   const novas = lst.filter(d => d.decisao !== 'aprovada')
   const bt = $('lvAddT'); bt.hidden = !novas.length; bt.textContent = `Adicionar ${novas.length} ao pipeline`; LV.armado = false
   $('lvG').innerHTML = lst.map(d => { const e = d.empresa || {}, tem = Object.keys(d.capivara || {}).length, fila = d.status === 'na_fila' || d.status === 'lendo', w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
-    return `<article class="lc" data-id="${d.id}"><div class="lc-h"><div><h3>${esc(e.nome || 'Empresa')}</h3><small>${esc([e.bairro, (e.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</small></div>${d.nota_dor != null ? `<span class="lc-p" title="Potencial"><b>${d.nota_dor}</b>potencial</span>` : ''}</div>
+    return `<article class="lc" data-id="${d.id}"><div class="lc-h"><label class="lc-sel"><input type="checkbox" data-sel${LV.sel.has(e.id) ? ' checked' : ''} aria-label="Selecionar ${esc(e.nome || 'empresa')}"></label><div><h3>${esc(e.nome || 'Empresa')}</h3><small>${esc([e.bairro, (e.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</small></div>${d.nota_dor != null ? `<span class="lc-p" title="Potencial"><b>${d.nota_dor}</b>potencial</span>` : ''}</div>
       ${e.nota ? `<div class="lc-n">★ ${String(e.nota).replace('.', ',')} <span>(${e.total_avaliacoes || 0} avaliações)</span></div>` : ''}
-      <div class="lc-ct">${e.whatsapp ? `<button class="lc-wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="lc-cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="lc-ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="lc-sem">Sem site</span>'}</div>
+      <div class="lc-ct">${e.whatsapp ? `<button class="lc-wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="lc-cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="lc-ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="lc-sem">Sem site</span>'}</div>${enrDados(e)}
       <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}${tem ? '<button class="btn line sm" data-abre>Abrir Raio-X</button>' : fila ? '<span class="lendo-tag"><i></i>Liz montando…</span>' : '<button class="btn line sm" data-faz>Fazer Raio-X</button>'}${enrBotao(e)}</div>${enrPainel(e)}</article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
   if ($('lvLimpa')) $('lvLimpa').onclick = () => { LV.f = new Set(); LV.q = ''; $('lvQ').value = ''; lvPintar() }
   $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
@@ -646,7 +685,8 @@ function lvPintar() {
   }
   $('lvG').querySelectorAll('.lc').forEach(c => {
     const d = LV.todos.find(x => x.id === c.dataset.id)
-    ligarEnr(c, d.empresa, lvPintar)
+    ligarEnr(c, d.empresa, lvPintar); ligarDados(c, d.empresa, lvPintar)
+    c.querySelector('[data-sel]').onchange = ev => { if (ev.target.checked) LV.sel.add(d.empresa.id); else LV.sel.delete(d.empresa.id); lvPintar() }
     c.querySelector('[data-zap]')?.addEventListener('click', ev => abrirConversas(true, ev.currentTarget.dataset.zap))
     c.querySelector('[data-abre]')?.addEventListener('click', () => abrirSeq(d.id))
     c.querySelector('[data-add]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { b.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); lvPintar() })
@@ -758,7 +798,7 @@ const esperandoTxt = t => { const m = Math.max(0, Math.floor((Date.now() - new D
 async function leadsDoPipe() {
   const out = []
   for (let i = 0; ; i += 1000) {
-    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(id, nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
+    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(id, nome, bairro, cidade, telefone, site, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
     if (error) { liz('Não consegui carregar todo o pipeline. Tenta de novo.'); break }
     out.push(...(data || []))
     if (!data || data.length < 1000) break
@@ -806,7 +846,7 @@ async function abrirCaptacao(empilhar = true) {
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
         ${d.etapa === 'cliente' || d.etapa === 'perdido' ? '' : `<div class="cp-et cp-tmp"><span>Temperatura</span><button data-tmp="" class="${d.temperatura ? '' : 'on'}">Automática</button>${TEMP_MAN.map(([k, t]) => `<button data-tmp="${k}" class="${d.temperatura === k ? 'on' : ''}">${t}</button>`).join('')}</div>`}
-        <div class="cp-ac"><button data-abre>${IC.eye}Raio-X</button><button data-copia>Copiar mensagem</button>${enrBotao(d.empresa)}</div>${enrPainel(d.empresa)}
+        <div class="cp-ac"><button data-abre>${IC.eye}Raio-X</button><button data-copia>Copiar mensagem</button>${enrBotao(d.empresa)}</div>${enrDados(d.empresa)}${enrPainel(d.empresa)}
         <textarea data-nota placeholder="Anotação (ex: falei com a Ana, retornar segunda)">${esc(d.anotacao || '')}</textarea></div></div>`
   }
   $('cap').dataset.seq = ''
@@ -841,6 +881,7 @@ async function abrirCaptacao(empilhar = true) {
     board.querySelectorAll('.pc').forEach(el => {
       const d = todos.find(x => x.id === el.dataset.id)
       el.onclick = e => { if (!e.target.closest('a,button,textarea')) el.classList.toggle('aberto') }
+      ligarDados(el, d.empresa, () => { const y = $('cap').scrollTop; pintar(); $('cap').scrollTop = y; $('pBoard').querySelector(`.pc[data-id="${d.id}"]`)?.classList.add('aberto') })
       ligarEnr(el, d.empresa, async () => { const y = $('cap').scrollTop; pintar(); $('cap').scrollTop = y; $('pBoard').querySelector(`.pc[data-id="${d.id}"]`)?.classList.add('aberto') })
       el.ondragstart = e => { e.dataTransfer.setData('text/plain', d.id); el.classList.add('voando') }
       el.ondragend = () => el.classList.remove('voando')
