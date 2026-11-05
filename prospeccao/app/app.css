@@ -941,3 +941,11 @@ body:has(#capO.on) .fab{display:none}
 
 .card .mds{margin:4px 0 12px}
 .card .md small{line-height:1.35;margin-top:2px}
+
+/* tela de pergunta: não encosta no menu nem fica coberta */
+.over{padding-top:72px;overflow:auto;align-items:safe center}
+@media (max-width:700px){
+  .over{padding-top:68px}
+  body:has(#ask:not([hidden])) .fab{display:none}
+  .card:has(.mds)>img{display:none}
+}
