@@ -41,9 +41,9 @@ const BTN_COMO = '<button class="como" data-como title="Como funciona" aria-labe
 function comoFunciona() {
   const ini = 500, r0 = rende(ini)
   $('indB').innerHTML = `<div class="ind-k">[ COMO FUNCIONA ]</div><h2>Você paga só pelo que usa.</h2>
-    <div class="cf"><div><b>Lista simples</b><span>Até 60 empresas da cidade e do nicho, cada uma com potencial, motivo e os contatos que estão no site.</span><em>${brlC(SALDO.busca)} por busca</em></div>
-    <div><b>Raio-X</b><span>Uma empresa completa: Google, site com prints e velocidade, anúncios e avaliações.</span><em>${brlC(SALDO.raiox)} por empresa</em></div></div>
-    <p>Conta nova ganha <b>${brlC(ini)}</b> pra testar: dá pra ${r0.listas} listas simples (até ${emp(r0.listas)} empresas) ou ${r0.raiox} empresas com Raio-X completo. Cada lista traz até 60 empresas; cidade pequena ou nicho raro pode trazer menos. Pesquisar de novo o que você já pesquisou não desconta nada. Quando o saldo acabar, a Kompila recarrega pra você.</p>
+    <div class="cf"><div><b>Lista simples</b><span>Até 60 empresas da cidade e do nicho, com tudo que o Google mostra: categoria, nota, telefone, site, endereço e horários.</span><em>${brlC(SALDO.busca)} por busca</em></div>
+</div>
+    <p>Conta nova ganha <b>${brlC(ini)}</b> pra testar: dá pra ${r0.listas} listas simples (até ${emp(r0.listas)} empresas). Cada lista traz até 60 empresas; cidade pequena ou nicho raro pode trazer menos. Pesquisar de novo o que você já pesquisou não desconta nada. Quando o saldo acabar, a Kompila recarrega pra você.</p>
     ${SALDO.isento ? '<p><b>Sua conta é isenta:</b> usa à vontade, nada é descontado.</p>' : `<p>Seu saldo agora: <b>${brlC(SALDO.saldo)}</b>.</p>`}`
   $('indO').hidden = false; requestAnimationFrame(() => $('indO').classList.add('on'))
 }
@@ -53,7 +53,7 @@ async function boasVindas() {
   const { count } = await sb.from('buscas').select('id', { count: 'exact', head: true })
   if (count) return
   const r0 = rende()
-  setTimeout(() => liz(`Bem-vindo! Faça suas primeiras <b>${r0.listas} listas simples (até ${emp(r0.listas)} empresas)</b> ou <b>${r0.raiox} empresas com Raio-X completo</b> por nossa conta. ${BTN_COMO}`, 12000), 1500)
+  setTimeout(() => liz(`Bem-vindo! Faça suas primeiras <b>${r0.listas} listas simples (até ${emp(r0.listas)} empresas)</b> por nossa conta. ${BTN_COMO}`, 12000), 1500)
 }
 async function carregarSaldo() { const { data } = await sb.rpc('meu_saldo'); if (data) SALDO = data; return SALDO }
 const ANG = { dor: 'Atendimento', canal: 'Presença digital', crescimento: 'Crescimento', nenhum: 'Fora do perfil' }
@@ -111,7 +111,6 @@ function pergunta(passo) {
     ? { stp: '1 de 2', h: `${hora()}${nome ? ', ' + esc(nome) : ''}.<br>Em que <em>cidade</em> a gente prospecta hoje?`, ph: 'Digite a cidade', sg: cid, bt: 'Continuar' }
     : { stp: '2 de 2', h: `E qual <em>nicho</em> eu procuro em ${esc(esc_.cidade.split(',')[0])}?`, ph: 'Ex: clínica de estética', sg: nic, bt: 'Começar a busca' }
   $('askc').innerHTML = `${passo === 2 ? `<div class="pick">${PIN}${esc(esc_.cidade)}</div>` : ''}<div class="stp">${q.stp}</div><h2>${q.h}</h2>
-    ${passo === 2 ? modosHtml() : ''}
     <div class="fld"><input type="text" id="aq" placeholder="${q.ph}" autocomplete="off"><button class="btn go lg" id="ab">${q.bt}</button></div>
     <div class="err" id="ae"></div><div class="sg">${q.sg.map(x => `<button>${x}</button>`).join('')}</div>
     ${passo === 2 ? `<div class="mds-s" id="mdS">${saldoDepois()}</div>` : ''}
@@ -121,12 +120,12 @@ function pergunta(passo) {
     v = (v || '').trim()
     if (!v) { $('ae').textContent = passo === 1 ? 'Me fala uma cidade pra eu começar.' : 'Me fala um nicho pra eu começar.'; aq.focus(); return }
     if (passo === 1) { esc_.cidade = cid.find(c => c.toLowerCase().startsWith(v.toLowerCase())) || v; pergunta(2) }
-    else { esc_.nicho = v.charAt(0).toUpperCase() + v.slice(1); fecharPergunta(); rodarBusca(esc_.cidade, esc_.nicho, esc_.modo || 'lista') }
+    else { esc_.nicho = v.charAt(0).toUpperCase() + v.slice(1); fecharPergunta(); rodarBusca(esc_.cidade, esc_.nicho, 'lista') }
   }
   $('ab').onclick = () => vai(aq.value)
   aq.onkeydown = e => { if (e.key === 'Enter') vai(aq.value) }
   $('askc').querySelectorAll('.sg button').forEach(b => b.onclick = () => vai(b.textContent))
-  $('askc').querySelectorAll('.md').forEach(b => b.onclick = () => { esc_.modo = b.dataset.m; $('askc').querySelectorAll('.md').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b) }); $('mdS').innerHTML = saldoDepois() })
+  if (false) $('askc').querySelectorAll('.md').forEach(b => b.onclick = () => { esc_.modo = b.dataset.m; $('askc').querySelectorAll('.md').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b) }); $('mdS').innerHTML = saldoDepois() })
   const dr = $('drop')
   if (dr) {
     dr.onclick = () => $('arq').click()
@@ -135,18 +134,11 @@ function pergunta(passo) {
     dr.ondrop = e => { e.preventDefault(); dr.classList.remove('on'); if (e.dataTransfer.files[0]) lerArquivo(e.dataTransfer.files[0]) }
   }
 }
-// o padrão é só a lista: Raio-X é escolha de quem quer a análise detalhada
-const MODOS = [['lista', 'Lista', 'Até 60 empresas do Google Maps, com nota, telefone e site. Depois você enriquece ou faz Raio-X de quem quiser.', 0], ['completa', 'Lista + 5 Raio-X', 'A lista completa e a análise detalhada das 5 com mais potencial: site, anúncios e avaliações.', 5]]
-const custoModo = m => SALDO.busca + MODOS.find(x => x[0] === m)[3] * SALDO.raiox
 function saldoDepois() {
   if (SALDO.isento) return `Sua conta é isenta: usa à vontade. ${BTN_COMO}`
-  const m = esc_.modo || 'lista', c = custoModo(m), r0 = rende()
-  const base = `Seu saldo dá pra <b>${r0.listas} lista${r0.listas === 1 ? '' : 's'} simples (até ${emp(r0.listas)} empresas)</b> ou <b>${r0.raiox} empresa${r0.raiox === 1 ? '' : 's'} com Raio-X</b>. ${BTN_COMO}`
-  return SALDO.saldo >= c || m === 'todas' ? base : `<span class="neg">Seu saldo não cobre essa opção.</span> ${base}`
-}
-function modosHtml() {
-  esc_.modo = esc_.modo || 'lista'
-  return `<div class="mds" role="group" aria-label="O que você quer receber">${MODOS.map(([k, t, s]) => `<button class="md${esc_.modo === k ? ' on' : ''}" data-m="${k}" aria-pressed="${esc_.modo === k}"><i></i><span><b>${t}</b><small>${s}</small></span></button>`).join('')}</div>`
+  const r0 = rende(), c = SALDO.busca
+  const base = `Seu saldo dá pra <b>${r0.listas} lista${r0.listas === 1 ? '' : 's'} (até ${emp(r0.listas)} empresas)</b>. ${BTN_COMO}`
+  return SALDO.saldo >= c ? base : `<span class="neg">Seu saldo não cobre essa opção.</span> ${base}`
 }
 function fecharPergunta() { $('ask').classList.add('bye'); setTimeout(() => $('ask').hidden = true, 700); document.body.classList.remove('fora') }
 const hora = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' }
@@ -246,7 +238,7 @@ async function rodarLista(nome, itens) {
     busca = { id: r.busca_id, cidade: 'Lista', nicho: nome, status: 'peneirando', olhadas: r.na_lista, novas: r.achadas_no_google + r.so_pelo_site, com_dor: 0 }
     atualizarFunil(); dizer(`Achei ${r.achadas_no_google} no Google${r.so_pelo_site ? ` e ${r.so_pelo_site} só pelo site` : ''}.${r.nao_e_empresa ? ` ${r.nao_e_empresa} não parecem empresa.` : ''} Montando os Raio-X.`)
     carregarSaldo()
-    await peneirar('todas')
+    await peneirar('lista')
   } catch (e) { erro(e) }
 }
 async function peneirar(modo) {
@@ -634,12 +626,14 @@ function ligarEnr(root, e, depois) {
 const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], buscaId: null, armado: false, sel: new Set(), timer: null }
 const ehCelular = e => /^\(?\d{2}\)?\s?9/.test(e.telefone || '')
 const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site], ['nota', 'Nota 4 ou mais', e => +e.nota >= 4]]
+const PRECO_G = { PRICE_LEVEL_INEXPENSIVE: '$', PRICE_LEVEL_MODERATE: '$$', PRICE_LEVEL_EXPENSIVE: '$$$', PRICE_LEVEL_VERY_EXPENSIVE: '$$$$' }
+const horarioHoje = e => { const h = e.horarios; if (!Array.isArray(h) || h.length !== 7) return ''; return String(h[(new Date().getDay() + 6) % 7] || '').replace(/^[^:]+:\s*/, '') }
 const LV_ORD = { potencial: (a, b) => (b.nota_dor ?? -1) - (a.nota_dor ?? -1), nota: (a, b) => (+b.empresa?.nota || 0) - (+a.empresa?.nota || 0), avaliacoes: (a, b) => (+b.empresa?.total_avaliacoes || 0) - (+a.empresa?.total_avaliacoes || 0), nome: (a, b) => String(a.empresa?.nome || '').localeCompare(String(b.empresa?.nome || ''), 'pt-BR') }
 const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (![...filtros].every(k => LV_FILTROS.find(x => x[0] === k)[2](e))) return false; const q = semAcento(LV.q.trim()).replace(/^@/, ''); if (!q) return true; const dg = q.replace(/\D/g, ''); return semAcento([e.nome, e.bairro, e.instagram, e.email, e.site].join(' ')).includes(q) || (/^[\d\s()+-]+$/.test(q) && dg.length >= 3 && String((e.telefone || '') + ' ' + (e.whatsapp || '')).replace(/\D/g, '').includes(dg)) }
 async function abrirListaHome() {
   if (!busca?.id) return
   if (LV.buscaId !== busca.id) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.sel = new Set(); LV.buscaId = busca.id }
-  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
+  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, endereco, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, categoria, status_google, horarios, faixa_preco, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
   LV.todos = data || []; LV.armado = false
   $('ask').hidden = true; document.body.classList.remove('fora')
@@ -691,10 +685,11 @@ function lvPintar() {
   const novas = lst.filter(d => d.decisao !== 'aprovada')
   const bt = $('lvAddT'); bt.hidden = !novas.length; bt.textContent = `Adicionar ${novas.length} ao pipeline`; LV.armado = false
   $('lvG').innerHTML = lst.map(d => { const e = d.empresa || {}, tem = Object.keys(d.capivara || {}).length, fila = d.status === 'na_fila' || d.status === 'lendo', w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
-    return `<article class="lc" data-id="${d.id}"><div class="lc-h"><label class="lc-sel"><input type="checkbox" data-sel${LV.sel.has(e.id) ? ' checked' : ''} aria-label="Selecionar ${esc(e.nome || 'empresa')}"></label><div><h3>${esc(e.nome || 'Empresa')}</h3><small>${esc([e.bairro, (e.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</small></div>${d.nota_dor != null ? `<span class="lc-p" title="Potencial"><b>${d.nota_dor}</b>potencial</span>` : ''}</div>
+    return `<article class="lc" data-id="${d.id}"><div class="lc-h"><label class="lc-sel"><input type="checkbox" data-sel${LV.sel.has(e.id) ? ' checked' : ''} aria-label="Selecionar ${esc(e.nome || 'empresa')}"></label><div><h3>${esc(e.nome || 'Empresa')}</h3><small>${esc([e.categoria, e.bairro, (e.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</small></div>${d.nota_dor != null ? `<span class="lc-p" title="Potencial"><b>${d.nota_dor}</b>potencial</span>` : ''}</div>
       ${e.nota ? `<div class="lc-n">★ ${String(e.nota).replace('.', ',')} <span>(${e.total_avaliacoes || 0} avaliações)</span></div>` : ''}
+      ${e.status_google === 'CLOSED_PERMANENTLY' ? '<div class="lc-fec">Fechada definitivamente no Google</div>' : e.status_google === 'CLOSED_TEMPORARILY' ? '<div class="lc-fec">Fechada temporariamente no Google</div>' : ''}${e.endereco ? `<div class="lc-g">${esc(e.endereco)}</div>` : ''}${horarioHoje(e) ? `<div class="lc-g">Hoje: ${esc(horarioHoje(e))}</div>` : ''}${PRECO_G[e.faixa_preco] ? `<div class="lc-g">Preço: ${PRECO_G[e.faixa_preco]}</div>` : ''}
       <div class="lc-ct">${e.whatsapp ? `<button class="lc-wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="lc-cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="lc-ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="lc-sem">Sem site</span>'}</div>${enrDados(e)}
-      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}${tem ? '<button class="btn line sm" data-abre>Abrir Raio-X</button>' : fila ? '<span class="lendo-tag"><i></i>Liz montando…</span>' : '<button class="btn line sm" data-faz>Fazer Raio-X</button>'}${enrBotao(e)}</div>${enrPainel(e)}</article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
+      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}${enrBotao(e)}</div>${enrPainel(e)}</article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
   if ($('lvLimpa')) $('lvLimpa').onclick = () => { LV.f = new Set(); LV.q = ''; $('lvQ').value = ''; lvPintar() }
   $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
   bt.onclick = async () => {
@@ -866,7 +861,7 @@ async function abrirCaptacao(empilhar = true) {
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
         ${d.etapa === 'cliente' || d.etapa === 'perdido' ? '' : `<div class="cp-et cp-tmp"><span>Temperatura</span><button data-tmp="" class="${d.temperatura ? '' : 'on'}">Automática</button>${TEMP_MAN.map(([k, t]) => `<button data-tmp="${k}" class="${d.temperatura === k ? 'on' : ''}">${t}</button>`).join('')}</div>`}
-        <div class="cp-ac"><button data-abre>${IC.eye}Raio-X</button><button data-copia>Copiar mensagem</button>${enrBotao(d.empresa)}</div>${enrDados(d.empresa)}${enrPainel(d.empresa)}
+        <div class="cp-ac"><button data-copia>Copiar mensagem</button>${enrBotao(d.empresa)}</div>${enrDados(d.empresa)}${enrPainel(d.empresa)}
         <textarea data-nota placeholder="Anotação (ex: falei com a Ana, retornar segunda)">${esc(d.anotacao || '')}</textarea></div></div>`
   }
   $('cap').dataset.seq = ''
@@ -878,7 +873,7 @@ async function abrirCaptacao(empilhar = true) {
     <div class="pf-i" id="pInfo" hidden></div>
     <div class="pt" id="pTabs">${ETAPAS.map(([k, t], i) => `<button data-col="${i}">${t}<span>${de(k).length}</span></button>`).join('')}</div>
     <div class="pb" id="pBoard"></div>`
-    : '<div class="cp-vazio">Seu pipeline está vazio.<br>Abre um Raio-X e toca em <b>Adicionar ao pipeline</b>.</div>'}</div>`
+    : '<div class="cp-vazio">Seu pipeline está vazio.<br>Faça uma busca e toque em <b>Adicionar ao pipeline</b>.</div>'}</div>`
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('capt')
   const board = $('pBoard')
@@ -914,7 +909,6 @@ async function abrirCaptacao(empilhar = true) {
         if (error) return liz('Não salvou a temperatura. Tenta de novo.')
         await abrirCaptacao(false); $('pBoard')?.querySelector(`.pc[data-id="${d.id}"]`)?.classList.add('aberto')
       })
-      el.querySelector('[data-abre]').onclick = () => { seq = []; abrirCapivara(d) }
       el.querySelector('[data-copia]').onclick = async e => { try { await navigator.clipboard.writeText(saudacaoTxt()); e.target.textContent = '✓ Copiada' } catch { liz('Não consegui copiar.') } }
       let tm; el.querySelector('[data-nota]').oninput = ev => { clearTimeout(tm); tm = setTimeout(async () => { d.anotacao = ev.target.value; await sb.from('diagnosticos').update({ anotacao: ev.target.value }).eq('id', d.id) }, 700) }
     })
@@ -939,7 +933,7 @@ async function abrirCaptacao(empilhar = true) {
         total += lista.length; if (lista.length && primeira < 0) primeira = i
         abas[i].querySelector('span').textContent = lista.length
         const lim = pipeF.lim[k] || POR_COLUNA, resto = lista.length - lim
-        const vazio = filtrando ? 'Ninguém aqui.' : k === 'a_contatar' ? 'Abre um Raio-X e toca em Adicionar ao pipeline.' : 'Arrasta uma empresa pra cá.'
+        const vazio = filtrando ? 'Ninguém aqui.' : k === 'a_contatar' ? 'Faça uma busca e toque em Adicionar ao pipeline.' : 'Arrasta uma empresa pra cá.'
         return `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${lista.length}</span></header><div class="pcol-b">${lista.slice(0, lim).map(cartao).join('') || `<div class="pv">${vazio}</div>`}${resto > 0 ? `<button class="pv-mais" data-vermais="${k}">Ver mais ${Math.min(resto, POR_COLUNA)} de ${resto}</button>` : ''}</div></section>`
       }).join('')
       ligar()
@@ -1012,7 +1006,7 @@ async function abrirDisparo(empilhar = true) {
       ${cad}
       <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
       <button class="btn ok lg" id="dCriarL" style="width:100%">Montar disparos</button>
-      ${prontos ? `<button class="btn line sm" id="dUsarRaiox" style="width:100%;margin-top:8px">ou usar meus ${prontos} Raio-X aprovados</button>` : ''}`
+      ${prontos ? `<button class="btn line sm" id="dUsarRaiox" style="width:100%;margin-top:8px">ou usar as ${prontos} empresas do pipeline</button>` : ''}`
   }
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Disparo automático</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${body}</div>`
@@ -1282,7 +1276,7 @@ function desenharFila(feitos) {
   const topo = `<div class="fl-top"><div><b>${feitos}</b> de ${lim} hoje</div><div class="fl-bar"><i style="width:${Math.min(100, feitos / lim * 100)}%"></i></div>
     <label>Limite por dia <select id="fLim">${LIMITES.map(n => `<option${n === lim ? ' selected' : ''}>${n}</option>`).join('')}</select></label></div>`
   let corpo
-  if (!fila.length) corpo = '<div class="cp-vazio">Ninguém esperando contato.<br>Passa nos Raio-X e toca em <b>Adicionar ao pipeline</b>.</div>'
+  if (!fila.length) corpo = '<div class="cp-vazio">Ninguém esperando contato.<br>Faça uma busca e toque em <b>Adicionar ao pipeline</b>.</div>'
   else if (fpos >= fila.length) corpo = `<div class="cp-vazio">Acabou a fila de hoje. ${feitos} contatada${feitos === 1 ? '' : 's'}.<br>Quem responder, você move pra <b>Respondeu</b> no pipeline.</div><button class="btn line" id="fPipe" style="width:100%">Ver o pipeline</button>`
   else if (cheio) corpo = `<div class="cp-vazio">Bateu o limite de hoje: <b>${lim} contatos</b>.<br>Mandar muita mensagem fria no mesmo dia é o que faz o WhatsApp bloquear o número.</div><button class="btn ghost" id="fMais" style="width:100%">Continuar mesmo assim</button>`
   else {
@@ -1503,10 +1497,10 @@ async function abrirPerfil(empilhar = true) {
     ${(!SALDO.isento && pl.data?.plano !== 'pagante') ? `<div class="pf-t">Virar cliente</div>
     <div class="pf-pl2"><button class="btn ok" data-assinar="comeco">Assinar Começo · R$ 147/mês</button><button class="btn line" data-assinar="escala">Assinar Escala · R$ 340/mês</button></div>
     <p class="pf-pl2n">Pagamento seguro no Mercado Pago. Cobra todo mês, cancela quando quiser. ${BTN_COMO}</p>` : ''}
-    <div class="pf-sd"><div><small>Seu saldo dá pra</small><b>${SALDO.isento ? 'usar à vontade' : `${rende().listas} listas simples`}</b><span>${SALDO.isento ? 'Conta isenta: nada é descontado.' : `até ${emp(rende().listas)} empresas, ou ${rende().avulsos} empresas com Raio-X · saldo ${brlC(SALDO.saldo)}`}</span></div>${BTN_COMO}</div>
+    <div class="pf-sd"><div><small>Seu saldo dá pra</small><b>${SALDO.isento ? 'usar à vontade' : `${rende().listas} listas simples`}</b><span>${SALDO.isento ? 'Conta isenta: nada é descontado.' : `até ${emp(rende().listas)} empresas · saldo ${brlC(SALDO.saldo)}`}</span></div>${BTN_COMO}</div>
     ${movs.length ? `<div class="pf-mv">${movs.map(m => `<div><span>${esc(m.descricao || m.tipo)}</span><small>${new Date(m.criado_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</small><b class="${m.centavos < 0 ? 'neg' : 'pos'}">${m.centavos < 0 ? '−' : '+'} ${brlC(Math.abs(m.centavos))}</b></div>`).join('')}</div>` : ''}
     <div class="pf-t">Meu uso em ${mes}</div>
-    <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
+    <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
     <div class="pf-ac">
       <button class="pfx wapp" id="pfWapp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.1c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.7-.9c.2-.2.3-.2.6-.1l1.9.9c.3.1.5.2.5.4.1.2.1.9-.1 1.5Z"/></svg></span>Conectar WhatsApp</button>
       <button class="pfx robo" id="pfRobo"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="13" r="1.5" fill="#fff"/><circle cx="15" cy="13" r="1.5" fill="#fff"/><path d="M12 3v4M8 19v2M16 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Robô de atendimento</button>

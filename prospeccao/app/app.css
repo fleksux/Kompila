@@ -1086,3 +1086,8 @@ body:has(#capO.on) .fab{display:none}
 
 /* ao rolar a lista, nada aparece atrás do menu */
 #lv::before{content:"";position:fixed;top:0;left:0;right:0;height:60px;background:var(--bg);z-index:3}
+
+/* só um botão menor agora: ocupa a linha toda */
+.lc-ac .btn{grid-column:1/-1}
+.lc-g{font-size:12px;line-height:1.4;color:var(--mu)}
+.lc-fec{font-size:12px;font-weight:600;color:#B4282D}
