@@ -1083,3 +1083,6 @@ body:has(#capO.on) .fab{display:none}
 .lc-ac .lc-ok{display:flex;align-items:center;justify-content:center;height:40px;background:var(--gs);border-radius:var(--r8)}
 .lc-ac .lendo-tag{display:flex;align-items:center;justify-content:center;height:40px;font-size:12px}
 @media (max-width:700px){ .lc-ac .btn,.lc-ac .lc-ok,.lc-ac .lendo-tag{height:44px;min-height:44px} }
+
+/* ao rolar a lista, nada aparece atrás do menu */
+#lv::before{content:"";position:fixed;top:0;left:0;right:0;height:60px;background:var(--bg);z-index:3}
