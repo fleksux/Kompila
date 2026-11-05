@@ -921,3 +921,20 @@ body:has(#capO.on) .fab{display:none}
   .over{padding-bottom:84px}
   .fab{bottom:calc(72px + env(safe-area-inset-bottom))}
 }
+
+/* temperatura: filtro no topo e escolha no cartão */
+.pf-tmp{flex:none;display:flex;gap:4px}
+.pf-tmp button{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;background:var(--w);border-radius:var(--r8);box-shadow:var(--sh);font-size:13px;font-weight:600;color:var(--tx);cursor:pointer}
+.pf-tmp i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.pf-tmp span{font-family:var(--mono);font-size:12px;color:var(--mu)}
+.pf-tmp button[aria-pressed="true"]{background:var(--cs);box-shadow:inset 0 0 0 2px var(--c)}
+.cp-tmp{align-items:center;flex-wrap:wrap}
+.cp-tmp>span{width:100%;font-size:11px;color:var(--mu)}
+.msg-n{display:block;margin-top:8px;font-size:12px;line-height:1.4;color:var(--mu)}
+@media (max-width:700px){
+  .pf{flex-wrap:wrap}
+  .pf-q{flex:1 0 100%}
+  .pf-tmp{flex:1;min-width:0}
+  .pf-tmp button{flex:1;justify-content:center;height:44px;padding:0 4px;font-size:12px}
+  .pf-resp{height:44px;padding:0 10px}
+}

@@ -42,7 +42,7 @@ function comoFunciona() {
   const ini = 500, r0 = rende(ini)
   $('indB').innerHTML = `<div class="ind-k">[ COMO FUNCIONA ]</div><h2>Você paga só pelo que usa.</h2>
     <div class="cf"><div><b>Lista simples</b><span>Até 60 empresas da cidade e do nicho, cada uma com potencial, motivo e os contatos que estão no site.</span><em>${brlC(SALDO.busca)} por busca</em></div>
-    <div><b>Raio-X</b><span>Uma empresa completa: Google, site com prints e velocidade, anúncios, Instagram com números, avaliações e a mensagem pronta pra mandar.</span><em>${brlC(SALDO.raiox)} por empresa</em></div></div>
+    <div><b>Raio-X</b><span>Uma empresa completa: Google, site com prints e velocidade, anúncios, Instagram com números e avaliações.</span><em>${brlC(SALDO.raiox)} por empresa</em></div></div>
     <p>Conta nova ganha <b>${brlC(ini)}</b> pra testar: dá pra ${r0.listas} listas simples (até ${emp(r0.listas)} empresas) ou ${r0.raiox} empresas com Raio-X completo. Cada lista traz até 60 empresas; cidade pequena ou nicho raro pode trazer menos. Pesquisar de novo o que você já pesquisou não desconta nada. Quando o saldo acabar, a Kompila recarrega pra você.</p>
     ${SALDO.isento ? '<p><b>Sua conta é isenta:</b> usa à vontade, nada é descontado.</p>' : `<p>Seu saldo agora: <b>${brlC(SALDO.saldo)}</b>.</p>`}`
   $('indO').hidden = false; requestAnimationFrame(() => $('indO').classList.add('on'))
@@ -85,7 +85,7 @@ async function iniciar() {
   try { const s = localStorage.getItem('liz_sessao_kmp_kompila'); if (s && !localStorage.getItem('kp_intake_ligado')) sb.rpc('ligar_intake', { p_sessao: s }).then(() => { try { localStorage.setItem('kp_intake_ligado', '1') } catch (_) {} }, () => {}) } catch (_) {}
   history.replaceState(null, '', location.pathname)
   $('login').hidden = true
-  $('pUser').hidden = $('pHist').hidden = $('pZoom').hidden = $('fab').hidden = false
+  $('pUser').hidden = $('pHist').hidden = $('pSec').hidden = $('pZoom').hidden = $('fab').hidden = false; carregarSaudacao()
   badgeConv(); setInterval(badgeConv, 15000)
   const inicial = () => { $('av').hidden = true; $('avL').hidden = false; $('avL').textContent = (usuario.user_metadata?.full_name || usuario.email || '?').trim().charAt(0).toUpperCase() }
   $('av').onerror = inicial
@@ -510,8 +510,8 @@ async function abrirCapivara(d, empilhar = true) {
     return itens.length ? `<div class="fotos" style="grid-template-columns:repeat(${itens.length},1fr)">${itens.join('')}</div>` : '' })()}
   <div class="sec"><h2>O Raio-X</h2></div><section class="grid">${BL.map(bloco).join('')}</section>
   ${(c.avaliacoes || []).length ? `<div class="sec"><h2>O que dizem no Google</h2></div><section class="revs">${c.avaliacoes.map(a => `<div class="rv${a.etiqueta ? ' bad' : ''}"><div class="m"><span class="stars">${[1, 2, 3, 4, 5].map(i => star(i <= a.estrelas)).join('')}</span>${esc((a.data || '').slice(0, 10).split('-').reverse().join('/'))}</div>${esc((a.texto || '').slice(0, 260))}${(a.texto || '').length > 260 ? '…' : ''}${a.etiqueta ? `<span class="tg">${esc(a.etiqueta)}</span>` : ''}</div>`).join('')}</section>` : ''}
-  <div class="sec"><h2>Abordagem</h2></div>
-  <section class="ab"><div class="msg"><div class="h">Mensagem sugerida pela Liz<b>sai por ${esc(c.canal)}</b></div><div id="msgBox"><p>${esc(d.abordagem || c.abordagem)}</p></div></div><div class="decd" id="decd"></div></section>
+  <div class="sec"><h2>Primeira mensagem</h2></div>
+  <section class="ab"><div class="msg"><div class="h">Saudação simples</div><div id="msgBox"><p>${esc(saudacaoTxt())}</p><small class="msg-n">Quando a pessoa responder, a Liz continua a conversa. Você muda essa frase em Perfil, Robô de atendimento.</small></div></div><div class="decd" id="decd"></div></section>
   <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   desenharDecisao(d)
   if (empilhar) empilha('cap')
@@ -529,21 +529,9 @@ function desenharDecisao(d) {
     if ($('dCap')) $('dCap').onclick = async () => { $('dCap').disabled = true; $('dCap').textContent = 'Mandando pra Liz…'; await fazerUma(d); desenharDecisao(d); esperarCapivara(d.id) }
     return
   }
-  box.innerHTML = `<div class="q">Nada sai sem o seu ok.</div><button class="btn ok" id="dOk">${IC.ok}Adicionar ao pipeline</button><button class="btn adj" id="dAj">Ajustar a mensagem</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
+  box.innerHTML = `<div class="q">Nada sai sem o seu ok.</div><button class="btn ok" id="dOk">${IC.ok}Adicionar ao pipeline</button><button class="btn ghost" id="dPu">Pular empresa</button><div class="err" id="dErr"></div>`
   $('dOk').onclick = () => decidir(d, 'aprovada')
   $('dPu').onclick = () => decidir(d, 'pulada')
-  $('dAj').onclick = () => {
-    $('msgBox').innerHTML = `<textarea id="msgTx">${esc(d.abordagem || d.capivara.abordagem)}</textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="btn go" id="msgSal">Salvar mensagem</button><button class="btn ghost" id="msgCan">Cancelar</button></div>`
-    $('msgTx').focus()
-    $('msgCan').onclick = () => $('msgBox').innerHTML = `<p>${esc(d.abordagem || d.capivara.abordagem)}</p>`
-    $('msgSal').onclick = async () => {
-      const t = $('msgTx').value.trim(); if (!t) return
-      $('msgSal').textContent = 'Salvando…'
-      const { error } = await sb.from('diagnosticos').update({ abordagem: t, decisao: 'ajustar', decidida_em: new Date().toISOString() }).eq('id', d.id)
-      if (error) { $('msgSal').textContent = 'Não salvou. Tenta de novo'; return }
-      d.abordagem = t; d.decisao = 'ajustar'; $('msgBox').innerHTML = `<p>${esc(t)}</p>`; liz('Mensagem guardada. Agora é só aprovar.'); desenharCards()
-    }
-  }
 }
 async function decidir(d, decisao) {
   const btn = document.activeElement; if (btn?.tagName === 'BUTTON') btn.disabled = true
@@ -633,13 +621,28 @@ const ESFRIA = 3 // dias contatado sem resposta
 const dias = t => t ? Math.floor((Date.now() - new Date(t)) / 864e5) : 0
 const haDias = n => n <= 0 ? 'hoje' : n === 1 ? 'ontem' : `há ${n} dias`
 const zap = n => { const d = String(n || '').replace(/\D/g, ''); return d.length >= 10 ? (d.startsWith('55') ? d : '55' + d) : null }
+// primeira mensagem: a mesma saudação simples do disparo. A conversa de verdade é com a Liz, quando a pessoa responde.
+let saudacaoDono = ''
+async function carregarSaudacao() { try { const { data } = await sb.from('canal_whatsapp').select('saudacao').maybeSingle(); saudacaoDono = String(data?.saudacao || '').trim() } catch (_) {} }
+const saudacaoTxt = () => { const h = Number(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo', hour: '2-digit', hour12: false })); const parte = h < 12 ? 'bom dia' : h < 18 ? 'boa tarde' : 'boa noite'; return (saudacaoDono || 'Olá, {saudacao}, tudo bem?').replace(/\{saudacao\}/gi, parte) }
+// temperatura: a escolha manual vale; sem ela, conta a última vez que a pessoa falou
+const TEMP_MAN = [['quente', 'Quente'], ['morno', 'Morno'], ['frio', 'Frio']]
+function calcTemp(etapa, manual, ultimaIn, etapaEm) {
+  if (etapa === 'cliente' || etapa === 'perdido') return TEMP[etapa]
+  const m = TEMP_MAN.find(x => x[0] === manual); if (m) return m
+  if (etapa === 'reuniao') return TEMP_MAN[0]
+  const base = ultimaIn || (etapa === 'respondeu' ? etapaEm : null)
+  if (!base) return TEMP_MAN[2]
+  const n = dias(base)
+  return n <= 3 ? TEMP_MAN[0] : n <= 14 ? TEMP_MAN[1] : TEMP_MAN[2]
+}
 async function contarCaptacao() {
   const { count } = await sb.from('diagnosticos').select('id', { count: 'exact', head: true }).eq('decisao', 'aprovada').eq('arquivado', false).not('etapa', 'in', '(cliente,perdido)')
   $('nCapt').hidden = !count; $('nCapt').textContent = count || ''
 }
 let colunaPipe = 0
 // filtro do pipeline: sobrevive ao redesenho (mover etapa, voltar da conversa)
-const pipeF = { q: '', resp: false, lim: {} }
+const pipeF = { q: '', resp: false, temp: '', lim: {} }
 // posição do pipeline: mover etapa ou voltar da conversa não pode jogar pro início
 let pipeX = 0, pipeY = 0
 const POR_COLUNA = 50
@@ -651,7 +654,7 @@ const esperandoTxt = t => { const m = Math.max(0, Math.floor((Date.now() - new D
 async function leadsDoPipe() {
   const out = []
   for (let i = 0; ; i += 1000) {
-    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, abordagem, capivara, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
+    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
     if (error) { liz('Não consegui carregar todo o pipeline. Tenta de novo.'); break }
     out.push(...(data || []))
     if (!data || data.length < 1000) break
@@ -659,8 +662,12 @@ async function leadsDoPipe() {
   return out
 }
 async function abrirCaptacao(empilhar = true) {
-  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
-  const [todos, resAg] = await Promise.all([leadsDoPipe(), sb.rpc('aguardando_resposta')])
+  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.temp = ''; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
+  const [todos, resAg, resAt] = await Promise.all([leadsDoPipe(), sb.rpc('aguardando_resposta'), sb.rpc('atividade_leads')])
+  const atvId = new Map(), atvTel = new Map()
+  ;(resAt.data || []).forEach(a => { const mais = (m, k) => { if (k && (!m.get(k) || m.get(k) < a.ultima_in)) m.set(k, a.ultima_in) }; mais(atvId, a.diagnostico_id); [a.telefone, a.fone].forEach(t => mais(atvTel, chaveTel(t))) })
+  const ultimaInDe = d => [atvId.get(d.id), ...[d.empresa?.whatsapp, d.empresa?.telefone, d.telefone].map(chaveTel).map(k => k && atvTel.get(k))].filter(Boolean).sort().pop() || null
+  const tempDe = d => calcTemp(d.etapa, d.temperatura, ultimaInDe(d), d.etapa_em)
   // quem está esperando resposta, ligado ao cartão pelo envio ou pelo telefone
   const porId = new Map(), porTel = new Map()
   const aguardando = resAg.data || []
@@ -670,10 +677,10 @@ async function abrirCaptacao(empilhar = true) {
   const foraDoPipe = aguardando.filter(a => !noPipe.has(a.telefone)).length
   const de = k => todos.filter(d => d.etapa === k)
   const quando = d => d.etapa_em || d.decidida_em
-  const esfriando = todos.filter(d => d.etapa === 'contatado' && dias(quando(d)) >= ESFRIA)
-  const kpi = [['frio', 'Frios', de('a_contatar').length, 'a contatar'], ['morno', 'Mornos', de('contatado').length, esfriando.length ? `${esfriando.length} esfriando` : 'esperando resposta'], ['quente', 'Quentes', de('respondeu').length + de('reuniao').length, 'responderam'], ['ganho', 'Clientes', de('cliente').length, 'fechados']]
+  const nTemp = k => todos.filter(d => tempDe(d)[0] === k).length
+  const kpi = [['frio', 'Frios', nTemp('frio'), 'sem resposta recente'], ['morno', 'Mornos', nTemp('morno'), 'quietos de 4 a 14 dias'], ['quente', 'Quentes', nTemp('quente'), 'falaram há até 3 dias'], ['ganho', 'Clientes', nTemp('ganho'), 'fechados']]
   const cartao = d => {
-    const e = d.empresa || {}, c = d.capivara || {}, msg = d.abordagem || c.abordagem || ''
+    const e = d.empresa || {}, c = d.capivara || {}, msg = saudacaoTxt(), tt = tempDe(d)
     const w = zap(e.whatsapp) || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? zap(e.telefone) : null) || zap(d.telefone)
     // número do card: empresa do Google ou, se o lead entrou por conversa, o telefone do próprio diagnóstico
     const tel = e.telefone || d.telefone || ''
@@ -685,15 +692,16 @@ async function abrirCaptacao(empilhar = true) {
       : [d.segmento, tel ? tfmt(tel) : ''].filter(Boolean).join(' · ')
     const es = esperaDe(d)
     const n = dias(quando(d)), frio = !es && d.etapa === 'contatado' && n >= ESFRIA, prox = ETAPAS[ETAPAS.findIndex(x => x[0] === d.etapa) + 1]
-    return `<div class="pc" draggable="true" data-id="${d.id}">
+    return `<div class="pc t-${tt[0]}" draggable="true" data-id="${d.id}">
       <div class="pc-h"><div><b>${esc(titulo)}</b><small>${esc(sub)}</small></div><span class="nt">${d.nota_dor ?? ''}</span></div>
       ${es ? `<button class="pc-esp" data-abrir="${esc(es.telefone)}"><span>${esperandoTxt(es.desde)}</span><b>Responder</b></button>` : ''}
-      <div class="pc-m"><span class="tp t-${TEMP[d.etapa]?.[0]}">${TEMP[d.etapa]?.[1] || ''}</span><span class="${frio ? 'esf' : ''}">${frio ? `sem resposta ${haDias(n)}` : (d.etapa === 'a_contatar' ? 'entrou ' : '') + haDias(n)}</span></div>
+      <div class="pc-m"><span class="tp t-${tt[0]}"${d.temperatura ? ' title="Marcado por você"' : ''}>${tt[1]}</span><span class="${frio ? 'esf' : ''}">${frio ? `sem resposta ${haDias(n)}` : (d.etapa === 'a_contatar' ? 'entrou ' : '') + haDias(n)}</span></div>
       ${d.anotacao ? `<div class="pc-n">${esc(d.anotacao)}</div>` : ''}
       <div class="pc-ac">${w ? `<a data-contato data-abrir="${w}" href="#" class="wpp">WhatsApp</a>` : ''}${telHref ? `<a data-contato href="tel:${esc(telHref)}">Ligar</a>` : ''}${e.instagram ? `<a data-contato class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Insta</a>` : ''}${e.email && !w ? `<a data-contato href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}
         ${prox && d.etapa !== 'cliente' && d.etapa !== 'perdido' ? `<button class="vai" data-vai="${prox[0]}" title="Passar pra ${prox[1]}">${prox[1]}${IC.arr}</button>` : ''}</div>
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
+        ${d.etapa === 'cliente' || d.etapa === 'perdido' ? '' : `<div class="cp-et cp-tmp"><span>Temperatura</span><button data-tmp="" class="${d.temperatura ? '' : 'on'}">Automática</button>${TEMP_MAN.map(([k, t]) => `<button data-tmp="${k}" class="${d.temperatura === k ? 'on' : ''}">${t}</button>`).join('')}</div>`}
         <div class="cp-ac"><button data-abre>${IC.eye}Raio-X</button><button data-copia>Copiar mensagem</button></div>
         <textarea data-nota placeholder="Anotação (ex: falei com a Ana, retornar segunda)">${esc(d.anotacao || '')}</textarea></div></div>`
   }
@@ -702,7 +710,7 @@ async function abrirCaptacao(empilhar = true) {
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Pipeline</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
     <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Abordagens do dia · ${de('a_contatar').length}</button>` : ''}${de('a_contatar').length ? `<button class="btn line sm" id="cDisp">Disparo automático</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
     ${todos.length ? `<div class="pk">${kpi.map(([t, k, v, s]) => `<div class="pk-i t-${t}"><i></i><div><b>${v}</b><span>${k}</span><small>${s}</small></div></div>`).join('')}</div>
-    <div class="pf"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pQ" type="search" placeholder="Buscar nome, empresa, telefone ou @" aria-label="Buscar no pipeline" autocomplete="off" value="${esc(pipeF.q)}"></label><button class="pf-resp" id="pResp" aria-pressed="${pipeF.resp}" ${noPipe.size || pipeF.resp ? '' : 'disabled'}>Responder<span>${todos.filter(esperaDe).length}</span></button></div>
+    <div class="pf"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pQ" type="search" placeholder="Buscar nome, empresa, telefone ou @" aria-label="Buscar no pipeline" autocomplete="off" value="${esc(pipeF.q)}"></label><div class="pf-tmp" id="pTemp">${TEMP_MAN.map(([k, t]) => `<button class="t-${k}" data-f="${k}" aria-pressed="${pipeF.temp === k}"><i></i>${t}<span>${nTemp(k)}</span></button>`).join('')}</div><button class="pf-resp" id="pResp" aria-pressed="${pipeF.resp}" ${noPipe.size || pipeF.resp ? '' : 'disabled'}>Responder<span>${todos.filter(esperaDe).length}</span></button></div>
     <div class="pf-i" id="pInfo" hidden></div>
     <div class="pt" id="pTabs">${ETAPAS.map(([k, t], i) => `<button data-col="${i}">${t}<span>${de(k).length}</span></button>`).join('')}</div>
     <div class="pb" id="pBoard"></div>`
@@ -736,8 +744,13 @@ async function abrirCaptacao(empilhar = true) {
       el.querySelectorAll('[data-contato]').forEach(a => a.addEventListener('click', () => { if (d.etapa === 'a_contatar') setTimeout(() => mover(d, 'contatado'), 400) }))
       el.querySelectorAll('[data-abrir]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); abrirConversas(true, a.dataset.abrir) }))
       el.querySelectorAll('[data-et]').forEach(b => b.onclick = () => mover(d, b.dataset.et))
+      el.querySelectorAll('[data-tmp]').forEach(b => b.onclick = async () => {
+        const { error } = await sb.from('diagnosticos').update({ temperatura: b.dataset.tmp || null }).eq('id', d.id)
+        if (error) return liz('Não salvou a temperatura. Tenta de novo.')
+        await abrirCaptacao(false); $('pBoard')?.querySelector(`.pc[data-id="${d.id}"]`)?.classList.add('aberto')
+      })
       el.querySelector('[data-abre]').onclick = () => { seq = []; abrirCapivara(d) }
-      el.querySelector('[data-copia]').onclick = async e => { try { await navigator.clipboard.writeText(d.abordagem || d.capivara?.abordagem || ''); e.target.textContent = '✓ Copiada' } catch { liz('Não consegui copiar.') } }
+      el.querySelector('[data-copia]').onclick = async e => { try { await navigator.clipboard.writeText(saudacaoTxt()); e.target.textContent = '✓ Copiada' } catch { liz('Não consegui copiar.') } }
       let tm; el.querySelector('[data-nota]').oninput = ev => { clearTimeout(tm); tm = setTimeout(async () => { d.anotacao = ev.target.value; await sb.from('diagnosticos').update({ anotacao: ev.target.value }).eq('id', d.id) }, 700) }
     })
     board.querySelectorAll('.pcol').forEach(col => {
@@ -752,8 +765,8 @@ async function abrirCaptacao(empilhar = true) {
     const fonesBusca = new Map(todos.map(d => { const e = d.empresa || {}, a = esperaDe(d); return [d.id, [e.whatsapp, e.telefone, d.telefone, a?.telefone, a?.fone].map(t => String(t || '').replace(/\D/g, '').replace(/^55(?=\d{10})/, '')).join(' ')] }))
     const pintar = (rolar = false) => {
       const q = semAcento(pipeF.q.trim()).replace(/^@/, ''), soNumero = /^[\d\s()+-]+$/.test(q), qd = soNumero ? q.replace(/\D/g, '').replace(/^55(?=\d{10})/, '') : ''
-      const bate = d => (!pipeF.resp || esperaDe(d)) && (!q || (soNumero ? qd.length >= 3 && fonesBusca.get(d.id).includes(qd) : textoBusca.get(d.id).includes(q)))
-      const filtrando = !!q || pipeF.resp
+      const bate = d => (!pipeF.resp || esperaDe(d)) && (!pipeF.temp || tempDe(d)[0] === pipeF.temp) && (!q || (soNumero ? qd.length >= 3 && fonesBusca.get(d.id).includes(qd) : textoBusca.get(d.id).includes(q)))
+      const filtrando = !!q || pipeF.resp || !!pipeF.temp
       let total = 0, primeira = -1
       board.innerHTML = ETAPAS.map(([k, t], i) => {
         // quem espera há mais tempo vem primeiro, pra não ficar escondido depois do limite da coluna
@@ -775,14 +788,15 @@ async function abrirCaptacao(empilhar = true) {
     board.scrollLeft = mob() ? colunaPipe * (board.children[0].offsetWidth + 12) : pipeX; marca(mob() ? colunaPipe : -1)
     if (!empilhar) $('cap').scrollTop = pipeY
     let tq; $('pQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { pipeF.q = e.target.value; pipeF.lim = {}; pintar(true) }, 150) }
+    $('pTemp').querySelectorAll('button').forEach(b => b.onclick = () => { pipeF.temp = pipeF.temp === b.dataset.f ? '' : b.dataset.f; pipeF.lim = {}; $('pTemp').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x.dataset.f === pipeF.temp)); pintar(true) })
     $('pResp').onclick = e => { pipeF.resp = !pipeF.resp; pipeF.lim = {}; e.currentTarget.setAttribute('aria-pressed', pipeF.resp); pintar(true) }
   }
   if ($('cFila')) $('cFila').onclick = () => abrirFila()
   if ($('cDisp')) $('cDisp').onclick = () => abrirDisparo()
   if ($('cCsv')) $('cCsv').onclick = () => {
     const cel = v => `"${String(v ?? '').replace(/"/g, '""')}"`
-    const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Temperatura', 'Desde', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Potencial', 'Assunto', 'Mensagem', 'Anotação'].map(cel).join(';')]
-    todos.forEach(d => { const e = d.empresa || {}; linhas.push([e.nome, d.busca?.nicho, e.bairro, e.cidade, (ETAPAS.find(x => x[0] === d.etapa) || [])[1], TEMP[d.etapa]?.[1], new Date(quando(d)).toLocaleDateString('pt-BR'), e.telefone, e.whatsapp, e.instagram ? '@' + e.instagram : '', e.email, e.site, d.nota_dor, ANG[d.angulo] || '', d.abordagem || d.capivara?.abordagem, d.anotacao].map(cel).join(';')) })
+    const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Temperatura', 'Desde', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Potencial', 'Assunto', 'Anotação'].map(cel).join(';')]
+    todos.forEach(d => { const e = d.empresa || {}; linhas.push([e.nome, d.busca?.nicho, e.bairro, e.cidade, (ETAPAS.find(x => x[0] === d.etapa) || [])[1], tempDe(d)[1], new Date(quando(d)).toLocaleDateString('pt-BR'), e.telefone, e.whatsapp, e.instagram ? '@' + e.instagram : '', e.email, e.site, d.nota_dor, ANG[d.angulo] || '', d.anotacao].map(cel).join(';')) })
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + linhas.join('\n')], { type: 'text/csv;charset=utf-8' })); a.download = `pipeline_kompila_${new Date().toISOString().slice(0, 10)}.csv`; a.click()
   }
   $('capO').classList.add('on'); $('cap').classList.add('on')
@@ -832,7 +846,7 @@ async function abrirDisparo(empilhar = true) {
       ${cad}
       <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
       <button class="btn ok lg" id="dCriarL" style="width:100%">Montar disparos</button>
-      ${prontos ? `<button class="btn line sm" id="dUsarRaiox" style="width:100%;margin-top:8px">ou usar meus ${prontos} Raio-X aprovados (abordagem pronta)</button>` : ''}`
+      ${prontos ? `<button class="btn line sm" id="dUsarRaiox" style="width:100%;margin-top:8px">ou usar meus ${prontos} Raio-X aprovados</button>` : ''}`
   }
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Disparo automático</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${body}</div>`
@@ -926,9 +940,9 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     // 1) lead que veio do disparo (ligado por um envio)
     const { data: ev } = await sb.from('envio').select('diagnostico_id').eq('telefone', tel).not('diagnostico_id', 'is', null).order('enviado_em', { ascending: false, nullsFirst: false }).limit(1)
     let dg = null
-    if (ev?.[0]?.diagnostico_id) { const r = await sb.from('diagnosticos').select('id, etapa, etapa_em, decidida_em, nota_dor, angulo, motivo, anotacao, empresa:empresas(nome)').eq('id', ev[0].diagnostico_id).maybeSingle(); dg = r.data }
+    if (ev?.[0]?.diagnostico_id) { const r = await sb.from('diagnosticos').select('id, temperatura, etapa, etapa_em, decidida_em, nota_dor, angulo, motivo, anotacao, empresa:empresas(nome)').eq('id', ev[0].diagnostico_id).maybeSingle(); dg = r.data }
     // 2) lead que entrou pela conversa (ligado direto pelo telefone)
-    if (!dg) { const r = await sb.from('diagnosticos').select('id, etapa, etapa_em, decidida_em, nota_dor, angulo, motivo, anotacao').eq('telefone', tel).eq('origem', 'conversa').eq('arquivado', false).order('criado_em', { ascending: false }).limit(1).maybeSingle(); dg = r.data }
+    if (!dg) { const r = await sb.from('diagnosticos').select('id, temperatura, etapa, etapa_em, decidida_em, nota_dor, angulo, motivo, anotacao').eq('telefone', tel).eq('origem', 'conversa').eq('arquivado', false).order('criado_em', { ascending: false }).limit(1).maybeSingle(); dg = r.data }
     // 3) ainda não está no pipe: oferece virar lead (só se não for pessoal)
     if (!dg) {
       box.innerHTML = ehPessoal(tel) ? '' : `<button class="cv2-virar" id="cvVirar">+ Virar lead (pro pipe)</button>`
@@ -937,7 +951,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
       return
     }
     const render = () => {
-      const t = TEMP[dg.etapa] || ['', 'Lead']
+      const t = calcTemp(dg.etapa, dg.temperatura, [...(byTel[tel] || [])].reverse().find(m => m.direcao === 'in')?.criado_em, dg.etapa_em)
       const quando = dg.etapa_em || dg.decidida_em, n = dias(quando)
       const momento = quando ? (n === 0 ? 'nesta fase hoje' : `nesta fase há ${n} dia${n > 1 ? 's' : ''}`) : ''
       const dor = dg.nota_dor != null ? `<span class="cv2-dor"${dg.motivo ? ` title="${esc(dg.motivo)}"` : ''}><b>${dg.nota_dor}</b> ${ANG[dg.angulo] || 'potencial'}</span>` : ''
@@ -1081,10 +1095,9 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
 }
 
 /* ======================= fila de envio: um toque por empresa ======================= */
-// nada sai sozinho: a fila abre o WhatsApp com a mensagem pronta e quem aperta enviar é você
+// nada sai sozinho: a fila abre o WhatsApp com a saudação e quem aperta enviar é você
 const LIMITES = [10, 20, 30, 50]
 const lerLimite = () => { try { return +localStorage.getItem('kp_limite') || 30 } catch { return 30 } }
-const modeloMsg = e => `Oi, tudo bem? Aqui é ${(usuario?.user_metadata?.full_name || '').split(' ')[0] || 'o pessoal'}, da Kompila. Encontrei vocês no Google e tenho uma ideia rápida pra ${e.nome}. Posso te mandar?`
 let fila = [], fpos = 0, passouLimite = false
 async function abrirFila(empilhar = true) {
   const hoje = new Date(); hoje.setHours(0, 0, 0, 0)
@@ -1107,11 +1120,11 @@ function desenharFila(feitos) {
   else if (fpos >= fila.length) corpo = `<div class="cp-vazio">Acabou a fila de hoje. ${feitos} contatada${feitos === 1 ? '' : 's'}.<br>Quem responder, você move pra <b>Respondeu</b> no pipeline.</div><button class="btn line" id="fPipe" style="width:100%">Ver o pipeline</button>`
   else if (cheio) corpo = `<div class="cp-vazio">Bateu o limite de hoje: <b>${lim} contatos</b>.<br>Mandar muita mensagem fria no mesmo dia é o que faz o WhatsApp bloquear o número.</div><button class="btn ghost" id="fMais" style="width:100%">Continuar mesmo assim</button>`
   else {
-    const e = d.empresa || {}, c = d.capivara || {}, msg = d.abordagem || c.abordagem || modeloMsg(e)
+    const e = d.empresa || {}, c = d.capivara || {}, msg = saudacaoTxt()
     const w = zap(e.whatsapp) || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? zap(e.telefone) : null), prox = fila[fpos + 1]
     corpo = `<div class="fl-c">
       <div class="fl-h"><div><small>${fpos + 1} de ${fila.length} na fila</small><b>${esc(c.nome || e.nome)}</b><span>${esc(d.busca?.cidade === 'Lista' ? 'Lista · ' + d.busca.nicho : (d.busca?.nicho || '') + ' · ' + (e.cidade || '').split(',')[0])}${e.bairro ? ' · ' + esc(e.bairro) : ''}</span></div><span class="nt">${d.nota_dor ?? ''}</span></div>
-      <label class="fl-l">Mensagem${d.abordagem || c.abordagem ? ' do Raio-X' : ' padrão (essa empresa não tem Raio-X)'} · dá pra mexer</label>
+      <label class="fl-l">Primeira mensagem · dá pra mexer</label>
       <textarea id="fMsg">${esc(msg)}</textarea>
       <div class="fl-ct">${e.instagram ? `<a href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener" class="ig">${IC.ig}@${esc(e.instagram)}</a>` : ''}${e.telefone ? `<span>${esc(e.telefone)}</span>` : ''}${e.email ? `<span>${esc(e.email)}</span>` : ''}</div>
       ${w ? '' : `<div class="fl-add"><label>Não achei WhatsApp. Abre o Insta, pega o número e cola aqui:</label><div class="fl-addr"><input id="fAdd" inputmode="tel" placeholder="(11) 90000-0000" value="${esc(e.whatsapp || '')}"><button class="btn line sm" id="fAddB">Salvar</button></div></div>`}
@@ -1139,9 +1152,8 @@ function desenharFila(feitos) {
   const msgAtual = () => $('fMsg').value.trim()
   $('fMsg').oninput = () => { const z = $('fZap'); if (z) z.href = z.href.split('?')[0] + '?text=' + encodeURIComponent(msgAtual()) }
   const contatou = async () => {
-    const t = msgAtual(), mudou = t !== (d.abordagem || d.capivara?.abordagem || '')
-    $('fOk').hidden = false
-    const { error } = await sb.from('diagnosticos').update({ etapa: 'contatado', etapa_em: new Date().toISOString(), ...(mudou && t ? { abordagem: t } : {}) }).eq('id', d.id)
+        $('fOk').hidden = false
+    const { error } = await sb.from('diagnosticos').update({ etapa: 'contatado', etapa_em: new Date().toISOString() }).eq('id', d.id)
     if (error) { $('fOk').hidden = true; return liz('Não marquei como contatada. Tenta de novo.') }
     contarCaptacao()
     setTimeout(() => { fila.splice(fpos, 1); desenharFila(feitos + 1); $('cap').scrollTop = 0 }, 1200)
@@ -1214,7 +1226,7 @@ function abrirFicha(d, empilhar = true) {
     ${linha(e.instagram, 'Instagram', e.instagram ? `<a href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : 'não achei')}
     ${e.email ? linha(1, 'E-mail', `<a href="mailto:${esc(e.email)}">${esc(e.email)}</a>`) : ''}</div>
     ${e.google_maps_url ? `<div class="bl-f"><span>Fonte: Google Maps</span><a class="lnk" href="${esc(e.google_maps_url)}" target="_blank" rel="noopener">Abrir no Maps${IC.ext}</a></div>` : ''}</article></section>
-  <section class="ab"><div class="msg"><div class="h">Abordagem</div><p style="color:var(--mu)">Sai junto com o Raio-X.</p></div><div class="decd" id="decd"></div></section>
+  <section class="ab"><div class="msg"><div class="h">Primeira mensagem</div><p>${esc(saudacaoTxt())}</p></div><div class="decd" id="decd"></div></section>
   <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   desenharDecisao(d)
   if (empilhar) empilha('cap')
@@ -1262,6 +1274,7 @@ $('bNova').onclick = () => {
   if (history.state?.camada) history.replaceState(null, '')
   pergunta(1)
 }
+$('bMais').onclick = () => $('bNova').click()
 // marca no menu onde a pessoa está
 const marcarNav = () => {
   const aberto = $('cap').classList.contains('on'), t = aberto ? $('cap').querySelector('.cap-x .t')?.textContent : ''
@@ -1432,6 +1445,7 @@ async function abrirAtendimento() {
     const segmentos = {}
     $('atSeg').value.split('\n').forEach(l => { const i = l.indexOf(':'); if (i > 0) { const k = l.slice(0, i).trim().toLowerCase(), v = l.slice(i + 1).trim(); if (k && v) segmentos[k] = v } })
     const b = $('atSalvar'); b.disabled = true
+    saudacaoDono = saudacao || ''
     const { error } = await sb.from('canal_whatsapp').update({ saudacao: saudacao || null, instrucoes: instrucoes || null, atende, portes, segmentos }).eq('sessao', canal.sessao)
     b.disabled = false
     if (error) return liz('Não consegui salvar.')
@@ -1508,7 +1522,7 @@ async function abrirIndicar(empilhar = true) {
   const codigo = await meuCodigo(), link = SITE + '?ind=' + codigo
   const { data } = await sb.from('indicacao').select('nome, empresa, status, criado_em').order('criado_em', { ascending: false })
   const lst = data || [], ganhos = lst.filter(x => x.status === 'pagou').length
-  const texto = `Tô usando a prospecção da Kompila: ela acha empresas da cidade, lê Google, site e Instagram de cada uma e já entrega a mensagem pronta. Pede acesso por aqui: ${link}`
+  const texto = `Tô usando a prospecção da Kompila: ela acha empresas da cidade, lê Google, site e Instagram de cada uma e já entrega quem vale abordar. Pede acesso por aqui: ${link}`
   $('indB').innerHTML = `<div class="ind-k">[ LIZ ]</div>
     <h2>Conhece alguém que vive atrás de cliente? Me apresenta.</h2>
     <p>Quando a pessoa que você indicar virar cliente, você ganha <b>1 mês grátis</b> da prospecção.</p>
