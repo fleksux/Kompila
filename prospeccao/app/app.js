@@ -640,6 +640,8 @@ async function contarCaptacao() {
 let colunaPipe = 0
 // filtro do pipeline: sobrevive ao redesenho (mover etapa, voltar da conversa)
 const pipeF = { q: '', resp: false, lim: {} }
+// posição do pipeline: mover etapa ou voltar da conversa não pode jogar pro início
+let pipeX = 0, pipeY = 0
 const POR_COLUNA = 50
 const semAcento = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 // mesma pessoa, formatos diferentes: sem 55 e sem o 9 extra (DDD + 8 últimos). LID não vira chave.
@@ -657,7 +659,7 @@ async function leadsDoPipe() {
   return out
 }
 async function abrirCaptacao(empilhar = true) {
-  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.lim = {} }
+  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
   const [todos, resAg] = await Promise.all([leadsDoPipe(), sb.rpc('aguardando_resposta')])
   // quem está esperando resposta, ligado ao cartão pelo envio ou pelo telefone
   const porId = new Map(), porTel = new Map()
@@ -721,7 +723,8 @@ async function abrirCaptacao(empilhar = true) {
     const abas = [...$('pTabs').children]
     const marca = i => abas.forEach((b, j) => b.classList.toggle('on', j === i))
     abas.forEach((b, i) => b.onclick = () => { board.scrollTo({ left: board.children[i].offsetLeft - board.offsetLeft, behavior: 'smooth' }); marca(i) })
-    board.onscroll = () => { const w = board.children[0].offsetWidth + 12; colunaPipe = Math.round(board.scrollLeft / w); marca(colunaPipe) }
+    board.onscroll = () => { const w = board.children[0].offsetWidth + 12; pipeX = board.scrollLeft; colunaPipe = Math.round(board.scrollLeft / w); marca(colunaPipe) }
+    board.addEventListener('click', () => { pipeY = $('cap').scrollTop }, true)
     const ligar = () => {
     board.querySelectorAll('.pc').forEach(el => {
       const d = todos.find(x => x.id === el.dataset.id)
@@ -769,7 +772,8 @@ async function abrirCaptacao(empilhar = true) {
       if (rolar && primeira >= 0) { colunaPipe = primeira; board.scrollLeft = board.children[primeira].offsetLeft - board.offsetLeft; marca(mob() ? primeira : -1) }
     }
     pintar()
-    board.scrollLeft = mob() ? colunaPipe * (board.children[0].offsetWidth + 12) : 0; marca(mob() ? colunaPipe : -1)
+    board.scrollLeft = mob() ? colunaPipe * (board.children[0].offsetWidth + 12) : pipeX; marca(mob() ? colunaPipe : -1)
+    if (!empilhar) $('cap').scrollTop = pipeY
     let tq; $('pQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { pipeF.q = e.target.value; pipeF.lim = {}; pintar(true) }, 150) }
     $('pResp').onclick = e => { pipeF.resp = !pipeF.resp; pipeF.lim = {}; e.currentTarget.setAttribute('aria-pressed', pipeF.resp); pintar(true) }
   }
