@@ -1083,7 +1083,7 @@ const ligarVersoes = () => {
 const dpOpcoes = (vals, atual, fmt) => [...new Set([...vals, atual])].sort((a, b) => a - b).map(v => `<option value="${v}"${v === atual ? ' selected' : ''}>${fmt(v)}</option>`).join('')
 const DP_SETA = '<i class="dp-seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></i>'
 const dpResumo = c => `${c.intervalo_seg_min} a ${c.intervalo_seg_max} s · pausa a cada ${c.pausa_cada_min} a ${c.pausa_cada_max} · até ${c.limite_dia}/dia · ${c.hora_ini}h às ${c.hora_fim}h`
-const DP_PADRAO = { intervalo_seg_min: 30, intervalo_seg_max: 90, pausa_cada_min: 15, pausa_cada_max: 25, pausa_dur_min: 5, pausa_dur_max: 12, limite_dia: 60, hora_ini: 8, hora_fim: 20, dias: [1, 2, 3, 4, 5, 6], modo_versao: 'sequencia' }
+const DP_PADRAO = { intervalo_seg_min: 30, intervalo_seg_max: 90, pausa_cada_min: 2, pausa_cada_max: 4, pausa_dur_min: 5, pausa_dur_max: 12, limite_dia: 300, hora_ini: 10, hora_fim: 18, dias: [1, 2, 3, 4, 5, 6], modo_versao: 'sequencia' }
 const dpCampoN = (id, v) => `<input id="${id}" type="number" min="0" inputmode="numeric" value="${v}" aria-label="${id}">`
 // acordeão das configurações: editável até ligar; rodando, só mostra
 const dpConfig = (dados = {}, soLer = false) => {
@@ -1183,7 +1183,8 @@ const dpTempoTxt = n => {
   if (!n || !$('dIntMin')) return ''
   const c = dpLer(), media = (c.intervalo_seg_min + c.intervalo_seg_max) / 2, cada = (c.pausa_cada_min + c.pausa_cada_max) / 2, pausa = (c.pausa_dur_min + c.pausa_dur_max) / 2
   const min = Math.round(n * media / 60 + (cada > 0 && c.pausa_cada_max > 0 ? Math.floor(n / cada) * pausa : 0))
-  return `${min < 60 ? min + ' min' : Math.floor(min / 60) + 'h' + String(min % 60).padStart(2, '0')} de envio${n > c.limite_dia ? `, em ${Math.ceil(n / c.limite_dia)} dias por causa do limite de ${c.limite_dia}/dia` : ''}`
+  const janela = Math.max(1, c.hora_fim - c.hora_ini) * 60, dias = Math.max(Math.ceil(n / c.limite_dia), Math.ceil(min / janela))
+  return `${min < 60 ? min + ' min' : Math.floor(min / 60) + 'h' + String(min % 60).padStart(2, '0')} de envio${dias > 1 ? `, em ${dias} dias dentro do horário e do limite` : ''}`
 }
 const dpPintarPublico = () => {
   if (!$('dpLista')) return
