@@ -1227,3 +1227,11 @@ body:has(#capO.on) .fab{display:none}
 .dp-chk input:checked+span b{color:#fff}
 .dp-chk input:focus-visible+span{outline:2px solid var(--tx);outline-offset:2px}
 
+/* disparo: importar planilha */
+#dpPara .dp-sec span{font-weight:500;color:var(--mu)}
+.dp-plan{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:8px}
+.dp-plan label{cursor:pointer}
+.dp-link{border:0;background:none;padding:6px 0;font:inherit;font-size:13px;font-weight:500;color:var(--mu);text-decoration:underline;cursor:pointer}
+.dp-link:hover{color:var(--tx)}
+#dNumsInfo{display:block;margin-top:6px}
+

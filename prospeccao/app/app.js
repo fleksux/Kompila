@@ -1160,14 +1160,15 @@ const ligarComplemento = campId => {
   pinta()
 }
 // público do pipeline, como na extensão: checkbox de etapas com a contagem e exclusão por etiqueta
-let DP_PIPE = [], DP_ETAPAS = new Set(['a_contatar']), DP_EXC = new Set()
+let DP_PIPE = [], DP_ETAPAS = new Set(['a_contatar']), DP_EXC = new Set(), DP_INC = new Set()
 const dpFoneDe = d => {
   const e = d.empresa || {}
   let x = String(e.whatsapp || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? e.telefone : '') || d.telefone || '').replace(/\D/g, '').replace(/^0+/, '')
   if (x.length === 10 || x.length === 11) x = '55' + x
   return x.length >= 12 && x.length <= 13 ? x : ''
 }
-const dpTemEtiqueta = l => DP_EXC.has('t:' + l.temp) || (l.seg && DP_EXC.has('s:' + l.seg))
+const dpTem = (l, conj) => conj.has('t:' + l.temp) || (l.seg && conj.has('s:' + l.seg))
+const dpTemEtiqueta = l => dpTem(l, DP_EXC) || (DP_INC.size && !dpTem(l, DP_INC))
 const dpPublico = () => {
   const vistos = new Set(), alvo = []; let semCel = 0, porEtiqueta = 0, repetidos = 0
   for (const l of DP_PIPE) {
@@ -1199,9 +1200,66 @@ const ligarPublico = () => {
   if (!$('dpPara')) return
   $('dpPara').querySelectorAll('input[data-et]').forEach(i => i.onchange = () => { i.checked ? DP_ETAPAS.add(i.dataset.et) : DP_ETAPAS.delete(i.dataset.et); dpPintarPublico() })
   $('dpPara').querySelectorAll('input[data-exc]').forEach(i => i.onchange = () => { i.checked ? DP_EXC.add(i.dataset.exc) : DP_EXC.delete(i.dataset.exc); dpPintarPublico() })
+  $('dpPara').querySelectorAll('input[data-inc]').forEach(i => i.onchange = () => { i.checked ? DP_INC.add(i.dataset.inc) : DP_INC.delete(i.dataset.inc); dpPintarPublico() })
+  const tudo = $('dEtTodas'), marcas = [...$('dpPara').querySelectorAll('input[data-et]')]
+  const syncTodas = () => { tudo.checked = marcas.every(i => i.checked) }
+  marcas.forEach(i => i.addEventListener('change', syncTodas))
+  tudo.onchange = () => { marcas.forEach(i => { i.checked = tudo.checked; tudo.checked ? DP_ETAPAS.add(i.dataset.et) : DP_ETAPAS.delete(i.dataset.et) }); dpPintarPublico() }
   document.querySelector('.dp-cf')?.addEventListener('input', dpPintarPublico)
   $('dVers')?.addEventListener('click', () => setTimeout(dpPintarPublico, 0))
   dpPintarPublico()
+}
+// números manuais: um por linha. Aceita nome junto, separado por TAB, ponto e vírgula ou vírgula.
+const dpTelefone = v => { let x = String(v ?? '').replace(/\D/g, '').replace(/^0+/, ''); if (x.length === 10 || x.length === 11) x = '55' + x; return x.length >= 12 && x.length <= 13 ? x : '' }
+const dpLerNumeros = texto => {
+  const lista = [], vistos = new Set(); let invalidos = 0
+  for (const linha of String(texto || '').split(/\r?\n/)) {
+    if (!linha.trim()) continue
+    const campos = linha.split(/[\t;,]/).map(x => x.trim()).filter(Boolean)
+    const tels = campos.map(dpTelefone).filter(Boolean)
+    if (!tels.length) { invalidos++; continue }
+    const nome = campos.find(x => !dpTelefone(x) && /[a-zà-ú]/i.test(x)) || 'Contato'
+    tels.forEach(tel => { if (!vistos.has(tel)) { vistos.add(tel); lista.push({ tel, nome }) } })
+  }
+  return { lista, invalidos }
+}
+const semAc = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+function dpCarregarXlsx() {
+  if (window.XLSX) return Promise.resolve()
+  return new Promise((ok, erro) => { const js = document.createElement('script'); js.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; js.onload = ok; js.onerror = () => erro(new Error('Não consegui abrir o leitor de planilha.')); document.head.appendChild(js) })
+}
+// reconhece as colunas pelo nome, sem diferenciar maiúsculas e acentos, como na extensão
+async function dpLerPlanilha(arquivo) {
+  await dpCarregarXlsx()
+  const wb = window.XLSX.read(await arquivo.arrayBuffer(), { type: 'array' })
+  const linhas = window.XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '', raw: false })
+  if (!linhas.length) return []
+  const cols = Object.keys(linhas[0]), acha = re => cols.find(c => re.test(semAc(c)))
+  const cTel = acha(/tel|cel|fone|whats|numero|phone|contato/), cNome = acha(/nome|name|funcionario|colaborador/), cEmp = acha(/empresa|companhia|loja|negocio|razao/)
+  if (!cTel) throw new Error('Não achei a coluna de telefone. Use um título como Telefone ou WhatsApp.')
+  return linhas.map(l => [String(l[cNome] || l[cEmp] || '').replace(/[\t;,]/g, ' ').trim(), String(l[cTel] || '').trim()].filter(Boolean).join(';'))
+}
+const dpPintarNumeros = () => {
+  const b = $('dCriarL'), t = $('dNums'); if (!b || !t) return
+  const { lista, invalidos } = dpLerNumeros(t.value)
+  $('dNumsInfo').textContent = t.value.trim() ? `${lista.length} reconhecido${lista.length === 1 ? '' : 's'}${invalidos ? `, ${invalidos} inválido${invalidos === 1 ? '' : 's'}` : ''}. Repetidos entram uma vez.` : 'Com nome, separe por ponto e vírgula: Clínica Bela;11 99999-0000'
+  b.textContent = lista.length ? `Montar disparo para ${lista.length} número${lista.length === 1 ? '' : 's'}` : 'Montar disparo para estes números'
+}
+const ligarNumeros = () => {
+  const t = $('dNums'); if (!t) return
+  t.oninput = dpPintarNumeros
+  $('dPlan').onchange = async e => {
+    const f = e.target.files?.[0]; e.target.value = ''; if (!f) return
+    const rot = $('dPlanRot'); rot.textContent = 'Lendo…'
+    try {
+      const novas = await dpLerPlanilha(f)
+      t.value = [t.value.trim(), ...novas].filter(Boolean).join('\n')
+      dpPintarNumeros(); liz(`Planilha lida: ${dpLerNumeros(novas.join('\n')).lista.length} números.`)
+    } catch (er) { liz(esc(er.message || 'Não consegui ler a planilha.')) }
+    rot.textContent = 'Importar planilha (.xlsx ou .csv)'
+  }
+  $('dModelo').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeffNome;Telefone\nClínica Exemplo;11 99999-0000\n'], { type: 'text/csv;charset=utf-8' })); a.download = 'modelo-disparo.csv'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000) }
+  dpPintarNumeros()
 }
 const dpAba = qual => {
   if ($('dpPara')) $('dpPara').hidden = qual !== 'pipe'
@@ -1254,7 +1312,7 @@ async function abrirDisparo(empilhar = true) {
     ])
     const ultimaIn = {}; (ins || []).forEach(m => { if (!ultimaIn[m.telefone]) ultimaIn[m.telefone] = m.criado_em })
     DP_PIPE = (ds || []).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
-    DP_ETAPAS = new Set(['a_contatar']); DP_EXC = new Set()
+    DP_ETAPAS = new Set(['a_contatar']); DP_EXC = new Set(); DP_INC = new Set()
     const prontos = prontosDisparo = DP_PIPE.filter(l => l.tel).length
     const nEtapa = k => DP_PIPE.filter(l => l.etapa === k).length
     const segs = [...new Set(DP_PIPE.map(l => l.seg).filter(Boolean))].sort((x, y) => x.localeCompare(y))
@@ -1270,8 +1328,10 @@ async function abrirDisparo(empilhar = true) {
         </div>
         <div id="dpEsqNums" hidden>
           <h3 class="dp-esq-t">Números que vão receber</h3>
-          <label class="dp-lbl" for="dNums" style="margin-top:0">Um por linha</label>
-          <textarea id="dNums" class="dp-ta dp-ta-alta" placeholder="11 99999-0000&#10;11 98888-7777"></textarea>
+          <div class="dp-plan"><label class="btn line sm" for="dPlan"><span id="dPlanRot">Importar planilha (.xlsx ou .csv)</span></label><input id="dPlan" type="file" accept=".xlsx,.xls,.csv" hidden><button type="button" class="dp-link" id="dModelo">Baixar planilha modelo</button></div>
+          <label class="dp-lbl" for="dNums">Ou cole um por linha</label>
+          <textarea id="dNums" class="dp-ta dp-ta-alta" placeholder="11 99999-0000&#10;Clínica Bela;11 98888-7777"></textarea>
+          <small class="at-hint" id="dNumsInfo"></small>
         </div>
       </div>
       <aside class="dp-dir">
@@ -1282,9 +1342,11 @@ async function abrirDisparo(empilhar = true) {
           </div>
           <div id="dpPara">
             <div class="dp-sec" style="margin-top:0">Qual etapa do pipeline vai receber</div>
-            <div class="dp-chk">${ETAPAS.map(([k, t]) => `<label><input type="checkbox" data-et="${k}"${k === 'a_contatar' ? ' checked' : ''}><span>${t} <b>${nEtapa(k)}</b></span></label>`).join('')}</div>
+            <div class="dp-chk"><label><input type="checkbox" id="dEtTodas"><span>Todas <b>${DP_PIPE.length}</b></span></label>${ETAPAS.map(([k, t]) => `<label><input type="checkbox" data-et="${k}"${k === 'a_contatar' ? ' checked' : ''}><span>${t} <b>${nEtapa(k)}</b></span></label>`).join('')}</div>
+            ${excChips.length ? `<div class="dp-sec">Enviar só para quem tem as etiquetas <span>(nenhuma marcada = todos)</span></div>
+            <div class="dp-chk">${excChips.map(([k, t, n]) => `<label><input type="checkbox" data-inc="${esc(k)}"><span>${esc(t)} <b>${n}</b></span></label>`).join('')}</div>
             <div class="dp-sec">Não enviar para quem tem as etiquetas</div>
-            ${excChips.length ? `<div class="dp-chk">${excChips.map(([k, t, n]) => `<label><input type="checkbox" data-exc="${esc(k)}"><span>${esc(t)} <b>${n}</b></span></label>`).join('')}</div>` : '<p class="dp-var" style="padding:0">Nenhuma etiqueta no pipeline ainda.</p>'}
+            <div class="dp-chk">${excChips.map(([k, t, n]) => `<label><input type="checkbox" data-exc="${esc(k)}"><span>${esc(t)} <b>${n}</b></span></label>`).join('')}</div>` : '<p class="dp-var" style="padding:12px 0 0">Nenhuma etiqueta no pipeline ainda.</p>'}
             <div class="dp-cfg" id="dpResumo" style="margin-top:12px"></div>
           </div>
           ${campoMensagem()}
@@ -1304,14 +1366,14 @@ async function abrirDisparo(empilhar = true) {
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
-  ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id); ligarPublico()
+  ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id); ligarPublico(); ligarNumeros()
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
   if ($('dUsarRaiox')) dpAba(prontosDisparo ? 'pipe' : 'nums')
   // a mensagem escolhida vira a padrão da conta: é a mesma que aparece no pipeline
   const guardarMensagem = async msg => { const { error } = await sb.from('canal_whatsapp').update({ saudacao: msg }).eq('dono', usuario.id); if (!error) saudacaoDono = msg }
   if ($('dpList')) $('dpList').querySelectorAll('.dp-it').forEach(el => { const top = el.querySelector('.dp-it-top'); if (top) top.onclick = () => el.classList.toggle('aberto') })
   if ($('dCriarL')) $('dCriarL').onclick = async () => {
-    const nums = [...new Set(($('dNums').value || '').split(/[\s,;]+/).map(x => x.replace(/\D/g, '')).filter(Boolean).map(x => { x = x.replace(/^0+/, ''); if (x.length === 10 || x.length === 11) x = '55' + x; return x }).filter(x => x.length >= 12 && x.length <= 13))]
+    const { lista: nums } = dpLerNumeros($('dNums').value)
     if (!nums.length) return liz('Põe pelo menos um número com DDD.')
     const msg = dpVersoes()[0]
     if (!msg) return liz('Escreve a mensagem que vai ser enviada.')
@@ -1321,8 +1383,10 @@ async function abrirDisparo(empilhar = true) {
     await guardarMensagem(msg)
     const { data: c, error } = await sb.from('campanha').insert({ nome: 'Minha lista ' + new Date().toLocaleDateString('pt-BR'), status: 'pausada', intervalo_min: 5, ...cfg }).select('id').single()
     if (error) { $('dCriarL').disabled = false; $('dCriarL').textContent = 'Montar disparo para estes números'; return liz(esc(error.message)) }
-    const { error: e2 } = await sb.from('envio').insert(nums.map((tel, i) => ({ campanha_id: c.id, empresa_nome: 'Contato', telefone: tel, mensagem: msg, ordem: i + 1, status: 'na_fila' })))
-    if (e2) return liz(esc(e2.message))
+    for (let i = 0; i < nums.length; i += 200) {
+      const { error: e2 } = await sb.from('envio').insert(nums.slice(i, i + 200).map((n, j) => ({ campanha_id: c.id, dono: usuario.id, empresa_nome: n.nome, telefone: n.tel, mensagem: msg, ordem: i + j + 1, status: 'na_fila' })))
+      if (e2) { await sb.from('campanha').update({ status: 'cancelada' }).eq('id', c.id); $('dCriarL').disabled = false; dpPintarNumeros(); return liz(`Não consegui montar a fila: ${esc(e2.message)}`) }
+    }
     recarrega()
   }
   if ($('dUsarRaiox')) $('dUsarRaiox').onclick = async () => {
