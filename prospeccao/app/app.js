@@ -38,6 +38,19 @@ const custoRaiox = () => ''   // 01/11 (Alex): a tela mostra o que dá pra fazer
 const rende = (c = SALDO.saldo) => ({ listas: Math.floor(c / SALDO.busca), raiox: Math.max(0, Math.floor((c - SALDO.busca) / SALDO.raiox)), avulsos: Math.floor(c / SALDO.raiox) })
 const emp = n => (n * 60).toLocaleString('pt-BR')   // cada lista simples traz até 60 empresas
 const BTN_COMO = '<button class="como" data-como title="Como funciona" aria-label="Como funciona">?</button>'
+// IA de prospecção ativa: só no plano Escala. Quem não tem vê o convite em vez da tela.
+async function comIA(abrir) {
+  const { data: tem, error } = await sb.rpc('tenho_ia')
+  if (error) return liz('Não consegui conferir seu plano. Tenta de novo.')
+  if (tem) return abrir()
+  const { data: ass } = await sb.from('assinatura').select('plano').maybeSingle()
+  const jaPaga = ass?.plano === 'pagante'
+  $('indB').innerHTML = `<div class="ind-k">[ IA DE PROSPECÇÃO ATIVA ]</div><h2>Isso faz parte do plano Escala.</h2>
+    <p>A Liz manda a primeira mensagem pelo seu WhatsApp, responde quem chamar e tenta marcar a reunião. Plano Escala: <b>R$ 578/mês</b>.</p>
+    ${jaPaga ? '<p>Pra mudar do Começo pro Escala, fale com a Kompila. Assim você não paga dois planos ao mesmo tempo.</p>' : '<button class="btn ok" id="iaAssinar" style="width:100%">Assinar Escala · R$ 578/mês</button>'}`
+  $('indO').hidden = false; requestAnimationFrame(() => $('indO').classList.add('on'))
+  if ($('iaAssinar')) $('iaAssinar').onclick = () => { fecharIndicar(); abrirPagamento('escala') }
+}
 function comoFunciona() {
   const ini = 500, r0 = rende(ini)
   $('indB').innerHTML = `<div class="ind-k">[ COMO FUNCIONA ]</div><h2>Você paga só pelo que usa.</h2>
@@ -1006,7 +1019,7 @@ async function abrirCaptacao(empilhar = true) {
     $('pResp').onclick = e => { pipeF.resp = !pipeF.resp; pipeF.lim = {}; e.currentTarget.setAttribute('aria-pressed', pipeF.resp); pintar(true) }
   }
   if ($('cFila')) $('cFila').onclick = () => abrirFila()
-  if ($('cDisp')) $('cDisp').onclick = () => abrirDisparo()
+  if ($('cDisp')) $('cDisp').onclick = () => comIA(abrirDisparo)
   if ($('cCsv')) $('cCsv').onclick = () => {
     const cel = v => `"${String(v ?? '').replace(/"/g, '""')}"`
     const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Temperatura', 'Desde', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Potencial', 'Assunto', 'Anotação'].map(cel).join(';')]
@@ -1549,7 +1562,7 @@ async function abrirPerfil(empilhar = true) {
     <header class="pf-h">${$('av').hidden ? `<span class="pf-av">${esc(nome.charAt(0).toUpperCase())}</span>` : `<img class="pf-av" src="${esc($('av').src)}" alt="" referrerpolicy="no-referrer">`}
       <div><h2>${esc(nome)}</h2><small>${esc(usuario?.email || '')}</small></div><span class="pf-pl p-${plano}">${PLANO_TXT[plano][0]}${mg ? ` · ${mg} mês${mg === 1 ? '' : 'es'} grátis` : ''}</span></header>
     ${(!SALDO.isento && pl.data?.plano !== 'pagante') ? `<div class="pf-t">Virar cliente</div>
-    <div class="pf-pl2"><button class="btn ok" data-assinar="comeco">Assinar Começo · R$ 147/mês</button><button class="btn line" data-assinar="escala">Assinar Escala · R$ 340/mês</button></div>
+    <div class="pf-pl2"><button class="btn ok" data-assinar="comeco">Assinar Começo · R$ 247/mês</button><button class="btn line" data-assinar="escala">Assinar Escala · R$ 578/mês</button></div>
     <p class="pf-pl2n">Pagamento seguro no Mercado Pago. Cobra todo mês, cancela quando quiser. ${BTN_COMO}</p>` : ''}
     <div class="pf-sd"><div><small>Seu saldo dá pra</small><b>${SALDO.isento ? 'usar à vontade' : `${rende().listas} listas simples`}</b><span>${SALDO.isento ? 'Conta isenta: nada é descontado.' : `até ${emp(rende().listas)} empresas · saldo ${brlC(SALDO.saldo)}`}</span></div>${BTN_COMO}</div>
     ${movs.length ? `<div class="pf-mv">${movs.map(m => `<div><span>${esc(m.descricao || m.tipo)}</span><small>${new Date(m.criado_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</small><b class="${m.centavos < 0 ? 'neg' : 'pos'}">${m.centavos < 0 ? '−' : '+'} ${brlC(Math.abs(m.centavos))}</b></div>`).join('')}</div>` : ''}
@@ -1573,8 +1586,8 @@ async function abrirPerfil(empilhar = true) {
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   $('capX').onclick = fecharCapivara
   $('pfWapp').onclick = () => abrirConectar()
-  $('pfRobo').onclick = () => abrirAtendimento()
-  $('pfDisp').onclick = () => abrirDisparo()
+  $('pfRobo').onclick = () => comIA(abrirAtendimento)
+  $('pfDisp').onclick = () => comIA(abrirDisparo)
   $('pfConv').onclick = () => abrirConversas()
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
   $('pfPipe').onclick = () => abrirCaptacao()
@@ -1676,7 +1689,7 @@ async function abrirAtendimento() {
 ;$('bAjustes').onclick = () => abrirPerfil()
 
 /* ======================= checkout transparente (cartão na tela, Mercado Pago) ======================= */
-const VALORP = { comeco: 147, escala: 340 }
+const VALORP = { comeco: 247, escala: 578 }
 let mpInstance = null, payBrick = null, payPlano = null
 async function abrirPagamento(plano) {
   if (!VALORP[plano]) return
