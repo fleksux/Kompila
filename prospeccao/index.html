@@ -5,7 +5,7 @@
 <script>if(location.pathname==='/prospeccao')location.replace('/prospeccao/'+location.search+location.hash)</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prospecção · Kompila</title>
-<meta name="description" content="Você fala o nicho e a cidade. A Liz lê o Google, o site e as avaliações de cada empresa e te entrega quem tem motivo pra comprar.">
+<meta name="description" content="Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nota, telefone, site, horários e avaliações, e você escolhe quem entra no pipeline.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
@@ -237,7 +237,7 @@ section.s{padding:96px 0 0}
 </style>
 <link rel="canonical" href="https://kompila.com.br/prospeccao/">
 <meta property="og:title" content="Prospecção · Kompila">
-<meta property="og:description" content="Você fala o nicho e a cidade. A Liz lê o Google, o site e as avaliações de cada empresa e te entrega quem tem motivo pra comprar.">
+<meta property="og:description" content="Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nota, telefone, site, horários e avaliações, e você escolhe quem entra no pipeline.">
 <meta property="og:image" content="https://kompila.com.br/prospeccao/img/landing_capivara.png">
 <link rel="icon" href="img/liz_rosto_3d.png">
 </head>
@@ -248,13 +248,13 @@ section.s{padding:96px 0 0}
   <div class="wrap">
     <header class="topo">
       <a class="marca" href="https://kompila.com.br/">[ <i>kompila</i> ]</a>
-      <nav><a href="#como">Como funciona</a><a href="#raio-x">O Raio-X</a><a href="#planos">Planos</a></nav>
+      <nav><a href="#como">Como funciona</a><a href="#ficha">A ficha</a><a href="#planos">Planos</a></nav>
     </header>
 
     <section class="hero">
       <div class="eyebrow aparece"><b>prospecção</b>IA sob medida pra pequena e média empresa</div>
       <h1 class="aparece">Quais empresas da sua cidade valem a sua <em>ligação</em> hoje?</h1>
-      <p class="sub aparece">Você fala o nicho e a cidade. A Liz lê o Google, o site e as avaliações de cada empresa e te entrega <b>quem tem motivo pra comprar</b>. Nada sai sem o seu ok.</p>
+      <p class="sub aparece">Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nota, telefone, site, horários e avaliações, e <b>você escolhe quem entra no pipeline</b>.</p>
       <div class="busca aparece" id="busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><div class="tx" id="dig"></div><button class="ir" data-entrar><span>Começar</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button></div>
       <div class="prova aparece"><span class="num">[ <i>60</i> ] empresas lidas em pouco mais de 1 minuto</span><span>no nosso teste com padarias de Santos</span></div>
     </section>
@@ -268,71 +268,58 @@ section.s{padding:96px 0 0}
       <h2 class="aparece">Três passos. Você só decide no último.</h2>
       <div class="passos">
         <div class="passo aparece"><div class="n">1</div><div><h3>Você diz o nicho e a cidade</h3><p>Ou sobe a sua lista de clientes em Excel. Conta pessoal, como e-mail de Gmail e MEI com nome de pessoa, fica de fora sozinha.</p><div class="tags"><span>pet shop em Mogi</span><span>clínica em Campinas</span><span>sua planilha</span></div></div></div>
-        <div class="passo aparece"><div class="n">2</div><div><h3>A Liz lê cada empresa</h3><p>Nota e avaliações no Google, o site no celular e no computador, se tem WhatsApp, se anuncia, o Instagram e as fotos da loja.</p><div class="tags"><span>Google Meu Negócio</span><span>site</span><span>anúncios</span><span>Instagram</span></div></div></div>
-        <div class="passo aparece"><div class="n">3</div><div><h3>Você recebe o Raio-X e aprova</h3><p>Cada empresa vem com o motivo pra abordar e a prova. Você adiciona ao pipeline ou pula.</p><div class="tags"><span>aprovar</span><span>pular</span></div></div></div>
+        <div class="passo aparece"><div class="n">2</div><div><h3>A Liz traz os dados do Google Maps</h3><p>Categoria, nota, telefone, site, endereço, horários e até 5 avaliações de cada empresa.</p><div class="tags"><span>Google Maps</span><span>avaliações</span><span>horários</span></div></div></div>
+        <div class="passo aparece"><div class="n">3</div><div><h3>Você filtra e escolhe</h3><p>Filtre por celular, site e nota. Quem interessar entra no pipeline com um clique.</p><div class="tags"><span>filtrar</span><span>enriquecer</span><span>adicionar</span></div></div></div>
       </div>
     </section>
 
-    <section class="s" id="raio-x">
-      <div class="rot aparece">O RAIO-X</div>
-      <h2 class="aparece">Tudo o que você precisa saber antes de ligar.</h2>
-      <p class="lead aparece">Uma página por empresa, com o que dá pra ver de fora e o que isso significa pra você vender.</p>
-      <div class="vitrine aparece"><span class="selo">exemplo · empresa fictícia</span><img src="img/landing_capivara.png" alt="Exemplo de Raio-X de uma padaria: potencial, resumo, print do site, fotos e blocos de diagnóstico"></div>
-      <div class="lista-cap">
-        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Print do site no celular e no computador, com a velocidade medida</div>
-        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>O que falta: WhatsApp, chat, pedido online, site próprio</div>
-        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Se já anuncia: pixel da Meta e tag do Google no site</div>
-        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>As avaliações que mostram o problema, com data</div>
-        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Marca, cores e fotos da loja, pra você chegar sabendo com quem fala</div>
-        <div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>O contato de cada empresa: WhatsApp, Instagram, e-mail e telefone</div>
-      </div>
-    </section>
+    <section class="s" id="ficha">
+<div class="rot aparece">A FICHA</div>
+<h2 class="aparece">O que o Google mostra de cada empresa, num lugar só.</h2>
+<p class="lead aparece">Você abre a ficha e já sabe com quem vai falar, sem procurar empresa por empresa no Maps.</p>
+<div class="lista-cap">
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Categoria, nota e quantidade de avaliações</div>
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Até 5 avaliações, com autor e data</div>
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Telefone, site e endereço</div>
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Horários de cada dia da semana</div>
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Pagamento, estacionamento e acessibilidade, quando o Google informa</div>
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>O que a empresa oferece, como entrega e reserva</div>
+</div>
+</section>
 
-    <section class="s">
-      <div class="rot aparece">QUEM VALE A ABORDAGEM</div>
-      <h2 class="aparece">Empresa boa também é cliente.</h2>
-      <p class="lead aparece">Não é só quem tem reclamação. Cada empresa entra por um dos três motivos, e a mensagem muda junto.</p>
-      <div class="angulos">
-        <div class="ang dor aparece"><span class="ch">Atendimento</span><h3>Perde cliente por não responder</h3><p>Avaliação de quem mandou mensagem, ligou ou tentou encomendar e ficou sem resposta.</p></div>
-        <div class="ang canal aparece"><span class="ch">Presença digital</span><h3>Não tem por onde ser chamada</h3><p>Sem site próprio, só Facebook ou Instagram no lugar, sem WhatsApp na página.</p></div>
-        <div class="ang cres aparece"><span class="ch">Crescimento</span><h3>Está cheia de cliente</h3><p>Nota alta e muita avaliação. A conversa é sobre atender mais gente sem contratar.</p></div>
-      </div>
-    </section>
-
-    <section class="s" id="lista">
-      <div class="rot aparece">SÓ A LISTA</div>
-      <h2 class="aparece">Precisa só dos contatos? Leva a lista inteira.</h2>
-      <p class="lead aparece">Numa busca só, dezenas de empresas do Google Maps, com nota, telefone e site, prontas pra exportar. Enriqueça os contatos de quem interessar.</p>
+<section class="s" id="lista">
+      <div class="rot aparece">CONTATOS</div>
+      <h2 class="aparece">Falta contato? Complete no card da empresa.</h2>
+      <p class="lead aparece">Numa busca só, dezenas de empresas do Google Maps, com nota, telefone e site, prontas pra exportar. Enriqueça uma empresa ou várias de uma vez.</p>
       <div class="dupla">
-        <div class="cartao esc aparece"><h3>Instagram, e-mail e WhatsApp</h3><p>De quem você escolher, quando estão no site da empresa. Sem custo de Raio-X.</p>
+        <div class="cartao esc aparece"><h3>Instagram, e-mail e WhatsApp</h3><p>De quem você escolher, quando estão no site da empresa. Você também pode preencher na mão.</p>
           <div class="igs"><div><i></i>@padaria.exemplo<span>Gonzaga</span></div><div><i></i>@emporio.exemplo<span>Boqueirão</span></div><div><i></i>@confeitaria.exemplo<span>Embaré</span></div><div><i></i>@cafe.exemplo<span>Ponta da Praia</span></div><div><i></i>@doceria.exemplo<span>Aparecida</span></div><div class="mais">+ 55 empresas na mesma busca</div></div></div>
         <div class="cartao aparece"><h3>Numa planilha pronta</h3><p>Abre no Excel. Conta pessoal da sua lista sai riscada antes de qualquer busca.</p>
-          <div class="planilha"><div><span>EMPRESA</span><span>INSTAGRAM</span><span>ÂNGULO</span></div><div><span>Padaria Exemplo</span><span>@padaria.exemplo</span><span>Dor</span></div><div><span>Empório Exemplo</span><span>@emporio.exemplo</span><span>Crescimento</span></div><div><span>Confeitaria Exemplo</span><span>@confeitaria.exemplo</span><span>Canal</span></div><div class="riscado"><span>12.345.678 Fulano</span><span>MEI</span><span>fora</span></div><div class="mais">+ 56 linhas · exporta em 1 clique</div></div></div>
+          <div class="planilha"><div><span>EMPRESA</span><span>INSTAGRAM</span><span>NOTA</span></div><div><span>Padaria Exemplo</span><span>@padaria.exemplo</span><span>4,8</span></div><div><span>Empório Exemplo</span><span>@emporio.exemplo</span><span>4,9</span></div><div><span>Confeitaria Exemplo</span><span>@confeitaria.exemplo</span><span>4,6</span></div><div class="riscado"><span>12.345.678 Fulano</span><span>MEI</span><span>fora</span></div><div class="mais">+ 56 linhas · exporta em 1 clique</div></div></div>
       </div>
     </section>
 
     <section class="s" id="planos">
       <div class="rot aparece">PLANOS</div>
       <h2 class="aparece">Comece de graça. Pague quando valer a pena.</h2>
-      <p class="lead aparece">Você testa com R$ 5 por nossa conta. Gostou, escolhe um plano. Lista é a empresa pra varrer; Raio-X é a empresa pronta pra abordar, com a mensagem feita pra ela.</p>
+      <p class="lead aparece">Você testa com R$ 5 por nossa conta. Gostou, escolhe um plano.</p>
       <div class="planos">
         <div class="plano aparece" id="planoFree">
           <div class="pn">Free</div><div class="pp"><b>R$ 0</b></div>
           <div class="pd">Pra experimentar sem compromisso.</div>
-          <ul><li>R$ 5 de saldo de boas-vindas</li><li>~300 empresas na lista ou 8 Raio-X</li><li>Contato de cada empresa</li><li>Pipeline e Instagram incluídos</li></ul>
+          <ul><li>R$ 5 de saldo de boas-vindas</li><li>Até 300 empresas na lista</li><li>Ficha completa de cada empresa</li><li>Enriquecimento de contatos</li><li>Pipeline incluído</li></ul>
           <button class="pb line" data-quero>Começar grátis</button>
         </div>
         <div class="plano destaque aparece">
-          <div class="selo">mais escolhido</div>
-          <div class="pn">Começo</div><div class="pp"><b>R$ 147</b><span>/mês</span></div>
+                    <div class="pn">Começo</div><div class="pp"><b>R$ 147</b><span>/mês</span></div>
           <div class="pd">Pra quem prospecta todo dia.</div>
-          <ul><li>Até <b>1.500 empresas</b> na lista por mês</li><li><b>100 Raio-X</b> por mês</li><li>Pipeline completo</li><li>Enriquecimento de contatos</li><li>Passou da cota? Segue no avulso</li></ul>
+          <ul><li>Até <b>1.500 empresas</b> na lista por mês</li><li>Ficha completa de cada empresa</li><li>Pipeline completo</li><li>Enriquecimento de contatos</li><li>Passou da cota? Segue no avulso</li></ul>
           <button class="pb go" data-quero>Quero o Começo</button>
         </div>
         <div class="plano aparece">
           <div class="pn">Escala</div><div class="pp"><b>R$ 340</b><span>/mês</span></div>
           <div class="pd">Pra equipe ou volume alto.</div>
-          <ul><li>Até <b>4.000 empresas</b> na lista por mês</li><li><b>250 Raio-X</b> por mês</li><li>Tudo do Começo</li><li>Prioridade no atendimento</li></ul>
+          <ul><li>Até <b>4.000 empresas</b> na lista por mês</li><li>Tudo do Começo</li><li>Prioridade no atendimento</li></ul>
           <button class="pb line" data-quero>Quero o Escala</button>
         </div>
       </div>
