@@ -868,7 +868,7 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 body:has(#capO.on) .fab{display:none}
 
 /* pipeline: busca, Responder e quem está esperando */
-.pf{display:flex;gap:8px;margin-bottom:8px}
+.pf:not(.cap-b){display:flex;gap:8px;margin-bottom:8px}
 .pf-q{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;background:var(--w);border-radius:var(--r8);box-shadow:var(--sh)}
 .pf-q:focus-within{box-shadow:var(--sh),0 0 0 2px var(--g)}
 .pf-q svg{width:16px;height:16px;flex:none;fill:none;stroke:var(--mu);stroke-width:2;stroke-linecap:round}
@@ -932,7 +932,7 @@ body:has(#capO.on) .fab{display:none}
 .cp-tmp>span{width:100%;font-size:11px;color:var(--mu)}
 .msg-n{display:block;margin-top:8px;font-size:12px;line-height:1.4;color:var(--mu)}
 @media (max-width:700px){
-  .pf{flex-wrap:wrap}
+  .pf:not(.cap-b){flex-wrap:wrap}
   .pf-q{flex:1 0 100%}
   .pf-tmp{flex:1;min-width:0}
   .pf-tmp button{flex:1;justify-content:center;height:44px;padding:0 4px;font-size:12px}
