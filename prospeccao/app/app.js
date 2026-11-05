@@ -225,7 +225,7 @@ async function rodarBusca(cidade, nicho, modo = 'lista', quero = 60, novaMesmo =
       return
     }
   }
-  carregando({ tipo: 'busca', t: `Procurando ${nicho} em ${cidade.split(',')[0]}`, s: 'Olhando o Google Maps. Leva menos de um minuto.' })
+  consultaAbre({ tipo: 'busca', t: `Procurando ${nicho} em ${cidade.split(',')[0]}`, s: 'Olhando o Google Maps. Leva menos de um minuto.' })
   montarCanvas({ cidade, nicho, status: 'buscando', olhadas: 0, novas: 0, com_dor: 0 }, true)
   vivo(true, 'Liz procurando')
   try {
@@ -238,7 +238,7 @@ async function rodarBusca(cidade, nicho, modo = 'lista', quero = 60, novaMesmo =
   } catch (e) { erro(e) }
 }
 async function rodarLista(nome, itens) {
-  carregando({ tipo: 'busca', t: `Lendo a lista ${nome}`, s: 'Procurando cada empresa no Google.' })
+  consultaAbre({ tipo: 'busca', t: `Lendo a lista ${nome}`, s: 'Procurando cada empresa no Google.' })
   montarCanvas({ cidade: 'Lista', nicho: nome, status: 'buscando', olhadas: itens.length, novas: 0, com_dor: 0 }, true)
   vivo(true, 'Liz procurando')
   try {
@@ -250,14 +250,14 @@ async function rodarLista(nome, itens) {
   } catch (e) { erro(e) }
 }
 async function peneirar(modo) {
-  if (LOAD.tipo === 'busca') carregando({ tipo: 'busca', t: 'Organizando as empresas', s: `${busca.novas || busca.olhadas || 0} encontradas. Falta pouco.` })
+  if (LOAD.tipo === 'busca') consultaAbre({ tipo: 'busca', t: 'Organizando as empresas', s: `${busca.novas || busca.olhadas || 0} encontradas. Falta pouco.` })
   const a = await chamar('analisar', { busca_id: busca.id, modo })
   busca.com_dor = a.com_dor; atualizarFunil()
   // a lista traz só o que vem do Google Maps. Contato do site é no Enriquecer, quando a pessoa quiser.
   if (modo === 'lista') { fim(`Lista pronta: ${a.olhadas} empresas.`); await abrirListaHome(); return }
   if (!a.finalistas) return fim('Nenhuma empresa com potencial forte aqui. Bora outro nicho?')
   dizer(`${a.finalistas} empresas merecem Raio-X. Já estou montando, uma por uma.`)
-  carregando({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', de: 0, ate: a.finalistas, sair: true })
+  consultaAbre({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', de: 0, ate: a.finalistas, sair: true })
   acompanhar()
 }
 function erro(e) { fimCarregando(); vivo(false, 'Liz parada'); liz(/saldo/i.test(e.message) ? esc(e.message) : `Travei aqui: ${esc(e.message)}`, 8000); if (busca) { busca.status = 'erro'; atualizarFunil() } }
@@ -273,7 +273,7 @@ function acompanhar() {
     if (b) busca = b
     diags = (d ?? []).filter(x => x.status !== 'pronto' || Object.keys(x.capivara || {}).length || x.status === 'erro')
     atualizarFunil(); desenharCards()
-    if (LOAD.tipo === 'raiox') { const prontos = diags.filter(x => x.status === 'pronto').length; carregando({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', de: prontos, ate: Math.max(diags.length, prontos), sair: true }) }
+    if (LOAD.tipo === 'raiox') { const prontos = diags.filter(x => x.status === 'pronto').length; consultaAbre({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', de: prontos, ate: Math.max(diags.length, prontos), sair: true }) }
     if (busca.status === 'pronta' || busca.status === 'erro') {
       clearInterval(poll)
       const n = diags.filter(x => x.status === 'pronto').length
@@ -561,7 +561,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape') { fecharCapivara(); $
 /* ======================= popup de consulta ======================= */
 const LOAD = { tipo: '', timer: null }
 // tipo identifica quem abriu; aviso rápido (rapido=true) só aparece se demorar, pra não piscar na tela
-function carregando({ tipo = 'geral', t, s = '', de = null, ate = null, sair = false, rapido = false }) {
+function consultaAbre({ tipo = 'geral', t, s = '', de = null, ate = null, sair = false, rapido = false }) {
   clearTimeout(LOAD.timer); LOAD.tipo = tipo
   const mostra = () => {
     const o = $('loadO'), pct = ate ? Math.min(100, Math.round((de || 0) / ate * 100)) : null
@@ -575,15 +575,6 @@ function carregando({ tipo = 'geral', t, s = '', de = null, ate = null, sair = f
 }
 function fimCarregando(tipo) { if (tipo && LOAD.tipo !== tipo) return; clearTimeout(LOAD.timer); LOAD.tipo = ''; $('loadO').hidden = true }
 $('loadO').querySelector('.ld-x').onclick = () => fimCarregando()
-// aberturas de tela: aviso só quando demora
-for (const [fn, t] of [['abrirCaptacao', 'Carregando seu pipeline'], ['abrirConversas', 'Carregando suas conversas'], ['abrirFila', 'Carregando as abordagens'], ['abrirPerfil', 'Carregando seu perfil']]) {
-  const orig = window[fn]
-  window[fn] = async function (empilhar = true, ...resto) {
-    if (!empilhar) return orig(empilhar, ...resto)
-    carregando({ tipo: fn, t, rapido: true })
-    try { return await orig(empilhar, ...resto) } finally { fimCarregando(fn) }
-  }
-}
 
 /* ======================= enriquecer: dentro do card de cada empresa ======================= */
 const ENR = { aberto: new Set(), msg: {} }
@@ -632,7 +623,7 @@ function ligarEnr(root, e, depois) {
   }
   p.querySelector('[data-enr-buscar]').onclick = async ev => {
     const b = ev.currentTarget; b.disabled = true; b.textContent = 'Procurando…'
-    carregando({ tipo: 'enr', t: `Enriquecendo ${e.nome || 'a empresa'}`, s: 'Lendo o site e procurando o CNPJ.' })
+    consultaAbre({ tipo: 'enr', t: `Enriquecendo ${e.nome || 'a empresa'}`, s: 'Lendo o site e procurando o CNPJ.' })
     const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id } })
     fimCarregando('enr')
     if (error || data?.erro) { ENR.msg[e.id] = { t: 'ruim', h: esc(data?.erro || 'Não consegui buscar agora. Tenta de novo.') }; return depois() }
@@ -680,8 +671,8 @@ async function abrirListaHome() {
 async function lvAcompanhar(novas = 0) {
   clearInterval(LV.timer)
   let total = novas
-  const popup = falta => { if (!novas) return; if (LOAD.tipo && LOAD.tipo !== 'lote') return; if (LOAD.tipo === '' && total !== novas) return; carregando({ tipo: 'lote', t: 'Enriquecendo as empresas', s: 'Procurando site e CNPJ de cada uma. Pode continuar usando que eu aviso.', de: Math.max(0, total - falta), ate: total, sair: true }) }
-  if (novas) carregando({ tipo: 'lote', t: 'Enriquecendo as empresas', s: 'Procurando site e CNPJ de cada uma. Pode continuar usando que eu aviso.', de: 0, ate: novas, sair: true })
+  const popup = falta => { if (!novas) return; if (LOAD.tipo && LOAD.tipo !== 'lote') return; if (LOAD.tipo === '' && total !== novas) return; consultaAbre({ tipo: 'lote', t: 'Enriquecendo as empresas', s: 'Procurando site e CNPJ de cada uma. Pode continuar usando que eu aviso.', de: Math.max(0, total - falta), ate: total, sair: true }) }
+  if (novas) consultaAbre({ tipo: 'lote', t: 'Enriquecendo as empresas', s: 'Procurando site e CNPJ de cada uma. Pode continuar usando que eu aviso.', de: 0, ate: novas, sair: true })
   const ids = LV.todos.map(d => d.empresa?.id).filter(Boolean)
   const olhar = async () => {
     const p = $('lvProg'); if ($('lv').hidden || !p) return clearInterval(LV.timer)
@@ -728,7 +719,7 @@ function lvPintar() {
     c.querySelector('[data-zap]')?.addEventListener('click', ev => abrirConversas(true, ev.currentTarget.dataset.zap))
     c.querySelector('[data-abre]')?.addEventListener('click', () => abrirSeq(d.id))
     c.querySelector('[data-add]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { b.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); lvPintar() })
-    c.querySelector('[data-faz]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; b.textContent = 'Mandando…'; d.status = 'na_fila'; carregando({ tipo: 'raiox', t: `Montando o Raio-X de ${d.empresa?.nome || 'a empresa'}`, s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', sair: true }); await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', d.id); await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id); sb.functions.invoke('diagnosticar', { body: { diagnostico_id: d.id } }); busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar(); lvPintar() })
+    c.querySelector('[data-faz]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; b.textContent = 'Mandando…'; d.status = 'na_fila'; consultaAbre({ tipo: 'raiox', t: `Montando o Raio-X de ${d.empresa?.nome || 'a empresa'}`, s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', sair: true }); await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', d.id); await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id); sb.functions.invoke('diagnosticar', { body: { diagnostico_id: d.id } }); busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar(); lvPintar() })
   })
 }
 
@@ -1474,13 +1465,12 @@ new MutationObserver(marcarNav).observe($('hist'), { attributes: true, attribute
 async function abrirBusca(b) {
   if (history.state?.camada === 'hist') history.replaceState(null, '')
   $('hist').classList.remove('on'); $('ask').hidden = true; document.body.classList.remove('fora'); fecharCapivara()
-  carregando({ tipo: 'abrir', t: 'Abrindo sua pesquisa', rapido: true })
   vistos.clear(); montarCanvas({ ...b }, false); busca = { ...b }
   ;(await sb.from('diagnosticos').select('id').eq('busca_id', b.id).eq('status', 'pronto')).data?.forEach(x => vistos.add(x.id))
   vivo(b.status !== 'pronta' && b.status !== 'erro', b.status === 'pronta' ? 'Liz parada' : 'Liz trabalhando')
   acompanhar()
   // busca salva sempre abre em cards; o Raio-X de cada empresa abre pelo card
-  await abrirListaHome(); fimCarregando('abrir')
+  await abrirListaHome()
 }
 
 /* ======================= barra de comando ======================= */
