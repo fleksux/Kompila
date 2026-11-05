@@ -269,7 +269,8 @@ function acompanhar() {
     if (busca.status === 'pronta' || busca.status === 'erro') {
       clearInterval(poll)
       const n = diags.filter(x => x.status === 'pronto').length
-      fim(`Pronto. ${n} Raio-X pra você olhar. ${mob() ? 'Toca' : 'Clica'} numa empresa pra abrir.`)
+      if (n) fim(`Pronto. ${n} Raio-X pra você olhar. ${mob() ? 'Toca' : 'Clica'} numa empresa pra abrir.`)
+      else { fimCarregando(); vivo(false, 'Liz parada') }
     }
   }
   passo(); poll = setInterval(passo, 4000)
@@ -473,7 +474,7 @@ addEventListener('popstate', () => {
   $('hist').classList.remove('on')
   if (c === 'lista') abrirLista(false)
   else if (c === 'capt') abrirCaptacao(false)
-  else if (c === 'ficha' && fichaAberta) abrirFicha(fichaAberta, false)
+  else if (c === 'ficha' && fichaAberta) abrirFichaMaps(fichaAberta, false)
   else if (c === 'fila') abrirFila(false)
   else if (c === 'perfil') abrirPerfil(false)
   if (c !== 'ind' && !$('indO').hidden) fecharIndicar()
@@ -704,7 +705,7 @@ function lvPintar() {
   $('lvG').querySelectorAll('.lc').forEach(c => {
     const d = LV.todos.find(x => x.id === c.dataset.id)
     ligarEnr(c, d.empresa, lvPintar)
-    c.querySelector('[data-fi]').onclick = () => abrirFicha(d)
+    c.querySelector('[data-fi]').onclick = () => abrirFichaMaps(d)
     c.querySelector('[data-sel]').onchange = ev => { if (ev.target.checked) LV.sel.add(d.empresa.id); else LV.sel.delete(d.empresa.id); lvPintar() }
     c.querySelector('[data-zap]')?.addEventListener('click', ev => abrirConversas(true, ev.currentTarget.dataset.zap))
     c.querySelector('[data-abre]')?.addEventListener('click', () => abrirSeq(d.id))
@@ -715,7 +716,7 @@ function lvPintar() {
 
 /* ======================= ficha da empresa: tudo que o Maps entrega ======================= */
 let fichaAberta = null
-async function abrirFicha(d, empilhar = true) {
+async function abrirFichaMaps(d, empilhar = true) {
   fichaAberta = d
   const e = d.empresa || {}, x = e.google_extra || {}
   const { data: avs } = await sb.from('avaliacoes').select('estrelas, texto, publicada_em, autor, autor_link, tempo').eq('empresa_id', e.id).order('publicada_em', { ascending: false, nullsFirst: false }).limit(20)
@@ -750,13 +751,13 @@ async function abrirFicha(d, empilhar = true) {
     <div class="fi-g">Dados do Google Maps</div></div>`
   $('capX').onclick = fecharCapivara
   $('cap').querySelectorAll('[data-zap]').forEach(b => b.onclick = () => abrirConversas(true, b.dataset.zap))
-  if ($('fiAdd')) $('fiAdd').onclick = async ev => { ev.currentTarget.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { ev.currentTarget.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); abrirFicha(d, false) }
+  if ($('fiAdd')) $('fiAdd').onclick = async ev => { ev.currentTarget.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { ev.currentTarget.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); abrirFichaMaps(d, false) }
   if ($('fiBaixar')) $('fiBaixar').onclick = async () => {
     consultaAbre({ tipo: 'enr', t: 'Trazendo a ficha do Google', s: e.nome || '' })
     const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id } })
     fimCarregando('enr')
     if (error || data?.erro) return liz(esc(data?.erro || 'Não consegui trazer agora. Tenta de novo.'))
-    Object.assign(e, data.novo); abrirFicha(d, false)
+    Object.assign(e, data.novo); abrirFichaMaps(d, false)
   }
   if (empilhar) empilha('ficha')
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
