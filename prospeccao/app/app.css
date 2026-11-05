@@ -1057,3 +1057,20 @@ body:has(#capO.on) .fab{display:none}
   .lc-sel{width:32px;height:32px;margin:-6px 0 0 -6px}.lc-sel input,.lv-selt input{width:20px;height:20px}
   .lv-res{flex-wrap:wrap}
 }
+
+/* popup de consulta: centralizado, acima de tudo */
+.ld-o{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;background:rgba(10,11,14,.32);backdrop-filter:blur(4px);animation:ldIn .18s ease}
+.ld-o[hidden]{display:none}
+.ld-c{display:flex;flex-direction:column;align-items:center;gap:8px;width:min(380px,100%);padding:24px;background:var(--w);border-radius:var(--r12);box-shadow:0 24px 64px rgba(10,11,14,.24);text-align:center}
+.ld-c img{width:88px;height:auto;margin-bottom:4px}
+.ld-t{font-size:18px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.ld-s{font-size:13px;line-height:1.4;color:var(--mu)}
+.ld-s:empty,.ld-n:empty{display:none}
+.ld-b{position:relative;width:100%;height:6px;margin-top:8px;background:var(--s);border-radius:3px;overflow:hidden}
+.ld-b i{position:absolute;inset:0 auto 0 0;width:0;background:var(--g);border-radius:3px;transition:width .4s ease}
+.ld-b.sem i{width:35%;animation:ldVai 1.2s ease-in-out infinite}
+.ld-n{font-family:var(--mono);font-size:12px;color:var(--mu)}
+.ld-x{margin-top:8px}
+.ld-x[hidden]{display:none}
+@keyframes ldIn{from{opacity:0}to{opacity:1}}
+@keyframes ldVai{0%{left:-35%}100%{left:100%}}
