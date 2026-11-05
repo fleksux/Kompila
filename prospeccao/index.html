@@ -5,7 +5,7 @@
 <script>if(location.pathname==='/prospeccao')location.replace('/prospeccao/'+location.search+location.hash)</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prospecção · Kompila</title>
-<meta name="description" content="Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nota, telefone, site, horários e avaliações, e você escolhe quem entra no pipeline.">
+<meta name="description" content="Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nome, telefone e site, e você escolhe quem entra no pipeline.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
@@ -237,7 +237,7 @@ section.s{padding:96px 0 0}
 </style>
 <link rel="canonical" href="https://kompila.com.br/prospeccao/">
 <meta property="og:title" content="Prospecção · Kompila">
-<meta property="og:description" content="Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nota, telefone, site, horários e avaliações, e você escolhe quem entra no pipeline.">
+<meta property="og:description" content="Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nome, telefone e site, e você escolhe quem entra no pipeline.">
 <meta property="og:image" content="https://kompila.com.br/prospeccao/img/landing_capivara.png">
 <link rel="icon" href="img/liz_rosto_3d.png">
 </head>
@@ -254,7 +254,7 @@ section.s{padding:96px 0 0}
     <section class="hero">
       <div class="eyebrow aparece"><b>prospecção</b>IA sob medida pra pequena e média empresa</div>
       <h1 class="aparece">Quais empresas da sua cidade valem a sua <em>ligação</em> hoje?</h1>
-      <p class="sub aparece">Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nota, telefone, site, horários e avaliações, e <b>você escolhe quem entra no pipeline</b>.</p>
+      <p class="sub aparece">Você fala o nicho e a cidade. A Liz traz do Google Maps as empresas com nome, telefone e site, e <b>você escolhe quem entra no pipeline</b>.</p>
       <div class="busca aparece" id="busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><div class="tx" id="dig"></div><button class="ir" data-entrar><span>Começar</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button></div>
       <div class="prova aparece"><span class="num">[ <i>60</i> ] empresas lidas em pouco mais de 1 minuto</span><span>no nosso teste com padarias de Santos</span></div>
     </section>
@@ -268,22 +268,19 @@ section.s{padding:96px 0 0}
       <h2 class="aparece">Três passos. Você só decide no último.</h2>
       <div class="passos">
         <div class="passo aparece"><div class="n">1</div><div><h3>Você diz o nicho e a cidade</h3><p>Ou sobe a sua lista de clientes em Excel. Conta pessoal, como e-mail de Gmail e MEI com nome de pessoa, fica de fora sozinha.</p><div class="tags"><span>pet shop em Mogi</span><span>clínica em Campinas</span><span>sua planilha</span></div></div></div>
-        <div class="passo aparece"><div class="n">2</div><div><h3>A Liz traz os dados do Google Maps</h3><p>Categoria, nota, telefone, site, endereço, horários e até 5 avaliações de cada empresa.</p><div class="tags"><span>Google Maps</span><span>avaliações</span><span>horários</span></div></div></div>
+        <div class="passo aparece"><div class="n">2</div><div><h3>A Liz traz os dados do Google Maps</h3><p>Nome, telefone e site de cada empresa, quando ela tiver.</p><div class="tags"><span>Google Maps</span><span>telefone</span><span>site</span></div></div></div>
         <div class="passo aparece"><div class="n">3</div><div><h3>Você filtra e escolhe</h3><p>Filtre por celular, site e nota. Quem interessar entra no pipeline com um clique.</p><div class="tags"><span>filtrar</span><span>enriquecer</span><span>adicionar</span></div></div></div>
       </div>
     </section>
 
     <section class="s" id="ficha">
 <div class="rot aparece">A FICHA</div>
-<h2 class="aparece">O que o Google mostra de cada empresa, num lugar só.</h2>
+<h2 class="aparece">O contato de cada empresa, num lugar só.</h2>
 <p class="lead aparece">Você abre a ficha e já sabe com quem vai falar, sem procurar empresa por empresa no Maps.</p>
 <div class="lista-cap">
-<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Categoria, nota e quantidade de avaliações</div>
-<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Até 5 avaliações, com autor e data</div>
-<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Telefone, site e endereço</div>
-<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Horários de cada dia da semana</div>
-<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Pagamento, estacionamento e acessibilidade, quando o Google informa</div>
-<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>O que a empresa oferece, como entrega e reserva</div>
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Nome da empresa</div>
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Telefone, com aviso de quem tem celular</div>
+<div class="aparece"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Site, quando a empresa tiver</div>
 </div>
 </section>
 
