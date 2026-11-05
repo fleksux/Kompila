@@ -619,6 +619,7 @@ async function abrirListaHome() {
   const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
   LV.todos = data || []; LV.armado = false
+  $('ask').hidden = true; document.body.classList.remove('fora')
   const faltam = LV.todos.filter(d => !d.empresa?.contatos_lidos_em).length
   const titulo = busca.cidade === 'Lista' ? busca.nicho : `${busca.nicho} em ${(busca.cidade || '').split(',')[0]}`
   $('lv').innerHTML = `<div class="lv-in">
@@ -1392,6 +1393,7 @@ $('bNova').onclick = () => {
   $('hist').classList.remove('on'); $('capO').classList.remove('on'); $('cap').classList.remove('on')
   if (!$('indO').hidden) fecharIndicar()
   if (history.state?.camada) history.replaceState(null, '')
+  $('fname').textContent = ''; vivo(false, 'Liz parada')
   pergunta(1)
 }
 $('bMais').onclick = () => $('bNova').click()
