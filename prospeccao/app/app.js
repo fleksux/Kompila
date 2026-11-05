@@ -220,8 +220,8 @@ async function rodarBusca(cidade, nicho, modo = 'lista', quero = 60, novaMesmo =
     const { data: antigas } = await sb.from('buscas').select('*').neq('cidade', 'Lista').neq('status', 'erro').order('criada_em', { ascending: false }).limit(200)
     const ja = (antigas || []).find(b => chave(b.cidade) === chave(cidade) && parecida(b.nicho, nicho))
     if (ja) {
-      await abrirBusca(ja, modo === 'lista')
-      liz(`Você já pesquisou <b>${esc(ja.nicho)} em ${esc(ja.cidade.split(',')[0])}</b> em ${new Date(ja.criada_em).toLocaleDateString('pt-BR')}. Abri o resultado, sem gastar nada. Quer empresas novas? Usa o <b>Buscar mais</b>.`, 9000)
+      await abrirBusca(ja)
+      liz(`Você já pesquisou <b>${esc(ja.nicho)} em ${esc(ja.cidade.split(',')[0])}</b> em ${new Date(ja.criada_em).toLocaleDateString('pt-BR')}. Abri o resultado, sem gastar nada. Quer empresas novas? Usa o <b>Encontrar mais</b>.`, 9000)
       return
     }
   }
@@ -350,7 +350,7 @@ function atualizarFunil() {
   if (say) say.innerHTML = busca.status === 'pronta' ? `Achei <em>${cap} empresa${cap === 1 ? '' : 's'}</em> que valem a abordagem.${resto ? `<br><button class="btn line sm" id="bResto" style="margin-top:12px">Fazer Raio-X das outras ${resto}${custoRaiox(resto)}</button>` : ''}${busca.cidade !== 'Lista' ? `<div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--mu);font-weight:400">Encontrar mais empresas:</span>${[12, 30, 60].map(n => `<button class="btn line sm" data-mais="${n}">${n}</button>`).join('')}</div>` : ''}` : busca.status === 'erro' ? 'Travei nessa busca. <button class="btn go sm" id="bDeNovo" style="margin-top:12px">Tentar de novo</button>' : busca.status === 'diagnosticando' ? `Montando os Raio-X: <em>${cap}</em> prontas.` : say.innerHTML
 }
 document.addEventListener('click', e => {
-  const n = e.target.dataset?.mais; if (!n || !busca) return
+  const n = e.target.dataset?.mais; if (!/^\d+$/.test(n || '') || !busca) return
   const { cidade, nicho } = busca; clearInterval(poll); fecharCapivara(); vistos.clear()
   liz(`Bora: mais ${n} ${esc(nicho)} em ${esc(cidade.split(',')[0])}, só as que você ainda não tem.`)
   rodarBusca(cidade, nicho, false, +n, true)
@@ -628,7 +628,7 @@ async function abrirListaHome() {
   const faltam = LV.todos.filter(d => !d.empresa?.contatos_lidos_em).length
   const titulo = busca.cidade === 'Lista' ? busca.nicho : `${busca.nicho} em ${(busca.cidade || '').split(',')[0]}`
   $('lv').innerHTML = `<div class="lv-in">
-    <div class="lv-top"><div><h1>${esc(titulo)}</h1><p>${LV.todos.length} empresa${LV.todos.length === 1 ? '' : 's'} nesta lista</p></div><div class="lv-ac"><button class="btn line sm" id="lvCsv">Baixar planilha</button><button class="btn line sm" id="lvMais">Encontrar mais</button></div></div>
+    <div class="lv-top"><div><h1>${esc(titulo)}</h1><p>${LV.todos.length} empresa${LV.todos.length === 1 ? '' : 's'} nesta lista</p></div><div class="lv-ac"><button class="btn line sm" id="lvCsv">Baixar planilha</button>${busca.cidade === 'Lista' ? '' : '<button class="btn line sm" data-mais="60">Encontrar mais 60</button>'}</div></div>
     <div class="lv-en" id="lvProg" hidden></div>
     <div class="lv-fil"><div class="lv-lin"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lvQ" type="search" placeholder="Buscar nome, bairro, telefone ou @" aria-label="Buscar na lista" autocomplete="off" value="${esc(LV.q)}"></label>
       <label class="lv-ord">Ordenar<select id="lvOrd" aria-label="Ordenar">${[['potencial', 'Potencial'], ['nota', 'Nota no Google'], ['avaliacoes', 'Mais avaliações'], ['nome', 'Nome']].map(([k, t]) => `<option value="${k}"${LV.ord === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
@@ -639,7 +639,6 @@ async function abrirListaHome() {
   $('lv').hidden = false
   lvPintar(); lvAcompanhar()
   $('lvCsv').onclick = () => baixarCsv(LV.todos)
-  $('lvMais').onclick = () => abrirLista()
   let tq; $('lvQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { LV.q = e.target.value; lvPintar() }, 150) }
   $('lvOrd').onchange = e => { LV.ord = e.target.value; lvPintar() }
 }
@@ -740,7 +739,6 @@ function baixarCsv(todos) {
   a.download = `prospeccao_${(busca.nicho + '_' + busca.cidade).toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`
   a.click(); URL.revokeObjectURL(a.href)
 }
-$('bLista').onclick = () => { if (!busca?.id) return liz('Faz uma busca primeiro que eu monto a lista.'); fecharCapivara(); abrirListaHome() }
 $('bConv').onclick = () => abrirConversas()
 $('fabConv').onclick = () => abrirConversas()
 $('fabAg').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(), history.state?.camada ? 60 : 0) }
@@ -904,7 +902,7 @@ async function abrirCaptacao(empilhar = true) {
       col.ondragleave = () => col.classList.remove('alvo')
       col.ondrop = e => { e.preventDefault(); col.classList.remove('alvo'); mover(todos.find(x => x.id === e.dataTransfer.getData('text/plain')), col.dataset.et) }
     })
-    board.querySelectorAll('[data-mais]').forEach(b => b.onclick = () => { const k = b.dataset.mais; pipeF.lim[k] = (pipeF.lim[k] || POR_COLUNA) + POR_COLUNA; const y = board.scrollLeft; pintar(); board.scrollLeft = y })
+    board.querySelectorAll('[data-vermais]').forEach(b => b.onclick = () => { const k = b.dataset.vermais; pipeF.lim[k] = (pipeF.lim[k] || POR_COLUNA) + POR_COLUNA; const y = board.scrollLeft; pintar(); board.scrollLeft = y })
     }
     // busca: tudo o que identifica o lead, sem acento e sem maiúscula
     const textoBusca = new Map(todos.map(d => { const e = d.empresa || {}, a = esperaDe(d); return [d.id, semAcento([d.capivara?.nome, e.nome, e.instagram, e.email, e.cidade, e.bairro, d.busca?.nicho, d.segmento, d.anotacao, a?.nome].filter(Boolean).join(' '))] }))
@@ -921,7 +919,7 @@ async function abrirCaptacao(empilhar = true) {
         abas[i].querySelector('span').textContent = lista.length
         const lim = pipeF.lim[k] || POR_COLUNA, resto = lista.length - lim
         const vazio = filtrando ? 'Ninguém aqui.' : k === 'a_contatar' ? 'Abre um Raio-X e toca em Adicionar ao pipeline.' : 'Arrasta uma empresa pra cá.'
-        return `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${lista.length}</span></header><div class="pcol-b">${lista.slice(0, lim).map(cartao).join('') || `<div class="pv">${vazio}</div>`}${resto > 0 ? `<button class="pv-mais" data-mais="${k}">Ver mais ${Math.min(resto, POR_COLUNA)} de ${resto}</button>` : ''}</div></section>`
+        return `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${lista.length}</span></header><div class="pcol-b">${lista.slice(0, lim).map(cartao).join('') || `<div class="pv">${vazio}</div>`}${resto > 0 ? `<button class="pv-mais" data-vermais="${k}">Ver mais ${Math.min(resto, POR_COLUNA)} de ${resto}</button>` : ''}</div></section>`
       }).join('')
       ligar()
       const info = $('pInfo'), fora = pipeF.resp && foraDoPipe
@@ -1434,16 +1432,15 @@ const marcarNav = () => {
 }
 new MutationObserver(marcarNav).observe($('cap'), { childList: true, attributes: true, attributeFilter: ['class'] })
 new MutationObserver(marcarNav).observe($('hist'), { attributes: true, attributeFilter: ['class'] })
-async function abrirBusca(b, soLista = false) {
+async function abrirBusca(b) {
   if (history.state?.camada === 'hist') history.replaceState(null, '')
   $('hist').classList.remove('on'); $('ask').hidden = true; document.body.classList.remove('fora'); fecharCapivara()
   vistos.clear(); montarCanvas({ ...b }, false); busca = { ...b }
   ;(await sb.from('diagnosticos').select('id').eq('busca_id', b.id).eq('status', 'pronto')).data?.forEach(x => vistos.add(x.id))
   vivo(b.status !== 'pronta' && b.status !== 'erro', b.status === 'pronta' ? 'Liz parada' : 'Liz trabalhando')
   acompanhar()
-  // busca sem nenhum Raio-X abre direto como lista
-  const { data: comRx } = soLista ? { data: [] } : await sb.from('diagnosticos').select('id').eq('busca_id', b.id).neq('capivara', '{}').limit(1)
-  if (!(comRx || []).length) abrirListaHome()
+  // busca salva sempre abre em cards; o Raio-X de cada empresa abre pelo card
+  await abrirListaHome()
 }
 
 /* ======================= barra de comando ======================= */
