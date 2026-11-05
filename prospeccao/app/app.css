@@ -1131,3 +1131,5 @@ body:has(#capO.on) .fab{display:none}
   .cap-b.fi{padding:16px 12px 24px}
   .fi-ac>*{flex-basis:100%}
 }
+
+.fi-ac a{color:var(--tx);text-decoration:none}
