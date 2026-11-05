@@ -1042,7 +1042,7 @@ $('bCapt').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(),
 
 /* ======================= disparo automático em cadência ======================= */
 const DISP_ST = { pausada: ['Pausada', 'pausada'], rodando: ['Rodando', 'rodando'], concluida: ['Concluída', 'ok'], cancelada: ['Encerrada', 'off'] }
-const CHIP_DP = { na_fila: ['na fila', 'f'], enviando: ['enviando…', 'g'], enviado: ['enviado ✓', 'e'], entregue: ['entregue ✓✓', 'e'], lido: ['lido ✓✓', 'e'], respondeu: ['respondeu', 'r'], falhou: ['falhou', 'x'], parou: ['parou', 'x'] }
+const CHIP_DP = { na_fila: ['na fila', 'f'], enviando: ['enviando…', 'g'], enviado: ['enviado ✓', 'e'], entregue: ['entregue ✓✓', 'e'], lido: ['lido ✓✓', 'e'], respondeu: ['respondeu', 'r'], falhou: ['falhou', 'x'], parou: ['parou', 'x'], sem_whatsapp: ['sem WhatsApp', 'x'] }
 const tfmt = t => { t = String(t || '').replace(/^55/, ''); return t.length === 11 ? t.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : t.length === 10 ? t.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3') : t }
 let dispTimer = null, convTimer = null
 // a mensagem como vai chegar no WhatsApp: {saudacao} vira bom dia, boa tarde ou boa noite pela hora
