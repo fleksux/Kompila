@@ -1235,3 +1235,22 @@ body:has(#capO.on) .fab{display:none}
 .dp-link:hover{color:var(--tx)}
 #dNumsInfo{display:block;margin-top:6px}
 
+/* Kompila Guardian e painel de Qualidade */
+.dp-gitens{padding:0 12px}
+.g-i{margin-bottom:6px;padding:8px 10px;border-radius:9px;font-size:12.5px;line-height:1.4}
+.g-i.g-aviso{background:var(--as);color:var(--a)}
+.g-i.g-grave{background:#FDECEC;color:var(--r);font-weight:600}
+.dp-acc small.g-aviso{color:var(--a)}.dp-acc small.g-grave{color:var(--r);font-weight:600}.dp-acc small.g-ok{color:var(--gd)}
+.dp-glist .dp-sw{margin:0;border:0;border-top:1px solid var(--line);border-radius:0}
+.cap-b.ql{max-width:860px}
+.ql .dp-esq-t{margin:22px 0 10px}.ql .dp-esq-t:first-child{margin-top:0}
+.ql-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ql-c{padding:12px 14px;background:var(--w);border-radius:12px;box-shadow:var(--sh)}
+.ql-c b{display:block;font:700 24px var(--mono);line-height:1.15}
+.ql-c span{display:block;margin-top:2px;font-size:13px;font-weight:500}
+.ql-c small{display:block;margin-top:2px;font-size:11.5px;font-weight:400;color:var(--mu)}
+.ql-n{flex:none;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.ql-boa{background:var(--gs);color:var(--gd)}.ql-atencao{background:var(--as);color:var(--a)}.ql-risco{background:#FDECEC;color:var(--r)}
+#qlN{font:600 13px var(--mono);color:var(--mu)}
+#qlCsv{margin-top:8px}
+

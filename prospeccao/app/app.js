@@ -1159,6 +1159,111 @@ const ligarComplemento = campId => {
   $('dCompS').onclick = async () => { if (!textos().length) return liz('Escreve o texto do complemento.'); if (await salvar()) liz(campId ? 'Complemento salvo.' : 'Complemento pronto. Vale quando montar o disparo.') }
   pinta()
 }
+// Kompila Guardian: protege o número e avisa antes de dar problema
+const DP_G_NOMES = [['supressao', 'Consultar lista de supressão', 'Quem pediu para sair não recebe.'], ['duplicidade', 'Verificar duplicidade', 'O mesmo número entra uma vez.'], ['frequencia', 'Verificar frequência', 'Espera 3 dias e no máximo 4 mensagens em 30 dias.'], ['conteudo', 'Validar conteúdo', 'Bloqueia sem identificação, sem como sair ou com link encurtado.']]
+let DP_G = { supressao: true, duplicidade: true, frequencia: false, conteudo: false }, DP_OPT = new Set(), DP_ENVIOS = {}, DP_QUEDA = null, DP_G_TELS = []
+const dpFrequente = tel => { const l = DP_ENVIOS[tel] || []; return l.length >= 4 || l.some(t => Date.now() - t < 3 * 864e5) }
+async function carregarGuardian() {
+  const desde = new Date(Date.now() - 30 * 864e5).toISOString()
+  const [{ data: can }, { data: opt }, { data: env }, { data: cps }] = await Promise.all([
+    sb.from('canal_whatsapp').select('guardian').eq('dono', usuario.id).maybeSingle(),
+    sb.from('optout').select('telefone').limit(5000),
+    sb.from('envio').select('telefone, enviado_em').gte('enviado_em', desde).limit(5000),
+    sb.from('campanha').select('motivo_pausa').ilike('motivo_pausa', '%caiu%').gte('criada_em', new Date(Date.now() - 7 * 864e5).toISOString()).limit(1)
+  ])
+  DP_G = { ...DP_G, ...(can?.guardian || {}) }; DP_OPT = new Set((opt || []).map(x => x.telefone)); DP_ENVIOS = {}
+  ;(env || []).forEach(e => { (DP_ENVIOS[e.telefone] = DP_ENVIOS[e.telefone] || []).push(new Date(e.enviado_em).getTime()) })
+  DP_QUEDA = cps?.[0] || null
+}
+const DP_SPAM = /ganhe|gratis|promocao imperdivel|clique aqui|ultimas vagas|dinheiro facil|renda extra|sorteio|premio|oferta relampago|100% garantido/
+const dpItensGuardian = tels => {
+  const itens = [], vers = dpVersoes(), add = (n, t) => itens.push([n, t])
+  const ruins = vers.filter(v => /(bit\.ly|tinyurl|cutt\.ly|\bt\.co\/|is\.gd)/i.test(v)).length
+  if (ruins) add(DP_G.conteudo ? 'grave' : 'aviso', `${ruins === 1 ? 'Uma versão tem' : ruins + ' versões têm'} link encurtado, sinal forte de spam.`)
+  if (DP_G.conteudo) {
+    const sem = vers.filter(v => !/(\bsair\b|parar|nao receber|não receber)/i.test(v)).length
+    if (sem) add('grave', `${sem === 1 ? 'Uma versão não diz' : sem + ' versões não dizem'} como parar de receber.`)
+    const semId = vers.filter(v => !/(me chamo|\bsou\b|aqui é|aqui e)/i.test(v)).length
+    if (semId) add('grave', `${semId === 1 ? 'Uma versão não diz' : semId + ' versões não dizem'} quem está falando.`)
+  }
+  vers.forEach((v, i) => { const sa = semAc(v), letras = v.replace(/[^a-zA-ZÀ-ú]/g, ''), cx = letras.replace(/[^A-ZÀ-Ú]/g, '').length; if (DP_SPAM.test(sa)) add('aviso', `Versão ${i + 1} tem palavra de spam.`); if (letras.length > 30 && cx / letras.length > .45) add('aviso', `Versão ${i + 1} tem muita letra maiúscula.`); if ((v.match(/https?:\/\//g) || []).length > 2) add('aviso', `Versão ${i + 1} tem mais de 2 links.`) })
+  const longas = vers.filter(v => v.length > 280).length
+  if (longas) add('aviso', `${longas === 1 ? 'Uma versão é longa' : longas + ' versões são longas'} para quem não te conhece: aumenta a chance de denúncia.`)
+  if (vers.length === 1 && tels.length > 20) add('aviso', `O mesmo texto para ${tels.length} pessoas parece disparo. Use mais versões.`)
+  if ($('dIntMin')) { const c = dpLer(), ciclo = (c.intervalo_seg_min + c.intervalo_seg_max) / 2 + (c.pausa_cada_max > 0 ? ((c.pausa_dur_min + c.pausa_dur_max) / 2 * 60) / Math.max(1, (c.pausa_cada_min + c.pausa_cada_max) / 2) : 0), porHora = Math.round(3600 / ciclo); if (porHora > 30) add('aviso', `Ritmo de ${porHora} mensagens por hora é alto. O último bloqueio veio depois de 50 mensagens em 1h14.`) }
+  if (DP_QUEDA) add('aviso', 'Um número seu caiu nos últimos 7 dias. Comece devagar.')
+  const recentes = tels.filter(dpFrequente).length
+  if (recentes && !DP_G.frequencia) add('aviso', `${recentes} já ${recentes === 1 ? 'recebeu' : 'receberam'} mensagem há menos de 3 dias ou 4 vezes no mês. Ligue a frequência para tirar.`)
+  const fora = tels.filter(t => DP_OPT.has(t)).length
+  if (fora && !DP_G.supressao) add('grave', `${fora} ${fora === 1 ? 'pediu' : 'pediram'} para sair e vão receber.`)
+  return itens
+}
+const dpGuardianHtml = () => `<details class="dp-acc" id="dGuard" open><summary><span><b>Kompila Guardian</b><small id="dGRes"></small></span>${DP_SETA}</summary>
+  <div class="dp-gitens" id="dGItens"></div>
+  <div class="dp-glist">${DP_G_NOMES.map(([k, t, d]) => `<label class="dp-sw"><span><b>${t}</b><small>${d}</small></span><input type="checkbox" role="switch" data-g="${k}"${DP_G[k] ? ' checked' : ''}><i aria-hidden="true"></i></label>`).join('')}</div>
+  <button type="button" class="dp-link" data-qual style="padding:4px 12px 12px">Ver painel de qualidade</button></details>`
+const pintarGuardian = (tels = DP_G_TELS) => {
+  DP_G_TELS = tels; if (!$('dGItens')) return
+  const itens = dpItensGuardian(tels), graves = itens.filter(i => i[0] === 'grave').length, avisos = itens.length - graves
+  $('dGRes').textContent = graves ? `${graves} problema${graves === 1 ? '' : 's'} grave${graves === 1 ? '' : 's'}: não dá para enviar assim` : avisos ? `${avisos} aviso${avisos === 1 ? '' : 's'} antes de enviar` : 'Nada a apontar'
+  $('dGRes').className = graves ? 'g-grave' : avisos ? 'g-aviso' : 'g-ok'
+  $('dGItens').innerHTML = itens.map(([n, t]) => `<div class="g-i g-${n}">${esc(t)}</div>`).join('')
+}
+const guardianBloqueia = () => { const g = dpItensGuardian(DP_G_TELS).filter(i => i[0] === 'grave'); if (!g.length) return false; const d = $('dGuard'); if (d) d.open = true; liz(esc(g[0][1])); return true }
+const ligarGuardian = () => {
+  document.querySelectorAll('[data-g]').forEach(c => c.onchange = async () => {
+    const k = c.dataset.g, antes = DP_G[k]; DP_G = { ...DP_G, [k]: c.checked }
+    const { error } = await sb.from('canal_whatsapp').update({ guardian: DP_G }).eq('dono', usuario.id)
+    if (error) { DP_G = { ...DP_G, [k]: antes }; c.checked = antes; return liz('Não consegui salvar. Tenta de novo.') }
+    if ($('dpLista')) dpPintarPublico(); else pintarGuardian()
+  })
+  document.querySelectorAll('[data-qual]').forEach(b => b.onclick = () => abrirQualidade())
+  $('dMsg')?.addEventListener('input', () => pintarGuardian())
+  $('dVers')?.addEventListener('click', () => setTimeout(() => pintarGuardian(), 0))
+  document.querySelector('.dp-cf')?.addEventListener('input', () => pintarGuardian())
+  pintarGuardian()
+}
+// painel de Qualidade: últimos 30 dias, com os critérios da extensão
+const qualNivel = c => { if (c.recl >= 1 || c.saiu / Math.max(1, c.env) >= .03 || c.falha / Math.max(1, c.env + c.falha) >= .15) return ['risco', 'Risco']; if (c.saiu / Math.max(1, c.env) >= .01 || c.falha / Math.max(1, c.env + c.falha) >= .07) return ['atencao', 'Atenção']; return ['boa', 'Boa'] }
+async function abrirQualidade(empilhar = true) {
+  const desde = new Date(Date.now() - 30 * 864e5).toISOString()
+  const [{ data: evs }, { data: cps }, { data: opt }, { data: esp }, { count: auto }] = await Promise.all([
+    sb.from('envio').select('campanha_id, telefone, status, enviado_em, entregue_em, lido_em, resposta, complemento_status').gte('criado_em', desde).limit(10000),
+    sb.from('campanha').select('id, nome, status, motivo_pausa, criada_em').gte('criada_em', desde).order('criada_em', { ascending: false }).limit(20),
+    sb.from('optout').select('telefone, motivo, criado_em').order('criado_em', { ascending: false }).limit(5000),
+    sb.rpc('aguardando_resposta'),
+    sb.from('conversa').select('id', { count: 'exact', head: true }).eq('direcao', 'in').eq('automatica', true).gte('criado_em', desde)
+  ])
+  const es = evs || [], saiu = e => !!e.enviado_em, RE = /spam|denunci|bloquear|golpe|procon|ass[eé]dio/i
+  const total = { env: es.filter(saiu).length, ent: es.filter(e => e.entregue_em).length, lid: es.filter(e => e.lido_em).length, resp: es.filter(e => e.status === 'respondeu').length, sem: es.filter(e => e.status === 'sem_whatsapp').length, falha: es.filter(e => e.status === 'falhou').length, saidas: es.filter(e => e.status === 'parou').length, recl: es.filter(e => RE.test(e.resposta || '')).length, comp: es.filter(e => e.complemento_status === 'enviado').length }
+  const pct = (a, b) => b ? `${Math.round(a / b * 100)}%` : ''
+  const cards = [['Enviadas', total.env, ''], ['Entregues', total.ent, total.ent ? pct(total.ent, total.env) : 'medido após reconectar'], ['Lidas', total.lid, total.lid ? pct(total.lid, total.env) : 'medido após reconectar'], ['Responderam', total.resp, pct(total.resp, total.env)], ['Saudação automática', auto || 0, ''], ['Complementos', total.comp, ''], ['Sem WhatsApp', total.sem, ''], ['Falhas', total.falha, ''], ['Pediram para sair', total.saidas, pct(total.saidas, total.env)], ['Reclamações', total.recl, ''], ['Precisam de você', (esp || []).length, '']]
+  const camp = (cps || []).map(c => { const l = es.filter(e => e.campanha_id === c.id), x = { ...c, env: l.filter(saiu).length, resp: l.filter(e => e.status === 'respondeu').length, falha: l.filter(e => e.status === 'falhou').length, saiu: l.filter(e => e.status === 'parou').length, recl: l.filter(e => RE.test(e.resposta || '')).length }; x.nivel = qualNivel(x); return x }).filter(c => c.env || c.falha)
+  const optHtml = q => { const s = String(q || '').replace(/\D/g, ''), l = (opt || []).filter(o => !s || o.telefone.includes(s)); return l.length ? l.slice(0, 200).map(o => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(tfmt(o.telefone))}</b><small>${esc(String(o.motivo || 'Sem motivo').slice(0, 70))} · ${new Date(o.criado_em).toLocaleDateString('pt-BR')}</small></div><button type="button" class="dp-link" data-reat="${esc(o.telefone)}">Reativar</button></div></div>`).join('') : '<p class="dp-var" style="padding:14px">Ninguém na lista.</p>' }
+  $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Qualidade do disparo</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp ql">
+    <h3 class="dp-esq-t">Últimos 30 dias</h3>
+    <div class="ql-g">${cards.map(([t, n, s]) => `<div class="ql-c"><b>${n}</b><span>${t}${s ? `<small>${esc(s)}</small>` : ''}</span></div>`).join('')}</div>
+    <h3 class="dp-esq-t">Por campanha</h3>
+    ${camp.length ? `<div class="dp-list">${camp.map(c => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(c.nome)}</b><small>${new Date(c.criada_em).toLocaleDateString('pt-BR')} · ${c.env} enviadas · ${c.resp} responderam · ${c.falha} falhas · ${c.saiu} saíram${c.motivo_pausa ? ` · ${esc(c.motivo_pausa)}` : ''}</small></div><span class="ql-n ql-${c.nivel[0]}">${c.nivel[1]}</span></div></div>`).join('')}</div>` : '<p class="dp-var" style="padding:0">Nenhuma campanha com envio nesse período.</p>'}
+    ${(esp || []).length ? `<h3 class="dp-esq-t">Precisam de você</h3><div class="dp-list">${esp.slice(0, 30).map(e => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(e.nome || tfmt(e.fone || e.telefone))}</b><small>${esc(String(e.texto || '').slice(0, 90))}</small></div><button type="button" class="dp-link" data-abre="${esc(e.telefone)}">Abrir conversa</button></div></div>`).join('')}</div>` : ''}
+    <h3 class="dp-esq-t">Lista de supressão <span id="qlN">${(opt || []).length}</span></h3>
+    <div class="dp-teste"><input id="qlB" class="at-in" inputmode="tel" placeholder="Buscar ou adicionar número" aria-label="Buscar ou adicionar número" autocomplete="off"><button type="button" class="btn line sm" id="qlAdd">Adicionar</button></div>
+    <div class="dp-list" id="qlLista">${optHtml('')}</div>
+    <button type="button" class="dp-link" id="qlCsv">Baixar lista</button>
+  </div>`
+  $('capX').onclick = fecharCapivara
+  if (empilhar) empilha('qualidade')
+  const ligarLista = () => {
+    $('qlLista').querySelectorAll('[data-reat]').forEach(b => b.onclick = async () => { b.disabled = true; const { error } = await sb.from('optout').delete().eq('telefone', b.dataset.reat); if (error) { b.disabled = false; return liz('Não consegui reativar.') } liz('Número reativado.'); abrirQualidade(false) })
+  }
+  ligarLista()
+  $('qlB').oninput = e => { $('qlLista').innerHTML = optHtml(e.target.value); ligarLista() }
+  $('qlAdd').onclick = async () => { const tel = dpTelefone($('qlB').value); if (!tel) return liz('Confere o número, com DDD.'); const { error } = await sb.from('optout').upsert({ dono: usuario.id, telefone: tel, motivo: 'Adicionado à mão' }, { onConflict: 'dono,telefone' }); if (error) return liz('Não consegui adicionar.'); liz('Número na lista de supressão.'); abrirQualidade(false) }
+  $('qlCsv').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿Telefone;Motivo;Data\n' + (opt || []).map(o => [o.telefone, String(o.motivo || '').replace(/[;\n]/g, ' '), o.criado_em].join(';')).join('\n')], { type: 'text/csv;charset=utf-8' })); a.download = 'lista-supressao.csv'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000) }
+  $('cap').querySelectorAll('[data-abre]').forEach(b => b.onclick = () => abrirConversas(true, b.dataset.abre))
+  $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+}
 // público do pipeline, como na extensão: checkbox de etapas com a contagem e exclusão por etiqueta
 let DP_PIPE = [], DP_ETAPAS = new Set(['a_contatar']), DP_EXC = new Set(), DP_INC = new Set()
 const dpFoneDe = d => {
@@ -1170,15 +1275,17 @@ const dpFoneDe = d => {
 const dpTem = (l, conj) => conj.has('t:' + l.temp) || (l.seg && conj.has('s:' + l.seg))
 const dpTemEtiqueta = l => dpTem(l, DP_EXC) || (DP_INC.size && !dpTem(l, DP_INC))
 const dpPublico = () => {
-  const vistos = new Set(), alvo = []; let semCel = 0, porEtiqueta = 0, repetidos = 0
+  const vistos = new Set(), alvo = []; let semCel = 0, porEtiqueta = 0, repetidos = 0, suprimidos = 0, frequentes = 0
   for (const l of DP_PIPE) {
     if (!DP_ETAPAS.has(l.etapa)) continue
     if (!l.tel) { semCel++; continue }
+    if (DP_G.supressao && DP_OPT.has(l.tel)) { suprimidos++; continue }
+    if (DP_G.frequencia && dpFrequente(l.tel)) { frequentes++; continue }
     if (dpTemEtiqueta(l)) { porEtiqueta++; continue }
-    if (vistos.has(l.tel)) { repetidos++; continue }
+    if (DP_G.duplicidade && vistos.has(l.tel)) { repetidos++; continue }
     vistos.add(l.tel); alvo.push(l)
   }
-  return { alvo, semCel, porEtiqueta, repetidos }
+  return { alvo, semCel, porEtiqueta, repetidos, suprimidos, frequentes }
 }
 const dpTempoTxt = n => {
   if (!n || !$('dIntMin')) return ''
@@ -1189,11 +1296,12 @@ const dpTempoTxt = n => {
 }
 const dpPintarPublico = () => {
   if (!$('dpLista')) return
-  const { alvo, semCel, porEtiqueta, repetidos } = dpPublico(), n = alvo.length
+  const { alvo, semCel, porEtiqueta, repetidos, suprimidos, frequentes } = dpPublico(), n = alvo.length
   $('dpEsqT').textContent = `${n} ${n === 1 ? 'empresa vai' : 'empresas vão'} receber`
   $('dpLista').innerHTML = n ? `<div class="dp-list">${alvo.map(l => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(l.nome)}</b><small>${esc([tfmt(l.tel), l.bairro].filter(Boolean).join(' · '))}</small></div><span class="dp-chip c-f">${esc((ETAPAS.find(x => x[0] === l.etapa) || [])[1] || '')}</span></div></div>`).join('')}</div>` : '<p class="dp-lead">Nenhuma empresa com essa escolha. Marque outra etapa ou tire uma etiqueta.</p>'
-  const fora = [semCel && `${semCel} só com telefone fixo`, porEtiqueta && `${porEtiqueta} pela etiqueta`, repetidos && `${repetidos} com número repetido`].filter(Boolean).join(', ')
+  const fora = [semCel && `${semCel} só com telefone fixo`, porEtiqueta && `${porEtiqueta} pela etiqueta`, repetidos && `${repetidos} com número repetido`, suprimidos && `${suprimidos} na lista de supressão`, frequentes && `${frequentes} por frequência`].filter(Boolean).join(', ')
   $('dpResumo').innerHTML = `<b>${n} ${n === 1 ? 'empresa' : 'empresas'}</b>${dpVersoes().length ? ` · ${dpVersoes().length} ${dpVersoes().length === 1 ? 'versão' : 'versões'}` : ''}${dpTempoTxt(n) ? ` · ${dpTempoTxt(n)}` : ''}${fora ? `<br>Ficam de fora: ${fora}.` : ''}`
+  pintarGuardian(alvo.map(l => l.tel))
   const b = $('dUsarRaiox'); b.disabled = !n; b.textContent = `Montar disparo para ${n} ${n === 1 ? 'empresa' : 'empresas'}`
 }
 const ligarPublico = () => {
@@ -1231,7 +1339,13 @@ function dpCarregarXlsx() {
 // reconhece as colunas pelo nome, sem diferenciar maiúsculas e acentos, como na extensão
 async function dpLerPlanilha(arquivo) {
   await dpCarregarXlsx()
-  const wb = window.XLSX.read(await arquivo.arrayBuffer(), { type: 'array' })
+  const buf = await arquivo.arrayBuffer()
+  let wb
+  if (/\.csv$/i.test(arquivo.name)) {
+    // CSV pode vir em UTF-8 ou no padrão do Excel: sem isso, "Clínica" vira "ClÃ­nica"
+    let texto; try { texto = new TextDecoder('utf-8', { fatal: true }).decode(buf) } catch (_) { texto = new TextDecoder('windows-1252').decode(buf) }
+    wb = window.XLSX.read(texto.replace(/^﻿/, ''), { type: 'string' })
+  } else wb = window.XLSX.read(buf, { type: 'array' })
   const linhas = window.XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '', raw: false })
   if (!linhas.length) return []
   const cols = Object.keys(linhas[0]), acha = re => cols.find(c => re.test(semAc(c)))
@@ -1242,6 +1356,7 @@ async function dpLerPlanilha(arquivo) {
 const dpPintarNumeros = () => {
   const b = $('dCriarL'), t = $('dNums'); if (!b || !t) return
   const { lista, invalidos } = dpLerNumeros(t.value)
+  pintarGuardian(lista.map(n => n.tel))
   $('dNumsInfo').textContent = t.value.trim() ? `${lista.length} reconhecido${lista.length === 1 ? '' : 's'}${invalidos ? `, ${invalidos} inválido${invalidos === 1 ? '' : 's'}` : ''}. Repetidos entram uma vez.` : 'Com nome, separe por ponto e vírgula: Clínica Bela;11 99999-0000'
   b.textContent = lista.length ? `Montar disparo para ${lista.length} número${lista.length === 1 ? '' : 's'}` : 'Montar disparo para estes números'
 }
@@ -1271,6 +1386,7 @@ async function abrirDisparo(empilhar = true) {
   await carregarSaudacao()
   const { data: canalAt } = await sb.from('canal_whatsapp').select('atende').eq('dono', usuario.id).maybeSingle()
   DP_ATENDE = !!canalAt?.atende
+  await carregarGuardian()
   let prontosDisparo = 0
   const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(1)
   const camp = cs && cs[0]
@@ -1297,6 +1413,7 @@ async function abrirDisparo(empilhar = true) {
           ${camp.motivo_pausa && !rod ? `<div class="dp-aviso">${esc(camp.motivo_pausa)}</div>` : ''}
           ${!rod && fila ? campoMensagem() : ''}
           ${dpAtende()}
+          ${dpGuardianHtml()}
           ${dpComplemento()}
           ${dpConfig(camp, rod)}
           ${falhou ? `<div class="dp-cfg"><span class="dp-ferr">${falhou} falhou</span></div>` : ''}
@@ -1351,6 +1468,7 @@ async function abrirDisparo(empilhar = true) {
           </div>
           ${campoMensagem()}
           ${dpAtende()}
+          ${dpGuardianHtml()}
           ${dpComplemento()}
           ${dpConfig()}
           <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
@@ -1366,15 +1484,18 @@ async function abrirDisparo(empilhar = true) {
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
-  ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id); ligarPublico(); ligarNumeros()
+  ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id); ligarPublico(); ligarNumeros(); ligarGuardian()
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
   if ($('dUsarRaiox')) dpAba(prontosDisparo ? 'pipe' : 'nums')
   // a mensagem escolhida vira a padrão da conta: é a mesma que aparece no pipeline
   const guardarMensagem = async msg => { const { error } = await sb.from('canal_whatsapp').update({ saudacao: msg }).eq('dono', usuario.id); if (!error) saudacaoDono = msg }
   if ($('dpList')) $('dpList').querySelectorAll('.dp-it').forEach(el => { const top = el.querySelector('.dp-it-top'); if (top) top.onclick = () => el.classList.toggle('aberto') })
   if ($('dCriarL')) $('dCriarL').onclick = async () => {
-    const { lista: nums } = dpLerNumeros($('dNums').value)
-    if (!nums.length) return liz('Põe pelo menos um número com DDD.')
+    const { lista: todosNums } = dpLerNumeros($('dNums').value)
+    const nums = todosNums.filter(n => !(DP_G.supressao && DP_OPT.has(n.tel)) && !(DP_G.frequencia && dpFrequente(n.tel)))
+    if (!nums.length) return liz(todosNums.length ? 'Todos esses números foram barrados pelo Guardian.' : 'Põe pelo menos um número com DDD.')
+    DP_G_TELS = nums.map(n => n.tel); if (guardianBloqueia()) return
+    if (nums.length < todosNums.length) liz(`${todosNums.length - nums.length} número(s) ficaram de fora pelo Guardian.`)
     const msg = dpVersoes()[0]
     if (!msg) return liz('Escreve a mensagem que vai ser enviada.')
     const cfg = dpLer()
@@ -1392,6 +1513,7 @@ async function abrirDisparo(empilhar = true) {
   if ($('dUsarRaiox')) $('dUsarRaiox').onclick = async () => {
     const msg = dpVersoes()[0]
     if (!msg) return liz('Escreve a mensagem que vai ser enviada.')
+    if (guardianBloqueia()) return
     const cfg = dpLer()
     if (cfg.hora_ini >= cfg.hora_fim) { document.querySelector('.dp-acc').open = true; return liz('O horário de início precisa ser antes do fim.') }
     $('dUsarRaiox').disabled = true; $('dUsarRaiox').textContent = 'Montando…'
@@ -1409,6 +1531,8 @@ async function abrirDisparo(empilhar = true) {
   }
   if ($('dCiente')) $('dCiente').onchange = e => { $('dLiga').disabled = !e.target.checked }
   if ($('dLiga')) $('dLiga').onclick = async () => {
+    DP_G_TELS = (await sb.from('envio').select('telefone').eq('campanha_id', camp.id).eq('status', 'na_fila')).data?.map(e => e.telefone) || []
+    if (guardianBloqueia()) return
     const cfg = dpLer()
     if (cfg.hora_ini >= cfg.hora_fim) { document.querySelector('.dp-acc').open = true; return liz('O horário de início precisa ser antes do fim.') }
     if ($('dMsg')) {
@@ -1898,6 +2022,7 @@ async function abrirPerfil(empilhar = true) {
       <button class="pfx wapp" id="pfWapp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.1c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.7-.9c.2-.2.3-.2.6-.1l1.9.9c.3.1.5.2.5.4.1.2.1.9-.1 1.5Z"/></svg></span>Conectar WhatsApp</button>
       <button class="pfx robo" id="pfRobo"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="13" r="1.5" fill="#fff"/><circle cx="15" cy="13" r="1.5" fill="#fff"/><path d="M12 3v4M8 19v2M16 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Robô de atendimento</button>
       <button class="pfx disp" id="pfDisp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>Disparo automático</button>
+      <button class="pfx conv" id="pfQual"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>Qualidade e Guardian</button>
       <button class="pfx conv" id="pfConv"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 4V5a1 1 0 0 1 1-1z"/></svg></span>Conversas</button>
       <button class="pfx indi" id="pfInd"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 7h-2.2a3 3 0 1 0-5.8-1 3 3 0 1 0-5.8 1H4a1 1 0 0 0-1 1v3h18V8a1 1 0 0 0-1-1ZM4 12v7a1 1 0 0 0 1 1h6v-8H4Zm9 8h6a1 1 0 0 0 1-1v-7h-7v8Z"/></svg></span>Indicar e ganhar 1 mês</button>
       <button class="pfx pipe" id="pfPipe"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="5" height="16" rx="1.2"/><rect x="9.5" y="4" width="5" height="11" rx="1.2"/><rect x="16" y="4" width="5" height="14" rx="1.2"/></svg></span>Ver meu pipeline</button>
@@ -1914,6 +2039,7 @@ async function abrirPerfil(empilhar = true) {
   $('pfWapp').onclick = () => abrirConectar()
   $('pfRobo').onclick = () => comIA(abrirAtendimento)
   $('pfDisp').onclick = () => comIA(abrirDisparo)
+  $('pfQual').onclick = () => abrirQualidade()
   $('pfConv').onclick = () => abrirConversas()
   $('pfInd').onclick = () => abrirIndicar().catch(e => liz(esc(e.message)))
   $('pfPipe').onclick = () => abrirCaptacao()
