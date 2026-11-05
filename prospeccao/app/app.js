@@ -473,6 +473,7 @@ addEventListener('popstate', () => {
   $('hist').classList.remove('on')
   if (c === 'lista') abrirLista(false)
   else if (c === 'capt') abrirCaptacao(false)
+  else if (c === 'ficha' && fichaAberta) abrirFicha(fichaAberta, false)
   else if (c === 'fila') abrirFila(false)
   else if (c === 'perfil') abrirPerfil(false)
   if (c !== 'ind' && !$('indO').hidden) fecharIndicar()
@@ -633,7 +634,7 @@ const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (![...fil
 async function abrirListaHome() {
   if (!busca?.id) return
   if (LV.buscaId !== busca.id) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.sel = new Set(); LV.buscaId = busca.id }
-  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, endereco, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, categoria, status_google, horarios, faixa_preco, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
+  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, endereco, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, categoria, status_google, horarios, faixa_preco, google_extra, place_id, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
   LV.todos = data || []; LV.armado = false
   $('ask').hidden = true; document.body.classList.remove('fora')
@@ -687,9 +688,9 @@ function lvPintar() {
   $('lvG').innerHTML = lst.map(d => { const e = d.empresa || {}, tem = Object.keys(d.capivara || {}).length, fila = d.status === 'na_fila' || d.status === 'lendo', w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
     return `<article class="lc" data-id="${d.id}"><div class="lc-h"><label class="lc-sel"><input type="checkbox" data-sel${LV.sel.has(e.id) ? ' checked' : ''} aria-label="Selecionar ${esc(e.nome || 'empresa')}"></label><div><h3>${esc(e.nome || 'Empresa')}</h3><small>${esc([e.categoria, e.bairro, (e.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</small></div>${d.nota_dor != null ? `<span class="lc-p" title="Potencial"><b>${d.nota_dor}</b>potencial</span>` : ''}</div>
       ${e.nota ? `<div class="lc-n">★ ${String(e.nota).replace('.', ',')} <span>(${e.total_avaliacoes || 0} avaliações)</span></div>` : ''}
-      ${e.status_google === 'CLOSED_PERMANENTLY' ? '<div class="lc-fec">Fechada definitivamente no Google</div>' : e.status_google === 'CLOSED_TEMPORARILY' ? '<div class="lc-fec">Fechada temporariamente no Google</div>' : ''}${e.endereco ? `<div class="lc-g">${esc(e.endereco)}</div>` : ''}${horarioHoje(e) ? `<div class="lc-g">Hoje: ${esc(horarioHoje(e))}</div>` : ''}${PRECO_G[e.faixa_preco] ? `<div class="lc-g">Preço: ${PRECO_G[e.faixa_preco]}</div>` : ''}
-      <div class="lc-ct">${e.whatsapp ? `<button class="lc-wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="lc-cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="lc-ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="lc-sem">Sem site</span>'}</div>${enrDados(e)}
-      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}${enrBotao(e)}</div>${enrPainel(e)}</article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
+      ${e.status_google === 'CLOSED_PERMANENTLY' ? '<div class="lc-fec">Fechada definitivamente no Google</div>' : e.status_google === 'CLOSED_TEMPORARILY' ? '<div class="lc-fec">Fechada temporariamente no Google</div>' : ''}${horarioHoje(e) ? `<div class="lc-g">Hoje: ${esc(horarioHoje(e))}</div>` : ''}
+      <div class="lc-ct">${e.whatsapp ? `<button class="lc-wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="lc-cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="lc-ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="lc-sem">Sem site</span>'}</div>
+      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}<button class="btn line sm" data-fi>Ver ficha</button>${enrBotao(e)}</div>${enrPainel(e)}</article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
   if ($('lvLimpa')) $('lvLimpa').onclick = () => { LV.f = new Set(); LV.q = ''; $('lvQ').value = ''; lvPintar() }
   $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
   bt.onclick = async () => {
@@ -703,12 +704,62 @@ function lvPintar() {
   $('lvG').querySelectorAll('.lc').forEach(c => {
     const d = LV.todos.find(x => x.id === c.dataset.id)
     ligarEnr(c, d.empresa, lvPintar)
+    c.querySelector('[data-fi]').onclick = () => abrirFicha(d)
     c.querySelector('[data-sel]').onchange = ev => { if (ev.target.checked) LV.sel.add(d.empresa.id); else LV.sel.delete(d.empresa.id); lvPintar() }
     c.querySelector('[data-zap]')?.addEventListener('click', ev => abrirConversas(true, ev.currentTarget.dataset.zap))
     c.querySelector('[data-abre]')?.addEventListener('click', () => abrirSeq(d.id))
     c.querySelector('[data-add]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { b.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); lvPintar() })
     c.querySelector('[data-faz]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; b.textContent = 'Mandando…'; d.status = 'na_fila'; consultaAbre({ tipo: 'raiox', t: `Montando o Raio-X de ${d.empresa?.nome || 'a empresa'}`, s: 'Leva 1 a 2 minutos. Pode continuar usando que eu aviso.', sair: true }); await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', d.id); await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id); busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar(); lvPintar() })
   })
+}
+
+/* ======================= ficha da empresa: tudo que o Maps entrega ======================= */
+let fichaAberta = null
+async function abrirFicha(d, empilhar = true) {
+  fichaAberta = d
+  const e = d.empresa || {}, x = e.google_extra || {}
+  const { data: avs } = await sb.from('avaliacoes').select('estrelas, texto, publicada_em, autor, autor_link, tempo').eq('empresa_id', e.id).order('publicada_em', { ascending: false, nullsFirst: false }).limit(20)
+  const w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
+  const estrelas = n => { const v = Math.round(+n || 0); return `<span class="fi-est" aria-label="${v} de 5 estrelas">${'★'.repeat(v)}<i>${'★'.repeat(5 - v)}</i></span>` }
+  const hoje = (new Date().getDay() + 6) % 7
+  const sec = (t, c) => c ? `<section class="fi-s"><h3>${t}</h3>${c}</section>` : ''
+  const etiquetas = l => (l || []).length ? `<div class="fi-tags">${l.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''
+  const contato = [
+    e.whatsapp ? `<button class="fi-c wa" data-zap="${w}"><b>WhatsApp</b><span>${esc(tfmt(e.whatsapp))}</span></button>` : ehCelular(e) ? `<button class="fi-c wa" data-zap="${w}"><b>Celular</b><span>${esc(e.telefone)}</span></button>` : '',
+    tel && !ehCelular(e) ? `<a class="fi-c" href="tel:${esc(tel)}"><b>Telefone</b><span>${esc(e.telefone)}</span></a>` : '',
+    e.instagram ? `<a class="fi-c" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener"><b>Instagram</b><span>@${esc(e.instagram)}</span></a>` : '',
+    e.email ? `<a class="fi-c" href="mailto:${esc(e.email)}"><b>E-mail</b><span>${esc(e.email)}</span></a>` : '',
+    e.site ? `<a class="fi-c" href="${esc(e.site)}" target="_blank" rel="noopener"><b>Site</b><span>${esc(e.site.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</span></a>` : '',
+  ].join('')
+  const horas = Array.isArray(e.horarios) && e.horarios.length ? `<ul class="fi-h">${e.horarios.map((h, i) => { const [dia, ...r] = String(h).split(':'); return `<li class="${i === hoje ? 'on' : ''}"><span>${esc(dia)}</span><span>${esc(r.join(':').trim())}</span></li>` }).join('')}</ul>` : ''
+  const lista = (avs || []).map(a => `<article class="fi-a"><div class="fi-a-t">${a.autor_link ? `<a href="${esc(a.autor_link)}" target="_blank" rel="noopener">${esc(a.autor || 'Avaliador do Google')}</a>` : `<b>${esc(a.autor || 'Avaliador do Google')}</b>`}<small>${esc(a.tempo || (a.publicada_em ? new Date(a.publicada_em).toLocaleDateString('pt-BR') : ''))}</small></div>${estrelas(a.estrelas)}${a.texto ? `<p>${esc(a.texto)}</p>` : ''}</article>`).join('')
+  const semFicha = !e.google_extra
+  $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Ficha</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b fi">
+    <header class="fi-t"><div><h2>${esc(e.nome || 'Empresa')}</h2><p>${esc([e.categoria, PRECO_G[e.faixa_preco]].filter(Boolean).join(' · ') || 'Empresa')}</p></div>${e.nota ? `<div class="fi-n"><b>${String(e.nota).replace('.', ',')}</b>${estrelas(e.nota)}<small>${e.total_avaliacoes || 0} avaliações</small></div>` : ''}</header>
+    ${e.status_google && e.status_google !== 'OPERATIONAL' ? `<div class="lc-fec">${e.status_google === 'CLOSED_PERMANENTLY' ? 'Fechada definitivamente no Google' : 'Fechada temporariamente no Google'}</div>` : ''}
+    <div class="fi-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok" id="fiAdd">Adicionar ao pipeline</button>'}${e.google_maps_url ? `<a class="btn line" href="${esc(e.google_maps_url)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ''}</div>
+    ${semFicha ? `<div class="fi-av"><span>Essa empresa veio de uma busca antiga, sem a ficha completa do Google.</span><button class="btn go sm" id="fiBaixar">Trazer do Google</button></div>` : ''}
+    ${sec('Contato', contato ? `<div class="fi-cs">${contato}</div>` : '<p class="fi-v">Nenhum contato no Google. Use o Enriquecer no card.</p>')}
+    ${sec('Endereço', e.endereco ? `<p>${esc(e.endereco)}</p>` : '')}
+    ${sec('Sobre', [x.resumo, x.resumo_avaliacoes].filter(Boolean).map(t => `<p>${esc(t)}</p>`).join(''))}
+    ${sec('Horários', horas)}
+    ${sec('O que oferece', etiquetas(x.oferece))}${sec('Pagamento', etiquetas(x.pagamento))}${sec('Estacionamento', etiquetas(x.estacionamento))}${sec('Acessibilidade', etiquetas(x.acessibilidade))}
+    ${sec('Dados da empresa', enrDados(e))}
+    ${sec(`Avaliações${lista ? ` <small>O Google mostra até 5 por empresa</small>` : ''}`, lista || '<p class="fi-v">Nenhuma avaliação trazida ainda.</p>')}
+    <div class="fi-g">Dados do Google Maps</div></div>`
+  $('capX').onclick = fecharCapivara
+  $('cap').querySelectorAll('[data-zap]').forEach(b => b.onclick = () => abrirConversas(true, b.dataset.zap))
+  if ($('fiAdd')) $('fiAdd').onclick = async ev => { ev.currentTarget.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { ev.currentTarget.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); abrirFicha(d, false) }
+  if ($('fiBaixar')) $('fiBaixar').onclick = async () => {
+    consultaAbre({ tipo: 'enr', t: 'Trazendo a ficha do Google', s: e.nome || '' })
+    const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id } })
+    fimCarregando('enr')
+    if (error || data?.erro) return liz(esc(data?.erro || 'Não consegui trazer agora. Tenta de novo.'))
+    Object.assign(e, data.novo); abrirFicha(d, false)
+  }
+  if (empilhar) empilha('ficha')
+  $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
 
 /* ======================= lista simples ======================= */
