@@ -1254,7 +1254,21 @@ $('histX').hidden = false
 $('histX').onclick = () => { if (history.state?.camada === 'hist') history.back(); else $('hist').classList.remove('on') }
 $('bHist').onclick = e => { e.stopPropagation(); const on = !$('hist').classList.contains('on'); $('hist').classList.toggle('on', on); if (on && mob()) empilha('hist') }
 document.addEventListener('click', e => { if (!e.target.closest('#hist,#bHist')) $('hist').classList.remove('on') })
-$('bNova').onclick = () => { clearInterval(poll); fecharCapivara(); pergunta(1) }
+// Início: de qualquer tela, fecha tudo o que estiver aberto e volta pra home. A busca segue salva no Histórico.
+$('bNova').onclick = () => {
+  clearInterval(poll); clearInterval(convTimer); clearInterval(dispTimer); clearInterval(window.__cnTimer)
+  $('hist').classList.remove('on'); $('capO').classList.remove('on'); $('cap').classList.remove('on')
+  if (!$('indO').hidden) fecharIndicar()
+  if (history.state?.camada) history.replaceState(null, '')
+  pergunta(1)
+}
+// marca no menu onde a pessoa está
+const marcarNav = () => {
+  const aberto = $('cap').classList.contains('on'), t = aberto ? $('cap').querySelector('.cap-x .t')?.textContent : ''
+  $('bCapt').classList.toggle('on', t === 'Pipeline'); $('bConv').classList.toggle('on', t === 'Conversas'); $('bHist').classList.toggle('on', $('hist').classList.contains('on'))
+}
+new MutationObserver(marcarNav).observe($('cap'), { childList: true, attributes: true, attributeFilter: ['class'] })
+new MutationObserver(marcarNav).observe($('hist'), { attributes: true, attributeFilter: ['class'] })
 async function abrirBusca(b) {
   if (history.state?.camada === 'hist') history.replaceState(null, '')
   $('hist').classList.remove('on'); $('ask').hidden = true; document.body.classList.remove('fora'); fecharCapivara()

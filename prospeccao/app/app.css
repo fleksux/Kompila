@@ -889,3 +889,35 @@ body:has(#capO.on) .fab{display:none}
   .pf-resp{height:52px}
   .pc-esp{min-height:40px}.pv-mais{height:44px}
 }
+
+/* menu principal: sempre visível, com nome, Início em destaque */
+.top{z-index:42}
+.hist{z-index:43}
+.cap{top:72px}
+.nav{flex:none;height:44px;display:flex;align-items:center;gap:2px;padding:4px;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh)}
+.nav[hidden]{display:none}
+.nv{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border-radius:var(--r8);font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;white-space:nowrap;transition:background .15s}
+.nv svg{width:18px;height:18px;flex:none}
+.nv:hover{background:#F1F2EF}
+.nv.on{background:var(--tx);color:#fff}
+.nv-ini{background:var(--g);color:#06110A;font-weight:700;margin-right:4px}
+.nv-ini:hover{background:#27C46F}
+.nv:focus-visible{outline:2px solid var(--gd);outline-offset:2px}
+.nbdg{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--g);color:#06110A;font:700 11px/18px var(--mono);text-align:center;font-style:normal}
+.nbdg[hidden]{display:none}
+@media (max-width:1040px){ .file{display:none}.top .sepv{display:none} }
+@media (max-width:700px){
+  /* no celular o menu vira barra embaixo, ao alcance do polegar */
+  .nav{position:fixed;left:0;right:0;bottom:0;height:calc(60px + env(safe-area-inset-bottom));padding:4px 4px env(safe-area-inset-bottom);border-radius:0;box-shadow:0 -1px 0 var(--line),0 -8px 24px rgba(10,11,14,.06);gap:0}
+  .nv{position:relative;flex:1;min-width:0;height:52px;flex-direction:column;justify-content:center;gap:2px;padding:0;font-size:11px}
+  .nv svg{width:20px;height:20px}
+  .nv-ini{margin-right:0}
+  .nbdg{position:absolute;top:2px;left:calc(50% + 6px);min-width:16px;height:16px;font-size:10px;line-height:16px;padding:0 4px}
+  .pill-sec{margin-left:auto}
+  #pUser{margin-left:0!important}
+  .cap{top:60px;bottom:calc(60px + env(safe-area-inset-bottom));height:auto}
+  .hist{top:60px;bottom:calc(60px + env(safe-area-inset-bottom));padding-top:12px}
+  .hist-x{display:none!important}
+  .over{padding-bottom:84px}
+  .fab{bottom:calc(72px + env(safe-area-inset-bottom))}
+}
