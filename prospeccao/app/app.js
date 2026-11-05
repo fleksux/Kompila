@@ -1194,7 +1194,8 @@ async function abrirDisparo(empilhar = true) {
       Object.assign(cfg, { intervalo_min: +$('dInt').value, limite_dia: +$('dLim').value, hora_ini: +$('dHi').value, hora_fim: +$('dHf').value, dias: $('dDias').value === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5] })
     }
     const { error: eLiga } = await sb.from('campanha').update({ ...cfg, status: 'rodando' }).eq('id', camp.id)
-    if (eLiga) return liz('Não consegui ligar o disparo. Tenta de novo.') liz('Disparo ligado. Vou mandando no ritmo combinado.'); recarrega() }
+    if (eLiga) return liz('Não consegui ligar o disparo. Tenta de novo.')
+    liz('Disparo ligado. Vou mandando no ritmo combinado.'); recarrega() }
   if ($('dPausa')) $('dPausa').onclick = async () => { await sb.from('campanha').update({ status: 'pausada' }).eq('id', camp.id); recarrega() }
   if ($('dFim')) $('dFim').onclick = async () => { clearInterval(dispTimer); await sb.from('campanha').update({ status: 'cancelada' }).eq('id', camp.id); liz('Campanha encerrada.'); recarrega() }
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
