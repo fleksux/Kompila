@@ -1159,7 +1159,51 @@ const ligarComplemento = campId => {
   $('dCompS').onclick = async () => { if (!textos().length) return liz('Escreve o texto do complemento.'); if (await salvar()) liz(campId ? 'Complemento salvo.' : 'Complemento pronto. Vale quando montar o disparo.') }
   pinta()
 }
+// público do pipeline, como na extensão: checkbox de etapas com a contagem e exclusão por etiqueta
+let DP_PIPE = [], DP_ETAPAS = new Set(['a_contatar']), DP_EXC = new Set()
+const dpFoneDe = d => {
+  const e = d.empresa || {}
+  let x = String(e.whatsapp || (/^\(?\d{2}\)?\s?9/.test(e.telefone || '') ? e.telefone : '') || d.telefone || '').replace(/\D/g, '').replace(/^0+/, '')
+  if (x.length === 10 || x.length === 11) x = '55' + x
+  return x.length >= 12 && x.length <= 13 ? x : ''
+}
+const dpTemEtiqueta = l => DP_EXC.has('t:' + l.temp) || (l.seg && DP_EXC.has('s:' + l.seg))
+const dpPublico = () => {
+  const vistos = new Set(), alvo = []; let semCel = 0, porEtiqueta = 0, repetidos = 0
+  for (const l of DP_PIPE) {
+    if (!DP_ETAPAS.has(l.etapa)) continue
+    if (!l.tel) { semCel++; continue }
+    if (dpTemEtiqueta(l)) { porEtiqueta++; continue }
+    if (vistos.has(l.tel)) { repetidos++; continue }
+    vistos.add(l.tel); alvo.push(l)
+  }
+  return { alvo, semCel, porEtiqueta, repetidos }
+}
+const dpTempoTxt = n => {
+  if (!n || !$('dIntMin')) return ''
+  const c = dpLer(), media = (c.intervalo_seg_min + c.intervalo_seg_max) / 2, cada = (c.pausa_cada_min + c.pausa_cada_max) / 2, pausa = (c.pausa_dur_min + c.pausa_dur_max) / 2
+  const min = Math.round(n * media / 60 + (cada > 0 && c.pausa_cada_max > 0 ? Math.floor(n / cada) * pausa : 0))
+  return `${min < 60 ? min + ' min' : Math.floor(min / 60) + 'h' + String(min % 60).padStart(2, '0')} de envio${n > c.limite_dia ? `, em ${Math.ceil(n / c.limite_dia)} dias por causa do limite de ${c.limite_dia}/dia` : ''}`
+}
+const dpPintarPublico = () => {
+  if (!$('dpLista')) return
+  const { alvo, semCel, porEtiqueta, repetidos } = dpPublico(), n = alvo.length
+  $('dpEsqT').textContent = `${n} ${n === 1 ? 'empresa vai' : 'empresas vão'} receber`
+  $('dpLista').innerHTML = n ? `<div class="dp-list">${alvo.map(l => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(l.nome)}</b><small>${esc([tfmt(l.tel), l.bairro].filter(Boolean).join(' · '))}</small></div><span class="dp-chip c-f">${esc((ETAPAS.find(x => x[0] === l.etapa) || [])[1] || '')}</span></div></div>`).join('')}</div>` : '<p class="dp-lead">Nenhuma empresa com essa escolha. Marque outra etapa ou tire uma etiqueta.</p>'
+  const fora = [semCel && `${semCel} só com telefone fixo`, porEtiqueta && `${porEtiqueta} pela etiqueta`, repetidos && `${repetidos} com número repetido`].filter(Boolean).join(', ')
+  $('dpResumo').innerHTML = `<b>${n} ${n === 1 ? 'empresa' : 'empresas'}</b>${dpVersoes().length ? ` · ${dpVersoes().length} ${dpVersoes().length === 1 ? 'versão' : 'versões'}` : ''}${dpTempoTxt(n) ? ` · ${dpTempoTxt(n)}` : ''}${fora ? `<br>Ficam de fora: ${fora}.` : ''}`
+  const b = $('dUsarRaiox'); b.disabled = !n; b.textContent = `Montar disparo para ${n} ${n === 1 ? 'empresa' : 'empresas'}`
+}
+const ligarPublico = () => {
+  if (!$('dpPara')) return
+  $('dpPara').querySelectorAll('input[data-et]').forEach(i => i.onchange = () => { i.checked ? DP_ETAPAS.add(i.dataset.et) : DP_ETAPAS.delete(i.dataset.et); dpPintarPublico() })
+  $('dpPara').querySelectorAll('input[data-exc]').forEach(i => i.onchange = () => { i.checked ? DP_EXC.add(i.dataset.exc) : DP_EXC.delete(i.dataset.exc); dpPintarPublico() })
+  document.querySelector('.dp-cf')?.addEventListener('input', dpPintarPublico)
+  $('dVers')?.addEventListener('click', () => setTimeout(dpPintarPublico, 0))
+  dpPintarPublico()
+}
 const dpAba = qual => {
+  if ($('dpPara')) $('dpPara').hidden = qual !== 'pipe'
   document.querySelectorAll('[data-dptab]').forEach(t => { const on = t.dataset.dptab === qual; t.classList.toggle('on', on); t.setAttribute('aria-selected', on) })
   $('dpEsqPipe').hidden = $('dUsarRaiox').hidden = qual !== 'pipe'
   $('dpEsqNums').hidden = $('dCriarL').hidden = qual !== 'nums'
@@ -1203,16 +1247,25 @@ async function abrirDisparo(empilhar = true) {
         <div class="dp-fix">${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>` : `<button class="btn ok lg" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}</div>
       </aside></div>`
   } else {
-    const { data: ds } = await sb.from('diagnosticos').select('etapa, decisao, nota_dor, empresa:empresas(nome, bairro, whatsapp, telefone)').eq('decisao', 'aprovada').eq('arquivado', false).order('nota_dor', { ascending: false })
-    const lista = (ds || []).filter(d => (d.etapa || 'a_contatar') === 'a_contatar' && (d.empresa?.whatsapp || /^\(?\d{2}\)?\s?9/.test(d.empresa?.telefone || '')))
-    const prontos = prontosDisparo = lista.length
+    const [{ data: ds }, { data: ins }] = await Promise.all([
+      sb.from('diagnosticos').select('id, etapa, etapa_em, nota_dor, temperatura, segmento, telefone, capivara, busca:buscas(nicho), empresa:empresas(nome, bairro, whatsapp, telefone)').eq('decisao', 'aprovada').eq('arquivado', false).order('nota_dor', { ascending: false, nullsFirst: false }).limit(2000),
+      sb.from('conversa').select('telefone, criado_em').eq('direcao', 'in').eq('automatica', false).order('criado_em', { ascending: false }).limit(1000)
+    ])
+    const ultimaIn = {}; (ins || []).forEach(m => { if (!ultimaIn[m.telefone]) ultimaIn[m.telefone] = m.criado_em })
+    DP_PIPE = (ds || []).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
+    DP_ETAPAS = new Set(['a_contatar']); DP_EXC = new Set()
+    const prontos = prontosDisparo = DP_PIPE.filter(l => l.tel).length
+    const nEtapa = k => DP_PIPE.filter(l => l.etapa === k).length
+    const segs = [...new Set(DP_PIPE.map(l => l.seg).filter(Boolean))].sort((x, y) => x.localeCompare(y))
+    const nTempD = k => DP_PIPE.filter(l => l.temp === k).length
+    const excChips = [...TEMP_MAN.filter(([k]) => nTempD(k)).map(([k, t]) => [`t:${k}`, t, nTempD(k)]), ...segs.map(g => [`s:${g}`, g, DP_PIPE.filter(l => l.seg === g).length])]
     DP_VERS = [saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
     DP_COMP_ON = false; DP_COMP = [DP_COMP_PADRAO]
     body = `<div class="dp-duas">
       <div class="dp-esq">
         <div id="dpEsqPipe">
-          <h3 class="dp-esq-t">${prontos} empresa${prontos === 1 ? '' : 's'} vão receber</h3>
-          ${prontos ? `<div class="dp-list">${lista.map(d => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(d.empresa?.nome || 'Empresa')}</b><small>${esc([d.empresa?.whatsapp || d.empresa?.telefone, d.empresa?.bairro].filter(Boolean).join(' · '))}</small></div></div></div>`).join('')}</div>` : '<p class="dp-lead">Nenhuma empresa com celular ou WhatsApp em "A contatar" no pipeline.</p>'}
+          <h3 class="dp-esq-t" id="dpEsqT"></h3>
+          <div id="dpLista"></div>
         </div>
         <div id="dpEsqNums" hidden>
           <h3 class="dp-esq-t">Números que vão receber</h3>
@@ -1225,6 +1278,13 @@ async function abrirDisparo(empilhar = true) {
           <div class="dp-tabs" role="tablist" aria-label="Para quem enviar">
             <button type="button" role="tab" data-dptab="pipe"${prontos ? '' : ' disabled'}>Empresas do pipeline <b>${prontos}</b></button>
             <button type="button" role="tab" data-dptab="nums">Colar números</button>
+          </div>
+          <div id="dpPara">
+            <div class="dp-sec" style="margin-top:0">Qual etapa do pipeline vai receber</div>
+            <div class="dp-chk">${ETAPAS.map(([k, t]) => `<label><input type="checkbox" data-et="${k}"${k === 'a_contatar' ? ' checked' : ''}><span>${t} <b>${nEtapa(k)}</b></span></label>`).join('')}</div>
+            <div class="dp-sec">Não enviar para quem tem as etiquetas</div>
+            ${excChips.length ? `<div class="dp-chk">${excChips.map(([k, t, n]) => `<label><input type="checkbox" data-exc="${esc(k)}"><span>${esc(t)} <b>${n}</b></span></label>`).join('')}</div>` : '<p class="dp-var" style="padding:0">Nenhuma etiqueta no pipeline ainda.</p>'}
+            <div class="dp-cfg" id="dpResumo" style="margin-top:12px"></div>
           </div>
           ${campoMensagem()}
           ${dpAtende()}
@@ -1243,7 +1303,7 @@ async function abrirDisparo(empilhar = true) {
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
-  ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id)
+  ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id); ligarPublico()
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
   if ($('dUsarRaiox')) dpAba(prontosDisparo ? 'pipe' : 'nums')
   // a mensagem escolhida vira a padrão da conta: é a mesma que aparece no pipeline
@@ -1271,11 +1331,15 @@ async function abrirDisparo(empilhar = true) {
     if (cfg.hora_ini >= cfg.hora_fim) { document.querySelector('.dp-acc').open = true; return liz('O horário de início precisa ser antes do fim.') }
     $('dUsarRaiox').disabled = true; $('dUsarRaiox').textContent = 'Montando…'
     await guardarMensagem(msg)
-    const { data: campId, error } = await sb.rpc('criar_campanha', { p_nome: 'Prospecção ' + new Date().toLocaleDateString('pt-BR'), p_intervalo: 5, p_limite: cfg.limite_dia, p_hora_ini: cfg.hora_ini, p_hora_fim: cfg.hora_fim, p_dias: cfg.dias })
-    if (error) { $('dUsarRaiox').disabled = false; $('dUsarRaiox').textContent = `Montar disparo para ${prontosDisparo} empresas`; return liz(esc(error.message)) }
-    const { error: eMsg } = await sb.from('envio').update({ mensagem: msg }).eq('campanha_id', campId).eq('status', 'na_fila')
-    const { error: eCfg } = await sb.from('campanha').update(cfg).eq('id', campId)
-    if (eMsg || eCfg) liz('A campanha foi criada, mas a mensagem ou as configurações não salvaram. Confere antes de ligar.')
+    const { alvo } = dpPublico()
+    const volta = t => { $('dUsarRaiox').disabled = false; dpPintarPublico(); liz(esc(t)) }
+    if (!alvo.length) return volta('Nenhuma empresa com essa escolha.')
+    const { data: nova, error } = await sb.from('campanha').insert({ nome: 'Prospecção ' + new Date().toLocaleDateString('pt-BR'), status: 'pausada', intervalo_min: 5, ...cfg }).select('id').single()
+    if (error) return volta(error.message)
+    for (let i = 0; i < alvo.length; i += 200) {
+      const { error: eEnv } = await sb.from('envio').insert(alvo.slice(i, i + 200).map((l, j) => ({ campanha_id: nova.id, dono: usuario.id, diagnostico_id: l.id, empresa_nome: l.nome, telefone: l.tel, mensagem: msg, ordem: i + j + 1, status: 'na_fila' })))
+      if (eEnv) { await sb.from('campanha').update({ status: 'cancelada' }).eq('id', nova.id); return volta(`Não consegui montar a fila: ${eEnv.message}`) }
+    }
     recarrega()
   }
   if ($('dCiente')) $('dCiente').onchange = e => { $('dLiga').disabled = !e.target.checked }
