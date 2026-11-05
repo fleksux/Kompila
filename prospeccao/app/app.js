@@ -42,7 +42,7 @@ function comoFunciona() {
   const ini = 500, r0 = rende(ini)
   $('indB').innerHTML = `<div class="ind-k">[ COMO FUNCIONA ]</div><h2>Você paga só pelo que usa.</h2>
     <div class="cf"><div><b>Lista simples</b><span>Até 60 empresas da cidade e do nicho, cada uma com potencial, motivo e os contatos que estão no site.</span><em>${brlC(SALDO.busca)} por busca</em></div>
-    <div><b>Raio-X</b><span>Uma empresa completa: Google, site com prints e velocidade, anúncios, Instagram com números e avaliações.</span><em>${brlC(SALDO.raiox)} por empresa</em></div></div>
+    <div><b>Raio-X</b><span>Uma empresa completa: Google, site com prints e velocidade, anúncios e avaliações.</span><em>${brlC(SALDO.raiox)} por empresa</em></div></div>
     <p>Conta nova ganha <b>${brlC(ini)}</b> pra testar: dá pra ${r0.listas} listas simples (até ${emp(r0.listas)} empresas) ou ${r0.raiox} empresas com Raio-X completo. Cada lista traz até 60 empresas; cidade pequena ou nicho raro pode trazer menos. Pesquisar de novo o que você já pesquisou não desconta nada. Quando o saldo acabar, a Kompila recarrega pra você.</p>
     ${SALDO.isento ? '<p><b>Sua conta é isenta:</b> usa à vontade, nada é descontado.</p>' : `<p>Seu saldo agora: <b>${brlC(SALDO.saldo)}</b>.</p>`}`
   $('indO').hidden = false; requestAnimationFrame(() => $('indO').classList.add('on'))
@@ -136,7 +136,7 @@ function pergunta(passo) {
   }
 }
 // o padrão é só a lista: Raio-X é escolha de quem quer a análise detalhada
-const MODOS = [['lista', 'Lista', 'Até 60 empresas com nota no Google, contatos e Instagram. Depois você escolhe quem merece Raio-X.', 0], ['completa', 'Lista + 5 Raio-X', 'A lista completa e a análise detalhada das 5 com mais potencial: site, anúncios, Instagram e avaliações.', 5], ['todas', 'Lista + Raio-X de todas', 'Análise detalhada de todas as empresas da lista, até 60. Gasta mais saldo.', 60]]
+const MODOS = [['lista', 'Lista', 'Até 60 empresas do Google Maps, com nota, telefone e site. Depois você enriquece ou faz Raio-X de quem quiser.', 0], ['completa', 'Lista + 5 Raio-X', 'A lista completa e a análise detalhada das 5 com mais potencial: site, anúncios e avaliações.', 5], ['todas', 'Lista + Raio-X de todas', 'Análise detalhada de todas as empresas da lista, até 60. Gasta mais saldo.', 60]]
 const custoModo = m => SALDO.busca + MODOS.find(x => x[0] === m)[3] * SALDO.raiox
 function saldoDepois() {
   if (SALDO.isento) return `Sua conta é isenta: usa à vontade. ${BTN_COMO}`
@@ -250,15 +250,8 @@ async function rodarLista(nome, itens) {
 async function peneirar(modo) {
   const a = await chamar('analisar', { busca_id: busca.id, modo })
   busca.com_dor = a.com_dor; atualizarFunil()
-  // contatos de todas (Instagram, e-mail, WhatsApp): grátis, roda em paralelo com as capivaras
-  const lendoContatos = chamar('contatos', { busca_id: busca.id })
-  lendoContatos.then(c => c?.instagram && setTimeout(() => dizer(`Achei o Instagram de ${c.instagram} empresas. Tá na lista.`), 6000)).catch(() => {})
-  if (modo === 'lista') {
-    fim(`Lista pronta: ${a.olhadas} empresas.`)
-    LV.lendo = true; await abrirListaHome()
-    lendoContatos.catch(() => {}).finally(() => { LV.lendo = false; if (!$('lv').hidden) abrirListaHome() })
-    return
-  }
+  // a lista traz só o que vem do Google Maps. Contato do site é no Enriquecer, quando a pessoa quiser.
+  if (modo === 'lista') { fim(`Lista pronta: ${a.olhadas} empresas.`); await abrirListaHome(); return }
   if (!a.finalistas) return fim('Nenhuma empresa com potencial forte aqui. Bora outro nicho?')
   dizer(`${a.finalistas} empresas merecem Raio-X. Já estou montando, uma por uma.`)
   acompanhar()
@@ -1430,10 +1423,9 @@ sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.reload() }
 const PLANO_TXT = { free: ['Free', 'testando'], mes_gratis: ['Mês grátis', 'ganho por indicação'], pagante: ['Pagante', 'cliente'], cancelou: ['Cancelado', ''] }
 async function abrirPerfil(empilhar = true) {
   const ini = new Date(); ini.setDate(1); ini.setHours(0, 0, 0, 0); const desde = ini.toISOString()
-  const [uso, bus, ig, pl, gest] = await Promise.all([
+  const [uso, bus, pl, gest] = await Promise.all([
     sb.from('uso_ia').select('etapa, custo_usd').gte('criado_em', desde),
     sb.from('buscas').select('id', { count: 'exact', head: true }).gte('criada_em', desde),
-    sb.from('consulta_meta').select('id', { count: 'exact', head: true }).gte('criado_em', desde),
     sb.from('assinatura').select('plano, plano_id, meses_gratis').maybeSingle(),
     sb.rpc('sou_gestor'),
   ])
@@ -1456,7 +1448,7 @@ async function abrirPerfil(empilhar = true) {
     <div class="pf-sd"><div><small>Seu saldo dá pra</small><b>${SALDO.isento ? 'usar à vontade' : `${rende().listas} listas simples`}</b><span>${SALDO.isento ? 'Conta isenta: nada é descontado.' : `até ${emp(rende().listas)} empresas, ou ${rende().avulsos} empresas com Raio-X · saldo ${brlC(SALDO.saldo)}`}</span></div>${BTN_COMO}</div>
     ${movs.length ? `<div class="pf-mv">${movs.map(m => `<div><span>${esc(m.descricao || m.tipo)}</span><small>${new Date(m.criado_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</small><b class="${m.centavos < 0 ? 'neg' : 'pos'}">${m.centavos < 0 ? '−' : '+'} ${brlC(Math.abs(m.centavos))}</b></div>`).join('')}</div>` : ''}
     <div class="pf-t">Meu uso em ${mes}</div>
-    <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(ig.count || 0, 'perfis do Instagram')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
+    <div class="pf-g">${card(bus.count || 0, 'buscas')}${card(u.filter(x => x.etapa === 'diagnostico').length, 'Raio-X')}${card(reais(gasto), 'gasto de IA', 'câmbio do dia')}</div>
     <div class="pf-ac">
       <button class="pfx wapp" id="pfWapp"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.1c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.7-.9c.2-.2.3-.2.6-.1l1.9.9c.3.1.5.2.5.4.1.2.1.9-.1 1.5Z"/></svg></span>Conectar WhatsApp</button>
       <button class="pfx robo" id="pfRobo"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="13" r="1.5" fill="#fff"/><circle cx="15" cy="13" r="1.5" fill="#fff"/><path d="M12 3v4M8 19v2M16 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Robô de atendimento</button>
@@ -1643,7 +1635,7 @@ async function abrirIndicar(empilhar = true) {
   const codigo = await meuCodigo(), link = SITE + '?ind=' + codigo
   const { data } = await sb.from('indicacao').select('nome, empresa, status, criado_em').order('criado_em', { ascending: false })
   const lst = data || [], ganhos = lst.filter(x => x.status === 'pagou').length
-  const texto = `Tô usando a prospecção da Kompila: ela acha empresas da cidade, lê Google, site e Instagram de cada uma e já entrega quem vale abordar. Pede acesso por aqui: ${link}`
+  const texto = `Tô usando a prospecção da Kompila: ela acha empresas da cidade, lê Google e site de cada uma e já entrega quem vale abordar. Pede acesso por aqui: ${link}`
   $('indB').innerHTML = `<div class="ind-k">[ LIZ ]</div>
     <h2>Conhece alguém que vive atrás de cliente? Me apresenta.</h2>
     <p>Quando a pessoa que você indicar virar cliente, você ganha <b>1 mês grátis</b> da prospecção.</p>
