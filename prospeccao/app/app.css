@@ -1196,3 +1196,16 @@ body:has(#capO.on) .fab{display:none}
 .dp-cf>select{width:100%;margin-bottom:8px}
 .dp-cf input:focus,.dp-cf select:focus{border-color:var(--tx)}
 
+/* disparo: chave do atendimento automático */
+.dp-sw{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;margin:0 0 12px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.dp-sw b{display:block;font-size:14px;font-weight:600}
+.dp-sw small{display:block;margin-top:2px;font-size:12px;line-height:1.35;color:var(--mu)}
+.dp-sw input{position:absolute;opacity:0;width:44px;height:26px;margin:0;cursor:pointer}
+.dp-sw i{flex:none;position:relative;width:44px;height:26px;border-radius:13px;background:var(--line2);transition:background .2s}
+.dp-sw i::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(10,11,14,.25);transition:transform .2s}
+.dp-sw input:checked+i{background:var(--gd)}
+.dp-sw input:checked+i::after{transform:translateX(18px)}
+.dp-sw input:focus-visible+i{outline:2px solid var(--tx);outline-offset:2px}
+.dp-sw{position:relative}
+.dp-sw input{right:12px}
+

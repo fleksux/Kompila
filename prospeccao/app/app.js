@@ -1116,6 +1116,21 @@ const ligarConfig = () => {
   if (!$('dIntMin')) return
   document.querySelector('.dp-cf').addEventListener('input', () => { $('dCfgRes').textContent = dpResumo(dpLer()) })
 }
+// atendimento automático: a Liz responde quem respondeu ao disparo. Desligado, a resposta fica em Conversas para você.
+let DP_ATENDE = false
+const dpAtende = () => `<label class="dp-sw"><span><b>Atendimento automático</b><small id="dAtTx"></small></span><input type="checkbox" role="switch" id="dAtende"${DP_ATENDE ? ' checked' : ''}><i aria-hidden="true"></i></label>`
+const ligarAtende = () => {
+  const c = $('dAtende'); if (!c) return
+  const tx = () => { $('dAtTx').textContent = c.checked ? 'A Liz responde quem responder ao disparo.' : 'Desligado: as respostas ficam em Conversas para você.' }
+  tx()
+  c.onchange = async () => {
+    const quer = c.checked; c.disabled = true
+    const { error } = await sb.from('canal_whatsapp').update({ atende: quer }).eq('dono', usuario.id)
+    c.disabled = false
+    if (error) { c.checked = !quer; tx(); return liz('Não consegui mudar o atendimento. Tenta de novo.') }
+    DP_ATENDE = quer; tx(); liz(quer ? 'Atendimento automático ligado.' : 'Atendimento automático desligado.')
+  }
+}
 const dpAba = qual => {
   document.querySelectorAll('[data-dptab]').forEach(t => { const on = t.dataset.dptab === qual; t.classList.toggle('on', on); t.setAttribute('aria-selected', on) })
   $('dpEsqPipe').hidden = $('dUsarRaiox').hidden = qual !== 'pipe'
@@ -1123,6 +1138,8 @@ const dpAba = qual => {
 }
 async function abrirDisparo(empilhar = true) {
   await carregarSaudacao()
+  const { data: canalAt } = await sb.from('canal_whatsapp').select('atende').eq('dono', usuario.id).maybeSingle()
+  DP_ATENDE = !!canalAt?.atende
   let prontosDisparo = 0
   const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(1)
   const camp = cs && cs[0]
@@ -1147,6 +1164,7 @@ async function abrirDisparo(empilhar = true) {
           ${rod ? `<div class="dp-live" id="dpLive"><i class="dp-pulse"></i> disparando… a tela atualiza sozinha</div>` : ''}
           ${camp.motivo_pausa && !rod ? `<div class="dp-aviso">${esc(camp.motivo_pausa)}</div>` : ''}
           ${!rod && fila ? campoMensagem() : ''}
+          ${dpAtende()}
           ${dpConfig(camp, rod)}
           ${falhou ? `<div class="dp-cfg"><span class="dp-ferr">${falhou} falhou</span></div>` : ''}
           ${rod ? '' : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado, sem a API oficial, e o WhatsApp pode banir esse número. O risco é meu.</label>`}
@@ -1178,6 +1196,7 @@ async function abrirDisparo(empilhar = true) {
             <button type="button" role="tab" data-dptab="nums">Colar números</button>
           </div>
           ${campoMensagem()}
+          ${dpAtende()}
           ${dpConfig()}
           <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
         </div>
@@ -1192,7 +1211,7 @@ async function abrirDisparo(empilhar = true) {
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
-  ligarVersoes(); ligarConfig()
+  ligarVersoes(); ligarConfig(); ligarAtende()
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
   if ($('dUsarRaiox')) dpAba(prontosDisparo ? 'pipe' : 'nums')
   // a mensagem escolhida vira a padrão da conta: é a mesma que aparece no pipeline
