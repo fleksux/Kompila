@@ -101,6 +101,7 @@ async function iniciar() {
 const PIN = IC.ok
 let esc_ = { cidade: '', nicho: '', todas: false }
 function pergunta(passo) {
+  $('lv').hidden = true
   document.body.classList.add('fora')
   $('ask').hidden = false; $('ask').classList.remove('bye')
   const nome = (usuario?.user_metadata?.full_name || '').split(' ')[0]
@@ -219,7 +220,7 @@ async function rodarBusca(cidade, nicho, modo = 'lista', quero = 60, novaMesmo =
     const { data: antigas } = await sb.from('buscas').select('*').neq('cidade', 'Lista').neq('status', 'erro').order('criada_em', { ascending: false }).limit(200)
     const ja = (antigas || []).find(b => chave(b.cidade) === chave(cidade) && parecida(b.nicho, nicho))
     if (ja) {
-      await abrirBusca(ja)
+      await abrirBusca(ja, modo === 'lista')
       liz(`Você já pesquisou <b>${esc(ja.nicho)} em ${esc(ja.cidade.split(',')[0])}</b> em ${new Date(ja.criada_em).toLocaleDateString('pt-BR')}. Abri o resultado, sem gastar nada. Quer empresas novas? Usa o <b>Buscar mais</b>.`, 9000)
       return
     }
@@ -250,14 +251,20 @@ async function peneirar(modo) {
   const a = await chamar('analisar', { busca_id: busca.id, modo })
   busca.com_dor = a.com_dor; atualizarFunil()
   // contatos de todas (Instagram, e-mail, WhatsApp): grátis, roda em paralelo com as capivaras
-  chamar('contatos', { busca_id: busca.id }).then(c => c?.instagram && setTimeout(() => dizer(`Achei o Instagram de ${c.instagram} empresas. Tá na lista.`), 6000)).catch(() => {})
-  if (modo === 'lista') return fim(`Lista pronta: ${a.olhadas} empresas com potencial e motivo. Abre em Empresas encontradas e pede o Raio-X de quem interessar.`)
+  const lendoContatos = chamar('contatos', { busca_id: busca.id })
+  lendoContatos.then(c => c?.instagram && setTimeout(() => dizer(`Achei o Instagram de ${c.instagram} empresas. Tá na lista.`), 6000)).catch(() => {})
+  if (modo === 'lista') {
+    fim(`Lista pronta: ${a.olhadas} empresas.`)
+    LV.lendo = true; await abrirListaHome()
+    lendoContatos.catch(() => {}).finally(() => { LV.lendo = false; if (!$('lv').hidden) abrirListaHome() })
+    return
+  }
   if (!a.finalistas) return fim('Nenhuma empresa com potencial forte aqui. Bora outro nicho?')
   dizer(`${a.finalistas} empresas merecem Raio-X. Já estou montando, uma por uma.`)
   acompanhar()
 }
 function erro(e) { vivo(false, 'Liz parada'); liz(/saldo/i.test(e.message) ? esc(e.message) : `Travei aqui: ${esc(e.message)}`, 8000); if (busca) { busca.status = 'erro'; atualizarFunil() } }
-function fim(t) { vivo(false, 'Liz parada'); dizer(t); carregarHist() }
+function fim(t) { vivo(false, 'Liz parada'); dizer(t); carregarHist(); if (!$('lv').hidden) abrirListaHome() }
 
 function acompanhar() {
   clearInterval(poll)
@@ -288,6 +295,7 @@ function layout() {
     : { A: { x: 0, y: 0, w: 420 }, B: { x: 500, y: 0, w: 1040 }, C: { x: 0, y: 360, w: 1540 } }
 }
 function montarCanvas(b, animar) {
+  $('lv').hidden = true
   busca = { ...b }; diags = []; L = layout(); assinatura = ''
   $('fname').textContent = b.cidade === 'Lista' ? `/ Lista · ${b.nicho}` : `/ ${b.nicho} · ${b.cidade.split(',')[0]}`
   if (mob()) return montarCelular(b)
@@ -478,7 +486,7 @@ addEventListener('popstate', () => {
   else if (c === 'fila') abrirFila(false)
   else if (c === 'perfil') abrirPerfil(false)
   if (c !== 'ind' && !$('indO').hidden) fecharIndicar()
-  else if (!c) { $('capO').classList.remove('on'); $('cap').classList.remove('on') }
+  else if (!c) { $('capO').classList.remove('on'); $('cap').classList.remove('on'); if (!$('lv').hidden) abrirListaHome() }
 })
 async function abrirCapivara(d, empilhar = true) {
   const c = d.capivara, id = c.identidade || {}
@@ -552,6 +560,67 @@ function fecharCapivara() {
 $('capO').onclick = fecharCapivara
 addEventListener('keydown', e => { if (e.key === 'Escape') { fecharCapivara(); $('hist').classList.remove('on') } })
 
+/* ======================= lista na home: cards e filtros ======================= */
+const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], lendo: false, buscaId: null, armado: false }
+const ehCelular = e => /^\(?\d{2}\)?\s?9/.test(e.telefone || '')
+const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site], ['nota', 'Nota 4 ou mais', e => +e.nota >= 4]]
+const LV_ORD = { potencial: (a, b) => (b.nota_dor ?? -1) - (a.nota_dor ?? -1), nota: (a, b) => (+b.empresa?.nota || 0) - (+a.empresa?.nota || 0), avaliacoes: (a, b) => (+b.empresa?.total_avaliacoes || 0) - (+a.empresa?.total_avaliacoes || 0), nome: (a, b) => String(a.empresa?.nome || '').localeCompare(String(b.empresa?.nome || ''), 'pt-BR') }
+const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (![...filtros].every(k => LV_FILTROS.find(x => x[0] === k)[2](e))) return false; const q = semAcento(LV.q.trim()).replace(/^@/, ''); if (!q) return true; const dg = q.replace(/\D/g, ''); return semAcento([e.nome, e.bairro, e.instagram, e.email, e.site].join(' ')).includes(q) || (/^[\d\s()+-]+$/.test(q) && dg.length >= 3 && String((e.telefone || '') + ' ' + (e.whatsapp || '')).replace(/\D/g, '').includes(dg)) }
+async function abrirListaHome() {
+  if (!busca?.id) return
+  if (LV.buscaId !== busca.id) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.buscaId = busca.id }
+  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(nome, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
+  if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
+  LV.todos = data || []; LV.armado = false
+  const faltam = LV.todos.filter(d => !d.empresa?.contatos_lidos_em).length
+  const titulo = busca.cidade === 'Lista' ? busca.nicho : `${busca.nicho} em ${(busca.cidade || '').split(',')[0]}`
+  $('lv').innerHTML = `<div class="lv-in">
+    <div class="lv-top"><div><h1>${esc(titulo)}</h1><p>${LV.todos.length} empresa${LV.todos.length === 1 ? '' : 's'} nesta lista</p></div><div class="lv-ac"><button class="btn line sm" id="lvCsv">Baixar planilha</button><button class="btn line sm" id="lvMais">Encontrar mais</button></div></div>
+    ${LV.lendo ? '<div class="lv-en"><span><b>Lendo os sites</b> pra achar Instagram, e-mail e WhatsApp. A lista atualiza sozinha.</span></div>' : faltam ? `<div class="lv-en"><span><b>${faltam} empresa${faltam === 1 ? '' : 's'} sem leitura do site.</b> Busca Instagram, e-mail e WhatsApp, sem gastar saldo.</span><button class="btn go sm" id="lvEnr">Enriquecer contatos</button></div>` : ''}
+    <div class="lv-fil"><div class="lv-lin"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lvQ" type="search" placeholder="Buscar nome, bairro, telefone ou @" aria-label="Buscar na lista" autocomplete="off" value="${esc(LV.q)}"></label>
+      <label class="lv-ord">Ordenar<select id="lvOrd" aria-label="Ordenar">${[['potencial', 'Potencial'], ['nota', 'Nota no Google'], ['avaliacoes', 'Mais avaliações'], ['nome', 'Nome']].map(([k, t]) => `<option value="${k}"${LV.ord === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
+      <div class="lv-chips" id="lvChips"></div></div>
+    <div class="lv-res"><span id="lvN"></span><button class="btn ok sm" id="lvAddT" hidden></button></div>
+    <div class="lv-g" id="lvG"></div>
+    <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
+  $('lv').hidden = false
+  lvPintar()
+  $('lvCsv').onclick = () => baixarCsv(LV.todos)
+  $('lvMais').onclick = () => abrirLista()
+  let tq; $('lvQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { LV.q = e.target.value; lvPintar() }, 150) }
+  $('lvOrd').onchange = e => { LV.ord = e.target.value; lvPintar() }
+  if ($('lvEnr')) $('lvEnr').onclick = async () => { LV.lendo = true; await abrirListaHome(); try { const c = await chamar('contatos', { busca_id: busca.id }); liz(`Li ${c.lidas} sites: ${c.instagram} com Instagram, ${c.email} com e-mail.`) } catch (er) { liz('Não consegui ler agora: ' + esc(er.message)) } LV.lendo = false; if (!$('lv').hidden) abrirListaHome() }
+}
+function lvPintar() {
+  const lst = LV.todos.filter(d => lvPassa(d)).sort(LV_ORD[LV.ord])
+  $('lvChips').innerHTML = LV_FILTROS.map(([k, t]) => { const n = LV.todos.filter(d => lvPassa(d, new Set([...LV.f, k]))).length; return `<button data-f="${k}" aria-pressed="${LV.f.has(k)}">${t}<span>${n}</span></button>` }).join('')
+  $('lvN').textContent = lst.length === LV.todos.length ? 'Mostrando todas' : `Mostrando ${lst.length} de ${LV.todos.length}`
+  const novas = lst.filter(d => d.decisao !== 'aprovada')
+  const bt = $('lvAddT'); bt.hidden = !novas.length; bt.textContent = `Adicionar ${novas.length} ao pipeline`; LV.armado = false
+  $('lvG').innerHTML = lst.map(d => { const e = d.empresa || {}, tem = Object.keys(d.capivara || {}).length, fila = d.status === 'na_fila' || d.status === 'lendo', w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
+    return `<article class="lc" data-id="${d.id}"><div class="lc-h"><div><h3>${esc(e.nome || 'Empresa')}</h3><small>${esc([e.bairro, (e.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</small></div>${d.nota_dor != null ? `<span class="lc-p" title="Potencial"><b>${d.nota_dor}</b>potencial</span>` : ''}</div>
+      ${e.nota ? `<div class="lc-n">★ ${String(e.nota).replace('.', ',')} <span>(${e.total_avaliacoes || 0} avaliações)</span></div>` : ''}
+      <div class="lc-ct">${e.whatsapp ? `<button class="wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="sem">Sem site</span>'}</div>
+      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}${tem ? '<button class="btn line sm" data-abre>Abrir Raio-X</button>' : fila ? '<span class="lendo-tag"><i></i>Liz montando…</span>' : '<button class="btn line sm" data-faz>Fazer Raio-X</button>'}</div></article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
+  if ($('lvLimpa')) $('lvLimpa').onclick = () => { LV.f = new Set(); LV.q = ''; $('lvQ').value = ''; lvPintar() }
+  $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
+  bt.onclick = async () => {
+    if (!LV.armado) { LV.armado = true; bt.textContent = `Toque de novo para adicionar ${novas.length}`; return }
+    bt.disabled = true; bt.textContent = 'Adicionando…'
+    const ids = novas.map(d => d.id); let falhou = false
+    for (let i = 0; i < ids.length; i += 200) { const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).in('id', ids.slice(i, i + 200)); if (error) { falhou = true; break } }
+    bt.disabled = false; if (falhou) liz('Parte não entrou no pipeline. Tenta de novo.'); else liz(`${ids.length} empresa${ids.length === 1 ? '' : 's'} no pipeline.`)
+    contarCaptacao(); abrirListaHome()
+  }
+  $('lvG').querySelectorAll('.lc').forEach(c => {
+    const d = LV.todos.find(x => x.id === c.dataset.id)
+    c.querySelector('[data-zap]')?.addEventListener('click', ev => abrirConversas(true, ev.currentTarget.dataset.zap))
+    c.querySelector('[data-abre]')?.addEventListener('click', () => abrirSeq(d.id))
+    c.querySelector('[data-add]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { b.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); lvPintar() })
+    c.querySelector('[data-faz]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; b.textContent = 'Mandando…'; d.status = 'na_fila'; await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', d.id); await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id); sb.functions.invoke('diagnosticar', { body: { diagnostico_id: d.id } }); busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar(); lvPintar() })
+  })
+}
+
 /* ======================= lista simples ======================= */
 let filtroLista = 'todas', rolagemLista = 0
 async function abrirLista(empilhar = true) {
@@ -598,7 +667,7 @@ function baixarCsv(todos) {
   a.download = `prospeccao_${(busca.nicho + '_' + busca.cidade).toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`
   a.click(); URL.revokeObjectURL(a.href)
 }
-$('bLista').onclick = () => abrirLista()
+$('bLista').onclick = () => { if (!busca?.id) return liz('Faz uma busca primeiro que eu monto a lista.'); fecharCapivara(); abrirListaHome() }
 $('bConv').onclick = () => abrirConversas()
 $('fabConv').onclick = () => abrirConversas()
 $('fabAg').onclick = () => { fecharCapivara(); setTimeout(() => abrirCaptacao(), history.state?.camada ? 60 : 0) }
@@ -1283,13 +1352,16 @@ const marcarNav = () => {
 }
 new MutationObserver(marcarNav).observe($('cap'), { childList: true, attributes: true, attributeFilter: ['class'] })
 new MutationObserver(marcarNav).observe($('hist'), { attributes: true, attributeFilter: ['class'] })
-async function abrirBusca(b) {
+async function abrirBusca(b, soLista = false) {
   if (history.state?.camada === 'hist') history.replaceState(null, '')
   $('hist').classList.remove('on'); $('ask').hidden = true; document.body.classList.remove('fora'); fecharCapivara()
   vistos.clear(); montarCanvas({ ...b }, false); busca = { ...b }
   ;(await sb.from('diagnosticos').select('id').eq('busca_id', b.id).eq('status', 'pronto')).data?.forEach(x => vistos.add(x.id))
   vivo(b.status !== 'pronta' && b.status !== 'erro', b.status === 'pronta' ? 'Liz parada' : 'Liz trabalhando')
   acompanhar()
+  // busca sem nenhum Raio-X abre direto como lista
+  const { data: comRx } = soLista ? { data: [] } : await sb.from('diagnosticos').select('id').eq('busca_id', b.id).neq('capivara', '{}').limit(1)
+  if (!(comRx || []).length) abrirListaHome()
 }
 
 /* ======================= barra de comando ======================= */
