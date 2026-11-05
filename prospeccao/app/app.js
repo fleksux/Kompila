@@ -1056,7 +1056,7 @@ const campoMensagem = () => `<label class="dp-lbl" for="dMsg">Mensagem que vai s
       <textarea id="dMsg" class="dp-ta" rows="3" maxlength="1000"></textarea>
       <small class="at-hint"><b>{saudacao}</b> vira bom dia, boa tarde ou boa noite. <b>{Olá|Oi|Bom dia}</b> sorteia uma opção por pessoa.</small>
       <div class="dp-cfg" style="margin-top:8px">Vai chegar assim: <b id="dMsgPrev"></b></div>
-      <div class="dp-teste"><input id="dTel" class="at-in" inputmode="tel" placeholder="Seu número com DDD" aria-label="Número para receber o teste" autocomplete="tel"><button type="button" class="btn line sm" id="dTeste">Enviar teste para mim</button></div>`
+      <div class="dp-teste"><input id="dTel" class="at-in" inputmode="tel" placeholder="Seu número" aria-label="Seu número com DDD para receber o teste" autocomplete="tel"><button type="button" class="btn line sm" id="dTeste">Enviar teste para mim</button></div>`
 const ligarVersoes = () => {
   const t = $('dMsg'); if (!t) return
   const previa = () => { $('dMsgPrev').textContent = comSaudacao(comSorteio(t.value.trim())) || 'escreva a mensagem' }

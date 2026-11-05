@@ -1145,7 +1145,7 @@ body:has(#capO.on) .fab{display:none}
 #dpList .dp-it-top{cursor:pointer}
 .dp-esq [hidden]{display:none}
 .dp-ta-alta{min-height:320px}
-.dp-dir{position:sticky;top:74px;display:flex;flex-direction:column;max-height:calc(100vh - 110px);background:var(--w);border-radius:14px;box-shadow:var(--sh);overflow:hidden}
+.dp-dir{position:sticky;top:74px;display:flex;flex-direction:column;max-height:calc(100vh - 200px);background:var(--w);border-radius:14px;box-shadow:var(--sh);overflow:hidden}
 .dp-dir-rola{flex:1;min-height:0;overflow-y:auto;padding:16px}
 .dp-dir .dp-lbl:first-child{margin-top:0}
 .dp-fix{flex:none;padding:12px 16px;background:var(--w);border-top:1px solid var(--line)}
