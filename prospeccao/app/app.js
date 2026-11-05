@@ -1047,31 +1047,74 @@ const tfmt = t => { t = String(t || '').replace(/^55/, ''); return t.length === 
 let dispTimer = null, convTimer = null
 // a mensagem como vai chegar no WhatsApp: {saudacao} vira bom dia, boa tarde ou boa noite pela hora
 const comSaudacao = t => { const h = Number(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo', hour: '2-digit', hour12: false })); return String(t || '').replace(/\{saudacao\}/gi, h >= 5 && h < 12 ? 'bom dia' : h >= 12 && h < 18 ? 'boa tarde' : 'boa noite') }
-const campoMensagem = (id, valor) => `<label class="dp-lbl" for="${id}">Mensagem que vai ser enviada</label>
-      <textarea id="${id}" class="dp-ta" rows="3" maxlength="1000">${esc(valor)}</textarea>
-      <small class="at-hint">Escreva <b>{saudacao}</b> onde quiser que vire bom dia, boa tarde ou boa noite.</small>
-      <div class="dp-cfg" style="margin-top:8px">Vai chegar assim: <b id="${id}Prev"></b></div>`
-const ligarPrevia = id => { const t = $(id), p = $(id + 'Prev'); if (!t || !p) return; const f = () => { p.textContent = comSaudacao(t.value.trim()) || 'escreva a mensagem' }; t.oninput = f; f() }
+let DP_VERS = [''], DP_ATUAL = 0
+// sorteio de trechos: {Olá|Oi|Bom dia}
+const comSorteio = t => String(t || '').replace(/\{([^{}]*\|[^{}]*)\}/g, (_, o) => { const l = o.split('|'); return l[Math.floor(Math.random() * l.length)].trim() })
+const dpVersoes = () => DP_VERS.map(v => String(v || '').trim()).filter(Boolean)
+const campoMensagem = () => `<label class="dp-lbl" for="dMsg">Mensagem que vai ser enviada</label>
+      <div class="dp-vers" id="dVers"></div>
+      <textarea id="dMsg" class="dp-ta" rows="3" maxlength="1000"></textarea>
+      <small class="at-hint"><b>{saudacao}</b> vira bom dia, boa tarde ou boa noite. <b>{Olá|Oi|Bom dia}</b> sorteia uma opção por pessoa.</small>
+      <div class="dp-cfg" style="margin-top:8px">Vai chegar assim: <b id="dMsgPrev"></b></div>
+      <div class="dp-teste"><input id="dTel" class="at-in" inputmode="tel" placeholder="Seu número com DDD" aria-label="Número para receber o teste" autocomplete="tel"><button type="button" class="btn line sm" id="dTeste">Enviar teste para mim</button></div>`
+const ligarVersoes = () => {
+  const t = $('dMsg'); if (!t) return
+  const previa = () => { $('dMsgPrev').textContent = comSaudacao(comSorteio(t.value.trim())) || 'escreva a mensagem' }
+  const pinta = () => {
+    $('dVers').innerHTML = DP_VERS.map((_, i) => `<button type="button" class="${i === DP_ATUAL ? 'on' : ''}" data-v="${i}" aria-label="Versão ${i + 1}">${i + 1}</button>`).join('') + (DP_VERS.length < 20 ? '<button type="button" data-vmais aria-label="Nova versão">+</button>' : '') + (DP_VERS.length > 1 ? '<button type="button" class="dp-vdel" data-vdel>Excluir esta</button>' : '')
+    $('dVers').querySelectorAll('[data-v]').forEach(b => b.onclick = () => { DP_ATUAL = +b.dataset.v; pinta() })
+    const mais = $('dVers').querySelector('[data-vmais]'); if (mais) mais.onclick = () => { DP_VERS.push(''); DP_ATUAL = DP_VERS.length - 1; pinta(); t.focus() }
+    const del = $('dVers').querySelector('[data-vdel]'); if (del) del.onclick = () => { DP_VERS.splice(DP_ATUAL, 1); DP_ATUAL = Math.max(0, DP_ATUAL - 1); pinta() }
+    t.value = DP_VERS[DP_ATUAL] || ''; previa()
+  }
+  t.oninput = () => { DP_VERS[DP_ATUAL] = t.value; previa() }
+  pinta()
+  try { $('dTel').value = localStorage.getItem('kz_tel_teste') || '' } catch (_) {}
+  $('dTeste').onclick = async () => {
+    const b = $('dTeste'), telefone = $('dTel').value.trim(), versoes = dpVersoes()
+    if (!telefone) return liz('Coloca o seu número com DDD.')
+    if (!versoes.length) return liz('Escreve a mensagem antes de testar.')
+    try { localStorage.setItem('kz_tel_teste', telefone) } catch (_) {}
+    b.disabled = true; b.textContent = 'Enviando…'
+    try { const r = await chamar('disparo_teste', { telefone, versoes }); liz(`Teste enviado: ${r.enviadas} ${r.enviadas === 1 ? 'versão' : 'versões'}.`) } catch (e) { liz(esc(e.message || 'O teste não saiu. Tenta de novo.')) }
+    b.disabled = false; b.textContent = 'Enviar teste para mim'
+  }
+}
 const dpOpcoes = (vals, atual, fmt) => [...new Set([...vals, atual])].sort((a, b) => a - b).map(v => `<option value="${v}"${v === atual ? ' selected' : ''}>${fmt(v)}</option>`).join('')
 const DP_SETA = '<i class="dp-seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></i>'
-const dpVariacao = i => `Variação: o tempo muda a cada envio para não parecer robô. Com ${i} min, cada mensagem sai entre ${i} e ${Math.round(i * 1.6)} min depois da anterior.`
+const dpResumo = c => `${c.intervalo_seg_min} a ${c.intervalo_seg_max} s · pausa a cada ${c.pausa_cada_min} a ${c.pausa_cada_max} · até ${c.limite_dia}/dia · ${c.hora_ini}h às ${c.hora_fim}h`
+const DP_PADRAO = { intervalo_seg_min: 30, intervalo_seg_max: 90, pausa_cada_min: 15, pausa_cada_max: 25, pausa_dur_min: 5, pausa_dur_max: 12, limite_dia: 60, hora_ini: 8, hora_fim: 20, dias: [1, 2, 3, 4, 5, 6], modo_versao: 'sequencia' }
+const dpCampoN = (id, v) => `<input id="${id}" type="number" min="0" inputmode="numeric" value="${v}" aria-label="${id}">`
 // acordeão das configurações: editável até ligar; rodando, só mostra
-const dpConfig = (c = {}, soLer = false) => {
-  const i = c.intervalo_min ?? 5, l = c.limite_dia ?? 60, hi = c.hora_ini ?? 9, hf = c.hora_fim ?? 18, sete = (c.dias || [1, 2, 3, 4, 5]).length === 7
-  const res = `1 a cada ${i} min · até ${l}/dia · ${hi}h às ${hf}h · ${sete ? 'todos os dias' : 'seg a sex'}`
-  if (soLer) return `<details class="dp-acc"><summary><span><b>Configurações</b><small>${res}</small></span>${DP_SETA}</summary><p class="dp-var">${dpVariacao(i)}</p></details>`
-  return `<details class="dp-acc"><summary><span><b>Configurações</b><small id="dCfgRes">${res}</small></span>${DP_SETA}</summary>
-    <div class="dp-form">
-      <label>Intervalo entre envios<select id="dInt">${dpOpcoes([3, 5, 8, 12], i, v => `a cada ${v} min`)}</select></label>
-      <label>Máximo por dia<select id="dLim">${dpOpcoes([30, 60, 100, 150], l, v => `${v} por dia`)}</select></label>
-      <div class="dp-row"><label>Das <select id="dHi">${dpOpcoes(Array.from({ length: 24 }, (_, h) => h), hi, v => v)}</select> h</label><label>às <select id="dHf">${dpOpcoes(Array.from({ length: 24 }, (_, h) => h + 1), hf, v => v)}</select> h</label></div>
-      <label>Dias<select id="dDias"><option value="semana"${sete ? '' : ' selected'}>segunda a sexta</option><option value="todos"${sete ? ' selected' : ''}>todos os dias</option></select></label>
-    </div><p class="dp-var" id="dCfgVar">${dpVariacao(i)}</p></details>`
+const dpConfig = (dados = {}, soLer = false) => {
+  const c = { ...DP_PADRAO, ...dados }, nd = (c.dias || []).length
+  if (soLer) return `<details class="dp-acc"><summary><span><b>Configurações</b><small>${dpResumo(c)}</small></span>${DP_SETA}</summary><p class="dp-var">Intervalo sorteado a cada envio, sem repetir o anterior. Descansa de ${c.pausa_dur_min} a ${c.pausa_dur_max} min a cada ${c.pausa_cada_min} a ${c.pausa_cada_max} mensagens.</p></details>`
+  return `<details class="dp-acc"><summary><span><b>Configurações</b><small id="dCfgRes">${dpResumo(c)}</small></span>${DP_SETA}</summary>
+    <div class="dp-cf">
+      <div class="dp-sec">Intervalo entre cada mensagem <span>(sorteado a cada envio)</span></div>
+      <div class="dp-li">de ${dpCampoN('dIntMin', c.intervalo_seg_min)} a ${dpCampoN('dIntMax', c.intervalo_seg_max)} <select id="dIntUn" aria-label="Unidade do intervalo"><option value="1">segundos</option><option value="60">minutos</option></select></div>
+      <div class="dp-sec">Pausa longa</div>
+      <div class="dp-li">a cada ${dpCampoN('dCadaMin', c.pausa_cada_min)} a ${dpCampoN('dCadaMax', c.pausa_cada_max)} mensagens</div>
+      <div class="dp-li">descansar ${dpCampoN('dDurMin', c.pausa_dur_min)} a ${dpCampoN('dDurMax', c.pausa_dur_max)} minutos</div>
+      <div class="dp-sec">Versões da mensagem</div>
+      <select id="dModo" aria-label="Como usar as versões"><option value="sequencia"${c.modo_versao === 'sorteio' ? '' : ' selected'}>Alternar em sequência (1, 2, 3, 1, 2…)</option><option value="sorteio"${c.modo_versao === 'sorteio' ? ' selected' : ''}>Sortear uma por contato</option></select>
+      <div class="dp-sec">Máximo por dia</div>
+      <div class="dp-li">${dpCampoN('dLim', c.limite_dia)} mensagens</div>
+      <div class="dp-sec">Horário e dias</div>
+      <div class="dp-li">das <select id="dHi" aria-label="Início">${dpOpcoes(Array.from({ length: 24 }, (_, h) => h), c.hora_ini, v => v)}</select> às <select id="dHf" aria-label="Fim">${dpOpcoes(Array.from({ length: 24 }, (_, h) => h + 1), c.hora_fim, v => v)}</select> h</div>
+      <select id="dDias" aria-label="Dias"><option value="5"${nd <= 5 ? ' selected' : ''}>segunda a sexta</option><option value="6"${nd === 6 ? ' selected' : ''}>segunda a sábado</option><option value="7"${nd === 7 ? ' selected' : ''}>todos os dias</option></select>
+      <p class="dp-var" style="padding:0">Cada espera é sorteada dentro da faixa e nunca repete a anterior. Para 100+ pessoas, use no mínimo 30 a 90 segundos.</p>
+    </div></details>`
+}
+// lê a tela e corrige: nada abaixo de 0, máximo nunca menor que o mínimo, intervalo nunca abaixo de 15 s
+const dpLer = () => {
+  const n = id => Math.max(0, Math.round(+$(id).value || 0)), un = +$('dIntUn').value || 1
+  const imin = Math.max(15, n('dIntMin') * un), cmin = n('dCadaMin'), dmin = n('dDurMin')
+  return { versoes: dpVersoes(), modo_versao: $('dModo').value, intervalo_seg_min: imin, intervalo_seg_max: Math.max(imin, n('dIntMax') * un), pausa_cada_min: cmin, pausa_cada_max: Math.max(cmin, n('dCadaMax')), pausa_dur_min: dmin, pausa_dur_max: Math.max(dmin, n('dDurMax')), limite_dia: Math.min(300, Math.max(1, n('dLim'))), hora_ini: +$('dHi').value, hora_fim: +$('dHf').value, dias: { 5: [1, 2, 3, 4, 5], 6: [1, 2, 3, 4, 5, 6], 7: [0, 1, 2, 3, 4, 5, 6] }[$('dDias').value] }
 }
 const ligarConfig = () => {
-  if (!$('dInt')) return
-  const f = () => { const i = +$('dInt').value; $('dCfgRes').textContent = `1 a cada ${i} min · até ${$('dLim').value}/dia · ${$('dHi').value}h às ${$('dHf').value}h · ${$('dDias').value === 'todos' ? 'todos os dias' : 'seg a sex'}`; $('dCfgVar').textContent = dpVariacao(i) }
-  ;['dInt', 'dLim', 'dHi', 'dHf', 'dDias'].forEach(id => $(id).onchange = f)
+  if (!$('dIntMin')) return
+  document.querySelector('.dp-cf').addEventListener('input', () => { $('dCfgRes').textContent = dpResumo(dpLer()) })
 }
 const dpAba = qual => {
   document.querySelectorAll('[data-dptab]').forEach(t => { const on = t.dataset.dptab === qual; t.classList.toggle('on', on); t.setAttribute('aria-selected', on) })
@@ -1090,7 +1133,7 @@ async function abrirDisparo(empilhar = true) {
     const total = es.length, fila = ct('na_fila'), falhou = ct('falhou')
     const enviados = ct('enviado') + ct('entregue') + ct('lido') + ct('respondeu'), resp = ct('respondeu')
     const pct = total ? Math.round(enviados / total * 100) : 0, rod = camp.status === 'rodando'
-    const DIAS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb']
+    DP_VERS = camp.versoes?.length ? [...camp.versoes] : [es.find(e => e.status === 'na_fila')?.mensagem || saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
     body = `<div class="dp-duas">
       <div class="dp-esq">
         <h3 class="dp-esq-t">${total} empresa${total === 1 ? '' : 's'} neste disparo</h3>
@@ -1102,7 +1145,8 @@ async function abrirDisparo(empilhar = true) {
           <div class="dp-bar"><i id="dpBar" style="width:${pct}%"></i></div>
           <div class="dp-k"><div><b id="dpEnv">${enviados}</b><span>enviados</span></div><div><b id="dpFila">${fila}</b><span>na fila</span></div><div><b id="dpResp">${resp}</b><span>responderam</span></div></div>
           ${rod ? `<div class="dp-live" id="dpLive"><i class="dp-pulse"></i> disparando… a tela atualiza sozinha</div>` : ''}
-          ${!rod && fila ? campoMensagem('dMsgC', es.find(e => e.status === 'na_fila')?.mensagem || saudacaoDono || 'Olá, {saudacao}, tudo bem?') : ''}
+          ${camp.motivo_pausa && !rod ? `<div class="dp-aviso">${esc(camp.motivo_pausa)}</div>` : ''}
+          ${!rod && fila ? campoMensagem() : ''}
           ${dpConfig(camp, rod)}
           ${falhou ? `<div class="dp-cfg"><span class="dp-ferr">${falhou} falhou</span></div>` : ''}
           ${rod ? '' : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado, sem a API oficial, e o WhatsApp pode banir esse número. O risco é meu.</label>`}
@@ -1114,6 +1158,7 @@ async function abrirDisparo(empilhar = true) {
     const { data: ds } = await sb.from('diagnosticos').select('etapa, decisao, nota_dor, empresa:empresas(nome, bairro, whatsapp, telefone)').eq('decisao', 'aprovada').eq('arquivado', false).order('nota_dor', { ascending: false })
     const lista = (ds || []).filter(d => (d.etapa || 'a_contatar') === 'a_contatar' && (d.empresa?.whatsapp || /^\(?\d{2}\)?\s?9/.test(d.empresa?.telefone || '')))
     const prontos = prontosDisparo = lista.length
+    DP_VERS = [saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
     body = `<div class="dp-duas">
       <div class="dp-esq">
         <div id="dpEsqPipe">
@@ -1132,7 +1177,7 @@ async function abrirDisparo(empilhar = true) {
             <button type="button" role="tab" data-dptab="pipe"${prontos ? '' : ' disabled'}>Empresas do pipeline <b>${prontos}</b></button>
             <button type="button" role="tab" data-dptab="nums">Colar números</button>
           </div>
-          ${campoMensagem('dMsg', saudacaoDono || 'Olá, {saudacao}, tudo bem?')}
+          ${campoMensagem()}
           ${dpConfig()}
           <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
         </div>
@@ -1147,7 +1192,7 @@ async function abrirDisparo(empilhar = true) {
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
-  ligarPrevia('dMsg'); ligarPrevia('dMsgC'); ligarConfig()
+  ligarVersoes(); ligarConfig()
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
   if ($('dUsarRaiox')) dpAba(prontosDisparo ? 'pipe' : 'nums')
   // a mensagem escolhida vira a padrão da conta: é a mesma que aparece no pipeline
@@ -1156,44 +1201,44 @@ async function abrirDisparo(empilhar = true) {
   if ($('dCriarL')) $('dCriarL').onclick = async () => {
     const nums = [...new Set(($('dNums').value || '').split(/[\s,;]+/).map(x => x.replace(/\D/g, '')).filter(Boolean).map(x => { x = x.replace(/^0+/, ''); if (x.length === 10 || x.length === 11) x = '55' + x; return x }).filter(x => x.length >= 12 && x.length <= 13))]
     if (!nums.length) return liz('Põe pelo menos um número com DDD.')
-    const msg = ($('dMsg').value || '').trim()
+    const msg = dpVersoes()[0]
     if (!msg) return liz('Escreve a mensagem que vai ser enviada.')
+    const cfg = dpLer()
+    if (cfg.hora_ini >= cfg.hora_fim) { document.querySelector('.dp-acc').open = true; return liz('O horário de início precisa ser antes do fim.') }
     $('dCriarL').disabled = true; $('dCriarL').textContent = 'Montando…'
     await guardarMensagem(msg)
-    const dias = $('dDias').value === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]
-    const { data: c, error } = await sb.from('campanha').insert({ nome: 'Minha lista ' + new Date().toLocaleDateString('pt-BR'), status: 'pausada', intervalo_min: +$('dInt').value, limite_dia: +$('dLim').value, hora_ini: +$('dHi').value, hora_fim: +$('dHf').value, dias }).select('id').single()
+    const { data: c, error } = await sb.from('campanha').insert({ nome: 'Minha lista ' + new Date().toLocaleDateString('pt-BR'), status: 'pausada', intervalo_min: 5, ...cfg }).select('id').single()
     if (error) { $('dCriarL').disabled = false; $('dCriarL').textContent = 'Montar disparo para estes números'; return liz(esc(error.message)) }
     const { error: e2 } = await sb.from('envio').insert(nums.map((tel, i) => ({ campanha_id: c.id, empresa_nome: 'Contato', telefone: tel, mensagem: msg, ordem: i + 1, status: 'na_fila' })))
     if (e2) return liz(esc(e2.message))
     recarrega()
   }
   if ($('dUsarRaiox')) $('dUsarRaiox').onclick = async () => {
-    const msg = ($('dMsg').value || '').trim()
+    const msg = dpVersoes()[0]
     if (!msg) return liz('Escreve a mensagem que vai ser enviada.')
+    const cfg = dpLer()
+    if (cfg.hora_ini >= cfg.hora_fim) { document.querySelector('.dp-acc').open = true; return liz('O horário de início precisa ser antes do fim.') }
     $('dUsarRaiox').disabled = true; $('dUsarRaiox').textContent = 'Montando…'
-    const dias = $('dDias').value === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]
     await guardarMensagem(msg)
-    const { data: campId, error } = await sb.rpc('criar_campanha', { p_nome: 'Prospecção ' + new Date().toLocaleDateString('pt-BR'), p_intervalo: +$('dInt').value, p_limite: +$('dLim').value, p_hora_ini: +$('dHi').value, p_hora_fim: +$('dHf').value, p_dias: dias })
+    const { data: campId, error } = await sb.rpc('criar_campanha', { p_nome: 'Prospecção ' + new Date().toLocaleDateString('pt-BR'), p_intervalo: 5, p_limite: cfg.limite_dia, p_hora_ini: cfg.hora_ini, p_hora_fim: cfg.hora_fim, p_dias: cfg.dias })
     if (error) { $('dUsarRaiox').disabled = false; $('dUsarRaiox').textContent = `Montar disparo para ${prontosDisparo} empresas`; return liz(esc(error.message)) }
     const { error: eMsg } = await sb.from('envio').update({ mensagem: msg }).eq('campanha_id', campId).eq('status', 'na_fila')
-    if (eMsg) liz('A campanha foi criada, mas a mensagem não salvou. Confere antes de ligar.')
+    const { error: eCfg } = await sb.from('campanha').update(cfg).eq('id', campId)
+    if (eMsg || eCfg) liz('A campanha foi criada, mas a mensagem ou as configurações não salvaram. Confere antes de ligar.')
     recarrega()
   }
   if ($('dCiente')) $('dCiente').onchange = e => { $('dLiga').disabled = !e.target.checked }
   if ($('dLiga')) $('dLiga').onclick = async () => {
-    if ($('dMsgC')) {
-      const msg = $('dMsgC').value.trim()
+    const cfg = dpLer()
+    if (cfg.hora_ini >= cfg.hora_fim) { document.querySelector('.dp-acc').open = true; return liz('O horário de início precisa ser antes do fim.') }
+    if ($('dMsg')) {
+      const msg = dpVersoes()[0]
       if (!msg) return liz('Escreve a mensagem que vai ser enviada.')
       const { error } = await sb.from('envio').update({ mensagem: msg }).eq('campanha_id', camp.id).eq('status', 'na_fila')
       if (error) return liz('Não consegui salvar a mensagem. Tenta de novo.')
       await guardarMensagem(msg)
     }
-    const cfg = {}
-    if ($('dInt')) {
-      if (+$('dHi').value >= +$('dHf').value) { document.querySelector('.dp-acc').open = true; return liz('O horário de início precisa ser antes do fim.') }
-      Object.assign(cfg, { intervalo_min: +$('dInt').value, limite_dia: +$('dLim').value, hora_ini: +$('dHi').value, hora_fim: +$('dHf').value, dias: $('dDias').value === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5] })
-    }
-    const { error: eLiga } = await sb.from('campanha').update({ ...cfg, status: 'rodando' }).eq('id', camp.id)
+    const { error: eLiga } = await sb.from('campanha').update({ ...cfg, status: 'rodando', motivo_pausa: null }).eq('id', camp.id)
     if (eLiga) return liz('Não consegui ligar o disparo. Tenta de novo.')
     liz('Disparo ligado. Vou mandando no ritmo combinado.'); recarrega() }
   if ($('dPausa')) $('dPausa').onclick = async () => { await sb.from('campanha').update({ status: 'pausada' }).eq('id', camp.id); recarrega() }

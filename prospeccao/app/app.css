@@ -1178,3 +1178,21 @@ body:has(#capO.on) .fab{display:none}
   .dp-fix{position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));z-index:3;box-shadow:0 -6px 18px rgba(10,11,14,.07)}
 }
 
+/* disparo: versões da mensagem e configurações como na extensão */
+.dp-vers{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.dp-vers button{min-width:36px;height:36px;padding:0 8px;border:1px solid var(--line2);border-radius:9px;background:var(--w);font:600 13px var(--mono);color:var(--tx);cursor:pointer}
+.dp-vers button.on{background:var(--tx);border-color:var(--tx);color:#fff}
+.dp-vers .dp-vdel{margin-left:auto;border-color:transparent;background:none;font:500 12.5px inherit;color:var(--mu)}
+.dp-vers .dp-vdel:hover{color:var(--r)}
+.dp-teste{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-bottom:12px}
+.dp-cf{padding:4px 12px 12px;font-size:14px;color:var(--mu)}
+.dp-sec{margin:14px 0 8px;font-size:13.5px;font-weight:700;color:var(--tx)}
+.dp-sec:first-child{margin-top:4px}
+.dp-sec span{font-weight:600;color:var(--mu)}
+.dp-li{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.dp-cf input,.dp-cf select{height:42px;border:1px solid var(--line2);border-radius:var(--r8);background:var(--w);font:inherit;font-size:15px;color:var(--tx);outline:0}
+.dp-cf input{width:64px;padding:0 6px;text-align:center}
+.dp-cf select{padding:0 10px}
+.dp-cf>select{width:100%;margin-bottom:8px}
+.dp-cf input:focus,.dp-cf select:focus{border-color:var(--tx)}
+
