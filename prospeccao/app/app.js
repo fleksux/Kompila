@@ -1294,25 +1294,36 @@ async function abrirConectar() {
   const parar = () => { if (window.__cnTimer) { clearInterval(window.__cnTimer); window.__cnTimer = null } }
   const poll = async () => {
     const cap = $('cap'); if (!cap.classList.contains('on') || !cap.querySelector('.cn')) { parar(); return }
-    const { data } = await sb.functions.invoke('conectar', { body: { acao: 'estado' } })
-    if (!data || !box()) return
+    const { data, error } = await sb.functions.invoke('conectar', { body: { acao: 'estado' } })
+    if (!box()) return
+    if (error || !data) { parar(); botaoGerar(); return liz('Não consegui confirmar a conexão. Tente de novo.') }
     if (data.status === 'WORKING') {
       parar()
-      box().innerHTML = `<div class="cn-ok"><div class="cn-check">✓</div><b>Conectado</b><span>${data.numero ? esc(tfmt(data.numero)) : ''}</span></div>`
+      mostrarConectado(data.numero)
       liz('WhatsApp conectado. Pode disparar e conversar por esse número.')
       return
     }
     if (data.qr) box().innerHTML = `<img class="cn-qr" src="${data.qr}" alt="QR Code"><span class="cn-esc">Deixe aberto e escaneie no celular</span>`
     else box().innerHTML = `<div class="cn-wait">Preparando o QR...</div>`
   }
-  const gerar = async () => {
+  const botaoGerar = () => { box().innerHTML = `<button class="btn go" id="cnGerar">Gerar QR Code</button>`; $('cnGerar').onclick = () => gerar() }
+  // já conectado: mostra o número. Trocar exige 2 toques porque derruba o número atual.
+  const mostrarConectado = (numero) => {
+    box().innerHTML = `<div class="cn-ok"><div class="cn-check">✓</div><b>Conectado</b><span>${numero ? esc(tfmt(numero)) : ''}</span></div><button class="btn" id="cnTrocar">Trocar número</button>`
+    const b = $('cnTrocar'); let armado = false
+    b.onclick = () => { if (armado) return gerar(true); armado = true; b.textContent = 'Toque de novo para desconectar este número' }
+  }
+  const gerar = async (trocar = false) => {
     box().innerHTML = `<div class="cn-wait">Preparando o QR...</div>`
-    const { data, error } = await sb.functions.invoke('conectar', { body: { acao: 'iniciar' } })
-    if (error || data?.erro) { box().innerHTML = `<button class="btn go" id="cnGerar">Gerar QR Code</button>`; $('cnGerar').onclick = gerar; return liz(esc(data?.erro || 'Não consegui iniciar a conexão.')) }
+    const { data, error } = await sb.functions.invoke('conectar', { body: { acao: 'iniciar', trocar } })
+    if (error || data?.erro) { botaoGerar(); return liz(esc(data?.erro || 'Não consegui iniciar a conexão.')) }
     parar(); window.__cnTimer = setInterval(poll, 2500); poll()
   }
-  $('cnGerar').onclick = gerar
+  $('cnGerar').onclick = () => gerar()
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
+  // ao abrir, confere antes: quem já está conectado não vê "Gerar QR" (que derrubaria o número)
+  const { data: atual } = await sb.functions.invoke('conectar', { body: { acao: 'estado' } })
+  if (box() && atual?.status === 'WORKING') mostrarConectado(atual.numero)
 }
 
 /* ======================= robô de atendimento (config do dono) ======================= */
