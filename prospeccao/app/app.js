@@ -1110,7 +1110,7 @@ const dpConfig = (dados = {}, soLer = false) => {
 const dpLer = () => {
   const n = id => Math.max(0, Math.round(+$(id).value || 0)), un = +$('dIntUn').value || 1
   const imin = Math.max(15, n('dIntMin') * un), cmin = n('dCadaMin'), dmin = n('dDurMin')
-  return { versoes: dpVersoes(), modo_versao: $('dModo').value, intervalo_seg_min: imin, intervalo_seg_max: Math.max(imin, n('dIntMax') * un), pausa_cada_min: cmin, pausa_cada_max: Math.max(cmin, n('dCadaMax')), pausa_dur_min: dmin, pausa_dur_max: Math.max(dmin, n('dDurMax')), limite_dia: Math.min(300, Math.max(1, n('dLim'))), hora_ini: +$('dHi').value, hora_fim: +$('dHf').value, dias: { 5: [1, 2, 3, 4, 5], 6: [1, 2, 3, 4, 5, 6], 7: [0, 1, 2, 3, 4, 5, 6] }[$('dDias').value] }
+  return { complemento_ligado: DP_COMP_ON, complementos: DP_COMP.map(v => String(v || '').trim()).filter(Boolean), versoes: dpVersoes(), modo_versao: $('dModo').value, intervalo_seg_min: imin, intervalo_seg_max: Math.max(imin, n('dIntMax') * un), pausa_cada_min: cmin, pausa_cada_max: Math.max(cmin, n('dCadaMax')), pausa_dur_min: dmin, pausa_dur_max: Math.max(dmin, n('dDurMax')), limite_dia: Math.min(300, Math.max(1, n('dLim'))), hora_ini: +$('dHi').value, hora_fim: +$('dHf').value, dias: { 5: [1, 2, 3, 4, 5], 6: [1, 2, 3, 4, 5, 6], 7: [0, 1, 2, 3, 4, 5, 6] }[$('dDias').value] }
 }
 const ligarConfig = () => {
   if (!$('dIntMin')) return
@@ -1131,6 +1131,34 @@ const ligarAtende = () => {
     DP_ATENDE = quer; tx(); liz(quer ? 'Atendimento automático ligado.' : 'Atendimento automático desligado.')
   }
 }
+// complemento automático: para quem caiu na saudação automática da clínica
+const DP_COMP_PADRAO = 'Oi! Vi que caiu na mensagem automática de vocês, então vou direto ao ponto. Hoje cuido sozinho de mais de 20 clientes com ajuda da IA. Sem ela, eu pagaria mais de R$ 12 mil em salários, e sei como isso pesa para quem empreende. Posso te mostrar como funciona?'
+let DP_COMP = [DP_COMP_PADRAO], DP_COMP_ON = false
+const dpComplemento = () => `<div class="dp-comp"><label class="dp-sw"><span><b>Complemento automático</b><small>Para quem cair na saudação automática: uma vez, de 2 a 5 minutos depois. Cancela se a pessoa ou você responder.</small></span><input type="checkbox" role="switch" id="dComp"${DP_COMP_ON ? ' checked' : ''}><i aria-hidden="true"></i></label>
+  <div id="dCompBox"${DP_COMP_ON ? '' : ' hidden'}><div class="dp-vers" id="dCompV"></div><textarea id="dCompT" class="dp-ta" rows="6" maxlength="1000" aria-label="Texto do complemento"></textarea><button type="button" class="btn line sm" id="dCompS" style="width:100%;margin-top:8px">Salvar complemento</button></div></div>`
+const ligarComplemento = campId => {
+  const c = $('dComp'); if (!c) return
+  const t = $('dCompT'), box = $('dCompV'); let at = 0
+  const textos = () => DP_COMP.map(v => String(v || '').trim()).filter(Boolean)
+  const pinta = () => {
+    box.innerHTML = DP_COMP.map((_, i) => `<button type="button" class="${i === at ? 'on' : ''}" data-i="${i}" aria-label="Versão ${i + 1}">${i + 1}</button>`).join('') + (DP_COMP.length < 20 ? '<button type="button" data-m aria-label="Nova versão">+</button>' : '') + (DP_COMP.length > 1 ? '<button type="button" class="dp-vdel" data-d>Excluir esta</button>' : '')
+    box.querySelectorAll('[data-i]').forEach(b => b.onclick = () => { at = +b.dataset.i; pinta() })
+    const m = box.querySelector('[data-m]'); if (m) m.onclick = () => { DP_COMP.push(''); at = DP_COMP.length - 1; pinta(); t.focus() }
+    const d = box.querySelector('[data-d]'); if (d) d.onclick = () => { DP_COMP.splice(at, 1); at = Math.max(0, at - 1); pinta() }
+    t.value = DP_COMP[at] || ''
+  }
+  t.oninput = () => { DP_COMP[at] = t.value }
+  const salvar = async () => { if (!campId) return true; const { error } = await sb.from('campanha').update({ complemento_ligado: c.checked, complementos: textos() }).eq('id', campId); if (error) liz('Não consegui salvar o complemento. Tenta de novo.'); return !error }
+  c.onchange = async () => {
+    if (c.checked && !textos().length) DP_COMP = [DP_COMP_PADRAO]
+    const antes = DP_COMP_ON; DP_COMP_ON = c.checked; $('dCompBox').hidden = !c.checked; pinta(); c.disabled = true
+    const ok = await salvar(); c.disabled = false
+    if (!ok) { DP_COMP_ON = antes; c.checked = antes; $('dCompBox').hidden = !antes; return }
+    if (campId) liz(c.checked ? 'Complemento automático ligado.' : 'Complemento automático desligado.')
+  }
+  $('dCompS').onclick = async () => { if (!textos().length) return liz('Escreve o texto do complemento.'); if (await salvar()) liz(campId ? 'Complemento salvo.' : 'Complemento pronto. Vale quando montar o disparo.') }
+  pinta()
+}
 const dpAba = qual => {
   document.querySelectorAll('[data-dptab]').forEach(t => { const on = t.dataset.dptab === qual; t.classList.toggle('on', on); t.setAttribute('aria-selected', on) })
   $('dpEsqPipe').hidden = $('dUsarRaiox').hidden = qual !== 'pipe'
@@ -1150,6 +1178,7 @@ async function abrirDisparo(empilhar = true) {
     const total = es.length, fila = ct('na_fila'), falhou = ct('falhou')
     const enviados = ct('enviado') + ct('entregue') + ct('lido') + ct('respondeu'), resp = ct('respondeu')
     const pct = total ? Math.round(enviados / total * 100) : 0, rod = camp.status === 'rodando'
+    DP_COMP_ON = !!camp.complemento_ligado; DP_COMP = camp.complementos?.length ? [...camp.complementos] : [DP_COMP_PADRAO]
     DP_VERS = camp.versoes?.length ? [...camp.versoes] : [es.find(e => e.status === 'na_fila')?.mensagem || saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
     body = `<div class="dp-duas">
       <div class="dp-esq">
@@ -1165,6 +1194,7 @@ async function abrirDisparo(empilhar = true) {
           ${camp.motivo_pausa && !rod ? `<div class="dp-aviso">${esc(camp.motivo_pausa)}</div>` : ''}
           ${!rod && fila ? campoMensagem() : ''}
           ${dpAtende()}
+          ${dpComplemento()}
           ${dpConfig(camp, rod)}
           ${falhou ? `<div class="dp-cfg"><span class="dp-ferr">${falhou} falhou</span></div>` : ''}
           ${rod ? '' : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado, sem a API oficial, e o WhatsApp pode banir esse número. O risco é meu.</label>`}
@@ -1177,6 +1207,7 @@ async function abrirDisparo(empilhar = true) {
     const lista = (ds || []).filter(d => (d.etapa || 'a_contatar') === 'a_contatar' && (d.empresa?.whatsapp || /^\(?\d{2}\)?\s?9/.test(d.empresa?.telefone || '')))
     const prontos = prontosDisparo = lista.length
     DP_VERS = [saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
+    DP_COMP_ON = false; DP_COMP = [DP_COMP_PADRAO]
     body = `<div class="dp-duas">
       <div class="dp-esq">
         <div id="dpEsqPipe">
@@ -1197,6 +1228,7 @@ async function abrirDisparo(empilhar = true) {
           </div>
           ${campoMensagem()}
           ${dpAtende()}
+          ${dpComplemento()}
           ${dpConfig()}
           <div class="dp-aviso">Começa devagar pra não queimar o número. Intervalo curto demais toma bloqueio.</div>
         </div>
@@ -1211,7 +1243,7 @@ async function abrirDisparo(empilhar = true) {
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
-  ligarVersoes(); ligarConfig(); ligarAtende()
+  ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id)
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
   if ($('dUsarRaiox')) dpAba(prontosDisparo ? 'pipe' : 'nums')
   // a mensagem escolhida vira a padrão da conta: é a mesma que aparece no pipeline

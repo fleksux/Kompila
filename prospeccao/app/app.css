@@ -1209,3 +1209,9 @@ body:has(#capO.on) .fab{display:none}
 .dp-sw{position:relative}
 .dp-sw input{right:12px}
 
+/* disparo: complemento automático */
+.dp-comp{margin:0 0 12px;border:1px solid var(--line);border-radius:12px}
+.dp-comp .dp-sw{margin:0;border:0}
+.dp-comp [hidden]{display:none}
+#dCompBox{padding:0 12px 12px}
+
