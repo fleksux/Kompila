@@ -567,7 +567,7 @@ function enrPainel(e) {
   if (!e?.id || !ENR.aberto.has(e.id)) return ''
   const m = ENR.msg[e.id]
   const campo = (k, t, ph, modo = 'text') => `<label><span>${t}</span><input data-c="${k}" type="${modo}" placeholder="${ph}" value="${esc(e[k] || '')}" autocomplete="off"></label>`
-  return `<div class="enr" data-enr-p="${e.id}"><button class="btn go sm enr-b" data-enr-buscar>Buscar no Instagram e no site</button>
+  return `<div class="enr" data-enr-p="${e.id}"><button class="btn go sm enr-b" data-enr-buscar>Buscar no site da empresa</button>
     ${m ? `<div class="enr-m ${m.t}">${m.h}</div>` : ''}
     ${campo('whatsapp', 'WhatsApp', '(11) 90000-0000', 'tel')}${campo('instagram', 'Instagram', '@perfil')}${campo('email', 'E-mail', 'contato@empresa.com', 'email')}${campo('site', 'Site', 'https://')}
     <div class="enr-ac"><button class="btn ok sm" data-enr-salvar>Salvar</button><button class="btn ghost sm" data-enr-fechar>Fechar</button></div></div>`
@@ -590,21 +590,13 @@ function ligarEnr(root, e, depois) {
   }
   p.querySelector('[data-enr-buscar]').onclick = async ev => {
     const b = ev.currentTarget; b.disabled = true; b.textContent = 'Procurando…'
-    const colado = val('instagram')
-    const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id, ...(colado && colado.replace(/^@/, '').toLowerCase() !== String(e.instagram || '').toLowerCase() ? { instagram: colado } : {}) } })
+    const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id } })
     if (error || data?.erro) { ENR.msg[e.id] = { t: 'ruim', h: esc(data?.erro || 'Não consegui buscar agora. Tenta de novo.') }; return depois() }
     Object.assign(e, data.novo)
     const NOME = { whatsapp: 'WhatsApp', instagram: 'Instagram', email: 'E-mail', site: 'Site' }, ach = Object.entries(data.novo).map(([k, v]) => `<b>${NOME[k]}</b> ${esc(k === 'whatsapp' ? tfmt(v) : v)}`)
-    let h = ach.length ? `Achei ${ach.join(', ')}.` : `Não achei nada novo em ${esc(data.olhei.join(' e '))}.`
-    if (data.instagram) h += ` Perfil @${esc(data.instagram.username)}, ${Number(data.instagram.seguidores).toLocaleString('pt-BR')} seguidores.`
-    if (data.sugestao) h += ` Pode ser <button class="enr-sug" data-sug="${esc(data.sugestao)}">@${esc(data.sugestao)}</button>? Toque para conferir e usar.`
-    else if (!data.instagram && !e.instagram) h += ' Não encontrei o Instagram pelo nome. Cole o @ acima e busque de novo.'
-    if (data.pessoal) h += ' Esse perfil é pessoal ou não existe: a Meta só mostra conta comercial.'
-    if (data.teto) h += ' Bateu o limite de consultas à Meta de hoje.'
-    if (data.desligado) h += ' A conexão com a Meta está desligada.'
+    const h = ach.length ? `Achei ${ach.join(', ')}.` : data.sem_site ? 'Essa empresa não tem site pra eu ler. Preencha o que você achar e salve.' : data.nao_abriu ? 'Não consegui abrir o site dela. Preencha o que você achar e salve.' : 'Não achei nada novo no site. Preencha o que você achar e salve.'
     ENR.msg[e.id] = { t: ach.length ? 'ok' : 'ruim', h }; depois()
   }
-  p.querySelector('[data-sug]')?.addEventListener('click', ev => { const u = ev.currentTarget.dataset.sug; p.querySelector('[data-c="instagram"]').value = u; p.querySelector('[data-enr-buscar]').click() })
 }
 
 /* ======================= lista na home: cards e filtros ======================= */
