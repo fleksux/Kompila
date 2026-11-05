@@ -638,7 +638,7 @@ function ligarEnr(root, e, depois) {
 }
 
 /* ======================= lista na home: cards e filtros ======================= */
-const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], buscaId: null, armado: false, sel: new Set(), timer: null }
+const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], buscaId: null, sel: new Set(), timer: null }
 const ehCelular = e => /^\(?\d{2}\)?\s?9/.test(e.telefone || '')
 const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site], ['nota', 'Nota 4 ou mais', e => +e.nota >= 4]]
 const PRECO_G = { PRICE_LEVEL_INEXPENSIVE: '$', PRICE_LEVEL_MODERATE: '$$', PRICE_LEVEL_EXPENSIVE: '$$$', PRICE_LEVEL_VERY_EXPENSIVE: '$$$$' }
@@ -662,7 +662,7 @@ async function abrirListaHome() {
   const idsLista = await buscasDaLista(busca)
   const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, endereco, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, categoria, status_google, horarios, faixa_preco, google_extra, place_id, contatos_lidos_em)').in('busca_id', idsLista).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
-  LV.todos = data || []; LV.armado = false
+  LV.todos = data || []
   $('ask').hidden = true; document.body.classList.remove('fora')
   const faltam = LV.todos.filter(d => !d.empresa?.contatos_lidos_em).length
   const titulo = busca.cidade === 'Lista' ? busca.nicho : `${busca.nicho} em ${(busca.cidade || '').split(',')[0]}`
@@ -709,8 +709,8 @@ function lvPintar() {
   st.onchange = () => { idsLst.forEach(i => st.checked ? LV.sel.add(i) : LV.sel.delete(i)); lvPintar() }
   const be = $('lvEnrT'); be.hidden = !marcadas.length; be.textContent = `Enriquecer ${marcadas.length} selecionada${marcadas.length === 1 ? '' : 's'}`
   be.onclick = async () => { be.disabled = true; const { data: n, error } = await sb.rpc('enfileirar_enriq', { p_empresas: marcadas }); be.disabled = false; if (error) return liz(esc(error.message)); LV.sel = new Set(); if (!n) liz('Essas empresas já estão na fila.'); lvPintar(); lvAcompanhar(n || 0) }
-  const novas = lst.filter(d => d.decisao !== 'aprovada')
-  const bt = $('lvAddT'); bt.hidden = !novas.length; bt.textContent = `Adicionar ${novas.length} ao pipeline`; LV.armado = false
+  const novas = lst.filter(d => d.decisao !== 'aprovada' && LV.sel.has(d.empresa?.id)) // só as marcadas, igual ao Enriquecer
+  const bt = $('lvAddT'); bt.hidden = !novas.length; bt.textContent = `Adicionar ${novas.length} ao pipeline`
   $('lvG').innerHTML = lst.map(d => { const e = d.empresa || {}, tem = Object.keys(d.capivara || {}).length, fila = d.status === 'na_fila' || d.status === 'lendo', w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
     return `<article class="lc" data-id="${d.id}"><div class="lc-h"><label class="lc-sel"><input type="checkbox" data-sel${LV.sel.has(e.id) ? ' checked' : ''} aria-label="Selecionar ${esc(e.nome || 'empresa')}"></label><div><h3>${esc(e.nome || 'Empresa')}</h3><small>${esc([e.categoria, e.bairro, cidadeReal(e)].filter(Boolean).join(' · '))}</small></div>${d.nota_dor != null ? `<span class="lc-p" title="Potencial"><b>${d.nota_dor}</b>potencial</span>` : ''}</div>
       ${e.nota ? `<div class="lc-n">★ ${String(e.nota).replace('.', ',')} <span>(${e.total_avaliacoes || 0} avaliações)</span></div>` : ''}
@@ -720,11 +720,11 @@ function lvPintar() {
   if ($('lvLimpa')) $('lvLimpa').onclick = () => { LV.f = new Set(); LV.q = ''; $('lvQ').value = ''; lvPintar() }
   $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
   bt.onclick = async () => {
-    if (!LV.armado) { LV.armado = true; bt.textContent = `Toque de novo para adicionar ${novas.length}`; return }
     bt.disabled = true; bt.textContent = 'Adicionando…'
     const ids = novas.map(d => d.id); let falhou = false
     for (let i = 0; i < ids.length; i += 200) { const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).in('id', ids.slice(i, i + 200)); if (error) { falhou = true; break } }
     bt.disabled = false; if (falhou) liz('Parte não entrou no pipeline. Tenta de novo.'); else liz(`${ids.length} empresa${ids.length === 1 ? '' : 's'} no pipeline.`)
+    if (!falhou) LV.sel = new Set()
     contarCaptacao(); abrirListaHome()
   }
   $('lvG').querySelectorAll('.lc').forEach(c => {
