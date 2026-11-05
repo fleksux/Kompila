@@ -1074,3 +1074,12 @@ body:has(#capO.on) .fab{display:none}
 .ld-x[hidden]{display:none}
 @keyframes ldIn{from{opacity:0}to{opacity:1}}
 @keyframes ldVai{0%{left:-35%}100%{left:100%}}
+
+/* ações do card: 2 menores em cima, a principal em 100% embaixo, sempre alinhadas */
+.lc-ac{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:stretch;margin-top:auto;padding-top:4px}
+.lc-ac>*{min-width:0;width:100%;margin:0}
+.lc-ac .btn{display:flex;align-items:center;justify-content:center;height:40px;min-height:40px;padding:0 8px;white-space:nowrap}
+.lc-ac [data-add],.lc-ac .lc-ok{grid-column:1/-1;order:3}
+.lc-ac .lc-ok{display:flex;align-items:center;justify-content:center;height:40px;background:var(--gs);border-radius:var(--r8)}
+.lc-ac .lendo-tag{display:flex;align-items:center;justify-content:center;height:40px;font-size:12px}
+@media (max-width:700px){ .lc-ac .btn,.lc-ac .lc-ok,.lc-ac .lendo-tag{height:44px;min-height:44px} }
