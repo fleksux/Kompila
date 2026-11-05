@@ -1242,7 +1242,7 @@ async function abrirDisparo(empilhar = true) {
           ${dpConfig(camp, rod)}
           ${falhou ? `<div class="dp-cfg"><span class="dp-ferr">${falhou} falhou</span></div>` : ''}
           ${rod ? '' : `<label class="dp-ok"><input type="checkbox" id="dCiente"> Entendi: vai disparar sozinho pelo meu WhatsApp conectado, sem a API oficial, e o WhatsApp pode banir esse número. O risco é meu.</label>`}
-          <button class="btn ghost sm" id="dFim" style="width:100%">Encerrar disparos</button>
+          <button class="btn ghost sm" id="dFim" style="width:100%">Encerrar e montar outro disparo</button>
         </div>
         <div class="dp-fix">${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>` : `<button class="btn ok lg" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}</div>
       </aside></div>`
@@ -1357,7 +1357,7 @@ async function abrirDisparo(empilhar = true) {
     if (eLiga) return liz('Não consegui ligar o disparo. Tenta de novo.')
     liz('Disparo ligado. Vou mandando no ritmo combinado.'); recarrega() }
   if ($('dPausa')) $('dPausa').onclick = async () => { await sb.from('campanha').update({ status: 'pausada' }).eq('id', camp.id); recarrega() }
-  if ($('dFim')) $('dFim').onclick = async () => { clearInterval(dispTimer); await sb.from('campanha').update({ status: 'cancelada' }).eq('id', camp.id); liz('Campanha encerrada.'); recarrega() }
+  if ($('dFim')) $('dFim').onclick = async () => { clearInterval(dispTimer); await sb.from('campanha').update({ status: 'cancelada' }).eq('id', camp.id); liz('Disparo encerrado. Quem não recebeu continua no pipeline. Monte o novo aqui.'); recarrega() }
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
   clearInterval(dispTimer)
   if (camp && camp.status === 'rodando') dispTimer = setInterval(async () => {
