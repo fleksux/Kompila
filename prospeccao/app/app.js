@@ -1397,6 +1397,10 @@ $('bNova').onclick = () => {
   pergunta(1)
 }
 $('bMais').onclick = () => $('bNova').click()
+// Início é Início: painel que ainda estava carregando não abre por cima da home depois do clique
+let inicioEm = 0, ultimoClique = 0
+document.addEventListener('click', e => { if (e.target.closest('#bNova,#bMais')) inicioEm = Date.now(); else ultimoClique = Date.now() }, true)
+new MutationObserver(() => { if ($('cap').classList.contains('on') && !$('ask').hidden && inicioEm && ultimoClique < inicioEm) { $('cap').classList.remove('on'); $('capO').classList.remove('on') } }).observe($('cap'), { attributes: true, attributeFilter: ['class'] })
 // marca no menu onde a pessoa está
 const marcarNav = () => {
   const aberto = $('cap').classList.contains('on'), t = aberto ? $('cap').querySelector('.cap-x .t')?.textContent : ''

@@ -1031,3 +1031,6 @@ body:has(#capO.on) .fab{display:none}
 /* a home é uma tela limpa: nada da busca anterior aparece atrás */
 #ask{background-color:var(--bg);background-image:radial-gradient(var(--dot) 1px,transparent 1.2px);background-size:24px 24px}
 #ask.bye{background:transparent}
+
+/* o nome da busca não fica no topo: o menu nunca muda de lugar */
+#fname{display:none}
