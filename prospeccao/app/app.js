@@ -560,6 +560,53 @@ function fecharCapivara() {
 $('capO').onclick = fecharCapivara
 addEventListener('keydown', e => { if (e.key === 'Escape') { fecharCapivara(); $('hist').classList.remove('on') } })
 
+/* ======================= enriquecer: dentro do card de cada empresa ======================= */
+const ENR = { aberto: new Set(), msg: {} }
+const enrBotao = (e) => e?.id ? `<button class="btn line sm" data-enr="${e.id}" aria-expanded="${ENR.aberto.has(e.id)}">Enriquecer</button>` : ''
+function enrPainel(e) {
+  if (!e?.id || !ENR.aberto.has(e.id)) return ''
+  const m = ENR.msg[e.id]
+  const campo = (k, t, ph, modo = 'text') => `<label><span>${t}</span><input data-c="${k}" type="${modo}" placeholder="${ph}" value="${esc(e[k] || '')}" autocomplete="off"></label>`
+  return `<div class="enr" data-enr-p="${e.id}"><button class="btn go sm enr-b" data-enr-buscar>Buscar no Instagram e no site</button>
+    ${m ? `<div class="enr-m ${m.t}">${m.h}</div>` : ''}
+    ${campo('whatsapp', 'WhatsApp', '(11) 90000-0000', 'tel')}${campo('instagram', 'Instagram', '@perfil')}${campo('email', 'E-mail', 'contato@empresa.com', 'email')}${campo('site', 'Site', 'https://')}
+    <div class="enr-ac"><button class="btn ok sm" data-enr-salvar>Salvar</button><button class="btn ghost sm" data-enr-fechar>Fechar</button></div></div>`
+}
+// liga botões do card. depois() redesenha a tela onde o card está.
+function ligarEnr(root, e, depois) {
+  if (!e?.id) return
+  root.querySelector(`[data-enr="${e.id}"]`)?.addEventListener('click', ev => { ev.stopPropagation(); if (ENR.aberto.has(e.id)) ENR.aberto.delete(e.id); else ENR.aberto.add(e.id); depois() })
+  const p = root.querySelector(`[data-enr-p="${e.id}"]`); if (!p) return
+  const val = k => p.querySelector(`[data-c="${k}"]`).value.trim()
+  p.querySelector('[data-enr-fechar]').onclick = () => { ENR.aberto.delete(e.id); depois() }
+  p.querySelector('[data-enr-salvar]').onclick = async ev => {
+    const wa = val('whatsapp').replace(/\D/g, ''), ig = val('instagram').replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/[/?].*$/, '').toLowerCase(), em = val('email').toLowerCase(), si = val('site')
+    if (wa && wa.length < 10) { ENR.msg[e.id] = { t: 'ruim', h: 'Confere o WhatsApp com DDD.' }; return depois() }
+    const dados = { whatsapp: wa || null, instagram: ig || null, email: em || null, site: si ? (/^https?:\/\//i.test(si) ? si : 'https://' + si) : null }
+    ev.currentTarget.disabled = true
+    const { error } = await sb.from('empresas').update(dados).eq('id', e.id)
+    if (error) { ENR.msg[e.id] = { t: 'ruim', h: 'Não salvou. Tenta de novo.' }; return depois() }
+    Object.assign(e, dados); ENR.msg[e.id] = { t: 'ok', h: 'Salvo.' }; depois()
+  }
+  p.querySelector('[data-enr-buscar]').onclick = async ev => {
+    const b = ev.currentTarget; b.disabled = true; b.textContent = 'Procurando…'
+    const colado = val('instagram')
+    const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id, ...(colado && colado.replace(/^@/, '').toLowerCase() !== String(e.instagram || '').toLowerCase() ? { instagram: colado } : {}) } })
+    if (error || data?.erro) { ENR.msg[e.id] = { t: 'ruim', h: esc(data?.erro || 'Não consegui buscar agora. Tenta de novo.') }; return depois() }
+    Object.assign(e, data.novo)
+    const NOME = { whatsapp: 'WhatsApp', instagram: 'Instagram', email: 'E-mail', site: 'Site' }, ach = Object.entries(data.novo).map(([k, v]) => `<b>${NOME[k]}</b> ${esc(k === 'whatsapp' ? tfmt(v) : v)}`)
+    let h = ach.length ? `Achei ${ach.join(', ')}.` : `Não achei nada novo em ${esc(data.olhei.join(' e '))}.`
+    if (data.instagram) h += ` Perfil @${esc(data.instagram.username)}, ${Number(data.instagram.seguidores).toLocaleString('pt-BR')} seguidores.`
+    if (data.sugestao) h += ` Pode ser <button class="enr-sug" data-sug="${esc(data.sugestao)}">@${esc(data.sugestao)}</button>? Toque para conferir e usar.`
+    else if (!data.instagram && !e.instagram) h += ' Não encontrei o Instagram pelo nome. Cole o @ acima e busque de novo.'
+    if (data.pessoal) h += ' Esse perfil é pessoal ou não existe: a Meta só mostra conta comercial.'
+    if (data.teto) h += ' Bateu o limite de consultas à Meta de hoje.'
+    if (data.desligado) h += ' A conexão com a Meta está desligada.'
+    ENR.msg[e.id] = { t: ach.length ? 'ok' : 'ruim', h }; depois()
+  }
+  p.querySelector('[data-sug]')?.addEventListener('click', ev => { const u = ev.currentTarget.dataset.sug; p.querySelector('[data-c="instagram"]').value = u; p.querySelector('[data-enr-buscar]').click() })
+}
+
 /* ======================= lista na home: cards e filtros ======================= */
 const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], lendo: false, buscaId: null, armado: false }
 const ehCelular = e => /^\(?\d{2}\)?\s?9/.test(e.telefone || '')
@@ -569,14 +616,14 @@ const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (![...fil
 async function abrirListaHome() {
   if (!busca?.id) return
   if (LV.buscaId !== busca.id) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.buscaId = busca.id }
-  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(nome, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
+  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
   LV.todos = data || []; LV.armado = false
   const faltam = LV.todos.filter(d => !d.empresa?.contatos_lidos_em).length
   const titulo = busca.cidade === 'Lista' ? busca.nicho : `${busca.nicho} em ${(busca.cidade || '').split(',')[0]}`
   $('lv').innerHTML = `<div class="lv-in">
     <div class="lv-top"><div><h1>${esc(titulo)}</h1><p>${LV.todos.length} empresa${LV.todos.length === 1 ? '' : 's'} nesta lista</p></div><div class="lv-ac"><button class="btn line sm" id="lvCsv">Baixar planilha</button><button class="btn line sm" id="lvMais">Encontrar mais</button></div></div>
-    ${LV.lendo ? '<div class="lv-en"><span><b>Lendo os sites</b> pra achar Instagram, e-mail e WhatsApp. A lista atualiza sozinha.</span></div>' : faltam ? `<div class="lv-en"><span><b>${faltam} empresa${faltam === 1 ? '' : 's'} sem leitura do site.</b> Busca Instagram, e-mail e WhatsApp, sem gastar saldo.</span><button class="btn go sm" id="lvEnr">Enriquecer contatos</button></div>` : ''}
+    ${LV.lendo ? '<div class="lv-en"><span><b>Lendo os sites</b> pra achar Instagram, e-mail e WhatsApp. A lista atualiza sozinha.</span></div>' : ''}
     <div class="lv-fil"><div class="lv-lin"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lvQ" type="search" placeholder="Buscar nome, bairro, telefone ou @" aria-label="Buscar na lista" autocomplete="off" value="${esc(LV.q)}"></label>
       <label class="lv-ord">Ordenar<select id="lvOrd" aria-label="Ordenar">${[['potencial', 'Potencial'], ['nota', 'Nota no Google'], ['avaliacoes', 'Mais avaliações'], ['nome', 'Nome']].map(([k, t]) => `<option value="${k}"${LV.ord === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
       <div class="lv-chips" id="lvChips"></div></div>
@@ -589,7 +636,6 @@ async function abrirListaHome() {
   $('lvMais').onclick = () => abrirLista()
   let tq; $('lvQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { LV.q = e.target.value; lvPintar() }, 150) }
   $('lvOrd').onchange = e => { LV.ord = e.target.value; lvPintar() }
-  if ($('lvEnr')) $('lvEnr').onclick = async () => { LV.lendo = true; await abrirListaHome(); try { const c = await chamar('contatos', { busca_id: busca.id }); liz(`Li ${c.lidas} sites: ${c.instagram} com Instagram, ${c.email} com e-mail.`) } catch (er) { liz('Não consegui ler agora: ' + esc(er.message)) } LV.lendo = false; if (!$('lv').hidden) abrirListaHome() }
 }
 function lvPintar() {
   const lst = LV.todos.filter(d => lvPassa(d)).sort(LV_ORD[LV.ord])
@@ -601,7 +647,7 @@ function lvPintar() {
     return `<article class="lc" data-id="${d.id}"><div class="lc-h"><div><h3>${esc(e.nome || 'Empresa')}</h3><small>${esc([e.bairro, (e.cidade || '').split(',')[0]].filter(Boolean).join(' · '))}</small></div>${d.nota_dor != null ? `<span class="lc-p" title="Potencial"><b>${d.nota_dor}</b>potencial</span>` : ''}</div>
       ${e.nota ? `<div class="lc-n">★ ${String(e.nota).replace('.', ',')} <span>(${e.total_avaliacoes || 0} avaliações)</span></div>` : ''}
       <div class="lc-ct">${e.whatsapp ? `<button class="wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="sem">Sem site</span>'}</div>
-      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}${tem ? '<button class="btn line sm" data-abre>Abrir Raio-X</button>' : fila ? '<span class="lendo-tag"><i></i>Liz montando…</span>' : '<button class="btn line sm" data-faz>Fazer Raio-X</button>'}</div></article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
+      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}${tem ? '<button class="btn line sm" data-abre>Abrir Raio-X</button>' : fila ? '<span class="lendo-tag"><i></i>Liz montando…</span>' : '<button class="btn line sm" data-faz>Fazer Raio-X</button>'}${enrBotao(e)}</div>${enrPainel(e)}</article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
   if ($('lvLimpa')) $('lvLimpa').onclick = () => { LV.f = new Set(); LV.q = ''; $('lvQ').value = ''; lvPintar() }
   $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
   bt.onclick = async () => {
@@ -614,6 +660,7 @@ function lvPintar() {
   }
   $('lvG').querySelectorAll('.lc').forEach(c => {
     const d = LV.todos.find(x => x.id === c.dataset.id)
+    ligarEnr(c, d.empresa, lvPintar)
     c.querySelector('[data-zap]')?.addEventListener('click', ev => abrirConversas(true, ev.currentTarget.dataset.zap))
     c.querySelector('[data-abre]')?.addEventListener('click', () => abrirSeq(d.id))
     c.querySelector('[data-add]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { b.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); lvPintar() })
@@ -712,7 +759,8 @@ async function contarCaptacao() {
 }
 let colunaPipe = 0
 // filtro do pipeline: sobrevive ao redesenho (mover etapa, voltar da conversa)
-const pipeF = { q: '', resp: false, temp: '', lim: {} }
+const pipeF = { q: '', resp: false, temp: '', seg: '', lim: {} }
+const segDe = d => String(d.segmento || d.busca?.nicho || '').trim()
 // posição do pipeline: mover etapa ou voltar da conversa não pode jogar pro início
 let pipeX = 0, pipeY = 0
 const POR_COLUNA = 50
@@ -724,7 +772,7 @@ const esperandoTxt = t => { const m = Math.max(0, Math.floor((Date.now() - new D
 async function leadsDoPipe() {
   const out = []
   for (let i = 0; ; i += 1000) {
-    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
+    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(id, nome, bairro, cidade, telefone, site, instagram, email, whatsapp)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
     if (error) { liz('Não consegui carregar todo o pipeline. Tenta de novo.'); break }
     out.push(...(data || []))
     if (!data || data.length < 1000) break
@@ -732,7 +780,7 @@ async function leadsDoPipe() {
   return out
 }
 async function abrirCaptacao(empilhar = true) {
-  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.temp = ''; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
+  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.temp = ''; pipeF.seg = ''; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
   const [todos, resAg, resAt] = await Promise.all([leadsDoPipe(), sb.rpc('aguardando_resposta'), sb.rpc('atividade_leads')])
   const atvId = new Map(), atvTel = new Map()
   ;(resAt.data || []).forEach(a => { const mais = (m, k) => { if (k && (!m.get(k) || m.get(k) < a.ultima_in)) m.set(k, a.ultima_in) }; mais(atvId, a.diagnostico_id); [a.telefone, a.fone].forEach(t => mais(atvTel, chaveTel(t))) })
@@ -772,7 +820,7 @@ async function abrirCaptacao(empilhar = true) {
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
         ${d.etapa === 'cliente' || d.etapa === 'perdido' ? '' : `<div class="cp-et cp-tmp"><span>Temperatura</span><button data-tmp="" class="${d.temperatura ? '' : 'on'}">Automática</button>${TEMP_MAN.map(([k, t]) => `<button data-tmp="${k}" class="${d.temperatura === k ? 'on' : ''}">${t}</button>`).join('')}</div>`}
-        <div class="cp-ac"><button data-abre>${IC.eye}Raio-X</button><button data-copia>Copiar mensagem</button></div>
+        <div class="cp-ac"><button data-abre>${IC.eye}Raio-X</button><button data-copia>Copiar mensagem</button>${enrBotao(d.empresa)}</div>${enrPainel(d.empresa)}
         <textarea data-nota placeholder="Anotação (ex: falei com a Ana, retornar segunda)">${esc(d.anotacao || '')}</textarea></div></div>`
   }
   $('cap').dataset.seq = ''
@@ -780,7 +828,7 @@ async function abrirCaptacao(empilhar = true) {
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Pipeline</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
     <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Abordagens do dia · ${de('a_contatar').length}</button>` : ''}${de('a_contatar').length ? `<button class="btn line sm" id="cDisp">Disparo automático</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
     ${todos.length ? `<div class="pk">${kpi.map(([t, k, v, s]) => `<div class="pk-i t-${t}"><i></i><div><b>${v}</b><span>${k}</span><small>${s}</small></div></div>`).join('')}</div>
-    <div class="pf"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pQ" type="search" placeholder="Buscar nome, empresa, telefone ou @" aria-label="Buscar no pipeline" autocomplete="off" value="${esc(pipeF.q)}"></label><div class="pf-tmp" id="pTemp">${TEMP_MAN.map(([k, t]) => `<button class="t-${k}" data-f="${k}" aria-pressed="${pipeF.temp === k}"><i></i>${t}<span>${nTemp(k)}</span></button>`).join('')}</div><button class="pf-resp" id="pResp" aria-pressed="${pipeF.resp}" ${noPipe.size || pipeF.resp ? '' : 'disabled'}>Responder<span>${todos.filter(esperaDe).length}</span></button></div>
+    <div class="pf"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pQ" type="search" placeholder="Buscar nome, empresa, telefone ou @" aria-label="Buscar no pipeline" autocomplete="off" value="${esc(pipeF.q)}"></label>${(() => { const segs = {}; todos.forEach(d => { const s = segDe(d); if (s) segs[s] = (segs[s] || 0) + 1 }); return `<label class="lv-ord pf-seg"><span>Segmento</span><select id="pSeg" aria-label="Filtrar por segmento"><option value="">Todos (${todos.length})</option>${Object.entries(segs).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([s, n]) => `<option value="${esc(s)}"${pipeF.seg === s ? ' selected' : ''}>${esc(s)} (${n})</option>`).join('')}</select></label>` })()}<div class="pf-tmp" id="pTemp">${TEMP_MAN.map(([k, t]) => `<button class="t-${k}" data-f="${k}" aria-pressed="${pipeF.temp === k}"><i></i>${t}<span>${nTemp(k)}</span></button>`).join('')}</div><button class="pf-resp" id="pResp" aria-pressed="${pipeF.resp}" ${noPipe.size || pipeF.resp ? '' : 'disabled'}>Responder<span>${todos.filter(esperaDe).length}</span></button></div>
     <div class="pf-i" id="pInfo" hidden></div>
     <div class="pt" id="pTabs">${ETAPAS.map(([k, t], i) => `<button data-col="${i}">${t}<span>${de(k).length}</span></button>`).join('')}</div>
     <div class="pb" id="pBoard"></div>`
@@ -807,6 +855,7 @@ async function abrirCaptacao(empilhar = true) {
     board.querySelectorAll('.pc').forEach(el => {
       const d = todos.find(x => x.id === el.dataset.id)
       el.onclick = e => { if (!e.target.closest('a,button,textarea')) el.classList.toggle('aberto') }
+      ligarEnr(el, d.empresa, async () => { const y = $('cap').scrollTop; pintar(); $('cap').scrollTop = y; $('pBoard').querySelector(`.pc[data-id="${d.id}"]`)?.classList.add('aberto') })
       el.ondragstart = e => { e.dataTransfer.setData('text/plain', d.id); el.classList.add('voando') }
       el.ondragend = () => el.classList.remove('voando')
       el.querySelector('[data-vai]')?.addEventListener('click', () => mover(d, el.querySelector('[data-vai]').dataset.vai))
@@ -835,8 +884,8 @@ async function abrirCaptacao(empilhar = true) {
     const fonesBusca = new Map(todos.map(d => { const e = d.empresa || {}, a = esperaDe(d); return [d.id, [e.whatsapp, e.telefone, d.telefone, a?.telefone, a?.fone].map(t => String(t || '').replace(/\D/g, '').replace(/^55(?=\d{10})/, '')).join(' ')] }))
     const pintar = (rolar = false) => {
       const q = semAcento(pipeF.q.trim()).replace(/^@/, ''), soNumero = /^[\d\s()+-]+$/.test(q), qd = soNumero ? q.replace(/\D/g, '').replace(/^55(?=\d{10})/, '') : ''
-      const bate = d => (!pipeF.resp || esperaDe(d)) && (!pipeF.temp || tempDe(d)[0] === pipeF.temp) && (!q || (soNumero ? qd.length >= 3 && fonesBusca.get(d.id).includes(qd) : textoBusca.get(d.id).includes(q)))
-      const filtrando = !!q || pipeF.resp || !!pipeF.temp
+      const bate = d => (!pipeF.resp || esperaDe(d)) && (!pipeF.temp || tempDe(d)[0] === pipeF.temp) && (!pipeF.seg || segDe(d) === pipeF.seg) && (!q || (soNumero ? qd.length >= 3 && fonesBusca.get(d.id).includes(qd) : textoBusca.get(d.id).includes(q)))
+      const filtrando = !!q || pipeF.resp || !!pipeF.temp || !!pipeF.seg
       let total = 0, primeira = -1
       board.innerHTML = ETAPAS.map(([k, t], i) => {
         // quem espera há mais tempo vem primeiro, pra não ficar escondido depois do limite da coluna
@@ -858,6 +907,7 @@ async function abrirCaptacao(empilhar = true) {
     board.scrollLeft = mob() ? colunaPipe * (board.children[0].offsetWidth + 12) : pipeX; marca(mob() ? colunaPipe : -1)
     if (!empilhar) $('cap').scrollTop = pipeY
     let tq; $('pQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { pipeF.q = e.target.value; pipeF.lim = {}; pintar(true) }, 150) }
+    $('pSeg').onchange = e => { pipeF.seg = e.target.value; pipeF.lim = {}; pintar(true) }
     $('pTemp').querySelectorAll('button').forEach(b => b.onclick = () => { pipeF.temp = pipeF.temp === b.dataset.f ? '' : b.dataset.f; pipeF.lim = {}; $('pTemp').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x.dataset.f === pipeF.temp)); pintar(true) })
     $('pResp').onclick = e => { pipeF.resp = !pipeF.resp; pipeF.lim = {}; e.currentTarget.setAttribute('aria-pressed', pipeF.resp); pintar(true) }
   }

@@ -999,3 +999,25 @@ body:has(#capO.on) .fab{display:none}
   .lc-ct a,.lc-ct button{min-height:36px}
   body:has(#lv:not([hidden])) .fab{display:none}
 }
+
+/* enriquecer dentro do card */
+.enr{display:flex;flex-direction:column;gap:8px;margin-top:8px;padding:12px;background:var(--s);border-radius:var(--r8)}
+.enr label{display:block}
+.enr label span{display:block;margin-bottom:2px;font-size:11px;color:var(--mu)}
+.enr input{width:100%;height:36px;padding:0 10px;border:1px solid var(--line2);border-radius:6px;background:#fff;font:inherit;font-size:13px;color:var(--tx)}
+.enr input:focus{outline:2px solid var(--g);outline-offset:0}
+.enr-b{width:100%;justify-content:center}
+.enr-m{padding:8px 10px;border-radius:6px;font-size:12px;line-height:1.45;word-break:break-word}
+.enr-m.ok{background:var(--gs);color:#0B5F34}.enr-m.ruim{background:#FFF4E2;color:#7A4E05}
+.enr-sug{font-weight:700;text-decoration:underline;cursor:pointer}
+.enr-ac{display:flex;gap:8px}
+.pc .cp-ac{flex-wrap:wrap}
+.pf-seg{min-width:0}
+.pf-seg select{max-width:170px}
+@media (max-width:700px){
+  .enr input{height:44px;font-size:16px}
+  .enr .btn{min-height:44px}
+  .enr-ac .btn{flex:1;justify-content:center}
+  .pf-seg{flex:1 0 100%;height:44px}.pf-seg span{font-size:12px}.pf-seg select{flex:1;max-width:none}
+  .lv-ord.pf-seg{font-size:12px}
+}
