@@ -579,28 +579,21 @@ $('loadO').querySelector('.ld-x').onclick = () => fimCarregando()
 /* ======================= enriquecer: dentro do card de cada empresa ======================= */
 const ENR = { aberto: new Set(), msg: {} }
 const enrBotao = (e) => e?.id ? `<button class="btn line sm" data-enr="${e.id}" aria-expanded="${ENR.aberto.has(e.id)}">Enriquecer</button>` : ''
-const cnpjFmt = c => String(c || '').replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')
 const anoDe = d => String(d || '').slice(0, 4)
+// no card: só porte, atividade, abertura e situação. CNPJ e nome da Receita não aparecem.
 function enrDados(e) {
-  if (!e?.cnpj_status || e.cnpj_status === 'nao_achei') return ''
-  if (e.cnpj_status === 'ambiguo') return `<div class="rc rc-q"><b>Qual destas é a empresa?</b>${(e.cnpj_opcoes || []).map((o, i) => `<button data-op="${i}"><span>${esc(o.fantasia || o.razao || 'Sem nome fantasia')}</span><small>${esc(cnpjFmt(o.cnpj))}${o.atividade ? ' · ' + esc(o.atividade) : ''}${o.abertura ? ' · desde ' + anoDe(o.abertura) : ''}</small></button>`).join('')}</div>`
+  if (!['confirmado', 'escolhido', 'provavel'].includes(e?.cnpj_status)) return ''
   const r = e.receita || {}, prov = e.cnpj_status === 'provavel', ruim = r.situacao && !/ativa/i.test(r.situacao)
+  const linha = [r.porte, r.abertura ? 'desde ' + anoDe(r.abertura) : ''].filter(Boolean).map(esc).join(' · ')
+  if (!linha && !r.atividade) return ''
   return `<div class="rc"><div class="rc-t"><b>Dados da empresa</b><span class="${prov ? 'rc-pv' : 'rc-ok'}">${prov ? 'Provável' : 'Confirmado'}</span></div>
-    ${r.razao ? `<div>${esc(r.razao)}</div>` : r.fantasia ? `<div>${esc(r.fantasia)}</div>` : ''}<small>${[cnpjFmt(r.cnpj), r.porte, r.abertura ? 'desde ' + anoDe(r.abertura) : ''].filter(Boolean).map(esc).join(' · ')}</small>
-    ${r.atividade ? `<small>${esc(r.atividade)}</small>` : ''}${ruim ? `<small class="rc-ruim">Situação: ${esc(r.situacao)}</small>` : ''}
-    ${prov ? `<button class="rc-fix" data-rc-ok>É essa</button>` : ''}</div>`
-}
-function ligarDados(root, e, depois) {
-  if (!e?.id) return
-  const salvar = async d => { const { error } = await sb.from('empresas').update(d).eq('id', e.id); if (error) return liz('Não salvou. Tenta de novo.'); Object.assign(e, d); depois() }
-  root.querySelectorAll('[data-op]').forEach(b => b.onclick = ev => { ev.stopPropagation(); const o = e.cnpj_opcoes[+b.dataset.op]; salvar({ cnpj: o.cnpj, cnpj_status: 'escolhido', receita: o, cnpj_opcoes: null }) })
-  root.querySelector('[data-rc-ok]')?.addEventListener('click', ev => { ev.stopPropagation(); salvar({ cnpj_status: 'escolhido' }) })
+    ${linha ? `<small>${linha}</small>` : ''}${r.atividade ? `<small>${esc(r.atividade)}</small>` : ''}${ruim ? `<small class="rc-ruim">Situação: ${esc(r.situacao)}</small>` : ''}</div>`
 }
 function enrPainel(e) {
   if (!e?.id || !ENR.aberto.has(e.id)) return ''
   const m = ENR.msg[e.id]
   const campo = (k, t, ph, modo = 'text') => `<label><span>${t}</span><input data-c="${k}" type="${modo}" placeholder="${ph}" value="${esc(e[k] || '')}" autocomplete="off"></label>`
-  return `<div class="enr" data-enr-p="${e.id}"><button class="btn go sm enr-b" data-enr-buscar>Buscar site e CNPJ</button>
+  return `<div class="enr" data-enr-p="${e.id}"><button class="btn go sm enr-b" data-enr-buscar>Buscar dados</button>
     ${m ? `<div class="enr-m ${m.t}">${m.h}</div>` : ''}
     ${campo('whatsapp', 'WhatsApp', '(11) 90000-0000', 'tel')}${campo('instagram', 'Instagram', '@perfil')}${campo('email', 'E-mail', 'contato@empresa.com', 'email')}${campo('site', 'Site', 'https://')}
     <div class="enr-ac"><button class="btn ok sm" data-enr-salvar>Salvar</button><button class="btn ghost sm" data-enr-fechar>Fechar</button></div></div>`
@@ -623,16 +616,16 @@ function ligarEnr(root, e, depois) {
   }
   p.querySelector('[data-enr-buscar]').onclick = async ev => {
     const b = ev.currentTarget; b.disabled = true; b.textContent = 'Procurando…'
-    consultaAbre({ tipo: 'enr', t: `Enriquecendo ${e.nome || 'a empresa'}`, s: 'Lendo o site e procurando o CNPJ.' })
+    consultaAbre({ tipo: 'enr', t: `Enriquecendo ${e.nome || 'a empresa'}`, s: 'Lendo o site e procurando os dados da empresa.' })
     const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id } })
     fimCarregando('enr')
     if (error || data?.erro) { ENR.msg[e.id] = { t: 'ruim', h: esc(data?.erro || 'Não consegui buscar agora. Tenta de novo.') }; return depois() }
     Object.assign(e, data.novo)
     const NOME = { whatsapp: 'WhatsApp', instagram: 'Instagram', email: 'E-mail', site: 'Site' }, ach = Object.entries(data.novo).filter(([k]) => NOME[k]).map(([k, v]) => `<b>${NOME[k]}</b> ${esc(k === 'whatsapp' ? tfmt(v) : v)}`)
-    const CN = { confirmado: 'CNPJ confirmado pelo telefone e nome.', provavel: 'CNPJ provável: confira abaixo.', ambiguo: 'Achei mais de um CNPJ: escolha abaixo.', nao_achei: 'Não achei o CNPJ na base.', sem_base: 'A base de CNPJ não respondeu agora.' }
+    const CN = { confirmado: 'Dados da empresa confirmados.', provavel: 'Dados da empresa prováveis.', ambiguo: 'Achei mais de um cadastro com esse nome, então não preenchi os dados da empresa.', nao_achei: 'Não achei os dados da empresa.', sem_base: 'A base da Receita não respondeu agora.' }
     const cn = data.cnpj?.status
     const h = [ach.length ? `Achei ${ach.join(', ')}.` : data.sem_site ? 'Sem site pra ler.' : data.nao_abriu ? 'Não consegui abrir o site.' : 'Nada novo no site.', cn ? CN[cn] : ''].filter(Boolean).join(' ')
-    const bom = ach.length || ['confirmado', 'provavel', 'ambiguo'].includes(cn)
+    const bom = ach.length || ['confirmado', 'provavel'].includes(cn)
     ENR.msg[e.id] = { t: bom ? 'ok' : 'ruim', h }; depois()
   }
 }
@@ -640,7 +633,7 @@ function ligarEnr(root, e, depois) {
 /* ======================= lista na home: cards e filtros ======================= */
 const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], buscaId: null, armado: false, sel: new Set(), timer: null }
 const ehCelular = e => /^\(?\d{2}\)?\s?9/.test(e.telefone || '')
-const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site], ['nota', 'Nota 4 ou mais', e => +e.nota >= 4], ['cnpj', 'Com CNPJ', e => !!e.cnpj]]
+const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site], ['nota', 'Nota 4 ou mais', e => +e.nota >= 4]]
 const LV_ORD = { potencial: (a, b) => (b.nota_dor ?? -1) - (a.nota_dor ?? -1), nota: (a, b) => (+b.empresa?.nota || 0) - (+a.empresa?.nota || 0), avaliacoes: (a, b) => (+b.empresa?.total_avaliacoes || 0) - (+a.empresa?.total_avaliacoes || 0), nome: (a, b) => String(a.empresa?.nome || '').localeCompare(String(b.empresa?.nome || ''), 'pt-BR') }
 const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (![...filtros].every(k => LV_FILTROS.find(x => x[0] === k)[2](e))) return false; const q = semAcento(LV.q.trim()).replace(/^@/, ''); if (!q) return true; const dg = q.replace(/\D/g, ''); return semAcento([e.nome, e.bairro, e.instagram, e.email, e.site].join(' ')).includes(q) || (/^[\d\s()+-]+$/.test(q) && dg.length >= 3 && String((e.telefone || '') + ' ' + (e.whatsapp || '')).replace(/\D/g, '').includes(dg)) }
 async function abrirListaHome() {
@@ -671,8 +664,8 @@ async function abrirListaHome() {
 async function lvAcompanhar(novas = 0) {
   clearInterval(LV.timer)
   let total = novas
-  const popup = falta => { if (!novas) return; if (LOAD.tipo && LOAD.tipo !== 'lote') return; if (LOAD.tipo === '' && total !== novas) return; consultaAbre({ tipo: 'lote', t: 'Enriquecendo as empresas', s: 'Procurando site e CNPJ de cada uma. Pode continuar usando que eu aviso.', de: Math.max(0, total - falta), ate: total, sair: true }) }
-  if (novas) consultaAbre({ tipo: 'lote', t: 'Enriquecendo as empresas', s: 'Procurando site e CNPJ de cada uma. Pode continuar usando que eu aviso.', de: 0, ate: novas, sair: true })
+  const popup = falta => { if (!novas) return; if (LOAD.tipo && LOAD.tipo !== 'lote') return; if (LOAD.tipo === '' && total !== novas) return; consultaAbre({ tipo: 'lote', t: 'Enriquecendo as empresas', s: 'Procurando site e dados de cada uma. Pode continuar usando que eu aviso.', de: Math.max(0, total - falta), ate: total, sair: true }) }
+  if (novas) consultaAbre({ tipo: 'lote', t: 'Enriquecendo as empresas', s: 'Procurando site e dados de cada uma. Pode continuar usando que eu aviso.', de: 0, ate: novas, sair: true })
   const ids = LV.todos.map(d => d.empresa?.id).filter(Boolean)
   const olhar = async () => {
     const p = $('lvProg'); if ($('lv').hidden || !p) return clearInterval(LV.timer)
@@ -714,7 +707,7 @@ function lvPintar() {
   }
   $('lvG').querySelectorAll('.lc').forEach(c => {
     const d = LV.todos.find(x => x.id === c.dataset.id)
-    ligarEnr(c, d.empresa, lvPintar); ligarDados(c, d.empresa, lvPintar)
+    ligarEnr(c, d.empresa, lvPintar)
     c.querySelector('[data-sel]').onchange = ev => { if (ev.target.checked) LV.sel.add(d.empresa.id); else LV.sel.delete(d.empresa.id); lvPintar() }
     c.querySelector('[data-zap]')?.addEventListener('click', ev => abrirConversas(true, ev.currentTarget.dataset.zap))
     c.querySelector('[data-abre]')?.addEventListener('click', () => abrirSeq(d.id))
@@ -909,7 +902,6 @@ async function abrirCaptacao(empilhar = true) {
     board.querySelectorAll('.pc').forEach(el => {
       const d = todos.find(x => x.id === el.dataset.id)
       el.onclick = e => { if (!e.target.closest('a,button,textarea')) el.classList.toggle('aberto') }
-      ligarDados(el, d.empresa, () => { const y = $('cap').scrollTop; pintar(); $('cap').scrollTop = y; $('pBoard').querySelector(`.pc[data-id="${d.id}"]`)?.classList.add('aberto') })
       ligarEnr(el, d.empresa, async () => { const y = $('cap').scrollTop; pintar(); $('cap').scrollTop = y; $('pBoard').querySelector(`.pc[data-id="${d.id}"]`)?.classList.add('aberto') })
       el.ondragstart = e => { e.dataTransfer.setData('text/plain', d.id); el.classList.add('voando') }
       el.ondragend = () => el.classList.remove('voando')
