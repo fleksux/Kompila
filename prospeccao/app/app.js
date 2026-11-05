@@ -54,7 +54,7 @@ async function comIA(abrir) {
 function comoFunciona() {
   const ini = 500, r0 = rende(ini)
   $('indB').innerHTML = `<div class="ind-k">[ COMO FUNCIONA ]</div><h2>Você paga só pelo que usa.</h2>
-    <div class="cf"><div><b>Lista simples</b><span>Até 60 empresas da cidade e do nicho: nome, telefone e site, quando a empresa tiver.</span><em>${brlC(SALDO.busca)} por busca</em></div>
+    <div class="cf"><div><b>Lista simples</b><span>Até 60 empresas da cidade e do nicho, com tudo que o Google mostra: categoria, nota, telefone, site, endereço e horários.</span><em>${brlC(SALDO.busca)} por busca</em></div>
 </div>
     <p>Conta nova ganha <b>${brlC(ini)}</b> pra testar: dá pra ${r0.listas} listas simples (até ${emp(r0.listas)} empresas). Cada lista traz até 60 empresas; cidade pequena ou nicho raro pode trazer menos. Pesquisar de novo o que você já pesquisou não desconta nada. Quando o saldo acabar, a Kompila recarrega pra você.</p>
     ${SALDO.isento ? '<p><b>Sua conta é isenta:</b> usa à vontade, nada é descontado.</p>' : `<p>Seu saldo agora: <b>${brlC(SALDO.saldo)}</b>.</p>`}`
@@ -236,7 +236,7 @@ async function rodarBusca(cidade, nicho, modo = 'lista', quero = 60, novaMesmo =
   try {
     const b = await chamar('buscar', { cidade, nicho, quero })
     busca = { id: b.busca_id, cidade, nicho, status: 'peneirando', olhadas: b.olhadas, novas: b.novas, com_dor: 0 }
-    atualizarFunil(); dizer(`Olhei ${b.olhadas} empresas. ${b.ja_tinha ? b.ja_tinha + ' você já tinha, então ' : ''}${b.novas} são novas${b.novas < quero ? (b.teto ? ` (você pediu ${quero}; parei aqui pra não gastar à toa, é só buscar de novo pra trazer mais)` : ` (você pediu ${quero}, mas a cidade não tem mais que isso nesse nicho)`) : ''}. Organizando a lista.`)
+    atualizarFunil(); dizer(`Olhei ${b.olhadas} empresas. ${b.ja_tinha ? b.ja_tinha + ' você já tinha, então ' : ''}${b.novas} são novas${b.novas < quero ? (b.teto ? ` (você pediu ${quero}; parei aqui pra não gastar à toa, é só buscar de novo pra trazer mais)` : ` (você pediu ${quero}, mas a cidade não tem mais que isso nesse nicho)`) : ''}. Lendo as avaliações agora.`)
     if (!b.novas) return fim('Nenhuma empresa nova nessa busca. Tenta outro nicho ou outra cidade.')
     carregarSaldo()
     await peneirar(modo)
@@ -249,17 +249,21 @@ async function rodarLista(nome, itens) {
   try {
     const r = await chamar('importar', { nome_lista: nome, itens })
     busca = { id: r.busca_id, cidade: 'Lista', nicho: nome, status: 'peneirando', olhadas: r.na_lista, novas: r.achadas_no_google + r.so_pelo_site, com_dor: 0 }
-    atualizarFunil(); dizer(`Achei ${r.achadas_no_google} no Google${r.so_pelo_site ? ` e ${r.so_pelo_site} só pelo site` : ''}.${r.nao_e_empresa ? ` ${r.nao_e_empresa} não parecem empresa.` : ''}`)
+    atualizarFunil(); dizer(`Achei ${r.achadas_no_google} no Google${r.so_pelo_site ? ` e ${r.so_pelo_site} só pelo site` : ''}.${r.nao_e_empresa ? ` ${r.nao_e_empresa} não parecem empresa.` : ''} Montando os Raio-X.`)
     carregarSaldo()
     await peneirar('lista')
   } catch (e) { erro(e) }
 }
-async function peneirar() {
+async function peneirar(modo) {
   if (LOAD.tipo === 'busca') consultaAbre({ tipo: 'busca', t: 'Organizando as empresas', s: `${busca.novas || busca.olhadas || 0} encontradas. Falta pouco.` })
-  const a = await chamar('analisar', { busca_id: busca.id })
-  busca.com_dor = 0; atualizarFunil()
-  // 05/11/2026: a lista é só nome, telefone e site, sem IA e sem nota
-  fim(`Lista pronta: ${a.olhadas} empresas.`); await abrirListaHome()
+  const a = await chamar('analisar', { busca_id: busca.id, modo })
+  busca.com_dor = a.com_dor; atualizarFunil()
+  // a lista traz só o que vem do Google Maps. Contato do site é no Enriquecer, quando a pessoa quiser.
+  if (modo === 'lista') { fim(`Lista pronta: ${a.olhadas} empresas.`); await abrirListaHome(); return }
+  if (!a.finalistas) return fim('Nenhuma empresa com potencial forte aqui. Bora outro nicho?')
+  dizer(`${a.finalistas} empresas merecem Raio-X. Já estou montando, uma por uma.`)
+  consultaAbre({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva 1 a 2 minutos. Pode continuar usando que eu aviso.', de: 0, ate: a.finalistas, sair: true })
+  acompanhar()
 }
 function erro(e) { fimCarregando(); vivo(false, 'Liz parada'); liz(/saldo/i.test(e.message) ? esc(e.message) : `Travei aqui: ${esc(e.message)}`, 8000); if (busca) { busca.status = 'erro'; atualizarFunil() } }
 function fim(t) { fimCarregando(); vivo(false, 'Liz parada'); dizer(t); carregarHist(); if (!$('lv').hidden) abrirListaHome() }
@@ -636,7 +640,7 @@ function ligarEnr(root, e, depois) {
 /* ======================= lista na home: cards e filtros ======================= */
 const LV = { f: new Set(), q: '', ord: 'potencial', todos: [], buscaId: null, sel: new Set(), timer: null }
 const ehCelular = e => /^\(?\d{2}\)?\s?9/.test(e.telefone || '')
-const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site]]
+const LV_FILTROS = [['wa', 'WhatsApp', e => !!e.whatsapp], ['cel', 'Celular', ehCelular], ['insta', 'Instagram', e => !!e.instagram], ['email', 'E-mail', e => !!e.email], ['site', 'Com site', e => !!e.site], ['semsite', 'Sem site', e => !e.site], ['nota', 'Nota 4 ou mais', e => +e.nota >= 4]]
 const PRECO_G = { PRICE_LEVEL_INEXPENSIVE: '$', PRICE_LEVEL_MODERATE: '$$', PRICE_LEVEL_EXPENSIVE: '$$$', PRICE_LEVEL_VERY_EXPENSIVE: '$$$$' }
 const horarioHoje = e => { const h = e.horarios; if (!Array.isArray(h) || h.length !== 7) return ''; return String(h[(new Date().getDay() + 6) % 7] || '').replace(/^[^:]+:\s*/, '') }
 // a cidade do endereço do Google: às vezes ele devolve empresa de outra cidade na busca
@@ -654,7 +658,7 @@ async function abrirListaHome() {
   if (!busca?.id) return
   // somar mais 60 não apaga filtro, busca nem seleção: só zera quando muda de lista
   const qualLista = busca.cidade === 'Lista' ? busca.id : `${chave(busca.cidade)}|${chave(busca.nicho)}`
-  if (LV.buscaId !== qualLista) { LV.f = new Set(); LV.q = ''; LV.ord = 'nome'; LV.sel = new Set(); LV.buscaId = qualLista }
+  if (LV.buscaId !== qualLista) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.sel = new Set(); LV.buscaId = qualLista }
   const idsLista = await buscasDaLista(busca)
   const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, endereco, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, categoria, status_google, horarios, faixa_preco, google_extra, place_id, contatos_lidos_em)').in('busca_id', idsLista).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
@@ -665,7 +669,8 @@ async function abrirListaHome() {
   $('lv').innerHTML = `<div class="lv-in">
     <div class="lv-top"><div><h1>${esc(titulo)}</h1><p>${LV.todos.length} empresa${LV.todos.length === 1 ? '' : 's'} nesta lista</p></div><div class="lv-ac"><button class="btn line sm" id="lvCsv">Baixar planilha</button>${busca.cidade === 'Lista' ? '' : '<button class="btn line sm" data-mais="60">Encontrar mais 60</button>'}</div></div>
     <div class="lv-en" id="lvProg" hidden></div>
-    <div class="lv-fil"><div class="lv-lin"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lvQ" type="search" placeholder="Buscar nome, bairro, telefone ou @" aria-label="Buscar na lista" autocomplete="off" value="${esc(LV.q)}"></label></div>
+    <div class="lv-fil"><div class="lv-lin"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lvQ" type="search" placeholder="Buscar nome, bairro, telefone ou @" aria-label="Buscar na lista" autocomplete="off" value="${esc(LV.q)}"></label>
+      <label class="lv-ord">Ordenar<select id="lvOrd" aria-label="Ordenar">${[['potencial', 'Potencial'], ['nota', 'Nota no Google'], ['avaliacoes', 'Mais avaliações'], ['nome', 'Nome']].map(([k, t]) => `<option value="${k}"${LV.ord === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
       <div class="lv-chips" id="lvChips"></div></div>
     <div class="lv-res"><label class="lv-selt"><input type="checkbox" id="lvSelT"><span id="lvN"></span></label><div class="lv-resb"><button class="btn line sm" id="lvEnrT" hidden></button><button class="btn ok sm" id="lvAddT" hidden></button></div></div>
     <div class="lv-g" id="lvG"></div>
@@ -674,6 +679,7 @@ async function abrirListaHome() {
   lvPintar(); lvAcompanhar()
   $('lvCsv').onclick = () => baixarCsv(LV.todos)
   let tq; $('lvQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { LV.q = e.target.value; lvPintar() }, 150) }
+  $('lvOrd').onchange = e => { LV.ord = e.target.value; lvPintar() }
 }
 // progresso da fila: atualiza a contagem e redesenha quando termina
 async function lvAcompanhar(novas = 0) {
@@ -753,22 +759,31 @@ async function abrirFichaMaps(d, empilhar = true) {
   ].join('')
   const horas = Array.isArray(e.horarios) && e.horarios.length ? `<ul class="fi-h">${e.horarios.map((h, i) => { const [dia, ...r] = String(h).split(':'); return `<li class="${i === hoje ? 'on' : ''}"><span>${esc(dia)}</span><span>${esc(r.join(':').trim())}</span></li>` }).join('')}</ul>` : ''
   const lista = (avs || []).map(a => `<article class="fi-a"><div class="fi-a-t">${a.autor_link ? `<a href="${esc(a.autor_link)}" target="_blank" rel="noopener">${esc(a.autor || 'Avaliador do Google')}</a>` : `<b>${esc(a.autor || 'Avaliador do Google')}</b>`}<small>${esc(a.tempo || (a.publicada_em ? new Date(a.publicada_em).toLocaleDateString('pt-BR') : ''))}</small></div>${estrelas(a.estrelas)}${a.texto ? `<p>${esc(a.texto)}</p>` : ''}</article>`).join('')
+  const semFicha = !e.google_extra
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Ficha</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b fi">
     <header class="fi-t"><div><h2>${esc(e.nome || 'Empresa')}</h2><p>${esc([e.categoria, PRECO_G[e.faixa_preco]].filter(Boolean).join(' · ') || 'Empresa')}</p></div>${e.nota ? `<div class="fi-n"><b>${String(e.nota).replace('.', ',')}</b>${estrelas(e.nota)}<small>${e.total_avaliacoes || 0} avaliações</small></div>` : ''}</header>
     ${e.status_google && e.status_google !== 'OPERATIONAL' ? `<div class="lc-fec">${e.status_google === 'CLOSED_PERMANENTLY' ? 'Fechada definitivamente no Google' : 'Fechada temporariamente no Google'}</div>` : ''}
     <div class="fi-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok" id="fiAdd">Adicionar ao pipeline</button>'}${e.google_maps_url ? `<a class="btn line" href="${esc(e.google_maps_url)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ''}</div>
+    ${semFicha ? `<div class="fi-av"><span>Essa empresa veio de uma busca antiga, sem a ficha completa do Google.</span><button class="btn go sm" id="fiBaixar">Trazer do Google</button></div>` : ''}
     ${sec('Contato', contato ? `<div class="fi-cs">${contato}</div>` : '<p class="fi-v">Nenhum contato no Google. Use o Enriquecer no card.</p>')}
     ${sec('Endereço', e.endereco ? `<p>${esc(e.endereco)}</p>` : '')}
     ${sec('Sobre', [x.resumo, x.resumo_avaliacoes].filter(Boolean).map(t => `<p>${esc(t)}</p>`).join(''))}
     ${sec('Horários', horas)}
     ${sec('O que oferece', etiquetas(x.oferece))}${sec('Pagamento', etiquetas(x.pagamento))}${sec('Estacionamento', etiquetas(x.estacionamento))}${sec('Acessibilidade', etiquetas(x.acessibilidade))}
     ${sec('Dados da empresa', enrDados(e))}
-    ${lista ? sec('Avaliações <small>O Google mostra até 5 por empresa</small>', lista) : ''}
+    ${sec(`Avaliações${lista ? ` <small>O Google mostra até 5 por empresa</small>` : ''}`, lista || '<p class="fi-v">Nenhuma avaliação trazida ainda.</p>')}
     <div class="fi-g">Dados do Google Maps</div></div>`
   $('capX').onclick = fecharCapivara
   $('cap').querySelectorAll('[data-zap]').forEach(b => b.onclick = () => abrirConversas(true, b.dataset.zap))
   if ($('fiAdd')) $('fiAdd').onclick = async ev => { ev.currentTarget.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { ev.currentTarget.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); abrirFichaMaps(d, false) }
+  if ($('fiBaixar')) $('fiBaixar').onclick = async () => {
+    consultaAbre({ tipo: 'enr', t: 'Trazendo a ficha do Google', s: e.nome || '' })
+    const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id } })
+    fimCarregando('enr')
+    if (error || data?.erro) return liz(esc(data?.erro || 'Não consegui trazer agora. Tenta de novo.'))
+    Object.assign(e, data.novo); abrirFichaMaps(d, false)
+  }
   if (empilhar) empilha('ficha')
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
 }
