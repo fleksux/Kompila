@@ -647,10 +647,20 @@ const horarioHoje = e => { const h = e.horarios; if (!Array.isArray(h) || h.leng
 const cidadeReal = e => String(e.endereco || '').match(/,\s*([^,]+?)\s*-\s*[A-Z]{2}\b/)?.[1] || (e.cidade || '').split(',')[0]
 const LV_ORD = { potencial: (a, b) => (b.nota_dor ?? -1) - (a.nota_dor ?? -1), nota: (a, b) => (+b.empresa?.nota || 0) - (+a.empresa?.nota || 0), avaliacoes: (a, b) => (+b.empresa?.total_avaliacoes || 0) - (+a.empresa?.total_avaliacoes || 0), nome: (a, b) => String(a.empresa?.nome || '').localeCompare(String(b.empresa?.nome || ''), 'pt-BR') }
 const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (![...filtros].every(k => LV_FILTROS.find(x => x[0] === k)[2](e))) return false; const q = semAcento(LV.q.trim()).replace(/^@/, ''); if (!q) return true; const dg = q.replace(/\D/g, ''); return semAcento([e.nome, e.bairro, e.instagram, e.email, e.site].join(' ')).includes(q) || (/^[\d\s()+-]+$/.test(q) && dg.length >= 3 && String((e.telefone || '') + ' ' + (e.whatsapp || '')).replace(/\D/g, '').includes(dg)) }
+// "Encontrar mais" grava outra pesquisa, mas pra pessoa é a mesma lista: junta tudo da mesma cidade e segmento
+const mesmaLista = (a, b) => a.cidade !== 'Lista' && b.cidade !== 'Lista' && chave(a.cidade) === chave(b.cidade) && parecida(a.nicho, b.nicho)
+async function buscasDaLista(b) {
+  if (b.cidade === 'Lista') return [b.id]
+  const { data } = await sb.from('buscas').select('id, cidade, nicho').neq('cidade', 'Lista').neq('status', 'erro').limit(500)
+  return [...new Set([b.id, ...(data || []).filter(x => mesmaLista(x, b)).map(x => x.id)])]
+}
 async function abrirListaHome() {
   if (!busca?.id) return
-  if (LV.buscaId !== busca.id) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.sel = new Set(); LV.buscaId = busca.id }
-  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, endereco, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, categoria, status_google, horarios, faixa_preco, google_extra, place_id, contatos_lidos_em)').eq('busca_id', busca.id).order('nota_dor', { ascending: false })
+  // somar mais 60 não apaga filtro, busca nem seleção: só zera quando muda de lista
+  const qualLista = busca.cidade === 'Lista' ? busca.id : `${chave(busca.cidade)}|${chave(busca.nicho)}`
+  if (LV.buscaId !== qualLista) { LV.f = new Set(); LV.q = ''; LV.ord = 'potencial'; LV.sel = new Set(); LV.buscaId = qualLista }
+  const idsLista = await buscasDaLista(busca)
+  const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, endereco, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, categoria, status_google, horarios, faixa_preco, google_extra, place_id, contatos_lidos_em)').in('busca_id', idsLista).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
   LV.todos = data || []; LV.armado = false
   $('ask').hidden = true; document.body.classList.remove('fora')
@@ -1482,8 +1492,15 @@ async function esperarCapivara(id) {
 
 /* ======================= histórico ======================= */
 async function carregarHist() {
-  const { data } = await sb.from('buscas').select('id, cidade, nicho, status, olhadas, com_dor, criada_em').order('criada_em', { ascending: false }).limit(30)
-  $('hist').innerHTML = (data || []).length ? data.map(b => `<div class="hi" data-id="${b.id}"><b>${esc(b.cidade === 'Lista' ? 'Lista · ' + b.nicho : b.nicho + ' · ' + b.cidade.split(',')[0])}</b><small>${new Date(b.criada_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · ${b.olhadas} olhadas · ${{ pronta: 'pronta', erro: 'deu erro' }[b.status] || 'em andamento'}</small></div>`).join('') : '<div class="vazio">Nenhuma busca ainda.</div>'
+  const { data: todas } = await sb.from('buscas').select('id, cidade, nicho, status, olhadas, novas, com_dor, criada_em').order('criada_em', { ascending: false }).limit(200)
+  // um item por lista, com o total de empresas somando cada "Encontrar mais"; pesquisa com erro fica separada
+  const data = []
+  for (const b of todas || []) {
+    const g = b.status === 'erro' ? null : data.find(x => x.status !== 'erro' && mesmaLista(x, b))
+    if (g) g.total += b.novas || 0; else data.push({ ...b, total: b.novas || 0 })
+  }
+  data.splice(30)
+  $('hist').innerHTML = data.length ? data.map(b => `<div class="hi" data-id="${b.id}"><b>${esc(b.cidade === 'Lista' ? 'Lista · ' + b.nicho : b.nicho + ' · ' + b.cidade.split(',')[0])}</b><small>${new Date(b.criada_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · ${b.total} empresa${b.total === 1 ? '' : 's'} · ${{ pronta: 'pronta', erro: 'deu erro' }[b.status] || 'em andamento'}</small></div>`).join('') : '<div class="vazio">Nenhuma busca ainda.</div>'
   $('hist').insertAdjacentHTML('beforeend', `<button class="sair so-cel" id="bSair2">Sair da conta (${esc(usuario?.email || '')})</button>`)
   $('bSair2').onclick = async () => { await sb.auth.signOut(); location.reload() }
   $('hist').querySelectorAll('.hi').forEach(el => el.onclick = () => abrirBusca(data.find(b => b.id === el.dataset.id)))
