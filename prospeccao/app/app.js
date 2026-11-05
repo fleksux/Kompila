@@ -1224,7 +1224,7 @@ const ligarGuardian = () => {
   pintarGuardian()
 }
 // painel de Qualidade: últimos 30 dias, com os critérios da extensão
-const qualNivel = c => { if (c.recl >= 1 || c.saiu / Math.max(1, c.env) >= .03 || c.falha / Math.max(1, c.env + c.falha) >= .15) return ['risco', 'Risco']; if (c.saiu / Math.max(1, c.env) >= .01 || c.falha / Math.max(1, c.env + c.falha) >= .07) return ['atencao', 'Atenção']; return ['boa', 'Boa'] }
+const qualNivel = c => { if (/caiu/i.test(c.motivo_pausa || '') || c.recl >= 1 || c.saiu / Math.max(1, c.env) >= .03 || c.falha / Math.max(1, c.env + c.falha) >= .15) return ['risco', 'Risco']; if (c.saiu / Math.max(1, c.env) >= .01 || c.falha / Math.max(1, c.env + c.falha) >= .07) return ['atencao', 'Atenção']; return ['boa', 'Boa'] }
 async function abrirQualidade(empilhar = true) {
   const desde = new Date(Date.now() - 30 * 864e5).toISOString()
   const [{ data: evs }, { data: cps }, { data: opt }, { data: esp }, { count: auto }] = await Promise.all([
