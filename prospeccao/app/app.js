@@ -136,7 +136,7 @@ function pergunta(passo) {
   }
 }
 // o padrão é só a lista: Raio-X é escolha de quem quer a análise detalhada
-const MODOS = [['lista', 'Lista', 'Até 60 empresas do Google Maps, com nota, telefone e site. Depois você enriquece ou faz Raio-X de quem quiser.', 0], ['completa', 'Lista + 5 Raio-X', 'A lista completa e a análise detalhada das 5 com mais potencial: site, anúncios e avaliações.', 5], ['todas', 'Lista + Raio-X de todas', 'Análise detalhada de todas as empresas da lista, até 60. Gasta mais saldo.', 60]]
+const MODOS = [['lista', 'Lista', 'Até 60 empresas do Google Maps, com nota, telefone e site. Depois você enriquece ou faz Raio-X de quem quiser.', 0], ['completa', 'Lista + 5 Raio-X', 'A lista completa e a análise detalhada das 5 com mais potencial: site, anúncios e avaliações.', 5]]
 const custoModo = m => SALDO.busca + MODOS.find(x => x[0] === m)[3] * SALDO.raiox
 function saldoDepois() {
   if (SALDO.isento) return `Sua conta é isenta: usa à vontade. ${BTN_COMO}`
@@ -257,7 +257,7 @@ async function peneirar(modo) {
   if (modo === 'lista') { fim(`Lista pronta: ${a.olhadas} empresas.`); await abrirListaHome(); return }
   if (!a.finalistas) return fim('Nenhuma empresa com potencial forte aqui. Bora outro nicho?')
   dizer(`${a.finalistas} empresas merecem Raio-X. Já estou montando, uma por uma.`)
-  consultaAbre({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', de: 0, ate: a.finalistas, sair: true })
+  consultaAbre({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva 1 a 2 minutos. Pode continuar usando que eu aviso.', de: 0, ate: a.finalistas, sair: true })
   acompanhar()
 }
 function erro(e) { fimCarregando(); vivo(false, 'Liz parada'); liz(/saldo/i.test(e.message) ? esc(e.message) : `Travei aqui: ${esc(e.message)}`, 8000); if (busca) { busca.status = 'erro'; atualizarFunil() } }
@@ -273,7 +273,7 @@ function acompanhar() {
     if (b) busca = b
     diags = (d ?? []).filter(x => x.status !== 'pronto' || Object.keys(x.capivara || {}).length || x.status === 'erro')
     atualizarFunil(); desenharCards()
-    if (LOAD.tipo === 'raiox') { const prontos = diags.filter(x => x.status === 'pronto').length; consultaAbre({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', de: prontos, ate: Math.max(diags.length, prontos), sair: true }) }
+    if (LOAD.tipo === 'raiox') { const prontos = diags.filter(x => x.status === 'pronto').length; consultaAbre({ tipo: 'raiox', t: 'Montando os Raio-X', s: 'Leva 1 a 2 minutos. Pode continuar usando que eu aviso.', de: prontos, ate: Math.max(diags.length, prontos), sair: true }) }
     if (busca.status === 'pronta' || busca.status === 'erro') {
       clearInterval(poll)
       const n = diags.filter(x => x.status === 'pronto').length
@@ -372,7 +372,7 @@ async function fazerResto() {
   await sb.from('diagnosticos').update({ status: 'na_fila' }).in('id', sem.map(x => x.id))
   await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id)
   busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); dizer(`Bora: mais ${sem.length} Raio-X.`)
-  for (const x of sem) { sb.functions.invoke('diagnosticar', { body: { diagnostico_id: x.id } }); await espera(400) }
+  consultaAbre({ tipo: 'raiox', t: `Montando ${sem.length} Raio-X`, s: 'Eles rodam aos poucos, uns 6 por minuto. Pode continuar usando que eu aviso.', de: 0, ate: sem.length, sair: true })
   acompanhar()
 }
 document.addEventListener('click', async e => {
@@ -712,7 +712,7 @@ function lvPintar() {
     c.querySelector('[data-zap]')?.addEventListener('click', ev => abrirConversas(true, ev.currentTarget.dataset.zap))
     c.querySelector('[data-abre]')?.addEventListener('click', () => abrirSeq(d.id))
     c.querySelector('[data-add]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { b.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); lvPintar() })
-    c.querySelector('[data-faz]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; b.textContent = 'Mandando…'; d.status = 'na_fila'; consultaAbre({ tipo: 'raiox', t: `Montando o Raio-X de ${d.empresa?.nome || 'a empresa'}`, s: 'Leva cerca de 1 minuto. Pode continuar usando que eu aviso.', sair: true }); await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', d.id); await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id); sb.functions.invoke('diagnosticar', { body: { diagnostico_id: d.id } }); busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar(); lvPintar() })
+    c.querySelector('[data-faz]')?.addEventListener('click', async ev => { const b = ev.currentTarget; b.disabled = true; b.textContent = 'Mandando…'; d.status = 'na_fila'; consultaAbre({ tipo: 'raiox', t: `Montando o Raio-X de ${d.empresa?.nome || 'a empresa'}`, s: 'Leva 1 a 2 minutos. Pode continuar usando que eu aviso.', sair: true }); await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', d.id); await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id); busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar(); lvPintar() })
   })
 }
 
@@ -743,7 +743,6 @@ async function abrirLista(empilhar = true) {
     b.disabled = true; b.textContent = 'Mandando…'
     await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', b.dataset.faz)
     await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id)
-    sb.functions.invoke('diagnosticar', { body: { diagnostico_id: b.dataset.faz } })
     busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar()
     b.outerHTML = '<span class="lendo-tag"><i></i>Liz montando…</span>'
   })
@@ -1403,7 +1402,6 @@ function abrirFicha(d, empilhar = true) {
 async function fazerUma(d) {
   await sb.from('diagnosticos').update({ status: 'na_fila' }).eq('id', d.id)
   await sb.from('buscas').update({ status: 'diagnosticando', terminada_em: null }).eq('id', busca.id)
-  sb.functions.invoke('diagnosticar', { body: { diagnostico_id: d.id } })
   d.status = 'na_fila'; busca.status = 'diagnosticando'; vivo(true, 'Liz trabalhando'); acompanhar()
 }
 const esperando = new Set()
