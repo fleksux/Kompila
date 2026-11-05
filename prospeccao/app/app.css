@@ -938,3 +938,6 @@ body:has(#capO.on) .fab{display:none}
   .pf-tmp button{flex:1;justify-content:center;height:44px;padding:0 4px;font-size:12px}
   .pf-resp{height:44px;padding:0 10px}
 }
+
+.card .mds{margin:4px 0 12px}
+.card .md small{line-height:1.35;margin-top:2px}

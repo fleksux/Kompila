@@ -110,21 +110,22 @@ function pergunta(passo) {
     ? { stp: '1 de 2', h: `${hora()}${nome ? ', ' + esc(nome) : ''}.<br>Em que <em>cidade</em> a gente prospecta hoje?`, ph: 'Digite a cidade', sg: cid, bt: 'Continuar' }
     : { stp: '2 de 2', h: `E qual <em>nicho</em> eu procuro em ${esc(esc_.cidade.split(',')[0])}?`, ph: 'Ex: clínica de estética', sg: nic, bt: 'Começar a busca' }
   $('askc').innerHTML = `${passo === 2 ? `<div class="pick">${PIN}${esc(esc_.cidade)}</div>` : ''}<div class="stp">${q.stp}</div><h2>${q.h}</h2>
+    ${passo === 2 ? modosHtml() : ''}
     <div class="fld"><input type="text" id="aq" placeholder="${q.ph}" autocomplete="off"><button class="btn go lg" id="ab">${q.bt}</button></div>
     <div class="err" id="ae"></div><div class="sg">${q.sg.map(x => `<button>${x}</button>`).join('')}</div>
-    ${passo === 2 ? modosHtml() : ''}
+    ${passo === 2 ? `<div class="mds-s" id="mdS">${saldoDepois()}</div>` : ''}
     ${passo === 1 ? `<div class="ou">ou</div><div class="drop" id="drop"><div class="di">${IC.arq}</div><div><b>Sobe uma lista</b><small>Excel ou CSV com empresa, site ou cidade. Conta pessoal eu descarto.</small></div></div>` : ''}`
   const aq = $('aq'); if (!mob()) aq.focus()
   const vai = v => {
     v = (v || '').trim()
     if (!v) { $('ae').textContent = passo === 1 ? 'Me fala uma cidade pra eu começar.' : 'Me fala um nicho pra eu começar.'; aq.focus(); return }
     if (passo === 1) { esc_.cidade = cid.find(c => c.toLowerCase().startsWith(v.toLowerCase())) || v; pergunta(2) }
-    else { esc_.nicho = v.charAt(0).toUpperCase() + v.slice(1); fecharPergunta(); rodarBusca(esc_.cidade, esc_.nicho, esc_.modo || 'completa') }
+    else { esc_.nicho = v.charAt(0).toUpperCase() + v.slice(1); fecharPergunta(); rodarBusca(esc_.cidade, esc_.nicho, esc_.modo || 'lista') }
   }
   $('ab').onclick = () => vai(aq.value)
   aq.onkeydown = e => { if (e.key === 'Enter') vai(aq.value) }
   $('askc').querySelectorAll('.sg button').forEach(b => b.onclick = () => vai(b.textContent))
-  $('askc').querySelectorAll('.md').forEach(b => b.onclick = () => { esc_.modo = b.dataset.m; $('askc').querySelectorAll('.md').forEach(x => x.classList.toggle('on', x === b)); $('mdS').innerHTML = saldoDepois() })
+  $('askc').querySelectorAll('.md').forEach(b => b.onclick = () => { esc_.modo = b.dataset.m; $('askc').querySelectorAll('.md').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b) }); $('mdS').innerHTML = saldoDepois() })
   const dr = $('drop')
   if (dr) {
     dr.onclick = () => $('arq').click()
@@ -133,18 +134,18 @@ function pergunta(passo) {
     dr.ondrop = e => { e.preventDefault(); dr.classList.remove('on'); if (e.dataTransfer.files[0]) lerArquivo(e.dataTransfer.files[0]) }
   }
 }
-// lista simples, pesquisa completa (Raio-X das 5 melhores) ou completa de todas: o cliente escolhe quanto do saldo gasta
-const MODOS = [['lista', 'Lista simples', 'até 60 empresas com potencial, contato e Instagram', 0], ['completa', 'Pesquisa completa', 'a lista + Raio-X das 5 melhores', 5], ['todas', 'Completa de todas', 'a lista + Raio-X de todas (até 60)', 60]]
+// o padrão é só a lista: Raio-X é escolha de quem quer a análise detalhada
+const MODOS = [['lista', 'Lista', 'Até 60 empresas com nota no Google, contatos e Instagram. Depois você escolhe quem merece Raio-X.', 0], ['completa', 'Lista + 5 Raio-X', 'A lista completa e a análise detalhada das 5 com mais potencial: site, anúncios, Instagram e avaliações.', 5], ['todas', 'Lista + Raio-X de todas', 'Análise detalhada de todas as empresas da lista, até 60. Gasta mais saldo.', 60]]
 const custoModo = m => SALDO.busca + MODOS.find(x => x[0] === m)[3] * SALDO.raiox
 function saldoDepois() {
   if (SALDO.isento) return `Sua conta é isenta: usa à vontade. ${BTN_COMO}`
-  const m = esc_.modo || 'completa', c = custoModo(m), r0 = rende()
+  const m = esc_.modo || 'lista', c = custoModo(m), r0 = rende()
   const base = `Seu saldo dá pra <b>${r0.listas} lista${r0.listas === 1 ? '' : 's'} simples (até ${emp(r0.listas)} empresas)</b> ou <b>${r0.raiox} empresa${r0.raiox === 1 ? '' : 's'} com Raio-X</b>. ${BTN_COMO}`
   return SALDO.saldo >= c || m === 'todas' ? base : `<span class="neg">Seu saldo não cobre essa opção.</span> ${base}`
 }
 function modosHtml() {
-  esc_.modo = esc_.modo || 'completa'
-  return `<div class="ou">como você quer?</div><div class="mds">${MODOS.map(([k, t, s, n]) => `<button class="md${esc_.modo === k ? ' on' : ''}" data-m="${k}"><i></i><span><b>${t}</b><small>${s}</small></span><em>${n === 0 ? 'até 60 empresas' : n === 60 ? 'até 60 Raio-X' : n + ' Raio-X'}</em></button>`).join('')}</div><div class="mds-s" id="mdS">${saldoDepois()}</div>`
+  esc_.modo = esc_.modo || 'lista'
+  return `<div class="mds" role="group" aria-label="O que você quer receber">${MODOS.map(([k, t, s]) => `<button class="md${esc_.modo === k ? ' on' : ''}" data-m="${k}" aria-pressed="${esc_.modo === k}"><i></i><span><b>${t}</b><small>${s}</small></span></button>`).join('')}</div>`
 }
 function fecharPergunta() { $('ask').classList.add('bye'); setTimeout(() => $('ask').hidden = true, 700); document.body.classList.remove('fora') }
 const hora = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' }
@@ -211,8 +212,8 @@ function distancia(a, b) {
 }
 const parecida = (a, b) => { a = chave(a); b = chave(b); return a === b || (Math.min(a.length, b.length) >= 5 && distancia(a, b) <= 2) }
 
-async function rodarBusca(cidade, nicho, modo = 'completa', quero = 60, novaMesmo = false) {
-  if (modo === true) modo = 'todas'; if (!modo) modo = 'completa'
+async function rodarBusca(cidade, nicho, modo = 'lista', quero = 60, novaMesmo = false) {
+  if (modo === true) modo = 'todas'; if (!modo) modo = 'lista'
   // já pesquisou essa cidade e esse nicho (mesmo escrito diferente)? abre o que já tem e não gasta nada
   if (!novaMesmo) {
     const { data: antigas } = await sb.from('buscas').select('*').neq('cidade', 'Lista').neq('status', 'erro').order('criada_em', { ascending: false }).limit(200)
