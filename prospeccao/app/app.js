@@ -236,7 +236,7 @@ async function rodarBusca(cidade, nicho, modo = 'lista', quero = 60, novaMesmo =
   try {
     const b = await chamar('buscar', { cidade, nicho, quero })
     busca = { id: b.busca_id, cidade, nicho, status: 'peneirando', olhadas: b.olhadas, novas: b.novas, com_dor: 0 }
-    atualizarFunil(); dizer(`Olhei ${b.olhadas} empresas. ${b.ja_tinha ? b.ja_tinha + ' você já tinha, então ' : ''}${b.novas} são novas${b.novas < quero ? ` (pedi ${quero}, mas a cidade não tem mais que isso nesse nicho)` : ''}. Lendo as avaliações agora.`)
+    atualizarFunil(); dizer(`Olhei ${b.olhadas} empresas. ${b.ja_tinha ? b.ja_tinha + ' você já tinha, então ' : ''}${b.novas} são novas${b.novas < quero ? (b.teto ? ` (você pediu ${quero}; parei aqui pra não gastar à toa, é só buscar de novo pra trazer mais)` : ` (você pediu ${quero}, mas a cidade não tem mais que isso nesse nicho)`) : ''}. Lendo as avaliações agora.`)
     if (!b.novas) return fim('Nenhuma empresa nova nessa busca. Tenta outro nicho ou outra cidade.')
     carregarSaldo()
     await peneirar(modo)
