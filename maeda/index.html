@@ -627,5 +627,34 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObse
 aba(); marca()
 })()
 </script>
+<style>
+#maeda-cookies{position:fixed;left:16px;right:16px;bottom:16px;z-index:99990;max-width:640px;margin:0 auto;padding:16px 20px;display:none;align-items:center;gap:16px;background:#232C1F;color:#F1E9D7;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.28);font-size:14px;line-height:1.45}
+#maeda-cookies.on{display:flex}
+#maeda-cookies p{margin:0;flex:1;color:inherit}
+#maeda-cookies a{color:inherit;text-decoration:underline}
+#maeda-cookies div{display:flex;gap:8px;flex-shrink:0}
+#maeda-cookies button{min-height:44px;padding:0 18px;border-radius:8px;border:1px solid #F1E9D7;background:transparent;color:#F1E9D7;font:inherit;font-weight:500;cursor:pointer}
+#maeda-cookies button.sim{background:#F1E9D7;color:#232C1F}
+@media (max-width:600px){#maeda-cookies{flex-direction:column;align-items:stretch;left:12px;right:12px;bottom:12px}#maeda-cookies div button{flex:1}}
+</style>
+<div id="maeda-cookies" role="dialog" aria-label="Aviso de cookies">
+  <p>Usamos cookies para medir as visitas e melhorar o site. Saiba mais na <a href="https://maedagastronomia.com.br/politica-de-privacidade/">Política de privacidade</a>.</p>
+  <div><button type="button" class="nao">Recusar</button><button type="button" class="sim">Aceitar</button></div>
+</div>
+<script>
+/* Medição da Maeda (06/11/2026): Google Analytics e acessos do CRM só depois do aceite. */
+(function () {
+  var CH = 'maeda_cookies', caixa = document.getElementById('maeda-cookies'), ligado = false
+  function ler() { try { return localStorage.getItem(CH) } catch (e) { return null } }
+  function gravar(v) { try { localStorage.setItem(CH, v) } catch (e) {} }
+  function script(src, attr, valor) { var s = document.createElement('script'); s.src = src; s.async = false; s.setAttribute(attr, valor); document.head.appendChild(s) }
+  function ligar() { if (ligado) return; ligado = true; script('https://crm.kompila.com.br/acessos.js', 'data-chave', 'kmp_maeda'); script('https://crm.kompila.com.br/medicao.js', 'data-ga', 'G-R0J2JXHDQK') }
+  function escolher(v) { gravar(v); caixa.classList.remove('on'); if (v === 'sim') ligar() }
+  caixa.querySelector('.sim').addEventListener('click', function () { escolher('sim') })
+  caixa.querySelector('.nao').addEventListener('click', function () { escolher('nao') })
+  var v = ler()
+  if (v === 'sim') ligar(); else if (v !== 'nao') caixa.classList.add('on')
+})()
+</script>
 </body>
 </html>
