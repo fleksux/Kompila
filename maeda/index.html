@@ -530,6 +530,7 @@ function add(k) {
   const it = CAT[k]; if (!it) return
   pedido[k] = (pedido[k] || 0) + (pedido[k] ? 1 : (it.min || 1))
   salva(); marca(); toast(`${it.n} no pedido`)
+  if (window.fbq) fbq('track', 'AddToCart', { value: it.p, currency: 'BRL' })
   voa(origem)
 }
 function voa(de) {
@@ -593,6 +594,8 @@ async function enviar() {
   const url = zap(txt.join('\n'))
   if (janela) janela.location.href = url; else location.href = url
   enviando = false; bt.textContent = 'Enviar pedido pelo WhatsApp'
+  // pedido ainda não pago: é Lead, não Purchase. O eventID serve para juntar com a API de Conversões depois.
+  if (numero && window.fbq) fbq('track', 'Lead', { value: total(), currency: 'BRL' }, { eventID: `pedido_${numero}` })
   if (numero) { pedido = {}; salva(); marca(); fecha(); toast(`Pedido nº ${numero} registrado. Agora é só tocar em enviar no WhatsApp.`) }
 }
 function abre() { $('#toast').classList.remove('on'); desenha(); $('#pedido').classList.add('on'); $('#pedido').setAttribute('aria-hidden', 'false'); $('#veu').classList.add('on'); document.body.style.overflow = 'hidden' }
@@ -613,7 +616,7 @@ document.addEventListener('click', e => {
   if (t.matches('[data-luz]')) { const l = $('#luz'); $('img', l).src = t.dataset.luz; $('p', l).textContent = t.dataset.leg; return l.classList.add('on') }
   if (t.matches('[data-fecha-luz]')) return $('#luz').classList.remove('on')
   if (t.id === 'enviar') return enviar()
-  if (t.matches('[data-zap]')) { e.preventDefault(); window.open(zap('Olá, Maeda! Vim pelo cardápio.'), '_blank', 'noopener') }
+  if (t.matches('[data-zap]')) { e.preventDefault(); if (window.fbq) fbq('track', 'Contact'); window.open(zap('Olá, Maeda! Vim pelo cardápio.'), '_blank', 'noopener') }
 })
 document.addEventListener('change', e => { if (e.target.name === 'modo') { $('#c-end').hidden = e.target.value !== 'Entrega'; lerForm() } })
 document.addEventListener('input', e => e.target.classList && e.target.classList.remove('erro'))
@@ -642,13 +645,17 @@ aba(); marca()
   <div><button type="button" class="nao">Recusar</button><button type="button" class="sim">Aceitar</button></div>
 </div>
 <script>
-/* Medição da Maeda (06/11/2026): Google Analytics e acessos do CRM só depois do aceite. */
+/* Medição da Maeda (06/11/2026): Google Analytics, acessos do CRM e Pixel da Meta só depois do aceite. */
 (function () {
   var CH = 'maeda_cookies', caixa = document.getElementById('maeda-cookies'), ligado = false
   function ler() { try { return localStorage.getItem(CH) } catch (e) { return null } }
   function gravar(v) { try { localStorage.setItem(CH, v) } catch (e) {} }
   function script(src, attr, valor) { var s = document.createElement('script'); s.src = src; s.async = false; s.setAttribute(attr, valor); document.head.appendChild(s) }
-  function ligar() { if (ligado) return; ligado = true; script('https://crm.kompila.com.br/acessos.js', 'data-chave', 'kmp_maeda'); script('https://crm.kompila.com.br/medicao.js', 'data-ga', 'G-R0J2JXHDQK') }
+  function ligar() { if (ligado) return; ligado = true; script('https://crm.kompila.com.br/acessos.js', 'data-chave', 'kmp_maeda'); script('https://crm.kompila.com.br/medicao.js', 'data-ga', 'G-R0J2JXHDQK'); pixel() }
+  function pixel() {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1788265568950596'); fbq('track', 'PageView')
+  }
   function escolher(v) { gravar(v); caixa.classList.remove('on'); if (v === 'sim') ligar() }
   caixa.querySelector('.sim').addEventListener('click', function () { escolher('sim') })
   caixa.querySelector('.nao').addEventListener('click', function () { escolher('nao') })
