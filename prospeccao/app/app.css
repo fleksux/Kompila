@@ -1389,3 +1389,7 @@ a.fi-c{text-decoration:none;color:inherit}
   .pc-etq-add input,.pc-etq-add button{height:44px}.pc-etq-add input{font-size:16px}
   .pf-lote{margin-left:0;width:100%}.pf-lote input{flex:1;width:auto;height:44px;font-size:16px}.pf-i .pf-lote button{height:44px}
 }
+/* botões do card aberto: mesma altura, fonte e largura */
+.pc .cp-ac{gap:4px}
+.pc .cp-ac>*{flex:1 1 100%;display:flex;align-items:center;justify-content:center;height:32px;min-height:32px;padding:0 8px;font-size:12px;font-weight:500}
+@media (max-width:700px){.pc .cp-ac>*{flex:1 1 0;height:44px;min-height:44px}}
