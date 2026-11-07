@@ -1194,14 +1194,15 @@ const dpSlHtml = (id, rotulo, grupos) => {
 const dpSlFechar = (exceto) => document.querySelectorAll('.dp-sl').forEach(el => { if (el === exceto) return; el.querySelector('.dp-sl-p').hidden = true; el.querySelector('.dp-sl-bt').setAttribute('aria-expanded', 'false') })
 document.addEventListener('click', e => { if (!e.target.closest?.('.dp-sl')) dpSlFechar() })
 document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; const a = document.querySelector('.dp-sl-bt[aria-expanded="true"]'); if (a) { dpSlFechar(); a.focus() } })
-const dpSlLigar = (id, conj, vazio, tudo, aoMudar) => {
+const dpSlLigar = (id, conj, vazio, tudo, aoMudar, foraDoTudo = []) => {
   const el = $(id); if (!el) return
   const bt = el.querySelector('.dp-sl-bt'), p = el.querySelector('.dp-sl-p'), marcas = [...el.querySelectorAll('input[type=checkbox]')], busca = el.querySelector('.dp-sl-bu')
   const texto = i => i.nextElementSibling.textContent
   const pinta = () => {
     marcas.forEach(i => { i.checked = conj.has(i.value) })
     const on = marcas.filter(i => i.checked)
-    $(id + 'V').textContent = !on.length ? vazio : tudo && on.length === marcas.length ? tudo : on.length <= 2 ? on.map(texto).join(', ') : `${texto(on[0])} +${on.length - 1}`
+    const todasSemFora = marcas.filter(i => !foraDoTudo.includes(i.value))
+    $(id + 'V').textContent = !on.length ? vazio : tudo && on.length === marcas.length ? tudo : tudo && foraDoTudo.length && on.length === todasSemFora.length && on.every(i => todasSemFora.includes(i)) ? 'Todas, menos Perdido' : on.length <= 2 ? on.map(texto).join(', ') : `${texto(on[0])} +${on.length - 1}`
     bt.classList.toggle('tem', !!on.length)
   }
   bt.onclick = () => { const abre = p.hidden; dpSlFechar(el); p.hidden = !abre; bt.setAttribute('aria-expanded', abre); if (abre) { if (busca && !mob()) busca.focus(); p.scrollIntoView({ block: 'nearest' }) } }
@@ -1214,7 +1215,7 @@ const dpSlLigar = (id, conj, vazio, tudo, aoMudar) => {
   }
   el.querySelector('[data-sl-limpa]').onclick = () => { conj.clear(); pinta(); aoMudar?.() }
   const bTudo = el.querySelector('[data-sl-tudo]'); if (!tudo) bTudo.hidden = true
-  else bTudo.onclick = () => { marcas.forEach(i => conj.add(i.value)); pinta(); aoMudar?.() }
+  else bTudo.onclick = () => { marcas.forEach(i => { if (!foraDoTudo.includes(i.value)) conj.add(i.value) }); pinta(); aoMudar?.() }
   DP_SL[id] = { pinta }; pinta()
 }
 // grupos de mensagens por segmento: a etiqueta escolhida traz as frases do grupo
@@ -1580,7 +1581,7 @@ const dpPintarPublico = () => {
 }
 const ligarPublico = () => {
   if (!$('dpPara')) return
-  dpSlLigar('slEtapa', DP_ETAPAS, 'Nenhuma etapa', 'Todas as etapas', (v, on) => { if (on && DP_ETAPA_RESPONDEU.includes(v) && DP_TIRA_RESP) { DP_TIRA_RESP = false; $('dTiraResp').checked = false } dpPintarPublico() })
+  dpSlLigar('slEtapa', DP_ETAPAS, 'Nenhuma etapa', 'Todas as etapas', (v, on) => { if (on && DP_ETAPA_RESPONDEU.includes(v) && DP_TIRA_RESP) { DP_TIRA_RESP = false; $('dTiraResp').checked = false } dpPintarPublico() }, ['perdido'])
   if ($('dTiraResp')) $('dTiraResp').onchange = ev => { DP_TIRA_RESP = ev.target.checked; dpPintarPublico() }
   dpSlLigar('slInc', DP_INC, 'Todas', '', (v, on) => { if (on) { DP_EXC.delete(v); DP_SL.slExc?.pinta() } dpPintarPublico(); dpGrAuto() })
   dpSlLigar('slExc', DP_EXC, 'Nenhuma', '', (v, on) => { if (on) { DP_INC.delete(v); DP_SL.slInc?.pinta(); dpGrAuto() } dpPintarPublico() })
