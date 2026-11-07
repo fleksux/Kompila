@@ -1355,3 +1355,8 @@ a.fi-c{text-decoration:none;color:inherit}
 .fi-fotos:first-child{margin-top:0}
 .fi-falta-l{width:100%}
 @media (max-width:700px){.fi-fotos{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.dp-tira{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid var(--line2);border-radius:var(--r8);background:var(--w);font-size:14px;font-weight:500;color:var(--tx);cursor:pointer}
+.dp-tira:hover{background:var(--s)}
+.dp-tira input{flex:none;width:18px;height:18px;margin:0;accent-color:var(--tx)}
+.dp-tira span{flex:1;min-width:0}
+.dp-tira b{font:600 12px var(--mono);color:var(--mu)}

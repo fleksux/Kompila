@@ -1540,14 +1540,18 @@ const dpFoneDe = d => {
   if (x.length === 10 || x.length === 11) x = '55' + x
   return x.length >= 12 && x.length <= 13 ? x : ''
 }
-const dpTem = (l, conj) => conj.has('t:' + l.temp) || (l.seg && conj.has('s:' + l.seg))
-// lista e temperatura somam: Estetica + Frio é quem está nas duas
-const dpNaEscolha = l => { const k = [...DP_INC], segs = k.some(x => x.startsWith('s:')), temps = k.some(x => x.startsWith('t:')); return (!segs || DP_INC.has('s:' + l.seg)) && (!temps || DP_INC.has('t:' + l.temp)) }
+const dpTem = (l, conj) => conj.has('t:' + l.temp) || (l.seg && conj.has('s:' + l.seg)) || (l.cat && conj.has('c:' + l.cat))
+// tirar quem já respondeu vale pela conversa, não só pela etapa: dá para responder e continuar em A contatar
+let DP_TIRA_RESP = true, DP_RESP_TEL = new Set()
+const DP_ETAPA_RESPONDEU = ['respondeu', 'reuniao', 'cliente']
+// lista, categoria e temperatura somam: Estetica + Frio é quem está nas duas
+const dpNaEscolha = l => { const k = [...DP_INC], tem = p => k.some(x => x.startsWith(p)); return (!tem('s:') || DP_INC.has('s:' + l.seg)) && (!tem('c:') || DP_INC.has('c:' + l.cat)) && (!tem('t:') || DP_INC.has('t:' + l.temp)) }
 const dpTemEtiqueta = l => dpTem(l, DP_EXC) || !dpNaEscolha(l)
 const dpPublico = () => {
-  const vistos = new Set(), alvo = []; let semCel = 0, porEtiqueta = 0, repetidos = 0, suprimidos = 0, frequentes = 0
+  const vistos = new Set(), alvo = []; let semCel = 0, porEtiqueta = 0, repetidos = 0, suprimidos = 0, frequentes = 0, responderam = 0
   for (const l of DP_PIPE) {
     if (!DP_ETAPAS.has(l.etapa)) continue
+    if (DP_TIRA_RESP && l.resp) { responderam++; continue }
     if (!l.tel) { semCel++; continue }
     if (DP_G.supressao && DP_OPT.has(l.tel)) { suprimidos++; continue }
     if (DP_G.frequencia && dpFrequente(l.tel)) { frequentes++; continue }
@@ -1555,7 +1559,7 @@ const dpPublico = () => {
     if (DP_G.duplicidade && vistos.has(l.tel)) { repetidos++; continue }
     vistos.add(l.tel); alvo.push(l)
   }
-  return { alvo, semCel, porEtiqueta, repetidos, suprimidos, frequentes }
+  return { alvo, semCel, porEtiqueta, repetidos, suprimidos, frequentes, responderam }
 }
 const dpTempoTxt = n => {
   if (!n || !$('dIntMin')) return ''
@@ -1566,17 +1570,18 @@ const dpTempoTxt = n => {
 }
 const dpPintarPublico = () => {
   if (!$('dpLista')) return
-  const { alvo, semCel, porEtiqueta, repetidos, suprimidos, frequentes } = dpPublico(), n = alvo.length
+  const { alvo, semCel, porEtiqueta, repetidos, suprimidos, frequentes, responderam } = dpPublico(), n = alvo.length
   $('dpEsqT').textContent = `${n} ${n === 1 ? 'empresa vai' : 'empresas vão'} receber`
-  $('dpLista').innerHTML = n ? `<div class="dp-list">${alvo.map(l => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(l.nome)}</b><small>${esc([tfmt(l.tel), l.bairro].filter(Boolean).join(' · '))}</small></div><span class="dp-chip c-f">${esc((ETAPAS.find(x => x[0] === l.etapa) || [])[1] || '')}</span></div></div>`).join('')}</div>` : '<p class="dp-lead">Nenhuma empresa com essa escolha. Escolha outra lista ou etapa.</p>'
-  const fora = [semCel && `${semCel} só com telefone fixo`, porEtiqueta && `${porEtiqueta} pela lista escolhida`, repetidos && `${repetidos} com número repetido`, suprimidos && `${suprimidos} na lista de supressão`, frequentes && `${frequentes} por frequência`].filter(Boolean).join(', ')
+  $('dpLista').innerHTML = n ? `<div class="dp-list">${alvo.map(l => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(l.nome)}</b><small>${esc([tfmt(l.tel), l.bairro].filter(Boolean).join(' · '))}</small></div><span class="dp-chip c-f">${esc((ETAPAS.find(x => x[0] === l.etapa) || [])[1] || '')}${l.resp && !DP_ETAPA_RESPONDEU.includes(l.etapa) ? ' · respondeu' : ''}</span></div></div>`).join('')}</div>` : '<p class="dp-lead">Nenhuma empresa com essa escolha. Escolha outra lista ou etapa.</p>'
+  const fora = [responderam && `${responderam} que já ${responderam === 1 ? 'respondeu' : 'responderam'}`, semCel && `${semCel} só com telefone fixo`, porEtiqueta && `${porEtiqueta} pela lista escolhida`, repetidos && `${repetidos} com número repetido`, suprimidos && `${suprimidos} na lista de supressão`, frequentes && `${frequentes} por frequência`].filter(Boolean).join(', ')
   $('dpResumo').innerHTML = `<b>${n} ${n === 1 ? 'empresa' : 'empresas'}</b>${dpVersoes().length ? ` · ${dpVersoes().length} ${dpVersoes().length === 1 ? 'versão' : 'versões'}` : ''}${dpTempoTxt(n) ? ` · ${dpTempoTxt(n)}` : ''}${fora ? `<br>Ficam de fora: ${fora}.` : ''}`
   pintarGuardian(alvo.map(l => l.tel))
   const b = $('dUsarRaiox'); b.disabled = !n; b.textContent = `Montar disparo para ${n} ${n === 1 ? 'empresa' : 'empresas'}`
 }
 const ligarPublico = () => {
   if (!$('dpPara')) return
-  dpSlLigar('slEtapa', DP_ETAPAS, 'Nenhuma etapa', 'Todas as etapas', dpPintarPublico)
+  dpSlLigar('slEtapa', DP_ETAPAS, 'Nenhuma etapa', 'Todas as etapas', (v, on) => { if (on && DP_ETAPA_RESPONDEU.includes(v) && DP_TIRA_RESP) { DP_TIRA_RESP = false; $('dTiraResp').checked = false } dpPintarPublico() })
+  if ($('dTiraResp')) $('dTiraResp').onchange = ev => { DP_TIRA_RESP = ev.target.checked; dpPintarPublico() }
   dpSlLigar('slInc', DP_INC, 'Todas', '', (v, on) => { if (on) { DP_EXC.delete(v); DP_SL.slExc?.pinta() } dpPintarPublico(); dpGrAuto() })
   dpSlLigar('slExc', DP_EXC, 'Nenhuma', '', (v, on) => { if (on) { DP_INC.delete(v); DP_SL.slInc?.pinta(); dpGrAuto() } dpPintarPublico() })
   document.querySelector('.dp-cf')?.addEventListener('input', dpPintarPublico)
@@ -1690,12 +1695,15 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
         <div class="dp-fix">${rod ? `<button class="btn line" id="dPausa" style="width:100%">Pausar</button>` : `<button class="btn ok lg" id="dLiga" style="width:100%" disabled>Ligar o disparo</button>`}</div>
       </aside></div>`
   } else {
-    const [{ data: ds }, { data: ins }] = await Promise.all([
-      sb.from('diagnosticos').select('id, etapa, etapa_em, nota_dor, temperatura, segmento, telefone, capivara, busca:buscas(nicho), empresa:empresas(nome, bairro, whatsapp, telefone)').eq('decisao', 'aprovada').eq('arquivado', false).order('nota_dor', { ascending: false, nullsFirst: false }).limit(2000),
-      sb.from('conversa').select('telefone, criado_em').eq('direcao', 'in').eq('automatica', false).order('criado_em', { ascending: false }).limit(1000)
+    const [{ data: ds }, { data: ins }, { data: atv }] = await Promise.all([
+      sb.from('diagnosticos').select('id, etapa, etapa_em, nota_dor, temperatura, segmento, telefone, capivara, busca:buscas(nicho), empresa:empresas(nome, bairro, whatsapp, telefone, categoria)').eq('decisao', 'aprovada').eq('arquivado', false).order('nota_dor', { ascending: false, nullsFirst: false }).limit(2000),
+      sb.from('conversa').select('telefone, criado_em').eq('direcao', 'in').eq('automatica', false).order('criado_em', { ascending: false }).limit(1000),
+      sb.rpc('atividade_leads')
     ])
+    const respId = new Set((atv || []).map(a => a.diagnostico_id).filter(Boolean))
+    DP_RESP_TEL = new Set((atv || []).flatMap(a => [chaveTel(a.telefone), chaveTel(a.fone)]).filter(Boolean)); DP_TIRA_RESP = true
     const ultimaIn = {}; (ins || []).forEach(m => { if (!ultimaIn[m.telefone]) ultimaIn[m.telefone] = m.criado_em })
-    DP_PIPE = (ds || []).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
+    DP_PIPE = (ds || []).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), cat: String(d.empresa?.categoria || '').trim(), resp: DP_ETAPA_RESPONDEU.includes(etapa) || respId.has(d.id) || DP_RESP_TEL.has(chaveTel(tel)), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
     DP_ETAPAS = new Set(['a_contatar']); DP_EXC = new Set(); DP_INC = new Set()
     // veio do pipeline filtrado: o disparo já abre na mesma lista
     if (doPipeline) { if (pipeF.seg && DP_PIPE.some(l => l.seg === pipeF.seg)) DP_INC.add('s:' + pipeF.seg); if (pipeF.temp) DP_INC.add('t:' + pipeF.temp) }
@@ -1704,7 +1712,9 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
     const segs = [...new Set(DP_PIPE.map(l => l.seg).filter(Boolean))].sort((x, y) => x.localeCompare(y))
     const nTempD = k => DP_PIPE.filter(l => l.temp === k).length
     DP_SEGS = segs
-    const etqGrupos = [['Segmento', segs.map(g => [`s:${g}`, g, DP_PIPE.filter(l => l.seg === g).length])], ['Temperatura', TEMP_MAN.filter(([k]) => nTempD(k)).map(([k, t]) => [`t:${k}`, t, nTempD(k)])]]
+    const cats = [...new Set(DP_PIPE.map(l => l.cat).filter(Boolean))].sort((x, y) => DP_PIPE.filter(l => l.cat === y).length - DP_PIPE.filter(l => l.cat === x).length)
+    const nResp = DP_PIPE.filter(l => l.resp).length
+    const etqGrupos = [['Lista', segs.map(g => [`s:${g}`, g, DP_PIPE.filter(l => l.seg === g).length])], ['Categoria', cats.map(g => [`c:${g}`, g, DP_PIPE.filter(l => l.cat === g).length])], ['Temperatura', TEMP_MAN.filter(([k]) => nTempD(k)).map(([k, t]) => [`t:${k}`, t, nTempD(k)])]]
     const temEtq = etqGrupos.some(g => g[1].length)
     DP_VERS = [saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
     DP_COMP_ON = false; DP_COMP = [DP_COMP_PADRAO]
@@ -1729,9 +1739,10 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
             <button type="button" role="tab" data-dptab="nums">Colar números</button>
           </div>
           <div id="dpPara">
-            ${temEtq ? dpSlHtml('slInc', 'Qual lista vai receber', etqGrupos) : ''}
+            ${temEtq ? dpSlHtml('slInc', 'Quem vai receber', etqGrupos) : ''}
             ${dpSlHtml('slEtapa', 'Etapa do pipeline', [['', ETAPAS.map(([k, t]) => [k, t, nEtapa(k)])]])}
             ${temEtq ? dpSlHtml('slExc', 'Não enviar para', etqGrupos) : '<p class="dp-var" style="padding:12px 0 0">Nenhuma lista no pipeline ainda.</p>'}
+            <label class="dp-tira"><input type="checkbox" id="dTiraResp" checked><span>Tirar quem já respondeu</span><b>${nResp}</b></label>
             <div class="dp-cfg" id="dpResumo" style="margin-top:12px"></div>
           </div>
           ${campoMensagem()}
@@ -1761,10 +1772,10 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
   if ($('dpList')) $('dpList').querySelectorAll('.dp-it').forEach(el => { const top = el.querySelector('.dp-it-top'); if (top) top.onclick = () => el.classList.toggle('aberto') })
   if ($('dCriarL')) $('dCriarL').onclick = async () => {
     const { lista: todosNums } = dpLerNumeros($('dNums').value)
-    const nums = todosNums.filter(n => !(DP_G.supressao && DP_OPT.has(n.tel)) && !(DP_G.frequencia && dpFrequente(n.tel)))
-    if (!nums.length) return liz(todosNums.length ? 'Todos esses números foram barrados pelo Guardian.' : 'Põe pelo menos um número com DDD.')
+    const nums = todosNums.filter(n => !(DP_G.supressao && DP_OPT.has(n.tel)) && !(DP_G.frequencia && dpFrequente(n.tel)) && !DP_RESP_TEL.has(chaveTel(n.tel)))
+    if (!nums.length) return liz(todosNums.length ? 'Todos esses números ficaram de fora: pelo Guardian ou porque já responderam.' : 'Põe pelo menos um número com DDD.')
     DP_G_TELS = nums.map(n => n.tel); if (guardianBloqueia()) return
-    if (nums.length < todosNums.length) liz(`${todosNums.length - nums.length} número(s) ficaram de fora pelo Guardian.`)
+    if (nums.length < todosNums.length) liz(`${todosNums.length - nums.length} número(s) ficaram de fora: pelo Guardian ou porque já responderam.`)
     const msg = dpVersoes()[0]
     if (!msg) return liz('Escreve a mensagem que vai ser enviada.')
     const cfg = dpLer()
