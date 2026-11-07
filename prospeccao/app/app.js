@@ -584,8 +584,14 @@ function fimCarregando(tipo) { if (tipo && LOAD.tipo !== tipo) return; clearTime
 $('loadO').querySelector('.ld-x').onclick = () => fimCarregando()
 
 /* ======================= enriquecer: dentro do card de cada empresa ======================= */
-const ENR = { aberto: new Set(), msg: {} }
-const enrBotao = (e) => e?.id ? `<button class="btn line sm" data-enr="${e.id}" aria-expanded="${ENR.aberto.has(e.id)}">Enriquecer</button>` : ''
+const enrBotao = (e) => e?.id ? `<button class="btn line sm" data-enr="${e.id}" aria-haspopup="dialog">Enriquecer</button>` : ''
+// no Google muita empresa põe o Instagram no lugar do site: vira Instagram, não conta como site
+const empNorm = e => {
+  if (!e) return e
+  const m = String(e.site || '').trim().match(/^(?:https?:\/\/)?(?:www\.|m\.)?instagram\.com\/([A-Za-z0-9_.]+)/i)
+  if (m && !['p', 'reel', 'reels', 'explore', 'stories'].includes(m[1].toLowerCase())) { if (!e.instagram) e.instagram = m[1].toLowerCase(); e.site = null }
+  return e
+}
 const anoDe = d => String(d || '').slice(0, 4)
 // no card: só porte, atividade, abertura e situação. CNPJ e nome da Receita não aparecem.
 function enrDados(e) {
@@ -596,45 +602,87 @@ function enrDados(e) {
   return `<div class="rc"><div class="rc-t"><b>Dados da empresa</b><span class="${prov ? 'rc-pv' : 'rc-ok'}">${prov ? 'Provável' : 'Confirmado'}</span></div>
     ${linha ? `<small>${linha}</small>` : ''}${r.atividade ? `<small>${esc(r.atividade)}</small>` : ''}${ruim ? `<small class="rc-ruim">Situação: ${esc(r.situacao)}</small>` : ''}</div>`
 }
-function enrPainel(e) {
-  if (!e?.id || !ENR.aberto.has(e.id)) return ''
-  const m = ENR.msg[e.id]
-  const campo = (k, t, ph, modo = 'text') => `<label><span>${t}</span><input data-c="${k}" type="${modo}" placeholder="${ph}" value="${esc(e[k] || '')}" autocomplete="off"></label>`
-  return `<div class="enr" data-enr-p="${e.id}"><button class="btn go sm enr-b" data-enr-buscar>Buscar dados</button>
-    ${m ? `<div class="enr-m ${m.t}">${m.h}</div>` : ''}
-    ${campo('whatsapp', 'WhatsApp', '(11) 90000-0000', 'tel')}${campo('instagram', 'Instagram', '@perfil')}${campo('email', 'E-mail', 'contato@empresa.com', 'email')}${campo('site', 'Site', 'https://')}
-    <div class="enr-ac"><button class="btn ok sm" data-enr-salvar>Salvar</button><button class="btn ghost sm" data-enr-fechar>Fechar</button></div></div>`
+// janela de enriquecer: o que achou, o que falta e campo para preencher à mão
+const ENR_IC = {
+  whatsapp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.7-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>',
+  email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+  site: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
 }
-// liga botões do card. depois() redesenha a tela onde o card está.
+const ENR_CAMPOS = [['whatsapp', 'WhatsApp', '(11) 90000-0000', 'tel'], ['instagram', 'Instagram', '@perfil', 'text'], ['email', 'E-mail', 'contato@empresa.com', 'email'], ['site', 'Site', 'empresa.com.br', 'url']]
+let ENR_J = null
+const enrEsc = ev => { if (ev.key === 'Escape') enrFechar() }
+const enrFechar = () => {
+  if (!ENR_J) return
+  const j = ENR_J; ENR_J = null
+  $('enrJ')?.remove(); document.removeEventListener('keydown', enrEsc)
+  if (j.mudou) j.depois?.()
+}
+const enrPintar = () => {
+  const j = ENR_J; if (!j) return
+  const e = j.e
+  const linha = ([k, t, ph, modo]) => {
+    const v = j.val[k] || ''
+    const tag = j.achou.has(k) ? ['ok', 'Encontrado'] : v && v.replace(/^@/, '') === (e[k] || '') ? ['sv', 'Salvo'] : !v && j.buscou ? ['nd', 'Não encontrado'] : null
+    const cel = k === 'whatsapp' && !v && ehCelular(e) ? `<button type="button" class="enr-j-usa" data-usa-cel>Usar o celular do Google: ${esc(e.telefone)}</button>` : ''
+    return `<div class="enr-j-c"><label for="enrC_${k}"><i class="enr-j-ic ic-${k}">${ENR_IC[k]}</i><b>${t}</b>${tag ? `<span class="enr-j-tag t-${tag[0]}">${tag[1]}</span>` : ''}</label><input id="enrC_${k}" data-c="${k}" type="${modo === 'url' ? 'text' : modo}" placeholder="${ph}" value="${esc(v)}" autocomplete="off">${cel}</div>`
+  }
+  $('enrJ').innerHTML = `<div class="enr-j" role="dialog" aria-modal="true" aria-labelledby="enrJT">
+    <header class="enr-j-h"><div><small>Dados de contato</small><h3 id="enrJT">${esc(e.nome || 'Empresa')}</h3></div><button type="button" class="jan-x" id="enrJX" aria-label="Fechar">${IC.x}</button></header>
+    <div class="enr-j-b">
+      <button type="button" class="btn go enr-j-busca" id="enrJB"${j.buscando ? ' disabled' : ''}>${j.buscando ? 'Procurando…' : j.buscou ? 'Buscar de novo' : 'Buscar dados'}</button>
+      ${j.msg ? `<div class="enr-m ${j.msg.t}" role="status">${j.msg.h}</div>` : ''}
+      ${ENR_CAMPOS.map(linha).join('')}
+      ${enrDados(e)}
+    </div>
+    <footer class="enr-j-f"><button type="button" class="btn ok" id="enrJS">Salvar</button></footer></div>`
+  const raiz = $('enrJ')
+  raiz.querySelectorAll('[data-c]').forEach(i => i.oninput = () => { j.val[i.dataset.c] = i.value; j.achou.delete(i.dataset.c) })
+  raiz.querySelector('[data-usa-cel]')?.addEventListener('click', () => { j.val.whatsapp = String(e.telefone || ''); enrPintar() })
+  $('enrJX').onclick = enrFechar
+  $('enrJB').onclick = enrBuscar
+  $('enrJS').onclick = enrSalvar
+}
+const enrSalvar = async () => {
+  const j = ENR_J; if (!j) return
+  const v = k => String(j.val[k] || '').trim()
+  const wa = v('whatsapp').replace(/\D/g, ''), ig = v('instagram').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/^@/, '').replace(/[/?].*$/, '').toLowerCase(), si = v('site')
+  if (wa && wa.length < 10) { j.msg = { t: 'ruim', h: 'Confere o WhatsApp com DDD.' }; enrPintar(); return $('enrC_whatsapp').focus() }
+  const dados = empNorm({ whatsapp: wa || null, instagram: ig || null, email: v('email').toLowerCase() || null, site: si ? (/^https?:\/\//i.test(si) ? si : 'https://' + si) : null })
+  const b = $('enrJS'); b.disabled = true; b.textContent = 'Salvando…'
+  const { error } = await sb.from('empresas').update(dados).eq('id', j.e.id)
+  if (!ENR_J) return
+  if (error) { j.msg = { t: 'ruim', h: 'Não salvou. Tenta de novo.' }; return enrPintar() }
+  Object.assign(j.e, dados); j.mudou = true; enrFechar(); liz('Dados salvos.')
+}
+const enrBuscar = async () => {
+  const j = ENR_J; if (!j || j.buscando) return
+  const e = j.e; j.buscando = true; j.msg = null; enrPintar()
+  const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id } })
+  if (ENR_J !== j) { if (!error && !data?.erro) { Object.assign(e, data.novo); empNorm(e); j.depois?.() } return }
+  j.buscando = false
+  if (error || data?.erro) { j.msg = { t: 'ruim', h: esc(data?.erro || 'Não consegui buscar agora. Tenta de novo.') }; return enrPintar() }
+  Object.assign(e, data.novo); empNorm(e); j.mudou = true; j.buscou = true; j.achou = new Set()
+  ENR_CAMPOS.forEach(([k]) => { if (data.novo[k] && e[k] && !String(j.val[k] || '').trim()) { j.val[k] = k === 'instagram' ? '@' + e[k] : e[k]; j.achou.add(k) } })
+  const CN = { confirmado: 'Dados da empresa confirmados.', provavel: 'Dados da empresa prováveis.', ambiguo: 'Achei mais de um cadastro com esse nome, então não preenchi os dados da empresa.', nao_achei: 'Não achei os dados da empresa.', sem_base: 'A base da Receita não respondeu agora.' }
+  const cn = data.cnpj?.status, bom = j.achou.size || ['confirmado', 'provavel'].includes(cn)
+  const h = [j.achou.size ? '' : !e.site ? 'Sem site para ler. Se você souber os dados, preencha aqui.' : data.nao_abriu ? 'Não consegui abrir o site.' : 'Nada novo no site.', cn ? CN[cn] : ''].filter(Boolean).join(' ')
+  j.msg = h ? { t: bom ? 'ok' : 'ruim', h } : null
+  enrPintar()
+}
+const enrAbrir = (e, depois) => {
+  if (!e?.id) return
+  enrFechar(); empNorm(e)
+  ENR_J = { e, depois, achou: new Set(), buscou: false, buscando: false, mudou: false, msg: null, val: Object.fromEntries(ENR_CAMPOS.map(([k]) => [k, k === 'instagram' && e[k] ? '@' + e[k] : e[k] || ''])) }
+  const o = document.createElement('div'); o.id = 'enrJ'; o.className = 'enr-j-o'
+  o.addEventListener('mousedown', ev => { if (ev.target === o) enrFechar() })
+  document.body.appendChild(o); document.addEventListener('keydown', enrEsc)
+  enrPintar(); $('enrJB').focus()
+}
+// liga o botão do card. depois() redesenha a tela onde o card está.
 function ligarEnr(root, e, depois) {
   if (!e?.id) return
-  root.querySelector(`[data-enr="${e.id}"]`)?.addEventListener('click', ev => { ev.stopPropagation(); if (ENR.aberto.has(e.id)) ENR.aberto.delete(e.id); else ENR.aberto.add(e.id); depois() })
-  const p = root.querySelector(`[data-enr-p="${e.id}"]`); if (!p) return
-  const val = k => p.querySelector(`[data-c="${k}"]`).value.trim()
-  p.querySelector('[data-enr-fechar]').onclick = () => { ENR.aberto.delete(e.id); depois() }
-  p.querySelector('[data-enr-salvar]').onclick = async ev => {
-    const wa = val('whatsapp').replace(/\D/g, ''), ig = val('instagram').replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/[/?].*$/, '').toLowerCase(), em = val('email').toLowerCase(), si = val('site')
-    if (wa && wa.length < 10) { ENR.msg[e.id] = { t: 'ruim', h: 'Confere o WhatsApp com DDD.' }; return depois() }
-    const dados = { whatsapp: wa || null, instagram: ig || null, email: em || null, site: si ? (/^https?:\/\//i.test(si) ? si : 'https://' + si) : null }
-    ev.currentTarget.disabled = true
-    const { error } = await sb.from('empresas').update(dados).eq('id', e.id)
-    if (error) { ENR.msg[e.id] = { t: 'ruim', h: 'Não salvou. Tenta de novo.' }; return depois() }
-    Object.assign(e, dados); ENR.msg[e.id] = { t: 'ok', h: 'Salvo.' }; depois()
-  }
-  p.querySelector('[data-enr-buscar]').onclick = async ev => {
-    const b = ev.currentTarget; b.disabled = true; b.textContent = 'Procurando…'
-    consultaAbre({ tipo: 'enr', t: `Enriquecendo ${e.nome || 'a empresa'}`, s: 'Lendo o site e procurando os dados da empresa.' })
-    const { data, error } = await sb.functions.invoke('enriquecer', { body: { empresa_id: e.id } })
-    fimCarregando('enr')
-    if (error || data?.erro) { ENR.msg[e.id] = { t: 'ruim', h: esc(data?.erro || 'Não consegui buscar agora. Tenta de novo.') }; return depois() }
-    Object.assign(e, data.novo)
-    const NOME = { whatsapp: 'WhatsApp', instagram: 'Instagram', email: 'E-mail', site: 'Site' }, ach = Object.entries(data.novo).filter(([k]) => NOME[k]).map(([k, v]) => `<b>${NOME[k]}</b> ${esc(k === 'whatsapp' ? tfmt(v) : v)}`)
-    const CN = { confirmado: 'Dados da empresa confirmados.', provavel: 'Dados da empresa prováveis.', ambiguo: 'Achei mais de um cadastro com esse nome, então não preenchi os dados da empresa.', nao_achei: 'Não achei os dados da empresa.', sem_base: 'A base da Receita não respondeu agora.' }
-    const cn = data.cnpj?.status
-    const h = [ach.length ? `Achei ${ach.join(', ')}.` : data.sem_site ? 'Sem site pra ler.' : data.nao_abriu ? 'Não consegui abrir o site.' : 'Nada novo no site.', cn ? CN[cn] : ''].filter(Boolean).join(' ')
-    const bom = ach.length || ['confirmado', 'provavel'].includes(cn)
-    ENR.msg[e.id] = { t: bom ? 'ok' : 'ruim', h }; depois()
-  }
+  root.querySelector(`[data-enr="${e.id}"]`)?.addEventListener('click', ev => { ev.stopPropagation(); enrAbrir(e, depois) })
 }
 
 /* ======================= lista na home: cards e filtros ======================= */
@@ -662,7 +710,7 @@ async function abrirListaHome() {
   const idsLista = await buscasDaLista(busca)
   const { data, error } = await sb.from('diagnosticos').select('id, status, angulo, nota_dor, motivo, decisao, capivara, empresa:empresas(id, nome, endereco, bairro, cidade, telefone, site, google_maps_url, nota, total_avaliacoes, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes, categoria, status_google, horarios, faixa_preco, google_extra, place_id, contatos_lidos_em)').in('busca_id', idsLista).order('nota_dor', { ascending: false })
   if (error) return liz('Não consegui carregar a lista. Tenta de novo.')
-  LV.todos = data || []
+  LV.todos = data || []; LV.todos.forEach(d => empNorm(d.empresa))
   $('ask').hidden = true; document.body.classList.remove('fora')
   const faltam = LV.todos.filter(d => !d.empresa?.contatos_lidos_em).length
   const titulo = busca.cidade === 'Lista' ? busca.nicho : `${busca.nicho} em ${(busca.cidade || '').split(',')[0]}`
@@ -716,7 +764,7 @@ function lvPintar() {
       ${e.nota ? `<div class="lc-n">★ ${String(e.nota).replace('.', ',')} <span>(${e.total_avaliacoes || 0} avaliações)</span></div>` : ''}
       ${e.status_google === 'CLOSED_PERMANENTLY' ? '<div class="lc-fec">Fechada definitivamente no Google</div>' : e.status_google === 'CLOSED_TEMPORARILY' ? '<div class="lc-fec">Fechada temporariamente no Google</div>' : ''}${horarioHoje(e) ? `<div class="lc-g">Hoje: ${esc(horarioHoje(e))}</div>` : ''}
       <div class="lc-ct">${e.whatsapp ? `<button class="lc-wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="lc-cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="lc-ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="lc-sem">Sem site</span>'}</div>
-      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}<button class="btn line sm" data-fi>Ver ficha</button>${enrBotao(e)}</div>${enrPainel(e)}</article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
+      <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}<button class="btn line sm" data-fi>Ver ficha</button>${enrBotao(e)}</div></article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
   if ($('lvLimpa')) $('lvLimpa').onclick = () => { LV.f = new Set(); LV.q = ''; $('lvQ').value = ''; lvPintar() }
   $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
   bt.onclick = async () => {
@@ -743,19 +791,21 @@ function lvPintar() {
 let fichaAberta = null
 async function abrirFichaMaps(d, empilhar = true) {
   fichaAberta = d
-  const e = d.empresa || {}, x = e.google_extra || {}
+  const e = empNorm(d.empresa) || {}, x = e.google_extra || {}
   const { data: avs } = await sb.from('avaliacoes').select('estrelas, texto, publicada_em, autor, autor_link, tempo').eq('empresa_id', e.id).order('publicada_em', { ascending: false, nullsFirst: false }).limit(20)
   const w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
   const estrelas = n => { const v = Math.round(+n || 0); return `<span class="fi-est" aria-label="${v} de 5 estrelas">${'★'.repeat(v)}<i>${'★'.repeat(5 - v)}</i></span>` }
   const hoje = (new Date().getDay() + 6) % 7
   const sec = (t, c) => c ? `<section class="fi-s"><h3>${t}</h3>${c}</section>` : ''
   const etiquetas = l => (l || []).length ? `<div class="fi-tags">${l.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''
+  const falta = t => `<button type="button" class="fi-c fi-falta" data-enr-add><b>${t}</b><span>Adicionar</span></button>`
   const contato = [
     e.whatsapp ? `<button class="fi-c wa" data-zap="${w}"><b>WhatsApp</b><span>${esc(tfmt(e.whatsapp))}</span></button>` : ehCelular(e) ? `<button class="fi-c wa" data-zap="${w}"><b>Celular</b><span>${esc(e.telefone)}</span></button>` : '',
     tel && !ehCelular(e) ? `<a class="fi-c" href="tel:${esc(tel)}"><b>Telefone</b><span>${esc(e.telefone)}</span></a>` : '',
-    e.instagram ? `<a class="fi-c" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener"><b>Instagram</b><span>@${esc(e.instagram)}</span></a>` : '',
-    e.email ? `<a class="fi-c" href="mailto:${esc(e.email)}"><b>E-mail</b><span>${esc(e.email)}</span></a>` : '',
-    e.site ? `<a class="fi-c" href="${esc(e.site)}" target="_blank" rel="noopener"><b>Site</b><span>${esc(e.site.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</span></a>` : '',
+    !e.whatsapp && !ehCelular(e) ? falta('WhatsApp') : '',
+    e.instagram ? `<a class="fi-c" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener"><b>Instagram</b><span>@${esc(e.instagram)}</span></a>` : falta('Instagram'),
+    e.email ? `<a class="fi-c" href="mailto:${esc(e.email)}"><b>E-mail</b><span>${esc(e.email)}</span></a>` : falta('E-mail'),
+    e.site ? `<a class="fi-c" href="${esc(e.site)}" target="_blank" rel="noopener"><b>Site</b><span>${esc(e.site.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</span></a>` : falta('Site'),
   ].join('')
   const horas = Array.isArray(e.horarios) && e.horarios.length ? `<ul class="fi-h">${e.horarios.map((h, i) => { const [dia, ...r] = String(h).split(':'); return `<li class="${i === hoje ? 'on' : ''}"><span>${esc(dia)}</span><span>${esc(r.join(':').trim())}</span></li>` }).join('')}</ul>` : ''
   const lista = (avs || []).map(a => `<article class="fi-a"><div class="fi-a-t">${a.autor_link ? `<a href="${esc(a.autor_link)}" target="_blank" rel="noopener">${esc(a.autor || 'Avaliador do Google')}</a>` : `<b>${esc(a.autor || 'Avaliador do Google')}</b>`}<small>${esc(a.tempo || (a.publicada_em ? new Date(a.publicada_em).toLocaleDateString('pt-BR') : ''))}</small></div>${estrelas(a.estrelas)}${a.texto ? `<p>${esc(a.texto)}</p>` : ''}</article>`).join('')
@@ -764,9 +814,9 @@ async function abrirFichaMaps(d, empilhar = true) {
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Ficha</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b fi">
     <header class="fi-t"><div><h2>${esc(e.nome || 'Empresa')}</h2><p>${esc([e.categoria, PRECO_G[e.faixa_preco]].filter(Boolean).join(' · ') || 'Empresa')}</p></div>${e.nota ? `<div class="fi-n"><b>${String(e.nota).replace('.', ',')}</b>${estrelas(e.nota)}<small>${e.total_avaliacoes || 0} avaliações</small></div>` : ''}</header>
     ${e.status_google && e.status_google !== 'OPERATIONAL' ? `<div class="lc-fec">${e.status_google === 'CLOSED_PERMANENTLY' ? 'Fechada definitivamente no Google' : 'Fechada temporariamente no Google'}</div>` : ''}
-    <div class="fi-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok" id="fiAdd">Adicionar ao pipeline</button>'}${e.google_maps_url ? `<a class="btn line" href="${esc(e.google_maps_url)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ''}</div>
+    <div class="fi-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok" id="fiAdd">Adicionar ao pipeline</button>'}${e.google_maps_url ? `<a class="btn line" href="${esc(e.google_maps_url)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ''}${enrBotao(e)}</div>
     ${semFicha ? `<div class="fi-av"><span>Essa empresa veio de uma busca antiga, sem a ficha completa do Google.</span><button class="btn go sm" id="fiBaixar">Trazer do Google</button></div>` : ''}
-    ${sec('Contato', contato ? `<div class="fi-cs">${contato}</div>` : '<p class="fi-v">Nenhum contato no Google. Use o Enriquecer no card.</p>')}
+    ${sec('Contato', `<div class="fi-cs">${contato}</div>`)}
     ${sec('Endereço', e.endereco ? `<p>${esc(e.endereco)}</p>` : '')}
     ${sec('Sobre', [x.resumo, x.resumo_avaliacoes].filter(Boolean).map(t => `<p>${esc(t)}</p>`).join(''))}
     ${sec('Horários', horas)}
@@ -776,6 +826,9 @@ async function abrirFichaMaps(d, empilhar = true) {
     <div class="fi-g">Dados do Google Maps</div></div>`
   $('capX').onclick = fecharCapivara
   $('cap').querySelectorAll('[data-zap]').forEach(b => b.onclick = () => abrirConversas(true, b.dataset.zap))
+  const fiDepois = () => { abrirFichaMaps(d, false); if (LV.todos?.length && $('lvG')) lvPintar() }
+  ligarEnr($('cap'), e, fiDepois)
+  $('cap').querySelectorAll('[data-enr-add]').forEach(b => b.onclick = () => enrAbrir(e, fiDepois))
   if ($('fiAdd')) $('fiAdd').onclick = async ev => { ev.currentTarget.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { ev.currentTarget.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); abrirFichaMaps(d, false) }
   if ($('fiBaixar')) $('fiBaixar').onclick = async () => {
     consultaAbre({ tipo: 'enr', t: 'Trazendo a ficha do Google', s: e.nome || '' })
@@ -900,6 +953,7 @@ async function leadsDoPipe() {
 async function abrirCaptacao(empilhar = true) {
   if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.temp = ''; pipeF.seg = ''; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
   const [todos, resAg, resAt] = await Promise.all([leadsDoPipe(), sb.rpc('aguardando_resposta'), sb.rpc('atividade_leads')])
+  todos.forEach(d => empNorm(d.empresa))
   const atvId = new Map(), atvTel = new Map()
   ;(resAt.data || []).forEach(a => { const mais = (m, k) => { if (k && (!m.get(k) || m.get(k) < a.ultima_in)) m.set(k, a.ultima_in) }; mais(atvId, a.diagnostico_id); [a.telefone, a.fone].forEach(t => mais(atvTel, chaveTel(t))) })
   const ultimaInDe = d => [atvId.get(d.id), ...[d.empresa?.whatsapp, d.empresa?.telefone, d.telefone].map(chaveTel).map(k => k && atvTel.get(k))].filter(Boolean).sort().pop() || null
@@ -938,7 +992,7 @@ async function abrirCaptacao(empilhar = true) {
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
         ${d.etapa === 'cliente' || d.etapa === 'perdido' ? '' : `<div class="cp-et cp-tmp"><span>Temperatura</span><button data-tmp="" class="${d.temperatura ? '' : 'on'}">Automática</button>${TEMP_MAN.map(([k, t]) => `<button data-tmp="${k}" class="${d.temperatura === k ? 'on' : ''}">${t}</button>`).join('')}</div>`}
-        <div class="cp-ac"><button data-copia>Copiar mensagem</button>${enrBotao(d.empresa)}</div>${enrDados(d.empresa)}${enrPainel(d.empresa)}
+        <div class="cp-ac"><button data-copia>Copiar mensagem</button>${enrBotao(d.empresa)}</div>${enrDados(d.empresa)}
         <textarea data-nota placeholder="Anotação (ex: falei com a Ana, retornar segunda)">${esc(d.anotacao || '')}</textarea></div></div>`
   }
   $('cap').dataset.seq = ''
@@ -1051,24 +1105,85 @@ let DP_VERS = [''], DP_ATUAL = 0
 // sorteio de trechos: {Olá|Oi|Bom dia}
 const comSorteio = t => String(t || '').replace(/\{([^{}]*\|[^{}]*)\}/g, (_, o) => { const l = o.split('|'); return l[Math.floor(Math.random() * l.length)].trim() })
 const dpVersoes = () => DP_VERS.map(v => String(v || '').trim()).filter(Boolean)
-const campoMensagem = () => `<label class="dp-lbl" for="dMsg">Mensagem que vai ser enviada</label>
+// seletor com caixas de marcar. grupos = [[título, [[valor, texto, contagem]]]]
+const DP_SL = {}
+const dpSlHtml = (id, rotulo, grupos) => {
+  const total = grupos.reduce((a, g) => a + g[1].length, 0)
+  return `<div class="dp-sl" id="${id}"><span class="dp-lbl" id="${id}R">${rotulo}</span>
+    <button type="button" class="dp-sl-bt" aria-haspopup="true" aria-expanded="false" aria-labelledby="${id}R ${id}V"><span class="dp-sl-v" id="${id}V"></span>${DP_SETA}</button>
+    <div class="dp-sl-p" hidden>
+      ${total > 6 ? `<input type="search" class="dp-sl-bu" placeholder="Procurar" aria-label="Procurar em ${rotulo}">` : ''}
+      <div class="dp-sl-l">${grupos.map(([t, ops]) => ops.length ? `<div class="dp-sl-bloco">${t ? `<div class="dp-sl-g">${esc(t)}</div>` : ''}${ops.map(([v, x, n]) => `<label class="dp-sl-o"><input type="checkbox" value="${esc(v)}"><span>${esc(x)}</span>${n == null ? '' : `<b>${n}</b>`}</label>`).join('')}</div>` : '').join('')}<p class="dp-sl-nada" hidden>Nada encontrado.</p></div>
+      <div class="dp-sl-rod"><button type="button" data-sl-limpa>Limpar</button><button type="button" data-sl-tudo>Marcar todas</button></div>
+    </div></div>`
+}
+const dpSlFechar = (exceto) => document.querySelectorAll('.dp-sl').forEach(el => { if (el === exceto) return; el.querySelector('.dp-sl-p').hidden = true; el.querySelector('.dp-sl-bt').setAttribute('aria-expanded', 'false') })
+document.addEventListener('click', e => { if (!e.target.closest?.('.dp-sl')) dpSlFechar() })
+document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; const a = document.querySelector('.dp-sl-bt[aria-expanded="true"]'); if (a) { dpSlFechar(); a.focus() } })
+const dpSlLigar = (id, conj, vazio, tudo, aoMudar) => {
+  const el = $(id); if (!el) return
+  const bt = el.querySelector('.dp-sl-bt'), p = el.querySelector('.dp-sl-p'), marcas = [...el.querySelectorAll('input[type=checkbox]')], busca = el.querySelector('.dp-sl-bu')
+  const texto = i => i.nextElementSibling.textContent
+  const pinta = () => {
+    marcas.forEach(i => { i.checked = conj.has(i.value) })
+    const on = marcas.filter(i => i.checked)
+    $(id + 'V').textContent = !on.length ? vazio : tudo && on.length === marcas.length ? tudo : on.length <= 2 ? on.map(texto).join(', ') : `${texto(on[0])} +${on.length - 1}`
+    bt.classList.toggle('tem', !!on.length)
+  }
+  bt.onclick = () => { const abre = p.hidden; dpSlFechar(el); p.hidden = !abre; bt.setAttribute('aria-expanded', abre); if (abre) { if (busca && !mob()) busca.focus(); p.scrollIntoView({ block: 'nearest' }) } }
+  marcas.forEach(i => i.onchange = () => { i.checked ? conj.add(i.value) : conj.delete(i.value); pinta(); aoMudar?.(i.value, i.checked) })
+  if (busca) busca.oninput = () => {
+    const q = semAc(busca.value.trim()); let algum = false
+    el.querySelectorAll('.dp-sl-o').forEach(o => { const ve = semAc(o.textContent).includes(q); o.hidden = !ve; algum = algum || ve })
+    el.querySelectorAll('.dp-sl-bloco').forEach(b => { b.hidden = ![...b.querySelectorAll('.dp-sl-o')].some(o => !o.hidden) })
+    el.querySelector('.dp-sl-nada').hidden = algum
+  }
+  el.querySelector('[data-sl-limpa]').onclick = () => { conj.clear(); pinta(); aoMudar?.() }
+  const bTudo = el.querySelector('[data-sl-tudo]'); if (!tudo) bTudo.hidden = true
+  else bTudo.onclick = () => { marcas.forEach(i => conj.add(i.value)); pinta(); aoMudar?.() }
+  DP_SL[id] = { pinta }; pinta()
+}
+// grupos de mensagens por segmento: a etiqueta escolhida traz as frases do grupo
+let DP_GRUPOS = [], DP_GR = null, DP_GR_NOVO = false, DP_GR_ERRO = false, DP_GR_BASE = '[]', DP_SEGS = [], DP_GR_ETQ = new Set()
+const dpGrCarregar = async () => { const { data, error } = await sb.from('grupo_mensagem').select('id, nome, etiquetas, versoes').order('nome'); DP_GR_ERRO = !!error; DP_GRUPOS = data || [] }
+const dpGrAtual = () => DP_GRUPOS.find(g => g.id === DP_GR)
+const dpGrSujo = () => JSON.stringify(dpVersoes()) !== DP_GR_BASE
+const dpGrIdentificar = () => { const v = JSON.stringify(dpVersoes()); DP_GR = DP_GRUPOS.find(g => JSON.stringify(g.versoes) === v)?.id || null; DP_GR_NOVO = false; DP_GR_BASE = v }
+const dpGrCasa = (g, seg) => (g.etiquetas || []).includes(seg) || semAc(g.nome) === semAc(seg)
+const dpGrSegsEscolhidos = () => [...DP_INC].filter(k => k.startsWith('s:')).map(k => k.slice(2))
+const dpGrFormHtml = () => `<div class="dp-gr-form" id="dGrForm" hidden>
+    <label class="dp-lbl" for="dGrNome">Nome do grupo</label>
+    <input id="dGrNome" class="dp-gr-in" maxlength="60" placeholder="Escola" autocomplete="off">
+    <div id="dGrEtqBox"></div>
+    <small class="at-hint">Quando você escolher uma dessas etiquetas no disparo, as mensagens deste grupo aparecem sozinhas.</small>
+    <button type="button" class="dp-link dp-gr-del" id="dGrDel" hidden>Excluir grupo</button>
+  </div>`
+const campoMensagem = () => `<label class="dp-lbl" for="dGrupo">Grupo de mensagens</label>
+      <div class="dp-gr-l"><select id="dGrupo" class="dp-gr-s"></select><button type="button" class="btn line sm" id="dGrEdita" hidden>Editar</button></div>
+      <small class="at-hint dp-gr-dica" id="dGrDica" hidden></small>
+      ${dpGrFormHtml()}
+      <label class="dp-lbl" for="dMsg">Mensagem que vai ser enviada</label>
       <div class="dp-vers" id="dVers"></div>
       <textarea id="dMsg" class="dp-ta" rows="3" maxlength="1000"></textarea>
       <small class="at-hint"><b>{saudacao}</b> vira bom dia, boa tarde ou boa noite. <b>{Olá|Oi|Bom dia}</b> sorteia uma opção por pessoa.</small>
+      <button type="button" class="btn line sm dp-gr-salva" id="dGrSalva" hidden></button>
       <div class="dp-cfg" style="margin-top:8px">Vai chegar assim: <b id="dMsgPrev"></b></div>
       <div class="dp-teste"><input id="dTel" class="at-in" inputmode="tel" placeholder="Seu número" aria-label="Seu número com DDD para receber o teste" autocomplete="tel"><button type="button" class="btn line sm" id="dTeste">Enviar teste para mim</button></div>`
 const ligarVersoes = () => {
   const t = $('dMsg'); if (!t) return
   const previa = () => { $('dMsgPrev').textContent = comSaudacao(comSorteio(t.value.trim())) || 'escreva a mensagem' }
+  dpGrIdentificar()
   const pinta = () => {
     $('dVers').innerHTML = DP_VERS.map((_, i) => `<button type="button" class="${i === DP_ATUAL ? 'on' : ''}" data-v="${i}" aria-label="Versão ${i + 1}">${i + 1}</button>`).join('') + (DP_VERS.length < 20 ? '<button type="button" data-vmais aria-label="Nova versão">+</button>' : '') + (DP_VERS.length > 1 ? '<button type="button" class="dp-vdel" data-vdel>Excluir esta</button>' : '')
     $('dVers').querySelectorAll('[data-v]').forEach(b => b.onclick = () => { DP_ATUAL = +b.dataset.v; pinta() })
     const mais = $('dVers').querySelector('[data-vmais]'); if (mais) mais.onclick = () => { DP_VERS.push(''); DP_ATUAL = DP_VERS.length - 1; pinta(); t.focus() }
     const del = $('dVers').querySelector('[data-vdel]'); if (del) del.onclick = () => { DP_VERS.splice(DP_ATUAL, 1); DP_ATUAL = Math.max(0, DP_ATUAL - 1); pinta() }
-    t.value = DP_VERS[DP_ATUAL] || ''; previa()
+    t.value = DP_VERS[DP_ATUAL] || ''; previa(); dpGrPinta()
   }
-  t.oninput = () => { DP_VERS[DP_ATUAL] = t.value; previa() }
+  t.oninput = () => { DP_VERS[DP_ATUAL] = t.value; previa(); dpGrPinta() }
+  dpGrRepintaVersoes = pinta
   pinta()
+  dpGrLigar()
   try { $('dTel').value = localStorage.getItem('kz_tel_teste') || '' } catch (_) {}
   $('dTeste').onclick = async () => {
     const b = $('dTeste'), telefone = $('dTel').value.trim(), versoes = dpVersoes()
@@ -1078,6 +1193,85 @@ const ligarVersoes = () => {
     b.disabled = true; b.textContent = 'Enviando…'
     try { const r = await chamar('disparo_teste', { telefone, versoes }); liz(`Teste enviado: ${r.enviadas} ${r.enviadas === 1 ? 'versão' : 'versões'}.`) } catch (e) { liz(esc(e.message || 'O teste não saiu. Tenta de novo.')) }
     b.disabled = false; b.textContent = 'Enviar teste para mim'
+  }
+}
+let dpGrRepintaVersoes = () => {}
+const dpGrAplicar = g => {
+  DP_GR = g ? g.id : null; DP_GR_NOVO = false
+  DP_VERS = g ? [...g.versoes] : [saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
+  DP_GR_BASE = JSON.stringify(dpVersoes())
+  $('dGrForm').hidden = true
+  dpGrRepintaVersoes(); dpPintarPublico()
+}
+const dpGrAbrirForm = () => {
+  const g = dpGrAtual(), f = $('dGrForm')
+  $('dGrNome').value = g ? g.nome : ''
+  DP_GR_ETQ = new Set(g ? g.etiquetas : dpGrSegsEscolhidos())
+  const ops = [...new Set([...DP_SEGS, ...DP_GR_ETQ])].sort((x, y) => x.localeCompare(y)).map(x => [x, x])
+  $('dGrEtqBox').innerHTML = ops.length ? dpSlHtml('slGrEtq', 'Etiquetas que trazem este grupo', [['', ops]]) : ''
+  dpSlLigar('slGrEtq', DP_GR_ETQ, 'Nenhuma etiqueta', '')
+  $('dGrDel').hidden = !g; $('dGrDel').textContent = 'Excluir grupo'; delete $('dGrDel').dataset.conf
+  f.hidden = false
+}
+const dpGrPinta = () => {
+  const sel = $('dGrupo'); if (!sel) return
+  const v = DP_GR_NOVO ? 'novo' : DP_GR || ''
+  sel.innerHTML = `<option value="">Sem grupo</option>${DP_GRUPOS.map(g => `<option value="${g.id}">${esc(g.nome)} (${g.versoes.length} ${g.versoes.length === 1 ? 'mensagem' : 'mensagens'})</option>`).join('')}<option value="novo">Novo grupo</option>`
+  sel.value = v
+  const g = dpGrAtual(), bt = $('dGrSalva'), formAberto = !$('dGrForm').hidden
+  $('dGrEdita').hidden = !g || formAberto
+  bt.hidden = !(DP_GR_NOVO || formAberto || dpGrSujo())
+  bt.textContent = g ? `Salvar em ${g.nome}` : 'Salvar como grupo'
+  const segs = dpGrSegsEscolhidos(), dica = $('dGrDica')
+  const semGrupo = !g && !DP_GR_NOVO && segs.length && !DP_GRUPOS.some(x => segs.every(s => dpGrCasa(x, s)))
+  dica.hidden = !(DP_GR_ERRO || semGrupo)
+  dica.textContent = DP_GR_ERRO ? 'Não consegui abrir seus grupos. Feche e abra o disparo de novo.' : semGrupo ? 'Nenhum grupo tem essa etiqueta ainda. Escolha Novo grupo para criar.' : ''
+}
+const dpGrAuto = () => {
+  if (!$('dGrupo')) return
+  const segs = dpGrSegsEscolhidos()
+  if (segs.length) {
+    const cand = DP_GRUPOS.filter(g => segs.every(s => dpGrCasa(g, s)))
+    if (cand.length === 1 && cand[0].id !== DP_GR) {
+      if (dpGrSujo()) liz(`Você mudou as mensagens. Para trocar, escolha ${esc(cand[0].nome)} no grupo de mensagens.`)
+      else { dpGrAplicar(cand[0]); liz(`Trouxe ${cand[0].versoes.length} ${cand[0].versoes.length === 1 ? 'mensagem' : 'mensagens'} do grupo ${esc(cand[0].nome)}.`) }
+    }
+  }
+  dpGrPinta()
+}
+const dpGrLigar = () => {
+  const sel = $('dGrupo'); if (!sel) return
+  sel.onchange = () => {
+    const v = sel.value
+    if (dpGrSujo() && sel.dataset.conf !== v) { sel.dataset.conf = v; sel.value = DP_GR_NOVO ? 'novo' : DP_GR || ''; return liz('Você tem mensagens sem salvar. Salve ou escolha de novo para descartar.') }
+    delete sel.dataset.conf
+    if (v === 'novo') { DP_GR = null; DP_GR_NOVO = true; DP_VERS = ['']; DP_ATUAL = 0; DP_GR_BASE = '[]'; dpGrAbrirForm(); dpGrRepintaVersoes(); dpPintarPublico(); $('dGrNome').focus(); return }
+    dpGrAplicar(DP_GRUPOS.find(g => g.id === v) || null)
+  }
+  $('dGrEdita').onclick = () => { dpGrAbrirForm(); dpGrPinta(); $('dGrNome').focus() }
+  $('dGrSalva').onclick = async () => {
+    const g = dpGrAtual(), versoes = dpVersoes(), bt = $('dGrSalva'), formAberto = !$('dGrForm').hidden
+    if (!versoes.length) return liz('Escreve pelo menos uma mensagem.')
+    if (!g && !formAberto) { DP_GR_NOVO = true; dpGrAbrirForm(); dpGrPinta(); $('dGrNome').focus(); return }
+    const nome = formAberto ? $('dGrNome').value.trim() : g.nome
+    if (!nome) { $('dGrNome').focus(); return liz('Dá um nome pro grupo.') }
+    const dados = { nome, versoes, etiquetas: formAberto ? [...DP_GR_ETQ] : g.etiquetas, atualizado_em: new Date().toISOString() }
+    bt.disabled = true
+    const q = g ? sb.from('grupo_mensagem').update(dados).eq('id', g.id) : sb.from('grupo_mensagem').insert(dados)
+    const { data, error } = await q.select('id, nome, etiquetas, versoes').single()
+    bt.disabled = false
+    if (error) return liz(error.code === '23505' ? 'Já existe um grupo com esse nome.' : 'Não consegui salvar o grupo. Tenta de novo.')
+    DP_GRUPOS = [...DP_GRUPOS.filter(x => x.id !== data.id), data].sort((a, b) => a.nome.localeCompare(b.nome))
+    DP_GR = data.id; DP_GR_NOVO = false; DP_GR_BASE = JSON.stringify(versoes); $('dGrForm').hidden = true
+    dpGrPinta(); liz(`Grupo ${esc(data.nome)} salvo com ${versoes.length} ${versoes.length === 1 ? 'mensagem' : 'mensagens'}.`)
+  }
+  $('dGrDel').onclick = async () => {
+    const b = $('dGrDel'), g = dpGrAtual(); if (!g) return
+    if (!b.dataset.conf) { b.dataset.conf = '1'; b.textContent = 'Toque de novo para excluir'; return }
+    const { error } = await sb.from('grupo_mensagem').delete().eq('id', g.id)
+    if (error) return liz('Não consegui excluir o grupo.')
+    DP_GRUPOS = DP_GRUPOS.filter(x => x.id !== g.id); DP_GR = null; DP_GR_BASE = '[]'; $('dGrForm').hidden = true
+    dpGrPinta(); liz(`Grupo ${esc(g.nome)} excluído. As mensagens continuam aqui até você trocar.`)
   }
 }
 const dpOpcoes = (vals, atual, fmt) => [...new Set([...vals, atual])].sort((a, b) => a - b).map(v => `<option value="${v}"${v === atual ? ' selected' : ''}>${fmt(v)}</option>`).join('')
@@ -1298,21 +1492,17 @@ const dpPintarPublico = () => {
   if (!$('dpLista')) return
   const { alvo, semCel, porEtiqueta, repetidos, suprimidos, frequentes } = dpPublico(), n = alvo.length
   $('dpEsqT').textContent = `${n} ${n === 1 ? 'empresa vai' : 'empresas vão'} receber`
-  $('dpLista').innerHTML = n ? `<div class="dp-list">${alvo.map(l => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(l.nome)}</b><small>${esc([tfmt(l.tel), l.bairro].filter(Boolean).join(' · '))}</small></div><span class="dp-chip c-f">${esc((ETAPAS.find(x => x[0] === l.etapa) || [])[1] || '')}</span></div></div>`).join('')}</div>` : '<p class="dp-lead">Nenhuma empresa com essa escolha. Marque outra etapa ou tire uma etiqueta.</p>'
-  const fora = [semCel && `${semCel} só com telefone fixo`, porEtiqueta && `${porEtiqueta} pela etiqueta`, repetidos && `${repetidos} com número repetido`, suprimidos && `${suprimidos} na lista de supressão`, frequentes && `${frequentes} por frequência`].filter(Boolean).join(', ')
+  $('dpLista').innerHTML = n ? `<div class="dp-list">${alvo.map(l => `<div class="dp-it"><div class="dp-it-top"><div><b>${esc(l.nome)}</b><small>${esc([tfmt(l.tel), l.bairro].filter(Boolean).join(' · '))}</small></div><span class="dp-chip c-f">${esc((ETAPAS.find(x => x[0] === l.etapa) || [])[1] || '')}</span></div></div>`).join('')}</div>` : '<p class="dp-lead">Nenhuma empresa com essa escolha. Escolha outra lista ou etapa.</p>'
+  const fora = [semCel && `${semCel} só com telefone fixo`, porEtiqueta && `${porEtiqueta} pela lista escolhida`, repetidos && `${repetidos} com número repetido`, suprimidos && `${suprimidos} na lista de supressão`, frequentes && `${frequentes} por frequência`].filter(Boolean).join(', ')
   $('dpResumo').innerHTML = `<b>${n} ${n === 1 ? 'empresa' : 'empresas'}</b>${dpVersoes().length ? ` · ${dpVersoes().length} ${dpVersoes().length === 1 ? 'versão' : 'versões'}` : ''}${dpTempoTxt(n) ? ` · ${dpTempoTxt(n)}` : ''}${fora ? `<br>Ficam de fora: ${fora}.` : ''}`
   pintarGuardian(alvo.map(l => l.tel))
   const b = $('dUsarRaiox'); b.disabled = !n; b.textContent = `Montar disparo para ${n} ${n === 1 ? 'empresa' : 'empresas'}`
 }
 const ligarPublico = () => {
   if (!$('dpPara')) return
-  $('dpPara').querySelectorAll('input[data-et]').forEach(i => i.onchange = () => { i.checked ? DP_ETAPAS.add(i.dataset.et) : DP_ETAPAS.delete(i.dataset.et); dpPintarPublico() })
-  $('dpPara').querySelectorAll('input[data-exc]').forEach(i => i.onchange = () => { i.checked ? DP_EXC.add(i.dataset.exc) : DP_EXC.delete(i.dataset.exc); dpPintarPublico() })
-  $('dpPara').querySelectorAll('input[data-inc]').forEach(i => i.onchange = () => { i.checked ? DP_INC.add(i.dataset.inc) : DP_INC.delete(i.dataset.inc); dpPintarPublico() })
-  const tudo = $('dEtTodas'), marcas = [...$('dpPara').querySelectorAll('input[data-et]')]
-  const syncTodas = () => { tudo.checked = marcas.every(i => i.checked) }
-  marcas.forEach(i => i.addEventListener('change', syncTodas))
-  tudo.onchange = () => { marcas.forEach(i => { i.checked = tudo.checked; tudo.checked ? DP_ETAPAS.add(i.dataset.et) : DP_ETAPAS.delete(i.dataset.et) }); dpPintarPublico() }
+  dpSlLigar('slEtapa', DP_ETAPAS, 'Nenhuma etapa', 'Todas as etapas', dpPintarPublico)
+  dpSlLigar('slInc', DP_INC, 'Todas', '', (v, on) => { if (on) { DP_EXC.delete(v); DP_SL.slExc?.pinta() } dpPintarPublico(); dpGrAuto() })
+  dpSlLigar('slExc', DP_EXC, 'Nenhuma', '', (v, on) => { if (on) { DP_INC.delete(v); DP_SL.slInc?.pinta(); dpGrAuto() } dpPintarPublico() })
   document.querySelector('.dp-cf')?.addEventListener('input', dpPintarPublico)
   $('dVers')?.addEventListener('click', () => setTimeout(dpPintarPublico, 0))
   dpPintarPublico()
@@ -1386,7 +1576,7 @@ async function abrirDisparo(empilhar = true) {
   await carregarSaudacao()
   const { data: canalAt } = await sb.from('canal_whatsapp').select('atende').eq('dono', usuario.id).maybeSingle()
   DP_ATENDE = !!canalAt?.atende
-  await carregarGuardian()
+  await Promise.all([carregarGuardian(), dpGrCarregar()])
   let prontosDisparo = 0
   const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(1)
   const camp = cs && cs[0]
@@ -1399,6 +1589,7 @@ async function abrirDisparo(empilhar = true) {
     const pct = total ? Math.round(enviados / total * 100) : 0, rod = camp.status === 'rodando'
     DP_COMP_ON = !!camp.complemento_ligado; DP_COMP = camp.complementos?.length ? [...camp.complementos] : [DP_COMP_PADRAO]
     DP_VERS = camp.versoes?.length ? [...camp.versoes] : [es.find(e => e.status === 'na_fila')?.mensagem || saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
+    if (!rod && fila) { const { data: sg } = await sb.from('diagnosticos').select('segmento, busca:buscas(nicho)').eq('decisao', 'aprovada').eq('arquivado', false).limit(2000); DP_SEGS = [...new Set((sg || []).map(d => String(d.segmento || d.busca?.nicho || '').trim()).filter(Boolean))] }
     body = `<div class="dp-duas">
       <div class="dp-esq">
         <h3 class="dp-esq-t">${total} empresa${total === 1 ? '' : 's'} neste disparo</h3>
@@ -1434,7 +1625,9 @@ async function abrirDisparo(empilhar = true) {
     const nEtapa = k => DP_PIPE.filter(l => l.etapa === k).length
     const segs = [...new Set(DP_PIPE.map(l => l.seg).filter(Boolean))].sort((x, y) => x.localeCompare(y))
     const nTempD = k => DP_PIPE.filter(l => l.temp === k).length
-    const excChips = [...TEMP_MAN.filter(([k]) => nTempD(k)).map(([k, t]) => [`t:${k}`, t, nTempD(k)]), ...segs.map(g => [`s:${g}`, g, DP_PIPE.filter(l => l.seg === g).length])]
+    DP_SEGS = segs
+    const etqGrupos = [['Segmento', segs.map(g => [`s:${g}`, g, DP_PIPE.filter(l => l.seg === g).length])], ['Temperatura', TEMP_MAN.filter(([k]) => nTempD(k)).map(([k, t]) => [`t:${k}`, t, nTempD(k)])]]
+    const temEtq = etqGrupos.some(g => g[1].length)
     DP_VERS = [saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
     DP_COMP_ON = false; DP_COMP = [DP_COMP_PADRAO]
     body = `<div class="dp-duas">
@@ -1458,12 +1651,9 @@ async function abrirDisparo(empilhar = true) {
             <button type="button" role="tab" data-dptab="nums">Colar números</button>
           </div>
           <div id="dpPara">
-            <div class="dp-sec" style="margin-top:0">Qual etapa do pipeline vai receber</div>
-            <div class="dp-chk"><label><input type="checkbox" id="dEtTodas"><span>Todas <b>${DP_PIPE.length}</b></span></label>${ETAPAS.map(([k, t]) => `<label><input type="checkbox" data-et="${k}"${k === 'a_contatar' ? ' checked' : ''}><span>${t} <b>${nEtapa(k)}</b></span></label>`).join('')}</div>
-            ${excChips.length ? `<div class="dp-sec">Enviar só para quem tem as etiquetas <span>(nenhuma marcada = todos)</span></div>
-            <div class="dp-chk">${excChips.map(([k, t, n]) => `<label><input type="checkbox" data-inc="${esc(k)}"><span>${esc(t)} <b>${n}</b></span></label>`).join('')}</div>
-            <div class="dp-sec">Não enviar para quem tem as etiquetas</div>
-            <div class="dp-chk">${excChips.map(([k, t, n]) => `<label><input type="checkbox" data-exc="${esc(k)}"><span>${esc(t)} <b>${n}</b></span></label>`).join('')}</div>` : '<p class="dp-var" style="padding:12px 0 0">Nenhuma etiqueta no pipeline ainda.</p>'}
+            ${temEtq ? dpSlHtml('slInc', 'Qual lista vai receber', etqGrupos) : ''}
+            ${dpSlHtml('slEtapa', 'Etapa do pipeline', [['', ETAPAS.map(([k, t]) => [k, t, nEtapa(k)])]])}
+            ${temEtq ? dpSlHtml('slExc', 'Não enviar para', etqGrupos) : '<p class="dp-var" style="padding:12px 0 0">Nenhuma lista no pipeline ainda.</p>'}
             <div class="dp-cfg" id="dpResumo" style="margin-top:12px"></div>
           </div>
           ${campoMensagem()}
@@ -1488,7 +1678,7 @@ async function abrirDisparo(empilhar = true) {
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
   if ($('dUsarRaiox')) dpAba(prontosDisparo ? 'pipe' : 'nums')
   // a mensagem escolhida vira a padrão da conta: é a mesma que aparece no pipeline
-  const guardarMensagem = async msg => { const { error } = await sb.from('canal_whatsapp').update({ saudacao: msg }).eq('dono', usuario.id); if (!error) saudacaoDono = msg }
+  const guardarMensagem = async msg => { if (DP_GR) return; const { error } = await sb.from('canal_whatsapp').update({ saudacao: msg }).eq('dono', usuario.id); if (!error) saudacaoDono = msg }
   if ($('dpList')) $('dpList').querySelectorAll('.dp-it').forEach(el => { const top = el.querySelector('.dp-it-top'); if (top) top.onclick = () => el.classList.toggle('aberto') })
   if ($('dCriarL')) $('dCriarL').onclick = async () => {
     const { lista: todosNums } = dpLerNumeros($('dNums').value)
