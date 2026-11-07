@@ -609,6 +609,71 @@ const ENR_IC = {
   email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
   site: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
 }
+const ENR_FOTOS_MAX = 12
+const ENR_IC_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>'
+const ENR_IC_FOTO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5L5 20"/></svg>'
+const enrFotosUrl = async paths => {
+  if (!paths.length) return []
+  const { data } = await sb.storage.from('capivara').createSignedUrls(paths, 3600)
+  return paths.map((path, i) => ({ path, url: data?.[i]?.signedUrl || '' }))
+}
+// foto do celular é pesada: sobe com no máximo 1600 px
+const enrReduz = file => new Promise((ok, erro) => {
+  const u = URL.createObjectURL(file), im = new Image()
+  im.onload = () => { const k = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(u); c.toBlob(b => b ? ok(b) : erro(new Error('foto')), 'image/jpeg', .85) }
+  im.onerror = () => { URL.revokeObjectURL(u); erro(new Error('foto')) }
+  im.src = u
+})
+const enrPintarFotos = () => {
+  const j = ENR_J, el = $('enrJFotos'); if (!j || !el) return
+  const n = j.fotos.length
+  $('enrJFn').textContent = `${n} de ${ENR_FOTOS_MAX}`
+  el.innerHTML = `<div class="enr-j-gr">${j.fotos.map(f => `<div class="enr-j-th"><a href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Abrir foto"><img src="${esc(f.url)}" alt="Foto da empresa" referrerpolicy="no-referrer"></a><button type="button" class="enr-j-del" data-del="${esc(f.path)}" aria-label="Apagar foto">${IC.x}</button></div>`).join('')}${n < ENR_FOTOS_MAX ? `<button type="button" class="enr-j-add" id="enrFAdd"${j.carregado && !j.subindo ? '' : ' disabled'}>${ENR_IC_FOTO}<span>${j.subindo || 'Subir fotos'}</span></button>` : ''}</div><input id="enrFile" type="file" accept="image/*" multiple hidden>${j.fotoErro ? `<small class="enr-j-fe" role="alert">${esc(j.fotoErro)}</small>` : ''}`
+  if ($('enrFAdd')) $('enrFAdd').onclick = () => $('enrFile').click()
+  $('enrFile').onchange = ev => { const l = [...ev.target.files]; ev.target.value = ''; if (l.length) enrSubirFotos(l) }
+  el.querySelectorAll('[data-del]').forEach(b => b.onclick = () => enrApagarFoto(b))
+}
+const enrSubirFotos = async lista => {
+  const j = ENR_J; if (!j || j.subindo) return
+  const vaga = ENR_FOTOS_MAX - j.fotos.length, vao = lista.slice(0, vaga)
+  j.fotoErro = lista.length > vaga ? `Cabem só mais ${vaga}. O limite é ${ENR_FOTOS_MAX} fotos por empresa.` : ''
+  let falhou = 0
+  for (let i = 0; i < vao.length; i++) {
+    j.subindo = vao.length > 1 ? `Enviando ${i + 1} de ${vao.length}…` : 'Enviando…'; enrPintarFotos()
+    try {
+      const blob = await enrReduz(vao[i]), path = `${usuario.id}/empresa/${j.e.id}/${crypto.randomUUID()}.jpg`
+      const { error } = await sb.storage.from('capivara').upload(path, blob, { contentType: 'image/jpeg' })
+      if (error) throw error
+      const paths = [...j.fotos.map(f => f.path), path]
+      const { error: e2 } = await sb.from('empresas').update({ fotos: paths }).eq('id', j.e.id)
+      if (e2) { await sb.storage.from('capivara').remove([path]); throw e2 }
+      j.fotos = [...j.fotos, ...(await enrFotosUrl([path]))]; j.e.fotos = paths; j.mudou = true
+    } catch (_) { falhou++ }
+  }
+  j.subindo = ''
+  if (falhou) j.fotoErro = `${falhou === 1 ? 'Uma foto não subiu' : falhou + ' fotos não subiram'}. Use JPG ou PNG e tente de novo.`
+  if (ENR_J === j) enrPintarFotos(); else j.depois?.()
+}
+const enrApagarFoto = async b => {
+  const j = ENR_J; if (!j) return
+  if (!b.dataset.conf) { b.dataset.conf = '1'; b.classList.add('conf'); b.setAttribute('aria-label', 'Toque de novo para apagar'); return }
+  const path = b.dataset.del, resto = j.fotos.filter(f => f.path !== path), paths = resto.map(f => f.path)
+  b.disabled = true
+  const { error } = await sb.from('empresas').update({ fotos: paths }).eq('id', j.e.id)
+  if (error) { j.fotoErro = 'Não consegui apagar a foto. Tenta de novo.'; return enrPintarFotos() }
+  await sb.storage.from('capivara').remove([path])
+  j.fotos = resto; j.e.fotos = paths; j.fotoErro = ''; j.mudou = true; enrPintarFotos()
+}
+const enrCarregarExtra = async j => {
+  const { data, error } = await sb.from('empresas').select('info, fotos').eq('id', j.e.id).maybeSingle()
+  if (ENR_J !== j) return
+  if (error || !data) { j.fotoErro = 'Não consegui abrir as informações e fotos. Feche e abra de novo.'; return enrPintarFotos() }
+  j.info = data.info || ''; j.fotos = await enrFotosUrl(Array.isArray(data.fotos) ? data.fotos : [])
+  if (ENR_J !== j) return
+  j.carregado = true
+  const t = $('enrInfo'); if (t) { t.value = j.info; t.disabled = false }
+  enrPintarFotos()
+}
 const ENR_CAMPOS = [['whatsapp', 'WhatsApp', '(11) 90000-0000', 'tel'], ['instagram', 'Instagram', '@perfil', 'text'], ['email', 'E-mail', 'contato@empresa.com', 'email'], ['site', 'Site', 'empresa.com.br', 'url']]
 let ENR_J = null
 const enrEsc = ev => { if (ev.key === 'Escape') enrFechar() }
@@ -633,12 +698,16 @@ const enrPintar = () => {
       <button type="button" class="btn go enr-j-busca" id="enrJB"${j.buscando ? ' disabled' : ''}>${j.buscando ? 'Procurando…' : j.buscou ? 'Buscar de novo' : 'Buscar dados'}</button>
       ${j.msg ? `<div class="enr-m ${j.msg.t}" role="status">${j.msg.h}</div>` : ''}
       ${ENR_CAMPOS.map(linha).join('')}
+      <div class="enr-j-c"><label for="enrInfo"><i class="enr-j-ic">${ENR_IC_INFO}</i><b>Informações relevantes</b></label><textarea id="enrInfo" rows="3" maxlength="2000" placeholder="Quem decide, melhor horário, o que a empresa precisa"${j.carregado ? '' : ' disabled'}>${esc(j.info)}</textarea></div>
+      <div class="enr-j-c"><div class="enr-j-ft"><i class="enr-j-ic">${ENR_IC_FOTO}</i><b>Fotos</b><small id="enrJFn"></small></div><div id="enrJFotos"></div></div>
       ${enrDados(e)}
     </div>
     <footer class="enr-j-f"><button type="button" class="btn ok" id="enrJS">Salvar</button></footer></div>`
   const raiz = $('enrJ')
-  raiz.querySelectorAll('[data-c]').forEach(i => i.oninput = () => { j.val[i.dataset.c] = i.value; j.achou.delete(i.dataset.c) })
+  raiz.querySelectorAll('[data-c]').forEach(i => i.oninput = () => { j.val[i.dataset.c] = i.value; j.achou.delete(i.dataset.c); i.parentElement.querySelector('.enr-j-tag')?.remove() })
   raiz.querySelector('[data-usa-cel]')?.addEventListener('click', () => { j.val.whatsapp = String(e.telefone || ''); enrPintar() })
+  $('enrInfo').oninput = ev => { j.info = ev.target.value }
+  enrPintarFotos()
   $('enrJX').onclick = enrFechar
   $('enrJB').onclick = enrBuscar
   $('enrJS').onclick = enrSalvar
@@ -649,6 +718,7 @@ const enrSalvar = async () => {
   const wa = v('whatsapp').replace(/\D/g, ''), ig = v('instagram').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/^@/, '').replace(/[/?].*$/, '').toLowerCase(), si = v('site')
   if (wa && wa.length < 10) { j.msg = { t: 'ruim', h: 'Confere o WhatsApp com DDD.' }; enrPintar(); return $('enrC_whatsapp').focus() }
   const dados = empNorm({ whatsapp: wa || null, instagram: ig || null, email: v('email').toLowerCase() || null, site: si ? (/^https?:\/\//i.test(si) ? si : 'https://' + si) : null })
+  if (j.carregado) dados.info = String(j.info || '').trim() || null
   const b = $('enrJS'); b.disabled = true; b.textContent = 'Salvando…'
   const { error } = await sb.from('empresas').update(dados).eq('id', j.e.id)
   if (!ENR_J) return
@@ -673,11 +743,11 @@ const enrBuscar = async () => {
 const enrAbrir = (e, depois) => {
   if (!e?.id) return
   enrFechar(); empNorm(e)
-  ENR_J = { e, depois, achou: new Set(), buscou: false, buscando: false, mudou: false, msg: null, val: Object.fromEntries(ENR_CAMPOS.map(([k]) => [k, k === 'instagram' && e[k] ? '@' + e[k] : e[k] || ''])) }
+  ENR_J = { e, depois, achou: new Set(), buscou: false, buscando: false, mudou: false, msg: null, info: '', fotos: [], carregado: false, subindo: '', fotoErro: '', val: Object.fromEntries(ENR_CAMPOS.map(([k]) => [k, k === 'instagram' && e[k] ? '@' + e[k] : e[k] || ''])) }
   const o = document.createElement('div'); o.id = 'enrJ'; o.className = 'enr-j-o'
   o.addEventListener('mousedown', ev => { if (ev.target === o) enrFechar() })
   document.body.appendChild(o); document.addEventListener('keydown', enrEsc)
-  enrPintar(); $('enrJB').focus()
+  enrPintar(); $('enrJB').focus(); enrCarregarExtra(ENR_J)
 }
 // liga o botão do card. depois() redesenha a tela onde o card está.
 function ligarEnr(root, e, depois) {
@@ -792,6 +862,9 @@ let fichaAberta = null
 async function abrirFichaMaps(d, empilhar = true) {
   fichaAberta = d
   const e = empNorm(d.empresa) || {}, x = e.google_extra || {}
+  const { data: extra } = await sb.from('empresas').select('info, fotos').eq('id', e.id).maybeSingle()
+  if (extra) Object.assign(e, extra)
+  const fotosE = await enrFotosUrl(Array.isArray(e.fotos) ? e.fotos : [])
   const { data: avs } = await sb.from('avaliacoes').select('estrelas, texto, publicada_em, autor, autor_link, tempo').eq('empresa_id', e.id).order('publicada_em', { ascending: false, nullsFirst: false }).limit(20)
   const w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
   const estrelas = n => { const v = Math.round(+n || 0); return `<span class="fi-est" aria-label="${v} de 5 estrelas">${'★'.repeat(v)}<i>${'★'.repeat(5 - v)}</i></span>` }
@@ -817,6 +890,7 @@ async function abrirFichaMaps(d, empilhar = true) {
     <div class="fi-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok" id="fiAdd">Adicionar ao pipeline</button>'}${e.google_maps_url ? `<a class="btn line" href="${esc(e.google_maps_url)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ''}${enrBotao(e)}</div>
     ${semFicha ? `<div class="fi-av"><span>Essa empresa veio de uma busca antiga, sem a ficha completa do Google.</span><button class="btn go sm" id="fiBaixar">Trazer do Google</button></div>` : ''}
     ${sec('Contato', `<div class="fi-cs">${contato}</div>`)}
+    ${sec('Informações e fotos', `${e.info ? `<p class="fi-info">${esc(e.info)}</p>` : ''}${fotosE.length ? `<div class="enr-j-gr fi-fotos">${fotosE.map(f => `<a class="enr-j-th" href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Abrir foto"><img src="${esc(f.url)}" alt="Foto da empresa" referrerpolicy="no-referrer"></a>`).join('')}</div>` : ''}${e.info || fotosE.length ? '' : `<button type="button" class="fi-c fi-falta fi-falta-l" data-enr-add><b>Quem decide, melhor horário, fotos da empresa</b><span>Adicionar</span></button>`}`)}
     ${sec('Endereço', e.endereco ? `<p>${esc(e.endereco)}</p>` : '')}
     ${sec('Sobre', [x.resumo, x.resumo_avaliacoes].filter(Boolean).map(t => `<p>${esc(t)}</p>`).join(''))}
     ${sec('Horários', horas)}
