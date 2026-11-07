@@ -1360,3 +1360,8 @@ a.fi-c{text-decoration:none;color:inherit}
 .dp-tira input{flex:none;width:18px;height:18px;margin:0;accent-color:var(--tx)}
 .dp-tira span{flex:1;min-width:0}
 .dp-tira b{font:600 12px var(--mono);color:var(--mu)}
+/* 06/11/2026: botões do card do pipeline alinhados: contatos dividem a linha, a etapa ocupa a linha inteira */
+.pc-ac{gap:4px}
+.pc-ac a,.pc-ac button{flex:1 1 auto;height:32px;padding:0 6px;justify-content:center;white-space:nowrap}
+.pc-ac .vai{flex:0 0 100%;margin-left:0}
+@media (max-width:700px){.pc-ac a,.pc-ac button{height:44px}}
