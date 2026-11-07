@@ -1083,7 +1083,7 @@ async function abrirCaptacao(empilhar = true) {
     $('pResp').onclick = e => { pipeF.resp = !pipeF.resp; pipeF.lim = {}; e.currentTarget.setAttribute('aria-pressed', pipeF.resp); pintar(true) }
   }
   if ($('cFila')) $('cFila').onclick = () => abrirFila()
-  if ($('cDisp')) $('cDisp').onclick = () => comIA(abrirDisparo)
+  if ($('cDisp')) $('cDisp').onclick = () => comIA(() => abrirDisparo(true, true))
   if ($('cCsv')) $('cCsv').onclick = () => {
     const cel = v => `"${String(v ?? '').replace(/"/g, '""')}"`
     const linhas = [['Empresa', 'Busca', 'Bairro', 'Cidade', 'Etapa', 'Temperatura', 'Desde', 'Telefone', 'WhatsApp', 'Instagram', 'E-mail', 'Site', 'Potencial', 'Assunto', 'Anotação'].map(cel).join(';')]
@@ -1467,7 +1467,9 @@ const dpFoneDe = d => {
   return x.length >= 12 && x.length <= 13 ? x : ''
 }
 const dpTem = (l, conj) => conj.has('t:' + l.temp) || (l.seg && conj.has('s:' + l.seg))
-const dpTemEtiqueta = l => dpTem(l, DP_EXC) || (DP_INC.size && !dpTem(l, DP_INC))
+// lista e temperatura somam: Estetica + Frio é quem está nas duas
+const dpNaEscolha = l => { const k = [...DP_INC], segs = k.some(x => x.startsWith('s:')), temps = k.some(x => x.startsWith('t:')); return (!segs || DP_INC.has('s:' + l.seg)) && (!temps || DP_INC.has('t:' + l.temp)) }
+const dpTemEtiqueta = l => dpTem(l, DP_EXC) || !dpNaEscolha(l)
 const dpPublico = () => {
   const vistos = new Set(), alvo = []; let semCel = 0, porEtiqueta = 0, repetidos = 0, suprimidos = 0, frequentes = 0
   for (const l of DP_PIPE) {
@@ -1572,7 +1574,7 @@ const dpAba = qual => {
   $('dpEsqPipe').hidden = $('dUsarRaiox').hidden = qual !== 'pipe'
   $('dpEsqNums').hidden = $('dCriarL').hidden = qual !== 'nums'
 }
-async function abrirDisparo(empilhar = true) {
+async function abrirDisparo(empilhar = true, doPipeline = false) {
   await carregarSaudacao()
   const { data: canalAt } = await sb.from('canal_whatsapp').select('atende').eq('dono', usuario.id).maybeSingle()
   DP_ATENDE = !!canalAt?.atende
@@ -1621,6 +1623,8 @@ async function abrirDisparo(empilhar = true) {
     const ultimaIn = {}; (ins || []).forEach(m => { if (!ultimaIn[m.telefone]) ultimaIn[m.telefone] = m.criado_em })
     DP_PIPE = (ds || []).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
     DP_ETAPAS = new Set(['a_contatar']); DP_EXC = new Set(); DP_INC = new Set()
+    // veio do pipeline filtrado: o disparo já abre na mesma lista
+    if (doPipeline) { if (pipeF.seg && DP_PIPE.some(l => l.seg === pipeF.seg)) DP_INC.add('s:' + pipeF.seg); if (pipeF.temp) DP_INC.add('t:' + pipeF.temp) }
     const prontos = prontosDisparo = DP_PIPE.filter(l => l.tel).length
     const nEtapa = k => DP_PIPE.filter(l => l.etapa === k).length
     const segs = [...new Set(DP_PIPE.map(l => l.seg).filter(Boolean))].sort((x, y) => x.localeCompare(y))
@@ -1675,6 +1679,7 @@ async function abrirDisparo(empilhar = true) {
   if (empilhar) empilha('disparo')
   const recarrega = () => abrirDisparo(false)
   ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id); ligarPublico(); ligarNumeros(); ligarGuardian()
+  if (doPipeline && !camp && DP_INC.size) dpGrAuto()
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
   if ($('dUsarRaiox')) dpAba(prontosDisparo ? 'pipe' : 'nums')
   // a mensagem escolhida vira a padrão da conta: é a mesma que aparece no pipeline
