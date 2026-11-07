@@ -1365,3 +1365,27 @@ a.fi-c{text-decoration:none;color:inherit}
 .pc-ac a,.pc-ac button{flex:1 1 auto;height:32px;padding:0 6px;justify-content:center;white-space:nowrap}
 .pc-ac .vai{flex:0 0 100%;margin-left:0}
 @media (max-width:700px){.pc-ac a,.pc-ac button{height:44px}}
+/* 07/11/2026: etiquetas criadas por você */
+.pc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.pc-tags span,.pc-etq-l>span{display:inline-flex;align-items:center;gap:2px;max-width:100%;min-height:24px;padding:0 8px;background:var(--s);border:1px solid var(--line);border-radius:6px;font-size:12px;font-weight:500;color:var(--tx);overflow-wrap:anywhere}
+.pc-etq{margin-top:12px}
+.pc-etq-t{display:block;margin-bottom:4px;font-size:11px;color:var(--mu)}
+.pc-etq-l{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.pc-etq-l>span{padding-right:0}
+.pc-etq-l button{flex:none;width:24px;height:24px;display:grid;place-items:center;color:var(--mu);cursor:pointer}
+.pc-etq-l button:hover{color:var(--r)}
+.pc-etq-l button svg{width:12px;height:12px}
+.pc-etq-add{display:flex;gap:4px}
+.pc-etq-add input{flex:1;min-width:0;height:32px;padding:0 8px;border:1px solid var(--line2);border-radius:6px;font:inherit;font-size:12px;color:var(--tx);background:var(--w);outline:0}
+.pc-etq-add input:focus{border-color:var(--tx)}
+.pc-etq-add button{flex:none;height:32px;padding:0 8px;border:1px solid var(--line2);border-radius:6px;background:var(--w);font-size:12px;font-weight:500;color:var(--tx);cursor:pointer}
+.pf-lote{display:inline-flex;align-items:center;gap:4px;margin-left:auto}
+.pf-lote input{width:150px;height:32px;padding:0 8px;border:1px solid var(--line2);border-radius:6px;font:inherit;font-size:12px;color:var(--tx);background:var(--w);outline:0}
+.pf-lote input:focus{border-color:var(--tx)}
+.pf-i .pf-lote button{height:32px;padding:0 8px;border-radius:6px;background:var(--tx);font-size:12px;font-weight:500;color:#fff;white-space:nowrap}
+.pf-i{align-items:center}
+@media (max-width:700px){
+  .pc-etq-l button{width:36px;height:36px}
+  .pc-etq-add input,.pc-etq-add button{height:44px}.pc-etq-add input{font-size:16px}
+  .pf-lote{margin-left:0;width:100%}.pf-lote input{flex:1;width:auto;height:44px;font-size:16px}.pf-i .pf-lote button{height:44px}
+}

@@ -1004,7 +1004,7 @@ async function contarCaptacao() {
 }
 let colunaPipe = 0
 // filtro do pipeline: sobrevive ao redesenho (mover etapa, voltar da conversa)
-const pipeF = { q: '', resp: false, temp: '', seg: '', lim: {} }
+const pipeF = { q: '', resp: false, temp: '', seg: '', etq: '', lim: {} }
 const segDe = d => String(d.segmento || d.busca?.nicho || '').trim()
 // posição do pipeline: mover etapa ou voltar da conversa não pode jogar pro início
 let pipeX = 0, pipeY = 0
@@ -1017,7 +1017,7 @@ const esperandoTxt = t => { const m = Math.max(0, Math.floor((Date.now() - new D
 async function leadsDoPipe() {
   const out = []
   for (let i = 0; ; i += 1000) {
-    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, busca:buscas(nicho, cidade), empresa:empresas(id, nome, bairro, cidade, telefone, site, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
+    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, etiquetas, busca:buscas(nicho, cidade), empresa:empresas(id, nome, bairro, cidade, telefone, site, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
     if (error) { liz('Não consegui carregar todo o pipeline. Tenta de novo.'); break }
     out.push(...(data || []))
     if (!data || data.length < 1000) break
@@ -1025,9 +1025,18 @@ async function leadsDoPipe() {
   return out
 }
 async function abrirCaptacao(empilhar = true) {
-  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.temp = ''; pipeF.seg = ''; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
+  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.temp = ''; pipeF.seg = ''; pipeF.etq = ''; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
   const [todos, resAg, resAt] = await Promise.all([leadsDoPipe(), sb.rpc('aguardando_resposta'), sb.rpc('atividade_leads')])
   todos.forEach(d => empNorm(d.empresa))
+  // etiquetas criadas por você: mesma etiqueta com outra grafia vira a que já existe
+  const pEtqTodas = () => [...new Set(todos.flatMap(d => d.etiquetas || []))].sort((a, b) => a.localeCompare(b, 'pt-BR'))
+  const pEtqCanon = v => { const t = String(v || '').trim().replace(/\s+/g, ' ').slice(0, 30); return t ? pEtqTodas().find(x => semAc(x) === semAc(t)) || t : '' }
+  const pEtqPinta = () => {
+    const sel = $('pEtq'); if (!sel) return
+    const lista = pEtqTodas(); if (pipeF.etq && !lista.includes(pipeF.etq)) pipeF.etq = ''
+    sel.innerHTML = `<option value="">Todas</option>${lista.map(t => `<option value="${esc(t)}"${pipeF.etq === t ? ' selected' : ''}>${esc(t)} (${todos.filter(d => (d.etiquetas || []).includes(t)).length})</option>`).join('')}`
+    $('pEtqSug').innerHTML = lista.map(t => `<option value="${esc(t)}"></option>`).join('')
+  }
   const atvId = new Map(), atvTel = new Map()
   ;(resAt.data || []).forEach(a => { const mais = (m, k) => { if (k && (!m.get(k) || m.get(k) < a.ultima_in)) m.set(k, a.ultima_in) }; mais(atvId, a.diagnostico_id); [a.telefone, a.fone].forEach(t => mais(atvTel, chaveTel(t))) })
   const ultimaInDe = d => [atvId.get(d.id), ...[d.empresa?.whatsapp, d.empresa?.telefone, d.telefone].map(chaveTel).map(k => k && atvTel.get(k))].filter(Boolean).sort().pop() || null
@@ -1060,12 +1069,14 @@ async function abrirCaptacao(empilhar = true) {
       <div class="pc-h"><div><b>${esc(titulo)}</b><small>${esc(sub)}</small></div><span class="nt">${d.nota_dor ?? ''}</span></div>
       ${es ? `<button class="pc-esp" data-abrir="${esc(es.telefone)}"><span>${esperandoTxt(es.desde)}</span><b>Responder</b></button>` : ''}
       <div class="pc-m"><span class="tp t-${tt[0]}"${d.temperatura ? ' title="Marcado por você"' : ''}>${tt[1]}</span><span class="${frio ? 'esf' : ''}">${frio ? `sem resposta ${haDias(n)}` : (d.etapa === 'a_contatar' ? 'entrou ' : '') + haDias(n)}</span></div>
+      ${(d.etiquetas || []).length ? `<div class="pc-tags">${d.etiquetas.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
       ${d.anotacao ? `<div class="pc-n">${esc(d.anotacao)}</div>` : ''}
       <div class="pc-ac">${w ? `<a data-contato data-abrir="${w}" href="#" class="wpp">WhatsApp</a>` : ''}${telHref ? `<a data-contato href="tel:${esc(telHref)}">Ligar</a>` : ''}${e.instagram ? `<a data-contato class="ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">Insta</a>` : ''}${e.email && !w ? `<a data-contato href="mailto:${esc(e.email)}?body=${encodeURIComponent(msg)}">E-mail</a>` : ''}
         ${prox && d.etapa !== 'cliente' && d.etapa !== 'perdido' ? `<button class="vai" data-vai="${prox[0]}" title="Passar pra ${prox[1]}">${prox[1]}${IC.arr}</button>` : ''}</div>
       <div class="pc-mais">
         <div class="cp-et">${ETAPAS.map(([k, t]) => `<button data-et="${k}" class="${d.etapa === k ? 'on' : ''}">${t}</button>`).join('')}</div>
         ${d.etapa === 'cliente' || d.etapa === 'perdido' ? '' : `<div class="cp-et cp-tmp"><span>Temperatura</span><button data-tmp="" class="${d.temperatura ? '' : 'on'}">Automática</button>${TEMP_MAN.map(([k, t]) => `<button data-tmp="${k}" class="${d.temperatura === k ? 'on' : ''}">${t}</button>`).join('')}</div>`}
+        <div class="pc-etq"><span class="pc-etq-t">Etiquetas</span>${(d.etiquetas || []).length ? `<div class="pc-etq-l">${d.etiquetas.map(t => `<span>${esc(t)}<button type="button" data-etq-x="${esc(t)}" aria-label="Tirar a etiqueta ${esc(t)}">${IC.x}</button></span>`).join('')}</div>` : ''}<div class="pc-etq-add"><input data-etq-in list="pEtqSug" maxlength="30" placeholder="Nova etiqueta" aria-label="Nova etiqueta para ${esc(titulo)}" autocomplete="off"><button type="button" data-etq-add>Adicionar</button></div></div>
         <div class="cp-ac"><button data-copia>Copiar mensagem</button>${enrBotao(d.empresa)}</div>${enrDados(d.empresa)}
         <textarea data-nota placeholder="Anotação (ex: falei com a Ana, retornar segunda)">${esc(d.anotacao || '')}</textarea></div></div>`
   }
@@ -1074,7 +1085,7 @@ async function abrirCaptacao(empilhar = true) {
   $('cap').innerHTML = `<div class="cap-x"><span class="t">Pipeline</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b">
     <div class="lst-top"><h2>${todos.length ? `${todos.length} empresa${todos.length === 1 ? '' : 's'} no pipeline` : 'Pipeline'}</h2>${de('a_contatar').length ? `<button class="btn go sm" id="cFila">Abordagens do dia · ${de('a_contatar').length}</button>` : ''}${de('a_contatar').length ? `<button class="btn line sm" id="cDisp">Disparo automático</button>` : ''}${todos.length ? '<button class="btn line sm" id="cCsv">Baixar planilha</button>' : ''}</div>
     ${todos.length ? `<div class="pk">${kpi.map(([t, k, v, s]) => `<div class="pk-i t-${t}"><i></i><div><b>${v}</b><span>${k}</span><small>${s}</small></div></div>`).join('')}</div>
-    <div class="pf"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pQ" type="search" placeholder="Buscar nome, empresa, telefone ou @" aria-label="Buscar no pipeline" autocomplete="off" value="${esc(pipeF.q)}"></label>${(() => { const segs = {}; todos.forEach(d => { const s = segDe(d); if (s) segs[s] = (segs[s] || 0) + 1 }); return `<label class="lv-ord pf-seg"><span>Segmento</span><select id="pSeg" aria-label="Filtrar por segmento"><option value="">Todos (${todos.length})</option>${Object.entries(segs).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([s, n]) => `<option value="${esc(s)}"${pipeF.seg === s ? ' selected' : ''}>${esc(s)} (${n})</option>`).join('')}</select></label>` })()}<div class="pf-tmp" id="pTemp">${TEMP_MAN.map(([k, t]) => `<button class="t-${k}" data-f="${k}" aria-pressed="${pipeF.temp === k}"><i></i>${t}<span>${nTemp(k)}</span></button>`).join('')}</div><button class="pf-resp" id="pResp" aria-pressed="${pipeF.resp}" ${noPipe.size || pipeF.resp ? '' : 'disabled'}>Responder<span>${todos.filter(esperaDe).length}</span></button></div>
+    <div class="pf"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pQ" type="search" placeholder="Buscar nome, empresa, telefone ou @" aria-label="Buscar no pipeline" autocomplete="off" value="${esc(pipeF.q)}"></label>${(() => { const segs = {}; todos.forEach(d => { const s = segDe(d); if (s) segs[s] = (segs[s] || 0) + 1 }); return `<label class="lv-ord pf-seg"><span>Segmento</span><select id="pSeg" aria-label="Filtrar por segmento"><option value="">Todos (${todos.length})</option>${Object.entries(segs).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([s, n]) => `<option value="${esc(s)}"${pipeF.seg === s ? ' selected' : ''}>${esc(s)} (${n})</option>`).join('')}</select></label>` })()}<label class="lv-ord pf-seg"><span>Etiqueta</span><select id="pEtq" aria-label="Filtrar por etiqueta"></select></label><datalist id="pEtqSug"></datalist><div class="pf-tmp" id="pTemp">${TEMP_MAN.map(([k, t]) => `<button class="t-${k}" data-f="${k}" aria-pressed="${pipeF.temp === k}"><i></i>${t}<span>${nTemp(k)}</span></button>`).join('')}</div><button class="pf-resp" id="pResp" aria-pressed="${pipeF.resp}" ${noPipe.size || pipeF.resp ? '' : 'disabled'}>Responder<span>${todos.filter(esperaDe).length}</span></button></div>
     <div class="pf-i" id="pInfo" hidden></div>
     <div class="pt" id="pTabs">${ETAPAS.map(([k, t], i) => `<button data-col="${i}">${t}<span>${de(k).length}</span></button>`).join('')}</div>
     <div class="pb" id="pBoard"></div>`
@@ -1100,7 +1111,23 @@ async function abrirCaptacao(empilhar = true) {
     const ligar = () => {
     board.querySelectorAll('.pc').forEach(el => {
       const d = todos.find(x => x.id === el.dataset.id)
-      el.onclick = e => { if (!e.target.closest('a,button,textarea')) el.classList.toggle('aberto') }
+      el.onclick = e => { if (!e.target.closest('a,button,textarea,input')) el.classList.toggle('aberto') }
+      const etqSalva = async lista => {
+        const { error } = await sb.from('diagnosticos').update({ etiquetas: lista }).eq('id', d.id)
+        if (error) return liz('Não consegui salvar a etiqueta. Tenta de novo.')
+        d.etiquetas = lista; pEtqPinta()
+        const y = $('cap').scrollTop; pintar(); $('cap').scrollTop = y
+        const novo = $('pBoard').querySelector(`.pc[data-id="${d.id}"]`); novo?.classList.add('aberto'); novo?.querySelector('[data-etq-in]')?.focus()
+      }
+      const etqAdd = () => {
+        const t = pEtqCanon(el.querySelector('[data-etq-in]').value); if (!t) return
+        const atual = d.etiquetas || []
+        if (atual.includes(t)) { el.querySelector('[data-etq-in]').value = ''; return }
+        etqSalva([...atual, t])
+      }
+      el.querySelector('[data-etq-add]').onclick = etqAdd
+      el.querySelector('[data-etq-in]').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); etqAdd() } }
+      el.querySelectorAll('[data-etq-x]').forEach(b => b.onclick = () => etqSalva((d.etiquetas || []).filter(t => t !== b.dataset.etqX)))
       ligarEnr(el, d.empresa, async () => { const y = $('cap').scrollTop; pintar(); $('cap').scrollTop = y; $('pBoard').querySelector(`.pc[data-id="${d.id}"]`)?.classList.add('aberto') })
       el.ondragstart = e => { e.dataTransfer.setData('text/plain', d.id); el.classList.add('voando') }
       el.ondragend = () => el.classList.remove('voando')
@@ -1129,8 +1156,8 @@ async function abrirCaptacao(empilhar = true) {
     const fonesBusca = new Map(todos.map(d => { const e = d.empresa || {}, a = esperaDe(d); return [d.id, [e.whatsapp, e.telefone, d.telefone, a?.telefone, a?.fone].map(t => String(t || '').replace(/\D/g, '').replace(/^55(?=\d{10})/, '')).join(' ')] }))
     const pintar = (rolar = false) => {
       const q = semAcento(pipeF.q.trim()).replace(/^@/, ''), soNumero = /^[\d\s()+-]+$/.test(q), qd = soNumero ? q.replace(/\D/g, '').replace(/^55(?=\d{10})/, '') : ''
-      const bate = d => (!pipeF.resp || esperaDe(d)) && (!pipeF.temp || tempDe(d)[0] === pipeF.temp) && (!pipeF.seg || segDe(d) === pipeF.seg) && (!q || (soNumero ? qd.length >= 3 && fonesBusca.get(d.id).includes(qd) : textoBusca.get(d.id).includes(q)))
-      const filtrando = !!q || pipeF.resp || !!pipeF.temp || !!pipeF.seg
+      const bate = d => (!pipeF.resp || esperaDe(d)) && (!pipeF.temp || tempDe(d)[0] === pipeF.temp) && (!pipeF.seg || segDe(d) === pipeF.seg) && (!pipeF.etq || (d.etiquetas || []).includes(pipeF.etq)) && (!q || (soNumero ? qd.length >= 3 && fonesBusca.get(d.id).includes(qd) : textoBusca.get(d.id).includes(q)))
+      const filtrando = !!q || pipeF.resp || !!pipeF.temp || !!pipeF.seg || !!pipeF.etq
       let total = 0, primeira = -1
       board.innerHTML = ETAPAS.map(([k, t], i) => {
         // quem espera há mais tempo vem primeiro, pra não ficar escondido depois do limite da coluna
@@ -1144,7 +1171,15 @@ async function abrirCaptacao(empilhar = true) {
       ligar()
       const info = $('pInfo'), fora = pipeF.resp && foraDoPipe
       info.hidden = !filtrando && !foraDoPipe
-      info.innerHTML = `${filtrando ? (total ? `${total} de ${todos.length} no pipeline` : 'Ninguém encontrado no pipeline') : ''}${foraDoPipe && (fora || !filtrando) ? `<button id="pFora">${foraDoPipe} esperando em Conversas, fora do pipeline</button>` : ''}`
+      info.innerHTML = `${filtrando ? (total ? `${total} de ${todos.length} no pipeline` : 'Ninguém encontrado no pipeline') : ''}${foraDoPipe && (fora || !filtrando) ? `<button id="pFora">${foraDoPipe} esperando em Conversas, fora do pipeline</button>` : ''}${filtrando && total ? `<span class="pf-lote"><input id="pLoteT" list="pEtqSug" maxlength="30" placeholder="Etiqueta" aria-label="Etiqueta para as empresas filtradas" autocomplete="off"><button type="button" id="pLoteB">Etiquetar ${total === 1 ? 'esta' : `estas ${total}`}</button></span>` : ''}`
+      if ($('pLoteB')) { const fazLote = async () => {
+        const t = pEtqCanon($('pLoteT').value); if (!t) { $('pLoteT').focus(); return liz('Escreve o nome da etiqueta.') }
+        const alvos = todos.filter(bate), ids = alvos.map(x => x.id), b = $('pLoteB'); b.disabled = true; b.textContent = 'Salvando…'
+        const { error } = await sb.rpc('etiquetar', { p_ids: ids, p_etiqueta: t })
+        if (error) { b.disabled = false; pintar(); return liz('Não consegui etiquetar. Tenta de novo.') }
+        alvos.forEach(x => { if (!(x.etiquetas || []).includes(t)) x.etiquetas = [...(x.etiquetas || []), t] })
+        pEtqPinta(); pintar(); liz(`Etiqueta ${esc(t)} em ${ids.length} ${ids.length === 1 ? 'empresa' : 'empresas'}.`)
+      }; $('pLoteB').onclick = fazLote; $('pLoteT').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); fazLote() } } }
       if ($('pFora')) $('pFora').onclick = () => abrirConversas()
       if (rolar && primeira >= 0) { colunaPipe = primeira; board.scrollLeft = board.children[primeira].offsetLeft - board.offsetLeft; marca(mob() ? primeira : -1) }
     }
@@ -1153,6 +1188,8 @@ async function abrirCaptacao(empilhar = true) {
     if (!empilhar) $('cap').scrollTop = pipeY
     let tq; $('pQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { pipeF.q = e.target.value; pipeF.lim = {}; pintar(true) }, 150) }
     $('pSeg').onchange = e => { pipeF.seg = e.target.value; pipeF.lim = {}; pintar(true) }
+    pEtqPinta()
+    $('pEtq').onchange = e => { pipeF.etq = e.target.value; pipeF.lim = {}; pintar(true) }
     $('pTemp').querySelectorAll('button').forEach(b => b.onclick = () => { pipeF.temp = pipeF.temp === b.dataset.f ? '' : b.dataset.f; pipeF.lim = {}; $('pTemp').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x.dataset.f === pipeF.temp)); pintar(true) })
     $('pResp').onclick = e => { pipeF.resp = !pipeF.resp; pipeF.lim = {}; e.currentTarget.setAttribute('aria-pressed', pipeF.resp); pintar(true) }
   }
@@ -1225,7 +1262,7 @@ const dpGrAtual = () => DP_GRUPOS.find(g => g.id === DP_GR)
 const dpGrSujo = () => JSON.stringify(dpVersoes()) !== DP_GR_BASE
 const dpGrIdentificar = () => { const v = JSON.stringify(dpVersoes()); DP_GR = DP_GRUPOS.find(g => JSON.stringify(g.versoes) === v)?.id || null; DP_GR_NOVO = false; DP_GR_BASE = v }
 const dpGrCasa = (g, seg) => (g.etiquetas || []).includes(seg) || semAc(g.nome) === semAc(seg)
-const dpGrSegsEscolhidos = () => [...DP_INC].filter(k => k.startsWith('s:')).map(k => k.slice(2))
+const dpGrSegsEscolhidos = () => [...DP_INC].filter(k => k.startsWith('s:') || k.startsWith('e:')).map(k => k.slice(2))
 const dpGrFormHtml = () => `<div class="dp-gr-form" id="dGrForm" hidden>
     <label class="dp-lbl" for="dGrNome">Nome do grupo</label>
     <input id="dGrNome" class="dp-gr-in" maxlength="60" placeholder="Escola" autocomplete="off">
@@ -1541,12 +1578,12 @@ const dpFoneDe = d => {
   if (x.length === 10 || x.length === 11) x = '55' + x
   return x.length >= 12 && x.length <= 13 ? x : ''
 }
-const dpTem = (l, conj) => conj.has('t:' + l.temp) || (l.seg && conj.has('s:' + l.seg)) || (l.cat && conj.has('c:' + l.cat))
+const dpTem = (l, conj) => conj.has('t:' + l.temp) || (l.seg && conj.has('s:' + l.seg)) || (l.cat && conj.has('c:' + l.cat)) || (l.etq || []).some(t => conj.has('e:' + t))
 // tirar quem já respondeu vale pela conversa, não só pela etapa: dá para responder e continuar em A contatar
 let DP_TIRA_RESP = true, DP_RESP_TEL = new Set()
 const DP_ETAPA_RESPONDEU = ['respondeu', 'reuniao', 'cliente']
-// lista, categoria e temperatura somam: Estetica + Frio é quem está nas duas
-const dpNaEscolha = l => { const k = [...DP_INC], tem = p => k.some(x => x.startsWith(p)); return (!tem('s:') || DP_INC.has('s:' + l.seg)) && (!tem('c:') || DP_INC.has('c:' + l.cat)) && (!tem('t:') || DP_INC.has('t:' + l.temp)) }
+// lista, etiqueta, categoria e temperatura somam: Estetica + Frio é quem está nas duas
+const dpNaEscolha = l => { const k = [...DP_INC], tem = p => k.some(x => x.startsWith(p)); return (!tem('e:') || (l.etq || []).some(t => DP_INC.has('e:' + t))) && (!tem('s:') || DP_INC.has('s:' + l.seg)) && (!tem('c:') || DP_INC.has('c:' + l.cat)) && (!tem('t:') || DP_INC.has('t:' + l.temp)) }
 const dpTemEtiqueta = l => dpTem(l, DP_EXC) || !dpNaEscolha(l)
 const dpPublico = () => {
   const vistos = new Set(), alvo = []; let semCel = 0, porEtiqueta = 0, repetidos = 0, suprimidos = 0, frequentes = 0, responderam = 0
@@ -1671,7 +1708,7 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
     const pct = total ? Math.round(enviados / total * 100) : 0, rod = camp.status === 'rodando'
     DP_COMP_ON = !!camp.complemento_ligado; DP_COMP = camp.complementos?.length ? [...camp.complementos] : [DP_COMP_PADRAO]
     DP_VERS = camp.versoes?.length ? [...camp.versoes] : [es.find(e => e.status === 'na_fila')?.mensagem || saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
-    if (!rod && fila) { const { data: sg } = await sb.from('diagnosticos').select('segmento, busca:buscas(nicho)').eq('decisao', 'aprovada').eq('arquivado', false).limit(2000); DP_SEGS = [...new Set((sg || []).map(d => String(d.segmento || d.busca?.nicho || '').trim()).filter(Boolean))] }
+    if (!rod && fila) { const { data: sg } = await sb.from('diagnosticos').select('segmento, etiquetas, busca:buscas(nicho)').eq('decisao', 'aprovada').eq('arquivado', false).limit(2000); DP_SEGS = [...new Set((sg || []).flatMap(d => [String(d.segmento || d.busca?.nicho || '').trim(), ...(d.etiquetas || [])]).filter(Boolean))] }
     body = `<div class="dp-duas">
       <div class="dp-esq">
         <h3 class="dp-esq-t">${total} empresa${total === 1 ? '' : 's'} neste disparo</h3>
@@ -1697,25 +1734,26 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
       </aside></div>`
   } else {
     const [{ data: ds }, { data: ins }, { data: atv }] = await Promise.all([
-      sb.from('diagnosticos').select('id, etapa, etapa_em, nota_dor, temperatura, segmento, telefone, capivara, busca:buscas(nicho), empresa:empresas(nome, bairro, whatsapp, telefone, categoria)').eq('decisao', 'aprovada').eq('arquivado', false).order('nota_dor', { ascending: false, nullsFirst: false }).limit(2000),
+      sb.from('diagnosticos').select('id, etapa, etapa_em, nota_dor, temperatura, segmento, etiquetas, telefone, capivara, busca:buscas(nicho), empresa:empresas(nome, bairro, whatsapp, telefone, categoria)').eq('decisao', 'aprovada').eq('arquivado', false).order('nota_dor', { ascending: false, nullsFirst: false }).limit(2000),
       sb.from('conversa').select('telefone, criado_em').eq('direcao', 'in').eq('automatica', false).order('criado_em', { ascending: false }).limit(1000),
       sb.rpc('atividade_leads')
     ])
     const respId = new Set((atv || []).map(a => a.diagnostico_id).filter(Boolean))
     DP_RESP_TEL = new Set((atv || []).flatMap(a => [chaveTel(a.telefone), chaveTel(a.fone)]).filter(Boolean)); DP_TIRA_RESP = true
     const ultimaIn = {}; (ins || []).forEach(m => { if (!ultimaIn[m.telefone]) ultimaIn[m.telefone] = m.criado_em })
-    DP_PIPE = (ds || []).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), cat: String(d.empresa?.categoria || '').trim(), resp: DP_ETAPA_RESPONDEU.includes(etapa) || respId.has(d.id) || DP_RESP_TEL.has(chaveTel(tel)), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
+    DP_PIPE = (ds || []).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), cat: String(d.empresa?.categoria || '').trim(), etq: d.etiquetas || [], resp: DP_ETAPA_RESPONDEU.includes(etapa) || respId.has(d.id) || DP_RESP_TEL.has(chaveTel(tel)), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
     DP_ETAPAS = new Set(['a_contatar']); DP_EXC = new Set(); DP_INC = new Set()
     // veio do pipeline filtrado: o disparo já abre na mesma lista
-    if (doPipeline) { if (pipeF.seg && DP_PIPE.some(l => l.seg === pipeF.seg)) DP_INC.add('s:' + pipeF.seg); if (pipeF.temp) DP_INC.add('t:' + pipeF.temp) }
+    if (doPipeline) { if (pipeF.seg && DP_PIPE.some(l => l.seg === pipeF.seg)) DP_INC.add('s:' + pipeF.seg); if (pipeF.temp) DP_INC.add('t:' + pipeF.temp); if (pipeF.etq && DP_PIPE.some(l => l.etq.includes(pipeF.etq))) DP_INC.add('e:' + pipeF.etq) }
     const prontos = prontosDisparo = DP_PIPE.filter(l => l.tel).length
     const nEtapa = k => DP_PIPE.filter(l => l.etapa === k).length
     const segs = [...new Set(DP_PIPE.map(l => l.seg).filter(Boolean))].sort((x, y) => x.localeCompare(y))
     const nTempD = k => DP_PIPE.filter(l => l.temp === k).length
-    DP_SEGS = segs
+    const etqsD = [...new Set(DP_PIPE.flatMap(l => l.etq))].sort((x, y) => x.localeCompare(y))
+    DP_SEGS = [...new Set([...segs, ...etqsD])]
     const cats = [...new Set(DP_PIPE.map(l => l.cat).filter(Boolean))].sort((x, y) => DP_PIPE.filter(l => l.cat === y).length - DP_PIPE.filter(l => l.cat === x).length)
     const nResp = DP_PIPE.filter(l => l.resp).length
-    const etqGrupos = [['Lista', segs.map(g => [`s:${g}`, g, DP_PIPE.filter(l => l.seg === g).length])], ['Categoria', cats.map(g => [`c:${g}`, g, DP_PIPE.filter(l => l.cat === g).length])], ['Temperatura', TEMP_MAN.filter(([k]) => nTempD(k)).map(([k, t]) => [`t:${k}`, t, nTempD(k)])]]
+    const etqGrupos = [['Etiqueta', etqsD.map(g => [`e:${g}`, g, DP_PIPE.filter(l => l.etq.includes(g)).length])], ['Lista', segs.map(g => [`s:${g}`, g, DP_PIPE.filter(l => l.seg === g).length])], ['Categoria', cats.map(g => [`c:${g}`, g, DP_PIPE.filter(l => l.cat === g).length])], ['Temperatura', TEMP_MAN.filter(([k]) => nTempD(k)).map(([k, t]) => [`t:${k}`, t, nTempD(k)])]]
     const temEtq = etqGrupos.some(g => g[1].length)
     DP_VERS = [saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
     DP_COMP_ON = false; DP_COMP = [DP_COMP_PADRAO]
