@@ -501,10 +501,12 @@ async function enviar() {
   // worker podiam ficar esperando pra sempre. Agora no máximo 4 s + 3 s, e a tela diz que foi antes de abrir o WhatsApp.
   if (permissao) await ate(permissao, 4000)
   if (r && r.id) await ate(inscreverPush(r.id), 3000)
+  // 08/11: whats = 'resumo' (a Liz já mandou o resumo no WhatsApp: só abre a conversa), 'equipe' (a loja já recebeu, sem confirmação),
+  // 'abrir' (o cliente manda "Pedido nº X" e a Liz responde com o resumo)
   const destino = r && r.numero
-    ? `https://wa.me/${WA_CONFIRMA}?text=${encodeURIComponent(`*Pedido nº ${r.numero} · ${D.loja.nome}*\nQuero confirmar meu pedido.`)}`
+    ? (r.whats === 'resumo' ? `https://wa.me/${WA_CONFIRMA}` : `https://wa.me/${WA_CONFIRMA}?text=${encodeURIComponent(r.whats === 'equipe' ? `*Pedido nº ${r.numero} · ${D.loja.nome}*\nFiz meu pedido pelo cardápio.` : `*Pedido nº ${r.numero} · ${D.loja.nome}*\nQuero confirmar meu pedido.`)}`)
     : `https://wa.me/${D.loja.whatsapp}?text=${encodeURIComponent(msg)}`
-  if (r && r.numero) { bt.textContent = `Pedido nº ${r.numero} recebido! Abrindo o WhatsApp…`; $('#erro').innerHTML = `Se o WhatsApp não abrir sozinho, <a href="${destino}" style="color:inherit;text-decoration:underline">toque aqui</a>.` }
+  if (r && r.numero) { bt.textContent = r.whats === 'resumo' ? `Pedido nº ${r.numero} recebido! Te mandamos o resumo no WhatsApp pra confirmar.` : r.whats === 'equipe' ? `Pedido nº ${r.numero} recebido! A loja já está com ele.` : `Pedido nº ${r.numero} recebido! Abrindo o WhatsApp…`; $('#erro').innerHTML = `Se o WhatsApp não abrir sozinho, <a href="${destino}" style="color:inherit;text-decoration:underline">toque aqui</a>.` }
   else { bt.disabled = false; bt.textContent = 'Confirmar pelo WhatsApp' }
   // 0192 (19/10, Alex): o pedido grava 'aguardando' e o cliente confirma no WhatsApp da Kompila; a Liz da loja manda o resumo e o Pix ou a maquininha.
   // Se o registro falhou, cai no jeito antigo: o pedido inteiro vai pro WhatsApp da loja.
