@@ -28,6 +28,8 @@
 - Planos (mensalidade fixa, sem taxa por pedido): Start R$ 578/mês (até 3 mil respostas da Liz), Movimento R$ 978/mês (até 8 mil), Alta demanda R$ 1.478/mês (até 15 mil). Passou do pacote: R$ 60 a cada mil respostas. Acima de 20 mil por mês: plano sob medida.
 - Conta como resposta cada mensagem que a Liz manda pro cliente; mensagem da equipe e pedido lançado no balcão, no salão ou no cardápio online não contam.
 - O número de WhatsApp continua o da loja.
+- Ainda não emite nota fiscal nem tem controle de estoque e financeiro (novembro de 2026).
+- Comparação com Anota AI e iFood: https://kompila.com.br/pedidos/kompila-x-anota-ai-x-ifood/
 - Página: https://kompila.com.br/pedidos/
 
 ## kompila loja (loja virtual própria)

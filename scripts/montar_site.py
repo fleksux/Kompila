@@ -18,6 +18,7 @@ PAGINAS = {
     'chatbot/index.html': ('../', '../'),
     'crm/index.html': ('../', '../'),
     'pedidos/index.html': ('../', '../'),
+    'pedidos/kompila-x-anota-ai-x-ifood/index.html': ('../../', '../../'),
     'loja/index.html': ('../', '../'),
     'design/index.html': ('../', '../'),
     'cases/index.html': ('../', '../'),
