@@ -14,13 +14,16 @@
 ## Produtos
 - IA de atendimento e CRM: a Liz atende, qualifica e move o pipeline. https://kompila.com.br/chatbot/
 - kompila .crm: a Liz atendendo + o CRM. https://kompila.com.br/crm/
-- kompila loja: loja virtual com painel próprio, sem taxa por venda. https://kompila.com.br/loja/
+- kompila .pedidos: sistema de pedidos para restaurante e lanchonete. WhatsApp, balcão, salão, telefone e cardápio online num quadro só; a Liz responde o cliente no WhatsApp, inclusive o status do pedido; comanda impressa na cozinha; motoboy confirma a entrega com código. Sem taxa por pedido. https://kompila.com.br/pedidos/
+- kompila loja: loja virtual própria no domínio do cliente, sem taxa por venda, em cima do WooCommerce com painel da Kompila: vídeo da peça, provador virtual, cor em bolinha, estoque na página, frete antes do carrinho. A Maslu Select roda nela: 5.900+ pedidos e R$ 1,5 milhão em 12 meses só pelo site (lido em 15/09/2026). https://kompila.com.br/loja/
 - kompila design: marca, site e criativo. https://kompila.com.br/design/
 - kompila tráfego: anúncio com a conversão rastreada até a venda. https://kompila.com.br/trafego/
 - Trabalhos: marcas, embalagens, sites, sistemas, campanhas e vídeos feitos pra empresas reais. https://kompila.com.br/trabalhos/
 
 ## Quanto custa
-- Depende do que a gente monta pro negócio: o escopo é escrito antes, com data.
+- kompila .pedidos: mensalidade fixa, sem taxa por pedido. Start R$ 578/mês (até 3 mil respostas da Liz), Movimento R$ 978/mês (até 8 mil), Alta demanda R$ 1.478/mês (até 15 mil). Passou do pacote: R$ 60 a cada mil respostas; acima de 20 mil, plano sob medida.
+- kompila loja: mensalidade fixa, sem taxa por venda. Start R$ 578/mês, Movimento R$ 978/mês (vídeo da peça, stories, provador virtual), Alta demanda R$ 1.478/mês (migração do catálogo, loja otimizada).
+- CRM, IA de atendimento, design e tráfego: depende do que a gente monta pro negócio; o escopo é escrito antes, com data.
 
 ## Para quem
 - Dono de pequena e média empresa que tem gente fazendo trabalho repetitivo (responder cliente, cadastrar pedido, conferir, montar relatório) e ainda não sabe como usar a IA: clínica, loja, imobiliária, restaurante, contabilidade, prestador de serviço e quem vende por WhatsApp.
