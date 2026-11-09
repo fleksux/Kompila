@@ -64,6 +64,17 @@ table.cmp{width:100%;border-collapse:collapse;font-size:15px}
 .exemplo .v{margin-top:10px;font:900 40px Inter,sans-serif;letter-spacing:-.03em}
 .exemplo .v small{font-size:15px;font-weight:500;color:var(--mu);letter-spacing:0}
 .exemplo p{margin-top:8px;font-size:14.5px;line-height:1.5;color:var(--mu)}
+.exemplo.dois{grid-template-columns:1fr 1fr}
+.exemplo .calc label{display:block;font-size:15px;font-weight:600;margin-top:22px}.exemplo .calc label:first-child{margin-top:0}
+.exemplo .calc output{float:right;font-family:var(--mono);color:var(--gd)}
+.exemplo .calc input{width:100%;margin-top:12px;accent-color:var(--gd)}
+.exemplo .res{background:var(--carb);color:#fff}
+.exemplo .res .t{color:#A8ADB8}.exemplo .res .vv{margin-top:10px;font:900 48px Inter,sans-serif;letter-spacing:-.03em;color:#FF8A8E}
+.exemplo .res .lin{margin-top:22px;padding-top:18px;border-top:1px solid #23262b;display:flex;justify-content:space-between;gap:12px;font-size:15px;color:#A8ADB8}
+.exemplo .res .lin b{color:var(--g);font-size:20px;white-space:nowrap}
+.exemplo .res p{color:#A8ADB8}
+.ifood{margin-top:16px;border-radius:20px;padding:22px 26px;background:#fff;box-shadow:var(--sh)}
+.ifood .t{font:600 13px var(--mono);color:var(--mu)}.ifood p{margin-top:6px;font-size:16px;line-height:1.5}
 .nota{margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--mu2);max-width:900px;line-height:1.6}
 
 /* quando usar */
@@ -94,7 +105,8 @@ table.cmp{width:100%;border-collapse:collapse;font-size:15px}
 @media(max-width:960px){
   section{padding-top:72px}
   .topo,.faq{text-align:center}.lead{margin-inline:auto}.btns{justify-content:center}
-  .resumo,.exemplo,.quando{grid-template-columns:1fr}
+  .resumo,.exemplo,.exemplo.dois,.quando{grid-template-columns:1fr}
+  .ifood{text-align:left}
   #tabela,#exemplo,#quando{text-align:center}
   .resumo article,.exemplo article,.quando article{text-align:left}
   .tab-w{background:transparent;box-shadow:none;border-radius:0;text-align:left}
@@ -157,11 +169,8 @@ table.cmp{width:100%;border-collapse:collapse;font-size:15px}
       <table class="cmp">
         <thead><tr><th></th><th class="k">Kompila Pedidos</th><th>Anota AI</th><th>iFood</th></tr></thead>
         <tbody>
-          <tr><th>Como cobra</th><td class="k" data-l="Kompila Pedidos">Mensalidade fixa</td><td data-l="Anota AI">Mensalidade fixa, paga antes de usar</td><td data-l="iFood">Comissão sobre cada pedido + mensalidade</td></tr>
-          <tr><th>Preço</th><td class="k" data-l="Kompila Pedidos">R$ 578 a R$ 1.478 por mês<small>conforme quantas respostas da Liz no mês</small></td><td data-l="Anota AI">R$ 299,99 (Start) ou R$ 399,99 (Gestão Avançada) por mês<small>tabela de novembro de 2026</small></td><td data-l="iFood">12% por pedido se a loja entrega, 23% se o iFood entrega<small>fontes públicas; mensalidade citada entre R$ 100 e R$ 150</small></td></tr>
-          <tr><th>Taxa por pedido</th><td class="k" data-l="Kompila Pedidos"><span class="s">NÃO</span></td><td data-l="Anota AI"><span class="s">NÃO</span>só cobra no pagamento online pelo cardápio</td><td data-l="iFood"><span class="nao">SIM</span>a comissão</td></tr>
-          <tr><th>Pagamento online</th><td class="k" data-l="Kompila Pedidos">Pagamento na maquininha ou Pix da própria loja<small>a Kompila não intermedia o dinheiro</small></td><td data-l="Anota AI">Pix, cartão e carteira digital pelo cardápio, com taxa</td><td data-l="iFood">Cerca de 3,2% sobre o pagamento online</td></tr>
           <tr><th>Quem responde o WhatsApp da loja</th><td class="k" data-l="Kompila Pedidos"><span class="s">IA</span>a Liz, que lê o quadro e responde o status do pedido; quando não sabe, chama a equipe</td><td data-l="Anota AI"><span class="s">ROBÔ</span>atendente virtual no WhatsApp</td><td data-l="iFood"><span class="nao">NÃO</span>o cliente pede e conversa pelo app do iFood</td></tr>
+          <tr><th>Responde "cadê meu pedido?"</th><td class="k" data-l="Kompila Pedidos"><span class="s">SIM</span>a Liz lê o quadro e diz se está na cozinha, se já saiu e quanto falta</td><td data-l="Anota AI"><span class="parc">NÃO INFORMADO</span>não aparece na tabela de planos</td><td data-l="iFood"><span class="parc">SÓ NO APP</span>o cliente acompanha pelo app do iFood</td></tr>
           <tr><th>Salão e garçom</th><td class="k" data-l="Kompila Pedidos"><span class="s">SIM</span>mapa das mesas, garçom lança pelo celular</td><td data-l="Anota AI"><span class="s">SIM</span>pedidos de salão</td><td data-l="iFood"><span class="nao">NÃO</span></td></tr>
           <tr><th>Balcão (PDV)</th><td class="k" data-l="Kompila Pedidos"><span class="s">SIM</span></td><td data-l="Anota AI"><span class="s">SIM</span>frente de caixa</td><td data-l="iFood"><span class="nao">NÃO</span></td></tr>
           <tr><th>Cozinha</th><td class="k" data-l="Kompila Pedidos"><span class="s">SIM</span>comanda impressa sozinha (80 mm) e tela da cozinha</td><td data-l="Anota AI"><span class="s">SIM</span>display de cozinha</td><td data-l="iFood"><span class="parc">NÃO É O FOCO</span></td></tr>
@@ -169,6 +178,10 @@ table.cmp{width:100%;border-collapse:collapse;font-size:15px}
           <tr><th>Nota fiscal</th><td class="k" data-l="Kompila Pedidos"><span class="nao">AINDA NÃO</span></td><td data-l="Anota AI"><span class="s">SIM</span>no Gestão Avançada</td><td data-l="iFood"><span class="parc">NÃO SE APLICA</span></td></tr>
           <tr><th>Estoque e financeiro</th><td class="k" data-l="Kompila Pedidos"><span class="nao">NÃO</span>só o "esgotou e voltou" do cardápio</td><td data-l="Anota AI"><span class="s">SIM</span>no Gestão Avançada</td><td data-l="iFood"><span class="nao">NÃO</span></td></tr>
           <tr><th>Traz cliente novo</th><td class="k" data-l="Kompila Pedidos"><span class="nao">NÃO</span>atende quem já é seu</td><td data-l="Anota AI"><span class="nao">NÃO</span></td><td data-l="iFood"><span class="s">SIM</span>é um marketplace</td></tr>
+          <tr><th>Como cobra</th><td class="k" data-l="Kompila Pedidos">Mensalidade fixa</td><td data-l="Anota AI">Mensalidade fixa, paga antes de usar</td><td data-l="iFood">Comissão sobre cada pedido + mensalidade</td></tr>
+          <tr><th>Preço</th><td class="k" data-l="Kompila Pedidos">R$ 578 a R$ 1.478 por mês<small>conforme quantas respostas da Liz no mês</small></td><td data-l="Anota AI">R$ 299,99 (Start) ou R$ 399,99 (Gestão Avançada) por mês<small>tabela de novembro de 2026</small></td><td data-l="iFood">12% por pedido se a loja entrega, 23% se o iFood entrega<small>fontes públicas; mensalidade citada entre R$ 100 e R$ 150</small></td></tr>
+          <tr><th>Taxa por pedido</th><td class="k" data-l="Kompila Pedidos"><span class="s">NÃO</span></td><td data-l="Anota AI"><span class="s">NÃO</span>só cobra no pagamento online pelo cardápio</td><td data-l="iFood"><span class="nao">SIM</span>a comissão</td></tr>
+          <tr><th>Pagamento online</th><td class="k" data-l="Kompila Pedidos">Pagamento na maquininha ou Pix da própria loja<small>a Kompila não intermedia o dinheiro</small></td><td data-l="Anota AI">Pix, cartão e carteira digital pelo cardápio, com taxa</td><td data-l="iFood">Cerca de 3,2% sobre o pagamento online</td></tr>
         </tbody>
       </table>
     </div>
@@ -177,15 +190,23 @@ table.cmp{width:100%;border-collapse:collapse;font-size:15px}
 
 <section id="exemplo">
   <div class="shell">
-    <div class="rot">Exemplo de conta</div>
-    <h2>Mil pedidos de R$ 40 <em>num mês.</em></h2>
-    <p class="lead">R$ 40 mil vendidos pelo canal. Quanto vai embora em taxa e mensalidade em cada um.</p>
-    <div class="exemplo">
-      <article class="k"><div class="t">KOMPILA PEDIDOS · MOVIMENTO</div><div class="v">R$ 978<small> /mês</small></div><p>Mensalidade fixa. Até 8 mil respostas da Liz no mês.</p></article>
-      <article><div class="t">ANOTA AI · GESTÃO AVANÇADA</div><div class="v">R$ 399,99<small> /mês</small></div><p>Mensalidade de tabela. Mais a taxa do pagamento online, se o cliente pagar pelo cardápio.</p></article>
-      <article><div class="t">IFOOD · LOJA ENTREGA</div><div class="v">R$ 6.080<small> /mês</small></div><p>12% de comissão + 3,2% de pagamento online sobre R$ 40 mil, mais a mensalidade.</p></article>
+    <div class="rot">Faça a conta</div>
+    <h2>O que sai mais caro: a mensalidade <em>ou o cliente sem resposta?</em></h2>
+    <p class="lead">Cliente que pergunta e não tem resposta pede em outro lugar. Coloque os números da sua loja.</p>
+    <div class="exemplo dois">
+      <article class="calc">
+        <label>Clientes sem resposta por dia <output id="oSem">10</output><input id="iSem" type="range" min="1" max="60" value="10"></label>
+        <label>Ticket médio <output id="oTic">R$ 40</output><input id="iTic" type="range" min="15" max="120" value="40"></label>
+        <label>Quantos desses desistem <output id="oDes">50%</output><input id="iDes" type="range" min="10" max="100" step="10" value="50"></label>
+      </article>
+      <article class="res">
+        <div class="t">VOCÊ DEIXA DE VENDER POR MÊS</div><div class="vv" id="rPerda">R$ 6.000</div>
+        <div class="lin"><span>kompila .pedidos · Movimento</span><b>R$ 978/mês</b></div>
+        <p>A Liz responde na hora, inclusive "cadê meu pedido?", 24 horas.</p>
+      </article>
     </div>
-    <p class="nota">Conta ilustrativa. No iFood, os 3,2% valem só pra pedido pago online, e as taxas podem mudar: confira no Portal do Parceiro. A Kompila e o Anota AI não cobram por pedido.</p>
+    <div class="ifood"><div><div class="t">E NO IFOOD</div><p>Mil pedidos de R$ 40 no mês pagam cerca de <span style="font-weight:800">R$ 6.080</span> em comissão e pagamento online, mais a mensalidade.</p></div></div>
+    <p class="nota">Conta com os números que você escolheu. No iFood: 12% de comissão + 3,2% de pagamento online (fontes públicas); confira no Portal do Parceiro.</p>
   </div>
 </section>
 
@@ -195,7 +216,7 @@ table.cmp{width:100%;border-collapse:collapse;font-size:15px}
     <h2>Não é um ou outro. <em>Depende do que falta na sua loja.</em></h2>
     <div class="quando">
       <article><h3>Kompila Pedidos</h3><ul><li>Seu WhatsApp acumula e cliente fica sem resposta no pico</li><li>A pergunta que mais chega é "cadê meu pedido?"</li><li>Você tem salão, balcão e entrega e quer tudo num quadro</li><li>Quer cada pessoa da equipe vendo só a parte dela</li></ul></article>
-      <article><h3>Anota AI</h3><ul><li>Precisa emitir nota fiscal dentro do sistema hoje</li><li>Quer controle de estoque e financeiro no mesmo lugar</li><li>Quer o menor preço de mensalidade</li></ul></article>
+      <article><h3>Anota AI</h3><ul><li>Precisa emitir nota fiscal dentro do sistema hoje</li><li>Quer controle de estoque e financeiro no mesmo lugar</li></ul></article>
       <article><h3>iFood</h3><ul><li>Precisa ser encontrado por quem ainda não conhece a loja</li><li>Não tem entregador próprio (Plano Entrega)</li><li>Aceita pagar comissão pelo cliente novo</li></ul></article>
     </div>
     <div class="junto">O caminho que mais faz sentido pra muita loja: <b>iFood pra ser achado, Kompila pra atender sem comissão</b> quem já é seu cliente e volta a pedir direto pelo WhatsApp e pelo cardápio da loja.</div>
@@ -253,6 +274,13 @@ table.cmp{width:100%;border-collapse:collapse;font-size:15px}
   </div>
 </footer>
 <!-- /partes:rodape -->
+<script>
+(function(){var R=function(v){return 'R$ '+Math.round(v).toLocaleString('pt-BR')};
+var iS=document.getElementById('iSem'),iT=document.getElementById('iTic'),iD=document.getElementById('iDes');
+function c(){var sem=+iS.value,t=+iT.value,d=+iD.value;document.getElementById('oSem').textContent=sem;document.getElementById('oTic').textContent='R$ '+t;document.getElementById('oDes').textContent=d+'%';
+document.getElementById('rPerda').textContent=R(sem*30*t*d/100)}
+[iS,iT,iD].forEach(function(x){x.oninput=c});c()})();
+</script>
 <script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
 <script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
 <script src="https://crm.kompila.com.br/medicao.js" data-ga="G-L4B7092014" defer></script>
