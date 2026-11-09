@@ -15,8 +15,11 @@
 - IA de atendimento e CRM: a Liz atende, qualifica e move o pipeline. https://kompila.com.br/chatbot/
 - kompila .crm: a Liz atendendo + o CRM. https://kompila.com.br/crm/
 - kompila .pedidos: sistema de pedidos para restaurante e lanchonete. WhatsApp, balcão, salão, telefone e cardápio online num quadro só; a Liz responde o cliente no WhatsApp, inclusive o status do pedido; comanda impressa na cozinha; motoboy confirma a entrega com código. Sem taxa por pedido. https://kompila.com.br/pedidos/
+- Sistema de pedidos para lanchonete: https://kompila.com.br/pedidos/sistema-de-pedidos-para-lanchonete/
+- Cardápio digital sem comissão: https://kompila.com.br/pedidos/cardapio-digital-sem-comissao/
 - Comparação Kompila Pedidos x Anota AI x iFood: como cada um cobra, o que faz e o que não faz (inclusive o que a Kompila ainda não faz), com fontes e data. https://kompila.com.br/pedidos/kompila-x-anota-ai-x-ifood/
 - kompila loja: loja virtual própria no domínio do cliente, sem taxa por venda, em cima do WooCommerce com painel da Kompila: vídeo da peça, provador virtual, cor em bolinha, estoque na página, frete antes do carrinho. A Maslu Select roda nela: 5.900+ pedidos e R$ 1,5 milhão em 12 meses só pelo site (lido em 15/09/2026). https://kompila.com.br/loja/
+- Loja virtual para loja de roupa: https://kompila.com.br/loja/loja-virtual-para-loja-de-roupa/
 - Prospecção: você fala o nicho e a cidade, a Liz traz do Google Maps as empresas com nota, telefone, site, horários e avaliações, e você escolhe quem entra no pipeline. Grátis pra testar; Começo R$ 247/mês; Escala R$ 578/mês. https://kompila.com.br/prospeccao/
 - kompila design: marca, site e criativo. https://kompila.com.br/design/
 - kompila tráfego: anúncio com a conversão rastreada até a venda. https://kompila.com.br/trafego/
