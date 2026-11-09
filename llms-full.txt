@@ -1,0 +1,57 @@
+# Kompila: texto completo
+
+> Kompila é uma empresa brasileira de IA sob medida pra pequena e média empresa, de Mogi das Cruzes/SP (CNPJ 65.907.771/0001-02). Faz CRM com IA pra vender pelo WhatsApp, a Liz (IA de atendimento), sistema de pedidos pra restaurante, loja virtual própria, prospecção pelo Google Maps, design e tráfego pago. Atende em português, no Brasil inteiro. Site: https://kompila.com.br/ · WhatsApp: +55 11 96734-2512 · Instagram: @kompila.ia
+
+## A Liz, IA de atendimento
+- Atende no WhatsApp oficial da empresa (API da Meta) e no chat do site, 24 horas.
+- Responde cada lead em segundos, entende áudio e responde só com o que a empresa aprovou. Preço e condição saem da tabela aprovada; valor sensível pode exigir aprovação de uma pessoa.
+- Qualifica, marca reunião ou visita e passa pro vendedor da vez com o resumo da conversa.
+- Guardião: em 5 minutos sem resposta do vendedor o lead vai pro próximo da fila; em 10, a Liz retoma e segura o lead.
+- Não substitui o vendedor: faz o pré-atendimento; fechar continua sendo trabalho de gente.
+- Página: https://kompila.com.br/chatbot/
+
+## kompila .crm
+- CRM com IA pra vender pelo WhatsApp: junta numa tela o WhatsApp oficial, o Instagram, o Facebook e os pixels dos anúncios.
+- Mostra quem atendeu, quem ficou sem resposta e de qual anúncio veio cada venda; devolve a conversão pra Meta Ads e Google Ads.
+- Pipeline com as fases da venda de cada empresa; cada empresa num espaço isolado.
+- Preço: depende do escopo, escrito antes, com data.
+- Página: https://kompila.com.br/crm/
+
+## kompila .pedidos (sistema de pedidos pra restaurante e lanchonete)
+- WhatsApp, balcão, salão, telefone e cardápio online caem num quadro só (em produção, na rua, pronto).
+- A Liz responde o cliente no WhatsApp, inclusive o status do pedido; quando não sabe, chama alguém da equipe.
+- Avisos ao cliente: em produção (resumo com itens, pagamento e previsão), saiu (com o código de entrega) e pronto pra retirar.
+- Comanda impressa sozinha na cozinha, em impressora térmica de 80 mm.
+- Garçom lança a mesa pelo celular, com mapa das mesas; balcão lança quem chega ou liga; cardápio online com "esgotou" e "voltou" na hora.
+- Motoboy vê só as entregas dele e fecha a entrega com o código do cliente.
+- Cada pessoa da equipe entra com o próprio login e vê só o que é do cargo dela.
+- Planos (mensalidade fixa, sem taxa por pedido): Start R$ 578/mês (até 3 mil respostas da Liz), Movimento R$ 978/mês (até 8 mil), Alta demanda R$ 1.478/mês (até 15 mil). Passou do pacote: R$ 60 a cada mil respostas. Acima de 20 mil por mês: plano sob medida.
+- Conta como resposta cada mensagem que a Liz manda pro cliente; mensagem da equipe e pedido lançado no balcão, no salão ou no cardápio online não contam.
+- O número de WhatsApp continua o da loja.
+- Página: https://kompila.com.br/pedidos/
+
+## kompila loja (loja virtual própria)
+- Loja no domínio do cliente, sem taxa por venda, construída em cima do WooCommerce com plugin e painel da Kompila. Produto, cliente e pedido continuam do lojista.
+- Página da peça: cor em bolinha com a foto da cor, provador virtual, tamanho com numeração, estoque visível antes do botão, frete antes do carrinho, abas de composição, medidas, entrega e troca.
+- Vídeo da peça na página e nas bolhas de stories da loja, com vídeo por cor.
+- Painel: pedidos de hoje, peças sem medida e estoque acabando; cadastro de uma peça por vez com SKU automático; contagem de estoque por planilha; junta cadastros repetidos num modelo só com redirecionamento dos endereços antigos.
+- Checkout com Pix, cartão em até 12x e boleto.
+- Planos (mensalidade fixa, sem taxa por venda): Start R$ 578/mês, Movimento R$ 978/mês (vídeo da peça, stories, provador virtual), Alta demanda R$ 1.478/mês (migração do catálogo, loja otimizada pra carregar rápido, prioridade no suporte).
+- Caso: Maslu Select (alfaiataria e tricot feminino, Suzano/SP, masluoficial.com.br). Lido da loja em 15/09/2026: 5.900+ pedidos e R$ 1,5 milhão em 12 meses só pela loja online, 4.900 clientes online, Conjunto Tweed com 1.900+ vendidos, 66 peças consolidadas em 31 modelos, home com LCP de 2,9 s.
+- Página: https://kompila.com.br/loja/
+
+## Prospecção
+- Você fala o nicho e a cidade (ou sobe sua planilha); a Liz traz do Google Maps categoria, nota, telefone, site, endereço, horários e até 5 avaliações de cada empresa.
+- Filtra por celular, site e nota; quem interessa entra no pipeline com um clique; enriquece Instagram, e-mail e WhatsApp quando estão no site da empresa.
+- Planos: Free (R$ 5 de saldo, até 120 empresas), Começo R$ 247/mês (até 1.500 empresas por mês), Escala R$ 578/mês (até 4.000, com disparo automático por um WhatsApp dedicado e a Liz respondendo). O disparo do Escala não usa a API oficial do WhatsApp; o risco de restrição do número fica com o dono do número.
+- Página: https://kompila.com.br/prospeccao/
+
+## kompila design e kompila tráfego
+- Design: marca, site e criativo. https://kompila.com.br/design/
+- Tráfego: anúncio com a conversão rastreada até a venda. https://kompila.com.br/trafego/
+- Trabalhos feitos pra empresas reais: https://kompila.com.br/trabalhos/
+
+## Contato
+- WhatsApp: +55 11 96734-2512
+- Site: https://kompila.com.br/
+- Instagram: https://instagram.com/kompila.ia

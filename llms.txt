@@ -16,6 +16,7 @@
 - kompila .crm: a Liz atendendo + o CRM. https://kompila.com.br/crm/
 - kompila .pedidos: sistema de pedidos para restaurante e lanchonete. WhatsApp, balcão, salão, telefone e cardápio online num quadro só; a Liz responde o cliente no WhatsApp, inclusive o status do pedido; comanda impressa na cozinha; motoboy confirma a entrega com código. Sem taxa por pedido. https://kompila.com.br/pedidos/
 - kompila loja: loja virtual própria no domínio do cliente, sem taxa por venda, em cima do WooCommerce com painel da Kompila: vídeo da peça, provador virtual, cor em bolinha, estoque na página, frete antes do carrinho. A Maslu Select roda nela: 5.900+ pedidos e R$ 1,5 milhão em 12 meses só pelo site (lido em 15/09/2026). https://kompila.com.br/loja/
+- Prospecção: você fala o nicho e a cidade, a Liz traz do Google Maps as empresas com nota, telefone, site, horários e avaliações, e você escolhe quem entra no pipeline. Grátis pra testar; Começo R$ 247/mês; Escala R$ 578/mês. https://kompila.com.br/prospeccao/
 - kompila design: marca, site e criativo. https://kompila.com.br/design/
 - kompila tráfego: anúncio com a conversão rastreada até a venda. https://kompila.com.br/trafego/
 - Trabalhos: marcas, embalagens, sites, sistemas, campanhas e vídeos feitos pra empresas reais. https://kompila.com.br/trabalhos/
@@ -35,7 +36,14 @@
 - Site: https://kompila.com.br/
 - WhatsApp: +55 11 96734-2512
 
+## Cases
+- Sistemas, lojas e IA de atendimento no ar em empresas reais (P1LED, Maslu Select, Glowbos, Luciu's, Coleve). https://kompila.com.br/cases/
+
+## Texto completo
+- Versão longa, com cada produto, preço e caso: https://kompila.com.br/llms-full.txt
+
 ## Guias: o que a IA já faz em cada tipo de negócio
+- Ímã de IA: como montar com IA um teste ou ferramenta grátis que atrai o cliente certo e entrega a conversa pronta no WhatsApp, em 7 passos. https://kompila.com.br/blog/ima-de-ia/
 - Barbearia na era da IA: 10 coisas que já rodam sozinhas numa barbearia, com dados do Sebrae e fonte. https://kompila.com.br/blog/barbearia-na-era-da-ia/
 - Studio na era da IA: 10 coisas que já rodam sozinhas num studio, com dados do Sebrae e fonte. https://kompila.com.br/blog/studio-na-era-da-ia/
 - Clínica na era da IA: 10 coisas que já rodam sozinhas numa clínica, com dados do Sebrae e fonte. https://kompila.com.br/blog/clinica-na-era-da-ia/
