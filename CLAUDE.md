@@ -16,7 +16,7 @@ valem pros dois produtos e moram no repositório do CRM:
 - **Só dois caminhos**: botão de chamada = `data-liz href="#liz"` (abre o chat da Liz); falar direto = consultor `wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila`. Nunca link pro WhatsApp oficial. Antes de publicar, listar o destino de cada `<a>` e clicar de verdade.
 - **Rastreio**: toda página pública e toda landing de anúncio carrega, logo depois do `acessos.js`, o `<script src="/js/pixel.js" defer></script>` (pixel Meta "Kompila Vendas": PageView, ViewContent ao ler, Contact no clique da Liz/WhatsApp, Lead no formulário). Aprovação e convite (noindex) não levam.
 - **Movimento**: toda página carrega `/js/anima.js`. Nada de grade de cards iguais e parados.
-- **Régua**: páginas de produto carregam `css/regua.css` (menu, rodapé, 1.200 px, título 64). A home e a Trabalhos têm o CSS próprio com os mesmos valores.
+- **Régua**: páginas de produto carregam `css/regua.css` (menu, rodapé, 1.200 px, título 64). O link leva versão (`regua.css?v=AAAAMMDD`): mudou o regua.css, troca a versão em todas as páginas, senão o celular fica com o CSS velho. O menu do celular (3 traços) mora no `partes/menu.html` + `regua.css`. A home e a Trabalhos têm o CSS próprio com os mesmos valores.
 - **Só fato**: nenhuma frase que o produto não sustenta (tempo de resposta = o medido; Instagram só quando existir; Meta: disparo em massa no cartão do cliente).
 - **Coleve é parceira** (o Alex tem 10%). P1LED só como cliente/parceiro onde ele autorizou.
 - **Rascunho não vai pro repositório**: os antigos (antiga, v2, nova, humana) saíram em 03/10; versão nova se testa em branch, não em pasta. Aprovação de cliente (`aprovacao/`, `convite/`) é link sem login por decisão de 30/09, com noindex.
