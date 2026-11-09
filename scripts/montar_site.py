@@ -15,6 +15,7 @@ RAIZ_REPO = Path(__file__).resolve().parent.parent
 PAGINAS = {
     'index.html': ('', './'),
     'trabalhos/index.html': ('../', '../'),
+    'trabalhos/sokraty/index.html': ('../../', '../../'),
     'chatbot/index.html': ('../', '../'),
     'crm/index.html': ('../', '../'),
     'pedidos/index.html': ('../', '../'),

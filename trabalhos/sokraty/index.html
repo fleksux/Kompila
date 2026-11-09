@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sokraty · UX e interface | kompila</title>
+<meta name="description" content="Case Sokraty: a Kompila redesenhou a interface de um software jurídico a partir da tarefa do advogado. Tela inicial, fluxo da publicação à minuta, celular e marca.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1pL7W0Q5n-wU.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&family=Host+Grotesk:wght@700&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&family=Host+Grotesk:wght@700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&family=Host+Grotesk:wght@700&display=swap"></noscript>
+<link rel="stylesheet" href="../../css/regua.css?v=20261109b">
+<style>
+:root{--carb:#0A0B0E;--papel:#F2F3EF;--g:#2FD67B;--gd:#12803F;--gs:#E6F7EE;--amb:#FFB224;--tx:#0A0B0E;--mu:#5F6473;--mu2:#9A9EAA;--line:#E2E3DE;--lima:#E4F808;--mono:'JetBrains Mono',ui-monospace,monospace;--sh:0 1px 2px rgba(10,11,14,.05),0 14px 36px rgba(10,11,14,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--tx);background:var(--papel);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}img{display:block;max-width:100%}
+.shell{width:min(1200px,88%);margin:0 auto}
+.rot{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--gd);letter-spacing:.14em;text-transform:uppercase}
+h1{font-size:clamp(40px,5.4vw,68px);line-height:1.02;letter-spacing:-.035em;font-weight:800}
+h2{font-size:clamp(32px,4vw,50px);line-height:1.06;letter-spacing:-.03em;font-weight:800;margin-top:14px}
+h1 em,h2 em{font-style:normal;color:var(--gd)}
+.lead{margin-top:18px;font-size:18px;line-height:1.6;color:var(--mu);max-width:560px}
+.lead b{color:var(--tx);font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:0;cursor:pointer}
+.btn.esc{background:var(--carb);color:#fff}.btn.cla{background:#fff;color:var(--carb);box-shadow:var(--sh)}.btn.ver{background:var(--g);color:var(--carb)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+section{padding:120px 0 0}
+.cena{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.cena.vivo{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.cena{opacity:1;transform:none;transition:none}*{animation:none!important}}
+
+/* trilha */
+.trilha{padding-top:28px;font-family:var(--mono);font-size:12px;color:var(--mu2)}
+.trilha a{text-decoration:none}.trilha a:hover{color:var(--tx)}
+
+/* 1. topo */
+.topo{padding:40px 0 0;position:relative;overflow:hidden}
+.topo::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(10,11,14,.07) 1px,transparent 1.2px);background-size:24px 24px;mask:linear-gradient(180deg,#000 30%,transparent);pointer-events:none}
+.topo .shell{position:relative;display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:center}
+.selo-p{display:inline-flex;align-items:center;gap:10px;height:34px;padding:0 14px 0 6px;border-radius:999px;background:#fff;box-shadow:var(--sh);font-size:14px;color:var(--mu)}
+.selo-p b{white-space:nowrap;font-family:var(--mono);font-size:12px;color:#fff;background:var(--carb);border-radius:999px;padding:4px 10px}
+.selo-p b i{font-style:normal;color:var(--g)}
+.topo h1{margin-top:22px}
+/* 09/11/2026: no celular o título tem 4 linhas; o espaço já vem reservado e a troca de fonte não empurra o texto de baixo */
+@media(max-width:480px){.topo h1{min-height:4.1em}}
+.grifo{position:relative;white-space:nowrap;color:var(--tx)!important;z-index:0}
+.grifo::after{content:"";position:absolute;left:-4px;right:-4px;bottom:.06em;height:.42em;background:var(--lima);z-index:-1;border-radius:3px;transform-origin:left;animation:grifa 1.1s .5s cubic-bezier(.7,0,.2,1) both}
+@keyframes grifa{from{transform:scaleX(0)}}
+.prova{margin-top:32px;display:flex;gap:28px;flex-wrap:wrap;font-size:14px;color:var(--mu)}
+.prova span b{display:block;font-family:var(--mono);font-size:22px;color:var(--tx)}
+.prova span b i{font-style:normal;color:var(--gd)}
+.vitrine{position:relative;height:540px}
+.nav-b{position:absolute;left:0;top:10px;width:90%;border-radius:16px;background:#fff;box-shadow:0 30px 80px rgba(10,11,14,.18);overflow:hidden}
+.bar{height:34px;display:flex;align-items:center;gap:6px;padding:0 14px;background:#F4F4F2;border-bottom:1px solid var(--line)}
+.bar i{width:10px;height:10px;border-radius:50%;background:#DADDD5}
+.bar span{margin-left:12px;font-family:var(--mono);font-size:11px;color:var(--mu);background:#fff;border-radius:6px;padding:3px 10px}
+.nav-b .vp{height:420px;overflow:hidden}
+.nav-b .vp img{width:100%;height:auto;animation:rola 18s ease-in-out infinite alternate}
+@keyframes rola{0%,15%{transform:translateY(0)}100%{transform:translateY(calc(-100% + 420px))}}
+.cel-v{position:absolute;right:0;bottom:0;width:206px;height:430px;border-radius:34px;background:var(--carb);padding:8px;box-shadow:0 30px 70px rgba(10,11,14,.3);z-index:2}
+.cel-v .vp{height:100%;border-radius:27px;overflow:hidden;background:#fff}
+.cel-v .vp img{width:100%;height:auto;animation:rolac 26s ease-in-out infinite alternate}
+@keyframes rolac{0%,8%{transform:translateY(0)}100%{transform:translateY(calc(-100% + 414px))}}
+.chip{position:absolute;z-index:3;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:#fff;box-shadow:var(--sh);font-size:13px;line-height:1.35;animation:flutua 5s ease-in-out infinite}
+.chip b{font-family:var(--mono);font-size:12px}
+.chip i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-style:normal;font-size:15px;flex:none}
+.chip.c1{left:-24px;bottom:70px}.chip.c1 i{background:var(--lima)}
+.chip.c2{right:160px;top:-12px;animation-delay:1.5s}.chip.c2 i{background:var(--gs)}
+@keyframes flutua{50%{transform:translateY(-8px)}}
+
+.faixa{margin-top:80px;padding:18px 0;border-block:1px solid var(--line);overflow:hidden;mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.faixa .tri{display:flex;gap:12px;width:max-content;animation:passa 40s linear infinite}
+.faixa span{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:999px;background:#fff;font-size:15px;font-weight:500;white-space:nowrap;box-shadow:0 1px 2px rgba(10,11,14,.05)}
+.faixa span i{width:8px;height:8px;border-radius:50%;background:var(--g)}
+@keyframes passa{to{transform:translateX(-50%)}}
+
+/* 2. antes e depois (escuro) */
+.escuro{margin-top:120px;padding:110px 0;background:var(--carb);color:#fff;position:relative;overflow:hidden}
+.escuro::before{content:"";position:absolute;width:720px;height:720px;right:-240px;top:-260px;background:radial-gradient(closest-side,rgba(228,248,8,.18),transparent);pointer-events:none}
+.escuro .rot{color:var(--lima)}
+.escuro h2 em{color:var(--lima)}
+.escuro .lead{color:#A9ADB6}.escuro .lead b{color:#fff}
+.vira{margin-top:56px;display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:stretch}
+.lado{border-radius:22px;padding:30px;border:1px solid #23262C;background:#111318}
+.lado h3{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7D828D;font-weight:600}
+.lado.dep{background:#15170F;border-color:#3A400E}
+.lado.dep h3{color:var(--lima)}
+.lado ul{list-style:none;margin-top:20px;display:grid;gap:16px}
+.lado li{display:grid;grid-template-columns:26px 1fr;gap:12px;font-size:16px;line-height:1.5;color:#C9CCD2}
+.lado li b{color:#fff;font-weight:600}
+.lado li i{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:700;background:#23262C;color:#8B909A}
+.lado.dep li i{background:var(--lima);color:var(--carb)}
+.seta{display:grid;place-items:center;font-size:28px;color:var(--lima)}
+.frase{margin-top:56px;font-size:clamp(22px,2.6vw,32px);line-height:1.35;font-weight:700;letter-spacing:-.02em;max-width:900px}
+.frase span{color:var(--lima)}
+
+/* 3. tela inicial com pinos */
+.casa .topo-s{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+.mesa{margin-top:48px;display:grid;grid-template-columns:1.55fr 1fr;gap:40px;align-items:start}
+.quadro{position:relative;border-radius:18px;background:#fff;box-shadow:0 30px 80px rgba(10,11,14,.14);overflow:hidden}
+.quadro .tela{position:relative}
+.quadro img{width:100%;height:auto}
+.alvo{position:absolute;border:2.5px solid var(--g);border-radius:14px;box-shadow:0 0 0 9999px rgba(10,11,14,.42);transition:all .55s cubic-bezier(.2,.7,.2,1);pointer-events:none;opacity:0}
+.alvo.on{opacity:1}
+.funcs{display:grid;gap:6px}
+.funcs button{all:unset;cursor:pointer;display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start;padding:14px 16px;border-radius:14px;transition:background .2s}
+.funcs button:hover,.funcs button.on{background:#fff;box-shadow:0 1px 2px rgba(10,11,14,.06)}
+.funcs button:focus-visible{outline:2px solid var(--gd);outline-offset:2px}
+.funcs .n{width:30px;height:30px;border-radius:50%;background:var(--carb);color:#fff;font:700 13px var(--mono);display:grid;place-items:center}
+.funcs button.on .n{background:var(--gd)}
+.funcs b{display:block;font-size:17px}
+.funcs span{display:block;margin-top:3px;font-size:14.5px;line-height:1.5;color:var(--mu)}
+
+/* 4. fluxo */
+.passos{margin-top:48px;display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.passos::before{content:"";position:absolute;left:10%;right:10%;top:21px;height:2px;background:var(--line)}
+.passos .lin{position:absolute;left:10%;top:21px;height:2px;background:var(--carb);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.passos button{all:unset;cursor:pointer;position:relative;display:grid;justify-items:center;gap:10px;text-align:center;padding:0 6px}
+.passos button:focus-visible .bola{outline:2px solid var(--gd);outline-offset:3px}
+.bola{width:44px;height:44px;border-radius:50%;background:#fff;border:2px solid var(--line);display:grid;place-items:center;font:700 14px var(--mono);color:var(--mu);transition:all .3s}
+.passos button.feito .bola{background:var(--carb);border-color:var(--carb);color:#fff}
+.passos button.on .bola{background:var(--lima);border-color:var(--carb);color:var(--carb);transform:scale(1.12)}
+.passos b{font-size:15px}
+.passos small{font-size:13px;color:var(--mu);line-height:1.4;max-width:160px}
+.etapa{margin-top:40px;display:grid;grid-template-columns:1fr 1.5fr;gap:48px;align-items:center}
+.etapa h3{font-size:28px;letter-spacing:-.02em;line-height:1.15}
+.etapa p{margin-top:14px;font-size:16.5px;line-height:1.6;color:var(--mu)}
+.etapa ul{margin-top:18px;list-style:none;display:grid;gap:10px}
+.etapa li{display:flex;gap:10px;font-size:15px;line-height:1.5}
+.etapa li::before{content:"";flex:none;width:8px;height:8px;margin-top:8px;border-radius:50%;background:var(--g)}
+.etapa .nav-b{position:relative;width:100%;top:0}
+.etapa .nav-b .vp{height:auto;aspect-ratio:1440/1000}
+.etapa .nav-b .vp img{animation:none;transition:opacity .35s}
+.troca{opacity:0}
+
+/* 5. escritórios + celular */
+.dupla{margin-top:48px;display:grid;grid-template-columns:1.4fr 1fr;gap:24px}
+.cartao{border-radius:24px;background:#fff;box-shadow:var(--sh);padding:32px;overflow:hidden;display:flex;flex-direction:column}
+.cartao .rot{font-size:12px}
+.cartao h3{margin-top:10px;font-size:24px;letter-spacing:-.02em;line-height:1.2}
+.cartao p{margin-top:10px;font-size:15.5px;line-height:1.6;color:var(--mu)}
+.cartao .img{margin-top:24px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.cartao .img img{width:100%;height:auto}
+.cartao.cel{background:var(--carb);color:#fff}
+.cartao.cel p{color:#A9ADB6}
+.cartao.cel .rot{color:var(--lima)}
+.mini-cel{margin:28px auto -32px;width:230px;height:400px;border-radius:34px 34px 0 0;background:#1E2026;padding:9px 9px 0}
+.mini-cel .vp{height:100%;border-radius:26px 26px 0 0;overflow:hidden;background:#fff}
+.mini-cel img{width:100%;height:auto;animation:rolac2 24s ease-in-out infinite alternate}
+@keyframes rolac2{0%,10%{transform:translateY(0)}100%{transform:translateY(calc(-100% + 391px))}}
+
+/* 6. marca */
+.marca .grade{margin-top:48px;display:grid;grid-template-columns:1.5fr 1fr;gap:24px}
+.login{border-radius:24px;overflow:hidden;box-shadow:0 30px 80px rgba(10,11,14,.16)}
+.login img{width:100%;height:auto}
+.marca .grade{align-items:start}
+.tokens{display:grid;gap:16px}
+.logo-c{border-radius:24px;background:#0D0E0D;padding:34px;display:grid;place-items:center;min-height:150px}
+.logo-c img{width:min(260px,80%)}
+.cores{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cor{border-radius:18px;height:120px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;font-family:var(--mono);font-size:11px;border:1px solid var(--line)}
+.cor b{font-family:Inter;font-size:14px;margin-bottom:2px}
+.tipo{border-radius:24px;background:#fff;box-shadow:var(--sh);padding:24px 28px}
+.tipo .aa{font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.tipo p{margin-top:8px;font-size:14px;color:var(--mu);line-height:1.5}
+.simb{margin-top:24px;border-radius:24px;background:#fff;box-shadow:var(--sh);padding:28px 32px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center}
+.simb .s{font-size:72px;font-weight:800;line-height:1;width:96px;height:96px;border-radius:22px;background:var(--lima);display:grid;place-items:center}
+.simb p{font-size:17px;line-height:1.6;color:var(--mu)}
+.simb p b{color:var(--tx)}
+
+/* 7. método */
+.metodo .lista{margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:m}
+.metodo .item{border-radius:22px;background:#fff;box-shadow:var(--sh);padding:28px 24px;position:relative}
+.metodo .item::before{counter-increment:m;content:"0" counter(m);font:700 13px var(--mono);color:var(--gd)}
+.metodo .item h3{margin-top:14px;font-size:19px;letter-spacing:-.01em}
+.metodo .item p{margin-top:8px;font-size:14.5px;line-height:1.55;color:var(--mu)}
+
+/* 8. cta */
+.cta{padding:120px 0}
+.cta .caixa{border-radius:32px;background:var(--carb);color:#fff;padding:72px clamp(28px,6vw,80px);position:relative;overflow:hidden;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+.cta .caixa::after{content:"";position:absolute;width:520px;height:520px;right:-160px;bottom:-260px;background:radial-gradient(closest-side,rgba(47,214,123,.32),transparent)}
+.cta h2{margin:0}.cta h2 em{color:var(--g)}
+.cta p{margin-top:16px;color:#A9ADB6;font-size:17px;line-height:1.6}
+.cta .btns{margin:0;justify-content:flex-end;position:relative;z-index:1}
+.cta .btn.cla{background:#fff}
+
+@media (max-width:960px){
+  .topo .shell,.casa .topo-s,.mesa,.etapa,.dupla,.marca .grade,.cta .caixa{grid-template-columns:1fr}
+  .vitrine{height:420px;margin-top:10px}.nav-b .vp{height:300px}
+  .cel-v{width:150px;height:310px;border-radius:26px;padding:6px}.cel-v .vp{border-radius:21px}
+  @keyframes rolac{0%,8%{transform:translateY(0)}100%{transform:translateY(calc(-100% + 298px))}}
+  .chip.c1{left:0;bottom:24px}.chip.c2{right:auto;left:30%;top:-20px}
+  .vira{grid-template-columns:1fr}.seta{transform:rotate(90deg)}
+  .passos{grid-template-columns:repeat(5,minmax(0,1fr))}.passos small{display:none}.passos b{font-size:12px}
+  .metodo .lista{grid-template-columns:1fr 1fr}
+  .cta .btns{justify-content:flex-start}
+  section{padding-top:88px}.escuro{margin-top:88px;padding:80px 0}
+}
+@media (max-width:560px){
+  .shell{width:auto;margin:0 16px}
+  .vitrine{height:340px}.nav-b{width:100%}.nav-b .vp{height:230px}.cel-v{display:none}
+  .chip.c2{display:none}
+  .metodo .lista,.cores{grid-template-columns:1fr}
+  .cores{grid-template-columns:repeat(3,1fr)}.cor{height:96px;font-size:10px}
+  .simb{grid-template-columns:1fr}
+  .prova{gap:18px}
+  .lado{padding:22px}
+}
+</style>
+<link rel="canonical" href="../../trabalhos/sokraty/">
+<link rel="icon" href="../../favicon.ico">
+<meta property="og:title" content="Sokraty · UX e interface | kompila"><meta property="og:description" content="Case Sokraty: a Kompila redesenhou a interface de um software jurídico a partir da tarefa do advogado. Tela inicial, fluxo da publicação à minuta, celular e marca.">
+<meta property="og:image" content="https://kompila.com.br/trabalhos/sokraty/img/login.webp"><meta property="og:type" content="article"><meta property="og:url" content="https://kompila.com.br/trabalhos/sokraty/"><meta property="og:locale" content="pt_BR"><meta property="og:site_name" content="Kompila">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Sokraty · UX e interface","headline":"Case Sokraty: interface de software jurídico redesenhada a partir da tarefa do advogado","description":"Case Sokraty: a Kompila redesenhou a interface de um software jurídico a partir da tarefa do advogado. Tela inicial, fluxo da publicação à minuta, celular e marca.","url":"https://kompila.com.br/trabalhos/sokraty/","inLanguage":"pt-BR","dateCreated":"2026-11-09","image":"https://kompila.com.br/trabalhos/sokraty/img/home.webp","creator":{"@id":"https://kompila.com.br/#org"},"publisher":{"@id":"https://kompila.com.br/#org"},"about":{"@type":"SoftwareApplication","name":"Sokraty","applicationCategory":"BusinessApplication","applicationSubCategory":"Software jurídico"},"genre":"UX e interface"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Kompila","item":"https://kompila.com.br/"},{"@type":"ListItem","position":2,"name":"Trabalhos","item":"https://kompila.com.br/trabalhos/"},{"@type":"ListItem","position":3,"name":"Sokraty","item":"https://kompila.com.br/trabalhos/sokraty/"}]}</script>
+</head>
+<body class="kr">
+<!-- partes:menu (não edite aqui: partes/menu.html + scripts/montar_site.py) -->
+<header class="kr-nav"><div class="kr-box">
+  <a class="kr-logo" href="../../"><b>[</b> kompila <b>]</b></a>
+  <ul onclick="if(event.target.closest('a')){this.closest('.kr-nav').classList.remove('aberto');document.documentElement.classList.remove('kr-trava')}">
+    <li class="kr-drop"><a href="../../#produtos">Produtos <span class="v">▾</span></a>
+      <div class="kr-menu">
+        <a href="../../crm/"><b>kompila .crm</b><span>Atendimento e vendas num lugar só</span></a>
+        <a href="../../pedidos/"><b>kompila .pedidos</b><span>Pedidos de restaurante, sem comissão</span></a>
+        <a href="../../chatbot/"><b>A Liz, IA de atendimento</b><span>A Liz atende, qualifica e move o pipeline</span></a>
+        <a href="../../loja/"><b>kompila loja</b><span>Loja própria, sem taxa por venda</span></a>
+        <a href="../../design/"><b>kompila design</b><span>Marca, site e criativo</span></a>
+        <a href="../../trafego/"><b>kompila tráfego</b><span>Anúncio que sabe qual lead virou venda</span></a>
+      </div>
+    </li>
+    <li><a href="../../#como">Como funciona</a></li>
+    <li><a href="../../#clientes">Clientes</a></li>
+    <li><a href="../../trabalhos/">Trabalhos</a></li>
+    <li><a href="../../blog/">Blog</a></li>
+    <li class="kr-so-cel"><a href="https://instagram.com/kompila.ia" target="_blank" rel="noopener">Instagram @kompila.ia</a></li>
+  </ul>
+  <div class="k-dir"><a class="k-ig" href="https://instagram.com/kompila.ia" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila.ia"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a data-liz class="kr-btn" href="#liz">Falar com a Kompila</a><button class="kr-burg" type="button" aria-label="Abrir o menu" aria-expanded="false" onclick="var n=this.closest('.kr-nav'),a=n.classList.toggle('aberto');this.setAttribute('aria-expanded',a);this.setAttribute('aria-label',a?'Fechar o menu':'Abrir o menu');document.documentElement.classList.toggle('kr-trava',a)"><span></span><span></span><span></span></button></div>
+</div></header>
+<!-- /partes:menu -->
+
+<main>
+<div class="shell trilha"><a href="../../trabalhos/">Trabalhos</a> / Sokraty · UX e interface</div>
+
+<!-- 1. topo -->
+<section class="topo">
+  <div class="shell">
+    <div>
+      <span class="selo-p"><b>[ kompila<i>.ux</i> ]</b><span>Interface e produto</span></span>
+      <h1>Software jurídico que o advogado entende <em class="grifo">de primeira.</em></h1>
+      <p class="lead">A Sokraty já tinha a inteligência. Faltava a tela. Redesenhamos a plataforma a partir da <b>tarefa do advogado</b>, não da lógica do sistema: a tela inicial diz o que fazer hoje, e a publicação vira minuta em <b>5 etapas</b>.</p>
+      <div class="btns"><a class="btn esc" data-liz href="#liz">Quero uma interface assim</a><a class="btn cla" href="#fluxo">Ver o fluxo</a></div>
+      <div class="prova"><span><b>[ <i>5</i> ]</b>etapas da publicação à minuta</span><span><b>[ <i>4</i> ]</b>estados da tela inicial</span><span><b>[ <i>2</i> ]</b>telas: computador e celular</span></div>
+    </div>
+    <div class="vitrine">
+      <div class="nav-b"><div class="bar"><i></i><i></i><i></i><span>app.sokraty.com.br</span></div><div class="vp"><img src="img/home.webp" alt="Tela inicial do Sokraty Pro: saudação, insight da IA, resumo do dia e próximas ações" width="1440" height="1265" fetchpriority="high"></div></div>
+      <div class="cel-v"><div class="vp"><img src="img/celular.webp" alt="Tela inicial do Sokraty no celular" width="390" height="3113"></div></div>
+      <div class="chip c1"><i>Σ</i><div><b>4 providências</b><br>precisam de você hoje</div></div>
+      <div class="chip c2"><i>✓</i><div><b>Minuta pronta</b><br>pra sua revisão</div></div>
+    </div>
+  </div>
+  <div class="faixa" aria-hidden="true"><div class="tri" id="faixa"></div></div>
+</section>
+
+<!-- 2. antes e depois -->
+<section class="escuro">
+  <div class="shell cena">
+    <span class="rot">O problema</span>
+    <h2>A tela seguia o motor.<br><em>Agora segue o advogado.</em></h2>
+    <p class="lead">Quem usava a plataforma antiga tinha dificuldade. O diagnóstico: as telas mostravam como a análise funciona por dentro, e não o que o advogado precisa fazer em seguida.</p>
+    <div class="vira">
+      <div class="lado"><h3>Antes</h3><ul>
+        <li><i>×</i><span>Telas organizadas pelas <b>etapas internas</b> da análise.</span></li>
+        <li><i>×</i><span>Muitas decisões na mesma tela, sem dizer <b>por onde começar</b>.</span></li>
+        <li><i>×</i><span>Prazo, documento e minuta espalhados em lugares diferentes.</span></li>
+      </ul></div>
+      <div class="seta" aria-hidden="true">→</div>
+      <div class="lado dep"><h3>Depois</h3><ul>
+        <li><i>1</i><span>A tela inicial abre com <b>o que precisa de você hoje</b>.</span></li>
+        <li><i>2</i><span>Cada publicação segue <b>um caminho só</b>, com a etapa sempre à vista.</span></li>
+        <li><i>3</i><span>A IA sugere, mas <b>quem decide é o advogado</b>: nada é protocolado sozinho.</span></li>
+      </ul></div>
+    </div>
+    <p class="frase">Menos decisões por tela. <span>Uma ação clara</span> em cada uma.</p>
+  </div>
+</section>
+
+<!-- 3. tela inicial -->
+<section class="casa" id="inicio">
+  <div class="shell cena">
+    <div class="topo-s">
+      <div><span class="rot">A tela inicial</span><h2>Abriu, já sabe <em>o que fazer.</em></h2></div>
+      <p class="lead">Nada de painel com 40 números. A tela responde três perguntas: o que é urgente, o que falta e qual o próximo passo. Clique nos itens para ver cada parte.</p>
+    </div>
+    <div class="mesa">
+      <div class="quadro"><div class="bar"><i></i><i></i><i></i><span>Início</span></div><div class="tela" id="tela"><img src="img/home.webp" alt="Tela inicial do Sokraty com as partes destacadas" width="1440" height="1265" loading="lazy"><div class="alvo" id="alvo"></div></div></div>
+      <div class="funcs" id="funcs">
+        <button class="on" data-a="19.8,7.9,20.8,6.3"><i class="n">1</i><div><b>Quantas providências, logo de cara</b><span>"4 providências precisam de você." O número que importa aparece antes de tudo.</span></div></button>
+        <button data-a="20.1,14.9,34,25.9"><i class="n">2</i><div><b>A IA diz por onde começar</b><span>Um parágrafo em português simples, com o processo, o que falta e um campo para perguntar.</span></div></button>
+        <button data-a="54.4,14.9,42.2,25.9"><i class="n">3</i><div><b>O dia em quatro números</b><span>Trabalho de hoje, atrasos, prazos a confirmar e minutas em revisão. Cada um abre a lista.</span></div></button>
+        <button data-a="20.1,42.7,76.4,19.4"><i class="n">4</i><div><b>Navegue fácil</b><span>Os atalhos com o nome da tarefa e uma linha explicando para que serve.</span></div></button>
+        <button data-a="20.1,63.6,48.1,34.8"><i class="n">5</i><div><b>Próximas ações com o botão certo</b><span>"Adicionar contestação", "Confirmar prazo", "Revisar minuta": a ação já vem escrita na linha.</span></div></button>
+        <button data-a="68.8,63.5,27.8,26.5"><i class="n">6</i><div><b>Missões que ensinam a usar</b><span>Pontos SK por tarefa concluída. O advogado aprende a plataforma fazendo o trabalho do dia.</span></div></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. fluxo -->
+<section id="fluxo">
+  <div class="shell cena">
+    <span class="rot">Da publicação à minuta</span>
+    <h2>Cinco etapas. <em>Sempre à vista.</em></h2>
+    <p class="lead">O advogado cola ou anexa a publicação e segue uma linha só. Cada etapa mostra o que já foi feito, o que vem depois e o que ainda depende dele.</p>
+    <div class="passos" id="passos"><div class="lin" id="lin"></div>
+      <button data-p="0"><span class="bola">1</span><b>Publicação</b><small>Anexa, cola ou recebe do DJEN</small></button>
+      <button data-p="1"><span class="bola">2</span><b>Dados</b><small>Processo, partes e datas preenchidos</small></button>
+      <button data-p="2"><span class="bola">3</span><b>Documentos</b><small>Peças dos autos organizadas</small></button>
+      <button data-p="3"><span class="bola">4</span><b>Análise</b><small>Comando do juiz, resumo e prazo</small></button>
+      <button data-p="4"><span class="bola">5</span><b>Minuta</b><small>Aprovar, corrigir ou refazer</small></button>
+    </div>
+    <div class="etapa">
+      <div id="etTxt"></div>
+      <div class="nav-b"><div class="bar"><i></i><i></i><i></i><span id="etUrl">Nova publicação</span></div><div class="vp"><img id="etImg" src="img/et0.webp" alt="" width="1440" height="1000" loading="lazy"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. escritórios + celular -->
+<section>
+  <div class="shell cena">
+    <span class="rot">Feito para o dia a dia</span>
+    <h2>Um escritório ou vários. <em>No computador ou no celular.</em></h2>
+    <div class="dupla">
+      <div class="cartao">
+        <span class="rot">Espaços de trabalho</span>
+        <h3>Troca de escritório em um clique</h3>
+        <p>Quem atende mais de um escritório vê todos no menu, com o papel em cada um e quantas providências esperam lá. Sem sair e entrar de novo.</p>
+        <div class="img"><img src="img/escritorios.webp" alt="Seletor de escritórios do Sokraty com quatro escritórios e contadores" width="1440" height="900" loading="lazy"></div>
+      </div>
+      <div class="cartao cel">
+        <span class="rot">Celular</span>
+        <h3>A mesma tela, no bolso</h3>
+        <p>O menu vira pílulas no topo, os resumos se empilham e a ação principal continua a um toque.</p>
+        <div class="mini-cel"><div class="vp"><img src="img/celular.webp" alt="Sokraty no celular, rolando a tela inicial" width="390" height="3113" loading="lazy"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. marca -->
+<section class="marca">
+  <div class="shell cena">
+    <span class="rot">Marca e interface juntas</span>
+    <h2>Tinta, lima e <em>nada sobrando.</em></h2>
+    <p class="lead">A identidade nova entrou na interface: moldura escura, a ação principal em lima e o slogan <b>Tecnologia jurídica inteligente</b>.</p>
+    <div class="grade">
+      <div class="login"><img src="img/login.webp" alt="Tela de login do Sokraty com a marca nova" width="1600" height="901" loading="lazy"></div>
+      <div class="tokens">
+        <div class="logo-c"><img src="img/sokraty_logo_negativo.svg" alt="Logo Sokraty"></div>
+        <div class="cores">
+          <div class="cor" style="background:#0D0E0D;color:#fff;border-color:#0D0E0D"><b>Tinta</b>#0D0E0D</div>
+          <div class="cor" style="background:#E4F808"><b>Lima</b>#E4F808</div>
+          <div class="cor" style="background:#F9F5F3"><b>Papel</b>#F9F5F3</div>
+        </div>
+        <div class="tipo"><div class="aa" style="font-family:'Host Grotesk',Inter,sans-serif">Aa Host Grotesk</div><p>Títulos em Host Grotesk, texto em Open Sans e números de processo em Geist Mono, para ler sem esforço.</p></div>
+      </div>
+    </div>
+    <div class="simb"><div class="s" aria-hidden="true">Σ</div><p><b>ΣΩΚΡΑΤΗΣ:</b> em grego, o nome de Sócrates começa e termina em sigma. Na matemática, o mesmo sinal significa soma. Um único caractere liga a filosofia à tecnologia, sem busto e sem coluna.</p></div>
+  </div>
+</section>
+
+<!-- 7. método -->
+<section class="metodo">
+  <div class="shell cena">
+    <span class="rot">Como a Kompila trabalha UX</span>
+    <h2>Primeiro a tarefa. <em>Depois a tela.</em></h2>
+    <div class="lista">
+      <div class="item"><h3>Diagnóstico</h3><p>Lemos as telas atuais e listamos onde o usuário trava, com o motivo de cada travada.</p></div>
+      <div class="item"><h3>Referências</h3><p>Comparamos com os concorrentes e com apps que o público já usa bem, como bancos digitais.</p></div>
+      <div class="item"><h3>Protótipo navegável</h3><p>Em HTML, não em imagem: dá para clicar, testar estados e abrir no celular de verdade.</p></div>
+      <div class="item"><h3>Ajuste com o cliente</h3><p>Cada rodada vira uma versão nova, com o que mudou e por quê. O código vai pronto para o time.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. cta -->
+<section class="cta">
+  <div class="shell cena">
+    <div class="caixa">
+      <div><h2>Seu sistema é bom, <em>mas difícil de usar?</em></h2><p>Conta como ele funciona hoje. Em 30 minutos a gente mostra onde o usuário trava e o caminho para resolver.</p></div>
+      <div class="btns"><a class="btn ver" data-liz href="#liz">Falar com a Kompila</a><a class="btn cla" href="../../trabalhos/">Ver outros trabalhos</a></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- partes:rodape (não edite aqui: partes/rodape.html + scripts/montar_site.py) -->
+<footer class="kr-foot">
+  <div class="kr-box kr-rodape">
+    <div class="kr-marca">
+      <div class="kr-logo"><b>[</b> kompila <b>]</b></div>
+      <p>IA sob medida pra pequena e média empresa.</p><div class="k-acoes"><a class="k-ig-f" href="https://instagram.com/kompila.ia" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila.ia"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a class="kr-btn" href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">Falar direto com um consultor</a></div>
+    </div>
+    <div class="kr-col"><h4>Produtos</h4>
+      <a href="../../chatbot/">IA de atendimento e CRM</a><a href="../../crm/">kompila .crm</a><a href="../../pedidos/">kompila .pedidos</a><a href="../../loja/">kompila loja</a><a href="../../design/">kompila design</a><a href="../../trafego/">kompila tráfego</a>
+    </div>
+    <div class="kr-col"><h4>Kompila</h4>
+      <a href="../../#o-que-faz">O que a IA faz</a><a href="../../#como">Como funciona</a><a href="../../#clientes">Clientes</a><a href="../../trabalhos/">Trabalhos</a><a href="../../blog/">Blog</a>
+    </div>
+    <div class="kr-col"><h4>Parceiros</h4>
+      <a href="https://coleve.com.br" target="_blank" rel="noopener">Coleve · contabilidade</a><a href="https://p1led.com.br" target="_blank" rel="noopener">P1LED · painéis de LED</a>
+    </div>
+    <div class="kr-col"><h4>Contato</h4>
+      <a href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">WhatsApp (11) 96734-2512</a><a href="https://instagram.com/kompila.ia" target="_blank" rel="noopener">Instagram @kompila.ia</a><a href="https://crm.kompila.com.br">Entrar no CRM</a>
+    </div>
+  </div>
+  <div class="kr-box kr-base">
+    <span>Kompila · CNPJ 65.907.771/0001-02 · Mogi das Cruzes/SP</span>
+    <a href="../../privacidade/">Política de privacidade</a>
+    <a href="../../termos/">Termos de serviço</a>
+    <a href="../../exclusao-de-dados/">Exclusão de dados</a>
+  </div>
+</footer>
+<!-- /partes:rodape -->
+
+<script>
+(function(){
+  var it=['Tela inicial','Fluxo de minuta','Protótipo navegável','Celular','Seletor de escritórios','Gamificação com SK','Jurisprudência escolhida','Marca aplicada','Login','Estados vazios'];
+  var f=document.getElementById('faixa');f.innerHTML=it.concat(it).map(function(t){return '<span><i></i>'+t+'</span>'}).join('');
+
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vivo');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.cena').forEach(function(c){io.observe(c)});
+
+  // pinos da tela inicial (x,y,l,a em % da imagem)
+  var alvo=document.getElementById('alvo'),bs=document.querySelectorAll('#funcs button'),auto=0,parou=false;
+  function marca(b){bs.forEach(function(x){x.classList.toggle('on',x===b)});var a=b.dataset.a.split(',');alvo.style.left=a[0]+'%';alvo.style.top=a[1]+'%';alvo.style.width=a[2]+'%';alvo.style.height=a[3]+'%';alvo.classList.add('on')}
+  bs.forEach(function(b,i){b.addEventListener('click',function(){parou=true;marca(b)})});
+  marca(bs[0]);
+  setInterval(function(){if(parou)return;auto=(auto+1)%bs.length;marca(bs[auto])},4200);
+
+  // etapas do fluxo
+  var E=[
+    {t:'Como a publicação chegou até você?',p:'Anexar arquivo, colar o texto ou receber do DJEN. O resto é identificado a partir dele.',l:['Três jeitos de começar, lado a lado','À direita, o que acontece depois','Aviso claro: nada é protocolado sem você'],img:'et0',u:'Nova publicação · Publicação'},
+    {t:'Os dados vêm preenchidos',p:'Número CNJ, tribunal, partes e datas saem do texto da publicação. O advogado só confere e completa o que faltar.',l:['Selo "Identificado no texto" em cada campo achado','O texto original fica preservado','À direita, por que conferir agora'],img:'et1',u:'Nova publicação · Dados'},
+    {t:'Documentos no lugar certo',p:'O advogado anexa os autos e a IA confere o que a publicação cita: contestação, documentos, despacho. Ninguém precisa marcar nada.',l:['Páginas lidas e peças organizadas, em números','Cada peça citada com "Encontrado nos autos"','Faltou peça? Vira uma ação, não um erro'],img:'et2',u:'Nova publicação · Documentos'},
+    {t:'A análise, explicada',p:'O que o juiz pediu, o resumo, a providência sugerida e o prazo literal. Cada conclusão aponta o trecho e a página de onde saiu.',l:['Comando do juiz destacado com o grifo','Prazo transcrito, a contagem é do advogado','Jurisprudência: escolhe um julgado para a minuta'],img:'et3',u:'Nova publicação · Análise'},
+    {t:'Minuta pronta para decidir',p:'A peça sai com os pontos que dependem do advogado grifados em lima. No fim da leitura: aprovar, corrigir ou rejeitar.',l:['Grifo lima no que precisa da sua decisão','Copiar, baixar em Word ou gerar de novo','O julgado escolhido já aparece citado'],img:'et4',u:'Nova publicação · Minuta'}
+  ];
+  var pb=document.querySelectorAll('#passos button'),lin=document.getElementById('lin'),txt=document.getElementById('etTxt'),img=document.getElementById('etImg'),url=document.getElementById('etUrl'),cur=-1,parouF=false;
+  function etapa(i){if(i===cur)return;cur=i;var e=E[i];
+    pb.forEach(function(b,k){b.classList.toggle('on',k===i);b.classList.toggle('feito',k<i)});
+    lin.style.width=(80*i/4)+'%';
+    txt.innerHTML='<span class="rot">Etapa '+(i+1)+' de 5</span><h3 style="margin-top:10px">'+e.t+'</h3><p>'+e.p+'</p><ul>'+e.l.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+    url.textContent=e.u;img.alt='Tela da etapa '+(i+1)+' do fluxo de nova publicação';
+    var src='img/'+e.img+'.webp';if(img.getAttribute('src')!==src){img.classList.add('troca');setTimeout(function(){img.src=src;img.onload=function(){img.classList.remove('troca')}},200)}
+  }
+  pb.forEach(function(b,i){b.addEventListener('click',function(){parouF=true;etapa(i)})});
+  etapa(0);
+  setInterval(function(){if(!parouF)etapa((cur+1)%5)},5200);
+})();
+</script>
+<script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
+<script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
+<script src="https://crm.kompila.com.br/medicao.js" data-ga="G-L4B7092014" defer></script>
+<script src="/js/pixel.js?v=3" defer></script>
+<script src="/js/anima.js?v=20261109" defer></script>
+</body>
+</html>

@@ -41,6 +41,7 @@
 - WhatsApp: +55 11 96734-2512
 
 ## Cases
+- Sokraty (software jurídico): interface redesenhada a partir da tarefa do advogado; tela inicial com o que fazer hoje e a publicação virando minuta em 5 etapas, no computador e no celular. https://kompila.com.br/trabalhos/sokraty/
 - Sistemas, lojas e IA de atendimento no ar em empresas reais (P1LED, Maslu Select, Glowbos, Luciu's, Coleve). https://kompila.com.br/cases/
 
 ## Texto completo

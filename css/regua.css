@@ -82,3 +82,8 @@ html:has(body.kr),body.kr{overflow-x:clip}
   html.kr-trava,html.kr-trava body{overflow:hidden}
 }
 @media(max-width:480px){.kr-nav .k-ig{display:none}}
+
+/* 09/11/2026: fonte reserva com as medidas da Inter. Enquanto a Inter não chega, o texto já quebra nas mesmas linhas
+   (sem pulo quando ela troca). Valores de métrica Inter x Arial. */
+@font-face{font-family:"Inter fb";src:local("Arial"),local("Helvetica Neue"),local("Helvetica");size-adjust:107.64%;ascent-override:90.49%;descent-override:22.56%;line-gap-override:0%}
+body.kr{font-family:Inter,"Inter fb",system-ui,-apple-system,sans-serif}
