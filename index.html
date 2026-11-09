@@ -67,8 +67,9 @@ nav .panel{display:none}
 @keyframes heroPara{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,28%,0)}}
 @media(prefers-reduced-motion:reduce){.hero .bgwrap{animation:none}}
 .hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 30%;opacity:0}
-.hero.bgin img.bg{animation:heroIn 2.2s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes heroIn{from{opacity:0;transform:scale(1.14) translateY(6%)}to{opacity:1;transform:scale(1.06) translateY(3%)}}
+.hero.bgin img.bg{animation:heroFade .6s ease-out forwards,heroIn 2.2s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes heroFade{from{opacity:0}to{opacity:1}}
+@keyframes heroIn{from{transform:scale(1.14) translateY(6%)}to{transform:scale(1.06) translateY(3%)}}
 .hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,11,14,.82) 0%,rgba(10,11,14,.7) 45%,rgba(10,11,14,.35) 68%,rgba(10,11,14,.1) 100%)}
 .hero .veil2{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,14,.35) 0%,rgba(10,11,14,0) 30%,rgba(10,11,14,0) 60%,rgba(10,11,14,.8) 100%)}
 .hero .in{position:relative;z-index:2;width:min(var(--shell),100% - 2*var(--gut));margin:0 auto;padding:0 0 72px;display:grid;gap:22px;justify-items:start}
@@ -97,8 +98,8 @@ nav .panel{display:none}
   nav .panel .btn{margin-top:8px;color:#fff}
   .hero{margin:0;border-radius:0;height:auto;min-height:100svh}
   .hero img.bg{object-position:79% 50%}
-  .hero.bgin img.bg{animation-name:heroInM}
-  @keyframes heroInM{from{opacity:0;transform:scale(1.14)}to{opacity:1;transform:scale(1.08) translateY(30px)}}
+  .hero.bgin img.bg{animation-name:heroFade,heroInM}
+  @keyframes heroInM{from{transform:scale(1.14)}to{transform:scale(1.08) translateY(30px)}}
   .hero .in{width:100%;padding:110px var(--gut) 40px;gap:16px}
   .hero h1{font-size:44px;font-weight:600;max-width:none}
   .hero .lead{display:none}
