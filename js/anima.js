@@ -5,6 +5,23 @@
 (function () {
   if (window.__kmv) return; window.__kmv = 1;
   var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // 09/11/2026 (Alex: "no mobile deixa mais suave possível, menos pesado possível"): no celular nada de desfoque,
+  // vidro fosco, zoom e brilho infinitos; título entra inteiro; o que está fora da tela só é calculado quando chega perto.
+  var leve = matchMedia('(max-width: 900px)').matches || !!(navigator.connection && navigator.connection.saveData);
+  if (leve) {
+    var lv = document.createElement('style');
+    lv.textContent = [
+      '*,*::before,*::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}',
+      '.kr-nav,header.nav,nav#nav{background:#fff!important}',
+      '.kmv-zoom img,.kmv-zoom video{animation:none!important}',
+      '.kmv-btn::after{display:none!important}',
+      '.kmv-br{animation:none!important}',
+      '.kmv-h{opacity:0;transform:translateY(18px);transition:opacity .6s ease-out,transform .6s ease-out}.kmv-h.kmv-on{opacity:1;transform:none}',
+      '.kmv-in{transform:translateY(22px)!important;transition:opacity .6s ease-out,transform .6s ease-out!important}.kmv-in.kmv-on{transform:none!important}',
+      'main>section:nth-of-type(n+3),body>section:nth-of-type(n+3){content-visibility:auto;contain-intrinsic-size:auto 900px}'
+    ].join('');
+    document.head.appendChild(lv);
+  }
   var css = [
     '.kmv-bar{position:fixed;left:0;top:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#12803F,#2FD67B);z-index:100000;pointer-events:none}',
     '.kmv-w{display:inline-block;opacity:0;transform:translateY(.55em) rotate(2deg);filter:blur(4px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1),filter .7s}',
@@ -43,6 +60,7 @@
   // títulos: palavra por palavra (mantém <em>, <span>, <br>)
   document.querySelectorAll('main h1, main h2, section h1, section h2, article h3.cap-h, .cap h3').forEach(function (h) {
     if (jaAnima(h) || h.dataset.kmv) return; h.dataset.kmv = 1; var i = 0;
+    if (leve) { h.classList.add('kmv-h'); io.observe(h); return; }
     (function quebra(no) {
       Array.prototype.slice.call(no.childNodes).forEach(function (c) {
         if (c.nodeType === 3) {
