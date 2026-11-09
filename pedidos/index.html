@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kompila .pedidos · sistema de pedidos para restaurante, sem comissão</title>
+<meta name="description" content="Sistema de pedidos para restaurante e lanchonete: WhatsApp, balcão, salão e cardápio online num quadro só. A Liz responde o cliente no WhatsApp, a cozinha recebe a comanda impressa e o motoboy confirma a entrega com código. Mensalidade fixa a partir de R$ 578, sem taxa por pedido.">
+<link rel="canonical" href="https://kompila.com.br/pedidos/">
+<link rel="icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<meta property="og:title" content="kompila .pedidos · todo pedido atendido, nenhum cliente esperando">
+<meta property="og:description" content="WhatsApp, balcão, salão e cardápio online num quadro só. A Liz responde o cliente, a cozinha recebe a comanda e o motoboy confirma a entrega. Sem taxa por pedido.">
+<meta property="og:image" content="https://kompila.com.br/img/compartilhar.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:type" content="website"><meta property="og:url" content="https://kompila.com.br/pedidos/"><meta property="og:locale" content="pt_BR"><meta property="og:site_name" content="Kompila">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"kompila .pedidos","url":"https://kompila.com.br/pedidos/","applicationCategory":"BusinessApplication","applicationSubCategory":"Sistema de pedidos para restaurante","operatingSystem":"Web, WhatsApp","inLanguage":"pt-BR","description":"Sistema de pedidos para restaurante e lanchonete. WhatsApp, balcão, salão, telefone e cardápio online caem num quadro só. A Liz, IA da Kompila, responde o cliente no WhatsApp, inclusive o status do pedido. Comanda impressa na cozinha, garçom lança a mesa pelo celular, motoboy confirma a entrega com código. Mensalidade fixa, sem taxa por pedido.","featureList":["Quadro único de pedidos: WhatsApp, balcão, salão, telefone e cardápio online","Liz responde o cliente no WhatsApp, inclusive o status do pedido","Avisos de pedido em produção, saiu para entrega e pronto para retirar","Comanda impressa automaticamente na cozinha (impressora térmica 80 mm)","Garçom lança a mesa pelo celular, com mapa das mesas","Motoboy confirma a entrega com código","Cardápio online sem comissão, com esgotou e voltou na hora","Equipe com acesso por cargo","Desempenho da loja e histórico de cada cliente"],"offers":[{"@type":"Offer","name":"Start","price":"578","priceCurrency":"BRL","description":"Até 3 mil respostas da Liz por mês"},{"@type":"Offer","name":"Movimento","price":"978","priceCurrency":"BRL","description":"Até 8 mil respostas da Liz por mês"},{"@type":"Offer","name":"Alta demanda","price":"1478","priceCurrency":"BRL","description":"Até 15 mil respostas da Liz por mês"}],"provider":{"@type":"Organization","@id":"https://kompila.com.br/#org","name":"Kompila"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"O kompila .pedidos cobra taxa por pedido?","acceptedAnswer":{"@type":"Answer","text":"Não. É uma mensalidade fixa: R$ 578 no Start, R$ 978 no Movimento e R$ 1.478 no Alta demanda. Não tem comissão nem taxa por pedido."}},{"@type":"Question","name":"Preciso trocar o número de WhatsApp da loja?","acceptedAnswer":{"@type":"Answer","text":"Não. O número continua o da sua loja, ligado pela API oficial da Meta. O cliente fala com o mesmo WhatsApp de sempre."}},{"@type":"Question","name":"O que conta como resposta da Liz?","acceptedAnswer":{"@type":"Answer","text":"Cada mensagem que a Liz manda pro cliente. Mensagem da sua equipe e pedido lançado no balcão, no salão ou pelo cardápio online não contam."}},{"@type":"Question","name":"E se passar do pacote?","acceptedAnswer":{"@type":"Answer","text":"A Liz continua respondendo, nenhum cliente fica esperando. O que passar sai a R$ 60 a cada mil respostas, na mensalidade seguinte. Acima de 20 mil respostas por mês, o plano é sob medida."}},{"@type":"Question","name":"Funciona com impressora na cozinha?","acceptedAnswer":{"@type":"Answer","text":"Sim. A comanda sai sozinha numa impressora térmica de 80 mm, assim que o pedido entra."}},{"@type":"Question","name":"Funciona para salão, entrega e retirada?","acceptedAnswer":{"@type":"Answer","text":"Sim. Garçom lança a mesa pelo celular, o balcão lança quem chega ou liga, o cardápio online recebe o delivery e a retirada, e tudo cai no mesmo quadro."}}]}</script>
+<link rel="stylesheet" href="../css/regua.css">
+<style>
+:root{--carb:#0A0B0E;--off:#E9EBEE;--papel:#F2F3EF;--g:#2FD67B;--gd:#12803F;--gs:#E6F7EE;--amb:#FFB224;--ver:#E5484D;--tx:#0A0B0E;--mu:#5F6473;--mu2:#9A9EAA;--line:#E2E3DE;--mono:'JetBrains Mono',ui-monospace,monospace;--sh:0 1px 2px rgba(10,11,14,.05),0 14px 36px rgba(10,11,14,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;color:var(--tx);background:var(--papel);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.shell{width:min(1200px,88%);margin:0 auto}
+.mono{font-family:var(--mono)}
+.rot{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--gd);letter-spacing:.14em;text-transform:uppercase}
+.lead{margin-top:18px;font-size:18px;line-height:1.6;color:var(--mu);max-width:560px}
+.lead b{color:var(--tx);font-weight:600}
+h1 em,h2 em{color:var(--gd)}
+.btn{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:0;cursor:pointer}
+.btn.esc{background:var(--carb);color:#fff}.btn.cla{background:#fff;color:var(--carb);box-shadow:var(--sh)}.btn.ver{background:var(--g);color:var(--carb)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+section{padding:120px 0 0}
+
+/* ---------- 1. topo ---------- */
+.topo{padding:72px 0 0;position:relative;overflow:hidden}
+.topo::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(10,11,14,.07) 1px,transparent 1.2px);background-size:24px 24px;mask:linear-gradient(180deg,#000 30%,transparent);pointer-events:none}
+.topo .shell{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+.selo-p{display:inline-flex;align-items:center;gap:10px;height:34px;padding:0 14px 0 6px;border-radius:999px;background:#fff;box-shadow:var(--sh);font-size:14px;color:var(--mu)}
+.selo-p b{white-space:nowrap;font-family:var(--mono);font-size:12px;color:#fff;background:var(--carb);border-radius:999px;padding:4px 10px}
+.selo-p b i{font-style:normal;color:var(--amb)}
+.topo h1{margin-top:22px}
+.prova{margin-top:28px;display:flex;gap:28px;flex-wrap:wrap;font-size:14px;color:var(--mu)}
+.prova span b{display:block;font-family:var(--mono);font-size:22px;color:var(--tx)}
+.prova span b i{font-style:normal;color:var(--gd)}
+
+/* o quadro que recebe pedidos */
+.quadro{position:relative;border-radius:22px;background:#fff;box-shadow:0 30px 80px rgba(10,11,14,.16);padding:18px;overflow:hidden}
+.quadro .qt{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 14px;border-bottom:1px solid var(--line)}
+.quadro .qt b{font-family:var(--mono);font-size:13px}.quadro .qt b i{font-style:normal;color:var(--gd)}
+.quadro .qt span{font-family:var(--mono);font-size:12px;color:var(--mu)}
+.quadro .qt span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--g);margin-right:8px;box-shadow:0 0 0 4px var(--gs);animation:pulsa 1.6s infinite}
+@keyframes pulsa{50%{box-shadow:0 0 0 7px rgba(47,214,123,.12)}}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;height:390px}
+.col{background:var(--papel);border-radius:14px;padding:10px;overflow:hidden;display:flex;flex-direction:column;gap:8px}
+.col h4{font-size:11px;font-family:var(--mono);color:var(--mu);font-weight:600;letter-spacing:.06em;display:flex;justify-content:space-between}
+.col h4 i{font-style:normal;color:var(--tx)}
+.pc{background:#fff;border-radius:10px;padding:10px;box-shadow:0 1px 2px rgba(10,11,14,.06);font-size:12px;animation:cai .6s cubic-bezier(.2,.8,.2,1) both}
+.pc .l1{display:flex;justify-content:space-between;align-items:center}
+.pc .l1 b{font-family:var(--mono);font-size:12px}
+.pc .cn{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px}
+.cn.liz{background:var(--gs);color:var(--gd)}.cn.gar{background:#EEE8FF;color:#5B3FD0}.cn.bal{background:#FFF1D6;color:#8A5A00}.cn.car{background:#E3EEFF;color:#2F6FE0}.cn.tel{background:#F0F1F3;color:#4B5160}
+.pc .it{margin-top:6px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc .pr{margin-top:6px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--mu)}
+.pc .pr .t{color:var(--gd)}.pc .pr .t.at{color:var(--ver)}
+@keyframes cai{from{opacity:0;transform:translateY(-18px) scale(.96)}to{opacity:1;transform:none}}
+.quadro .liz-img{position:absolute;right:-8px;bottom:-14px;width:150px;filter:drop-shadow(0 16px 26px rgba(10,11,14,.25));pointer-events:none}
+.bal-liz{position:absolute;right:120px;bottom:96px;max-width:210px;padding:10px 14px;border-radius:14px 14px 4px 14px;background:var(--carb);color:#fff;font-size:13px;line-height:1.4;box-shadow:var(--sh);transition:opacity .4s}
+
+/* faixa de canais */
+.faixa{margin-top:80px;padding:18px 0;border-block:1px solid var(--line);overflow:hidden;mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.faixa .tri{display:flex;gap:12px;width:max-content;animation:passa 36s linear infinite}
+.faixa span{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:999px;background:#fff;font-size:15px;font-weight:500;white-space:nowrap;box-shadow:0 1px 2px rgba(10,11,14,.05)}
+.faixa span i{width:8px;height:8px;border-radius:50%;background:var(--g)}
+@keyframes passa{to{transform:translateX(-50%)}}
+
+/* ---------- 2. a dor ---------- */
+.dor .shell{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.cel{position:relative;width:320px;height:600px;margin:0 auto;border-radius:44px;background:var(--carb);padding:12px;box-shadow:0 40px 90px rgba(10,11,14,.28)}
+.cel .tela{height:100%;border-radius:34px;background:#ECE5DD;overflow:hidden;display:flex;flex-direction:column}
+.cel .cab{height:64px;background:#075E54;color:#fff;display:flex;align-items:center;gap:10px;padding:0 16px;font-size:14px;font-weight:600}
+.cel .cab i{width:34px;height:34px;border-radius:50%;background:#2a8a7e;display:grid;place-items:center;font-style:normal;font-size:13px}
+.cel .cab small{display:block;font-weight:400;font-size:11px;opacity:.75}
+.msgs{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:8px;justify-content:flex-end}
+.m{max-width:80%;padding:8px 10px 6px;border-radius:10px;font-size:13.5px;line-height:1.35;background:#fff;align-self:flex-start;box-shadow:0 1px 1px rgba(0,0,0,.08);opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s}
+.m small{display:block;text-align:right;font-size:10px;color:#8a8f98;margin-top:2px}
+.m.eu{align-self:flex-end;background:#DCF8C6}
+.vivo .m{opacity:1;transform:none}
+.m.raiva{background:#fff}
+.sem{margin-top:6px;align-self:center;font-size:11px;font-family:var(--mono);background:rgba(229,72,77,.12);color:var(--ver);padding:4px 10px;border-radius:999px;opacity:0;transition:opacity .5s 2.4s}
+.vivo .sem{opacity:1}
+.grande{font-size:clamp(72px,9vw,128px);font-weight:900;letter-spacing:-.05em;line-height:.9;color:var(--ver)}
+.grande small{font-size:22px;letter-spacing:-.01em;color:var(--tx);font-weight:700;display:block;margin-top:14px}
+.dor .fonte{margin-top:20px;font-family:var(--mono);font-size:12px;color:var(--mu2)}
+
+/* ---------- 3. a liz ---------- */
+.liz-s{background:var(--carb);color:var(--off);margin-top:120px;padding:120px 0;position:relative;overflow:hidden}
+.liz-s::before{content:"";position:absolute;width:700px;height:700px;top:-300px;right:-200px;border-radius:50%;background:radial-gradient(circle,rgba(47,214,123,.22),transparent 65%)}
+.liz-s .shell{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.liz-s h2{color:#fff}.liz-s h2 em{color:var(--g)}.liz-s .lead{color:#A8ADB8}.liz-s .lead b{color:#fff}.liz-s .rot{color:var(--g)}
+.chat{border-radius:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:22px;display:flex;flex-direction:column;gap:12px;min-height:340px;justify-content:center}
+.chat .m{font-size:14px;max-width:85%}
+.chat .m.cli{background:#1f232a;color:#E9EBEE}
+.chat .m.cli small{color:#7d8290}
+.chat .m.lz{align-self:flex-end;background:var(--g);color:var(--carb);border-radius:14px 14px 4px 14px}
+.chat .m.lz small{color:#0d5a2d}
+.chat .m.av{align-self:center;background:transparent;border:1px dashed rgba(47,214,123,.45);color:#9FF2C4;font-family:var(--mono);font-size:12px;box-shadow:none}
+.dig{align-self:flex-end;display:flex;gap:4px;padding:10px 14px;border-radius:14px;background:rgba(47,214,123,.18);opacity:0}
+.dig i{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pula 1s infinite}.dig i:nth-child(2){animation-delay:.15s}.dig i:nth-child(3){animation-delay:.3s}
+@keyframes pula{50%{transform:translateY(-4px)}}
+.passos3{margin-top:32px;display:grid;gap:12px}
+.passos3 div{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);font-size:15px}
+.passos3 b{font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.passos3 .a{background:rgba(255,178,36,.15);color:var(--amb)}.passos3 .s{background:rgba(47,214,123,.15);color:var(--g)}.passos3 .p{background:rgba(106,162,255,.15);color:#8FB8FF}
+
+/* ---------- 4. a operação ---------- */
+.op .cab-s{max-width:720px}
+.tabs{margin-top:40px;display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:#fff;font:600 15px Inter,sans-serif;color:var(--mu);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+.tabs button.on{background:var(--carb);color:#fff;border-color:var(--carb)}
+.tabs button svg{width:18px;height:18px}
+.palco{margin-top:24px;border-radius:24px;background:#fff;box-shadow:var(--sh);min-height:460px;display:grid;grid-template-columns:1fr 1.2fr;overflow:hidden}
+.palco .txt{padding:48px}
+.palco .txt h3{font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.15}
+.palco .txt p{margin-top:14px;font-size:16px;line-height:1.6;color:var(--mu)}
+.palco .txt ul{margin-top:20px;list-style:none;display:grid;gap:10px}
+.palco .txt li{display:flex;gap:10px;font-size:15px}
+.palco .txt li::before{content:"✓";color:var(--gd);font-weight:800}
+.palco .ilu{background:var(--papel);position:relative;display:grid;place-items:center;padding:32px;overflow:hidden}
+.cena-op{display:none;width:100%;animation:entra .5s cubic-bezier(.2,.8,.2,1)}
+.cena-op.on{display:block}
+@keyframes entra{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* salão */
+.mapa{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:420px;margin:0 auto}
+.mesa{aspect-ratio:1;border-radius:16px;background:#fff;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:18px;box-shadow:0 1px 2px rgba(10,11,14,.06);position:relative}
+.mesa small{position:absolute;bottom:8px;font-size:10px;font-weight:600;color:var(--mu)}
+.mesa.oc{background:var(--carb);color:#fff}.mesa.oc small{color:var(--g)}
+.mesa.co{background:#FFF1D6;color:#8A5A00}.mesa.co small{color:#8A5A00}
+.legenda{margin-top:16px;display:flex;gap:16px;justify-content:center;font-size:12px;color:var(--mu)}
+.legenda i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+/* cozinha: comanda */
+.comanda{width:260px;margin:0 auto;background:#fff;padding:22px 20px 28px;font-family:var(--mono);font-size:13px;line-height:1.6;box-shadow:0 20px 40px rgba(10,11,14,.12);position:relative;animation:imprime 2.4s cubic-bezier(.2,.8,.2,1) both}
+.comanda::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;background:linear-gradient(135deg,#fff 50%,transparent 50%) 0 0/12px 10px,linear-gradient(225deg,#fff 50%,transparent 50%) 0 0/12px 10px}
+.comanda .c{text-align:center;font-weight:700}
+.comanda hr{border:0;border-top:1px dashed #bbb;margin:8px 0}
+.comanda .ln{display:flex;justify-content:space-between}
+.comanda .ob{color:var(--ver)}
+@keyframes imprime{from{clip-path:inset(0 0 100% 0);transform:translateY(-30px)}to{clip-path:inset(0 0 -20px 0);transform:none}}
+.impressora{width:300px;height:26px;margin:0 auto -6px;border-radius:10px 10px 4px 4px;background:var(--carb);position:relative;z-index:1}
+/* balcão */
+.pdv{width:100%;max-width:440px;margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+.pdv .cat{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pdv .cat div{background:#fff;border-radius:12px;padding:12px;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(10,11,14,.06)}
+.pdv .cat div span{display:block;font-family:var(--mono);font-size:12px;color:var(--gd);margin-top:4px}
+.pdv .cat div.esg{opacity:.45}.pdv .cat div.esg span{color:var(--ver)}
+.pdv .car{background:#fff;border-radius:12px;padding:12px;font-size:13px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 2px rgba(10,11,14,.06)}
+.pdv .car .ln{display:flex;justify-content:space-between}.pdv .car .tot{margin-top:auto;padding-top:8px;border-top:1px solid var(--line);font-weight:800;display:flex;justify-content:space-between}
+.pdv .car button{height:36px;border-radius:8px;border:0;background:var(--g);font:700 13px Inter,sans-serif}
+
+/* ---------- 5. entrega ---------- */
+.entrega .shell{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.cel.mot .tela{background:#fff;padding:24px 18px;gap:12px}
+.cel.mot .tt{font-size:12px;font-family:var(--mono);color:var(--mu)}
+.cel.mot .ent{border-radius:16px;background:var(--papel);padding:14px;font-size:13px;line-height:1.5}
+.cel.mot .ent b{display:block;font-size:15px}
+.cod{display:flex;gap:8px;justify-content:center;margin:10px 0}
+.cod span{width:46px;height:56px;border-radius:12px;border:2px solid var(--line);display:grid;place-items:center;font:700 24px var(--mono);transition:border-color .3s,background .3s}
+.vivo .cod span{border-color:var(--g);background:var(--gs)}
+.vivo .cod span:nth-child(1){transition-delay:.3s}.vivo .cod span:nth-child(2){transition-delay:.6s}.vivo .cod span:nth-child(3){transition-delay:.9s}.vivo .cod span:nth-child(4){transition-delay:1.2s}
+.cel.mot .ok{height:48px;border-radius:12px;background:var(--carb);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px;transition:background .4s 1.6s}
+.vivo .ok{background:var(--gd)}
+.lista-ent{margin-top:28px;display:grid;gap:14px}
+.lista-ent div{display:flex;gap:14px;align-items:flex-start;font-size:16px;line-height:1.5}
+.lista-ent b{font-family:var(--mono);color:var(--gd);font-size:14px;min-width:28px}
+
+/* ---------- 6. comissão ---------- */
+.conta{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.conta .ctrl{background:#fff;border-radius:24px;padding:36px;box-shadow:var(--sh)}
+.conta label{display:block;font-size:15px;font-weight:600;margin-top:24px}
+.conta label:first-child{margin-top:0}
+.conta label output{float:right;font-family:var(--mono);color:var(--gd)}
+.conta input[type=range]{width:100%;margin-top:12px;accent-color:var(--gd)}
+.conta .res{border-radius:24px;padding:36px;background:var(--carb);color:var(--off);display:flex;flex-direction:column;gap:18px}
+.conta .res .lin{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:16px;border-bottom:1px solid #23262b}
+.conta .res .lin span{font-size:15px;color:#A8ADB8}
+.conta .res .lin .vl{font:800 30px Inter,sans-serif;letter-spacing:-.02em;white-space:nowrap}
+.conta .res .lin.ruim .vl{color:#FF8A8E}.conta .res .lin.bom .vl{color:var(--g)}
+.conta .res .eco{margin-top:auto;font-size:15px;color:#A8ADB8}
+.conta .res .eco .vl2{display:block;font:900 44px Inter,sans-serif;color:#fff;letter-spacing:-.03em;margin-top:6px}
+.conta .nota{grid-column:1/-1;font-family:var(--mono);font-size:12px;color:var(--mu2)}
+
+/* ---------- 7. planos ---------- */
+.planos{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.plano{position:relative;background:#fff;border:1px solid var(--line);border-radius:24px;padding:36px 32px 32px;display:flex;flex-direction:column}
+.plano.esc{background:var(--carb);color:#fff;border-color:var(--carb)}
+.plano .tag{position:absolute;top:28px;right:24px;background:var(--g);color:var(--carb);font:700 11px var(--mono);letter-spacing:.12em;padding:6px 11px;border-radius:20px}
+.plano .n{font:600 13px var(--mono);color:var(--gd);letter-spacing:.16em}.plano.esc .n{color:var(--g)}
+.plano h3{font-size:34px;font-weight:800;letter-spacing:-.025em;margin-top:6px}
+.plano .d{font-size:16px;color:var(--mu);margin-top:4px}.plano.esc .d{color:#A3A8B0}
+.plano ul{list-style:none;margin-top:20px;border-top:1px solid var(--line)}.plano.esc ul{border-color:#2A2E35}
+.plano li{display:flex;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line);font-size:16px}.plano.esc li{border-color:#2A2E35}
+.plano li b{font:700 18px var(--mono);color:var(--gd);min-width:58px}.plano.esc li b{color:var(--g)}
+.plano .pq{list-style:none;border:0;margin-top:16px}.plano .pq li{border:0;padding:4px 0;font-size:14px;color:#5B6068}.plano.esc .pq li{color:#B9BDC4}
+.plano .pq li::before{content:"✓";color:var(--gd);margin-right:-4px}.plano.esc .pq li::before{color:var(--g)}
+.plano .pr{margin-top:auto;padding-top:22px;border-top:1px solid var(--line)}.plano.esc .pr{border-color:#2A2E35}
+.plano .pr span{font:400 13px var(--mono);color:var(--mu)}
+.plano .pr div{font-size:52px;font-weight:900;letter-spacing:-.035em;line-height:1.1}
+.plano .pr small{font-size:17px;font-weight:400;color:var(--mu)}
+.plano .btn{margin-top:20px;width:100%;justify-content:center}
+.rodape-p{margin-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font:400 13px var(--mono);color:var(--mu)}
+
+/* ---------- 8. perguntas ---------- */
+.faq .lista{margin-top:40px;max-width:840px;display:grid;gap:10px}
+.faq details{background:#fff;border-radius:16px;padding:0 24px;box-shadow:0 1px 2px rgba(10,11,14,.05)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 0;font-size:18px;font-weight:700;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:500 24px var(--mono);color:var(--gd);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 22px;font-size:16px;line-height:1.6;color:var(--mu);max-width:720px}
+
+/* ---------- 9. fecho ---------- */
+.fecho{margin:120px auto 0;padding:64px;border-radius:32px;background:radial-gradient(600px 340px at 85% 0%,rgba(47,214,123,.35),transparent 70%),var(--carb);color:var(--off);display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;overflow:hidden}
+.fecho h2{color:#fff}.fecho h2 em{color:var(--g)}
+.fecho p{margin-top:14px;color:#A8ADB8;font-size:17px;line-height:1.55;max-width:520px}
+.fecho img{width:220px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.45))}
+.cred{display:flex;justify-content:center;padding:56px 0 72px}
+.cred a{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:8px;background:var(--carb);color:#8A90A0;font-size:12px;text-decoration:none}
+.cred b{font-family:var(--mono);color:#fff}.cred b i{font-style:normal;color:var(--g)}
+
+/* entrada das cenas */
+.cena{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.cena.vivo{opacity:1;transform:none}
+
+/* ---------- celular ---------- */
+@media(max-width:960px){
+  section{padding-top:80px}
+  .topo{padding-top:40px;text-align:center}
+  .topo .shell,.dor .shell,.liz-s .shell,.entrega .shell{grid-template-columns:1fr;gap:48px}
+  .lead{margin-inline:auto;font-size:17px}
+  .btns,.prova{justify-content:center}
+  .cols{height:330px;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #cPronto{display:none}
+  .selo-p .st{display:none}.selo-p{padding:0 6px}
+  .cel .msgs{justify-content:flex-start;padding-top:24px}
+  .col{padding:6px}.pc{padding:8px;font-size:11px}.pc .pr{font-size:10px}
+  .quadro{padding:12px;text-align:left}
+  .quadro .liz-img{width:96px}.bal-liz{right:76px;bottom:64px;font-size:12px;max-width:170px}
+  .dor,.liz-s,.op,.entrega,.comissao,.planos-s,.faq{text-align:center}
+  .grande small{margin-inline:auto}
+  .cel{width:290px;height:500px}
+  .liz-s{padding:80px 0;margin-top:80px}
+  .chat{min-height:0;text-align:left}
+  .passos3 div{text-align:left}
+  .tabs{justify-content:center}
+  .palco{grid-template-columns:1fr}
+  .palco .txt{padding:32px 24px;text-align:center}.palco .txt ul{justify-items:center}
+  .palco .ilu{padding:28px 16px}
+  .lista-ent{justify-items:center}.lista-ent div{text-align:left;max-width:420px}
+  .conta{grid-template-columns:1fr;text-align:left}
+  .conta .ctrl,.conta .res{padding:28px 22px}
+  .planos{grid-template-columns:1fr;max-width:440px;margin-inline:auto;text-align:left}
+  .plano.esc{order:-1}
+  .rodape-p{justify-content:center;text-align:center}
+  .faq .lista{margin-inline:auto;text-align:left}
+  .fecho{grid-template-columns:1fr;padding:40px 24px;text-align:center;justify-items:center;margin-top:80px}
+  .fecho p{margin-inline:auto}.fecho .btns{justify-content:center}
+  .fecho img{width:150px}
+}
+@media(max-width:420px){.pdv{grid-template-columns:1fr}.mapa{gap:8px}.mesa{font-size:15px}.comanda{width:230px}.impressora{width:262px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.cena,.m{opacity:1;transform:none}}
+</style>
+</head>
+<body class="kr">
+<!-- partes:menu (não edite aqui: partes/menu.html + scripts/montar_site.py) -->
+<header class="kr-nav"><div class="kr-box">
+  <a class="kr-logo" href="../"><b>[</b> kompila <b>]</b></a>
+  <ul>
+    <li class="kr-drop"><a href="../#produtos">Produtos <span class="v">▾</span></a>
+      <div class="kr-menu">
+        <a href="../crm/"><b>kompila .crm</b><span>Atendimento e vendas num lugar só</span></a>
+        <a href="../pedidos/"><b>kompila .pedidos</b><span>Pedidos de restaurante, sem comissão</span></a>
+        <a href="../chatbot/"><b>A Liz, IA de atendimento</b><span>A Liz atende, qualifica e move o pipeline</span></a>
+        <a href="../loja/"><b>kompila loja</b><span>Loja própria, sem taxa por venda</span></a>
+        <a href="../design/"><b>kompila design</b><span>Marca, site e criativo</span></a>
+        <a href="../trafego/"><b>kompila tráfego</b><span>Anúncio que sabe qual lead virou venda</span></a>
+      </div>
+    </li>
+    <li><a href="../#como">Como funciona</a></li>
+    <li><a href="../#clientes">Clientes</a></li>
+    <li><a href="../trabalhos/">Trabalhos</a></li>
+    <li><a href="../blog/">Blog</a></li>
+  </ul>
+  <div class="k-dir"><a class="k-ig" href="https://instagram.com/kompila.ia" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila.ia"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a data-liz class="kr-btn" href="#liz">Falar com a Kompila</a></div>
+</div></header>
+<!-- /partes:menu -->
+
+<main>
+<!-- 1. topo: o quadro recebendo pedidos de todos os canais -->
+<section class="topo" id="topo">
+  <div class="shell">
+    <div>
+      <span class="selo-p"><b>[ kompila<i>.pedidos</i> ]</b><span class="st">Sistema de pedidos para restaurante</span></span>
+      <h1>Todo pedido atendido, <em>nenhum cliente esperando.</em></h1>
+      <p class="lead">WhatsApp, balcão, salão e cardápio online caem num quadro só. <b>A Liz responde o cliente</b>, a cozinha recebe a comanda impressa e o motoboy confirma a entrega com código.</p>
+      <div class="btns"><a data-liz class="btn esc" href="#liz">Quero ver funcionando</a><a class="btn cla" href="#planos">Ver os planos</a></div>
+      <div class="prova"><span><b>[ <i>0%</i> ]</b>de comissão por pedido</span><span><b>[ <i>5</i> ]</b>canais num quadro</span><span><b>[ <i>24 h</i> ]</b>a Liz respondendo</span></div>
+    </div>
+    <div class="quadro" aria-label="Quadro de pedidos recebendo pedidos de vários canais">
+      <div class="qt"><b>[ <i>quadro</i> ] de pedidos</b><span>ao vivo</span></div>
+      <div class="cols">
+        <div class="col" id="cProd"><h4>EM PRODUÇÃO <i id="nProd">0</i></h4></div>
+        <div class="col" id="cRua"><h4>NA RUA <i id="nRua">0</i></h4></div>
+        <div class="col" id="cPronto"><h4>PRONTO <i id="nPronto">0</i></h4></div>
+      </div>
+      <div class="bal-liz" id="balLiz">Pedido #481 entrou pela Liz. Já mandei pra cozinha.</div>
+      <img class="liz-img" src="../img/liz_09_mostrando_celular.webp" alt="Liz, a IA da Kompila" width="150" height="150">
+    </div>
+  </div>
+  <div class="faixa"><div class="tri" id="faixa"></div></div>
+</section>
+
+<!-- 2. a dor -->
+<section class="dor" id="dor">
+  <div class="shell">
+    <div class="cena">
+      <div class="cel"><div class="tela">
+        <div class="cab"><i>LJ</i><div>Sua lanchonete<small>visto por último às 20:12</small></div></div>
+        <div class="msgs">
+          <div class="m eu" style="transition-delay:.1s">Boa noite, pedi um X-Tudo e uma batata<small>19:58 ✓✓</small></div>
+          <div class="m eu" style="transition-delay:.7s">Já saiu?<small>20:31 ✓✓</small></div>
+          <div class="m eu" style="transition-delay:1.3s">Oi??<small>20:44 ✓✓</small></div>
+          <div class="m eu" style="transition-delay:1.9s">Vou cancelar então<small>20:52 ✓✓</small></div>
+          <div class="sem">sem resposta há 54 min</div>
+        </div>
+      </div></div>
+    </div>
+    <div>
+      <div class="rot">O que acontece hoje</div>
+      <h2>O cliente pergunta <em>"cadê meu pedido?"</em> e ninguém responde.</h2>
+      <p class="lead">Na hora do pico, a equipe está na chapa e no balcão. O WhatsApp acumula, o robô comum não sabe o status do pedido e o cliente desiste.</p>
+      <div class="grande" style="margin-top:36px">54<small>conversas sem resposta em 4 dias numa lanchonete que lemos antes de ligar o sistema.</small></div>
+      <p class="fonte">A pergunta número 1 dessas conversas era o status do pedido.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. a liz -->
+<section class="liz-s" id="liz-responde">
+  <div class="shell">
+    <div>
+      <div class="rot">A Liz no seu WhatsApp</div>
+      <h2>Ela sabe onde está cada pedido. <em>E responde na hora.</em></h2>
+      <p class="lead">A Liz lê o quadro. Quando o cliente pergunta, ela diz se está na cozinha, se já saiu e quanto falta. Quando não sabe, chama alguém da equipe, <b>nunca inventa</b>.</p>
+      <div class="passos3">
+        <div><b class="a">EM PRODUÇÃO</b>o cliente recebe o resumo com itens, pagamento e previsão</div>
+        <div><b class="s">SAIU</b>avisa quando o motoboy sai, com o código de entrega</div>
+        <div><b class="p">PRONTO</b>avisa quando a retirada está esperando no balcão</div>
+      </div>
+    </div>
+    <div class="chat cena" id="chat">
+      <div class="m cli" style="transition-delay:.2s">Boa noite! Meu pedido já saiu?<small>20:31</small></div>
+      <div class="dig" id="dig1"><i></i><i></i><i></i></div>
+      <div class="m lz" style="transition-delay:1.6s">Boa noite, Marcos! Seu pedido #482 saiu às 20:14 com o motoboy. Chega em uns 15 minutos. 🛵<small>20:31</small></div>
+      <div class="m cli" style="transition-delay:2.6s">Show, obrigado!<small>20:32</small></div>
+      <div class="m av" style="transition-delay:3.4s">20:44 · pedido #482 entregue · código confirmado</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. a operação -->
+<section class="op" id="operacao">
+  <div class="shell">
+    <div class="cab-s">
+      <div class="rot">A loja inteira num app</div>
+      <h2>Do garçom à cozinha, <em>todo mundo vê o mesmo pedido.</em></h2>
+      <p class="lead">Cada pessoa da equipe entra com o próprio login e vê só o que é dela. O garçom vê o salão, o motoboy vê as entregas, o dono vê tudo.</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="on" data-c="salao" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Salão</button>
+      <button data-c="cozinha" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 17v4h10v-4"/></svg>Cozinha</button>
+      <button data-c="balcao" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h12L22 7H6"/></svg>Balcão</button>
+      <button data-c="cardapio" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h12a4 4 0 014 4v12H8a4 4 0 01-4-4z"/><path d="M8 9h8M8 13h6"/></svg>Cardápio</button>
+    </div>
+    <div class="palco cena">
+      <div class="txt">
+        <div class="cena-op on" data-c="salao"><h3>Garçom lança a mesa pelo celular.</h3><p>O mapa mostra cada mesa: livre, ocupada ou pedindo a conta. A mesa abre numa tela só dela, com o cardápio já aberto.</p><ul><li>Quantas mesas a loja tiver</li><li>O pedido vai direto pra cozinha</li><li>Garçom vê só o salão</li></ul></div>
+        <div class="cena-op" data-c="cozinha"><h3>A comanda sai sozinha na cozinha.</h3><p>O pedido entrou, a impressora térmica de 80 mm imprime. Sem ninguém copiar pedido do WhatsApp pro papel.</p><ul><li>Itens, adicionais e o que tirar</li><li>Observação do cliente em destaque</li><li>Tela da cozinha com a fila do momento</li></ul></div>
+        <div class="cena-op" data-c="balcao"><h3>Quem chega ou liga, entra no mesmo quadro.</h3><p>O balcão lança o pedido em segundos. O preço vem do cardápio, ninguém digita valor na mão.</p><ul><li>Balcão, retirada e telefone</li><li>Item esgotado não entra</li><li>Vai direto pra produção</li></ul></div>
+        <div class="cena-op" data-c="cardapio"><h3>Cardápio online, sem comissão.</h3><p>O cliente pede pelo link da loja. Acabou o ingrediente, você marca esgotou e o item some na hora, no cardápio e no balcão.</p><ul><li>Esgotou e voltou com um toque</li><li>Preço e item novo só o dono muda</li><li>Delivery e retirada</li></ul></div>
+      </div>
+      <div class="ilu">
+        <div class="cena-op on" data-c="salao"><div class="mapa">
+          <div class="mesa oc">1<small>R$ 86</small></div><div class="mesa">2</div><div class="mesa oc">3<small>R$ 142</small></div><div class="mesa co">4<small>conta</small></div>
+          <div class="mesa">5</div><div class="mesa oc">6<small>R$ 54</small></div><div class="mesa">7</div><div class="mesa oc">8<small>R$ 211</small></div>
+          <div class="mesa co">9<small>conta</small></div><div class="mesa">10</div><div class="mesa">11</div><div class="mesa oc">12<small>R$ 38</small></div>
+        </div><div class="legenda"><span><i style="background:#fff;box-shadow:0 0 0 1px #ddd"></i>livre</span><span><i style="background:var(--carb)"></i>ocupada</span><span><i style="background:#FFF1D6"></i>pediu a conta</span></div></div>
+        <div class="cena-op" data-c="cozinha"><div class="impressora"></div><div class="comanda">
+          <div class="c">PEDIDO #483 · MESA 6</div><div class="c" style="font-weight:400">20:36 · garçom Lucas</div><hr>
+          <div class="ln"><span>2x X-Burguer</span><span>34,00</span></div><div>&nbsp; + bacon</div><div class="ob">&nbsp; sem cebola</div>
+          <div class="ln"><span>1x Batata média</span><span>18,00</span></div><div class="ln"><span>2x Refri lata</span><span>12,00</span></div><hr>
+          <div class="ln" style="font-weight:700"><span>TOTAL</span><span>64,00</span></div>
+        </div></div>
+        <div class="cena-op" data-c="balcao"><div class="pdv">
+          <div class="cat"><div>X-Burguer<span>R$ 17,00</span></div><div>X-Tudo<span>R$ 24,00</span></div><div class="esg">X-Frango<span>esgotou</span></div><div>Batata<span>R$ 18,00</span></div><div>Açaí 500<span>R$ 22,00</span></div><div>Refri lata<span>R$ 6,00</span></div></div>
+          <div class="car"><b>Balcão · retirada</b><div class="ln"><span>1x X-Tudo</span><span>24,00</span></div><div class="ln"><span>1x Batata</span><span>18,00</span></div><div class="tot"><span>Total</span><span>R$ 42,00</span></div><button>Lançar pedido</button></div>
+        </div></div>
+        <div class="cena-op" data-c="cardapio"><div class="pdv" style="grid-template-columns:1fr;max-width:300px">
+          <div class="car" style="gap:10px"><b>Lanches</b>
+            <div class="ln"><span>X-Burguer</span><span class="mono" style="color:var(--gd)">R$ 17,00</span></div>
+            <div class="ln"><span>X-Tudo</span><span class="mono" style="color:var(--gd)">R$ 24,00</span></div>
+            <div class="ln" style="opacity:.45"><span>X-Frango</span><span class="mono" style="color:var(--ver)">esgotou</span></div>
+            <div class="ln"><span>X-Salada</span><span class="mono" style="color:var(--gd)">R$ 19,00</span></div>
+            <button>Ver carrinho · R$ 41,00</button></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. entrega -->
+<section class="entrega" id="entrega">
+  <div class="shell">
+    <div>
+      <div class="rot">Entrega</div>
+      <h2>O motoboy só fecha a entrega <em>com o código do cliente.</em></h2>
+      <p class="lead">O cliente recebe o código no aviso de saída. Na porta, o motoboy digita no celular dele e a entrega fecha no quadro. Acabou o "eu entreguei" contra o "não chegou".</p>
+      <div class="lista-ent">
+        <div><b>01</b>O motoboy vê só as entregas dele, no celular</div>
+        <div><b>02</b>Endereço, pagamento e troco na mesma tela</div>
+        <div><b>03</b>O dono liga e desliga o código quando quiser</div>
+      </div>
+    </div>
+    <div class="cena" id="moto">
+      <div class="cel mot"><div class="tela">
+        <div class="tt">MINHAS ENTREGAS · 2 na rua</div>
+        <div class="ent"><b>#482 · Marcos</b>Rua das Flores, 120 · Centro<br>Cartão na entrega</div>
+        <div class="tt" style="text-align:center;margin-top:8px">código do cliente</div>
+        <div class="cod"><span>4</span><span>8</span><span>2</span><span>1</span></div>
+        <div class="ok">Entrega confirmada</div>
+        <div class="ent" style="opacity:.6"><b>#485 · Juliana</b>Av. Brasil, 2.300 · Jardim<br>Dinheiro · troco pra R$ 100</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. comissão -->
+<section class="comissao" id="comissao">
+  <div class="shell">
+    <div class="rot">Faça a conta</div>
+    <h2>Comissão cresce com a loja. <em>A mensalidade não.</em></h2>
+    <p class="lead">Mexa nos números da sua loja e compare com um aplicativo que cobra comissão por pedido.</p>
+    <div class="conta">
+      <div class="ctrl">
+        <label>Pedidos por mês <output id="oPed">2.000</output><input id="iPed" type="range" min="300" max="6000" step="100" value="2000"></label>
+        <label>Ticket médio <output id="oTic">R$ 38</output><input id="iTic" type="range" min="15" max="120" step="1" value="38"></label>
+        <label>Comissão do aplicativo <output id="oCom">12%</output><input id="iCom" type="range" min="8" max="27" step="1" value="12"></label>
+      </div>
+      <div class="res">
+        <div class="lin ruim"><span>Comissão no mês</span><span class="vl" id="rCom">R$ 9.120</span></div>
+        <div class="lin bom"><span>kompila .pedidos <small id="rPlano">(Movimento)</small></span><span class="vl" id="rKmp">R$ 978</span></div>
+        <div class="eco">Fica na sua loja por mês<span class="vl2" id="rEco">R$ 8.142</span></div>
+      </div>
+      <p class="nota">Exemplo com os números que você escolheu. O plano sugerido considera umas 4 mensagens da Liz por pedido.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. planos -->
+<section class="planos-s" id="planos">
+  <div class="shell">
+    <div class="rot">Planos</div>
+    <h2>Mensalidade fixa. <em>Sem taxa por pedido.</em></h2>
+    <p class="lead">O que muda de um plano pro outro é quantas vezes a Liz responde seus clientes no mês. O sistema é o mesmo.</p>
+    <div class="planos">
+      <div class="plano">
+        <div class="n">01 · START</div><h3>Start</h3><div class="d">cerca de 100 respostas por dia</div>
+        <ul><li><b>3 mil</b>respostas da Liz no WhatsApp</li><li><b>✓</b>balcão, salão e entrega juntos</li><li><b>✓</b>cardápio online sem comissão</li></ul>
+        <ul class="pq"><li> Liz responde o status do pedido</li><li> Comanda impressa na cozinha</li><li> Garçom lança a mesa pelo celular</li></ul>
+        <div class="pr"><span>mensalidade</span><div>R$ 578<small>/mês</small></div></div>
+        <a data-liz class="btn esc" href="#liz">Quero o Start</a>
+      </div>
+      <div class="plano esc">
+        <span class="tag">MAIS ESCOLHIDO</span>
+        <div class="n">02 · MOVIMENTO</div><h3>Movimento</h3><div class="d">cerca de 270 respostas por dia</div>
+        <ul><li><b>8 mil</b>respostas da Liz no WhatsApp</li><li><b>✓</b>tudo do Start</li><li><b>✓</b>motoboy com código de entrega</li></ul>
+        <ul class="pq"><li> Aviso de pedido saiu e pronto no WhatsApp</li><li> Mapa das mesas do salão</li><li> Equipe com acesso por cargo</li></ul>
+        <div class="pr"><span>mensalidade</span><div>R$ 978<small>/mês</small></div></div>
+        <a data-liz class="btn ver" href="#liz">Quero o Movimento</a>
+      </div>
+      <div class="plano">
+        <div class="n">03 · ALTA DEMANDA</div><h3>Alta demanda</h3><div class="d">cerca de 500 respostas por dia</div>
+        <ul><li><b>15 mil</b>respostas da Liz no WhatsApp</li><li><b>✓</b>tudo do Movimento</li><li><b>✓</b>desempenho da loja</li></ul>
+        <ul class="pq"><li> Cardápio com esgotou e voltou na hora</li><li> Histórico de cada cliente</li><li> Prioridade no suporte</li></ul>
+        <div class="pr"><span>mensalidade</span><div>R$ 1.478<small>/mês</small></div></div>
+        <a data-liz class="btn esc" href="#liz">Quero o Alta demanda</a>
+      </div>
+    </div>
+    <div class="rodape-p"><span>passou do pacote · R$ 60 a cada mil respostas · acima de 20 mil, plano sob medida</span><span>sem taxa por pedido · sem comissão</span></div>
+  </div>
+</section>
+
+<!-- 8. perguntas -->
+<section class="faq" id="perguntas">
+  <div class="shell">
+    <div class="rot">Perguntas</div>
+    <h2>O que os donos perguntam.</h2>
+    <div class="lista">
+      <details><summary>Cobra taxa por pedido?</summary><p>Não. É uma mensalidade fixa: R$ 578 no Start, R$ 978 no Movimento e R$ 1.478 no Alta demanda. Sem comissão e sem taxa por pedido.</p></details>
+      <details><summary>Preciso trocar o número de WhatsApp da loja?</summary><p>Não. O número continua o da sua loja, ligado pela API oficial da Meta. O cliente fala com o mesmo WhatsApp de sempre.</p></details>
+      <details><summary>O que conta como resposta da Liz?</summary><p>Cada mensagem que a Liz manda pro cliente. Mensagem da sua equipe e pedido lançado no balcão, no salão ou pelo cardápio online não contam.</p></details>
+      <details><summary>E se passar do pacote?</summary><p>A Liz continua respondendo, nenhum cliente fica esperando. O que passar sai a R$ 60 a cada mil respostas, na mensalidade seguinte. Acima de 20 mil respostas por mês, o plano é sob medida.</p></details>
+      <details><summary>Funciona com impressora na cozinha?</summary><p>Sim. A comanda sai sozinha numa impressora térmica de 80 mm assim que o pedido entra.</p></details>
+      <details><summary>Serve pra salão, entrega e retirada?</summary><p>Sim. O garçom lança a mesa pelo celular, o balcão lança quem chega ou liga, o cardápio online recebe delivery e retirada, e tudo cai no mesmo quadro.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 9. fecho -->
+<div class="shell">
+  <div class="fecho">
+    <div><h2>Me mostra como está <em>o seu WhatsApp hoje.</em></h2><p>A gente lê as conversas da sua loja, mostra quantos clientes ficaram sem resposta e liga o sistema com o seu cardápio.</p><div class="btns"><a data-liz class="btn ver" href="#liz">Falar com a Liz</a><a class="btn cla" href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">Falar com um consultor</a></div></div>
+    <img src="../img/liz_10_comemorando.webp" alt="Liz comemorando" width="220" height="220" loading="lazy">
+  </div>
+  <div class="cred"><a href="https://kompila.com.br/">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div>
+</div>
+</main>
+
+<!-- partes:rodape (não edite aqui: partes/rodape.html + scripts/montar_site.py) -->
+<footer class="kr-foot">
+  <div class="kr-box kr-rodape">
+    <div class="kr-marca">
+      <div class="kr-logo"><b>[</b> kompila <b>]</b></div>
+      <p>IA sob medida pra pequena e média empresa.</p><div class="k-acoes"><a class="k-ig-f" href="https://instagram.com/kompila.ia" target="_blank" rel="noopener" aria-label="Instagram da Kompila @kompila.ia"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a class="kr-btn" href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">Falar direto com um consultor</a></div>
+    </div>
+    <div class="kr-col"><h4>Produtos</h4>
+      <a href="../chatbot/">IA de atendimento e CRM</a><a href="../crm/">kompila .crm</a><a href="../pedidos/">kompila .pedidos</a><a href="../loja/">kompila loja</a><a href="../design/">kompila design</a><a href="../trafego/">kompila tráfego</a>
+    </div>
+    <div class="kr-col"><h4>Kompila</h4>
+      <a href="../#o-que-faz">O que a IA faz</a><a href="../#como">Como funciona</a><a href="../#clientes">Clientes</a><a href="../trabalhos/">Trabalhos</a><a href="../blog/">Blog</a>
+    </div>
+    <div class="kr-col"><h4>Parceiros</h4>
+      <a href="https://coleve.com.br" target="_blank" rel="noopener">Coleve · contabilidade</a><a href="https://p1led.com.br" target="_blank" rel="noopener">P1LED · painéis de LED</a>
+    </div>
+    <div class="kr-col"><h4>Contato</h4>
+      <a href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">WhatsApp (11) 96734-2512</a><a href="https://instagram.com/kompila.ia" target="_blank" rel="noopener">Instagram @kompila.ia</a><a href="https://crm.kompila.com.br">Entrar no CRM</a>
+    </div>
+  </div>
+  <div class="kr-box kr-base">
+    <span>Kompila · CNPJ 65.907.771/0001-02 · Mogi das Cruzes/SP</span>
+    <a href="../privacidade/">Política de privacidade</a>
+    <a href="../termos/">Termos de serviço</a>
+    <a href="../exclusao-de-dados/">Exclusão de dados</a>
+  </div>
+</footer>
+<!-- /partes:rodape -->
+
+<script>
+(function(){
+  // faixa de canais
+  var can=['Pedido pelo WhatsApp','Garçom no salão','Balcão','Telefone','Cardápio online','Retirada','Delivery','Comanda na cozinha','Motoboy com código','Esgotou e voltou'];
+  var h=can.map(function(c){return '<span><i></i>'+c+'</span>'}).join('');document.getElementById('faixa').innerHTML=h+h;
+
+  // quadro do topo: pedidos entram, andam e saem
+  var reduz=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nomes=['Marcos','Juliana','Mesa 6','Ana','Pedro','Mesa 2','Carla','Diego','Balcão','Fernanda','Mesa 9','Rafael'];
+  var canais=[['liz','Liz'],['gar','Garçom'],['car','Cardápio'],['bal','Balcão'],['tel','Telefone']];
+  var itens=['2x X-Burguer, batata','X-Tudo, refri lata','Açaí 500, granola','3x X-Salada','Combo família','Batata grande, 2 refri','X-Bacon sem cebola','Porção de frango'];
+  var falas={liz:'Pedido entrou pela Liz. Já mandei pra cozinha.',gar:'O garçom lançou a mesa. Comanda impressa.',car:'Pedido do cardápio online, sem comissão.',bal:'Balcão lançou, já está em produção.',tel:'Pedido por telefone, direto no quadro.'};
+  var cols={p:document.getElementById('cProd'),r:document.getElementById('cRua'),k:document.getElementById('cPronto')};
+  var bal=document.getElementById('balLiz'),num=480,i=0;
+  function conta(){document.getElementById('nProd').textContent=cols.p.querySelectorAll('.pc').length;document.getElementById('nRua').textContent=cols.r.querySelectorAll('.pc').length;document.getElementById('nPronto').textContent=cols.k.querySelectorAll('.pc').length}
+  function card(n,c,nome,it,v,t,at){var d=document.createElement('div');d.className='pc';d.innerHTML='<div class="l1"><b>#'+n+'</b><span class="cn '+c[0]+'">'+c[1]+'</span></div><div class="it">'+nome+' · '+it+'</div><div class="pr"><span>R$ '+v+'</span><span class="t'+(at?' at':'')+'">'+t+'</span></div>';return d}
+  function poe(col,d,max){col.insertBefore(d,col.children[1]);var cs=col.querySelectorAll('.pc');if(cs.length>max)cs[cs.length-1].remove()}
+  function semente(){for(var k=0;k<3;k++){num++;poe(cols.p,card(num,canais[k],nomes[k],itens[k],(30+k*11)+',00',(12+k*6)+' min'),4)}
+    poe(cols.r,card(476,canais[0],'Lucas',itens[4],'89,00','sai 20:14'),4);poe(cols.r,card(477,canais[2],'Bia',itens[5],'46,00','sai 20:19'),4);
+    poe(cols.k,card(478,canais[3],'Balcão',itens[6],'28,00','retirar'),4);conta()}
+  function passo(){
+    var pr=cols.p.querySelectorAll('.pc');if(pr.length>=3){var velho=pr[pr.length-1];velho.remove();var b=velho.querySelector('.cn');var vai=b.classList.contains('bal')||b.classList.contains('gar')?cols.k:cols.r;
+      velho.querySelector('.t').textContent=vai===cols.k?'pronto':'saiu agora';velho.style.animation='none';void velho.offsetWidth;velho.style.animation='';poe(vai,velho,4)}
+    num++;var c=canais[i%canais.length];poe(cols.p,card(num,c,nomes[(i+3)%nomes.length],itens[i%itens.length],(24+(i*7)%60)+',00','25 min'),4);
+    bal.style.opacity=0;setTimeout(function(){bal.textContent='#'+num+' · '+falas[c[0]];bal.style.opacity=1},350);
+    i++;conta()}
+  semente();if(!reduz)setInterval(passo,2600);
+
+  // cenas entram ao rolar
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vivo');io.unobserve(e.target);
+    if(e.target.id==='chat'){var d=document.getElementById('dig1');d.style.opacity=1;setTimeout(function(){d.style.display='none'},1500)}}})},{threshold:.25});
+  document.querySelectorAll('.cena,.cel').forEach(function(el){io.observe(el)});
+  document.querySelectorAll('.dor .cel').forEach(function(el){io.observe(el)});
+
+  // abas da operação
+  document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){var c=b.dataset.c;
+    document.querySelectorAll('.tabs button').forEach(function(x){x.classList.toggle('on',x===b)});
+    document.querySelectorAll('.cena-op').forEach(function(x){x.classList.toggle('on',x.dataset.c===c)})}});
+
+  // conta da comissão
+  var R=function(v){return 'R$ '+Math.round(v).toLocaleString('pt-BR')};
+  function calc(){var p=+iPed.value,t=+iTic.value,c=+iCom.value;oPed.textContent=p.toLocaleString('pt-BR');oTic.textContent='R$ '+t;oCom.textContent=c+'%';
+    var com=p*t*c/100,resp=p*4,pl=resp<=3000?['Start',578]:resp<=8000?['Movimento',978]:resp<=15000?['Alta demanda',1478]:['Alta demanda',1478+Math.ceil((resp-15000)/1000)*60];
+    rCom.textContent=R(com);rKmp.textContent=R(pl[1]);rPlano.textContent='('+pl[0]+')';rEco.textContent=R(Math.max(0,com-pl[1]))}
+  var iPed=document.getElementById('iPed'),iTic=document.getElementById('iTic'),iCom=document.getElementById('iCom'),oPed=document.getElementById('oPed'),oTic=document.getElementById('oTic'),oCom=document.getElementById('oCom'),rCom=document.getElementById('rCom'),rKmp=document.getElementById('rKmp'),rPlano=document.getElementById('rPlano'),rEco=document.getElementById('rEco');
+  [iPed,iTic,iCom].forEach(function(x){x.oninput=calc});calc();
+})();
+</script>
+<script src="https://crm.kompila.com.br/liz.js" data-chave="kmp_kompila" defer></script>
+<script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
+<script src="https://crm.kompila.com.br/medicao.js" data-ga="G-L4B7092014" defer></script>
+<script src="/js/pixel.js?v=3" defer></script>
+<script src="/js/anima.js" defer></script>
+</body>
+</html>

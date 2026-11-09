@@ -17,6 +17,7 @@ PAGINAS = {
     'trabalhos/index.html': ('../', '../'),
     'chatbot/index.html': ('../', '../'),
     'crm/index.html': ('../', '../'),
+    'pedidos/index.html': ('../', '../'),
     'loja/index.html': ('../', '../'),
     'design/index.html': ('../', '../'),
     'cases/index.html': ('../', '../'),
