@@ -9,6 +9,7 @@ valem pros dois produtos e moram no repositório do CRM:
 - Sempre os dois lugares: commit + push neste repositório (conta `fleksux`) **e** `rsync -a --exclude .git --exclude .DS_Store ./ /Volumes/Dados/KOMPILA/05_SITE/` (nunca `--delete`).
 - Localhost: `http://localhost:8080` serve `03_SITE`.
 - Depois do push, conferir no ar (curl) antes de dizer que subiu.
+- Depois de conferir no ar, avisar os buscadores: `python3 scripts/indexnow.py /caminho/ ...` (só as páginas que mudaram; sem argumento manda o sitemap todo). A chave `a2307788b1c4748df69ea3972529c926.txt` na raiz nunca sai. Search Console e Bing Webmaster estão na conta fleks.ux.
 
 ## Regras do site
 - **Menu e rodapé têm um lugar só**: `partes/menu.html` e `partes/rodape.html`. Nunca editar o menu dentro de uma página: editar a parte e rodar `python3 scripts/montar_site.py` (copia pras 9 páginas). `python3 scripts/montar_site.py --checar` confere antes de publicar.

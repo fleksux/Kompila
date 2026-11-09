@@ -113,3 +113,6 @@
  .bg-t{grid-column:auto!important;grid-row:auto!important;min-height:230px}.bg-t-hero{min-height:300px}
  .bg-t-num{min-height:0}.bg-t-largo{grid-template-columns:42% 1fr;min-height:200px}
  .bg-t-hero .bg-sobre b{font-size:26px}.bg-t-cta{flex-direction:column;align-items:flex-start;padding:22px}.bg-t-num strong{font-size:34px}}
+
+/* 09/11/2026: link do produto certo em cada guia */
+.bg-prod{margin-top:14px;font-size:16px;line-height:1.6}.bg-prod a{color:#12803F;font-weight:700;text-decoration:underline;text-underline-offset:3px}
