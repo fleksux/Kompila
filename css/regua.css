@@ -64,3 +64,21 @@ html:has(body.kr),body.kr{overflow-x:clip}
 .kr-foot .k-ig-f{display:grid;width:42px}
 .k-acoes{display:flex;align-items:center;gap:10px;margin-top:20px}.k-acoes .k-ig-f{margin:0;width:42px;height:42px;display:grid}.k-acoes .btn,.k-acoes .kr-btn{margin:0!important;height:42px}
 .kr-foot .k-acoes .kr-btn{white-space:nowrap;font-size:14px;padding:0 14px}
+
+/* menu do celular (09/11/2026, Alex: "no celular eu não tenho menu"): botão de 3 traços abre a lista inteira */
+.kr-burg{display:none;width:42px;height:42px;border:0;border-radius:10px;background:#F2F3EF;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
+.kr-burg span{display:block;width:18px;height:2px;border-radius:2px;background:#0A0B0E;transition:transform .25s,opacity .2s}
+.kr-nav.aberto .kr-burg span:nth-child(1){transform:translateY(7px) rotate(45deg)}.kr-nav.aberto .kr-burg span:nth-child(2){opacity:0}.kr-nav.aberto .kr-burg span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.kr-nav .kr-so-cel{display:none}
+@media(max-width:900px){
+  .kr-burg{display:flex}
+  .kr-nav.aberto ul{display:flex;flex-direction:column;gap:0;position:fixed;top:68px;left:0;right:0;bottom:0;background:#fff;padding:12px 6% 40px;overflow-y:auto;font-size:18px;border-top:1px solid #E4E7E1;z-index:999}
+  .kr-nav.aberto ul>li>a{display:block;padding:16px 0;border-bottom:1px solid #EEF0EC}
+  .kr-nav.aberto .kr-drop>a{display:none}
+  .kr-nav.aberto .kr-drop .kr-menu{display:block;position:static;padding:0;min-width:0}
+  .kr-nav.aberto .kr-drop .kr-menu::before{display:none}
+  .kr-nav.aberto .kr-drop .kr-menu a{padding:14px 0!important;border-bottom:1px solid #EEF0EC}
+  .kr-nav.aberto .kr-so-cel{display:list-item}
+  html.kr-trava,html.kr-trava body{overflow:hidden}
+}
+@media(max-width:480px){.kr-nav .k-ig{display:none}}
