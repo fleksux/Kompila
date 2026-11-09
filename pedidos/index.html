@@ -64,8 +64,10 @@ section{padding:120px 0 0}
 .pc .pr{margin-top:6px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--mu)}
 .pc .pr .t{color:var(--gd)}.pc .pr .t.at{color:var(--ver)}
 @keyframes cai{from{opacity:0;transform:translateY(-18px) scale(.96)}to{opacity:1;transform:none}}
-.quadro .liz-img{position:absolute;right:-8px;bottom:-14px;width:150px;filter:drop-shadow(0 16px 26px rgba(10,11,14,.25));pointer-events:none}
-.bal-liz{position:absolute;right:120px;bottom:96px;max-width:210px;padding:10px 14px;border-radius:14px 14px 4px 14px;background:var(--carb);color:#fff;font-size:13px;line-height:1.4;box-shadow:var(--sh);transition:opacity .4s}
+.quadro-w{position:relative}
+.quadro-w .liz-img{position:absolute;right:-56px;bottom:-60px;z-index:3;width:190px;height:auto;animation:flutua 5s ease-in-out infinite;filter:drop-shadow(0 16px 26px rgba(10,11,14,.25));pointer-events:none}
+@keyframes flutua{50%{transform:translateY(-8px)}}
+.bal-liz{text-align:left;position:absolute;z-index:4;right:110px;bottom:120px;max-width:210px;padding:10px 14px;border-radius:14px 14px 4px 14px;background:var(--carb);color:#fff;font-size:13px;line-height:1.4;box-shadow:var(--sh);transition:opacity .4s}
 
 /* faixa de canais */
 .faixa{margin-top:80px;padding:18px 0;border-block:1px solid var(--line);overflow:hidden;mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
@@ -222,7 +224,7 @@ section{padding:120px 0 0}
 .fecho{margin:120px auto 0;padding:64px;border-radius:32px;background:radial-gradient(600px 340px at 85% 0%,rgba(47,214,123,.35),transparent 70%),var(--carb);color:var(--off);display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;overflow:hidden}
 .fecho h2{color:#fff}.fecho h2 em{color:var(--g)}
 .fecho p{margin-top:14px;color:#A8ADB8;font-size:17px;line-height:1.55;max-width:520px}
-.fecho img{width:220px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.45))}
+.fecho img{width:220px;height:auto;filter:drop-shadow(0 24px 40px rgba(0,0,0,.45))}
 .cred{display:flex;justify-content:center;padding:56px 0 72px}
 .cred a{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:8px;background:var(--carb);color:#8A90A0;font-size:12px;text-decoration:none}
 .cred b{font-family:var(--mono);color:#fff}.cred b i{font-style:normal;color:var(--g)}
@@ -244,7 +246,7 @@ section{padding:120px 0 0}
   .cel .msgs{justify-content:flex-start;padding-top:24px}
   .col{padding:6px}.pc{padding:8px;font-size:11px}.pc .pr{font-size:10px}
   .quadro{padding:12px;text-align:left}
-  .quadro .liz-img{width:96px}.bal-liz{right:76px;bottom:64px;font-size:12px;max-width:170px}
+  .quadro-w .liz-img{width:110px;right:-10px;bottom:-44px}.bal-liz{right:80px;bottom:70px;font-size:12px;max-width:170px}
   .dor,.liz-s,.op,.entrega,.comissao,.planos-s,.faq{text-align:center}
   .grande small{margin-inline:auto}
   .cel{width:290px;height:500px}
@@ -305,15 +307,16 @@ section{padding:120px 0 0}
       <div class="btns"><a data-liz class="btn esc" href="#liz">Quero ver funcionando</a><a class="btn cla" href="#planos">Ver os planos</a></div>
       <div class="prova"><span><b>[ <i>0%</i> ]</b>de comissão por pedido</span><span><b>[ <i>5</i> ]</b>canais num quadro</span><span><b>[ <i>24 h</i> ]</b>a Liz respondendo</span></div>
     </div>
-    <div class="quadro" aria-label="Quadro de pedidos recebendo pedidos de vários canais">
+    <div class="quadro-w"><div class="quadro" aria-label="Quadro de pedidos recebendo pedidos de vários canais">
       <div class="qt"><b>[ <i>quadro</i> ] de pedidos</b><span>ao vivo</span></div>
       <div class="cols">
         <div class="col" id="cProd"><h4>EM PRODUÇÃO <i id="nProd">0</i></h4></div>
         <div class="col" id="cRua"><h4>NA RUA <i id="nRua">0</i></h4></div>
         <div class="col" id="cPronto"><h4>PRONTO <i id="nPronto">0</i></h4></div>
       </div>
+    </div>
       <div class="bal-liz" id="balLiz">Pedido #481 entrou pela Liz. Já mandei pra cozinha.</div>
-      <img class="liz-img" src="../img/liz_09_mostrando_celular.webp" alt="Liz, a IA da Kompila" width="150" height="150">
+      <img class="liz-img" src="../img/liz_09_mostrando_celular.webp" alt="Liz, a IA da Kompila" width="190" height="254">
     </div>
   </div>
   <div class="faixa"><div class="tri" id="faixa"></div></div>
@@ -519,7 +522,7 @@ section{padding:120px 0 0}
 <div class="shell">
   <div class="fecho">
     <div><h2>Me mostra como está <em>o seu WhatsApp hoje.</em></h2><p>A gente lê as conversas da sua loja, mostra quantos clientes ficaram sem resposta e liga o sistema com o seu cardápio.</p><div class="btns"><a data-liz class="btn ver" href="#liz">Falar com a Liz</a><a class="btn cla" href="https://wa.me/5511967342512?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Kompila" target="_blank" rel="noopener">Falar com um consultor</a></div></div>
-    <img src="../img/liz_10_comemorando.webp" alt="Liz comemorando" width="220" height="220" loading="lazy">
+    <img src="../img/liz_10_comemorando.webp" alt="Liz comemorando" width="220" height="295" loading="lazy">
   </div>
   <div class="cred"><a href="https://kompila.com.br/">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div>
 </div>
