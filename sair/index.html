@@ -27,5 +27,5 @@ const U='https://fmbxnfebumfhrviumkbu.supabase.co',K='eyJhbGciOiJIUzI1NiIsInR5cC
 b.onclick=async()=>{const v=e.value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){e.focus();return}b.disabled=true;b.textContent='Saindo…';x.style.display='none'
 try{const r=await fetch(U+'/rest/v1/rpc/descadastrar_email',{method:'POST',headers:{apikey:K,'Content-Type':'application/json'},body:JSON.stringify({e:v,tk:t})});const j=await r.json();if(j.ok){document.getElementById('form').style.display='none';document.getElementById('ok').style.display='block'}else{b.disabled=false;b.textContent='Sair da lista';if(j.motivo==='link')x.style.display='block';else e.focus()}}catch{b.disabled=false;b.textContent='Tentar de novo'}}
 </script>
-<script src="/js/anima.js" defer></script>
+<script src="/js/anima.js?v=20261109" defer></script>
 </body></html>

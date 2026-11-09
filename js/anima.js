@@ -6,7 +6,7 @@
   if (window.__kmv) return; window.__kmv = 1;
   var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // 09/11/2026 (Alex: "no mobile deixa mais suave possível, menos pesado possível"): no celular nada de desfoque,
-  // vidro fosco, zoom e brilho infinitos; título entra inteiro; o que está fora da tela só é calculado quando chega perto.
+  // vidro fosco, zoom e brilho infinitos; título entra inteiro; (content-visibility saiu: no iPhone deixava espaço em branco e a página pulava).
   var leve = matchMedia('(max-width: 900px)').matches || !!(navigator.connection && navigator.connection.saveData);
   if (leve) {
     var lv = document.createElement('style');
@@ -17,8 +17,7 @@
       '.kmv-btn::after{display:none!important}',
       '.kmv-br{animation:none!important}',
       '.kmv-h{opacity:0;transform:translateY(18px);transition:opacity .6s ease-out,transform .6s ease-out}.kmv-h.kmv-on{opacity:1;transform:none}',
-      '.kmv-in{transform:translateY(22px)!important;transition:opacity .6s ease-out,transform .6s ease-out!important}.kmv-in.kmv-on{transform:none!important}',
-      'main>section:nth-of-type(n+3),body>section:nth-of-type(n+3){content-visibility:auto;contain-intrinsic-size:auto 900px}'
+      '.kmv-in{transform:translateY(22px)!important;transition:opacity .6s ease-out,transform .6s ease-out!important}.kmv-in.kmv-on{transform:none!important}'
     ].join('');
     document.head.appendChild(lv);
   }

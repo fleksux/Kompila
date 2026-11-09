@@ -593,6 +593,8 @@ html.guias h1,html.guias h2,html.guias h3,html.guias p,html.guias a.btn{outline:
 .sc-cap .n{font:600 11px var(--mono);letter-spacing:.04em;color:#2fd67b;background:rgba(47,214,123,.12);padding:4px 8px;border-radius:999px;white-space:nowrap}
 .sc-cap p{margin:0;color:#fff;font-size:15px;line-height:1.35;min-height:2.7em;display:flex;align-items:center;opacity:1;transition:opacity .25s}
 .sc-cap p.out{opacity:0}
+/* 09/11/2026 (Alex: "a div aumenta e baixa e o site todo se movimenta"): no celular a legenda reserva 3 linhas e não muda de altura */
+@media(max-width:700px){.sc-cap p{min-height:4.1em}}
 .sc-cap .pp{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
 .sc-cap .pp svg{width:16px;height:16px;fill:#fff}.sc-cap .pp .ic-play{display:none}.sc-cap.paused .pp .ic-play{display:block}.sc-cap.paused .pp .ic-pause{display:none}
 .sc-cap .cta{grid-column:1/-1;justify-self:start;visibility:hidden;display:inline-block;font-size:14px;font-weight:600;color:#2fd67b;text-decoration:none}
@@ -1680,6 +1682,6 @@ dots.forEach(function(d,i){d.style.cursor='pointer';d.addEventListener('click',f
 <script src="https://crm.kompila.com.br/acessos.js" data-chave="kmp_kompila" defer></script>
 <script src="https://crm.kompila.com.br/medicao.js" data-ga="G-L4B7092014" defer></script>
 <script src="/js/pixel.js?v=3" defer></script>
-<script src="/js/anima.js" defer></script>
+<script src="/js/anima.js?v=20261109" defer></script>
 </body>
 </html>
