@@ -31,6 +31,7 @@ PAGINAS = {
     'cases/index.html': ('../', '../'),
     'trafego/index.html': ('../', '../'),
     'blog/index.html': ('../', '../'),
+    'blog/noticias/brasil-usa-ia-mas-nao-otimiza-processos/index.html': ('../../../', '../../../'),
     'blog/noticias/claude-fable-5-2-mais-barato/index.html': ('../../../', '../../../'),
     'blog/noticias/sebrae-51-por-cento-pequenos-negocios-ia/index.html': ('../../../', '../../../'),
     'blog/noticias/chatgpt-transforma-foto-em-gif/index.html': ('../../../', '../../../'),
