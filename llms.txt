@@ -63,3 +63,8 @@
 - Contabilidade na era da IA: 10 coisas que já rodam sozinhas num escritório contábil, com dados do Sebrae e fonte. https://kompila.com.br/blog/contabilidade-na-era-da-ia/
 - Academia na era da IA: 10 coisas que já rodam sozinhas numa academia, com dados do Sebrae e fonte. https://kompila.com.br/blog/academia-na-era-da-ia/
 - E-commerce na era da IA: 10 coisas que já rodam sozinhas num e-commerce, com dados do Sebrae e fonte. https://kompila.com.br/blog/ecommerce-na-era-da-ia/
+
+## Notícias de IA pra empresa
+- Claude Fable 5.2 ficou 20% mais barato (09/11/2026): https://kompila.com.br/blog/noticias/claude-fable-5-2-mais-barato/
+- Sebrae: 51% dos pequenos negócios já usam IA no marketing (09/11/2026): https://kompila.com.br/blog/noticias/sebrae-51-por-cento-pequenos-negocios-ia/
+- ChatGPT transforma foto em GIF, Images 2.6 (04/11/2026): https://kompila.com.br/blog/noticias/chatgpt-transforma-foto-em-gif/
