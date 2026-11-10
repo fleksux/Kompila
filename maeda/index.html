@@ -128,11 +128,29 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .kit ul{list-style:none;font-size:14px;color:var(--cinza);margin:6px 0}
 .kit li{padding:4px 0;border-top:1px dashed var(--linha)}
 
+/* complementos: janela no meio da tela depois de adicionar */
+.oferta .rola{padding:12px 16px 4px}
+.oferta .ok-add{display:flex;align-items:center;gap:10px;font-size:14px;margin-bottom:10px;color:var(--cinza)}
+.oferta .ok-add i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ouro-escuro);color:#fff;font-style:normal;display:grid;place-items:center;font-size:14px}
+.oferta .sug{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;background:#fff;border:1px solid var(--linha);padding:6px 8px 6px 6px;margin-bottom:6px}
+.oferta .sug.sem-f{grid-template-columns:minmax(0,1fr) auto;padding-left:12px}
+.oferta .sug .f{width:48px;height:48px;overflow:hidden;background:var(--fundo)}
+.oferta .sug .f img{width:100%;height:100%;object-fit:cover}
+.oferta .sug b{display:block;font-size:14px;font-weight:600;line-height:1.3}
+.oferta .sug small{font-size:14px;font-weight:600;color:var(--ouro-escuro)}
+.oferta .sug .btn-add{height:36px;padding:0 10px;font-size:12.5px}
+.oferta footer{display:grid;gap:6px}
+.oferta footer .add{height:48px;margin:0}
+.oferta header h3{font-size:17px;line-height:1.25;padding:10px 0}
+.oferta header{height:auto;min-height:var(--hdr)}
+.oferta .seg{width:100%;height:44px;font-size:15px;font-weight:600;color:var(--ouro-escuro);box-shadow:inset 0 0 0 1.5px var(--ouro-escuro);background:#fff}
+.oferta .nao{font-size:14px;color:var(--cinza);text-decoration:underline;text-underline-offset:3px;padding:6px}
+
 /* pedido */
 .veu{position:fixed;inset:0;z-index:60;background:rgba(20,20,18,.5);opacity:0;pointer-events:none;transition:opacity .25s}
 .veu.on{opacity:1;pointer-events:auto}
-.folha{position:fixed;z-index:70;top:0;right:0;height:100%;width:min(460px,100%);background:var(--fundo);transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
-.folha.on{transform:none}
+.folha{position:fixed;z-index:70;top:50%;left:50%;width:min(520px,calc(100% - 24px));max-height:calc(100dvh - 24px);background:var(--fundo);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(20,20,18,.35);transform:translate(-50%,-50%) scale(.96);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s;display:flex;flex-direction:column}
+.folha.on{transform:translate(-50%,-50%);opacity:1;visibility:visible}
 .folha header{flex:none;height:var(--hdr);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fff;color:var(--tinta);border-bottom:1px solid var(--linha)}
 .folha header h3{font:600 18px var(--sans)}
 .folha header button{font-size:15px;font-weight:600;color:var(--ouro-escuro);padding:8px}
@@ -297,9 +315,6 @@ h1,h2{font-feature-settings:"lnum" 1}
 .pacs .pac{transition:opacity .4s,filter .4s,transform .3s}
 .btn-add,.add,.cats a,.aba,.btn-ped{transition:background .2s,color .2s,box-shadow .2s,border-color .2s}
 @media (max-width:600px){
-  .folha{top:auto;bottom:0;height:92%;width:100%;transform:translateY(100%);border-radius:18px 18px 0 0;overflow:hidden;transition:transform .45s cubic-bezier(.22,.61,.36,1)}
-  .folha header{border-radius:18px 18px 0 0;position:relative}
-  .folha header::before{content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);width:40px;height:4px;border-radius:4px;background:var(--linha)}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.surge{opacity:1;transform:none}}
 </style>
@@ -370,6 +385,7 @@ h1,h2{font-feature-settings:"lnum" 1}
 
 <div class="veu" id="veu"></div>
 <aside class="folha" id="pedido" role="dialog" aria-label="Meu pedido" aria-hidden="true"></aside>
+<aside class="folha oferta" id="oferta" role="dialog" aria-label="Complementos" aria-hidden="true"></aside>
 <div class="luz" id="luz" role="dialog" aria-label="Foto"><button data-fecha-luz>Fechar</button><img alt=""><p></p></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -419,8 +435,8 @@ const descHTML = d => !d ? '' : d.length > 90 ? `<p class="d clamp">${esc(d)}</p
 function pratoHTML(i, sid) {
   const mini = i.f ? `<button class="mini" data-luz="img/${i.f}" data-leg="${esc(i.n)}" aria-label="Ver foto de ${esc(i.n)}"><img src="img/${i.f}" alt="" loading="lazy"><i>${icCam}</i></button>` : ''
   let fim
-  if (i.v) fim = `<div class="vars">${i.v.map(([r, p]) => { const k = reg(`${sid}:${i.n}:${r}`, { n: i.n, det: r, p, min: i.min }); return `<div class="var"><span class="rot">${esc(r)}</span><span class="preco">${brl(p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }).join('')}</div>`
-  else { const k = reg(`${sid}:${i.n}`, { n: i.n, det: i.d && i.d.length < 30 ? i.d : '', p: i.p, min: i.min }); fim = `<div class="rodape-p"><span class="preco">${brl(i.p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }
+  if (i.v) fim = `<div class="vars">${i.v.map(([r, p]) => { const k = reg(`${sid}:${i.n}:${r}`, { n: i.n, det: r, p, min: i.min, f: i.f }); return `<div class="var"><span class="rot">${esc(r)}</span><span class="preco">${brl(p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }).join('')}</div>`
+  else { const k = reg(`${sid}:${i.n}`, { n: i.n, det: i.d && i.d.length < 30 ? i.d : '', p: i.p, min: i.min, f: i.f }); fim = `<div class="rodape-p"><span class="preco">${brl(i.p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }
   return `<article class="prato"><div class="topo-p">${mini}<div class="n">${esc(i.n)}</div></div>${descHTML(i.d)}${fim}</article>`
 }
 const grupoHTML = (g, sid) => `${g.t ? `<div class="grupo-t">${esc(g.t)}${g.nota ? `<small>${esc(g.nota)}</small>` : ''}</div>` : ''}<div class="lista">${g.itens.map(i => pratoHTML(i, sid)).join('')}</div>`
@@ -432,7 +448,7 @@ $('#pacs').innerHTML = pacs.map(p => {
   // cada 'ou' abre uma escolha e os 'alt' seguintes entram nela (o pacote 5 tem duas)
   const sets = []; p.grupos.forEach(([t, it]) => it.forEach(x => { if (x[3] === 'ou') sets.push({ t, ops: [x[0]] }); else if (x[3] === 'alt' && sets.length) sets[sets.length - 1].ops.push(x[0]) }))
   const temOu = sets.length > 0
-  const k = temOu ? `natal:${p.id}` : reg(`natal:${p.id}`, { n: `Natal · ${p.n}`, det: p.pessoas, p: p.p })
+  const k = temOu ? `natal:${p.id}` : reg(`natal:${p.id}`, { n: `Natal · ${p.n}`, det: p.pessoas, p: p.p, f: p.foto })
   const curto = n => n.split(/,| marinad| assad| com miolo/)[0]
   if (temOu) {
     ESC[k] = sets
@@ -535,10 +551,29 @@ function add(k) {
   }
   const it = CAT[k]; if (!it) return
   pedido[k] = (pedido[k] || 0) + (pedido[k] ? 1 : (it.min || 1))
-  salva(); marca(); toast(`${it.n} no pedido`)
+  salva(); marca()
   if (window.fbq) fbq('track', 'AddToCart', { value: it.p, currency: 'BRL' })
-  voa(origem)
+  // 10/11 (Alex): toda escolha pergunta na tela. Natal oferece a Rotisserie; Rotisserie oferece a ceia de Natal.
+  if (origem && origem.closest('#oferta')) return
+  oferta(k)
 }
+const SUG = {
+  natal: ['grazing:Grazing Table:4 pessoas', 'entradinhas:Brie folhado padrão com favo de mel e nuts caramelizados', 'beliscar:Mini salgados assados', 'guarnicoes:Salpicão de frango', 'sobremesas:Original cheesecake de frutas vermelhas'],
+  rotisserie: ['natal:pacote-1', 'natal-avulso:Peito de peru marinado', 'natal-avulso:Tender bolinha assado com mel, laranja e especiarias', 'natal-avulso:Pavê de abacaxi com coco']
+}
+function oferta(k) {
+  const deNatal = k.startsWith('natal'), it = CAT[k]
+  const lista = (deNatal ? SUG.natal : SUG.rotisserie).filter(x => CAT[x] && x !== k)
+  const titulo = deNatal ? 'Escolher complementos da Rotisserie' : 'Escolha itens para sua ceia de Natal'
+  $('#oferta').innerHTML = `<header><h3>${titulo}</h3><button data-fecha-oferta aria-label="Fechar">Fechar</button></header>
+    <div class="rola"><div class="ok-add"><i>✓</i><span><b>${esc(it.n)}</b> está no seu pedido.</span></div>
+    ${lista.map(x => { const s = CAT[x]; return `<div class="sug${s.f ? '' : ' sem-f'}">${s.f ? `<div class="f"><img src="img/${s.f}" alt="" loading="lazy"></div>` : ''}<div><b>${esc(s.n)}</b><small>${brl(s.p)}${s.det && s.det.length < 20 ? ' · ' + esc(s.det) : ''}</small></div><button class="btn-add" data-add="${esc(x)}">Adicionar</button></div>` }).join('')}</div>
+    <footer><button class="add" data-ir-pedido>Fechar meu pedido</button><button class="seg" data-ir-aba="${deNatal ? 'rotisserie' : 'natal'}">${deNatal ? 'Ver toda a Rotisserie' : 'Ver a ceia de Natal'}</button><button class="nao" data-fecha-oferta>Continuar escolhendo</button></footer>`
+  marca()
+  $('#toast').classList.remove('on')
+  $('#oferta').classList.add('on'); $('#oferta').setAttribute('aria-hidden', 'false'); $('#veu').classList.add('on'); document.body.style.overflow = 'hidden'
+}
+function fechaOferta() { $('#oferta').classList.remove('on'); $('#oferta').setAttribute('aria-hidden', 'true'); if (!$('#pedido').classList.contains('on')) { $('#veu').classList.remove('on'); document.body.style.overflow = '' } }
 function voa(de) {
   if (!de || matchMedia('(prefers-reduced-motion: reduce)').matches) return
   de.classList.remove('pop'); void de.offsetWidth; de.classList.add('pop')
@@ -610,14 +645,18 @@ function fecha() { lerForm(); $('#pedido').classList.remove('on'); $('#pedido').
 document.addEventListener('click', e => {
   const o = e.target.closest('[data-opc]')
   if (o) { o.parentElement.querySelectorAll('.opc').forEach(x => x.classList.toggle('on', x === o)); o.closest('.esc-set').querySelector('p').classList.remove('falta'); return }
-  const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-ver],[data-abre-pedido],[data-fecha],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
+  const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-ver],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
   if (!t) { if (e.target.id === 'luz') $('#luz').classList.remove('on'); return }
   if (t.matches('[data-add]')) { origem = t; return add(t.dataset.add) }
   if (t.matches('[data-ler]')) { const d = t.previousElementSibling, ab = d.classList.toggle('aberto'); t.textContent = ab ? 'Ler menos' : 'Ler mais'; return }
   if (t.matches('[data-kit]')) { const ul = t.previousElementSibling, ab = ul.classList.toggle('aberto'); t.textContent = ab ? 'Ver menos' : `Ver os ${ul.children.length} itens`; return }
   if (t.matches('[data-ver]')) { const c = t.nextElementSibling, on = c.classList.toggle('on'); t.setAttribute('aria-expanded', on); t.classList.toggle('on', on); t.firstChild.textContent = on ? 'Fechar composição ' : 'Ver composição '; return }
   if (t.matches('[data-abre-pedido]')) return abre()
-  if (t.matches('[data-fecha],#veu')) return fecha()
+  if (t.matches('[data-fecha-oferta]')) return fechaOferta()
+  if (t.matches('[data-ir-pedido]')) { fechaOferta(); return abre() }
+  if (t.matches('[data-ir-aba]')) { fechaOferta(); location.hash = t.dataset.irAba; return }
+  if (t.matches('#veu')) { if ($('#oferta').classList.contains('on')) return fechaOferta(); return fecha() }
+  if (t.matches('[data-fecha]')) return fecha()
   if (t.matches('[data-q]')) { lerForm(); const k = t.dataset.q, it = CAT[k]; let q = (pedido[k] || 0) + +t.dataset.d; if (it.min && q > 0 && q < it.min) q = +t.dataset.d < 0 ? 0 : it.min; if (q <= 0) delete pedido[k]; else pedido[k] = q; salva(); marca(); return desenha() }
   if (t.matches('[data-luz]')) { const l = $('#luz'); $('img', l).src = t.dataset.luz; $('p', l).textContent = t.dataset.leg; return l.classList.add('on') }
   if (t.matches('[data-fecha-luz]')) return $('#luz').classList.remove('on')
