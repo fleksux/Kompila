@@ -14,8 +14,9 @@
 - CRM com IA pra vender pelo WhatsApp: junta numa tela o WhatsApp oficial, o Instagram, o Facebook e os pixels dos anúncios.
 - Mostra quem atendeu, quem ficou sem resposta e de qual anúncio veio cada venda; devolve a conversão pra Meta Ads e Google Ads.
 - Pipeline com as fases da venda de cada empresa; cada empresa num espaço isolado.
-- Preço: depende do escopo, escrito antes, com data.
+- Preço: CRM com a IA organizando a partir de R$ 578/mês; com a Liz atendendo e operando (WhatsApp, Instagram) a partir de R$ 2.000/mês.
 - Página: https://kompila.com.br/crm/
+- Por segmento: equipe de vendas (caso P1LED, CRM e app de orçamentos) https://kompila.com.br/crm/crm-para-equipe-de-vendas/ ; buffet, casamento e evento corporativo (caso Maeda) https://kompila.com.br/crm/atendimento-por-ia-para-buffet/ ; loja de moda feminina (Maslu e Espaço Analu) https://kompila.com.br/crm/atendimento-whatsapp-loja-de-moda/
 
 ## kompila .pedidos (sistema de pedidos pra restaurante e lanchonete)
 - WhatsApp, balcão, salão, telefone e cardápio online caem num quadro só (em produção, na rua, pronto).

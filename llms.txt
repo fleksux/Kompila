@@ -14,6 +14,9 @@
 ## Produtos
 - IA de atendimento e CRM: a Liz atende, qualifica e move o pipeline. https://kompila.com.br/chatbot/
 - kompila .crm: a Liz atendendo + o CRM. https://kompila.com.br/crm/
+- CRM com IA para equipe de vendas (caso P1LED, CRM e app de orçamentos): https://kompila.com.br/crm/crm-para-equipe-de-vendas/
+- Atendimento por IA para buffet, casamento e evento corporativo (caso Maeda): https://kompila.com.br/crm/atendimento-por-ia-para-buffet/
+- Atendimento por IA no WhatsApp para loja de moda feminina (Maslu e Espaço Analu): https://kompila.com.br/crm/atendimento-whatsapp-loja-de-moda/
 - kompila .pedidos: sistema de pedidos para restaurante e lanchonete. WhatsApp, balcão, salão, telefone e cardápio online num quadro só; a Liz responde o cliente no WhatsApp, inclusive o status do pedido; comanda impressa na cozinha; motoboy confirma a entrega com código. Sem taxa por pedido. https://kompila.com.br/pedidos/
 - Sistema de pedidos para lanchonete: https://kompila.com.br/pedidos/sistema-de-pedidos-para-lanchonete/
 - Cardápio digital sem comissão: https://kompila.com.br/pedidos/cardapio-digital-sem-comissao/
