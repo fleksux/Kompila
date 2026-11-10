@@ -43,8 +43,25 @@
 <script>
   var APP = '2248152579306460', CONFIG = '1084583623978524';
   var res = document.getElementById('resultado'), btn = document.getElementById('conectar');
-  var sessao = {};
+  var sessao = {}, codigo = '', ligado = false;
   function mostra(classe, html) { res.className = 'cartao ' + classe; res.innerHTML = html; }
+  // 10/11/2026: no fim da conexão, o servidor inscreve o app Kompila na conta nova (antes era à mão e as mensagens não chegavam)
+  function ligar() {
+    if (ligado || !sessao.waba_id) return;
+    ligado = true;
+    mostra('ok', '<p><b>Conectado.</b> Ligando o número no CRM da Kompila…</p>');
+    fetch('https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/wa_conectar', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: codigo, waba_id: sessao.waba_id, phone_number_id: sessao.phone_number_id }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var n = j.numero || {};
+        if (j.inscrito) mostra('ok', '<p><b>Pronto. O número já está ligado no CRM da Kompila.</b> Avise a Kompila.</p>' +
+          '<p><code>' + (n.telefone || '') + ' ' + (n.nome || '') + '<br>WABA: ' + sessao.waba_id + '<br>Número (ID): ' + (sessao.phone_number_id || '-') + '</code></p>');
+        else mostra('erro', '<p><b>Conectado na Meta, mas o CRM ainda não recebe.</b> Avise a Kompila com estes dados:</p>' +
+          '<p><code>WABA: ' + sessao.waba_id + '<br>Número (ID): ' + (sessao.phone_number_id || '-') + '<br>' + (j.erro || '') + '</code></p>');
+      })
+      .catch(function () { mostra('erro', '<p><b>Conectado na Meta, mas não consegui avisar o CRM.</b> Avise a Kompila: WABA ' + sessao.waba_id + '</p>'); });
+  }
 
   window.addEventListener('message', function (ev) {
     if (!/facebook\.com$/.test(new URL(ev.origin).hostname)) return;
@@ -53,8 +70,8 @@
       if (d.type !== 'WA_EMBEDDED_SIGNUP') return;
       sessao = d.data || {};
       if (/FINISH/.test(d.event)) {
-        mostra('ok', '<p><b>Conectado.</b> Avise a Kompila. Dados da conexão:</p>' +
-          '<p><code>WABA: ' + (sessao.waba_id || '-') + '<br>Número (ID): ' + (sessao.phone_number_id || '-') + '<br>Evento: ' + d.event + '</code></p>');
+        mostra('ok', '<p><b>Conectado.</b> Ligando o número no CRM da Kompila…</p>');
+        setTimeout(ligar, codigo ? 0 : 4000);   // espera o code do login chegar; sem ele o servidor usa o robô
       } else if (d.event === 'CANCEL') {
         mostra('erro', '<p>Conexão interrompida na etapa: <code>' + (sessao.current_step || '-') + '</code>. Pode tentar de novo.</p>');
       } else if (d.event === 'ERROR') {
@@ -72,6 +89,7 @@
     btn.disabled = true;
     FB.login(function (r) {
       btn.disabled = false;
+      if (r.authResponse && r.authResponse.code) { codigo = r.authResponse.code; if (sessao.waba_id) ligar(); }
       if (!r.authResponse && !res.className.includes('ok')) mostra('erro', '<p>Login não concluído. Pode tentar de novo.</p>');
     }, {
       config_id: CONFIG,
