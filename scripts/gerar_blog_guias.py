@@ -244,7 +244,7 @@ def indice(todos):
                       f'<span class="bg-sobre"><span class="bg-rot">Guia · {e(nome(d))}</span><b>{tit}</b>{f"<small>{sub}</small>" if t in ("hero", "faixa") else ""}</span></a>')
     fecho = ('<div class="bg-t bg-t-cta rv"><div><span class="bg-rot">Não achou o seu ramo?</span><b>A Liz monta a lista do seu negócio com você.</b></div>'
               '<a class="bg-btn" data-liz href="#liz">Conversar com a Liz</a></div>')
-    return f'<!-- guias:inicio (gerado por scripts/gerar_blog_guias.py) -->\n<section class="bg-guias" id="guias"><div class="shell"><div class="dhead rv"><h1>O que eu faria se tivesse um negócio <em>na era da IA.</em></h1><p class="lead">Um guia por ramo, com 10 coisas que já dá pra deixar rodando sozinhas. Dados do Sebrae, com a fonte ao lado.</p></div><div class="bg-mosaico">{cards}</div>{fecho}</div></section>\n<!-- guias:fim -->'
+    return f'<!-- guias:inicio (gerado por scripts/gerar_blog_guias.py) -->\n<section class="bg-guias" id="guias"><div class="shell"><div class="dhead rv"><h2>O que eu faria se tivesse um negócio <em>na era da IA.</em></h2><p class="lead">Um guia por ramo, com 10 coisas que já dá pra deixar rodando sozinhas. Dados do Sebrae, com a fonte ao lado.</p></div><div class="bg-mosaico">{cards}</div>{fecho}</div></section>\n<!-- guias:fim -->'
 
 
 def main():

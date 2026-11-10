@@ -116,3 +116,7 @@
 
 /* 09/11/2026: link do produto certo em cada guia */
 .bg-prod{margin-top:14px;font-size:16px;line-height:1.6}.bg-prod a{color:#12803F;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+.bg-nav{padding:28px 0 0}.bg-nav .shell{display:flex;flex-wrap:wrap;gap:10px}.bg-nav a{font:600 15px/1 Inter,sans-serif;padding:11px 18px;border-radius:999px;background:#fff;border:1px solid var(--bg-linha);color:var(--bg-texto);text-decoration:none}.bg-nav a:first-child{background:var(--bg-carbono);color:#fff;border-color:var(--bg-carbono)}.bg-nav a:hover{border-color:var(--bg-verde-e)}
+#noticias,#guias,#dados,#faq{scroll-margin-top:90px}
+.bg-sobre .bg-tt{font-weight:700;font-size:20px;line-height:1.2}
