@@ -876,7 +876,8 @@ function lkSecao(e) {
 }
 // o que o robô logado leu por dentro do LinkedIn (conta separada no VPS)
 function lkRobo(r) {
-  if (!r || (!r.empresa && !r.pessoa && !(r.contatos || []).length)) return ''
+  const POR = { sem_tempo: 'O robô não coube no tempo desta vez. Pesquisa de novo que ele lê a página.', conta_bloqueada: 'A conta do robô no LinkedIn saiu. Me avisa que eu abro o login de novo.', teto_do_dia: 'O robô já leu o máximo de hoje. Amanhã ele volta.' }
+  if (!r || (!r.empresa && !r.pessoa && !(r.contatos || []).length)) return r?.motivo && POR[r.motivo] ? `<p class="fi-v">${POR[r.motivo]}</p>` : ''
   const em = r.empresa || {}, pe = r.pessoa || {}
   const lin = (t, v) => v ? `<div class="lk-p"><small>${esc(t)}</small><b>${esc(v)}</b></div>` : ''
   return `<div class="lk-l"><small class="lk-h">Lido por dentro do LinkedIn</small>
