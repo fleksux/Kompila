@@ -876,7 +876,7 @@ function lkSecao(e) {
 }
 // o que o robô logado leu por dentro do LinkedIn (conta separada no VPS)
 function lkRobo(r) {
-  const POR = { sem_tempo: 'O robô não coube no tempo desta vez. Pesquisa de novo que ele lê a página.', conta_bloqueada: 'A conta do robô no LinkedIn saiu. Me avisa que eu abro o login de novo.', teto_do_dia: 'O robô já leu o máximo de hoje. Amanhã ele volta.' }
+  const POR = { sem_tempo: 'O robô não coube no tempo desta vez. Pesquisa de novo que ele lê a página.', nao_organizou: 'O robô leu a página, mas não consegui organizar desta vez. Pesquisa de novo.', conta_bloqueada: 'A conta do robô no LinkedIn saiu. Me avisa que eu abro o login de novo.', teto_do_dia: 'O robô já leu o máximo de hoje. Amanhã ele volta.' }
   if (!r || (!r.empresa && !r.pessoa && !(r.contatos || []).length)) return r?.motivo && POR[r.motivo] ? `<p class="fi-v">${POR[r.motivo]}</p>` : ''
   const em = r.empresa || {}, pe = r.pessoa || {}
   const lin = (t, v) => v ? `<div class="lk-p"><small>${esc(t)}</small><b>${esc(v)}</b></div>` : ''
@@ -889,7 +889,7 @@ function lkLigar(root, e, depois) {
   root.querySelectorAll('[data-lk]').forEach(b => b.onclick = async () => {
     b.disabled = true
     consultaAbre({ tipo: 'lk', t: 'Pesquisando no LinkedIn', s: e.nome || '' })
-    try { const r = await chamar('linkedin', { empresa_id: e.id }); e.linkedin = r.linkedin; fimCarregando('lk'); depois() }
+    try { const r = await chamar('linkedin', { empresa_id: e.id }); Object.assign(e, r.novo || {}); e.linkedin = r.linkedin; fimCarregando('lk'); depois() }
     catch (er) { fimCarregando('lk'); b.disabled = false; liz(esc(er.message)) }
   })
 }
