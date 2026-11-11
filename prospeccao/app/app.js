@@ -876,14 +876,13 @@ function lkSecao(e) {
 }
 // o que o robô logado leu por dentro do LinkedIn (conta separada no VPS)
 function lkRobo(r) {
-  if (!r || (!r.empresa && !r.pessoa)) return ''
-  const em = r.empresa || {}, pe = r.pessoa || {}, at = (pe.experiences || [])[0] || {}
-  const lin = (t, v) => v ? `<div class="lk-p"><small>${t}</small><b>${esc(v)}</b></div>` : ''
-  const contatos = (pe.contacts || []).map(c => lin(c.label || c.type, c.value)).join('')
+  if (!r || (!r.empresa && !r.pessoa && !(r.contatos || []).length)) return ''
+  const em = r.empresa || {}, pe = r.pessoa || {}
+  const lin = (t, v) => v ? `<div class="lk-p"><small>${esc(t)}</small><b>${esc(v)}</b></div>` : ''
   return `<div class="lk-l"><small class="lk-h">Lido por dentro do LinkedIn</small>
-    ${lin('Setor', em.industry)}${lin('Tamanho', em.company_size)}${lin('Sede', em.headquarters)}${lin('Fundada', em.founded)}
-    ${pe.name ? lin('Quem decide', [pe.name, at.position_title].filter(Boolean).join(', ')) : ''}${lin('Onde mora', pe.location)}${contatos}
-    ${pe.about ? `<p class="fi-info">${esc(String(pe.about).slice(0, 600))}</p>` : ''}</div>`
+    ${lin('Setor', em.setor)}${lin('Tamanho', em.tamanho)}${lin('Sede', em.sede)}${lin('Fundada', em.fundada)}
+    ${pe.nome ? lin('Quem decide', [pe.nome, pe.cargo].filter(Boolean).join(', ')) : ''}${lin('Onde está', pe.local)}${(r.contatos || []).map(c => lin(c.de_quem || 'Contato', c.valor)).join('')}
+    ${pe.sobre ? `<p class="fi-info">${esc(String(pe.sobre).slice(0, 600))}</p>` : ''}</div>`
 }
 function lkLigar(root, e, depois) {
   root.querySelectorAll('[data-lk]').forEach(b => b.onclick = async () => {
