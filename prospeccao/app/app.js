@@ -857,12 +857,37 @@ function lvPintar() {
   })
 }
 
+/* ======================= LinkedIn e quem decide (11/11) ======================= */
+// a IA pesquisa na web: página da empresa, perfil de quem decide, telefone e e-mail públicos e o contexto
+function lkSecao(e) {
+  const l = e.linkedin
+  if (!l) return `<p class="fi-v">Procura a página da empresa no LinkedIn, o perfil de quem decide, telefone e e-mail públicos e um resumo pra puxar conversa. Leva até 1 minuto.</p><button class="btn go sm" data-lk>Pesquisar LinkedIn</button>`
+  const host = u => { try { return new URL(u).hostname.replace(/^www\./, '') } catch { return 'fonte' } }
+  const fonte = u => `<a class="lk-f" href="${esc(u)}" target="_blank" rel="noopener">${esc(host(u))}</a>`
+  const pessoas = (l.pessoas || []).map(p => `<div class="lk-p"><b>${p.linkedin ? `<a href="${esc(p.linkedin)}" target="_blank" rel="noopener">${esc(p.nome)}</a>` : esc(p.nome)}</b>${p.cargo ? `<small>${esc(p.cargo)}</small>` : ''}${fonte(p.fonte)}</div>`).join('')
+  const cont = (l.telefones || []).concat(l.emails || []).map(c => `<div class="lk-p"><b>${esc(c.valor)}</b>${c.de_quem ? `<small>${esc(c.de_quem)}</small>` : ''}${fonte(c.fonte)}</div>`).join('')
+  return `${l.contexto ? `<p class="fi-info">${esc(l.contexto)}</p>` : ''}
+    ${l.empresa_linkedin ? `<a class="fi-c lk-emp" href="${esc(l.empresa_linkedin)}" target="_blank" rel="noopener"><b>Página no LinkedIn</b><span>${esc([l.funcionarios, l.empresa_resumo].filter(Boolean).join(' · ') || 'Abrir')}</span></a>` : '<p class="fi-v">Não achei a página da empresa no LinkedIn.</p>'}
+    ${pessoas ? `<div class="lk-l"><small class="lk-h">Quem decide</small>${pessoas}</div>` : ''}
+    ${cont ? `<div class="lk-l"><small class="lk-h">Contatos achados</small>${cont}</div>` : ''}
+    ${!pessoas && (l.socios_receita || []).length ? `<p class="fi-v">Sócios na Receita: ${esc(l.socios_receita.join('; '))}. Não achei o perfil deles.</p>` : ''}
+    <div class="lk-r"><small>Pesquisado em ${new Date(l.pesquisado_em).toLocaleDateString('pt-BR')}</small><button class="btn line sm" data-lk>Pesquisar de novo</button></div>`
+}
+function lkLigar(root, e, depois) {
+  root.querySelectorAll('[data-lk]').forEach(b => b.onclick = async () => {
+    b.disabled = true
+    consultaAbre({ tipo: 'lk', t: 'Pesquisando no LinkedIn', s: e.nome || '' })
+    try { const r = await chamar('linkedin', { empresa_id: e.id }); e.linkedin = r.linkedin; fimCarregando('lk'); depois() }
+    catch (er) { fimCarregando('lk'); b.disabled = false; liz(esc(er.message)) }
+  })
+}
+
 /* ======================= ficha da empresa: tudo que o Maps entrega ======================= */
 let fichaAberta = null
 async function abrirFichaMaps(d, empilhar = true) {
   fichaAberta = d
   const e = empNorm(d.empresa) || {}, x = e.google_extra || {}
-  const { data: extra } = await sb.from('empresas').select('info, fotos').eq('id', e.id).maybeSingle()
+  const { data: extra } = await sb.from('empresas').select('info, fotos, linkedin').eq('id', e.id).maybeSingle()
   if (extra) Object.assign(e, extra)
   const fotosE = await enrFotosUrl(Array.isArray(e.fotos) ? e.fotos : [])
   const { data: avs } = await sb.from('avaliacoes').select('estrelas, texto, publicada_em, autor, autor_link, tempo').eq('empresa_id', e.id).order('publicada_em', { ascending: false, nullsFirst: false }).limit(20)
@@ -896,12 +921,14 @@ async function abrirFichaMaps(d, empilhar = true) {
     ${sec('Horários', horas)}
     ${sec('O que oferece', etiquetas(x.oferece))}${sec('Pagamento', etiquetas(x.pagamento))}${sec('Estacionamento', etiquetas(x.estacionamento))}${sec('Acessibilidade', etiquetas(x.acessibilidade))}
     ${sec('Dados da empresa', enrDados(e))}
+    ${sec('LinkedIn e quem decide', lkSecao(e))}
     ${sec(`Avaliações${lista ? ` <small>O Google mostra até 5 por empresa</small>` : ''}`, lista || '<p class="fi-v">Nenhuma avaliação trazida ainda.</p>')}
     <div class="fi-g">Dados do Google Maps</div></div>`
   $('capX').onclick = fecharCapivara
   $('cap').querySelectorAll('[data-zap]').forEach(b => b.onclick = () => abrirConversas(true, b.dataset.zap))
   const fiDepois = () => { abrirFichaMaps(d, false); if (LV.todos?.length && $('lvG')) lvPintar() }
   ligarEnr($('cap'), e, fiDepois)
+  lkLigar($('cap'), e, fiDepois)
   $('cap').querySelectorAll('[data-enr-add]').forEach(b => b.onclick = () => enrAbrir(e, fiDepois))
   if ($('fiAdd')) $('fiAdd').onclick = async ev => { ev.currentTarget.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { ev.currentTarget.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); abrirFichaMaps(d, false) }
   if ($('fiBaixar')) $('fiBaixar').onclick = async () => {
