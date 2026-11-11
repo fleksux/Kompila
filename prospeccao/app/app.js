@@ -165,8 +165,8 @@ const LK_TAM = [['1-10', 'Até 10'], ['11-50', '11 a 50'], ['51-200', '51 a 200'
 function lkPergunta() {
   const tam = new Set()
   $('askc').innerHTML = `<div class="stp">LinkedIn</div><h2>O que eu procuro no <em>LinkedIn</em>?</h2>
-    <div class="fld"><input type="text" id="lkT" placeholder="Ex: transportadora, indústria de embalagem, escola de idiomas" autocomplete="off"></div>
-    <div class="fld lk-fld"><input type="text" id="lkL" placeholder="Cidade ou estado (opcional, vazio = Brasil todo)" autocomplete="off"></div>
+    <div class="fld"><input type="text" id="lkT" placeholder="Ex: transportadora, indústria, escola" autocomplete="off"></div>
+    <div class="fld lk-fld"><input type="text" id="lkL" placeholder="Cidade ou estado (vazio = Brasil todo)" autocomplete="off"></div>
     <div class="lk-tl">Tamanho da empresa <small>opcional</small></div>
     <div class="sg lk-tam">${LK_TAM.map(([v, t]) => `<button type="button" data-v="${v}" aria-pressed="false">${t}</button>`).join('')}</div>
     <div class="err" id="lkE"></div>
