@@ -22,6 +22,7 @@ const IC = {
   ext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg>',
   eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  mala: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></svg>',
   arq: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 14l3-3 3 3M12 11v6"/></svg>',
 }
 const star = on => `<svg viewBox="0 0 24 24" fill="${on ? '#F5B83D' : '#E1E1DC'}"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z"/></svg>`
@@ -127,7 +128,8 @@ function pergunta(passo) {
     <div class="fld"><input type="text" id="aq" placeholder="${q.ph}" autocomplete="off"><button class="btn go lg" id="ab">${q.bt}</button></div>
     <div class="err" id="ae"></div><div class="sg">${q.sg.map(x => `<button>${x}</button>`).join('')}</div>
     ${passo === 2 ? `<div class="mds-s" id="mdS">${saldoDepois()}</div>` : ''}
-    ${passo === 1 ? `<div class="ou">ou</div><div class="drop" id="drop"><div class="di">${IC.arq}</div><div><b>Sobe uma lista</b><small>Excel ou CSV com empresa, site ou cidade. Conta pessoal eu descarto.</small></div></div>` : ''}`
+    ${passo === 1 ? `<div class="ou">ou</div><div class="drop" id="drop"><div class="di">${IC.arq}</div><div><b>Sobe uma lista</b><small>Excel ou CSV com empresa, site ou cidade. Conta pessoal eu descarto.</small></div></div>
+      <div class="drop" id="lkB"><div class="di">${IC.mala}</div><div><b>Buscar no LinkedIn</b><small>Escreve o que procura, do seu jeito. Cidade, estado e tamanho da empresa são opcionais.</small></div></div>` : ''}`
   const aq = $('aq'); if (!mob()) aq.focus()
   const vai = v => {
     v = (v || '').trim()
@@ -139,6 +141,7 @@ function pergunta(passo) {
   aq.onkeydown = e => { if (e.key === 'Enter') vai(aq.value) }
   $('askc').querySelectorAll('.sg button').forEach(b => b.onclick = () => vai(b.textContent))
   if (false) $('askc').querySelectorAll('.md').forEach(b => b.onclick = () => { esc_.modo = b.dataset.m; $('askc').querySelectorAll('.md').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b) }); $('mdS').innerHTML = saldoDepois() })
+  if ($('lkB')) $('lkB').onclick = lkPergunta
   const dr = $('drop')
   if (dr) {
     dr.onclick = () => $('arq').click()
@@ -155,6 +158,43 @@ function saldoDepois() {
 }
 function fecharPergunta() { $('ask').classList.add('bye'); setTimeout(() => $('ask').hidden = true, 700); document.body.classList.remove('fora') }
 const hora = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' }
+
+/* ======================= busca no LinkedIn (11/11) ======================= */
+// começa pelo LinkedIn: termo livre + lugar e tamanho opcionais. O robô lê a busca e a lista vai pro importar.
+const LK_TAM = [['1-10', 'Até 10'], ['11-50', '11 a 50'], ['51-200', '51 a 200'], ['201-500', '201 a 500'], ['501-1000', '501 a 1.000'], ['1001-5000', 'Mais de 1.000']]
+function lkPergunta() {
+  const tam = new Set()
+  $('askc').innerHTML = `<div class="stp">LinkedIn</div><h2>O que eu procuro no <em>LinkedIn</em>?</h2>
+    <div class="fld"><input type="text" id="lkT" placeholder="Ex: transportadora, indústria de embalagem, escola de idiomas" autocomplete="off"></div>
+    <div class="fld lk-fld"><input type="text" id="lkL" placeholder="Cidade ou estado (opcional, vazio = Brasil todo)" autocomplete="off"></div>
+    <div class="lk-tl">Tamanho da empresa <small>opcional</small></div>
+    <div class="sg lk-tam">${LK_TAM.map(([v, t]) => `<button type="button" data-v="${v}" aria-pressed="false">${t}</button>`).join('')}</div>
+    <div class="err" id="lkE"></div>
+    <div class="lk-ac"><button class="btn line" id="lkV">Voltar</button><button class="btn go lg" id="lkG">Buscar no LinkedIn</button></div>`
+  if (!mob()) $('lkT').focus()
+  $('askc').querySelectorAll('.lk-tam button').forEach(b => b.onclick = () => { const v = b.dataset.v; tam.has(v) ? tam.delete(v) : tam.add(v); b.classList.toggle('on', tam.has(v)); b.setAttribute('aria-pressed', tam.has(v)) })
+  $('lkV').onclick = () => pergunta(1)
+  const vai = () => {
+    const termo = $('lkT').value.trim()
+    if (!termo) { $('lkE').textContent = 'Me fala o que procurar.'; $('lkT').focus(); return }
+    fecharPergunta(); lkBuscar(termo, $('lkL').value.trim(), [...tam])
+  }
+  $('lkG').onclick = vai
+  ;[$('lkT'), $('lkL')].forEach(i => i.onkeydown = e => { if (e.key === 'Enter') vai() })
+}
+async function lkBuscar(termo, lugar, tamanhos) {
+  const onde = lugar ? ` em ${lugar}` : ' no Brasil'
+  consultaAbre({ tipo: 'lk', t: `Procurando ${termo}${onde} no LinkedIn`, s: 'O robô lê duas páginas do LinkedIn. Leva até 1 minuto.' })
+  vivo(true, 'Liz procurando')
+  try {
+    const r = await chamar('linkedin_busca', { termo, lugar, tamanhos })
+    fimCarregando('lk')
+    const lista = r.empresas || []
+    if (!lista.length) { vivo(false, 'Liz parada'); liz(`O LinkedIn não trouxe ${esc(termo)}${esc(onde)}. Tenta outra palavra ou tira um filtro.`, 8000); return pergunta(1) }
+    // o local do LinkedIn vira a cidade pra achar cada uma no Google Maps
+    await rodarLista(`LinkedIn: ${termo}${lugar ? ' · ' + lugar : ''}`.slice(0, 80), lista.slice(0, 50).map(e => ({ nome: e.nome, cidade: e.local || lugar || '' })))
+  } catch (e) { fimCarregando('lk'); vivo(false, 'Liz parada'); liz(esc(e.message), 8000); pergunta(1) }
+}
 
 /* ======================= lista (Excel/CSV) ======================= */
 $('arq').onchange = e => { if (e.target.files[0]) lerArquivo(e.target.files[0]); e.target.value = '' }

@@ -1403,3 +1403,10 @@ a.fi-c{text-decoration:none;color:inherit}
 .lk-p small{color:var(--mu)}
 .lk-f{margin-left:auto;font-size:12px;color:var(--mu2)!important}
 .lk-r{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;color:var(--mu2)}
+/* busca no LinkedIn (11/11) */
+#lkB{margin-top:10px}
+.lk-fld{margin-top:10px}
+.lk-tl{margin-top:16px;font-size:13px;font-weight:600}
+.lk-tl small{font-weight:400;color:var(--mu);margin-left:6px}
+.lk-tam{margin-top:8px}
+.lk-ac{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
