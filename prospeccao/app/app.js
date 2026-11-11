@@ -870,8 +870,20 @@ function lkSecao(e) {
     ${l.empresa_linkedin ? `<a class="fi-c lk-emp" href="${esc(l.empresa_linkedin)}" target="_blank" rel="noopener"><b>Página no LinkedIn</b><span>${esc([l.funcionarios, l.empresa_resumo].filter(Boolean).join(' · ') || 'Abrir')}</span></a>` : '<p class="fi-v">Não achei a página da empresa no LinkedIn.</p>'}
     ${pessoas ? `<div class="lk-l"><small class="lk-h">Quem decide</small>${pessoas}</div>` : ''}
     ${cont ? `<div class="lk-l"><small class="lk-h">Contatos achados</small>${cont}</div>` : ''}
+    ${lkRobo(l.robo)}
     ${!pessoas && (l.socios_receita || []).length ? `<p class="fi-v">Sócios na Receita: ${esc(l.socios_receita.join('; '))}. Não achei o perfil deles.</p>` : ''}
     <div class="lk-r"><small>Pesquisado em ${new Date(l.pesquisado_em).toLocaleDateString('pt-BR')}</small><button class="btn line sm" data-lk>Pesquisar de novo</button></div>`
+}
+// o que o robô logado leu por dentro do LinkedIn (conta separada no VPS)
+function lkRobo(r) {
+  if (!r || (!r.empresa && !r.pessoa)) return ''
+  const em = r.empresa || {}, pe = r.pessoa || {}, at = (pe.experiences || [])[0] || {}
+  const lin = (t, v) => v ? `<div class="lk-p"><small>${t}</small><b>${esc(v)}</b></div>` : ''
+  const contatos = (pe.contacts || []).map(c => lin(c.label || c.type, c.value)).join('')
+  return `<div class="lk-l"><small class="lk-h">Lido por dentro do LinkedIn</small>
+    ${lin('Setor', em.industry)}${lin('Tamanho', em.company_size)}${lin('Sede', em.headquarters)}${lin('Fundada', em.founded)}
+    ${pe.name ? lin('Quem decide', [pe.name, at.position_title].filter(Boolean).join(', ')) : ''}${lin('Onde mora', pe.location)}${contatos}
+    ${pe.about ? `<p class="fi-info">${esc(String(pe.about).slice(0, 600))}</p>` : ''}</div>`
 }
 function lkLigar(root, e, depois) {
   root.querySelectorAll('[data-lk]').forEach(b => b.onclick = async () => {
