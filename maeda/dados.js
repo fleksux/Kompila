@@ -12,7 +12,6 @@ window.MAEDA = {
   },
   condicoes: [
     ['Pedidos', 'Pronta entrega, com alguns itens sob encomenda.'],
-    ['Pagamento', 'Pix ou transferência.'],
     ['Entrega', 'Retirada no ateliê ou entrega. Frete não incluso.'],
     ['Pesos', 'Todos os pesos são aproximados.'],
     ['Nota fiscal', 'NF em torno de 14%.']
