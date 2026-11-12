@@ -1189,6 +1189,8 @@ async function abrirCaptacao(empilhar = true) {
     abas.forEach((b, i) => b.onclick = () => { board.scrollTo({ left: board.children[i].offsetLeft - board.offsetLeft, behavior: 'smooth' }); marca(i) })
     board.onscroll = () => { const w = board.children[0].offsetWidth + 12; pipeX = board.scrollLeft; colunaPipe = Math.round(board.scrollLeft / w); marca(colunaPipe) }
     board.addEventListener('click', () => { pipeY = $('cap').scrollTop }, true)
+    // 12/11/2026: com o mouse em cima de uma coluna, o gesto pro lado (ou Shift + rodinha) tem que andar o quadro, senão não chega em Perdido
+    board.addEventListener('wheel', e => { const dx = e.shiftKey && !e.deltaX ? e.deltaY : e.deltaX; if (!dx || Math.abs(dx) <= Math.abs(e.shiftKey ? 0 : e.deltaY)) return; e.preventDefault(); board.scrollLeft += dx }, { passive: false })
     const leadDe = new Map(todos.map(d => [d.id, d])), listas = {}
     // carrega mais 50 na coluna sem redesenhar o quadro: só os cartões novos entram na tela
     const maisDa = k => {
