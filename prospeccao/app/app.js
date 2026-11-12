@@ -1088,6 +1088,7 @@ const segDe = d => String(d.segmento || d.busca?.nicho || '').trim()
 // posição do pipeline: mover etapa ou voltar da conversa não pode jogar pro início
 let pipeX = 0, pipeY = 0
 const POR_COLUNA = 50
+let pipeRol = {} // rolagem de cada coluna do pipeline, pra não voltar ao topo quando o quadro é redesenhado
 const semAcento = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 // mesma pessoa, formatos diferentes: sem 55 e sem o 9 extra (DDD + 8 últimos). LID não vira chave.
 const chaveTel = t => { let d = String(t || '').replace(/\D/g, ''); if (d.length >= 12 && d.startsWith('55')) d = d.slice(2); return d.length === 10 || d.length === 11 ? d.slice(0, 2) + d.slice(-8) : null }
@@ -1096,15 +1097,16 @@ const esperandoTxt = t => { const m = Math.max(0, Math.floor((Date.now() - new D
 async function leadsDoPipe() {
   const out = []
   for (let i = 0; ; i += 1000) {
-    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, etiquetas, busca:buscas(nicho, cidade), empresa:empresas(id, nome, bairro, cidade, telefone, site, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
+    const { data, error } = await sb.from('diagnosticos').select('id, nota_dor, angulo, decisao, capivara_nome:capivara->>nome, temperatura, etapa, etapa_em, anotacao, decidida_em, telefone, segmento, etiquetas, busca:buscas(nicho, cidade), empresa:empresas(id, nome, bairro, cidade, telefone, site, instagram, email, whatsapp, cnpj, cnpj_status, receita, cnpj_opcoes)').eq('decisao', 'aprovada').eq('arquivado', false).order('decidida_em', { ascending: false }).order('id').range(i, i + 999)
     if (error) { liz('Não consegui carregar todo o pipeline. Tenta de novo.'); break }
-    out.push(...(data || []))
+    // 12/11/2026: o pipeline só usa o nome do Raio-X; baixar o Raio-X inteiro de cada lead pesava
+    out.push(...(data || []).map(d => ({ ...d, capivara: { nome: d.capivara_nome } })))
     if (!data || data.length < 1000) break
   }
   return out
 }
 async function abrirCaptacao(empilhar = true) {
-  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.temp = ''; pipeF.seg = ''; pipeF.etq = ''; pipeF.lim = {}; pipeX = 0; pipeY = 0 }
+  if (empilhar) { pipeF.q = ''; pipeF.resp = false; pipeF.temp = ''; pipeF.seg = ''; pipeF.etq = ''; pipeF.lim = {}; pipeRol = {}; pipeX = 0; pipeY = 0 }
   const [todos, resAg, resAt] = await Promise.all([leadsDoPipe(), sb.rpc('aguardando_resposta'), sb.rpc('atividade_leads')])
   todos.forEach(d => empNorm(d.empresa))
   // etiquetas criadas por você: mesma etiqueta com outra grafia vira a que já existe
@@ -1187,9 +1189,21 @@ async function abrirCaptacao(empilhar = true) {
     abas.forEach((b, i) => b.onclick = () => { board.scrollTo({ left: board.children[i].offsetLeft - board.offsetLeft, behavior: 'smooth' }); marca(i) })
     board.onscroll = () => { const w = board.children[0].offsetWidth + 12; pipeX = board.scrollLeft; colunaPipe = Math.round(board.scrollLeft / w); marca(colunaPipe) }
     board.addEventListener('click', () => { pipeY = $('cap').scrollTop }, true)
-    const ligar = () => {
-    board.querySelectorAll('.pc').forEach(el => {
-      const d = todos.find(x => x.id === el.dataset.id)
+    const leadDe = new Map(todos.map(d => [d.id, d])), listas = {}
+    // carrega mais 50 na coluna sem redesenhar o quadro: só os cartões novos entram na tela
+    const maisDa = k => {
+      const b = board.querySelector(`[data-vermais="${k}"]`); if (!b) return
+      const de0 = pipeF.lim[k] || POR_COLUNA, ate = de0 + POR_COLUNA, lista = listas[k] || []
+      pipeF.lim[k] = ate
+      const t = document.createElement('div'); t.innerHTML = lista.slice(de0, ate).map(cartao).join('')
+      const novos = [...t.children]; b.before(...novos)
+      const resto = lista.length - ate
+      if (resto > 0) b.textContent = `Ver mais ${Math.min(resto, POR_COLUNA)} de ${resto}`; else b.remove()
+      ligar(novos)
+    }
+    const ligar = (so) => {
+    (so || board.querySelectorAll('.pc')).forEach(el => {
+      const d = leadDe.get(el.dataset.id)
       el.onclick = e => { if (!e.target.closest('a,button,textarea,input')) el.classList.toggle('aberto') }
       const etqSalva = async lista => {
         const { error } = await sb.from('diagnosticos').update({ etiquetas: lista }).eq('id', d.id)
@@ -1228,7 +1242,9 @@ async function abrirCaptacao(empilhar = true) {
       col.ondragleave = () => col.classList.remove('alvo')
       col.ondrop = e => { e.preventDefault(); col.classList.remove('alvo'); mover(todos.find(x => x.id === e.dataTransfer.getData('text/plain')), col.dataset.et) }
     })
-    board.querySelectorAll('[data-vermais]').forEach(b => b.onclick = () => { const k = b.dataset.vermais; pipeF.lim[k] = (pipeF.lim[k] || POR_COLUNA) + POR_COLUNA; const y = board.scrollLeft; pintar(); board.scrollLeft = y })
+    board.querySelectorAll('[data-vermais]').forEach(b => b.onclick = () => maisDa(b.dataset.vermais))
+    // no computador a coluna rola sozinha: chegou perto do fim, carrega mais
+    board.querySelectorAll('.pcol-b').forEach(cb => { const k = cb.parentElement.dataset.et; cb.onscroll = () => { pipeRol[k] = cb.scrollTop; if (cb.scrollHeight - cb.scrollTop - cb.clientHeight < 400) maisDa(k) } })
     }
     // busca: tudo o que identifica o lead, sem acento e sem maiúscula
     const textoBusca = new Map(todos.map(d => { const e = d.empresa || {}, a = esperaDe(d); return [d.id, semAcento([d.capivara?.nome, e.nome, e.instagram, e.email, e.cidade, e.bairro, d.busca?.nicho, d.segmento, d.anotacao, a?.nome].filter(Boolean).join(' '))] }))
@@ -1242,11 +1258,14 @@ async function abrirCaptacao(empilhar = true) {
         // quem espera há mais tempo vem primeiro, pra não ficar escondido depois do limite da coluna
         const lista = de(k).filter(bate).sort((a, b) => (esperaDe(a)?.desde || '~').localeCompare(esperaDe(b)?.desde || '~'))
         total += lista.length; if (lista.length && primeira < 0) primeira = i
+        listas[k] = lista
         abas[i].querySelector('span').textContent = lista.length
         const lim = pipeF.lim[k] || POR_COLUNA, resto = lista.length - lim
         const vazio = filtrando ? 'Ninguém aqui.' : k === 'a_contatar' ? 'Faça uma busca e toque em Adicionar ao pipeline.' : 'Arrasta uma empresa pra cá.'
         return `<section class="pcol c-${TEMP[k][0]}" data-et="${k}"><header><i></i>${t}<span>${lista.length}</span></header><div class="pcol-b">${lista.slice(0, lim).map(cartao).join('') || `<div class="pv">${vazio}</div>`}${resto > 0 ? `<button class="pv-mais" data-vermais="${k}">Ver mais ${Math.min(resto, POR_COLUNA)} de ${resto}</button>` : ''}</div></section>`
       }).join('')
+      if (rolar) pipeRol = {}
+      board.querySelectorAll('.pcol-b').forEach(cb => { const y = pipeRol[cb.parentElement.dataset.et]; if (y) cb.scrollTop = y })
       ligar()
       const info = $('pInfo'), fora = pipeF.resp && foraDoPipe
       info.hidden = !filtrando && !foraDoPipe
