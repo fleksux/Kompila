@@ -918,7 +918,6 @@ const filaItens = () => {
     if (l.estado === 'humano' && l.humanoDesde != null) it.push({ tipo: 'Esperando uma pessoa', l, t: S.min - l.humanoDesde, txt: l.ficha.Proposta || l.interesse, quem: l.corretor, r: true })
     if (l.combinado && !l.combinado.feito && S.min > l.combinado.ate) it.push({ tipo: 'Combinado vencido', l, t: S.min - l.combinado.ate, txt: l.combinado.txt, quem: l.corretor, r: true })
   })
-  it.push({ tipo: 'Cliente sumiu', l: { nome: 'Aline Souza', id: '' }, t: 26 * 60, txt: 'Sem resposta desde ontem 11:00 · Liz volta hoje 16h', quem: 'Liz' })
   return it
 }
 const novoCls = k => S.novos.has(k) ? ' nova' : ''
@@ -1017,11 +1016,72 @@ function vPipeline() {
   }).join('')}</div>`
 }
 
+const FILA_EXTRA = {
+  liz: [
+    { nome: 'Camila Rocha', canal: 'whatsapp', txt: 'Perguntou se dá pra usar FGTS no apto do Centro', h: -3 },
+    { nome: 'Pedro Antunes', canal: 'instagram', txt: 'Quer alugar perto da estação, até R$ 1.900', h: -5 },
+    { nome: 'Luana Freitas', canal: 'facebook', txt: 'Mandou o comprovante de renda pra simulação', h: -8 },
+    { nome: 'Rodrigo Sales', canal: 'site', txt: 'Comparando 2 casas em condomínio', h: -11 }
+  ],
+  corretor: {
+    Paula: [['Proposta enviada', 'Ricardo Paiva · Edifício Aurora, R$ 455 mil', 'a'], ['Documentos', 'Família Oliveira · aprovação no banco', '']],
+    Diego: [['Vistoria de entrega', 'Carla Nunes · casa Vila Oliveira, 16:00', 'b'], ['Renovação', 'Marcelo Dias · aluguel de R$ 1.950', '']],
+    Renata: [['Negociando', 'Fábio e Lia · sobrado R$ 980 mil', 'a']],
+    Marcos: [['Sem resposta há 31 min', 'Clínica Sorriso · sala de 60 m²', 'r']]
+  },
+  combinados: [
+    { quem: 'Paula', lead: 'Lucas e Bia Ramos', txt: 'Mandar a minuta do contrato', ate: 17 * 60 },
+    { quem: 'Renata', lead: 'Fábio e Lia', txt: 'Voltar com a contraproposta', ate: 14 * 60 + 30 },
+    { quem: 'Diego', lead: 'Marcelo Dias', txt: 'Enviar o reajuste da renovação', ate: 12 * 60 }
+  ],
+  sumiu: [
+    { nome: 'Aline Souza', canal: 'whatsapp', txt: 'Sem resposta desde ontem 11:00', volta: 'Liz volta hoje 16:00' },
+    { nome: 'Jorge Lima', canal: 'instagram', txt: 'Viu o vídeo e não respondeu', volta: 'Liz volta amanhã 10:00' },
+    { nome: 'Tatiane Melo', canal: 'facebook', txt: 'Parou depois do valor do condomínio', volta: 'Liz volta amanhã 18:00' }
+  ]
+}
 function vFila() {
-  const f = filaItens(), grupos = ['Esperando uma pessoa', 'Combinado vencido', 'Cliente sumiu']
-  return `<div class="head"><h1>Fila</h1><span class="c">tudo que espera uma pessoa, com prazo</span></div>
-  ${dica('Quando alguém da equipe promete algo no WhatsApp, eu anoto o prazo. <b>Venceu, aparece aqui e eu cobro a pessoa.</b>')}
-  ${grupos.map(g => { const it = f.filter(x => x.tipo === g); return `<div class="sec"><div class="h"><h2>${g}</h2><span class="c">${it.length}</span></div><div class="b">${it.length ? it.map(x => `<div class="row nova">${avP(x.quem)}<span><b>${esc(x.l.nome)}</b><span class="sub">${esc(x.txt)}</span></span><span class="t ${x.r ? 'r' : ''}">${x.t >= 60 ? Math.floor(x.t / 60) + ' h' : x.t + ' min'}</span></div>`).join('') : '<div class="vazio">Nada aqui agora.</div>'}</div></div>` }).join('')}`
+  const f = filaItens(), gente = f.filter(x => x.r)
+  const lizAgora = S.leads.filter(l => l.estado === 'ia' && l.hoje).slice(0, 5).map(l => ({ nome: l.nome, canal: l.canal, txt: l.interesse, h: (l.msgs.at(-1)?.h ?? l.criado), vivo: l.msgs.at(-1)?.de === 'lead' || S.min - (l.msgs.at(-1)?.h ?? 0) < 3, id: l.id }))
+    .concat(FILA_EXTRA.liz.map((x, i) => ({ ...x, h: S.min + x.h, vivo: i === 0 })))
+    .sort((a, b) => (b.vivo - a.vivo) || (b.h - a.h))
+  const comCorretor = {}
+  Object.keys(S.equipe).forEach(k => {
+    comCorretor[k] = S.leads.filter(l => l.corretor === k && l.estado !== 'fechado').map(l => {
+      const v = S.visitas.find(x => x.lead === l.id)
+      return [l.estado === 'humano' ? 'Precisa responder' : l.fase === 'Proposta' ? 'Proposta' : v ? 'Visita ' + v.dia.toLowerCase() + ' ' + v.hora : l.fase, l.nome + ' · ' + l.interesse, l.estado === 'humano' ? 'r' : v ? 'b' : 'a', l.id]
+    }).concat(FILA_EXTRA.corretor[k] || [])
+  })
+  const combs = S.leads.filter(l => l.combinado).map(l => ({ quem: l.corretor, lead: l.nome, txt: l.combinado.txt, ate: l.combinado.ate, feito: l.combinado.feito })).concat(FILA_EXTRA.combinados)
+  const nCorretor = Object.values(comCorretor).reduce((a, v) => a + v.length, 0)
+  const nComb = combs.filter(c => !c.feito).length
+  const prazo = c => { if (c.feito) return '<span class="tag g">cumprido</span>'; const d = c.ate - S.min; return d < 0 ? `<span class="t r">venceu há ${-d} min</span>` : `<span class="tag a">faltam ${d >= 60 ? Math.floor(d / 60) + ' h ' + String(d % 60).padStart(2, '0') : d + ' min'}</span>` }
+  const cor = { r: 'r', a: 'a', b: 'b', '': '' }
+  return `<div class="head"><h1>Fila</h1><span class="c">a Liz atendendo, os corretores vendendo e tudo que tem prazo</span></div>
+  <div class="nums">
+    ${num('fl1', 'Liz atendendo agora', lizAgora.length + 9, 'em 4 canais', 'g', true)}
+    ${num('fl2', 'Com os corretores', nCorretor, 'visita, proposta, contrato')}
+    ${num('fl3', 'Esperando gente', gente.length, gente.length ? 'a Liz já chamou' : 'ninguém esperando', gente.length ? 'r' : '')}
+    ${num('fl4', 'Combinados abertos', nComb, 'com prazo, a Liz cobra')}
+  </div>
+  ${gente.length ? `<div class="sec" style="border-color:#f3c2ca"><div class="h"><h2 style="color:var(--red)">Esperando uma pessoa</h2><span class="c">${gente.length}</span></div><div class="b">${gente.map(x => `<div class="row nova">${avP(x.quem)}<span><b>${esc(x.l.nome)}</b><span class="sub">${x.tipo} · ${esc(x.txt)}</span></span><span class="t r">${x.t >= 60 ? Math.floor(x.t / 60) + ' h' : x.t + ' min'}</span></div>`).join('')}</div></div>` : ''}
+  <div class="g2e">
+    <div class="sec"><div class="h"><h2>Liz atendendo agora</h2><span class="vivo">ao vivo</span></div><div class="b">
+      ${lizAgora.map(x => `<div class="row" style="grid-template-columns:22px 1fr auto${x.id ? ';cursor:pointer' : ''}"${x.id ? ` data-abre="${x.id}"` : ''}>${cn(x.canal)}<span><b>${esc(x.nome)}</b><span class="sub">${esc(x.txt)}</span></span>${x.vivo ? '<span class="tag g">respondendo…</span>' : `<span class="t">${hh(x.h)}</span>`}</div>`).join('')}
+    </div></div>
+    <div class="sec"><div class="h"><h2>Corretores vendendo</h2><span class="c">${nCorretor} em andamento</span></div><div class="b">
+      ${Object.entries(comCorretor).filter(([, v]) => v.length).map(([k, v]) => `<div style="padding:10px 0;border-top:1px solid var(--line)"><div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">${avP(k, 22)}<b style="font-size:13px">${esc(S.equipe[k].nome)}</b><span class="sub" style="font-size:12px;color:var(--mute);margin-left:auto">${v.length} em andamento</span></div>
+        ${v.map(([t, d, c, id]) => `<div style="display:flex;gap:8px;align-items:center;padding:3px 0 3px 30px;font-size:12.5px${id ? ';cursor:pointer' : ''}"${id ? ` data-abre="${id}"` : ''}><span class="tag ${cor[c] ?? ''}">${esc(t)}</span><span style="color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d)}</span></div>`).join('')}</div>`).join('')}
+    </div></div>
+  </div>
+  <div class="g2e">
+    <div class="sec"><div class="h"><h2>Combinados com prazo</h2><span class="c">o que a equipe prometeu no WhatsApp</span></div><div class="b">
+      ${combs.sort((a, b) => (a.feito - b.feito) || (a.ate - b.ate)).map(c => `<div class="row" style="grid-template-columns:26px 1fr auto">${avP(c.quem)}<span><b>${esc(c.txt)}</b><span class="sub">${esc(c.lead)} · até ${hh(c.ate)}</span></span>${prazo(c)}</div>`).join('')}
+    </div></div>
+    <div class="sec"><div class="h"><h2>Cliente sumiu</h2><span class="c">a Liz volta sozinha</span></div><div class="b">
+      ${FILA_EXTRA.sumiu.map(x => `<div class="row" style="grid-template-columns:22px 1fr auto">${cn(x.canal)}<span><b>${esc(x.nome)}</b><span class="sub">${esc(x.txt)}</span></span><span class="tag b">${esc(x.volta)}</span></div>`).join('')}
+    </div></div>
+  </div>`
 }
 
 function vAgenda() {
@@ -1180,7 +1240,7 @@ async function rodar() {
     await roteiroRafael()
     await roteiroCarla()
     await roteiroBruno()
-    const f = fimDoDia(); await sleep(10000); f.remove()
+    toast('Fim da manhã na Vila Clara', `${nHoje()} leads atendidos, nenhum sem resposta. Recomeçando…`); await sleep(6000)
     if (g === geracao) rodar()
   } catch (e) { if (!(e instanceof Parou)) console.error(e) }
 }
