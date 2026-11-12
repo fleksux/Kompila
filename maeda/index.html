@@ -468,7 +468,7 @@ $('#pacs').innerHTML = pacs.map(p => {
       <button class="ver" data-ver aria-expanded="false">Ver composição <i>+</i></button>
       <div class="comp-w"><div class="comp">${comp}<p class="nota">${esc(M.natal.farofinha)}${temOu ? ' Onde aparece "ou", você escolhe a opção logo abaixo.' : ''}</p></div></div>
       ${escolha}
-      <button class="add" data-add="${k}">Adicionar ao pedido <span>+</span></button>
+      <button class="add" data-add="${k}">Escolher este pacote</button>
       <a class="zap-link" href="${zap(`Olá, Maeda! Tenho interesse no ${p.n} (${p.pessoas}), ${brl(p.p)}.`)}" target="_blank" rel="noopener">Tirar dúvida no WhatsApp</a>
     </div></article>`
 }).join('')
@@ -564,13 +564,11 @@ const SUG = {
   rotisserie: ['natal:pacote-1', 'natal-avulso:Peito de peru marinado', 'natal-avulso:Tender bolinha assado com mel, laranja e especiarias', 'natal-avulso:Pavê de abacaxi com coco']
 }
 function oferta(k) {
-  const deNatal = k.startsWith('natal'), it = CAT[k]
-  const lista = (deNatal ? SUG.natal : SUG.rotisserie).filter(x => CAT[x] && x !== k)
-  const titulo = deNatal ? 'Escolher complementos da Rotisserie' : 'Escolha itens para sua ceia de Natal'
-  $('#oferta').innerHTML = `<header><h3>${titulo}</h3><button data-fecha-oferta aria-label="Fechar">Fechar</button></header>
-    <div class="rola"><div class="ok-add"><i>✓</i><span><b>${esc(it.n)}</b> está no seu pedido.</span></div>
-    ${lista.map(x => { const s = CAT[x]; return `<div class="sug${s.f ? '' : ' sem-f'}">${s.f ? `<div class="f"><img src="img/${s.f}" alt="" loading="lazy"></div>` : ''}<div><b>${esc(s.n)}</b><small>${brl(s.p)}${s.det && s.det.length < 20 ? ' · ' + esc(s.det) : ''}</small></div><button class="btn-add" data-add="${esc(x)}">Adicionar</button></div>` }).join('')}</div>
-    <footer><button class="add" data-ir-pedido>Fechar meu pedido</button><button class="seg" data-ir-aba="${deNatal ? 'rotisserie' : 'natal'}">${deNatal ? 'Ver toda a Rotisserie' : 'Ver a ceia de Natal'}</button><button class="nao" data-fecha-oferta>Continuar escolhendo</button></footer>`
+  // 12/11 (Alex: "só o botão de escolher esse pacote ou adicionar mais produtos da rotisserie. Não vamos dificultar em nada"): dois botões, sem lista.
+  const deNatal = k.startsWith('natal'), it = CAT[k], n = Object.values(pedido).reduce((a, b) => a + b, 0)
+  $('#oferta').innerHTML = `<header><h3>${deNatal ? 'Pacote escolhido' : 'Adicionado ao pedido'}</h3><button data-fecha-oferta aria-label="Fechar">Fechar</button></header>
+    <div class="rola"><div class="ok-add"><i>✓</i><span><b>${esc(it.n)}</b> está no seu pedido.${n > 1 ? ` São ${n} itens, total estimado ${brl(total())}.` : ''}</span></div></div>
+    <footer><button class="add" data-enviar-ja>Fazer pedido pelo WhatsApp</button>${deNatal ? '<button class="seg" data-ir-aba="rotisserie">Adicionar produtos da Rotisserie</button>' : '<button class="seg" data-fecha-oferta>Continuar escolhendo</button>'}</footer>`
   marca()
   $('#toast').classList.remove('on')
   $('#oferta').classList.add('on'); $('#oferta').setAttribute('aria-hidden', 'false'); $('#veu').classList.add('on'); document.body.style.overflow = 'hidden'
@@ -612,7 +610,7 @@ async function enviar() {
   if (enviando) return
   const linhas = Object.entries(pedido).map(([k, q]) => { const it = CAT[k]; return `• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(it.p * q)}` })
   const janela = window.open('', '_blank')
-  enviando = true; const bt = $('#enviar'); bt.textContent = 'Enviando...'
+  enviando = true; const bt = $('#enviar'); if (bt) bt.textContent = 'Enviando...'
   let numero = null
   try {
     const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
@@ -624,7 +622,7 @@ async function enviar() {
   const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `Total estimado: ${brl(total())}`]
   const url = zap(txt.join('\n'))
   if (janela) janela.location.href = url; else location.href = url
-  enviando = false; bt.textContent = 'Fazer pedido pelo WhatsApp'
+  enviando = false; if (bt) bt.textContent = 'Fazer pedido pelo WhatsApp'
   // pedido ainda não pago: é Lead, não Purchase. O eventID serve para juntar com a API de Conversões depois.
   if (numero && window.fbq) fbq('track', 'Lead', { value: total(), currency: 'BRL' }, { eventID: `pedido_${numero}` })
   if (numero) { pedido = {}; salva(); marca(); fecha(); toast(`Pedido nº ${numero} registrado. Agora é só tocar em enviar no WhatsApp.`) }
@@ -635,7 +633,7 @@ function fecha() { lerForm(); $('#pedido').classList.remove('on'); $('#pedido').
 document.addEventListener('click', e => {
   const o = e.target.closest('[data-opc]')
   if (o) { o.parentElement.querySelectorAll('.opc').forEach(x => x.classList.toggle('on', x === o)); o.closest('.esc-set').querySelector('p').classList.remove('falta'); return }
-  const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-ver],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
+  const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-ver],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-enviar-ja],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
   if (!t) { if (e.target.id === 'luz') $('#luz').classList.remove('on'); return }
   if (t.matches('[data-add]')) { origem = t; return add(t.dataset.add) }
   if (t.matches('[data-ler]')) { const d = t.previousElementSibling, ab = d.classList.toggle('aberto'); t.textContent = ab ? 'Ler menos' : 'Ler mais'; return }
@@ -644,6 +642,7 @@ document.addEventListener('click', e => {
   if (t.matches('[data-abre-pedido]')) return abre()
   if (t.matches('[data-fecha-oferta]')) return fechaOferta()
   if (t.matches('[data-ir-pedido]')) { fechaOferta(); return abre() }
+  if (t.matches('[data-enviar-ja]')) { t.textContent = 'Enviando...'; return enviar().then(fechaOferta) }
   if (t.matches('[data-ir-aba]')) { fechaOferta(); location.hash = t.dataset.irAba; return }
   if (t.matches('#veu')) { if ($('#oferta').classList.contains('on')) return fechaOferta(); return fecha() }
   if (t.matches('[data-fecha]')) return fecha()
