@@ -1809,7 +1809,7 @@ async function abrirDisparo(empilhar = true, doPipeline = false, novo = false, c
   const rodando = abertas.find(c => c.status === 'rodando')
   if (doPipeline && !rodando) novo = true
   const camp = novo ? null : (abertas.find(c => c.id === campId) || rodando || abertas[0])
-  const faixa = abertas.length ? `<div class="dp-abertos"><span>Disparos abertos</span>${abertas.map(c => `<button type="button" data-dpcamp="${c.id}"${camp?.id === c.id ? ' class="on"' : ''}>${c.status === 'rodando' ? '<i class="dp-pulse"></i>' : ''}${esc(c.nome)}<b>${naFila[c.id] || 0} na fila</b></button>`).join('')}<button type="button" data-dpnovo${camp ? '' : ' class="on"'}>+ Novo disparo</button></div>` : ''
+  const faixa = abertas.length ? `<div class="dp-abertos"><span>Disparos abertos</span>${abertas.map(c => `<button type="button" data-dpcamp="${c.id}"${camp?.id === c.id ? ' class="on"' : ''}>${c.status === 'rodando' ? '<i class="dp-pulse"></i>' : ''}<span>${esc(c.nome)}</span><b>${naFila[c.id] || 0} na fila</b></button>`).join('')}<button type="button" data-dpnovo${camp ? '' : ' class="on"'}>+ Novo disparo</button></div>` : ''
   let body = ''
   if (camp) {
     const { data: evs } = await sb.from('envio').select('id, empresa_nome, telefone, status, mensagem, resposta').eq('campanha_id', camp.id).order('ordem', { ascending: true })
