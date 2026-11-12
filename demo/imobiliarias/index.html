@@ -40,7 +40,7 @@ body.zap-aberto .fab{display:none}
 @keyframes fabPula{30%{transform:scale(1.15)}60%{transform:scale(.95)}}
 
 /* ---------- lado do cliente (claro) ---------- */
-.lado{background:linear-gradient(180deg,#eef7f1 0%,var(--paper) 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 18px 10px;gap:10px;min-height:0;border-right:1px solid var(--line)}
+.lado{background:linear-gradient(180deg,#eef7f1 0%,var(--paper) 60%);display:flex;flex-direction:column;align-items:center;justify-content:safe center;padding:12px 18px 10px;gap:10px;min-height:0;border-right:1px solid var(--line)}
 .lado .cap{display:flex;align-items:center;gap:10px;width:min(100%,max(290px,calc((100vh - 128px) * .465)))}
 .lado .cap .canal{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none}
 .lado .cap small{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
@@ -754,10 +754,10 @@ async function roteiroMariana() {
 
 async function roteiroRafael() {
   passa(8)
-  const l = novoLead({ nome: 'Rafael Moura', canal: 'instagram', origem: 'Orgânico', tipo: 'Locação', interesse: 'Casa com quintal · aceita pet', valor: 2800 })
-  S.featured = l.id; S.filtro = 'todos'; abreFone(l, 'ig', 'Chamou no Direct do Instagram'); render(); irPara('agora')
+  const l = novoLead({ nome: 'Rafael Moura', canal: 'whatsapp', origem: 'Post do Instagram', tipo: 'Locação', interesse: 'Casa com quintal · aceita pet', valor: 2800 })
+  S.featured = l.id; S.filtro = 'todos'; abreFone(l, 'wa', 'Viu o post no Instagram'); render(); irPara('agora')
   await sleep(1500)
-  await cliente(l, 'Oi! Vocês têm casa pra alugar com quintal? Tenho dois cachorros')
+  await cliente(l, 'Oi! Vi o post de vocês no Instagram. Têm casa pra alugar com quintal? Tenho dois cachorros')
   await empresa(l, 'Oi, Rafael! Tenho sim, e que aceitam pet. Qual bairro você prefere e até quanto pensa no aluguel?', null, { seg: 17 })
   await sleep(1900)
   await cliente(l, 'César de Souza ou Braz Cubas. Até 2.800')
@@ -784,7 +784,7 @@ async function roteiroCarla() {
   v.zap = true; v.nova = true; render()
   const l = novoLead({ nome: 'Carla Mendes', canal: 'whatsapp', origem: 'Google Ads', campanha: 'g1', tipo: 'Venda', interesse: 'Casa em condomínio · Real Park', valor: 690000 })
   v.lead = l.nome
-  S.featured = l.id; abreFone(l, 'wa', 'Veio do Google, clicou no WhatsApp do site'); render()
+  S.featured = l.id; abreFone(l, 'wa', 'Veio do Google pelo site'); render()
   await sleep(1600)
   await cliente(l, 'Oi, vi a casa do Real Park no site. Aceitam proposta? Tenho 620 à vista')
   await empresa(l, 'Oi, Carla! Proposta é conversa do corretor com o proprietário, então já chamei a Renata pra você. Ela responde em poucos minutos.', null, { seg: 21 })
@@ -807,7 +807,7 @@ async function roteiroCarla() {
 async function roteiroBruno() {
   passa(12)
   const l = S.leads.find(x => x.nome === 'Bruno Teixeira')
-  S.featured = l.id; abreFone(l, 'corretor', 'Falando direto no WhatsApp do corretor'); irPara('equipe')
+  S.featured = l.id; abreFone(l, 'corretor', 'No WhatsApp do corretor'); irPara('equipe')
   await sleep(1800)
   await cliente(l, 'Diego, bora fechar o apê da Vila Oliveira. Me manda o contrato?')
   await empresa(l, 'Fechou, Bruno! Te mando o contrato até as 11h.', 'Diego', { pensa: 1400 })
