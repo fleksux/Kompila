@@ -593,16 +593,10 @@ function desenha() {
   const ks = Object.keys(pedido)
   const lista = ks.length ? ks.map(k => { const it = CAT[k], q = pedido[k]; return `<div class="ped"><div><b>${esc(it.n)}</b>${it.det ? `<small>${esc(it.det)}</small>` : ''}</div><div class="v">${brl(it.p * q)}</div><div class="qtd"><button data-q="${esc(k)}" data-d="-1" aria-label="Menos">−</button><span>${q}</span><button data-q="${esc(k)}" data-d="1" aria-label="Mais">+</button></div></div>` }).join('')
     : `<div class="vazio"><p>Seu pedido está vazio.</p>Toque em "Adicionar" nos pacotes ou nos pratos.</div>`
-  const form = ks.length ? `<div class="form" id="form"><h4>Seus dados</h4>
-    <label class="campo"><span>Nome</span><input name="nome" autocomplete="name" value="${esc(dados.nome)}"></label>
-    <label class="campo"><span>Seu WhatsApp (com DDD)</span><input name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 90000-0000" value="${esc(dados.telefone)}"></label>
-    <div class="duas"><label class="campo"><span>Data</span><input name="data" type="date" value="${esc(dados.data)}"></label><label class="campo"><span>Horário</span><input name="hora" type="time" step="900" value="${esc(dados.hora || '')}"></label></div>
-    <label class="campo"><span>Pessoas (opcional)</span><input name="pessoas" inputmode="numeric" value="${esc(dados.pessoas)}"></label>
-    <div class="modo"><label><input type="radio" name="modo" value="Retirada no ateliê" ${dados.modo !== 'Entrega' ? 'checked' : ''}> Retirada</label><label><input type="radio" name="modo" value="Entrega" ${dados.modo === 'Entrega' ? 'checked' : ''}> Entrega</label></div>
-    <label class="campo" id="c-end" ${dados.modo === 'Entrega' ? '' : 'hidden'}><span>Endereço da entrega</span><input name="endereco" autocomplete="street-address" value="${esc(dados.endereco)}"></label>
-    <label class="campo"><span>Observações</span><textarea name="obs" rows="2" placeholder="Opção do pacote, horário, restrições">${esc(dados.obs)}</textarea></label></div>` : ''
+  // 12/11 (Alex: "tira o formulário; fazer o pedido já vai pro WhatsApp e a Liz confirma o restante"): sem campos aqui.
+  const form = ''
   $('#pedido').innerHTML = `<header><h3>Meu pedido</h3><button data-fecha>Continuar escolhendo</button></header><div class="rola">${lista}${form}</div>
-    ${ks.length ? `<footer><div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Enviar pedido pelo WhatsApp</button><p class="aviso">Frete e NF (em torno de 14%) à parte. A equipe confirma disponibilidade e valor final.</p></footer>` : ''}`
+    ${ks.length ? `<footer><div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Fazer pedido pelo WhatsApp</button><p class="aviso">Você conclui pelo WhatsApp: lá a gente combina a data, a entrega ou retirada e confirma o valor final. Frete e NF (em torno de 14%) à parte.</p></footer>` : ''}`
 }
 function lerForm() {
   const f = $('#form'); if (!f) return dados
@@ -616,27 +610,21 @@ const PEDIDO_URL = 'https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/pedido
 let enviando = false
 async function enviar() {
   if (enviando) return
-  const d = lerForm(), nome = $('#form [name="nome"]'), tel = $('#form [name="telefone"]'), dig = d.telefone.replace(/\D/g, '')
-  if (!d.nome) { nome.classList.add('erro'); nome.focus(); toast('Coloca seu nome pra gente te chamar'); return }
-  if (dig.length < 10 || dig.length > 13) { tel.classList.add('erro'); tel.focus(); toast('Coloca seu WhatsApp com DDD'); return }
-  if (d.modo === 'Entrega' && d.endereco.length < 5) { const en = $('#form [name="endereco"]'); en.classList.add('erro'); en.focus(); toast('Coloca o endereço da entrega'); return }
-  const dt = (d.data ? d.data.split('-').reverse().join('/') : 'a combinar') + (d.hora ? ` às ${d.hora}` : '')
   const linhas = Object.entries(pedido).map(([k, q]) => { const it = CAT[k]; return `• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(it.p * q)}` })
   const janela = window.open('', '_blank')
   enviando = true; const bt = $('#enviar'); bt.textContent = 'Enviando...'
   let numero = null
   try {
     const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-      chave: 'kmp_maeda', nome: d.nome, telefone: dig, tipo: d.modo === 'Entrega' ? 'entrega' : 'retirada', endereco: d.endereco, pagamento: 'Pix ou transferência',
-      obs: [d.pessoas ? `Pessoas: ${d.pessoas}` : '', d.obs].filter(Boolean).join(' · '), entrega_dia: d.data || undefined, entrega_hora: d.hora || undefined, origem_link: ORIGEM,
+      chave: 'kmp_maeda', sem_dados: true, origem_link: ORIGEM,
       itens: Object.entries(pedido).map(([k, qtd]) => ({ id: CAT[k].id || k, qtd, ...(CAT[k].obs ? { obs: CAT[k].obs } : {}) })) }) })
     const j = await r.json().catch(() => ({}))
     if (r.ok && j.numero) numero = j.numero
   } catch (e) {}
-  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `Total estimado: ${brl(total())}`, '', `Nome: ${d.nome}`, `Data: ${dt}`, d.pessoas ? `Pessoas: ${d.pessoas}` : null, d.modo + (d.modo === 'Entrega' && d.endereco ? ': ' + d.endereco : ''), d.obs ? `Obs.: ${d.obs}` : null].filter(x => x !== null)
+  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `Total estimado: ${brl(total())}`]
   const url = zap(txt.join('\n'))
   if (janela) janela.location.href = url; else location.href = url
-  enviando = false; bt.textContent = 'Enviar pedido pelo WhatsApp'
+  enviando = false; bt.textContent = 'Fazer pedido pelo WhatsApp'
   // pedido ainda não pago: é Lead, não Purchase. O eventID serve para juntar com a API de Conversões depois.
   if (numero && window.fbq) fbq('track', 'Lead', { value: total(), currency: 'BRL' }, { eventID: `pedido_${numero}` })
   if (numero) { pedido = {}; salva(); marca(); fecha(); toast(`Pedido nº ${numero} registrado. Agora é só tocar em enviar no WhatsApp.`) }
