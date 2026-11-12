@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kompila CRM ao vivo</title>
+<meta name="description" content="Demonstração: o cliente fala no WhatsApp, no Instagram e no Facebook e o CRM da Kompila se atualiza na hora. Empresa fictícia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --carbon:#0a0b0e;--rail-line:#22282f;--paper:#f3f4f1;--surface:#fff;--surface-2:#f7f8f6;--line:#e6e8e3;--line-2:#d5d9d2;
+  --ink:#111318;--ink-2:#4b525b;--mute:#8a919a;
+  --green:#12803f;--green-2:#2fd67b;--green-bg:#e6f7ec;--menta:#ddf7e8;
+  --red:#c9203a;--red-bg:#fde8eb;--amber:#9a5b00;--amber-bg:#fff2d9;--blue:#1f4fa3;--blue-bg:#e8f0ff;
+  --font:"Inter","Helvetica Neue",Arial,sans-serif;--mono:"JetBrains Mono","SF Mono",Menlo,monospace;--r:12px;
+  --wa-head:#008069;--wa-bg:#efeae2;--wa-out:#d9fdd3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;cursor:pointer;color:inherit}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.demo{display:grid;grid-template-columns:minmax(340px,28%) 1fr;height:100vh}
+
+/* ---------- lado do cliente (claro) ---------- */
+.lado{background:linear-gradient(180deg,#eef7f1 0%,var(--paper) 60%);display:flex;flex-direction:column;align-items:center;padding:18px 18px 12px;gap:12px;min-height:0;border-right:1px solid var(--line)}
+.lado .cap{display:flex;align-items:center;gap:10px;width:min(330px,100%)}
+.lado .cap .canal{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none}
+.lado .cap small{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.lado .cap b{display:block;font-size:14px;font-weight:600;line-height:1.25;min-height:18px}
+.fone{width:min(330px,100%);flex:1 1 auto;max-height:680px;min-height:0;border-radius:40px;background:#fff;padding:9px;box-shadow:0 0 0 1px var(--line-2),0 24px 50px rgba(17,19,24,.14);display:flex}
+.tela{flex:1;border-radius:32px;overflow:hidden;background:var(--wa-bg);display:flex;flex-direction:column;min-height:0;position:relative}
+.st{height:30px;color:#fff;background:var(--wa-head);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+.ap-head{background:var(--wa-head);color:#fff;display:flex;align-items:center;gap:10px;padding:6px 12px 10px}
+.ap-head .av{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--green);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.ap-head b{display:block;font-size:14.5px;font-weight:600;line-height:1.2}
+.ap-head span{font-size:11.5px;opacity:.85}
+.chat{flex:1;overflow-y:auto;padding:12px 10px 8px;display:flex;flex-direction:column;gap:4px;scrollbar-width:none}
+.chat::-webkit-scrollbar{display:none}
+.dia{align-self:center;background:#fff;color:#54656f;font-size:11px;padding:4px 10px;border-radius:7px;margin:4px 0 8px;box-shadow:0 1px .5px rgba(0,0,0,.1)}
+.bb{max-width:82%;padding:6px 9px 4px;border-radius:8px;font-size:13.5px;line-height:1.38;color:#111b21;box-shadow:0 1px .5px rgba(0,0,0,.13);animation:entra .28s ease-out both;word-wrap:break-word}
+.bb .h{display:block;text-align:right;font-size:10.5px;color:#667781;margin-top:1px}
+.bb.out{align-self:flex-end;background:var(--wa-out);border-top-right-radius:2px}
+.bb.out .h::after{content:" ✓✓";color:#53bdeb;letter-spacing:-2px}
+.bb.in{align-self:flex-start;background:#fff;border-top-left-radius:2px}
+.bb.in .quem{display:block;font-size:11.5px;font-weight:600;color:#1f7a55;margin-bottom:1px}
+.bb.typing{padding:10px 12px}
+.bb.typing i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#8696a0;margin:0 2px;animation:pula 1s infinite}
+.bb.typing i:nth-child(2){animation-delay:.15s}.bb.typing i:nth-child(3){animation-delay:.3s}
+.bb.doc{display:flex;gap:9px;align-items:center;background:#fff}
+.bb.doc .pdf{width:34px;height:40px;border-radius:5px;background:#e94b3c;color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center}
+.imovel{margin:-2px -5px 4px;border-radius:6px;overflow:hidden;width:220px}
+.imovel .foto{height:118px;position:relative;background:linear-gradient(180deg,#b9d7ee 0%,#dfeefa 55%,#9fc48a 56%,#7fae6a 100%)}
+.imovel .foto svg{position:absolute;left:50%;bottom:14px;transform:translateX(-50%)}
+.imovel .t{background:#f0f2f5;padding:7px 9px;font-size:12.5px}
+.imovel .t b{display:block;font-size:13px}
+.inp{display:flex;align-items:center;gap:8px;padding:7px 8px 10px;background:var(--wa-bg)}
+.inp .campo{flex:1;background:#fff;border-radius:20px;padding:9px 14px;font-size:13.5px;color:#111b21;min-height:38px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inp .campo:empty::before{content:"Mensagem";color:#8696a0}
+.inp .env{width:38px;height:38px;border-radius:50%;background:var(--wa-head);display:grid;place-items:center;flex:none}
+/* Instagram Direct */
+.tela.ig{background:#fff}
+.tela.ig .st{background:#fff;color:#000}
+.tela.ig .ap-head{background:#fff;color:#000;border-bottom:1px solid #efefef}
+.tela.ig .ap-head .av{background:conic-gradient(from 200deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5,#feda75);padding:2px}
+.tela.ig .ap-head .av i{width:100%;height:100%;border-radius:50%;background:#fff;color:var(--green);display:grid;place-items:center;font-style:normal;border:2px solid #fff}
+.tela.ig .ap-head span{color:#737373;opacity:1}
+.tela.ig .bb{box-shadow:none;border-radius:20px;padding:8px 13px}
+.tela.ig .bb .h{display:none}
+.tela.ig .bb.out{background:#3797f0;color:#fff}
+.tela.ig .bb.in{background:#efefef}
+.tela.ig .bb.in .quem{color:#737373}
+.tela.ig .dia{background:transparent;box-shadow:none;color:#737373}
+.tela.ig .inp{background:#fff}
+.tela.ig .inp .campo{border:1px solid #dbdbdb}
+.tela.ig .inp .campo:empty::before{content:"Mensagem..."}
+.tela.ig .inp .env{background:#3797f0}
+.ctl{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.ctl button{border:1px solid var(--line-2);background:#fff;color:var(--ink-2);border-radius:20px;height:32px;padding:0 14px;font-size:12.5px;font-weight:600}
+.ctl button:hover{color:var(--ink)}
+.ctl button.on{background:var(--green);color:#fff;border-color:var(--green)}
+.lado .rod{font-size:11px;color:var(--mute);text-align:center}
+.lado .rod b{font-family:var(--mono);color:var(--ink);white-space:nowrap}.lado .rod b i{font-style:normal;color:var(--green)}
+
+/* ícones de canal */
+.cn{width:18px;height:18px;border-radius:5px;display:inline-grid;place-items:center;flex:none;vertical-align:-4px}
+.cn svg{width:11px;height:11px}
+.cn.whatsapp{background:#25d366;color:#fff}
+.cn.instagram{background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color:#fff}
+.cn.facebook{background:#1877f2;color:#fff}
+.cn.site{background:#e9ebee;color:var(--ink-2)}
+.cn.google{background:#fff;border:1px solid var(--line-2);color:#4285f4;font-weight:800;font-size:11px}
+.cn.meta{background:#0866ff;color:#fff;font-weight:800;font-size:10px}
+.cn.g{width:26px;height:26px;border-radius:8px}.cn.g svg{width:14px;height:14px}
+
+/* ---------- CRM ---------- */
+.crm{display:grid;grid-template-columns:210px 1fr;grid-template-rows:56px 1fr;background:var(--paper);min-height:0;position:relative}
+.rail{grid-row:1/3;background:var(--carbon);color:#e9ebee;display:flex;flex-direction:column;padding:0 10px;min-height:0}
+.logo{padding:14px 8px 12px;border-bottom:1px solid var(--rail-line);display:flex;gap:10px;align-items:center;flex:none}
+.logo .cl{width:34px;height:34px;border-radius:10px;background:#fff;color:var(--green);display:grid;place-items:center;font-weight:800;font-size:12px;flex:none}
+.logo b{display:block;font-size:13px;font-weight:600;color:#fff;line-height:1.2}
+.logo small{display:block;font-size:11px;color:var(--mute)}
+.meio{flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin;scrollbar-color:#2a3038 transparent;margin:0 -10px;padding:2px 10px 8px}
+.sec-t{font-size:10.5px;color:#6b727b;padding:12px 10px 4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.nav{display:flex;flex-direction:column;gap:1px}
+.nav button{all:unset;display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-weight:500;font-size:13px;color:#c4c9cf;cursor:pointer}
+.nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav button:focus-visible{outline:2px solid var(--green-2)}
+.nav button.on{background:rgba(255,255,255,.09);color:#fff}
+.nav button svg{color:#7c838c;flex:none}
+.nav button.on svg{color:var(--green-2)}
+.nav .n{margin-left:auto;font-size:10.5px;font-weight:600;background:#2a3038;padding:1px 7px;border-radius:10px;color:#fff}
+.nav .n.bad{background:var(--red)}
+.nav .n:empty{display:none}
+.nav button.pisca .n{animation:pulsa 1.2s ease-out}
+.rail .liz-rail{flex:none;display:flex;gap:9px;align-items:center;border-top:1px solid var(--rail-line);padding:10px 4px}
+.rail .liz-rail img{width:40px;height:40px;object-fit:contain;flex:none}
+.rail .liz-rail p{margin:0;font-size:11.5px;line-height:1.4;color:#c4c9cf}
+.rail .liz-rail p b{color:var(--green-2);font-weight:600}
+.rail .foot{flex:none;padding:8px 8px 12px;font-family:var(--mono);font-weight:700;font-size:13px;color:#fff}
+.rail .foot i{font-style:normal;color:var(--green-2)}
+.rail .foot small{display:block;font-family:var(--font);font-weight:400;font-size:10.5px;color:#6b727b}
+.top{background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 22px;min-width:0}
+.top .crumb{font-weight:600;font-size:15px;white-space:nowrap}
+.lizchave{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:20px;height:32px;padding:0 12px;font-size:12.5px;font-weight:600;color:var(--green);background:var(--surface)}
+.lizchave::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green-2);animation:respira 2s infinite}
+.lizchave.escuta{color:var(--amber)}.lizchave.escuta::before{background:#ffb224;animation:none}
+.top .sp{margin-left:auto}
+.top .tour{border:1px solid var(--line-2);background:var(--surface);border-radius:20px;height:30px;padding:0 12px;font-size:12px;font-weight:600;color:var(--ink-2)}
+.top .tour.on{background:var(--green);color:#fff;border-color:var(--green)}
+.top .ex{font-size:11px;color:var(--amber);background:var(--amber-bg);padding:3px 8px;border-radius:6px;font-weight:600;white-space:nowrap}
+.top .clock{font-family:var(--mono);font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.main{overflow-y:auto;padding:20px 24px 40px;min-width:0}
+.head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.head h1{font-size:21px;font-weight:700;margin:0;letter-spacing:-.01em}
+.head .c{font-size:13px;color:var(--mute)}
+.dica{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 14px 8px 8px;margin-bottom:14px}
+.dica img{width:42px;height:42px;object-fit:contain;flex:none}
+.dica p{margin:0;font-size:13px;color:var(--ink-2)}
+.dica p b{color:var(--ink)}
+
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.num{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;min-height:100px;display:flex;flex-direction:column}
+.num .l{font-size:12.5px;color:var(--ink-2);font-weight:500}
+.num .v{font-family:var(--mono);font-weight:700;font-size:clamp(21px,1.9vw,28px);letter-spacing:-.03em;line-height:1;margin-top:auto;white-space:nowrap;font-variant-numeric:tabular-nums}
+.num .v.g{color:var(--green)}.num .v.r{color:var(--red)}.num .v.a{color:var(--amber)}
+.num .s{font-size:12px;color:var(--mute);margin-top:6px}
+.num.dark{background:var(--carbon);border-color:var(--carbon);color:#fff}
+.num.dark .l{color:#aab1ba}.num.dark .s{color:#7c838c}.num.dark .v.g{color:var(--green-2)}
+.sec{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px;min-width:0}
+.sec>.h{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line)}
+.sec>.h h2{font-size:14px;font-weight:600;margin:0}
+.sec>.h .c{font-size:12.5px;color:var(--mute);margin-left:auto}
+.sec>.b{padding:2px 16px}
+.g2{display:grid;grid-template-columns:1.35fr 1fr;gap:12px}
+.g2e{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px}
+.row:first-child{border-top:0}
+.row .hr{font-family:var(--mono);font-size:12.5px;color:var(--mute)}
+.row b{font-weight:600}
+.row .sub{display:block;font-size:12.5px;color:var(--mute)}
+.row .t{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.row .t.r{color:var(--red);font-weight:600}.row .t.g{color:var(--green);font-weight:600}
+.nova{animation:destaca 2.4s ease-out}
+.vazio{padding:16px 0;color:var(--mute);font-size:13px}
+.tag{display:inline-block;font-size:11.5px;font-weight:500;padding:2px 8px;border-radius:6px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.tag.r{background:var(--red-bg);color:var(--red)}.tag.g{background:var(--green-bg);color:var(--green)}.tag.a{background:var(--amber-bg);color:var(--amber)}.tag.b{background:var(--blue-bg);color:var(--blue)}
+.est{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--ink-2);white-space:nowrap}
+.est::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green-2)}
+.est.humano{color:var(--red)}.est.humano::before{background:var(--red)}
+.est.agendado::before{background:var(--blue)}
+.est.fechado::before{background:var(--carbon)}
+.est.escuta{color:var(--amber)}.est.escuta::before{background:#ffb224}
+.av{width:26px;height:26px;border-radius:50%;background:#1d232b;color:#fff;font-weight:600;font-size:10.5px;display:inline-grid;place-items:center;flex:none}
+.av.ia{background:var(--green-bg);color:var(--green)}
+.pulse{animation:pulsa 1.6s ease-out}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{text-align:left;font-size:11.5px;font-weight:600;color:var(--mute);padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.t tr:last-child td{border-bottom:0}
+table.t td.n,table.t th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.t tr.alerta td{background:#fff8f8}
+.barras .br{display:grid;grid-template-columns:120px 1fr 40px;align-items:center;gap:10px;padding:8px 0;font-size:13px}
+.barras .br>span{display:flex;gap:8px;align-items:center}
+.barras .tr{height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.barras .tr i{display:block;height:100%;background:var(--green);border-radius:5px;transition:width .8s ease}
+.barras .br b{font-family:var(--mono);font-weight:600;text-align:right}
+.funil{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:12px 16px}
+.funil div{padding:11px 12px;border-radius:10px;background:var(--surface-2)}
+.funil span{display:block;font-size:12px;color:var(--ink-2)}
+.funil b{display:block;font-family:var(--mono);font-size:21px;font-weight:700;margin-top:6px}
+
+/* conversas */
+.conv{display:grid;grid-template-columns:240px 1fr;gap:12px;height:calc(100vh - 56px - 20px - 40px - 50px);min-height:420px}
+.lista{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.filtros{display:flex;gap:4px;padding:8px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.filtros button{border:1px solid var(--line);background:var(--surface);border-radius:20px;height:26px;padding:0 9px;font-size:11.5px;font-weight:600;color:var(--ink-2);display:inline-flex;gap:5px;align-items:center}
+.filtros button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.itens{overflow-y:auto;flex:1}
+.it{all:unset;display:block;box-sizing:border-box;width:100%;padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer}
+.it:hover{background:var(--surface-2)}
+.it.on{background:var(--green-bg)}
+.it b{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600}
+.it b small{margin-left:auto;font-family:var(--mono);font-weight:500;color:var(--mute);font-size:11px}
+.it span.u{display:block;font-size:12.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:2px 0 4px}
+.fio{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;min-width:0}
+.fh{padding:11px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.fh>div{min-width:0}
+.fh b{font-size:14px}
+.fh .sub{font-size:12px;color:var(--mute);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.fh .est{margin-left:auto}
+.ficha{padding:9px 16px 11px;border-bottom:1px solid var(--line)}
+.ficha h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin:0 0 6px}
+.ficha .cps{display:flex;flex-wrap:wrap;gap:6px}
+.cp{margin:0;border:1px solid var(--line);border-radius:8px;padding:4px 9px;background:var(--surface-2)}
+.cp.vaz{border-style:dashed;background:transparent}
+.cp.alerta{background:var(--amber-bg);border-color:#f3dca9}
+.cp dt{font-size:10.5px;color:var(--mute)}
+.cp dd{margin:0;font-size:12.5px;font-weight:600}
+.cp.vaz dd{color:var(--line-2);font-weight:500}
+.msgs{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px;background:var(--surface-2)}
+.m{max-width:78%;padding:8px 11px;border-radius:10px;font-size:13px;line-height:1.42;background:var(--surface);border:1px solid var(--line)}
+.m .q{display:flex;gap:6px;align-items:center;font-size:11px;font-weight:600;color:var(--mute);margin-bottom:2px}
+.m .q i{font-style:normal;font-family:var(--mono);font-weight:500;margin-left:auto}
+.m.lead{align-self:flex-start}
+.m.ia{align-self:flex-end;background:var(--green-bg);border-color:#cdebd8}.m.ia .q{color:var(--green)}
+.m.humano{align-self:flex-end;background:var(--blue-bg);border-color:#d3e0fa}.m.humano .q{color:var(--blue)}
+.m.sis{align-self:center;background:transparent;border:0;font-size:11.5px;color:var(--mute);padding:2px;text-align:center}
+.m.liz-nota{align-self:center;max-width:90%;background:var(--amber-bg);border-color:#f3dca9;font-size:12.5px}
+.m.liz-nota .q{color:var(--amber)}
+
+/* pipeline */
+.kb{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;overflow-x:auto;padding-bottom:8px}
+.kb .col{min-height:62vh;background:linear-gradient(180deg,#e9ece7 0%,#f2f4f0 45%,rgba(247,248,246,.35) 100%);border-radius:var(--r);padding:9px}
+.kb .col.p1{background:linear-gradient(180deg,#e3ebf7 0%,#eef3fa 45%,rgba(238,243,250,.35) 100%)}
+.kb .col.p2{background:linear-gradient(180deg,#f7ecd6 0%,#fbf4e6 45%,rgba(251,244,230,.35) 100%)}
+.kb .col.p3{background:linear-gradient(180deg,#e2f3e8 0%,#eef8f1 45%,rgba(238,248,241,.35) 100%)}
+.kb h3{margin:0;font-size:13px;font-weight:600;display:flex;gap:8px;padding:4px 6px}
+.kb h3 .n{margin-left:auto;font-weight:500;color:var(--mute);font-size:12px}
+.kb .sum{font-family:var(--mono);font-size:13.5px;font-weight:600;padding:0 6px 10px;min-height:40px}
+.kb .sum small{display:block;font-size:11px;font-weight:500;color:var(--ink-2)}
+.kb .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 11px;margin-bottom:9px;cursor:pointer}
+.kb .card:hover{border-color:var(--line-2)}
+.kb .card b{display:flex;gap:6px;align-items:center;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden}
+.kb .card b span{overflow:hidden;text-overflow:ellipsis}
+.kb .card .vv{font-family:var(--mono);font-size:12px;color:var(--ink);margin-top:2px}
+.kb .card .i{font-size:12px;color:var(--ink-2);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.kb .card .f{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:11.5px;color:var(--mute)}
+.kb .card.humano{border-left:3px solid var(--red)}
+.kb .card.nova{animation:chega .7s cubic-bezier(.2,.9,.3,1.2) both,destaca 2.4s ease-out}
+
+/* site ao vivo */
+.vivo{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--green)}
+.vivo::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green-2);animation:respira 2s infinite}
+.caminho{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin-top:4px}
+.caminho span{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.caminho span.z{background:var(--green-bg);border-color:#cdebd8;color:var(--green);font-weight:600}
+.caminho em{font-style:normal;color:var(--mute)}
+
+/* equipe e celulares */
+.pessoas{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.pessoa{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.pessoa .t{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.pessoa .t .av{width:36px;height:36px;font-size:12px}
+.pessoa .t b{display:block;font-size:14px}
+.pessoa .t small{font-size:12px;color:var(--mute)}
+.pessoa dl{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:0}
+.pessoa dt{font-size:11px;color:var(--mute)}
+.pessoa dd{margin:0;font-family:var(--mono);font-weight:700;font-size:17px}
+.pessoa dd.r{color:var(--red)}
+.pessoa .vez{margin-top:10px;font-size:12px;color:var(--green);font-weight:600}
+
+/* aviso */
+.toast{position:absolute;right:18px;top:66px;z-index:20;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:9px 14px 9px 9px;font-size:13px;box-shadow:0 16px 36px rgba(17,19,24,.16);display:flex;gap:10px;align-items:center;max-width:360px;animation:desce .35s ease-out both}
+.toast img{width:38px;height:38px;object-fit:contain;flex:none}
+.toast b{display:block;color:var(--green);font-weight:700;font-size:12.5px}
+.toast.r b{color:var(--red)}
+.toast.sai{animation:sobe .3s ease-in both}
+.fim{position:absolute;inset:0;background:rgba(243,244,241,.86);backdrop-filter:blur(4px);display:grid;place-items:center;z-index:30;animation:entra .4s ease-out both}
+.fim .box{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px 26px;width:min(520px,92%);box-shadow:0 30px 60px rgba(17,19,24,.12)}
+.fim .tl{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.fim .tl img{width:58px;height:58px;object-fit:contain}
+.fim h2{margin:0;font-size:19px}
+.fim p{margin:0 0 14px;color:var(--ink-2);font-size:13.5px}
+.fim .nums{margin:0;grid-template-columns:repeat(2,1fr)}
+
+.abas{display:none}
+
+@keyframes entra{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes pula{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+@keyframes respira{0%,100%{box-shadow:0 0 0 3px rgba(47,214,123,.2)}50%{box-shadow:0 0 0 6px rgba(47,214,123,.05)}}
+@keyframes pulsa{0%{color:var(--green-2);transform:scale(1.08)}100%{transform:none}}
+@keyframes destaca{0%{background-color:#fff3c4}100%{background-color:transparent}}
+@keyframes chega{from{opacity:0;transform:translateY(-10px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes desce{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@keyframes sobe{to{opacity:0;transform:translateY(-10px)}}
+
+@media (max-width:1280px){.g2,.g2e{grid-template-columns:1fr}.conv{grid-template-columns:200px 1fr}}
+@media (max-width:900px){
+  body{overflow:auto}
+  .demo{display:block;height:auto}
+  .abas{display:flex;position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line);padding:10px 16px;gap:8px}
+  .abas button{flex:1;height:38px;border-radius:20px;border:1px solid var(--line-2);background:#fff;color:var(--ink-2);font-weight:600;font-size:13.5px;position:relative}
+  .abas button.on{background:var(--green);color:#fff;border-color:var(--green)}
+  .abas .ponto{position:absolute;top:6px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--red);display:none}
+  .abas .ponto.on{display:block}
+  .demo[data-aba=crm] .lado{display:none}
+  .demo[data-aba=zap] .crm{display:none}
+  .lado{height:calc(100dvh - 59px);padding:12px 16px;border:0}
+  .fone{max-height:none}
+  .crm{display:block;min-height:calc(100dvh - 59px)}
+  .rail{flex-direction:row;padding:0;position:sticky;top:59px;z-index:30;overflow-x:auto;scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .logo,.rail .foot,.rail .liz-rail,.sec-t{display:none}
+  .meio{overflow:visible;margin:0;padding:0;display:flex}
+  .nav{flex-direction:row;padding:8px 6px;gap:2px}
+  .nav button{white-space:nowrap;padding:8px 10px}
+  .top{padding:0 16px;height:50px}
+  .top .crumb,.top .ex,.top .clock{display:none}
+  .main{padding:14px 16px 40px}
+  .conv{grid-template-columns:1fr;height:auto}
+  .lista{max-height:260px}
+  .msgs{height:420px;flex:none}
+  .kb{grid-template-columns:repeat(5,minmax(180px,1fr))}
+  .funil{grid-template-columns:repeat(2,1fr)}
+  .tabela{overflow-x:auto}
+  table.t{min-width:620px}
+  .toast{position:fixed;top:112px;right:16px;left:16px;max-width:none}
+}
+
+/* ---------- entrada (molde: login da Coleve) ---------- */
+.home{position:fixed;inset:0;z-index:100;display:grid;grid-template-columns:1fr 1fr;background:#fff;color:var(--ink);overflow-y:auto}
+.home.sai{animation:sobeHome .5s ease-in both}
+.h-foto{position:relative;overflow:hidden;color:#fff;display:flex;flex-direction:column;padding:44px 56px;min-height:100vh}
+.h-foto>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:45% 22%}
+.h-foto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,14,.55) 0%,rgba(10,11,14,.12) 30%,rgba(10,11,14,.15) 45%,rgba(10,11,14,.88) 100%)}
+.h-foto>*:not(img){position:relative;z-index:1}
+.h-marca{display:flex;align-items:center;gap:12px}
+.h-marca .cl{width:46px;height:46px;border-radius:14px;background:#fff;color:#12803f;display:grid;place-items:center;font-weight:800;font-size:16px}
+.h-marca b{display:block;font-size:19px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
+.h-marca small{font-size:12.5px;color:rgba(255,255,255,.8)}
+.h-meio{margin-top:auto}
+.h-eye{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(10,11,14,.55);border-radius:20px;padding:6px 12px;margin-bottom:14px}
+.h-eye::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green-2)}
+.h-foto h2{font-size:clamp(30px,2.9vw,42px);line-height:1.06;letter-spacing:-.03em;font-weight:800;margin:0 0 22px;max-width:14em;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.h-foto h2 em{font-style:normal;color:var(--green-2)}
+.h-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.h-card{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.h-card .ic{width:38px;height:38px;border-radius:12px;background:var(--green-2);color:#0a0b0e;display:grid;place-items:center;flex:none}
+.h-card b{display:block;font-size:14px;font-weight:700}
+.h-card span{display:block;font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.88)}
+.h-form{display:flex;flex-direction:column;justify-content:center;padding:44px clamp(24px,7vw,120px);min-height:100vh;position:relative}
+.h-form .in{width:100%;max-width:420px;margin:0 auto}
+.voltar{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:600;color:var(--ink-2);text-decoration:none;margin-bottom:36px}
+.h-form h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0 0 6px}
+.h-form h1 em{font-style:normal;color:var(--green)}
+.h-form .sub{font-size:14.5px;color:var(--ink-2);margin:0 0 24px}
+.liz-dica{display:flex;gap:12px;align-items:center;background:var(--green-bg);border-radius:16px;padding:10px 14px 10px 8px;margin-bottom:24px}
+.liz-dica img{width:64px;height:64px;object-fit:contain;flex:none}
+.liz-dica p{margin:0;font-size:13.5px;line-height:1.45;color:var(--ink)}
+.liz-dica code{font-family:var(--mono);font-size:12.5px;background:#fff;border-radius:6px;padding:1px 6px;color:var(--green);font-weight:600}
+.liz-dica button{border:0;background:transparent;color:var(--green);font-weight:700;font-size:13px;padding:0;text-decoration:underline;text-underline-offset:3px}
+.h-form label{display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;margin:0 0 7px}
+.campo2{position:relative;margin-bottom:18px}
+.h-form input[type=text],.h-form input[type=password]{width:100%;height:52px;border-radius:14px;border:1px solid transparent;background:#f1f3f0;padding:0 48px 0 16px;font-size:15px;color:var(--ink);outline:0;transition:border-color .15s,box-shadow .15s,background .15s}
+.h-form input:focus{background:#fff;border-color:var(--green);box-shadow:0 0 0 4px rgba(18,128,63,.12)}
+.h-form input.erro{border-color:var(--red);background:#fff;animation:treme .35s}
+.olho{position:absolute;right:8px;top:8px;width:36px;height:36px;border:0;background:transparent;border-radius:10px;color:var(--ink-2);display:grid;place-items:center}
+.h-form label.manter{display:flex;justify-content:flex-start;font-weight:500;gap:9px;align-items:center;font-size:13.5px;color:var(--ink-2);margin:0 0 20px}
+.manter input{width:18px;height:18px;accent-color:var(--green)}
+.entrar{width:100%;height:56px;border:0;border-radius:28px;background:var(--green);color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 10px 24px rgba(18,128,63,.25)}
+.entrar:hover{filter:brightness(1.07)}
+.entrar:disabled{cursor:default}
+.entrar .gira{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:gira .7s linear infinite;display:none}
+.entrar.ind .gira{display:block}
+.h-form .msg{min-height:20px;font-size:13px;color:var(--red);margin:-8px 0 8px}
+.h-form hr{border:0;border-top:1px solid var(--line);margin:26px 0 18px}
+.h-form .links{font-size:13.5px;color:var(--ink-2);display:grid;gap:8px}
+.h-form .links a{color:var(--green);font-weight:700;text-decoration:none}
+.h-rod b{white-space:nowrap}
+.h-rod{text-align:center;font-size:12px;color:var(--mute);margin-top:40px}
+.h-rod b{color:var(--ink);font-family:var(--mono);font-weight:700}
+.h-rod b i{font-style:normal;color:var(--green)}
+@keyframes sobeHome{to{opacity:0;transform:scale(1.015)}}
+@keyframes treme{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes gira{to{transform:rotate(360deg)}}
+@media (max-width:900px){
+  .home{display:block}
+  .h-foto{min-height:0;height:300px;padding:22px 20px}
+  .h-cards{display:none}
+  .h-foto h2{font-size:28px;margin:0}
+  .h-form{min-height:0;padding:28px 20px 32px}
+  .voltar{margin-bottom:22px}
+}
+.h-marca svg{flex:none}
+</style>
+</head>
+<body>
+<div class="home" id="home">
+  <section class="h-foto">
+    <img src="img/corretor.jpg" alt="Corretor mostrando um apartamento para um casal">
+    <div class="h-marca" id="hMarca"></div>
+    <div class="h-meio">
+      <div class="h-eye">CRM Vila Clara</div>
+      <h2>Todo cliente da imobiliária <em>numa tela só.</em></h2>
+      <div class="h-cards">
+        <div class="h-card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></div><div><b>WhatsApp da equipe</b><span>A conversa de cada corretor, dentro do CRM</span></div></div>
+        <div class="h-card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></div><div><b>Liz atendendo</b><span>Responde em segundos e marca a visita</span></div></div>
+        <div class="h-card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><b>Fila com prazo</b><span>O que espera uma pessoa, com o tempo correndo</span></div></div>
+        <div class="h-card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div><div><b>Resultado</b><span>A meta, e o que fez ela ser batida</span></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="h-form">
+    <form class="in" id="login" autocomplete="off" novalidate>
+      <a class="voltar" href="https://kompila.com.br/crm/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7M19 12H5"/></svg> Voltar ao site</a>
+      <h1>Entrar no CRM <em>Vila Clara</em></h1>
+      <p class="sub">Ambiente de demonstração, com conversas que acontecem na sua frente.</p>
+      <div class="liz-dica"><img src="img/liz_fala_3d.png" alt=""><p>Oi, eu sou a Liz. Entra com <code>admin</code> e a senha <code>kompila123</code> que eu te mostro tudo. <button type="button" id="lpre">Preencher pra mim</button></p></div>
+      <label for="lu">Usuário</label>
+      <div class="campo2"><input id="lu" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Seu usuário"></div>
+      <label for="ls">Senha</label>
+      <div class="campo2"><input id="ls" type="password" autocomplete="off" placeholder="Sua senha"><button type="button" class="olho" id="lolho" aria-label="Mostrar senha"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+      <label class="manter"><input type="checkbox" checked> Manter conectado neste aparelho</label>
+      <div class="msg" id="lmsg" role="alert"></div>
+      <button class="entrar" id="lbtn" type="submit"><span class="gira"></span><span id="ltxt">Entrar</span></button>
+      <hr>
+      <div class="links"><span>Quer isso na sua empresa? <a href="https://kompila.com.br/crm/">Conheça o CRM da Kompila</a></span></div>
+      <div class="h-rod">Vila Clara Imóveis é uma empresa fictícia · Desenvolvido por <b><i>[</i> kompila <i>]</i></b></div>
+    </form>
+  </section>
+</div>
+<nav class="abas" aria-label="Lados da demonstração">
+  <button data-aba="zap" class="on">Cliente <span class="ponto" id="pZap"></span></button>
+  <button data-aba="crm">CRM <span class="ponto" id="pCrm"></span></button>
+</nav>
+<div class="demo" data-aba="zap" id="demo">
+  <aside class="lado">
+    <div class="cap"><span class="canal cn whatsapp" id="capIcone"></span><div><small id="capCanal">O cliente</small><b id="quemFone">&nbsp;</b></div></div>
+    <div class="fone"><div class="tela" id="tela">
+      <div class="st"><span id="foneHora">9:12</span><span>5G ▮▮▮</span></div>
+      <div class="ap-head" id="apHead"></div>
+      <div class="chat" id="chat"></div>
+      <div class="inp"><div class="campo" id="campo"></div><div class="env" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M3 20.5 21 12 3 3.5l.01 6.6L15 12 3.01 13.9z"/></svg></div></div>
+    </div></div>
+    <div class="ctl">
+      <button id="bPausa">Pausar</button>
+      <button data-vel="1" class="on">1x</button>
+      <button data-vel="2">2x</button>
+      <button id="bReinicia">Recomeçar</button>
+    </div>
+    <div class="rod">Vila Clara Imóveis é uma empresa fictícia · Desenvolvido por <b><i>[</i> kompila <i>]</i></b></div>
+  </aside>
+
+  <section class="crm" aria-label="CRM da Kompila">
+    <aside class="rail">
+      <div class="logo" id="railLogo"></div>
+      <div class="meio" id="nav"></div>
+      <div class="liz-rail"><img src="img/liz_fala_3d.png" alt=""><p id="lizRail"><b>Liz</b> atendendo</p></div>
+      <div class="foot"><i>[</i> kompila <i>]</i><small>CRM com IA</small></div>
+    </aside>
+    <header class="top">
+      <span class="crumb" id="crumb">Agora</span>
+      <button class="lizchave" id="lizChave" title="Atendendo: a Liz responde. Em escuta: ela só lê e anota.">Liz atendendo</button>
+      <span class="sp"></span>
+      <button class="tour on" id="bTour" title="O CRM vai sozinho pra tela onde a coisa acontece">Tour automático</button>
+      <span class="ex">Demonstração</span>
+      <span class="clock" id="clock">09:12</span>
+    </header>
+    <main class="main" id="main"></main>
+  </section>
+</div>
+
+<script>
+'use strict'
+const $ = s => document.querySelector(s)
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+const brl = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR')
+const curto = v => v >= 1e6 ? 'R$ ' + (v / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' mi' : v >= 1e4 ? 'R$ ' + Math.round(v / 1e3) + ' mil' : brl(v)
+const hh = m => String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')
+const iniciais = n => n.split(' ').filter(Boolean).slice(0, 2).map(p => p[0]).join('').toUpperCase()
+const FASES = ['Novo', 'Qualificando', 'Visita marcada', 'Proposta', 'Fechado']
+
+/* ---------- marca da Vila Clara (cliente fictício) ---------- */
+const SIMB = (s = 34) => `<svg width="${s}" height="${s}" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#0F3D4A"/><circle cx="33" cy="15" r="5.5" fill="#F2A65A"/><path d="M10 26 24 14l14 12" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 24v12h18V24" fill="none" stroke="#fff" stroke-width="3.6" stroke-linejoin="round"/><rect x="21.5" y="29" width="5" height="7" rx="1" fill="#F2A65A"/></svg>`
+const LOGO = (s = 34, claro = false) => `<span style="display:inline-flex;align-items:center;gap:10px">${SIMB(s)}<span style="line-height:1"><span style="display:block;font-weight:800;font-size:${Math.round(s * .5)}px;letter-spacing:-.02em;color:${claro ? '#fff' : '#0F3D4A'}">Vila Clara</span><span style="display:block;font-weight:600;font-size:${Math.max(9, Math.round(s * .26))}px;letter-spacing:.32em;color:${claro ? 'rgba(255,255,255,.75)' : '#E07A3E'};margin-top:3px">IMÓVEIS</span></span></span>`
+
+/* ---------- ícones ---------- */
+const ICN = {
+  whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+  facebook: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-2.8 0-4 1.7-4 4.4V10H7v4h3v8h4v-8h3l1-4h-4V8.6c0-.4.3-.6 1-.6Z"/></svg>',
+  site: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+  google: 'G', meta: '∞'
+}
+const cn = (k, g) => `<span class="cn ${k}${g ? ' g' : ''}" title="${({ whatsapp: 'WhatsApp', instagram: 'Instagram', facebook: 'Facebook', site: 'Site', google: 'Google Ads', meta: 'Meta Ads' })[k]}">${ICN[k]}</span>`
+const LU = {
+  painel: '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+  acessos: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  campanhas: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+  agora: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  pipeline: '<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="11" rx="1"/><rect x="17" y="4" width="4" height="7" rx="1"/>',
+  fila: '<path d="M3 6h18M3 12h12M3 18h7"/><circle cx="19" cy="17" r="3"/>',
+  agenda: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  conversas: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+  followup: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  leads: '<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 11h6M20 8v6"/>',
+  equipe: '<circle cx="9" cy="7" r="4"/><path d="M3 21v-1a6 6 0 0 1 12 0v1M16 3.1a4 4 0 0 1 0 7.8M21 21v-1a6 6 0 0 0-4-5.6"/>',
+  celulares: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>',
+  resultado: '<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>',
+  aprendeu: '<path d="M12 3a6 6 0 0 0-3.5 10.9V17h7v-3.1A6 6 0 0 0 12 3ZM9 21h6"/>',
+  conector: '<path d="M12 22v-5M9 8V2M15 8V2M18 8v5a6 6 0 0 1-12 0V8z"/>'
+}
+const GRUPOS = [
+  ['Vendas', [['painel', 'Painel'], ['conversas', 'Conversas'], ['pipeline', 'Pipeline'], ['agenda', 'Agenda'], ['fila', 'Fila']]],
+  ['Marketing', [['campanhas', 'Campanhas'], ['acessos', 'Site ao vivo']]],
+  ['Gestão', [['equipe', 'Equipe'], ['resultado', 'Resultado']]]
+]
+const NOMES = Object.fromEntries(GRUPOS.flatMap(g => g[1]))
+
+let S, geracao = 0
+
+function estadoInicial() {
+  const L = []
+  const add = o => { const l = Object.assign({ id: 'l' + (L.length + 1), msgs: [], ficha: {}, estado: 'ia', corretor: null, numero: 'oficial', valor: 0, resp: 40, hoje: true, campanha: null }, o); l.ini = iniciais(l.nome); L.push(l); return l }
+  add({ nome: 'Juliana Prado', canal: 'site', origem: 'Google Ads', campanha: 'g1', tipo: 'Venda', interesse: 'Casa 3 dorm · Mogilar', fase: 'Qualificando', valor: 690000, criado: 134, resp: 38,
+    ficha: { Objetivo: 'Morar', Orçamento: 'até R$ 700 mil', Bairro: 'Mogilar' },
+    msgs: [{ de: 'lead', txt: 'Boa noite, a casa da rua Ipiranga ainda está à venda?', h: 134 }, { de: 'ia', txt: 'Boa noite, Juliana! Está sim: 3 dormitórios, uma suíte, R$ 690 mil. Te mando as fotos agora ou prefere de manhã?', h: 134 }, { de: 'sis', txt: 'Liz respondeu em 38 s, às 02:14, pelo chat do site' }] })
+  add({ nome: 'Thiago Alves', canal: 'whatsapp', origem: 'Meta Ads', campanha: 'm2', tipo: 'Locação', interesse: 'Apto 2 dorm · Centro', fase: 'Visita marcada', estado: 'agendado', corretor: 'Diego', valor: 2100, criado: 470, resp: 22,
+    ficha: { Orçamento: 'até R$ 2.200/mês', Bairro: 'Centro', Garantia: 'Caução' },
+    msgs: [{ de: 'lead', txt: 'Bom dia, o apto do Centro aceita caução?', h: 470 }, { de: 'ia', txt: 'Bom dia, Thiago! Aceita sim, 3 aluguéis. Quer ver hoje às 15h com o Diego?', h: 470 }, { de: 'lead', txt: 'Combinado, 15h estou lá', h: 472 }] })
+  add({ nome: 'Lucas e Bia Ramos', canal: 'whatsapp', numero: 'Paula', origem: 'Indicação', tipo: 'Venda', interesse: 'Apto 3 dorm · Centro', fase: 'Proposta', estado: 'escuta', corretor: 'Paula', valor: 512000, criado: 485, resp: 31, hoje: false,
+    ficha: { Objetivo: 'Morar', Pagamento: 'Financiamento aprovado', 'Combinado pra': 'Resposta do proprietário hoje' },
+    msgs: [{ de: 'humano', quem: 'Paula', txt: 'Lucas, o proprietário aceitou 512. Te mando a minuta ainda hoje.', h: 520 }, { de: 'nota', txt: 'Liz em escuta anotou: Paula prometeu a minuta hoje.', h: 520 }] })
+  add({ nome: 'Fernanda Costa', canal: 'instagram', origem: 'Orgânico', tipo: 'Locação', interesse: 'Casa com quintal · Braz Cubas', fase: 'Novo', valor: 2500, criado: 521, resp: 19,
+    msgs: [{ de: 'lead', txt: 'Oi, quanto é o aluguel da casa do post?', h: 521 }, { de: 'ia', txt: 'Oi, Fernanda! R$ 2.500 com IPTU incluso. Você tem pet? Pergunto porque tem quintal.', h: 521 }] })
+  add({ nome: 'Otávio Reis', canal: 'facebook', origem: 'Meta Ads', campanha: 'm1', tipo: 'Venda', interesse: 'Apto 2 dorm · Mogilar', fase: 'Qualificando', valor: 415000, criado: 538, resp: 27,
+    ficha: { Objetivo: 'Investir', Orçamento: 'até R$ 420 mil' },
+    msgs: [{ de: 'lead', txt: 'Esse apto aluga fácil? É pra investimento', h: 538 }, { de: 'ia', txt: 'Aluga sim, Otávio: no bairro sai entre R$ 2.000 e 2.300. Quer ver o rendimento com o valor de compra?', h: 538 }] })
+  add({ nome: 'Bruno Teixeira', canal: 'whatsapp', numero: 'Diego', origem: 'Meta Ads', campanha: 'm2', tipo: 'Locação', interesse: 'Apto 2 dorm · Vila Oliveira', fase: 'Proposta', estado: 'escuta', corretor: 'Diego', valor: 2300, criado: 495, resp: 25, hoje: false,
+    ficha: { Orçamento: 'R$ 2.300/mês', Garantia: 'Seguro fiança' },
+    msgs: [{ de: 'humano', quem: 'Diego', txt: 'Bruno, o seguro fiança foi aprovado. Agora é só o contrato.', h: 505 }] })
+  const equipe = {
+    Paula: { nome: 'Paula Martins', ini: 'PA', area: 'Venda · Mogilar e Centro', msgs: 41, resp: 4, visitas: 3, fechados: 2 },
+    Diego: { nome: 'Diego Santos', ini: 'DI', area: 'Locação', msgs: 37, resp: 6, visitas: 4, fechados: 5 },
+    Renata: { nome: 'Renata Lima', ini: 'RE', area: 'Venda · alto padrão', msgs: 19, resp: 9, visitas: 1, fechados: 1 },
+    Marcos: { nome: 'Marcos Prado', ini: 'MP', area: 'Locação · comercial', msgs: 12, resp: 31, visitas: 0, fechados: 0 }
+  }
+  return {
+    min: 9 * 60 + 12, leads: L, equipe, vez: 'Paula',
+    feed: [
+      { h: 538, txt: '<b>Otávio Reis</b> chegou pelo Facebook, anúncio <b>Apto 2 dorm Mogilar</b>', k: 'facebook' },
+      { h: 521, txt: '<b>Fernanda Costa</b> chamou no Direct do Instagram', k: 'instagram' },
+      { h: 470, txt: 'Liz marcou visita: <b>Thiago Alves</b>, hoje 15:00 com Diego', k: 'whatsapp' },
+      { h: 134, txt: '<b>Juliana Prado</b> chegou às 02:14 pelo site e a Liz respondeu em 38 s', k: 'site' }
+    ],
+    visitas: [{ lead: 'l2', nome: 'Thiago Alves', imovel: 'Apto 2 dorm · Centro', dia: 'Hoje', hora: '15:00', corretor: 'Diego', liz: true }],
+    campanhas: [
+      { id: 'm1', rede: 'meta', nome: 'Apto 2 dorm Mogilar', onde: 'Reels do Instagram', gasto: 1180, ritmo: 2.6, cliques: 2140, conversas: 38, leads: 29, visitas: 9, vendas: 1, valor: 412000 },
+      { id: 'm2', rede: 'meta', nome: 'Casas pra alugar com quintal', onde: 'Stories e Facebook', gasto: 620, ritmo: 1.4, cliques: 1310, conversas: 27, leads: 21, visitas: 7, vendas: 3, valor: 7650 },
+      { id: 'm3', rede: 'meta', nome: 'Lançamento Vila Oliveira', onde: 'Feed do Instagram', gasto: 540, ritmo: 2.1, cliques: 980, conversas: 2, leads: 0, visitas: 0, vendas: 0, valor: 0 },
+      { id: 'g1', rede: 'google', nome: 'Casas em condomínio Mogi', onde: 'Pesquisa do Google', gasto: 1460, ritmo: 3.1, cliques: 610, conversas: 19, leads: 14, visitas: 6, vendas: 1, valor: 690000 },
+      { id: 'g2', rede: 'google', nome: 'Imobiliária em Mogi', onde: 'Pesquisa · marca', gasto: 210, ritmo: .5, cliques: 340, conversas: 11, leads: 9, visitas: 3, vendas: 1, valor: 2300 }
+    ],
+    site: [
+      { id: 's1', cidade: 'Mogi das Cruzes', uf: 'SP', ap: 'iPhone', origem: 'Google Ads', caminho: ['Início', 'Casas à venda'], seg: 84, h: 548 },
+      { id: 's2', cidade: 'Suzano', uf: 'SP', ap: 'Android', origem: 'Instagram', caminho: ['Aluguel', 'Casa Braz Cubas'], seg: 52, h: 550 },
+      { id: 's3', cidade: 'São Paulo', uf: 'SP', ap: 'Windows', origem: 'Busca orgânica', caminho: ['Início'], seg: 12, h: 551 }
+    ],
+    redes: [
+      { k: 'whatsapp', nome: 'WhatsApp da Vila Clara', det: '(11) 90000-0100 · número oficial', modo: 'Liz atendendo', lidas: 212 },
+      { k: 'instagram', nome: '@vilaclara.imoveis', det: 'Direct e comentários', modo: 'Liz atendendo', lidas: 64 },
+      { k: 'facebook', nome: 'Vila Clara Imóveis', det: 'Messenger da página', modo: 'Liz atendendo', lidas: 23 },
+      { k: 'site', nome: 'vilaclara.com.br', det: 'Chat do site e formulário', modo: 'Liz atendendo', lidas: 17 },
+      { k: 'whatsapp', nome: 'Celular da Paula', det: 'WhatsApp do corretor', modo: 'Liz em escuta', lidas: 41, quem: 'Paula' },
+      { k: 'whatsapp', nome: 'Celular do Diego', det: 'WhatsApp do corretor', modo: 'Liz em escuta', lidas: 37, quem: 'Diego' },
+      { k: 'whatsapp', nome: 'Celular da Renata', det: 'WhatsApp do corretor', modo: 'Liz em escuta', lidas: 19, quem: 'Renata' },
+      { k: 'whatsapp', nome: 'Celular do Marcos', det: 'WhatsApp do corretor', modo: 'Liz em escuta', lidas: 12, quem: 'Marcos' }
+    ],
+    aprendeu: [
+      { h: 520, quem: 'Paula', lead: 'Lucas e Bia Ramos', tipo: 'Combinado', txt: 'Enviar a minuta do contrato hoje' },
+      { h: 498, quem: 'Marcos', lead: 'Clínica Sorriso', tipo: 'Sem resposta', txt: 'Lead de sala comercial esperando há 31 min' },
+      { h: 465, quem: 'Diego', lead: 'Patrícia Nunes', tipo: 'Concorrente', txt: 'Está vendo um apto com a imobiliária do Centro' },
+      { h: 430, quem: 'Liz', lead: 'Otávio Reis', tipo: 'Não sabia', txt: 'Perguntou o valor do condomínio do Edifício Aurora' }
+    ],
+    followups: [
+      { nome: 'Fernanda Costa', canal: 'instagram', quando: 'hoje 10:30', txt: 'Fernanda, a casa de Braz Cubas ainda está livre. Quer ver no sábado?', st: 'agendado' },
+      { nome: 'Henrique Dias', canal: 'whatsapp', quando: 'ontem 18:00', txt: 'Henrique, separei 2 salas no Centro com o tamanho que você falou.', st: 'respondeu' },
+      { nome: 'Aline Souza', canal: 'whatsapp', quando: 'ontem 11:00', txt: 'Aline, conseguiu ver as fotos da casa da Vila Oliveira?', st: 'sem resposta' }
+    ],
+    mes: { vendas: 4, valorVendas: 1985000, locacoes: 11, valorLoc: 26400 },
+    view: 'agora', auto: true, speed: 1, paused: false, aberta: null, featured: null, filtro: 'todos',
+    novos: new Set(), ultimo: {}, piscaNav: new Set()
+  }
+}
+
+/* ---------- tempo ---------- */
+class Parou extends Error {}
+async function sleep(ms) {
+  const g = geracao; let falta = ms
+  while (falta > 0) {
+    await new Promise(r => setTimeout(r, 60))
+    if (g !== geracao) throw new Parou()
+    if (!S.paused) falta -= 60 * S.speed
+  }
+}
+function passa(n) {
+  S.min += n
+  S.campanhas.forEach(c => { if (c.ritmo) c.gasto += c.ritmo * n * (0.8 + Math.random() * .4) })
+  $('#clock').textContent = hh(S.min); $('#foneHora').textContent = hh(S.min).replace(/^0/, '')
+}
+
+/* ---------- celular do cliente ---------- */
+let modoFone = 'wa'
+function abreFone(l, modo, legenda) {
+  modoFone = modo
+  $('#tela').className = 'tela' + (modo === 'ig' ? ' ig' : '')
+  const head = modo === 'ig'
+    ? `<span aria-hidden="true">‹</span><div class="av"><i>${SIMB(26)}</i></div><div><b>vilaclara.imoveis</b><span id="apSub">Vila Clara Imóveis</span></div>`
+    : modo === 'corretor'
+      ? `<span aria-hidden="true">‹</span><div class="av" style="background:#1d232b;color:#fff">${esc(S.equipe[l.corretor].ini)}</div><div><b>${esc(S.equipe[l.corretor].nome)}</b><span id="apSub">corretor · Vila Clara</span></div>`
+      : `<span aria-hidden="true">‹</span><div class="av" style="background:transparent">${SIMB(36)}</div><div><b>Vila Clara Imóveis</b><span id="apSub">conta comercial</span></div>`
+  $('#apHead').innerHTML = head
+  $('#capIcone').className = 'canal cn ' + (modo === 'ig' ? 'instagram' : 'whatsapp')
+  $('#capIcone').innerHTML = ICN[modo === 'ig' ? 'instagram' : 'whatsapp']
+  $('#capCanal').textContent = legenda
+  $('#quemFone').textContent = 'No celular de ' + l.nome.split(' ')[0]
+  $('#chat').innerHTML = '<div class="dia">HOJE</div>'
+  marcaAba('zap')
+}
+function bolha(cls, html) {
+  const c = $('#chat'); c.querySelector('.typing')?.remove()
+  const d = document.createElement('div'); d.className = 'bb ' + cls; d.innerHTML = html + '<span class="h">' + hh(S.min) + '</span>'
+  c.appendChild(d); c.scrollTop = c.scrollHeight
+}
+async function digita(txt) {
+  const campo = $('#campo'); campo.textContent = ''
+  const passo = Math.max(1, Math.round(txt.length / 22))
+  for (let i = 0; i < txt.length; i += passo) { campo.textContent = txt.slice(0, i + passo); await sleep(45) }
+  await sleep(250); campo.textContent = ''
+}
+function digitando(on) {
+  const c = $('#chat'); c.querySelector('.typing')?.remove()
+  const sub = $('#apSub'); if (sub) sub.textContent = on ? 'digitando…' : (modoFone === 'ig' ? 'Ativo agora' : 'online')
+  if (on) { const d = document.createElement('div'); d.className = 'bb in typing'; d.innerHTML = '<i></i><i></i><i></i>'; c.appendChild(d); c.scrollTop = c.scrollHeight }
+}
+const cartaoImovel = (foto, t, sub) => `<div class="imovel"><div class="foto" style="background:url(img/${foto}) center/cover"></div><div class="t"><b>${esc(t)}</b>${esc(sub)}</div></div>`
+
+/* ---------- o que acontece no CRM ---------- */
+const lead = id => S.leads.find(l => l.id === id)
+const camp = id => S.campanhas.find(c => c.id === id)
+const novo = k => S.novos.add(k)
+function evento(txt, k, tipo) { S.feed.unshift({ h: S.min, txt, k, tipo, nova: true }) }
+function piscar(...views) { views.forEach(v => S.piscaNav.add(v)) }
+function novoLead(o, quieto) {
+  const l = Object.assign({ id: 'n' + Date.now() + Math.random().toString(36).slice(2, 5), msgs: [], ficha: {}, estado: 'ia', corretor: null, numero: 'oficial', fase: 'Novo', valor: 0, criado: S.min, hoje: true, resp: null, campanha: null }, o)
+  l.ini = iniciais(l.nome); S.leads.unshift(l)
+  const c = l.campanha && camp(l.campanha); if (c) { c.conversas++; c.leads++; c.cliques += 3; novo('camp:' + c.id) }
+  novo('lead:' + l.id); piscar('conversas', 'leads', 'painel', c ? 'campanhas' : 'agora')
+  const via = c ? `anúncio <b>${esc(c.nome)}</b> (${c.rede === 'meta' ? 'Meta' : 'Google'})` : ({ instagram: 'Direct do Instagram', facebook: 'Messenger do Facebook', site: 'chat do site', whatsapp: 'WhatsApp' })[l.canal]
+  evento(`<b>${esc(l.nome)}</b> chegou pelo ${via}`, l.canal)
+  if (!quieto) toast('Entrou lead', `${esc(l.nome)} · ${c ? (c.rede === 'meta' ? 'Meta Ads' : 'Google Ads') : esc(l.origem)}`)
+  return l
+}
+function msg(l, de, txt, extra) {
+  const m = Object.assign({ de, txt, h: S.min, nova: true }, extra || {}); l.msgs.push(m)
+  if (de === 'ia' && l.resp == null) { l.resp = extra?.seg ?? 18 + Math.round(Math.random() * 20); l.msgs.push({ de: 'sis', txt: `Liz respondeu em ${l.resp} s`, nova: true }) }
+  if (de === 'humano' && S.equipe[extra?.quem]) S.equipe[extra.quem].msgs++
+  const r = S.redes.find(x => (l.numero === 'oficial' ? (x.k === l.canal && !x.quem) : x.quem === l.numero)); if (r) r.lidas++
+  piscar('conversas'); render()
+}
+function ficha(l, o) { Object.assign(l.ficha, o); Object.keys(o).forEach(k => novo('ficha:' + l.id + ':' + k)); render() }
+function fase(l, f, estado) {
+  l.fase = f; if (estado) l.estado = estado
+  novo('card:' + l.id); piscar('pipeline')
+  evento(`<b>${esc(l.nome)}</b> foi pra ${esc(f)}`, l.canal, f === 'Fechado' ? 'g' : '')
+  render()
+}
+function visita(l, dia, hora, corretor, imovel) {
+  l.corretor = corretor; S.equipe[corretor].visitas++
+  S.visitas.push({ lead: l.id, nome: l.nome, imovel: imovel || l.interesse, dia, hora, corretor, liz: true })
+  const c = l.campanha && camp(l.campanha); if (c) c.visitas++
+  novo('vis:' + l.id); piscar('agenda', 'equipe')
+  evento(`Liz marcou visita: <b>${esc(l.nome)}</b>, ${dia.toLowerCase()} ${hora} com ${corretor}`, l.canal, 'b')
+  toast('Visita marcada', `${esc(l.nome)} · ${dia.toLowerCase()} ${hora} com ${corretor}`)
+}
+function fechar(l) {
+  l.estado = 'fechado'; fase(l, 'Fechado')
+  if (l.tipo === 'Venda') { S.mes.vendas++; S.mes.valorVendas += l.valor } else { S.mes.locacoes++; S.mes.valorLoc += l.valor }
+  if (l.corretor) S.equipe[l.corretor].fechados++
+  const c = l.campanha && camp(l.campanha); if (c) { c.vendas++; c.valor += l.valor; novo('camp:' + c.id) }
+  piscar('resultado', 'campanhas', 'equipe')
+}
+function aprendeu(quem, l, tipo, txt) { S.aprendeu.unshift({ h: S.min, quem, lead: l.nome, tipo, txt, nova: true }); piscar('aprendeu') }
+
+async function cliente(l, txt) {
+  await digita(txt); bolha('out', esc(txt)); passa(1); msg(l, 'lead', txt); irPara('conversas', l.id)
+}
+async function empresa(l, txt, quem, opt = {}) {
+  digitando(true); await sleep(opt.pensa ?? 1500); digitando(false)
+  const rot = quem && modoFone !== 'corretor' ? `<span class="quem">${esc(quem)} · corretor${['Paula', 'Renata'].includes(quem) ? 'a' : ''}</span>` : ''
+  bolha('in', rot + (opt.card || '') + esc(txt))
+  msg(l, quem ? 'humano' : 'ia', txt, Object.assign(quem ? { quem } : {}, opt.seg ? { seg: opt.seg } : {}))
+  marcaAba('crm')
+}
+
+/* ---------- roteiros ---------- */
+async function roteiroMariana() {
+  const l = novoLead({ nome: 'Mariana Lopes', canal: 'whatsapp', origem: 'Meta Ads', campanha: 'm1', tipo: 'Venda', interesse: 'Apto 2 dorm · Mogilar', valor: 438000 })
+  S.featured = l.id; abreFone(l, 'wa', 'Clicou no anúncio do Instagram'); render(); irPara('painel')
+  await sleep(1600)
+  await cliente(l, 'Oi, vi o anúncio do apartamento no Mogilar. Ainda tá disponível?')
+  await empresa(l, 'Oi, Mariana! Aqui é a Liz, da Vila Clara. Tá disponível sim: 2 dormitórios com varanda, 68 m², R$ 438 mil. Posso te fazer duas perguntas rápidas pra separar o que combina com você?', null, { seg: 24 })
+  await sleep(1700)
+  await cliente(l, 'Pode sim')
+  await empresa(l, 'É pra morar ou pra investir? E já tem uma faixa de valor em mente?')
+  fase(l, 'Qualificando')
+  await sleep(2000)
+  await cliente(l, 'Pra morar, eu e meu marido. Até uns 450 mil, a gente vai financiar')
+  await sleep(400)
+  ficha(l, { Objetivo: 'Morar (casal)', Orçamento: 'até R$ 450 mil', Pagamento: 'Financiamento', Bairro: 'Mogilar' })
+  await sleep(900)
+  await empresa(l, 'Perfeito, esse cabe certinho. Tenho mais um no mesmo bairro: 2 dormitórios com vaga coberta, R$ 415 mil. Quer ver os dois no mesmo dia? Tenho sábado às 10h ou às 14h.', null, { pensa: 1800, card: cartaoImovel('apto.jpg', 'Apto 2 dorm · Mogilar', '68 m² · varanda · R$ 438 mil') })
+  await sleep(1800)
+  await cliente(l, 'Sábado 10h é ótimo')
+  await empresa(l, 'Marcado: sábado, 10h, com a Paula, nossa corretora do Mogilar. Ela te chama aqui pra combinar o ponto de encontro.')
+  visita(l, 'Sábado', '10:00', 'Paula', 'Apto 2 dorm · Mogilar (2 imóveis)')
+  fase(l, 'Visita marcada', 'agendado'); irPara('pipeline')
+  await sleep(3000)
+  irPara('campanhas')
+  await sleep(3400)
+}
+
+async function roteiroRafael() {
+  passa(8)
+  const l = novoLead({ nome: 'Rafael Moura', canal: 'instagram', origem: 'Orgânico', tipo: 'Locação', interesse: 'Casa com quintal · aceita pet', valor: 2800 })
+  S.featured = l.id; S.filtro = 'todos'; abreFone(l, 'ig', 'Chamou no Direct do Instagram'); render(); irPara('agora')
+  await sleep(1500)
+  await cliente(l, 'Oi! Vocês têm casa pra alugar com quintal? Tenho dois cachorros')
+  await empresa(l, 'Oi, Rafael! Tenho sim, e que aceitam pet. Qual bairro você prefere e até quanto pensa no aluguel?', null, { seg: 17 })
+  await sleep(1900)
+  await cliente(l, 'César de Souza ou Braz Cubas. Até 2.800')
+  ficha(l, { Bairro: 'César de Souza ou Braz Cubas', Orçamento: 'até R$ 2.800/mês', Pet: '2 cachorros' })
+  fase(l, 'Qualificando')
+  await empresa(l, 'Separei 3 casas com quintal nessa faixa. A que mais combina com você:', null, { pensa: 1600 })
+  await sleep(600)
+  await empresa(l, '3 dormitórios, quintal de 80 m², R$ 2.650 + IPTU. Quer ver amanhã?', null, { pensa: 1200, card: cartaoImovel('casa.jpg', 'Casa 3 dorm · Braz Cubas', 'Quintal 80 m² · aceita pet · R$ 2.650') })
+  await sleep(2000)
+  await cliente(l, 'Quero! Amanhã fim de tarde dá?')
+  await empresa(l, 'Dá sim: amanhã às 17h30 com o Diego. Ele já recebe tudo o que você me contou, não precisa repetir nada.')
+  visita(l, 'Amanhã', '17:30', 'Diego', 'Casa 3 dorm · Braz Cubas')
+  fase(l, 'Visita marcada', 'agendado'); irPara('agenda')
+  await sleep(3200)
+}
+
+async function roteiroCarla() {
+  passa(10)
+  // primeiro ela aparece no site, vinda do Google Ads
+  const v = { id: 'sc', cidade: 'Mogi das Cruzes', uf: 'SP', ap: 'iPhone', origem: 'Google Ads', termo: 'casa condomínio mogi', caminho: ['Início'], seg: 4, h: S.min, nova: true }
+  S.site.unshift(v); piscar('acessos'); evento('Visitante do <b>Google Ads</b> entrou no site, em Mogi das Cruzes', 'site'); irPara('acessos'); render()
+  for (const p of ['Casas em condomínio', 'Casa Real Park', 'Fotos da casa']) { await sleep(1500); v.caminho.push(p); v.seg += 40; v.nova = true; render() }
+  await sleep(1200)
+  v.zap = true; v.nova = true; render()
+  const l = novoLead({ nome: 'Carla Mendes', canal: 'whatsapp', origem: 'Google Ads', campanha: 'g1', tipo: 'Venda', interesse: 'Casa em condomínio · Real Park', valor: 690000 })
+  v.lead = l.nome
+  S.featured = l.id; abreFone(l, 'wa', 'Veio do Google, clicou no WhatsApp do site'); render()
+  await sleep(1600)
+  await cliente(l, 'Oi, vi a casa do Real Park no site. Aceitam proposta? Tenho 620 à vista')
+  await empresa(l, 'Oi, Carla! Proposta é conversa do corretor com o proprietário, então já chamei a Renata pra você. Ela responde em poucos minutos.', null, { seg: 21 })
+  ficha(l, { Objetivo: 'Comprar', Proposta: 'R$ 620 mil à vista' })
+  l.estado = 'humano'; l.humanoDesde = S.min; l.corretor = 'Renata'
+  evento('<b>Carla Mendes</b> fez proposta: a Liz chamou a Renata', 'whatsapp', 'r')
+  toast('Precisa de gente', 'Carla Mendes · proposta à vista', true)
+  piscar('fila'); render(); irPara('fila')
+  await sleep(2400); passa(1); render()
+  await sleep(2000); passa(1); render()
+  await empresa(l, 'Carla, Renata aqui. O proprietário pede 690, mas à vista dá pra conversar. Consegue vir ver a casa amanhã? Levo sua proposta pra ele na hora.', 'Renata', { pensa: 1700 })
+  l.estado = 'agendado'; l.humanoDesde = null
+  await sleep(1800)
+  await cliente(l, 'Consigo, amanhã de manhã')
+  visita(l, 'Amanhã', '09:30', 'Renata', 'Casa em condomínio · Real Park')
+  fase(l, 'Proposta'); irPara('campanhas')
+  await sleep(3600)
+}
+
+async function roteiroBruno() {
+  passa(12)
+  const l = S.leads.find(x => x.nome === 'Bruno Teixeira')
+  S.featured = l.id; abreFone(l, 'corretor', 'Falando direto no WhatsApp do corretor'); irPara('equipe')
+  await sleep(1800)
+  await cliente(l, 'Diego, bora fechar o apê da Vila Oliveira. Me manda o contrato?')
+  await empresa(l, 'Fechou, Bruno! Te mando o contrato até as 11h.', 'Diego', { pensa: 1400 })
+  await sleep(700)
+  l.combinado = { txt: 'Diego envia o contrato até 11:00', ate: 11 * 60, feito: false }
+  ficha(l, { 'Combinado pra': 'Contrato até 11:00' })
+  msg(l, 'nota', 'Liz em escuta anotou: Diego prometeu o contrato até 11:00.')
+  aprendeu('Diego', l, 'Combinado', 'Enviar o contrato pro Bruno até 11:00')
+    irPara('conversas', l.id)
+  await sleep(3600)
+  // o tempo passa e o combinado vence
+  passa(11 * 60 + 6 - S.min)
+  evento('Combinado vencido: <b>contrato do Bruno</b> era até 11:00 (Diego)', 'whatsapp', 'r')
+  toast('Combinado vencido', 'Contrato do Bruno, com o Diego. A Liz já cobrou.', true)
+  msg(l, 'sis', 'Liz avisou o Diego no WhatsApp dele: "o contrato do Bruno venceu às 11:00"')
+  piscar('fila'); irPara('fila')
+  await sleep(3600)
+  passa(4)
+  digitando(true); await sleep(1300); digitando(false)
+  bolha('in doc', '<span class="pdf">PDF</span><span><b>Contrato_VilaOliveira.pdf</b><br><small>2 páginas</small></span>')
+  msg(l, 'humano', 'Contrato_VilaOliveira.pdf', { quem: 'Diego' })
+  await empresa(l, 'Bruno, desculpa a demora. Tá aí, é só assinar.', 'Diego', { pensa: 1000 })
+  l.combinado.feito = true; ficha(l, { 'Combinado pra': 'Contrato enviado 11:10' })
+  await sleep(1600)
+  await cliente(l, 'Assinado! Valeu, Diego')
+  fechar(l); toast('Contrato de locação', `Bruno Teixeira · ${brl(l.valor)}/mês, veio do anúncio`)
+  irPara('equipe')
+  await sleep(3800)
+  passa(14)
+  const lb = S.leads.find(x => x.nome === 'Lucas e Bia Ramos')
+  if (lb) { fechar(lb); toast('Venda fechada', `Lucas e Bia · ${brl(lb.valor)} com a Paula`); irPara('resultado') }
+  await sleep(4400)
+}
+
+/* ---------- o que acontece ao fundo ---------- */
+const FILA_FUNDO = [
+  { nome: 'Patrícia Nunes', canal: 'facebook', origem: 'Meta Ads', campanha: 'm2', tipo: 'Locação', interesse: 'Apto 1 dorm · perto da UMC', valor: 1600, fala: 'Tem apto pequeno perto da faculdade?', liz: 'Tenho 3, Patrícia. É só pra você? Pergunto pra separar os de 1 dormitório.' },
+  { nome: 'Roberto Lima', canal: 'site', origem: 'Google Ads', campanha: 'g1', tipo: 'Venda', interesse: 'Sobrado 4 dorm · Mogilar', valor: 980000, fala: 'Quero avaliar a troca do meu apê por uma casa maior', liz: 'Dá sim, Roberto. Seu apê fica em qual bairro? Com isso eu te mostro casas onde a troca fecha.' },
+  { nome: 'Aline Souza', canal: 'whatsapp', origem: 'Google Ads', campanha: 'g2', tipo: 'Locação', interesse: 'Casa 2 dorm · Vila Oliveira', valor: 2200, fala: 'A casa da Vila Oliveira ainda tá livre?', liz: 'Tá livre sim, Aline! Quer ver ainda essa semana?' },
+  { nome: 'Gustavo Reis', canal: 'instagram', origem: 'Meta Ads', campanha: 'm1', tipo: 'Venda', interesse: 'Apto 3 dorm · Centro', valor: 560000, fala: 'Aceita FGTS na entrada?', liz: 'Aceita sim, Gustavo. Você já tem a simulação do banco ou quer que a gente faça com você?' },
+  { nome: 'Sônia Matos', canal: 'whatsapp', origem: 'Indicação', tipo: 'Venda', interesse: 'Casa térrea · César de Souza', valor: 470000, fala: 'A Paula me indicou vocês, procuro casa térrea', liz: 'Que bom, Sônia! Quantos dormitórios você precisa?' },
+  { nome: 'Henrique Dias', canal: 'facebook', origem: 'Orgânico', tipo: 'Locação', interesse: 'Sala comercial · Centro', valor: 3200, fala: 'Vocês têm sala comercial pra alugar?', liz: 'Tenho sim, Henrique. Uns quantos m² e pra que tipo de atendimento?' }
+]
+const VISITANTES = [
+  ['Mogi das Cruzes', 'Android', 'Instagram', ['Aluguel', 'Casas com quintal']], ['Guararema', 'iPhone', 'Google Ads', ['Início', 'Apartamentos']],
+  ['Suzano', 'Windows', 'Busca orgânica', ['Início', 'Venda']], ['Mogi das Cruzes', 'iPhone', 'Facebook', ['Casa Braz Cubas']], ['Itaquaquecetuba', 'Android', 'Google Ads', ['Imobiliária em Mogi', 'Contato']]
+]
+async function fundo() {
+  let i = 0, k = 0
+  await sleep(15000)
+  while (true) {
+    // visitante novo no site
+    const vv = VISITANTES[k++ % VISITANTES.length]
+    if (k % 2) S.site.unshift({ id: 'v' + k, cidade: vv[0], uf: 'SP', ap: vv[1], origem: vv[2], caminho: [...vv[3]], seg: 5, h: S.min, nova: true })
+    S.site = S.site.slice(0, 9); S.site.forEach(s => s.seg += 20); piscar('acessos'); render()
+    await sleep(5000)
+    const f = FILA_FUNDO[i % FILA_FUNDO.length]; i++
+    if (!S.leads.some(x => x.nome === f.nome)) {
+      const l = novoLead({ nome: f.nome, canal: f.canal, origem: f.origem, campanha: f.campanha || null, tipo: f.tipo, interesse: f.interesse, valor: f.valor }, true)
+      l.msgs.push({ de: 'lead', txt: f.fala, h: S.min, nova: true }); render()
+      await sleep(2000)
+      msg(l, 'ia', f.liz)
+      if (i % 2 === 0) { await sleep(4000); fase(l, 'Qualificando') }
+    }
+    await sleep(6000)
+    if (i === 2) { const fu = S.followups[0]; fu.st = 'enviado'; piscar('followup'); render(); await sleep(5000); fu.st = 'respondeu'; fu.resposta = 'Quero sim! Sábado de manhã'; evento('<b>Fernanda Costa</b> respondeu o follow-up da Liz', 'instagram', 'g'); piscar('followup'); render() }
+    await sleep(14000 + Math.random() * 6000)
+  }
+}
+
+/* ---------- navegação ---------- */
+let segura = 0
+const TROCA = { agora: 'painel', celulares: 'equipe', aprendeu: 'fila', followup: 'conversas', leads: 'conversas', conector: 'painel' }
+function irPara(view, aberta) {
+  view = TROCA[view] || view
+  if (aberta && view === 'conversas' && (S.auto || !S.aberta)) S.aberta = aberta
+  if (!S.auto) { render(); return }
+  const agora = Date.now()
+  if (view !== S.view && agora < segura) { render(); return }
+  if (view !== S.view) segura = agora + 6500 / S.speed
+  S.view = view; render()
+}
+function marcaAba(q) {
+  const aba = $('#demo').dataset.aba
+  if (q === 'zap' && aba !== 'zap') $('#pZap').classList.add('on')
+  if (q === 'crm' && aba !== 'crm') $('#pCrm').classList.add('on')
+}
+
+/* ---------- peças das telas ---------- */
+const hojeL = () => S.leads.filter(l => l.hoje)
+const resp = () => S.leads.map(l => l.resp).filter(x => x != null)
+const mediana = a => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)] }
+const filaItens = () => {
+  const it = []
+  S.leads.forEach(l => {
+    if (l.estado === 'humano' && l.humanoDesde != null) it.push({ tipo: 'Esperando uma pessoa', l, t: S.min - l.humanoDesde, txt: l.ficha.Proposta || l.interesse, quem: l.corretor, r: true })
+    if (l.combinado && !l.combinado.feito && S.min > l.combinado.ate) it.push({ tipo: 'Combinado vencido', l, t: S.min - l.combinado.ate, txt: l.combinado.txt, quem: l.corretor, r: true })
+  })
+  it.push({ tipo: 'Cliente sumiu', l: { nome: 'Aline Souza', id: '' }, t: 26 * 60, txt: 'Sem resposta desde ontem 11:00 · Liz volta hoje 16h', quem: 'Liz' })
+  return it
+}
+const novoCls = k => S.novos.has(k) ? ' nova' : ''
+const num = (k, l, v, s, cls = '', dark = false) => `<div class="num${dark ? ' dark' : ''}"><div class="l">${l}</div><div class="v ${cls}" data-k="${k}">${v}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`
+const estado = l => l.estado === 'humano' ? '<span class="est humano">precisa de gente</span>' : l.estado === 'agendado' ? '<span class="est agendado">visita marcada</span>' : l.estado === 'fechado' ? '<span class="est fechado">fechado</span>' : l.estado === 'escuta' ? '<span class="est escuta">Liz em escuta</span>' : '<span class="est">Liz atendendo</span>'
+const tagTipo = l => `<span class="tag ${l.tipo === 'Venda' ? 'b' : 'a'}">${l.tipo}</span>`
+const dica = () => ''
+const custoLead = c => c.leads ? brl(c.gasto / c.leads) : '·'
+const avP = (q, s = 26) => q === 'Liz' ? `<span class="av ia" style="width:${s}px;height:${s}px">Liz</span>` : `<span class="av" style="width:${s}px;height:${s}px">${S.equipe[q]?.ini ?? '?'}</span>`
+const numeroDe = l => l.numero === 'oficial' ? ({ whatsapp: 'WhatsApp da Vila Clara', instagram: 'Direct do Instagram', facebook: 'Messenger', site: 'Chat do site' })[l.canal] : 'WhatsApp do ' + (l.numero === 'Paula' || l.numero === 'Renata' ? 'da ' : '') + l.numero
+const numeroTxt = l => l.numero === 'oficial' ? numeroDe(l) : `celular ${['Paula', 'Renata'].includes(l.numero) ? 'da' : 'do'} ${l.numero}`
+
+function vPainel() {
+  const h = hojeL(), por = { whatsapp: 0, instagram: 0, facebook: 0, site: 0 }
+  h.forEach(l => por[l.canal]++)
+  const tot = Math.max(1, Object.values(por).reduce((a, b) => a + b, 0))
+  const gasto = S.campanhas.reduce((a, c) => a + c.gasto, 0), leadsAds = S.campanhas.reduce((a, c) => a + c.leads, 0)
+  const melhor = [...S.campanhas].sort((a, b) => b.valor - a.valor)[0], gasta = S.campanhas.find(c => c.leads === 0)
+  const passou = S.leads.filter(l => l.corretor).length
+  return `<div class="head"><h1>Painel</h1><span class="c">a imobiliária inteira numa tela · hoje</span></div>
+  ${dica(`Hoje entraram <b>${h.length} leads</b> por 4 canais e eu respondi todos em <b>${mediana(resp())} s</b>. A campanha <b>${esc(gasta.nome)}</b> está gastando sem trazer lead.`)}
+  <div class="nums">
+    ${num('p1', 'Leads novos', h.length, 'WhatsApp, Insta, Face e site', '', true)}
+    ${num('p2', 'Liz passou ao corretor', passou, 'com a ficha pronta', 'g')}
+    ${num('p3', 'Visitas marcadas', S.visitas.length, 'na agenda dos corretores')}
+    ${num('p4', 'Investido em anúncio', curto(gasto), 'Meta + Google, no mês')}
+    ${num('p5', 'Custo por lead', brl(gasto / Math.max(1, leadsAds)), 'média das campanhas')}
+  </div>
+  <div class="g2e">
+    <div class="sec"><div class="h"><h2>De onde chegou hoje</h2><span class="c">${h.length} leads</span></div><div class="b barras">
+      ${[['whatsapp', 'WhatsApp'], ['instagram', 'Instagram'], ['facebook', 'Facebook'], ['site', 'Site']].map(([k, t]) => `<div class="br"><span>${cn(k)}${t}</span><div class="tr"><i style="width:${Math.round(100 * por[k] / tot)}%"></i></div><b data-k="pc${k}">${por[k]}</b></div>`).join('')}
+    </div></div>
+    <div class="sec"><div class="h"><h2>Anúncios</h2><span class="c">mês</span></div><div class="b">
+      <div class="row"><span>${cn(melhor.rede, true)}</span><span><b>${esc(melhor.nome)}</b><span class="sub">Campanha que mais vendeu · ${melhor.vendas} negócios</span></span><span class="t g">${curto(melhor.valor)}</span></div>
+      <div class="row"><span>${cn(gasta.rede, true)}</span><span><b>${esc(gasta.nome)}</b><span class="sub">Campanha que só gasta · ${gasta.cliques} cliques, 0 lead</span></span><span class="t r" data-k="pgasta">${brl(gasta.gasto)}</span></div>
+    </div></div>
+  </div>`
+}
+
+function vAcessos() {
+  const agora = S.site.filter(s => S.min - s.h < 30)
+  return `<div class="head"><h1>Site ao vivo</h1><span class="vivo">${agora.length} pessoas no site agora</span></div>
+  ${dica('Vejo quem entra no site, de onde veio, o que olhou e <b>quem clicou no WhatsApp</b>. Quando vira conversa, o caminho vai junto pro lead.')}
+  <div class="sec"><div class="h"><h2>Quem está navegando</h2><span class="c">cidade · aparelho · origem · caminho</span></div><div class="b">
+    ${S.site.map(s => `<div class="row${s.nova ? ' nova' : ''}" style="grid-template-columns:52px 1fr auto"><span class="hr">${hh(s.h)}</span><span><b>${esc(s.cidade)}, ${s.uf}</b> <span class="tag">${esc(s.ap)}</span> <span class="tag ${s.origem.includes('Ads') ? 'b' : ''}">${esc(s.origem)}${s.termo ? ' · "' + esc(s.termo) + '"' : ''}</span>
+      <div class="caminho">${s.caminho.map(p => `<span>${esc(p)}</span>`).join('<em>›</em>')}${s.zap ? '<em>›</em><span class="z">clicou no WhatsApp</span>' : ''}</div>${s.lead ? `<span class="sub">virou lead: <b>${esc(s.lead)}</b></span>` : ''}</span><span class="t">${Math.floor(s.seg / 60)}m${String(s.seg % 60).padStart(2, '0')}s</span></div>`).join('')}
+  </div></div>`
+}
+
+function vCampanhas() {
+  const tg = S.campanhas.reduce((a, c) => a + c.gasto, 0), tl = S.campanhas.reduce((a, c) => a + c.leads, 0), tv = S.campanhas.reduce((a, c) => a + c.valor, 0)
+  const linha = c => `<tr class="${c.leads === 0 ? 'alerta' : ''}${novoCls('camp:' + c.id)}"><td><div style="display:flex;gap:9px;align-items:center">${cn(c.rede, true)}<div><b>${esc(c.nome)}</b><div class="sub" style="font-size:12px;color:var(--mute)">${esc(c.onde)}${c.leads === 0 ? ' · <span style="color:var(--red);font-weight:600">campanha que só gasta</span>' : ''}</div></div></div></td>
+    <td class="n" data-k="cg${c.id}">${brl(c.gasto)}</td><td class="n">${c.cliques.toLocaleString('pt-BR')}</td><td class="n" data-k="cc${c.id}">${c.conversas}</td><td class="n" data-k="cl${c.id}">${c.leads}</td><td class="n">${custoLead(c)}</td><td class="n" data-k="cv${c.id}">${c.visitas}</td><td class="n" data-k="cf${c.id}">${c.vendas}</td><td class="n">${c.valor ? curto(c.valor) : '·'}</td></tr>`
+  return `<div class="head"><h1>Campanhas</h1><span class="c">Meta Ads e Google Ads, do clique até a venda · novembro</span></div>
+  ${dica('Cada conversa que chega de anúncio vem marcada com a campanha. Aqui você vê <b>o gasto, o lead, a visita e a venda</b> de cada uma, lado a lado.')}
+  <div class="nums">${num('c1', 'Investido no mês', curto(tg), 'Meta + Google', '', true)}${num('c2', 'Leads de anúncio', tl, 'conversas que viraram lead', 'g')}${num('c3', 'Custo por lead', brl(tg / Math.max(1, tl)), 'média')}${num('c4', 'Vendido de anúncio', curto(tv), 'venda + locação')}</div>
+  <div class="sec"><div class="h"><h2>Meta e Google</h2><span class="c">atualiza sozinho</span></div><div class="b tabela" style="padding:0 8px">
+    <table class="t"><thead><tr><th>Campanha</th><th class="n">Gasto</th><th class="n">Cliques</th><th class="n">Conversas</th><th class="n">Leads</th><th class="n">Custo/lead</th><th class="n">Visitas</th><th class="n">Fechados</th><th class="n">Valor</th></tr></thead>
+    <tbody>${S.campanhas.map(linha).join('')}</tbody></table>
+  </div></div>`
+}
+
+function vAgora() {
+  const h = hojeL(), r = resp(), f = filaItens().filter(x => x.r)
+  return `<div class="head"><h1>Agora</h1><span class="c">o que está acontecendo, sem abrir o WhatsApp de ninguém</span></div>
+  <div class="nums">
+    ${num('a1', 'Leads hoje', h.length, 'contando a madrugada', '', true)}
+    ${num('a2', 'Respondidos em até 5 min', (r.length ? Math.round(100 * r.filter(x => x <= 300).length / r.length) : 0) + '%', 'WhatsApp, Insta, Face e site', 'g')}
+    ${num('a3', 'Primeira resposta', mediana(r) + ' s', 'mediana do dia')}
+    ${num('a4', 'Precisam de gente', f.length, f.length ? 'tem gente esperando' : 'ninguém esperando', f.length ? 'r' : '')}
+  </div>
+  <div class="g2">
+    <div class="sec"><div class="h"><h2>Acontecendo agora</h2><span class="vivo">ao vivo</span></div><div class="b">
+      ${S.feed.slice(0, 9).map(e => `<div class="row${e.nova ? ' nova' : ''}" style="grid-template-columns:44px 22px 1fr auto"><span class="hr">${hh(e.h)}</span>${cn(e.k)}<span>${e.txt}</span><span>${e.tipo === 'r' ? '<span class="tag r">gente</span>' : e.tipo === 'b' ? '<span class="tag b">visita</span>' : e.tipo === 'g' ? '<span class="tag g">ok</span>' : ''}</span></div>`).join('')}
+    </div></div>
+    <div>
+      <div class="sec"><div class="h"><h2>Precisa de gente</h2><span class="c">${f.length}</span></div><div class="b">
+        ${f.length ? f.map(x => `<div class="row nova">${avP(x.quem)}<span><b>${esc(x.l.nome)}</b><span class="sub">${x.tipo} · ${esc(x.txt)}</span></span><span class="t r">${x.t} min</span></div>`).join('') : '<div class="vazio">Ninguém esperando. A Liz está dando conta.</div>'}
+      </div></div>
+      <div class="sec"><div class="h"><h2>Próximas visitas</h2><span class="c">${S.visitas.length}</span></div><div class="b">
+        ${S.visitas.slice(-4).reverse().map(v => `<div class="row${novoCls('vis:' + v.lead)}"><span class="hr">${v.hora}</span><span><b>${esc(v.nome)}</b><span class="sub">${esc(v.dia)} · ${esc(v.imovel)}</span></span>${avP(v.corretor)}</div>`).join('')}
+      </div></div>
+    </div>
+  </div>`
+}
+
+function vPipeline() {
+  const cor = ['', 'p1', 'p2', 'p2', 'p3']
+  return `<div class="head"><h1>Pipeline</h1><span class="c">a Liz move o card sozinha; o corretor só corrige</span></div>
+  <div class="kb">${FASES.map((f, i) => {
+    const cs = S.leads.filter(l => l.fase === f)
+    const soma = cs.reduce((a, l) => a + (l.tipo === 'Venda' ? l.valor : 0), 0), aluga = cs.filter(l => l.tipo === 'Locação').reduce((a, l) => a + l.valor, 0)
+    return `<div class="col ${cor[i]}"><h3>${f}<span class="n">${cs.length}</span></h3><div class="sum" data-k="kb${i}">${soma ? curto(soma) : ''}${aluga ? `<small>${soma ? '+ ' : ''}${brl(aluga)}/mês em aluguel</small>` : ''}</div>
+      ${cs.map(l => `<div class="card${l.estado === 'humano' ? ' humano' : ''}${S.novos.has('card:' + l.id) || S.novos.has('lead:' + l.id) ? ' nova' : ''}" data-abre="${l.id}"><b>${cn(l.canal)}<span>${esc(l.nome)}</span></b><div class="vv">${l.tipo === 'Venda' ? curto(l.valor) : brl(l.valor) + '/mês'}</div><div class="i">${esc(l.interesse)}</div><div class="f">${tagTipo(l)}${l.corretor ? avP(l.corretor, 20) : avP('Liz', 20)}</div></div>`).join('')}
+    </div>`
+  }).join('')}</div>`
+}
+
+function vFila() {
+  const f = filaItens(), grupos = ['Esperando uma pessoa', 'Combinado vencido', 'Cliente sumiu']
+  return `<div class="head"><h1>Fila</h1><span class="c">tudo que espera uma pessoa, com prazo</span></div>
+  ${dica('Quando alguém da equipe promete algo no WhatsApp, eu anoto o prazo. <b>Venceu, aparece aqui e eu cobro a pessoa.</b>')}
+  ${grupos.map(g => { const it = f.filter(x => x.tipo === g); return `<div class="sec"><div class="h"><h2>${g}</h2><span class="c">${it.length}</span></div><div class="b">${it.length ? it.map(x => `<div class="row nova">${avP(x.quem)}<span><b>${esc(x.l.nome)}</b><span class="sub">${esc(x.txt)}</span></span><span class="t ${x.r ? 'r' : ''}">${x.t >= 60 ? Math.floor(x.t / 60) + ' h' : x.t + ' min'}</span></div>`).join('') : '<div class="vazio">Nada aqui agora.</div>'}</div></div>` }).join('')}`
+}
+
+function vAgenda() {
+  const dias = ['Hoje', 'Amanhã', 'Sábado']
+  return `<div class="head"><h1>Agenda</h1><span class="c">visitas marcadas pela Liz direto na agenda do corretor</span></div>
+  <div class="nums">${num('ag', 'Visitas na agenda', S.visitas.length, 'todas com a ficha pronta', '', true)}${['Paula', 'Diego', 'Renata', 'Marcos'].map(c => num('agc' + c, c, S.visitas.filter(v => v.corretor === c).length, 'visitas')).join('')}</div>
+  ${dias.map(d => { const vs = S.visitas.filter(v => v.dia === d).sort((a, b) => a.hora.localeCompare(b.hora)); return `<div class="sec"><div class="h"><h2>${d}</h2><span class="c">${vs.length} visita${vs.length === 1 ? '' : 's'}</span></div><div class="b">${vs.length ? vs.map(v => `<div class="row${novoCls('vis:' + v.lead)}"><span class="hr">${v.hora}</span><span><b>${esc(v.nome)}</b><span class="sub">${esc(v.imovel)} · com ${v.corretor}</span></span><span class="tag g">marcada pela Liz</span></div>`).join('') : '<div class="vazio">Nada ainda.</div>'}</div></div>` }).join('')}`
+}
+
+function vConversas() {
+  let lista = [...S.leads].sort((a, b) => (b.msgs.at(-1)?.h ?? b.criado) - (a.msgs.at(-1)?.h ?? a.criado))
+  if (S.filtro === 'equipe') lista = lista.filter(l => l.numero !== 'oficial')
+  else if (S.filtro !== 'todos') lista = lista.filter(l => l.canal === S.filtro && l.numero === 'oficial')
+  if (!S.aberta || !lead(S.aberta)) S.aberta = (S.featured && lead(S.featured)) ? S.featured : lista[0]?.id
+  const l = lead(S.aberta)
+  const campos = l.numero !== 'oficial' ? ['Orçamento', 'Garantia', 'Pagamento', 'Combinado pra'] : l.tipo === 'Venda' ? ['Objetivo', 'Orçamento', 'Pagamento', 'Bairro', 'Proposta'] : ['Bairro', 'Orçamento', 'Pet', 'Garantia']
+  const ult = x => [...x.msgs].reverse().find(m => m.de !== 'sis' && m.de !== 'nota')
+  const c = l.campanha && camp(l.campanha)
+  const F = [['todos', 'Todas'], ['whatsapp', cn('whatsapp')], ['instagram', cn('instagram')], ['facebook', cn('facebook')], ['site', cn('site')], ['equipe', 'Corretores']]
+  return `<div class="head"><h1>Conversas</h1><span class="c">WhatsApp, Instagram, Facebook, site e o celular de cada corretor, num lugar só</span></div>
+  <div class="conv">
+    <div class="lista"><div class="filtros">${F.map(([k, t]) => `<button data-filtro="${k}" class="${S.filtro === k ? 'on' : ''}">${t}</button>`).join('')}</div><div class="itens">
+      ${lista.map(x => `<button class="it${x.id === S.aberta ? ' on' : ''}${novoCls('lead:' + x.id)}" data-abre="${x.id}"><b>${cn(x.canal)}${esc(x.nome)}<small>${hh(ult(x)?.h ?? x.criado)}</small></b><span class="u">${esc(ult(x)?.txt ?? '')}</span>${estado(x)}</button>`).join('')}
+    </div></div>
+    <div class="fio">
+      <div class="fh">${cn(l.canal, true)}<div><b>${esc(l.nome)}</b><div class="sub">${tagTipo(l)} ${esc(numeroTxt(l))}${c ? ` · anúncio <b style="font-size:12px">${esc(c.nome)}</b>` : ` · ${esc(l.origem)}`}</div></div>${estado(l)}</div>
+      <div class="ficha"><h3>O que a Liz anotou</h3><div class="cps">
+        ${campos.filter(k => l.ficha[k]).map(k => `<dl class="cp${k === 'Combinado pra' && l.combinado && !l.combinado.feito ? ' alerta' : ''}${S.novos.has('ficha:' + l.id + ':' + k) ? ' nova' : ''}"><dt>${k}</dt><dd>${esc(l.ficha[k])}</dd></dl>`).join('')}
+        ${l.corretor ? `<dl class="cp"><dt>Corretor</dt><dd>${l.corretor}</dd></dl>` : ''}${!campos.some(k => l.ficha[k]) && !l.corretor ? '<span style="font-size:12.5px;color:var(--mute)">Vou anotando aqui o que o cliente contar.</span>' : ''}
+      </div></div>
+      <div class="msgs" id="msgs">${l.msgs.map(m => m.de === 'sis' ? `<div class="m sis${m.nova ? ' nova' : ''}">${esc(m.txt)}</div>` : m.de === 'nota' ? `<div class="m liz-nota${m.nova ? ' nova' : ''}"><div class="q">Liz em escuta<i>${hh(m.h)}</i></div>${esc(m.txt)}</div>` : `<div class="m ${m.de}${m.nova ? ' nova' : ''}"><div class="q">${m.de === 'ia' ? 'Liz' : m.de === 'humano' ? esc(m.quem) + (l.numero !== 'oficial' ? ' · no celular dele' : '') : esc(l.nome.split(' ')[0])}<i>${hh(m.h)}</i></div>${esc(m.txt)}</div>`).join('')}</div>
+    </div>
+  </div>`
+}
+
+function vFollowup() {
+  return `<div class="head"><h1>Follow-up</h1><span class="c">a Liz volta em quem sumiu, no canal em que a pessoa chamou</span></div>
+  ${dica('Cliente que parou de responder recebe uma mensagem minha no tempo certo. <b>Respondeu, volta pra conversa e pro corretor.</b>')}
+  <div class="nums">${num('f1', 'Agendados', S.followups.filter(f => f.st === 'agendado').length, 'próximos toques', '', true)}${num('f2', 'Responderam', S.followups.filter(f => f.st === 'respondeu').length, 'voltaram a conversar', 'g')}${num('f3', 'Sem resposta', S.followups.filter(f => f.st === 'sem resposta').length, 'a Liz tenta de novo')}</div>
+  <div class="sec"><div class="h"><h2>Toques da Liz</h2></div><div class="b">${S.followups.map(f => `<div class="row" style="grid-template-columns:22px 1fr auto">${cn(f.canal)}<span><b>${esc(f.nome)}</b> <span class="sub">${esc(f.quando)} · "${esc(f.txt)}"${f.resposta ? `<br><b style="color:var(--green)">Respondeu: "${esc(f.resposta)}"</b>` : ''}</span></span><span class="tag ${f.st === 'respondeu' ? 'g' : f.st === 'sem resposta' ? '' : 'b'}">${f.st}</span></div>`).join('')}</div></div>`
+}
+
+function vLeads() {
+  const L = [...S.leads].sort((a, b) => b.criado - a.criado)
+  return `<div class="head"><h1>Leads</h1><span class="c">${L.length} no dia · origem de cada um, até o anúncio</span></div>
+  <div class="sec"><div class="b tabela" style="padding:0 8px"><table class="t"><thead><tr><th>Lead</th><th>Canal</th><th>Origem</th><th>Interesse</th><th>Fase</th><th>Corretor</th><th class="n">Valor</th></tr></thead><tbody>
+  ${L.map(l => { const c = l.campanha && camp(l.campanha); return `<tr class="${novoCls('lead:' + l.id)}" data-abre="${l.id}" style="cursor:pointer"><td><b>${esc(l.nome)}</b></td><td>${cn(l.canal)} ${l.numero === 'oficial' ? '' : '<span class="tag">celular ' + esc(l.numero) + '</span>'}</td><td>${c ? `${cn(c.rede)} ${esc(c.nome)}` : esc(l.origem)}</td><td>${esc(l.interesse)}</td><td>${esc(l.fase)}</td><td>${l.corretor || '<span style="color:var(--green)">Liz</span>'}</td><td class="n">${l.tipo === 'Venda' ? curto(l.valor) : brl(l.valor) + '/mês'}</td></tr>` }).join('')}
+  </tbody></table></div></div>`
+}
+
+function vEquipe() {
+  return `<div class="head"><h1>Equipe</h1><span class="c">o WhatsApp de cada corretor dentro do CRM, com a Liz em escuta</span></div>
+  ${dica('Leio a conversa de cada corretor no celular dele: <b>quem demora, o que foi prometido e quem está segurando lead</b>. O dono vê tudo sem pedir print.')}
+  <div class="pessoas">${Object.entries(S.equipe).map(([k, p]) => { const naMao = S.leads.filter(l => l.corretor === k && l.estado !== 'fechado').length; return `<div class="pessoa${S.piscaNav.has('equipe') ? '' : ''}"><div class="t"><span class="av">${p.ini}</span><div><b>${esc(p.nome)}</b><small>${esc(p.area)}</small></div></div><dl>
+    <div><dt>Na mão agora</dt><dd data-k="eq1${k}">${naMao}</dd></div><div><dt>Responde em</dt><dd class="${p.resp > 15 ? 'r' : ''}">${p.resp} min</dd></div>
+    <div><dt>Mensagens hoje</dt><dd data-k="eq2${k}">${p.msgs}</dd></div><div><dt>Visitas</dt><dd data-k="eq3${k}">${p.visitas}</dd></div>
+    <div><dt>Fechados no mês</dt><dd data-k="eq4${k}">${p.fechados}</dd></div></dl>${S.vez === k ? '<div class="vez">Próximo lead do rodízio</div>' : ''}${p.resp > 15 ? '<div class="vez" style="color:var(--red)">Demorando: a Liz já avisou o gestor</div>' : ''}</div>` }).join('')}</div>`
+}
+
+function vCelulares() {
+  return `<div class="head"><h1>Celulares e redes</h1><span class="c">tudo conectado no CRM, pela API oficial da Meta</span></div>
+  ${dica('No número da empresa, no Insta e no Face eu <b>atendo</b>. No celular dos corretores eu fico <b>em escuta</b>: só leio e anoto, quem responde é ele.')}
+  <div class="sec"><div class="b">${S.redes.map(r => `<div class="row" style="grid-template-columns:30px 1fr auto auto">${cn(r.k, true)}<span><b>${esc(r.nome)}</b><span class="sub">${esc(r.det)}</span></span><span class="t" data-k="rd${r.nome}">${r.lidas} msgs hoje</span><span class="est ${r.modo.includes('escuta') ? 'escuta' : ''}">${r.modo}</span></div>`).join('')}</div></div>`
+}
+
+function vResultado() {
+  const L = S.leads, comVisita = new Set(S.visitas.map(v => v.lead)).size
+  const prop = L.filter(l => ['Proposta', 'Fechado'].includes(l.fase)).length, fech = L.filter(l => l.fase === 'Fechado').length
+  return `<div class="head"><h1>Resultado</h1><span class="c">novembro de 2026 · até agora</span></div>
+  <div class="nums">
+    ${num('rv', 'Vendas no mês, R$', curto(S.mes.valorVendas).replace('R$ ', ''), S.mes.vendas + ' imóveis', 'g', true)}
+    ${num('rl', 'Locações no mês', S.mes.locacoes, brl(S.mes.valorLoc) + '/mês em contratos')}
+    ${num('rt', 'Primeira resposta', mediana(resp()) + ' s', 'antes da Liz: 3 h 40')}
+    ${num('rc', 'Lead → visita', Math.round(100 * comVisita / Math.max(1, L.length)) + '%', comVisita + ' de ' + L.length + ' no dia')}
+  </div>
+  <div class="sec"><div class="h"><h2>Funil de hoje</h2></div><div class="funil">
+    <div><span>Leads</span><b data-k="f1">${L.length}</b></div><div><span>Conversaram</span><b data-k="f2">${L.filter(l => l.msgs.some(m => m.de === 'lead')).length}</b></div><div><span>Visita</span><b data-k="f3">${comVisita}</b></div><div><span>Proposta</span><b data-k="f4">${prop}</b></div><div><span>Fechado</span><b data-k="f5">${fech}</b></div>
+  </div></div>
+  <div class="sec"><div class="h"><h2>Quem fechou</h2><span class="c">no mês</span></div><div class="b barras">
+    ${Object.entries(S.equipe).map(([k, p]) => `<div class="br"><span>${avP(k, 20)}${esc(p.nome.split(' ')[0])}</span><div class="tr"><i style="width:${Math.round(100 * p.fechados / 8)}%"></i></div><b data-k="qf${k}">${p.fechados}</b></div>`).join('')}
+  </div></div>`
+}
+
+function vAprendeu() {
+  const cor = { Combinado: 'a', Concorrente: 'b', 'Sem resposta': 'r', 'Não sabia': '' }
+  return `<div class="head"><h1>Liz aprendeu</h1><span class="c">o que eu tirei das conversas de hoje, inclusive do celular dos corretores</span></div>
+  ${dica('Promessa, concorrente, prazo, objeção. <b>Tudo que foi dito vira dado</b>, e o que eu não sabia responder vira pergunta pra vocês me ensinarem.')}
+  <div class="sec"><div class="b">${S.aprendeu.map(a => `<div class="row${a.nova ? ' nova' : ''}" style="grid-template-columns:44px 26px 1fr auto"><span class="hr">${hh(a.h)}</span>${avP(a.quem)}<span><b>${esc(a.lead)}</b><span class="sub">${esc(a.txt)}</span></span><span class="tag ${cor[a.tipo] ?? ''}">${a.tipo}</span></div>`).join('')}</div></div>`
+}
+
+function vConector() {
+  const bloco = (t, it, cls) => `<div class="sec"><div class="h"><h2>${t}</h2></div><div class="b">${it.map(x => `<div class="row" style="grid-template-columns:1fr auto"><span>${x}</span><span class="tag ${cls}">${t.split(' ')[0]}</span></div>`).join('')}</div></div>`
+  return `<div class="head"><h1>Conector Vila Clara</h1><span class="c">as regras do negócio que a Liz segue</span></div>
+  ${dica('Eu sigo as regras da Vila Clara, não regra genérica. <b>O que faço sozinha, o que peço aprovação e o que nunca faço</b> fica escrito aqui.')}
+  <div class="g2e">${bloco('Faz sozinha', ['Responde em segundos, 24 h, nos 4 canais', 'Qualifica: objetivo, orçamento, bairro, pet, garantia', 'Manda foto e ficha do imóvel certo', 'Marca visita na agenda do corretor do rodízio', 'Volta em quem sumiu (follow-up)'], 'g')}
+  ${bloco('Chama gente', ['Proposta e negociação de valor', 'Contrato e documentação', 'Cliente irritado ou pedindo pessoa', 'Pergunta que ela não sabe responder'], 'a')}</div>
+  ${bloco('Nunca faz', ['Dar desconto ou aceitar proposta', 'Prometer aprovação de crédito', 'Responder no celular do corretor (lá ela só escuta)'], 'r')}`
+}
+
+const VIEWS = { painel: vPainel, acessos: vAcessos, campanhas: vCampanhas, agora: vAgora, pipeline: vPipeline, fila: vFila, agenda: vAgenda, conversas: vConversas, followup: vFollowup, leads: vLeads, equipe: vEquipe, celulares: vCelulares, resultado: vResultado, aprendeu: vAprendeu, conector: vConector }
+
+function nav() {
+  const fila = filaItens().filter(x => x.r).length
+  const cont = { fila: fila ? String(fila) : '', conversas: String(S.leads.filter(l => l.estado !== 'fechado').length) }
+  $('#nav').innerHTML = GRUPOS.map(([t, it]) => `<div class="sec-t">${t}</div><nav class="nav">${it.map(([k, n]) => `<button data-view="${k}" class="${S.view === k ? 'on' : ''}${S.piscaNav.has(k) ? ' pisca' : ''}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${LU[k]}</svg>${n}<span class="n${k === 'fila' && fila ? ' bad' : ''}">${cont[k] ?? ''}</span></button>`).join('')}</nav>`).join('')
+  const lidas = S.redes.reduce((a, r) => a + r.lidas, 0)
+  $('#lizRail').innerHTML = `<b>Liz</b> atendendo 4 canais`
+}
+
+function render() {
+  if (!S) return
+  const main = $('#main'), troca = main.dataset.view !== S.view
+  const topo = troca ? 0 : main.scrollTop, lt = main.querySelector('.itens')?.scrollTop ?? 0
+  main.innerHTML = VIEWS[S.view]()
+  main.dataset.view = S.view; main.scrollTop = topo
+  const it = main.querySelector('.itens'); if (it && !troca) it.scrollTop = lt
+  const msgs = $('#msgs'); if (msgs) msgs.scrollTop = msgs.scrollHeight
+  $('#crumb').textContent = NOMES[S.view]
+  nav()
+  main.querySelectorAll('[data-k]').forEach(el => { const k = el.dataset.k, v = el.textContent; if (S.ultimo[k] !== undefined && S.ultimo[k] !== v) el.classList.add('pulse'); S.ultimo[k] = v })
+  S.novos.clear(); S.piscaNav.clear()
+  S.feed.forEach(e => e.nova = false); S.site.forEach(s => s.nova = false); S.aprendeu.forEach(a => a.nova = false); S.leads.forEach(l => l.msgs.forEach(m => m.nova = false))
+}
+
+let toastT
+function toast(titulo, txt, ruim) {
+  document.querySelectorAll('.toast').forEach(t => t.remove())
+  const t = document.createElement('div'); t.className = 'toast' + (ruim ? ' r' : '')
+  t.innerHTML = `<img src="img/liz_rosto_3d.png" alt=""><div><b>${titulo}</b>${txt}</div>`
+  $('.crm').appendChild(t); marcaAba('crm')
+  clearTimeout(toastT); toastT = setTimeout(() => { t.classList.add('sai'); setTimeout(() => t.remove(), 300) }, 3400 / S.speed)
+}
+
+function fimDoDia() {
+  const box = document.createElement('div'); box.className = 'fim'
+  const gasto = S.campanhas.reduce((a, c) => a + c.gasto, 0)
+  box.innerHTML = `<div class="box"><div class="tl"><img src="img/liz_fala_3d.png" alt=""><h2>Assim foi a manhã da Vila Clara</h2></div><p>WhatsApp, Instagram, Facebook, site e o celular de cada corretor num lugar só. Cada anúncio medido até a venda. Nenhum combinado esquecido.</p>
+  <div class="nums">${num('x1', 'Leads atendidos', S.leads.filter(l => l.hoje).length, 'nenhum sem resposta', '', true)}${num('x2', 'Primeira resposta', mediana(resp()) + ' s', 'mediana', 'g')}${num('x3', 'Visitas na agenda', S.visitas.length, 'marcadas pela Liz')}${num('x4', 'Anúncios no mês', curto(gasto), 'medidos até a venda')}</div>
+  <p style="margin:14px 0 0;font-size:12.5px;color:var(--mute)">Recomeça sozinha em instantes.</p></div>`
+  $('.crm').appendChild(box); return box
+}
+
+async function rodar() {
+  const g = ++geracao
+  document.querySelectorAll('.fim,.toast').forEach(x => x.remove())
+  const vel = S?.speed ?? 1, auto = S?.auto ?? true
+  S = estadoInicial(); S.speed = vel; S.auto = auto
+  $('#railLogo').innerHTML = LOGO(34, true)
+  passa(0); render()
+  $('#chat').innerHTML = ''; $('#apHead').innerHTML = ''; $('#quemFone').innerHTML = '&nbsp;'
+  fundo().catch(e => { if (!(e instanceof Parou)) console.error(e) })
+  try {
+    await roteiroMariana()
+    await roteiroRafael()
+    await roteiroCarla()
+    await roteiroBruno()
+    const f = fimDoDia(); await sleep(10000); f.remove()
+    if (g === geracao) rodar()
+  } catch (e) { if (!(e instanceof Parou)) console.error(e) }
+}
+
+document.addEventListener('click', e => {
+  const v = e.target.closest('[data-view]')
+  if (v) { S.view = v.dataset.view; S.auto = false; $('#bTour').classList.remove('on'); render(); return }
+  const fi = e.target.closest('[data-filtro]')
+  if (fi) { S.filtro = fi.dataset.filtro; S.aberta = null; S.auto = false; $('#bTour').classList.remove('on'); render(); return }
+  const a = e.target.closest('[data-abre]')
+  if (a) { S.aberta = a.dataset.abre; S.view = 'conversas'; S.auto = false; $('#bTour').classList.remove('on'); render(); return }
+  const vel = e.target.closest('[data-vel]')
+  if (vel) { S.speed = +vel.dataset.vel; document.querySelectorAll('[data-vel]').forEach(b => b.classList.toggle('on', b === vel)); return }
+  const aba = e.target.closest('.abas button')
+  if (aba) { $('#demo').dataset.aba = aba.dataset.aba; document.querySelectorAll('.abas button').forEach(b => b.classList.toggle('on', b === aba)); $(aba.dataset.aba === 'zap' ? '#pZap' : '#pCrm').classList.remove('on'); window.scrollTo(0, 0) }
+})
+$('#bTour').onclick = () => { S.auto = !S.auto; $('#bTour').classList.toggle('on', S.auto) }
+$('#lizChave').onclick = () => { const b = $('#lizChave'), esc2 = !b.classList.contains('escuta'); b.classList.toggle('escuta', esc2); b.textContent = esc2 ? 'Liz em escuta' : 'Liz atendendo'; toast(esc2 ? 'Liz em escuta' : 'Liz atendendo', esc2 ? 'Ela só lê e anota; quem responde é a equipe.' : 'Ela responde nos canais da empresa.') }
+$('#bPausa').onclick = () => { S.paused = !S.paused; $('#bPausa').textContent = S.paused ? 'Continuar' : 'Pausar'; $('#bPausa').classList.toggle('on', S.paused) }
+$('#bReinicia').onclick = () => { $('#bPausa').textContent = 'Pausar'; $('#bPausa').classList.remove('on'); rodar() }
+
+/* ---------- entrada com login de demonstração ---------- */
+document.getElementById('hMarca').innerHTML = LOGO(48, true)
+const SENHAS = ['kompila123', 'lompila123']
+async function escreve(el, txt) { el.value = ''; for (const c of txt) { el.value += c; await new Promise(r => setTimeout(r, 55)) } }
+$('#lolho').onclick = () => { const i = $('#ls'); i.type = i.type === 'password' ? 'text' : 'password' }
+$('#lpre').onclick = async () => { await escreve($('#lu'), 'admin'); await escreve($('#ls'), 'kompila123'); $('#lbtn').focus() }
+$('#login').onsubmit = e => {
+  e.preventDefault()
+  const u = $('#lu').value.trim().toLowerCase(), s = $('#ls').value.trim()
+  $('#lu').classList.remove('erro'); $('#ls').classList.remove('erro')
+  if (u !== 'admin' || !SENHAS.includes(s)) {
+    const campo = u !== 'admin' ? $('#lu') : $('#ls')
+    void campo.offsetWidth; campo.classList.add('erro'); campo.focus()
+    $('#lmsg').textContent = 'Usuário ou senha não conferem. Use admin e kompila123.'
+    return
+  }
+  $('#lmsg').textContent = ''
+  $('#lbtn').disabled = true; $('#lbtn').classList.add('ind'); $('#ltxt').textContent = 'Entrando'
+  setTimeout(() => { $('#home').classList.add('sai'); setTimeout(() => { $('#home').remove(); document.body.style.overflow = '' }, 550); rodar() }, 900)
+}
+</script>
+</body>
+</html>
