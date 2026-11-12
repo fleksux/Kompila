@@ -554,10 +554,15 @@ function estadoInicial() {
     ficha: { Objetivo: 'Morar', Pagamento: 'Financiamento aprovado', 'Combinado pra': 'Resposta do proprietário hoje' },
     msgs: [{ de: 'humano', quem: 'Paula', txt: 'Lucas, o proprietário aceitou 512. Te mando a minuta ainda hoje.', h: 520 }, { de: 'nota', txt: 'Liz em escuta anotou: Paula prometeu a minuta hoje.', h: 520 }] })
   add({ nome: 'Fernanda Costa', canal: 'instagram', origem: 'Orgânico', tipo: 'Locação', interesse: 'Casa com quintal · Braz Cubas', fase: 'Novo', valor: 2500, criado: 521, resp: 19,
-    msgs: [{ de: 'lead', txt: 'Oi, quanto é o aluguel da casa do post?', h: 521 }, { de: 'ia', txt: 'Oi, Fernanda! R$ 2.500 com IPTU incluso. Você tem pet? Pergunto porque tem quintal.', h: 521 }] })
+    ficha: { Bairro: 'Braz Cubas', Orçamento: 'até R$ 2.600/mês', Pet: '1 gato' },
+    msgs: [{ de: 'lead', txt: 'Oi, quanto é o aluguel da casa do post?', h: 521 }, { de: 'ia', txt: 'Oi, Fernanda! R$ 2.500 com IPTU incluso. É a casa de Braz Cubas, 2 dormitórios e quintal. Você tem pet?', h: 521 }, { de: 'sis', txt: 'Liz respondeu em 19 s, no Direct do Instagram' },
+      { de: 'lead', txt: 'Tenho um gato. Aceita?', h: 523 }, { de: 'ia', txt: 'Aceita sim. Quer que eu te mande o vídeo da casa por aqui mesmo?', h: 523 }, { de: 'lead', txt: 'Manda!', h: 524 },
+      { de: 'ia', txt: 'Mandei o vídeo. Se gostar, a gente marca a visita pelo WhatsApp, fica mais fácil pra combinar.', h: 524 }] })
   add({ nome: 'Otávio Reis', canal: 'facebook', origem: 'Meta Ads', campanha: 'm1', tipo: 'Venda', interesse: 'Apto 2 dorm · Mogilar', fase: 'Qualificando', valor: 415000, criado: 538, resp: 27,
     ficha: { Objetivo: 'Investir', Orçamento: 'até R$ 420 mil' },
-    msgs: [{ de: 'lead', txt: 'Esse apto aluga fácil? É pra investimento', h: 538 }, { de: 'ia', txt: 'Aluga sim, Otávio: no bairro sai entre R$ 2.000 e 2.300. Quer ver o rendimento com o valor de compra?', h: 538 }] })
+    msgs: [{ de: 'lead', txt: 'Vi o anúncio aqui no Face. Esse apto aluga fácil? É pra investimento', h: 538 }, { de: 'ia', txt: 'Aluga sim, Otávio: no Mogilar um 2 dormitórios sai entre R$ 2.000 e 2.300. Quer ver quanto rende sobre o valor de compra?', h: 538 }, { de: 'sis', txt: 'Liz respondeu em 27 s, no Messenger do Facebook' },
+      { de: 'lead', txt: 'Quero. Pago à vista', h: 541 }, { de: 'ia', txt: 'Com R$ 415 mil à vista e aluguel de R$ 2.150, dá uns 0,52% ao mês antes do IPTU e condomínio. Tenho mais dois no bairro com conta parecida. Te passo pra Paula olhar com você?', h: 541 },
+      { de: 'lead', txt: 'Pode passar', h: 543 }] })
   add({ nome: 'Bruno Teixeira', canal: 'whatsapp', numero: 'Diego', origem: 'Meta Ads', campanha: 'm2', tipo: 'Locação', interesse: 'Apto 2 dorm · Vila Oliveira', fase: 'Proposta', estado: 'escuta', corretor: 'Diego', valor: 2300, criado: 495, resp: 25, hoje: false,
     ficha: { Orçamento: 'R$ 2.300/mês', Garantia: 'Seguro fiança' },
     msgs: [{ de: 'humano', quem: 'Diego', txt: 'Bruno, o seguro fiança foi aprovado. Agora é só o contrato.', h: 505 }] })
@@ -577,11 +582,11 @@ function estadoInicial() {
     ],
     visitas: [{ lead: 'l2', nome: 'Thiago Alves', imovel: 'Apto 2 dorm · Centro', dia: 'Hoje', hora: '15:00', corretor: 'Diego', liz: true }],
     campanhas: [
-      { id: 'm1', rede: 'meta', nome: 'Apto 2 dorm Mogilar', onde: 'Reels do Instagram', gasto: 1180, ritmo: 2.6, cliques: 2140, conversas: 38, leads: 29, visitas: 9, vendas: 1, valor: 412000 },
-      { id: 'm2', rede: 'meta', nome: 'Casas pra alugar com quintal', onde: 'Stories e Facebook', gasto: 620, ritmo: 1.4, cliques: 1310, conversas: 27, leads: 21, visitas: 7, vendas: 3, valor: 7650 },
-      { id: 'm3', rede: 'meta', nome: 'Lançamento Vila Oliveira', onde: 'Feed do Instagram', gasto: 540, ritmo: 2.1, cliques: 980, conversas: 2, leads: 0, visitas: 0, vendas: 0, valor: 0 },
-      { id: 'g1', rede: 'google', nome: 'Casas em condomínio Mogi', onde: 'Pesquisa do Google', gasto: 1460, ritmo: 3.1, cliques: 610, conversas: 19, leads: 14, visitas: 6, vendas: 1, valor: 690000 },
-      { id: 'g2', rede: 'google', nome: 'Imobiliária em Mogi', onde: 'Pesquisa · marca', gasto: 210, ritmo: .5, cliques: 340, conversas: 11, leads: 9, visitas: 3, vendas: 1, valor: 2300 }
+      { id: 'm1', rede: 'meta', nome: 'Apto 2 dorm Mogilar', onde: 'Reels do Instagram', gasto: 1180, ritmo: 2.6, cliques: 9840, conversas: 162, leads: 141, visitas: 38, vendas: 3, valor: 1290000 },
+      { id: 'm2', rede: 'meta', nome: 'Casas pra alugar com quintal', onde: 'Stories e Facebook', gasto: 640, ritmo: 1.4, cliques: 6210, conversas: 118, leads: 104, visitas: 41, vendas: 14, valor: 34300 },
+      { id: 'm3', rede: 'meta', nome: 'Lançamento Vila Oliveira', onde: 'Feed do Instagram', gasto: 190, ritmo: .9, cliques: 980, conversas: 2, leads: 0, visitas: 0, vendas: 0, valor: 0 },
+      { id: 'g1', rede: 'google', nome: 'Casas em condomínio Mogi', onde: 'Pesquisa do Google', gasto: 1460, ritmo: 3.1, cliques: 2310, conversas: 96, leads: 88, visitas: 27, vendas: 4, valor: 2910000 },
+      { id: 'g2', rede: 'google', nome: 'Imobiliária em Mogi', onde: 'Pesquisa · marca', gasto: 230, ritmo: .5, cliques: 1140, conversas: 64, leads: 59, visitas: 18, vendas: 3, valor: 1120000 }
     ],
     site: [
       { id: 's1', cidade: 'Mogi das Cruzes', uf: 'SP', ap: 'iPhone', origem: 'Google Ads', caminho: ['Início', 'Casas à venda'], seg: 84, h: 548 },
@@ -609,7 +614,8 @@ function estadoInicial() {
       { nome: 'Henrique Dias', canal: 'whatsapp', quando: 'ontem 18:00', txt: 'Henrique, separei 2 salas no Centro com o tamanho que você falou.', st: 'respondeu' },
       { nome: 'Aline Souza', canal: 'whatsapp', quando: 'ontem 11:00', txt: 'Aline, conseguiu ver as fotos da casa da Vila Oliveira?', st: 'sem resposta' }
     ],
-    mes: { vendas: 4, valorVendas: 1985000, locacoes: 11, valorLoc: 26400 },
+    mes: { vendas: 12, valorVendas: 6240000, locacoes: 33, valorLoc: 81400, leads: 612 },
+    base: { hoje: 38, canal: { whatsapp: 17, instagram: 9, facebook: 7, site: 5 }, passou: 21, conversaram: 36, visita: 11, proposta: 4, fechado: 2 },
     view: 'agora', auto: true, speed: 1, paused: false, aberta: null, featured: null, filtro: 'todos',
     novos: new Set(), ultimo: {}, piscaNav: new Set()
   }
@@ -844,12 +850,12 @@ async function roteiroBruno() {
 
 /* ---------- o que acontece ao fundo ---------- */
 const FILA_FUNDO = [
-  { nome: 'Patrícia Nunes', canal: 'facebook', origem: 'Meta Ads', campanha: 'm2', tipo: 'Locação', interesse: 'Apto 1 dorm · perto da UMC', valor: 1600, fala: 'Tem apto pequeno perto da faculdade?', liz: 'Tenho 3, Patrícia. É só pra você? Pergunto pra separar os de 1 dormitório.' },
+  { nome: 'Patrícia Nunes', canal: 'facebook', origem: 'Meta Ads', campanha: 'm2', tipo: 'Locação', interesse: 'Apto 1 dorm · perto da UMC', valor: 1600, fala: 'Tem apto pequeno perto da faculdade?', liz: 'Tenho 3, Patrícia. É só pra você? Pergunto pra separar os de 1 dormitório.', mais: [['lead', 'Só eu. Até 1.700'], ['ia', 'Perfeito. O melhor fica a 6 minutos a pé da UMC: 1 dormitório, R$ 1.600 com condomínio. Quer ver amanhã depois da aula?']] },
   { nome: 'Roberto Lima', canal: 'site', origem: 'Google Ads', campanha: 'g1', tipo: 'Venda', interesse: 'Sobrado 4 dorm · Mogilar', valor: 980000, fala: 'Quero avaliar a troca do meu apê por uma casa maior', liz: 'Dá sim, Roberto. Seu apê fica em qual bairro? Com isso eu te mostro casas onde a troca fecha.' },
   { nome: 'Aline Souza', canal: 'whatsapp', origem: 'Google Ads', campanha: 'g2', tipo: 'Locação', interesse: 'Casa 2 dorm · Vila Oliveira', valor: 2200, fala: 'A casa da Vila Oliveira ainda tá livre?', liz: 'Tá livre sim, Aline! Quer ver ainda essa semana?' },
-  { nome: 'Gustavo Reis', canal: 'instagram', origem: 'Meta Ads', campanha: 'm1', tipo: 'Venda', interesse: 'Apto 3 dorm · Centro', valor: 560000, fala: 'Aceita FGTS na entrada?', liz: 'Aceita sim, Gustavo. Você já tem a simulação do banco ou quer que a gente faça com você?' },
+  { nome: 'Gustavo Reis', canal: 'instagram', origem: 'Meta Ads', campanha: 'm1', tipo: 'Venda', interesse: 'Apto 3 dorm · Centro', valor: 560000, fala: 'Aceita FGTS na entrada?', liz: 'Aceita sim, Gustavo. Você já tem a simulação do banco ou quer que a gente faça com você?', mais: [['lead', 'Ainda não fiz'], ['ia', 'A gente faz junto. Me diz a renda da família por alto e quanto tem de FGTS, que eu já te mostro a parcela.']] },
   { nome: 'Sônia Matos', canal: 'whatsapp', origem: 'Indicação', tipo: 'Venda', interesse: 'Casa térrea · César de Souza', valor: 470000, fala: 'A Paula me indicou vocês, procuro casa térrea', liz: 'Que bom, Sônia! Quantos dormitórios você precisa?' },
-  { nome: 'Henrique Dias', canal: 'facebook', origem: 'Orgânico', tipo: 'Locação', interesse: 'Sala comercial · Centro', valor: 3200, fala: 'Vocês têm sala comercial pra alugar?', liz: 'Tenho sim, Henrique. Uns quantos m² e pra que tipo de atendimento?' }
+  { nome: 'Henrique Dias', canal: 'facebook', origem: 'Orgânico', tipo: 'Locação', interesse: 'Sala comercial · Centro', valor: 3200, fala: 'Vocês têm sala comercial pra alugar?', liz: 'Tenho sim, Henrique. Uns quantos m² e pra que tipo de atendimento?', mais: [['lead', 'Uns 40 m², é consultório'], ['ia', 'Tenho duas no Centro com recepção e banheiro dentro, a partir de R$ 3.200. Te mando as fotos aqui?']] }
 ]
 const VISITANTES = [
   ['Mogi das Cruzes', 'Android', 'Instagram', ['Aluguel', 'Casas com quintal']], ['Guararema', 'iPhone', 'Google Ads', ['Início', 'Apartamentos']],
@@ -870,6 +876,7 @@ async function fundo() {
       l.msgs.push({ de: 'lead', txt: f.fala, h: S.min, nova: true }); render()
       await sleep(2000)
       msg(l, 'ia', f.liz)
+      for (const [de, txt] of (f.mais || [])) { await sleep(3500); passa(1); msg(l, de, txt) }
       if (i % 2 === 0) { await sleep(4000); fase(l, 'Qualificando') }
     }
     await sleep(6000)
@@ -902,6 +909,7 @@ function fecharZap() { $('#demo').classList.remove('aberto'); document.body.clas
 
 /* ---------- peças das telas ---------- */
 const hojeL = () => S.leads.filter(l => l.hoje)
+const nHoje = () => hojeL().length + S.base.hoje
 const resp = () => S.leads.map(l => l.resp).filter(x => x != null)
 const mediana = a => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)] }
 const filaItens = () => {
@@ -925,25 +933,25 @@ const numeroTxt = l => l.numero === 'oficial' ? numeroDe(l) : `celular ${['Paula
 
 function vPainel() {
   const h = hojeL(), por = { whatsapp: 0, instagram: 0, facebook: 0, site: 0 }
-  h.forEach(l => por[l.canal]++)
+  h.forEach(l => por[l.canal]++); Object.entries(S.base.canal).forEach(([k, v]) => por[k] += v)
   const tot = Math.max(1, Object.values(por).reduce((a, b) => a + b, 0))
   const gasto = S.campanhas.reduce((a, c) => a + c.gasto, 0), leadsAds = S.campanhas.reduce((a, c) => a + c.leads, 0)
   const melhor = [...S.campanhas].sort((a, b) => b.valor - a.valor)[0], gasta = S.campanhas.find(c => c.leads === 0)
-  const passou = S.leads.filter(l => l.corretor).length
+  const passou = S.leads.filter(l => l.corretor).length + S.base.passou
   return `<div class="head"><h1>Painel</h1><span class="c">a imobiliária inteira numa tela · hoje</span></div>
-  ${dica(`Hoje entraram <b>${h.length} leads</b> por 4 canais e eu respondi todos em <b>${mediana(resp())} s</b>. A campanha <b>${esc(gasta.nome)}</b> está gastando sem trazer lead.`)}
+  ${dica(`Hoje entraram <b>${nHoje()} leads</b> por 4 canais e eu respondi todos em <b>${mediana(resp())} s</b>. A campanha <b>${esc(gasta.nome)}</b> está gastando sem trazer lead.`)}
   <div class="nums">
-    ${num('p1', 'Leads novos', h.length, 'WhatsApp, Insta, Face e site', '', true)}
-    ${num('p2', 'Liz passou ao corretor', passou, 'com a ficha pronta', 'g')}
-    ${num('p3', 'Visitas marcadas', S.visitas.length, 'na agenda dos corretores')}
-    ${num('p4', 'Investido em anúncio', curto(gasto), 'Meta + Google, no mês')}
-    ${num('p5', 'Custo por lead', brl(gasto / Math.max(1, leadsAds)), 'média das campanhas')}
+    ${num('p1', 'Leads hoje', nHoje(), 'WhatsApp, Insta, Face e site', '', true)}
+    ${num('p2', 'Liz passou ao corretor', passou, 'hoje, com a ficha pronta', 'g')}
+    ${num('p6', 'Leads no mês', S.mes.leads + h.length, 'novembro até agora')}
+    ${num('p4', 'Vendido no mês', curto(S.mes.valorVendas), S.mes.vendas + ' imóveis + ' + S.mes.locacoes + ' locações', 'g')}
+    ${num('p5', 'Custo por lead', brl(gasto / Math.max(1, leadsAds)), 'anúncios no mês')}
   </div>
   <div class="g2e">
-    <div class="sec"><div class="h"><h2>De onde chegou hoje</h2><span class="c">${h.length} leads</span></div><div class="b barras">
+    <div class="sec"><div class="h"><h2>De onde chegou hoje</h2><span class="c">${nHoje()} leads hoje</span></div><div class="b barras">
       ${[['whatsapp', 'WhatsApp'], ['instagram', 'Instagram'], ['facebook', 'Facebook'], ['site', 'Site']].map(([k, t]) => `<div class="br"><span>${cn(k)}${t}</span><div class="tr"><i style="width:${Math.round(100 * por[k] / tot)}%"></i></div><b data-k="pc${k}">${por[k]}</b></div>`).join('')}
     </div></div>
-    <div class="sec"><div class="h"><h2>Anúncios</h2><span class="c">mês</span></div><div class="b">
+    <div class="sec"><div class="h"><h2>Anúncios</h2><span class="c">no mês</span></div><div class="b">
       <div class="row"><span>${cn(melhor.rede, true)}</span><span><b>${esc(melhor.nome)}</b><span class="sub">Campanha que mais vendeu · ${melhor.vendas} negócios</span></span><span class="t g">${curto(melhor.valor)}</span></div>
       <div class="row"><span>${cn(gasta.rede, true)}</span><span><b>${esc(gasta.nome)}</b><span class="sub">Campanha que só gasta · ${gasta.cliques} cliques, 0 lead</span></span><span class="t r" data-k="pgasta">${brl(gasta.gasto)}</span></div>
     </div></div>
@@ -966,7 +974,7 @@ function vCampanhas() {
     <td class="n" data-k="cg${c.id}">${brl(c.gasto)}</td><td class="n">${c.cliques.toLocaleString('pt-BR')}</td><td class="n" data-k="cc${c.id}">${c.conversas}</td><td class="n" data-k="cl${c.id}">${c.leads}</td><td class="n">${custoLead(c)}</td><td class="n" data-k="cv${c.id}">${c.visitas}</td><td class="n" data-k="cf${c.id}">${c.vendas}</td><td class="n">${c.valor ? curto(c.valor) : '·'}</td></tr>`
   return `<div class="head"><h1>Campanhas</h1><span class="c">Meta Ads e Google Ads, do clique até a venda · novembro</span></div>
   ${dica('Cada conversa que chega de anúncio vem marcada com a campanha. Aqui você vê <b>o gasto, o lead, a visita e a venda</b> de cada uma, lado a lado.')}
-  <div class="nums">${num('c1', 'Investido no mês', curto(tg), 'Meta + Google', '', true)}${num('c2', 'Leads de anúncio', tl, 'conversas que viraram lead', 'g')}${num('c3', 'Custo por lead', brl(tg / Math.max(1, tl)), 'média')}${num('c4', 'Vendido de anúncio', curto(tv), 'venda + locação')}</div>
+  <div class="nums">${num('c1', 'Investido no mês', curto(tg), 'Meta + Google', '', true)}${num('c2', 'Leads de anúncio', tl, 'no mês', 'g')}${num('c3', 'Custo por lead', brl(tg / Math.max(1, tl)), 'média do mês')}${num('c4', 'Vendido de anúncio', curto(tv), 'no mês, venda + locação')}</div>
   <div class="sec"><div class="h"><h2>Meta e Google</h2><span class="c">atualiza sozinho</span></div><div class="b tabela" style="padding:0 8px">
     <table class="t"><thead><tr><th>Campanha</th><th class="n">Gasto</th><th class="n">Cliques</th><th class="n">Conversas</th><th class="n">Leads</th><th class="n">Custo/lead</th><th class="n">Visitas</th><th class="n">Fechados</th><th class="n">Valor</th></tr></thead>
     <tbody>${S.campanhas.map(linha).join('')}</tbody></table>
@@ -977,7 +985,7 @@ function vAgora() {
   const h = hojeL(), r = resp(), f = filaItens().filter(x => x.r)
   return `<div class="head"><h1>Agora</h1><span class="c">o que está acontecendo, sem abrir o WhatsApp de ninguém</span></div>
   <div class="nums">
-    ${num('a1', 'Leads hoje', h.length, 'contando a madrugada', '', true)}
+    ${num('a1', 'Leads hoje', nHoje(), 'contando a madrugada', '', true)}
     ${num('a2', 'Respondidos em até 5 min', (r.length ? Math.round(100 * r.filter(x => x <= 300).length / r.length) : 0) + '%', 'WhatsApp, Insta, Face e site', 'g')}
     ${num('a3', 'Primeira resposta', mediana(r) + ' s', 'mediana do dia')}
     ${num('a4', 'Precisam de gente', f.length, f.length ? 'tem gente esperando' : 'ninguém esperando', f.length ? 'r' : '')}
@@ -1027,7 +1035,8 @@ function vConversas() {
   let lista = [...S.leads].sort((a, b) => (b.msgs.at(-1)?.h ?? b.criado) - (a.msgs.at(-1)?.h ?? a.criado))
   if (S.filtro === 'equipe') lista = lista.filter(l => l.numero !== 'oficial')
   else if (S.filtro !== 'todos') lista = lista.filter(l => l.canal === S.filtro && l.numero === 'oficial')
-  if (!S.aberta || !lead(S.aberta)) S.aberta = (S.featured && lead(S.featured)) ? S.featured : lista[0]?.id
+  if (!S.aberta || !lista.some(x => x.id === S.aberta)) S.aberta = (S.featured && lista.some(x => x.id === S.featured)) ? S.featured : lista[0]?.id
+  if (!lista.length) return `<div class="head"><h1>Conversas</h1></div><div class="conv"><div class="lista"><div class="filtros">${[['todos', 'Todas'], ['whatsapp', cn('whatsapp')], ['instagram', cn('instagram')], ['facebook', cn('facebook')], ['site', cn('site')], ['equipe', 'Corretores']].map(([k, t]) => `<button data-filtro="${k}" class="${S.filtro === k ? 'on' : ''}">${t}</button>`).join('')}</div></div><div class="fio"><div class="vazio" style="padding:20px">Nenhuma conversa nesse canal ainda.</div></div></div>`
   const l = lead(S.aberta)
   const campos = l.numero !== 'oficial' ? ['Orçamento', 'Garantia', 'Pagamento', 'Combinado pra'] : l.tipo === 'Venda' ? ['Objetivo', 'Orçamento', 'Pagamento', 'Bairro', 'Proposta'] : ['Bairro', 'Orçamento', 'Pet', 'Garantia']
   const ult = x => [...x.msgs].reverse().find(m => m.de !== 'sis' && m.de !== 'nota')
@@ -1044,7 +1053,7 @@ function vConversas() {
         ${campos.filter(k => l.ficha[k]).map(k => `<dl class="cp${k === 'Combinado pra' && l.combinado && !l.combinado.feito ? ' alerta' : ''}${S.novos.has('ficha:' + l.id + ':' + k) ? ' nova' : ''}"><dt>${k}</dt><dd>${esc(l.ficha[k])}</dd></dl>`).join('')}
         ${l.corretor ? `<dl class="cp"><dt>Corretor</dt><dd>${l.corretor}</dd></dl>` : ''}${!campos.some(k => l.ficha[k]) && !l.corretor ? '<span style="font-size:12.5px;color:var(--mute)">Vou anotando aqui o que o cliente contar.</span>' : ''}
       </div></div>
-      <div class="msgs" id="msgs">${l.msgs.map(m => m.de === 'sis' ? `<div class="m sis${m.nova ? ' nova' : ''}">${esc(m.txt)}</div>` : m.de === 'nota' ? `<div class="m liz-nota${m.nova ? ' nova' : ''}"><div class="q">Liz em escuta<i>${hh(m.h)}</i></div>${esc(m.txt)}</div>` : `<div class="m ${m.de}${m.nova ? ' nova' : ''}"><div class="q">${m.de === 'ia' ? 'Liz' : m.de === 'humano' ? esc(m.quem) + (l.numero !== 'oficial' ? ' · no celular dele' : '') : esc(l.nome.split(' ')[0])}<i>${hh(m.h)}</i></div>${esc(m.txt)}</div>`).join('')}</div>
+      <div class="msgs" id="msgs">${l.msgs.map(m => m.de === 'sis' ? `<div class="m sis${m.nova ? ' nova' : ''}">${esc(m.txt)}</div>` : m.de === 'nota' ? `<div class="m liz-nota${m.nova ? ' nova' : ''}"><div class="q">Liz em escuta<i>${hh(m.h)}</i></div>${esc(m.txt)}</div>` : `<div class="m ${m.de}${m.nova ? ' nova' : ''}"><div class="q">${m.de === 'ia' ? 'Liz' : m.de === 'humano' ? esc(m.quem) + (l.numero !== 'oficial' ? ' · no celular dele' : '') : cn(l.canal) + ' ' + esc(l.nome.split(' ')[0])}<i>${hh(m.h)}</i></div>${esc(m.txt)}</div>`).join('')}</div>
     </div>
   </div>`
 }
@@ -1087,10 +1096,10 @@ function vResultado() {
     ${num('rv', 'Vendas no mês, R$', curto(S.mes.valorVendas).replace('R$ ', ''), S.mes.vendas + ' imóveis', 'g', true)}
     ${num('rl', 'Locações no mês', S.mes.locacoes, brl(S.mes.valorLoc) + '/mês em contratos')}
     ${num('rt', 'Primeira resposta', mediana(resp()) + ' s', 'antes da Liz: 3 h 40')}
-    ${num('rc', 'Lead → visita', Math.round(100 * comVisita / Math.max(1, L.length)) + '%', comVisita + ' de ' + L.length + ' no dia')}
+    ${num('rc', 'Lead → visita', Math.round(100 * (comVisita + S.base.visita) / (L.length + S.base.hoje)) + '%', (comVisita + S.base.visita) + ' de ' + (L.length + S.base.hoje) + ' hoje')}
   </div>
   <div class="sec"><div class="h"><h2>Funil de hoje</h2></div><div class="funil">
-    <div><span>Leads</span><b data-k="f1">${L.length}</b></div><div><span>Conversaram</span><b data-k="f2">${L.filter(l => l.msgs.some(m => m.de === 'lead')).length}</b></div><div><span>Visita</span><b data-k="f3">${comVisita}</b></div><div><span>Proposta</span><b data-k="f4">${prop}</b></div><div><span>Fechado</span><b data-k="f5">${fech}</b></div>
+    <div><span>Leads</span><b data-k="f1">${L.length + S.base.hoje}</b></div><div><span>Conversaram</span><b data-k="f2">${L.filter(l => l.msgs.some(m => m.de === 'lead')).length + S.base.conversaram}</b></div><div><span>Visita</span><b data-k="f3">${comVisita + S.base.visita}</b></div><div><span>Proposta</span><b data-k="f4">${prop + S.base.proposta}</b></div><div><span>Fechado</span><b data-k="f5">${fech + S.base.fechado}</b></div>
   </div></div>
   <div class="sec"><div class="h"><h2>Quem fechou</h2><span class="c">no mês</span></div><div class="b barras">
     ${Object.entries(S.equipe).map(([k, p]) => `<div class="br"><span>${avP(k, 20)}${esc(p.nome.split(' ')[0])}</span><div class="tr"><i style="width:${Math.round(100 * p.fechados / 8)}%"></i></div><b data-k="qf${k}">${p.fechados}</b></div>`).join('')}
@@ -1151,7 +1160,7 @@ function fimDoDia() {
   const box = document.createElement('div'); box.className = 'fim'
   const gasto = S.campanhas.reduce((a, c) => a + c.gasto, 0)
   box.innerHTML = `<div class="box"><div class="tl"><img src="img/liz_fala_3d.png" alt=""><h2>Assim foi a manhã da Vila Clara</h2></div><p>WhatsApp, Instagram, Facebook, site e o celular de cada corretor num lugar só. Cada anúncio medido até a venda. Nenhum combinado esquecido.</p>
-  <div class="nums">${num('x1', 'Leads atendidos', S.leads.filter(l => l.hoje).length, 'nenhum sem resposta', '', true)}${num('x2', 'Primeira resposta', mediana(resp()) + ' s', 'mediana', 'g')}${num('x3', 'Visitas na agenda', S.visitas.length, 'marcadas pela Liz')}${num('x4', 'Anúncios no mês', curto(gasto), 'medidos até a venda')}</div>
+  <div class="nums">${num('x1', 'Leads atendidos', nHoje(), 'hoje, nenhum sem resposta', '', true)}${num('x2', 'Primeira resposta', mediana(resp()) + ' s', 'mediana', 'g')}${num('x3', 'Visitas na agenda', S.visitas.length, 'marcadas pela Liz')}${num('x4', 'Vendido no mês', curto(S.mes.valorVendas), 'com ' + curto(gasto) + ' em anúncio', 'g')}</div>
   <p style="margin:14px 0 0;font-size:12.5px;color:var(--mute)">Recomeça sozinha em instantes.</p></div>`
   $('.crm').appendChild(box); return box
 }
