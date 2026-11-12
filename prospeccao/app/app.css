@@ -451,6 +451,22 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .pv{font-size:12px;color:var(--mu2);text-align:center;padding:24px 8px;border:1px dashed var(--line2);border-radius:var(--r8)}
 .pc{background:var(--w);border-radius:var(--r8);box-shadow:var(--sh);padding:12px;cursor:grab;border-left:3px solid var(--c, transparent)}
 .pcol .pc{border-left-color:var(--c)}
+/* 12/11/2026: cada coluna rola sozinha no computador, com barra fina na cor da etapa */
+@media (min-width:701px){
+  .pcol-b{max-height:calc(100vh - 150px);min-height:120px;overflow-y:auto;overscroll-behavior:contain;margin-right:-5px;padding:2px 5px 6px 2px;scrollbar-gutter:stable}
+  .pcol-b::-webkit-scrollbar{width:6px}
+  .pcol-b::-webkit-scrollbar-track{background:transparent;margin:4px 0}
+  .pcol-b::-webkit-scrollbar-thumb{background:rgba(10,11,14,.14);border-radius:3px}
+  .pcol:hover .pcol-b::-webkit-scrollbar-thumb{background:var(--c)}
+  .pb::-webkit-scrollbar{height:8px}
+  .pb::-webkit-scrollbar-track{background:rgba(10,11,14,.04);border-radius:4px}
+  .pb::-webkit-scrollbar-thumb{background:rgba(10,11,14,.18);border-radius:4px}
+  .pb::-webkit-scrollbar-thumb:hover{background:var(--g)}
+  @supports not selector(::-webkit-scrollbar){
+    .pcol-b{scrollbar-width:thin;scrollbar-color:rgba(10,11,14,.2) transparent}
+    .pb{scrollbar-width:thin;scrollbar-color:rgba(10,11,14,.2) transparent}
+  }
+}
 .pc.voando{opacity:.4}
 .pc-h{display:flex;gap:8px;align-items:flex-start}
 .pc-h>div{min-width:0;flex:1}
