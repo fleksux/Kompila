@@ -49,8 +49,10 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .abre h1{font-size:clamp(38px,4.6vw,58px);margin:10px 0 10px}
 .abre h1 em{color:var(--ouro-escuro)}
 .abre p{color:var(--cinza);font-size:16px;max-width:42ch}
-.abre .f{min-height:260px}
-.abre .f img{width:100%;height:100%;object-fit:cover}
+/* 12/11/2026 (Alex: "espaço gigante branco e as letras abaixo do corte da tela"): a foto acompanha a altura do texto, não estica o topo */
+.abre{min-height:min(420px,62svh)}
+.abre .f{position:relative;min-height:260px;overflow:hidden}
+.abre .f img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .achar{margin-top:22px;display:flex;gap:8px;max-width:420px}
 .achar input{flex:1;min-width:0;height:52px;padding:0 16px;font:500 18px var(--sans);border:1px solid var(--linha);background:var(--fundo);color:var(--tinta);border-radius:0}
 .achar button{height:52px;padding:0 20px;background:var(--ouro-escuro);color:#fff;font-weight:600;font-size:15px}
