@@ -1488,8 +1488,11 @@ const dpGrLigar = () => {
 }
 const dpOpcoes = (vals, atual, fmt) => [...new Set([...vals, atual])].sort((a, b) => a - b).map(v => `<option value="${v}"${v === atual ? ' selected' : ''}>${fmt(v)}</option>`).join('')
 const DP_SETA = '<i class="dp-seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></i>'
-const dpResumo = c => `${c.intervalo_seg_min} a ${c.intervalo_seg_max} s · pausa a cada ${c.pausa_cada_min} a ${c.pausa_cada_max} · até ${c.limite_dia}/dia · ${c.hora_ini}h às ${c.hora_fim}h`
-const DP_PADRAO = { intervalo_seg_min: 30, intervalo_seg_max: 90, pausa_cada_min: 2, pausa_cada_max: 4, pausa_dur_min: 5, pausa_dur_max: 12, limite_dia: 300, hora_ini: 10, hora_fim: 18, dias: [1, 2, 3, 4, 5, 6], modo_versao: 'sequencia' }
+const dpResumo = c => `${dpEmMin(c) ? `${c.intervalo_seg_min / 60} a ${c.intervalo_seg_max / 60} min` : `${c.intervalo_seg_min} a ${c.intervalo_seg_max} s`} · pausa a cada ${c.pausa_cada_min} a ${c.pausa_cada_max} · até ${c.limite_dia}/dia · ${c.hora_ini}h às ${c.hora_fim}h`
+// 12/11/2026: cadência aprovada pelo Alex (6 a 12 min, pausa de 15 a 30 min a cada 6 a 9, 40 por dia, 9h às 18h, seg a sex, versões em sorteio)
+const DP_PADRAO = { intervalo_seg_min: 360, intervalo_seg_max: 720, pausa_cada_min: 6, pausa_cada_max: 9, pausa_dur_min: 15, pausa_dur_max: 30, limite_dia: 40, hora_ini: 9, hora_fim: 18, dias: [1, 2, 3, 4, 5], modo_versao: 'sorteio' }
+const DP_VERS_PADRAO = ['Olá, tudo bem?', 'Olá! Tudo bem?', 'Olá, {saudacao}! Tudo bem?', 'Olá, tudo bem por aí?', 'Olá, {saudacao}, tudo bem?', 'Olá! Tudo bem por aí?']
+const dpEmMin = c => c.intervalo_seg_min >= 60 && c.intervalo_seg_min % 60 === 0 && c.intervalo_seg_max % 60 === 0
 const dpCampoN = (id, v) => `<input id="${id}" type="number" min="0" inputmode="numeric" value="${v}" aria-label="${id}">`
 // acordeão das configurações: editável até ligar; rodando, só mostra
 const dpConfig = (dados = {}, soLer = false) => {
@@ -1498,7 +1501,7 @@ const dpConfig = (dados = {}, soLer = false) => {
   return `<details class="dp-acc"><summary><span><b>Configurações</b><small id="dCfgRes">${dpResumo(c)}</small></span>${DP_SETA}</summary>
     <div class="dp-cf">
       <div class="dp-sec">Intervalo entre cada mensagem <span>(sorteado a cada envio)</span></div>
-      <div class="dp-li">de ${dpCampoN('dIntMin', c.intervalo_seg_min)} a ${dpCampoN('dIntMax', c.intervalo_seg_max)} <select id="dIntUn" aria-label="Unidade do intervalo"><option value="1">segundos</option><option value="60">minutos</option></select></div>
+      <div class="dp-li">de ${dpCampoN('dIntMin', dpEmMin(c) ? c.intervalo_seg_min / 60 : c.intervalo_seg_min)} a ${dpCampoN('dIntMax', dpEmMin(c) ? c.intervalo_seg_max / 60 : c.intervalo_seg_max)} <select id="dIntUn" aria-label="Unidade do intervalo"><option value="1">segundos</option><option value="60"${dpEmMin(c) ? ' selected' : ''}>minutos</option></select></div>
       <div class="dp-sec">Pausa longa</div>
       <div class="dp-li">a cada ${dpCampoN('dCadaMin', c.pausa_cada_min)} a ${dpCampoN('dCadaMax', c.pausa_cada_max)} mensagens</div>
       <div class="dp-li">descansar ${dpCampoN('dDurMin', c.pausa_dur_min)} a ${dpCampoN('dDurMax', c.pausa_dur_max)} minutos</div>
@@ -1509,7 +1512,7 @@ const dpConfig = (dados = {}, soLer = false) => {
       <div class="dp-sec">Horário e dias</div>
       <div class="dp-li">das <select id="dHi" aria-label="Início">${dpOpcoes(Array.from({ length: 24 }, (_, h) => h), c.hora_ini, v => v)}</select> às <select id="dHf" aria-label="Fim">${dpOpcoes(Array.from({ length: 24 }, (_, h) => h + 1), c.hora_fim, v => v)}</select> h</div>
       <select id="dDias" aria-label="Dias"><option value="5"${nd <= 5 ? ' selected' : ''}>segunda a sexta</option><option value="6"${nd === 6 ? ' selected' : ''}>segunda a sábado</option><option value="7"${nd === 7 ? ' selected' : ''}>todos os dias</option></select>
-      <p class="dp-var" style="padding:0">Cada espera é sorteada dentro da faixa e nunca repete a anterior. Para 100+ pessoas, use no mínimo 30 a 90 segundos.</p>
+      <p class="dp-var" style="padding:0">Cada espera é sorteada dentro da faixa e nunca repete a anterior. Intervalo curto e muitas mensagens por dia derrubam o número.</p>
     </div></details>`
 }
 // lê a tela e corrige: nada abaixo de 0, máximo nunca menor que o mínimo, intervalo nunca abaixo de 15 s
@@ -1791,14 +1794,22 @@ const dpAba = qual => {
   $('dpEsqPipe').hidden = $('dUsarRaiox').hidden = qual !== 'pipe'
   $('dpEsqNums').hidden = $('dCriarL').hidden = qual !== 'nums'
 }
-async function abrirDisparo(empilhar = true, doPipeline = false) {
+async function abrirDisparo(empilhar = true, doPipeline = false, novo = false, campId = null) {
   await carregarSaudacao()
   const { data: canalAt } = await sb.from('canal_whatsapp').select('atende').eq('dono', usuario.id).maybeSingle()
   DP_ATENDE = !!canalAt?.atende
   await Promise.all([carregarGuardian(), dpGrCarregar()])
   let prontosDisparo = 0
-  const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(1)
-  const camp = cs && cs[0]
+  // 12/11/2026: a tela abria sempre no último disparo criado, mesmo já enviado inteiro, e não deixava montar outro.
+  // Agora: disparo sem ninguém na fila não conta; vindo do pipeline sem nada rodando, abre direto em montar um novo.
+  const { data: cs } = await sb.from('campanha').select('*').in('status', ['rodando', 'pausada']).order('criada_em', { ascending: false }).limit(30)
+  const naFila = {}, jaNaFila = new Set()
+  if (cs?.length) { const { data: fl } = await sb.from('envio').select('campanha_id, diagnostico_id').eq('status', 'na_fila').in('campanha_id', cs.map(c => c.id)).limit(5000); (fl || []).forEach(e => { naFila[e.campanha_id] = (naFila[e.campanha_id] || 0) + 1; if (e.diagnostico_id) jaNaFila.add(e.diagnostico_id) }) }
+  const abertas = (cs || []).filter(c => c.status === 'rodando' || naFila[c.id])
+  const rodando = abertas.find(c => c.status === 'rodando')
+  if (doPipeline && !rodando) novo = true
+  const camp = novo ? null : (abertas.find(c => c.id === campId) || rodando || abertas[0])
+  const faixa = abertas.length ? `<div class="dp-abertos"><span>Disparos abertos</span>${abertas.map(c => `<button type="button" data-dpcamp="${c.id}"${camp?.id === c.id ? ' class="on"' : ''}>${c.status === 'rodando' ? '<i class="dp-pulse"></i>' : ''}${esc(c.nome)}<b>${naFila[c.id] || 0} na fila</b></button>`).join('')}<button type="button" data-dpnovo${camp ? '' : ' class="on"'}>+ Novo disparo</button></div>` : ''
   let body = ''
   if (camp) {
     const { data: evs } = await sb.from('envio').select('id, empresa_nome, telefone, status, mensagem, resposta').eq('campanha_id', camp.id).order('ordem', { ascending: true })
@@ -1841,7 +1852,8 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
     const respId = new Set((atv || []).map(a => a.diagnostico_id).filter(Boolean))
     DP_RESP_TEL = new Set((atv || []).flatMap(a => [chaveTel(a.telefone), chaveTel(a.fone)]).filter(Boolean)); DP_TIRA_RESP = true
     const ultimaIn = {}; (ins || []).forEach(m => { if (!ultimaIn[m.telefone]) ultimaIn[m.telefone] = m.criado_em })
-    DP_PIPE = (ds || []).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), cat: String(d.empresa?.categoria || '').trim(), etq: d.etiquetas || [], resp: DP_ETAPA_RESPONDEU.includes(etapa) || respId.has(d.id) || DP_RESP_TEL.has(chaveTel(tel)), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
+    const nJaFila = (ds || []).filter(d => jaNaFila.has(d.id)).length
+    DP_PIPE = (ds || []).filter(d => !jaNaFila.has(d.id)).map(d => { const tel = dpFoneDe(d), etapa = d.etapa || 'a_contatar'; return { id: d.id, etapa, tel, nome: d.empresa?.nome || d.capivara?.nome || 'Empresa', bairro: d.empresa?.bairro || '', seg: String(d.segmento || d.busca?.nicho || '').trim(), cat: String(d.empresa?.categoria || '').trim(), etq: d.etiquetas || [], resp: DP_ETAPA_RESPONDEU.includes(etapa) || respId.has(d.id) || DP_RESP_TEL.has(chaveTel(tel)), temp: calcTemp(etapa, d.temperatura, ultimaIn[tel], d.etapa_em)[0] } })
     DP_ETAPAS = new Set(['a_contatar']); DP_EXC = new Set(); DP_INC = new Set()
     // veio do pipeline filtrado: o disparo já abre na mesma lista
     if (doPipeline) { if (pipeF.seg && DP_PIPE.some(l => l.seg === pipeF.seg)) DP_INC.add('s:' + pipeF.seg); if (pipeF.temp) DP_INC.add('t:' + pipeF.temp); if (pipeF.etq && DP_PIPE.some(l => l.etq.includes(pipeF.etq))) DP_INC.add('e:' + pipeF.etq) }
@@ -1855,7 +1867,7 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
     const nResp = DP_PIPE.filter(l => l.resp).length
     const etqGrupos = [['Etiqueta', etqsD.map(g => [`e:${g}`, g, DP_PIPE.filter(l => l.etq.includes(g)).length])], ['Lista', segs.map(g => [`s:${g}`, g, DP_PIPE.filter(l => l.seg === g).length])], ['Categoria', cats.map(g => [`c:${g}`, g, DP_PIPE.filter(l => l.cat === g).length])], ['Temperatura', TEMP_MAN.filter(([k]) => nTempD(k)).map(([k, t]) => [`t:${k}`, t, nTempD(k)])]]
     const temEtq = etqGrupos.some(g => g[1].length)
-    DP_VERS = [saudacaoDono || 'Olá, {saudacao}, tudo bem?']; DP_ATUAL = 0
+    DP_VERS = !saudacaoDono || /^ol[áa][,!]?\s.{0,24}tudo bem/i.test(saudacaoDono) ? [...DP_VERS_PADRAO] : [saudacaoDono]; DP_ATUAL = 0
     DP_COMP_ON = false; DP_COMP = [DP_COMP_PADRAO]
     body = `<div class="dp-duas">
       <div class="dp-esq">
@@ -1882,6 +1894,7 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
             ${dpSlHtml('slEtapa', 'Etapa do pipeline', [['', ETAPAS.map(([k, t]) => [k, t, nEtapa(k)])]])}
             ${temEtq ? dpSlHtml('slExc', 'Não enviar para', etqGrupos) : '<p class="dp-var" style="padding:12px 0 0">Nenhuma lista no pipeline ainda.</p>'}
             <label class="dp-tira"><input type="checkbox" id="dTiraResp" checked><span>Tirar quem já respondeu</span><b>${nResp}</b></label>
+            ${nJaFila ? `<p class="dp-var" style="padding:10px 0 0">${nJaFila} ${nJaFila === 1 ? 'empresa já está' : 'empresas já estão'} na fila de outro disparo e não ${nJaFila === 1 ? 'entra' : 'entram'} de novo.</p>` : ''}
             <div class="dp-cfg" id="dpResumo" style="margin-top:12px"></div>
           </div>
           ${campoMensagem()}
@@ -1898,10 +1911,12 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
       </aside></div>`
   }
   $('cap').dataset.seq = ''; $('cap').classList.remove('largo')
-  $('cap').innerHTML = `<div class="cap-x"><span class="t">Disparo automático</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${body}</div>`
+  $('cap').innerHTML = `<div class="cap-x"><span class="t">Disparo automático</span><button class="ibtn" id="capX" aria-label="Fechar">${IC.x}</button></div><div class="cap-b dp">${faixa}${body}</div>`
   $('capX').onclick = fecharCapivara
   if (empilhar) empilha('disparo')
-  const recarrega = () => abrirDisparo(false)
+  const recarrega = id => abrirDisparo(false, false, id ? false : novo, id || camp?.id)
+  document.querySelectorAll('[data-dpcamp]').forEach(b => b.onclick = () => abrirDisparo(false, false, false, b.dataset.dpcamp))
+  document.querySelectorAll('[data-dpnovo]').forEach(b => b.onclick = () => abrirDisparo(false, false, true))
   ligarVersoes(); ligarConfig(); ligarAtende(); ligarComplemento(camp?.id); ligarPublico(); ligarNumeros(); ligarGuardian()
   if (doPipeline && !camp && DP_INC.size) dpGrAuto()
   document.querySelectorAll('[data-dptab]').forEach(t => t.onclick = () => dpAba(t.dataset.dptab))
@@ -1927,7 +1942,7 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
       const { error: e2 } = await sb.from('envio').insert(nums.slice(i, i + 200).map((n, j) => ({ campanha_id: c.id, dono: usuario.id, empresa_nome: n.nome, telefone: n.tel, mensagem: msg, ordem: i + j + 1, status: 'na_fila' })))
       if (e2) { await sb.from('campanha').update({ status: 'cancelada' }).eq('id', c.id); $('dCriarL').disabled = false; dpPintarNumeros(); return liz(`Não consegui montar a fila: ${esc(e2.message)}`) }
     }
-    recarrega()
+    recarrega(c.id)
   }
   if ($('dUsarRaiox')) $('dUsarRaiox').onclick = async () => {
     const msg = dpVersoes()[0]
@@ -1946,7 +1961,7 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
       const { error: eEnv } = await sb.from('envio').insert(alvo.slice(i, i + 200).map((l, j) => ({ campanha_id: nova.id, dono: usuario.id, diagnostico_id: l.id, empresa_nome: l.nome, telefone: l.tel, mensagem: msg, ordem: i + j + 1, status: 'na_fila' })))
       if (eEnv) { await sb.from('campanha').update({ status: 'cancelada' }).eq('id', nova.id); return volta(`Não consegui montar a fila: ${eEnv.message}`) }
     }
-    recarrega()
+    recarrega(nova.id)
   }
   if ($('dCiente')) $('dCiente').onchange = e => { $('dLiga').disabled = !e.target.checked }
   if ($('dLiga')) $('dLiga').onclick = async () => {
@@ -1961,11 +1976,14 @@ async function abrirDisparo(empilhar = true, doPipeline = false) {
       if (error) return liz('Não consegui salvar a mensagem. Tenta de novo.')
       await guardarMensagem(msg)
     }
+    // um disparo rodando por vez no mesmo número: os outros ficam pausados
+    const outros = abertas.filter(c => c.status === 'rodando' && c.id !== camp.id)
+    if (outros.length) { const { error: eP } = await sb.from('campanha').update({ status: 'pausada' }).in('id', outros.map(c => c.id)); if (eP) return liz('Não consegui pausar o outro disparo. Tenta de novo.') }
     const { error: eLiga } = await sb.from('campanha').update({ ...cfg, status: 'rodando', motivo_pausa: null }).eq('id', camp.id)
     if (eLiga) return liz('Não consegui ligar o disparo. Tenta de novo.')
-    liz('Disparo ligado. Vou mandando no ritmo combinado.'); recarrega() }
+    liz(outros.length ? 'Disparo ligado. Pausei o outro que estava rodando: vai um por vez.' : 'Disparo ligado. Vou mandando no ritmo combinado.'); recarrega() }
   if ($('dPausa')) $('dPausa').onclick = async () => { await sb.from('campanha').update({ status: 'pausada' }).eq('id', camp.id); recarrega() }
-  if ($('dFim')) $('dFim').onclick = async () => { clearInterval(dispTimer); await sb.from('campanha').update({ status: 'cancelada' }).eq('id', camp.id); liz('Disparo encerrado. Quem não recebeu continua no pipeline. Monte o novo aqui.'); recarrega() }
+  if ($('dFim')) $('dFim').onclick = async () => { clearInterval(dispTimer); await sb.from('campanha').update({ status: 'cancelada' }).eq('id', camp.id); liz('Disparo encerrado. Quem não recebeu continua no pipeline. Monte o novo aqui.'); abrirDisparo(false, false, true) }
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
   clearInterval(dispTimer)
   if (camp && camp.status === 'rodando') dispTimer = setInterval(async () => {
