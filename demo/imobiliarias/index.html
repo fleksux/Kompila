@@ -22,15 +22,30 @@ body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:
 button{font:inherit;cursor:pointer;color:inherit}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-.demo{display:grid;grid-template-columns:minmax(340px,30%) 1fr;height:100vh}
+.demo{display:grid;grid-template-columns:0 1fr;height:100vh;transition:grid-template-columns .45s cubic-bezier(.2,.8,.2,1)}
+.demo.aberto{grid-template-columns:minmax(330px,27%) 1fr}
+.demo:not(.aberto) .lado{visibility:hidden;padding:0;border:0;overflow:hidden}
+.lado{position:relative;overflow:hidden}
+.fechar{position:absolute;top:10px;right:10px;z-index:5;width:34px;height:34px;border-radius:50%;border:1px solid var(--line-2);background:#fff;color:var(--ink-2);display:grid;place-items:center;box-shadow:0 4px 12px rgba(17,19,24,.08)}
+.fechar:hover{color:var(--ink)}
+.fab{position:fixed;left:22px;bottom:22px;z-index:60;width:64px;height:64px;border-radius:50%;border:0;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 12px 28px rgba(18,128,63,.35);transition:transform .2s}
+.fab:hover{transform:scale(1.06)}
+.fab svg{width:32px;height:32px}
+.fab .bdg{position:absolute;top:-3px;right:-3px;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:#e5243b;color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center;border:2px solid #fff;font-family:var(--font)}
+.fab .bdg:empty{display:none}
+.fab.pula{animation:fabPula .5s ease}
+.fab .dica-fab{position:absolute;left:76px;top:50%;transform:translateY(-50%);white-space:nowrap;background:var(--carbon);color:#fff;font-size:12.5px;font-weight:600;padding:7px 11px;border-radius:10px;pointer-events:none;opacity:0;transition:opacity .2s}
+.fab:hover .dica-fab,.fab.mostra .dica-fab{opacity:1}
+body.zap-aberto .fab{display:none}
+@keyframes fabPula{30%{transform:scale(1.15)}60%{transform:scale(.95)}}
 
 /* ---------- lado do cliente (claro) ---------- */
-.lado{background:linear-gradient(180deg,#eef7f1 0%,var(--paper) 60%);display:flex;flex-direction:column;align-items:center;padding:18px 18px 12px;gap:12px;min-height:0;border-right:1px solid var(--line)}
-.lado .cap{display:flex;align-items:center;gap:10px;width:min(100%,440px)}
+.lado{background:linear-gradient(180deg,#eef7f1 0%,var(--paper) 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 18px 10px;gap:10px;min-height:0;border-right:1px solid var(--line)}
+.lado .cap{display:flex;align-items:center;gap:10px;width:min(100%,max(290px,calc((100vh - 128px) * .465)))}
 .lado .cap .canal{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none}
 .lado .cap small{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
 .lado .cap b{display:block;font-size:14px;font-weight:600;line-height:1.25;min-height:18px}
-.fone{--fz:clamp(14px,1.75vh,17px);flex:none;height:calc(100vh - 150px);width:min(100%,440px);min-height:0;border-radius:40px;background:#fff;padding:9px;box-shadow:0 0 0 1px var(--line-2),0 24px 50px rgba(17,19,24,.14);display:flex}
+.fone{--fz:clamp(13.5px,1.65vh,16.5px);flex:none;width:min(100%,max(290px,calc((100vh - 128px) * .465)));aspect-ratio:9/19.4;height:auto;max-height:calc(100vh - 128px);min-height:0;border-radius:40px;background:#fff;padding:9px;box-shadow:0 0 0 1px var(--line-2),0 24px 50px rgba(17,19,24,.14);display:flex}
 .tela{flex:1;border-radius:32px;overflow:hidden;background:var(--wa-bg);display:flex;flex-direction:column;min-height:0;position:relative}
 .st{height:30px;color:#fff;background:var(--wa-head);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:space-between;padding:0 22px}
 .ap-head{background:var(--wa-head);color:#fff;display:flex;align-items:center;gap:10px;padding:6px 12px 10px}
@@ -301,20 +316,22 @@ table.t tr.alerta td{background:#fff8f8}
 @media (max-width:900px){
   body{overflow:auto}
   .demo{display:block;height:auto}
-  .abas{display:flex;position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line);padding:10px 16px;gap:8px}
-  .abas button{flex:1;height:38px;border-radius:20px;border:1px solid var(--line-2);background:#fff;color:var(--ink-2);font-weight:600;font-size:13.5px;position:relative}
-  .abas button.on{background:var(--green);color:#fff;border-color:var(--green)}
-  .abas .ponto{position:absolute;top:6px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--red);display:none}
-  .abas .ponto.on{display:block}
-  .demo[data-aba=crm] .lado{display:none}
-  .demo[data-aba=zap] .crm{display:none}
-  .lado{height:calc(100dvh - 59px);padding:12px 16px;border:0}
-  .lado{height:auto;min-height:calc(100dvh - 59px);padding:16px 16px 20px;gap:14px}
-  .fone{--fz:13px;flex:none;width:min(290px,78vw);height:min(560px,calc(100dvh - 250px));min-height:430px;background:#14181d;padding:8px;border-radius:38px;box-shadow:0 18px 40px rgba(17,19,24,.25)}
-  .tela{border-radius:30px}
-  .lado .cap{width:min(290px,78vw)}
-  .crm{display:block;min-height:calc(100dvh - 59px)}
-  .rail{flex-direction:row;padding:0;position:sticky;top:59px;z-index:30;overflow-x:auto;scrollbar-width:none}
+  .demo.aberto{grid-template-columns:1fr}
+  .demo .lado{display:none}
+  .demo.aberto .lado{display:flex;visibility:visible;position:fixed;inset:0;z-index:80;padding:0;background:#000;height:100dvh}
+  .demo.aberto .lado .cap,.demo.aberto .lado .rod{display:none}
+  .demo.aberto .lado .ctl{display:none}
+  .rail{padding-bottom:0}
+  .demo.aberto .fone{width:100%;height:100dvh;max-height:none;aspect-ratio:auto;border-radius:0;padding:0;background:none;box-shadow:none}
+  .demo.aberto .tela{border-radius:0}
+  .demo.aberto .st{display:none}
+  .demo.aberto .ap-head{padding-top:12px;padding-right:56px}
+  .fechar{top:10px;right:12px;background:rgba(255,255,255,.18);border:0;color:#fff;box-shadow:none}
+  .tela.ig ~ .fechar,.lado:has(.tela.ig) .fechar{background:#efefef;color:#111}
+  .fab{left:16px;bottom:16px;width:58px;height:58px}
+  .fab .dica-fab{display:none}
+  .crm{display:block;min-height:100dvh}
+  .rail{flex-direction:row;padding:0;position:sticky;top:0;z-index:30;overflow-x:auto;scrollbar-width:none}
   .rail::-webkit-scrollbar{display:none}
   .logo,.rail .foot,.rail .liz-rail,.sec-t{display:none}
   .meio{overflow:visible;margin:0;padding:0;display:flex}
@@ -330,7 +347,7 @@ table.t tr.alerta td{background:#fff8f8}
   .funil{grid-template-columns:repeat(2,1fr)}
   .tabela{overflow-x:auto}
   table.t{min-width:620px}
-  .toast{position:fixed;top:112px;right:16px;left:16px;max-width:none}
+  .toast{position:fixed;top:64px;right:16px;left:16px;max-width:none}
 }
 
 /* ---------- entrada (molde: login da Coleve) ---------- */
@@ -398,6 +415,7 @@ table.t tr.alerta td{background:#fff8f8}
   .voltar{margin-bottom:22px}
 }
 .h-marca svg{flex:none}
+body:not(.zap-aberto) .rail .liz-rail,body:not(.zap-aberto) .rail .foot{visibility:hidden}
 </style>
 </head>
 <body>
@@ -435,12 +453,10 @@ table.t tr.alerta td{background:#fff8f8}
     </form>
   </section>
 </div>
-<nav class="abas" aria-label="Lados da demonstração">
-  <button data-aba="zap" class="on">Cliente <span class="ponto" id="pZap"></span></button>
-  <button data-aba="crm">CRM <span class="ponto" id="pCrm"></span></button>
-</nav>
-<div class="demo" data-aba="zap" id="demo">
-  <aside class="lado">
+<button class="fab" id="fab" aria-label="Abrir a conversa do cliente no WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg><span class="bdg" id="bdg"></span><span class="dica-fab" id="dicaFab">Ver o cliente no WhatsApp</span></button>
+
+<div class="demo" id="demo">
+  <aside class="lado"><button class="fechar" id="bFechar" aria-label="Fechar a conversa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <div class="cap"><span class="canal cn whatsapp" id="capIcone"></span><div><small id="capCanal">O cliente</small><b id="quemFone">&nbsp;</b></div></div>
     <div class="fone"><div class="tela" id="tela">
       <div class="st"><span id="foneHora">9:12</span><span>5G ▮▮▮</span></div>
@@ -631,12 +647,12 @@ function abreFone(l, modo, legenda) {
   $('#capCanal').textContent = legenda
   $('#quemFone').textContent = 'No celular de ' + l.nome.split(' ')[0]
   $('#chat').innerHTML = '<div class="dia">HOJE</div>'
-  marcaAba('zap')
 }
 function bolha(cls, html) {
   const c = $('#chat'); c.querySelector('.typing')?.remove()
   const d = document.createElement('div'); d.className = 'bb ' + cls; d.innerHTML = html + '<span class="h">' + hh(S.min) + '</span>'
   c.appendChild(d); c.scrollTop = c.scrollHeight
+  marcaAba('zap')
 }
 async function digita(txt) {
   const campo = $('#campo'); campo.textContent = ''
@@ -874,11 +890,15 @@ function irPara(view, aberta) {
   if (view !== S.view) segura = agora + 6500 / S.speed
   S.view = view; render()
 }
+let naoLidas = 0
+function aberto() { return $('#demo').classList.contains('aberto') }
 function marcaAba(q) {
-  const aba = $('#demo').dataset.aba
-  if (q === 'zap' && aba !== 'zap') $('#pZap').classList.add('on')
-  if (q === 'crm' && aba !== 'crm') $('#pCrm').classList.add('on')
+  if (q !== 'zap' || aberto()) return
+  naoLidas++; $('#bdg').textContent = naoLidas > 99 ? '99+' : naoLidas
+  const f = $('#fab'); f.classList.remove('pula'); void f.offsetWidth; f.classList.add('pula')
 }
+function abrirZap() { $('#demo').classList.add('aberto'); document.body.classList.add('zap-aberto'); naoLidas = 0; $('#bdg').textContent = ''; setTimeout(() => { const c = $('#chat'); c.scrollTop = c.scrollHeight }, 480) }
+function fecharZap() { $('#demo').classList.remove('aberto'); document.body.classList.remove('zap-aberto') }
 
 /* ---------- peças das telas ---------- */
 const hojeL = () => S.leads.filter(l => l.hoje)
@@ -1141,6 +1161,7 @@ async function rodar() {
   document.querySelectorAll('.fim,.toast').forEach(x => x.remove())
   const vel = S?.speed ?? 1, auto = S?.auto ?? true
   S = estadoInicial(); S.speed = vel; S.auto = auto
+  naoLidas = 0; $('#bdg').textContent = ''
   $('#railLogo').innerHTML = LOGO(34, true)
   passa(0); render()
   $('#chat').innerHTML = ''; $('#apHead').innerHTML = ''; $('#quemFone').innerHTML = '&nbsp;'
@@ -1164,9 +1185,10 @@ document.addEventListener('click', e => {
   if (a) { S.aberta = a.dataset.abre; S.view = 'conversas'; S.auto = false; $('#bTour').classList.remove('on'); render(); return }
   const vel = e.target.closest('[data-vel]')
   if (vel) { S.speed = +vel.dataset.vel; document.querySelectorAll('[data-vel]').forEach(b => b.classList.toggle('on', b === vel)); return }
-  const aba = e.target.closest('.abas button')
-  if (aba) { $('#demo').dataset.aba = aba.dataset.aba; document.querySelectorAll('.abas button').forEach(b => b.classList.toggle('on', b === aba)); $(aba.dataset.aba === 'zap' ? '#pZap' : '#pCrm').classList.remove('on'); window.scrollTo(0, 0) }
 })
+$('#fab').onclick = abrirZap
+$('#bFechar').onclick = fecharZap
+setTimeout(() => { const f = $('#fab'); f.classList.add('mostra'); setTimeout(() => f.classList.remove('mostra'), 4000) }, 2600)
 $('#bTour').onclick = () => { S.auto = !S.auto; $('#bTour').classList.toggle('on', S.auto) }
 $('#lizChave').onclick = () => { const b = $('#lizChave'), esc2 = !b.classList.contains('escuta'); b.classList.toggle('escuta', esc2); b.textContent = esc2 ? 'Liz em escuta' : 'Liz atendendo'; toast(esc2 ? 'Liz em escuta' : 'Liz atendendo', esc2 ? 'Ela só lê e anota; quem responde é a equipe.' : 'Ela responde nos canais da empresa.') }
 $('#bPausa').onclick = () => { S.paused = !S.paused; $('#bPausa').textContent = S.paused ? 'Continuar' : 'Pausar'; $('#bPausa').classList.toggle('on', S.paused) }
