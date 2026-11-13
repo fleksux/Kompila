@@ -2204,7 +2204,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
   bindLista()
   if (abrirTel && byTel[abrirTel]) aba = ehLead(abrirTel) ? 'leads' : 'pessoal'
   const vis0 = visiveis()
-  const first = abrirTel && byTel[abrirTel] ? abrirTel : (!mob() && vis0.length ? vis0[0] : null)
+  const first = abrirTel && byTel[abrirTel] ? abrirTel : null
   if (first) selecionar(first)
   $('capO').classList.add('on'); $('cap').classList.add('on'); $('cap').scrollTop = 0
   clearInterval(convTimer); convTimer = setInterval(atualizar, 2000)
@@ -2406,7 +2406,7 @@ new MutationObserver(() => { if ($('cap').classList.contains('on') && !$('ask').
 const marcarNav = () => {
   const aberto = $('cap').classList.contains('on'), t = aberto ? $('cap').querySelector('.cap-x .t')?.textContent : ''
   // 12/11/2026 (Alex: "não precisa ser tudo modal"): Pipeline, Conversas e Disparo abrem como página, sem fundo escuro nem painel deslizando
-  if (aberto) { const pg = ['Pipeline', 'Conversas', 'Disparo automático'].includes(t), semBarra = t === 'Pipeline' || t === 'Conversas'; $('cap').classList.toggle('pg', pg); $('capO').classList.toggle('pg', pg); $('cap').classList.toggle('pgx', semBarra) }
+  if (aberto) { const pg = ['Pipeline', 'Disparo automático'].includes(t), cvw = t === 'Conversas'; $('cap').classList.toggle('pg', pg); $('capO').classList.toggle('pg', pg); $('cap').classList.toggle('pgx', t === 'Pipeline'); $('cap').classList.toggle('cvw', cvw); $('capO').classList.toggle('cvw', cvw) } // Conversas: janelinha no canto (Alex 12/11: "no cantinho, não precisa disso tudo")
   $('bCapt').classList.toggle('on', t === 'Pipeline'); $('bConv').classList.toggle('on', t === 'Conversas'); $('bHist').classList.toggle('on', $('hist').classList.contains('on'))
 }
 new MutationObserver(marcarNav).observe($('cap'), { childList: true, attributes: true, attributeFilter: ['class'] })

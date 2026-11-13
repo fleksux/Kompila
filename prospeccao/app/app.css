@@ -925,7 +925,21 @@ body:has(#capO.on) .fab{display:none}
   .cap-o.pg{background:var(--bg);backdrop-filter:none;transition:none}
   .cap.pg{left:12px;right:12px;width:auto;box-shadow:none;border:1px solid var(--line);transition:none}
   .cap.pg.pgx>.cap-x{display:none}
-  .cap.pg .cap-b.cv2wrap{max-width:1320px}
+  /* Conversas: janelinha no canto direito de baixo, sem cobrir a tela */
+  .cap-o.cvw,.cap-o.on.cvw{opacity:0;pointer-events:none;transition:none}
+  .cap.cvw{top:auto;left:auto;right:16px;bottom:16px;width:400px;height:min(640px,calc(100vh - 96px));display:flex;flex-direction:column;overflow:hidden;background:var(--w);border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 6px rgba(10,11,14,.06),0 16px 48px rgba(10,11,14,.2);transition:none}
+  .cap.cvw:not(.on){display:none}
+  .cap.cvw>.cap-x{flex:none;position:static;padding:8px 8px 8px 16px;background:var(--w)}
+  .cap.cvw>.cap-x .t{font-size:14px;font-weight:600;color:var(--tx)}
+  .cap.cvw .cap-b.cv2wrap{flex:1;min-height:0;max-width:none;margin:0;padding:0}
+  .cap.cvw .cv2{grid-template-columns:1fr;gap:0;height:100%;min-height:0}
+  .cap.cvw .cv2-list,.cap.cvw .cv2-chat{border:0;border-radius:0}
+  .cap.cvw .cv2-chat{display:none}
+  .cap.cvw .cv2.aberta .cv2-list{display:none}
+  .cap.cvw .cv2.aberta .cv2-chat{display:flex}
+  .cap.cvw .cv-back{display:grid}
+  .cap.cvw .cv2-emp,.cap.cvw .cv2-dor{display:none}
+  .cap.cvw .cv2-fase>.cv2-et{justify-content:flex-start}
 }
 .nav{flex:none;height:44px;display:flex;align-items:center;gap:2px;padding:4px;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh)}
 .nav[hidden]{display:none}
