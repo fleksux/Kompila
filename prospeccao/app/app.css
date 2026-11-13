@@ -801,6 +801,7 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .cv-nome-inp{font:inherit;font-size:14.5px;font-weight:600;color:var(--tx);background:var(--w);border:1px solid var(--tx);border-radius:7px;padding:3px 8px;outline:none;max-width:220px}
 .cv-tag{flex:none;margin-left:auto;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.01em;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--w);color:var(--mu2);white-space:nowrap}
 .cv-tag:hover{border-color:var(--tx);color:var(--tx)}
+.cv-tag-c{display:none}
 .cv-del{flex:none;cursor:pointer;display:grid;place-items:center;width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--w);color:var(--mu2)}
 .cv-del svg{width:15px;height:15px}
 .cv-del:hover{border-color:#D94F6B;color:#D94F6B}
@@ -939,6 +940,12 @@ body:has(#capO.on) .fab{display:none}
   .cap.cvw .cv2.aberta .cv2-chat{display:flex}
   .cap.cvw .cv-back{display:grid}
   .cap.cvw .cv2-emp,.cap.cvw .cv2-dor{display:none}
+  .cap.cvw .cv-thead{gap:8px;padding:8px 10px}
+  .cap.cvw .cv-who{flex:1}
+  .cap.cvw .cv-who small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cap.cvw .cv-tag{margin-left:0;padding:5px 9px}
+  .cap.cvw .cv-tag-l{display:none}
+  .cap.cvw .cv-tag-c{display:inline}
   .cap.cvw .cv2-fase>.cv2-et{justify-content:flex-start}
 }
 .nav{flex:none;height:44px;display:flex;align-items:center;gap:2px;padding:4px;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh)}
