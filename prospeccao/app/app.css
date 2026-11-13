@@ -1145,16 +1145,16 @@ body:has(#capO.on) .fab{display:none}
 .cap-b.dp{max-width:1016px;padding:20px 24px 24px}
 .dp-duas{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}
 /* 12/11/2026: faixa pra trocar de disparo ou montar um novo */
-.dp-abertos{display:flex;align-items:center;gap:8px;overflow-x:auto;margin:0 0 16px;padding-bottom:4px;scrollbar-width:none}
+.dp-abertos{display:flex;align-items:center;gap:10px;overflow-x:auto;margin:0 0 20px;padding:2px 2px 6px;scrollbar-width:none}
 .dp-abertos::-webkit-scrollbar{display:none}
-.dp-abertos>span{flex:none;font-size:12px;font-weight:600;color:var(--mu)}
-.dp-abertos button{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:36px;max-width:300px;padding:0 12px;border:1px solid var(--line);border-radius:18px;background:var(--w);font:inherit;font-size:13px;font-weight:500;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.dp-abertos>span{flex:none;font-size:12px;font-weight:600;color:var(--mu);margin-right:2px}
+.dp-abertos button{flex:none;display:inline-flex;align-items:center;gap:10px;height:44px;max-width:380px;padding:0 8px 0 18px;border:1px solid var(--line);border-radius:22px;background:var(--w);font:inherit;font-size:13.5px;font-weight:500;color:var(--tx);white-space:nowrap;cursor:pointer}
 .dp-abertos button span{min-width:0;overflow:hidden;text-overflow:ellipsis}
-.dp-abertos button b{flex:none;font:600 11px var(--mono);color:var(--mu)}
+.dp-abertos button b{flex:none;height:28px;display:inline-flex;align-items:center;padding:0 10px;border-radius:14px;background:var(--s);font:600 11.5px var(--mono);color:var(--mu)}
 .dp-abertos button:hover{border-color:var(--line2)}
-.dp-abertos button.on{background:var(--tx);border-color:var(--tx);color:#fff}.dp-abertos button.on b{color:rgba(255,255,255,.65)}
-.dp-abertos button[data-dpnovo]{font-weight:600}
-@media (max-width:700px){ .dp-abertos button{min-height:44px} }
+.dp-abertos button.on{background:var(--tx);border-color:var(--tx);color:#fff}.dp-abertos button.on b{background:rgba(255,255,255,.14);color:rgba(255,255,255,.8)}
+.dp-abertos button[data-dpnovo]{font-weight:600;padding:0 18px}
+
 .dp-esq-t{font-size:16px;font-weight:700;margin-bottom:10px}
 .dp-esq .dp-list{margin:0}
 .dp-esq .dp-it-top{cursor:default}
