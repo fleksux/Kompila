@@ -2062,18 +2062,22 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
       if (bv) bv.onclick = async () => { bv.disabled = true; const nm = nomeDe(tel) || (foneDe(tel) ? tfmt(foneDe(tel)) : 'Contato'); const { error } = await sb.from('diagnosticos').insert({ telefone: tel, etapa: 'respondeu', origem: 'conversa', decisao: 'aprovada', decidida_em: new Date().toISOString(), capivara: { nome: nm } }); if (error) { bv.disabled = false; return liz('Não consegui virar lead.') } liz('Virou lead. Agora ele está no pipe.'); carregarFase(tel) }
       return
     }
+    // 12/11/2026: bloco recolhido numa linha só; etapa e anotação abrem no canto quando ele pede
+    let aberto = ''
     const render = () => {
       const t = calcTemp(dg.etapa, dg.temperatura, [...(byTel[tel] || [])].reverse().find(m => m.direcao === 'in')?.criado_em, dg.etapa_em)
       const quando = dg.etapa_em || dg.decidida_em, n = dias(quando)
       const momento = quando ? (n === 0 ? 'nesta fase hoje' : `nesta fase há ${n} dia${n > 1 ? 's' : ''}`) : ''
       const dor = dg.nota_dor != null ? `<span class="cv2-dor"${dg.motivo ? ` title="${esc(dg.motivo)}"` : ''}><b>${dg.nota_dor}</b> ${ANG[dg.angulo] || 'potencial'}</span>` : ''
-      box.innerHTML = `<div class="cv2-fr"><span class="tp t-${t[0]}">${t[1] || 'Lead'}</span>${dg.empresa?.nome ? `<span class="cv2-emp">${esc(dg.empresa.nome)}</span>` : ''}${momento ? `<span class="cv2-tempo">${momento}</span>` : ''}<span class="cv2-et">${ETAPAS.map(([k, tx]) => `<button data-et="${k}" class="${dg.etapa === k ? 'on' : ''}">${tx}</button>`).join('')}</span></div>
-        <div class="cv2-dados">${dor}<input class="cv2-anot" placeholder="Anotação (ex: falei com a Ana, retornar segunda)" autocomplete="off"></div>`
+      const etNome = (ETAPAS.find(([k]) => k === dg.etapa) || ['', 'Etapa'])[1]
+      box.innerHTML = `<div class="cv2-fr"><span class="tp t-${t[0]}">${t[1] || 'Lead'}</span>${dg.empresa?.nome ? `<span class="cv2-emp">${esc(dg.empresa.nome)}</span>` : ''}${momento ? `<span class="cv2-tempo">${momento}</span>` : ''}<span class="cv2-ac">${dor}<button type="button" class="cv2-bt${aberto === 'et' ? ' on' : ''}" data-ab="et" aria-expanded="${aberto === 'et'}">${etNome}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><button type="button" class="cv2-bt${aberto === 'an' ? ' on' : ''}" data-ab="an" aria-expanded="${aberto === 'an'}">Anotação${dg.anotacao ? '<i></i>' : ''}</button></span></div>
+        ${aberto === 'et' ? `<div class="cv2-et">${ETAPAS.map(([k, tx]) => `<button data-et="${k}" class="${dg.etapa === k ? 'on' : ''}">${tx}</button>`).join('')}</div>` : ''}${aberto === 'an' ? `<textarea class="cv2-anot" rows="4" placeholder="Anotação (ex: falei com a Ana, retornar segunda)" autocomplete="off"></textarea>` : ''}`
+      box.querySelectorAll('[data-ab]').forEach(b => b.onclick = () => { aberto = aberto === b.dataset.ab ? '' : b.dataset.ab; render(); if (aberto === 'an') box.querySelector('.cv2-anot')?.focus() })
       box.querySelectorAll('[data-et]').forEach(b => b.onclick = async () => {
         const nv = b.dataset.et
         const { error } = await sb.from('diagnosticos').update({ etapa: nv, etapa_em: new Date().toISOString() }).eq('id', dg.id)
         if (error) return liz('Não consegui mover a fase.')
-        dg.etapa = nv; dg.etapa_em = new Date().toISOString(); render()
+        dg.etapa = nv; dg.etapa_em = new Date().toISOString(); aberto = ''; render()
       })
       const anot = box.querySelector('.cv2-anot')
       if (anot) { anot.value = dg.anotacao || ''; let tm; anot.oninput = e => { dg.anotacao = e.target.value; clearTimeout(tm); tm = setTimeout(() => sb.from('diagnosticos').update({ anotacao: e.target.value }).eq('id', dg.id), 700) } }

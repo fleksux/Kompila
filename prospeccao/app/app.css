@@ -846,6 +846,16 @@ body.fora .bar{opacity:0;transform:translate(-50%,16px);pointer-events:none}
 .cv2-tempo{font-size:11px;color:var(--mu2);white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
 .cv2-tempo::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--mu2)}
 .cv2-et{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.cv2-fase{gap:8px;padding:8px 14px}
+.cv2-ac{margin-left:auto;flex:none;display:flex;align-items:center;gap:6px}
+.cv2-bt{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--w);font:inherit;font-size:12px;font-weight:500;color:var(--tx);cursor:pointer;transition:border-color .12s}
+.cv2-bt:hover{border-color:var(--line2)}
+.cv2-bt.on{background:var(--tx);border-color:var(--tx);color:#fff}
+.cv2-bt svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.cv2-bt i{width:6px;height:6px;border-radius:50%;background:#1FA463}
+.cv2-fase>.cv2-et{margin-left:0;justify-content:flex-end}
+textarea.cv2-anot{flex:none;width:100%;min-height:76px;max-height:220px;line-height:1.45;resize:vertical}
+@media (max-width:700px){ .cv2-bt{height:38px} .cv2-ac{margin-left:0;width:100%} }
 .cv2-et button{font-size:11.5px;padding:4px 9px;border-radius:8px;border:1px solid var(--line);background:var(--w);color:var(--mu);cursor:pointer;transition:all .12s}
 .cv2-et button:hover{border-color:var(--line2);color:var(--tx)}
 .cv2-et button.on{background:var(--tx);color:#fff;border-color:var(--tx)}
