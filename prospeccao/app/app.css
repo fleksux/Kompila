@@ -920,6 +920,13 @@ body:has(#capO.on) .fab{display:none}
 .top{z-index:42}
 .hist{z-index:43}
 .cap{top:72px}
+/* 12/11/2026: Pipeline, Conversas e Disparo como página no computador (sem modal) */
+@media (min-width:701px){
+  .cap-o.pg{background:var(--bg);backdrop-filter:none;transition:none}
+  .cap.pg{left:12px;right:12px;width:auto;box-shadow:none;border:1px solid var(--line);transition:none}
+  .cap.pg.pgx>.cap-x{display:none}
+  .cap.pg .cap-b.cv2wrap{max-width:1320px}
+}
 .nav{flex:none;height:44px;display:flex;align-items:center;gap:2px;padding:4px;background:var(--w);border-radius:var(--r12);box-shadow:var(--sh)}
 .nav[hidden]{display:none}
 .nv{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border-radius:var(--r8);font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;white-space:nowrap;transition:background .15s}

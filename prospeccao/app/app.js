@@ -2059,7 +2059,7 @@ async function abrirConversas(empilhar = true, abrirTel = null) {
     if (!dg) {
       box.innerHTML = ehPessoal(tel) ? '' : `<button class="cv2-virar" id="cvVirar">+ Virar lead (pro pipe)</button>`
       const bv = $('cvVirar')
-      if (bv) bv.onclick = async () => { bv.disabled = true; const nm = nomeDe(tel) || (foneDe(tel) ? tfmt(foneDe(tel)) : 'Contato'); const { error } = await sb.from('diagnosticos').insert({ telefone: tel, etapa: 'respondeu', origem: 'conversa', decisao: 'aprovada', decidida_em: new Date().toISOString(), capivara: { nome: nm } }); if (error) { bv.disabled = false; return liz('Não consegui virar lead.') } liz('Virou lead. Agora ele está no pipe.'); carregarFase(tel) }
+      if (bv) bv.onclick = async () => { bv.disabled = true; const nm = nomeDe(tel) || (foneDe(tel) ? tfmt(foneDe(tel)) : 'Contato'); const { error } = await sb.from('diagnosticos').insert({ telefone: tel, etapa: 'respondeu', origem: 'conversa', segmento: 'Prospecção individual', decisao: 'aprovada', decidida_em: new Date().toISOString(), capivara: { nome: nm } }); if (error) { bv.disabled = false; return liz('Não consegui virar lead.') } liz('Virou lead. Agora ele está no pipe.'); carregarFase(tel) }
       return
     }
     // 12/11/2026: bloco recolhido numa linha só; etapa e anotação abrem no canto quando ele pede
@@ -2405,6 +2405,8 @@ new MutationObserver(() => { if ($('cap').classList.contains('on') && !$('ask').
 // marca no menu onde a pessoa está
 const marcarNav = () => {
   const aberto = $('cap').classList.contains('on'), t = aberto ? $('cap').querySelector('.cap-x .t')?.textContent : ''
+  // 12/11/2026 (Alex: "não precisa ser tudo modal"): Pipeline, Conversas e Disparo abrem como página, sem fundo escuro nem painel deslizando
+  if (aberto) { const pg = ['Pipeline', 'Conversas', 'Disparo automático'].includes(t), semBarra = t === 'Pipeline' || t === 'Conversas'; $('cap').classList.toggle('pg', pg); $('capO').classList.toggle('pg', pg); $('cap').classList.toggle('pgx', semBarra) }
   $('bCapt').classList.toggle('on', t === 'Pipeline'); $('bConv').classList.toggle('on', t === 'Conversas'); $('bHist').classList.toggle('on', $('hist').classList.contains('on'))
 }
 new MutationObserver(marcarNav).observe($('cap'), { childList: true, attributes: true, attributeFilter: ['class'] })
