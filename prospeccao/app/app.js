@@ -1093,6 +1093,7 @@ const segDe = d => String(d.segmento || d.busca?.nicho || '').trim()
 // posição do pipeline: mover etapa ou voltar da conversa não pode jogar pro início
 let pipeX = 0, pipeY = 0
 const POR_COLUNA = 50
+let pipeTimer = null // confere de tempos em tempos se o pipeline mudou no banco
 let pipeRol = {} // rolagem de cada coluna do pipeline, pra não voltar ao topo quando o quadro é redesenhado
 const semAcento = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 // mesma pessoa, formatos diferentes: sem 55 e sem o 9 extra (DDD + 8 últimos). LID não vira chave.
@@ -1291,6 +1292,19 @@ async function abrirCaptacao(empilhar = true) {
     pintar()
     board.scrollLeft = mob() ? colunaPipe * (board.children[0].offsetWidth + 12) : pipeX; marca(mob() ? colunaPipe : -1)
     if (!empilhar) $('cap').scrollTop = pipeY
+    // 12/11/2026: o pipeline se atualiza sozinho. A cada 30 s pergunta ao banco só id, etapa e temperatura;
+    // se mudou (lead novo, alguém respondeu, etapa trocada em outro lugar), recarrega mantendo a rolagem.
+    // Não mexe enquanto ele está com um cartão aberto, digitando ou arrastando.
+    const assina = l => l.map(d => `${d.id}:${d.etapa || ''}:${d.temperatura || ''}`).sort().join('|')
+    const sigAgora = assina(todos)
+    clearInterval(pipeTimer)
+    pipeTimer = setInterval(async () => {
+      if (!document.getElementById('pBoard') || !$('cap').classList.contains('on')) return clearInterval(pipeTimer)
+      if (document.hidden || board.querySelector('.pc.aberto,.pc.voando') || $('cap').contains(document.activeElement) && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return
+      const { data, error } = await sb.from('diagnosticos').select('id, etapa, temperatura').eq('decisao', 'aprovada').eq('arquivado', false).limit(5000)
+      if (error || !data || data.length >= 1000 || !document.getElementById('pBoard')) return // acima de 1000 a resposta vem cortada: não compara
+      if (assina(data) !== sigAgora) { clearInterval(pipeTimer); pipeY = $('cap').scrollTop; pipeX = board.scrollLeft; abrirCaptacao(false) }
+    }, 30000)
     let tq; $('pQ').oninput = e => { clearTimeout(tq); tq = setTimeout(() => { pipeF.q = e.target.value; pipeF.lim = {}; pintar(true) }, 150) }
     $('pSeg').onchange = e => { pipeF.seg = e.target.value; pipeF.lim = {}; pintar(true) }
     pEtqPinta()
