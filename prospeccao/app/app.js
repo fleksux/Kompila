@@ -809,7 +809,9 @@ const horarioHoje = e => { const h = e.horarios; if (!Array.isArray(h) || h.leng
 // a cidade do endereço do Google: às vezes ele devolve empresa de outra cidade na busca
 const cidadeReal = e => String(e.endereco || '').match(/,\s*([^,]+?)\s*-\s*[A-Z]{2}\b/)?.[1] || (e.cidade || '').split(',')[0]
 const LV_ORD = { potencial: (a, b) => (b.nota_dor ?? -1) - (a.nota_dor ?? -1), nota: (a, b) => (+b.empresa?.nota || 0) - (+a.empresa?.nota || 0), avaliacoes: (a, b) => (+b.empresa?.total_avaliacoes || 0) - (+a.empresa?.total_avaliacoes || 0), nome: (a, b) => String(a.empresa?.nome || '').localeCompare(String(b.empresa?.nome || ''), 'pt-BR') }
-const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (![...filtros].every(k => LV_FILTROS.find(x => x[0] === k)[2](e))) return false; const q = semAcento(LV.q.trim()).replace(/^@/, ''); if (!q) return true; const dg = q.replace(/\D/g, ''); return semAcento([e.nome, e.bairro, e.instagram, e.email, e.site].join(' ')).includes(q) || (/^[\d\s()+-]+$/.test(q) && dg.length >= 3 && String((e.telefone || '') + ' ' + (e.whatsapp || '')).replace(/\D/g, '').includes(dg)) }
+// 12/11/2026 (Alex): "telefone fixo nem precisa trazer, a não ser que for enriquecer". Quem não tem WhatsApp nem celular fica guardado e só aparece se ele pedir.
+const lvSemZap = d => { const e = d.empresa || {}; return !e.whatsapp && !ehCelular(e) }
+const lvPassa = (d, filtros = LV.f) => { const e = d.empresa || {}; if (!LV.fixo && lvSemZap(d)) return false; if (![...filtros].every(k => LV_FILTROS.find(x => x[0] === k)[2](e))) return false; const q = semAcento(LV.q.trim()).replace(/^@/, ''); if (!q) return true; const dg = q.replace(/\D/g, ''); return semAcento([e.nome, e.bairro, e.instagram, e.email, e.site].join(' ')).includes(q) || (/^[\d\s()+-]+$/.test(q) && dg.length >= 3 && String((e.telefone || '') + ' ' + (e.whatsapp || '')).replace(/\D/g, '').includes(dg)) }
 // "Encontrar mais" grava outra pesquisa, mas pra pessoa é a mesma lista: junta tudo da mesma cidade e segmento
 const mesmaLista = (a, b) => a.cidade !== 'Lista' && b.cidade !== 'Lista' && chave(a.cidade) === chave(b.cidade) && parecida(a.nicho, b.nicho)
 async function buscasDaLista(b) {
@@ -865,7 +867,7 @@ async function lvAcompanhar(novas = 0) {
 }
 function lvPintar() {
   const lst = LV.todos.filter(d => lvPassa(d)).sort(LV_ORD[LV.ord])
-  $('lvChips').innerHTML = LV_FILTROS.map(([k, t]) => { const n = LV.todos.filter(d => lvPassa(d, new Set([...LV.f, k]))).length; return `<button data-f="${k}" aria-pressed="${LV.f.has(k)}">${t}<span>${n}</span></button>` }).join('')
+  $('lvChips').innerHTML = LV_FILTROS.map(([k, t]) => { const n = LV.todos.filter(d => lvPassa(d, new Set([...LV.f, k]))).length; return `<button data-f="${k}" aria-pressed="${LV.f.has(k)}">${t}<span>${n}</span></button>` }).join('') + (LV.todos.some(lvSemZap) ? `<button data-fixo aria-pressed="${!!LV.fixo}" title="Empresas só com telefone fixo ou sem telefone. Mostre para enriquecer e achar o WhatsApp.">Sem WhatsApp<span>${LV.todos.filter(lvSemZap).length}</span></button>` : '')
   const idsLst = lst.map(d => d.empresa?.id).filter(Boolean), marcadas = idsLst.filter(i => LV.sel.has(i))
   $('lvN').textContent = marcadas.length ? `${marcadas.length} selecionada${marcadas.length === 1 ? '' : 's'} de ${lst.length}` : `Selecionar todas (${lst.length})`
   const st = $('lvSelT'); st.checked = !!idsLst.length && marcadas.length === idsLst.length; st.indeterminate = !!marcadas.length && !st.checked
@@ -881,7 +883,7 @@ function lvPintar() {
       <div class="lc-ct">${e.whatsapp ? `<button class="lc-wa" data-zap="${w}">WhatsApp</button>` : ehCelular(e) ? `<button class="lc-cel" data-zap="${w}">Celular</button>` : ''}${tel ? `<a href="tel:${esc(tel)}">${esc(e.telefone)}</a>` : ''}${e.instagram ? `<a class="lc-ig" href="https://instagram.com/${esc(e.instagram)}" target="_blank" rel="noopener">@${esc(e.instagram)}</a>` : ''}${e.email ? `<a href="mailto:${esc(e.email)}">E-mail</a>` : ''}${e.site ? `<a href="${esc(e.site)}" target="_blank" rel="noopener">Site</a>` : '<span class="lc-sem">Sem site</span>'}</div>
       <div class="lc-ac">${d.decisao === 'aprovada' ? '<span class="lc-ok">No pipeline</span>' : '<button class="btn ok sm" data-add>Adicionar ao pipeline</button>'}<button class="btn line sm" data-fi>Ver ficha</button>${enrBotao(e)}</div></article>` }).join('') || `<div class="lv-vz">Nenhuma empresa com esses filtros.<br><button class="btn line sm" id="lvLimpa">Limpar filtros</button></div>`
   if ($('lvLimpa')) $('lvLimpa').onclick = () => { LV.f = new Set(); LV.q = ''; $('lvQ').value = ''; lvPintar() }
-  $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
+  $('lvChips').querySelectorAll('button').forEach(b => b.onclick = () => { if ('fixo' in b.dataset) { LV.fixo = !LV.fixo; return lvPintar() } const k = b.dataset.f; if (LV.f.has(k)) LV.f.delete(k); else { LV.f.add(k); if (k === 'site') LV.f.delete('semsite'); if (k === 'semsite') LV.f.delete('site') } lvPintar() })
   bt.onclick = async () => {
     bt.disabled = true; bt.textContent = 'Adicionando…'
     const ids = novas.map(d => d.id); let falhou = false
