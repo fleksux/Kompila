@@ -430,7 +430,9 @@ sb.auth.getSession().then(({ data: { session } }) => {
   document.getElementById('fimq').textContent = `Bem-vindo de volta${nome ? ', ' + nome : ''}.`
   document.getElementById('fimsub').textContent = 'Você já está conectado.'
   const b = document.getElementById('gbtn'); b.innerHTML = 'Abrir a prospecção'; b.onclick = () => location.href = APP
-  document.querySelectorAll('[data-entrar],[data-quero]').forEach(x => x.onclick = () => { if (celular()) painel.classList.add('on'); verEntrada(true) })
+  // já logado: Entrar e Começar levam direto pro app, sem passar pelo painel
+  document.querySelectorAll('[data-entrar]').forEach(x => x.onclick = () => { location.href = APP })
+  document.querySelectorAll('[data-quero]').forEach(x => x.onclick = () => { if (celular()) painel.classList.add('on'); verEntrada(true) })
   document.getElementById('busca').onclick = () => { if (celular()) painel.classList.add('on'); verEntrada(true) }
   verEntrada(true)
 })

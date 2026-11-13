@@ -87,8 +87,13 @@ $('bGoogle').onclick = async () => {
 }
 $('bSair').onclick = async () => { await sb.auth.signOut(); location.reload() }
 
+// 12/11/2026: às vezes a sessão não respondia (ou chegava depois da tela de login) e só um Ctrl R resolvia.
+// Agora o app recarrega sozinho, uma vez, quando isso acontece.
+const recarregaLogin = () => { try { const t = +sessionStorage.getItem('kp_login_recarga') || 0; if (Date.now() - t < 60000) return false; sessionStorage.setItem('kp_login_recarga', String(Date.now())) } catch (_) { return false } location.replace(location.pathname); return true }
 async function iniciar() {
-  const { data: { session } } = await sb.auth.getSession()
+  const res = await Promise.race([sb.auth.getSession(), new Promise(r => setTimeout(() => r(null), 6000))])
+  if (!res && recarregaLogin()) return
+  const session = res?.data?.session || null
   const erroUrl = new URLSearchParams(location.hash.slice(1)).get('error_description') || new URLSearchParams(location.search).get('error_description')
   if (!session) {
     $('login').hidden = false
@@ -1809,7 +1814,7 @@ async function abrirDisparo(empilhar = true, doPipeline = false, novo = false, c
   const rodando = abertas.find(c => c.status === 'rodando')
   if (doPipeline && !rodando) novo = true
   const camp = novo ? null : (abertas.find(c => c.id === campId) || rodando || abertas[0])
-  const faixa = abertas.length ? `<div class="dp-abertos"><div class="dp-ab-top"><span>Disparos abertos</span><button type="button" data-dpnovo${camp ? '' : ' class="on"'}>+ Novo disparo</button></div><div class="dp-ab-l">${abertas.map(c => `<button type="button" data-dpcamp="${c.id}"${camp?.id === c.id ? ' class="on"' : ''}>${c.status === 'rodando' ? '<i class="dp-pulse"></i>' : ''}<span>${esc(c.nome)}</span><b>${naFila[c.id] || 0} na fila</b></button>`).join('')}</div></div>` : ''
+  const faixa = abertas.length ? `<div class="dp-abertos"><div class="dp-ab-t">Disparos abertos</div><div class="dp-ab-l">${abertas.map(c => `<button type="button" data-dpcamp="${c.id}"${camp?.id === c.id ? ' class="on"' : ''}><span>${esc(c.nome)}</span><small>${c.status === 'rodando' ? '<i class="dp-pulse"></i>Rodando' : 'Pausado'} · ${naFila[c.id] || 0} na fila</small></button>`).join('')}<button type="button" data-dpnovo${camp ? '' : ' class="on"'}><span>+ Novo disparo</span><small>com quem está no pipeline</small></button></div></div>` : ''
   let body = ''
   if (camp) {
     const { data: evs } = await sb.from('envio').select('id, empresa_nome, telefone, status, mensagem, resposta').eq('campanha_id', camp.id).order('ordem', { ascending: true })
@@ -2424,7 +2429,7 @@ $('bEnv').onclick = () => { comando($('inp').value); $('inp').value = '' }
 
 let eraCelular = mob()
 addEventListener('resize', () => { if (mob() === eraCelular) return; eraCelular = mob(); if (busca && $('n_olhadas')) { const st = { ...busca }; const d = diags; montarCanvas(st, false); busca = st; diags = d; atualizarFunil(); desenharCards() } })
-sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.reload() })
+sb.auth.onAuthStateChange((ev, s) => { if (ev === 'SIGNED_OUT') location.reload(); else if (s && !usuario && !$('login').hidden) recarregaLogin() })
 /* ======================= perfil: meu uso e, pro gestor, a prospecção inteira ======================= */
 const PLANO_TXT = { free: ['Free', 'testando'], mes_gratis: ['Mês grátis', 'ganho por indicação'], pagante: ['Pagante', 'cliente'], cancelou: ['Cancelado', ''] }
 async function abrirPerfil(empilhar = true) {
