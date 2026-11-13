@@ -368,6 +368,9 @@ section.s{padding:96px 0 0}
 <script src="/js/pixel.js" defer></script>
 <script src="/js/anima.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!-- 12/11/2026: se a biblioteca do login não carregar, tenta o outro endereço e, por último, recarrega a página uma vez. Sem ela nenhum botão funciona. -->
+<script>if(typeof supabase==='undefined')document.write('<script src="https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"><\/script>')</script>
+<script>if(typeof supabase==='undefined'){try{if(Date.now()-(+sessionStorage.getItem('kp_lib_recarga')||0)>60000){sessionStorage.setItem('kp_lib_recarga',String(Date.now()));location.reload()}}catch(_){}}</script>
 <script src="app/config.js"></script>
 <script>
 // busca que se digita sozinha

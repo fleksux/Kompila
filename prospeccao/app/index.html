@@ -9,7 +9,7 @@
 <link rel="icon" href="img/liz_rosto_3d.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css?v=1794528623">
+<link rel="stylesheet" href="app.css?v=1794528838">
 </head>
 <body class="fora">
 
@@ -72,9 +72,12 @@
 </div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="config.js?v=1794528623"></script>
-<script src="app.js?v=1794528623"></script>
+<!-- 12/11/2026: se a biblioteca do login não carregar, tenta o outro endereço e, por último, recarrega a página uma vez. Sem ela nenhum botão funciona. -->
+<script>if(typeof supabase==='undefined')document.write('<script src="https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"><\/script>')</script>
+<script>if(typeof supabase==='undefined'){try{if(Date.now()-(+sessionStorage.getItem('kp_lib_recarga')||0)>60000){sessionStorage.setItem('kp_lib_recarga',String(Date.now()));location.reload()}}catch(_){}}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+<script src="https://sdk.mercadopago.com/js/v2" defer></script>
+<script src="config.js?v=1794528838"></script>
+<script src="app.js?v=1794528838"></script>
 </body>
 </html>
