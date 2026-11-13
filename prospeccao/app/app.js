@@ -2387,15 +2387,15 @@ async function esperarCapivara(id) {
 
 /* ======================= histórico ======================= */
 async function carregarHist() {
-  const { data: todas } = await sb.from('buscas').select('id, cidade, nicho, status, olhadas, novas, com_dor, criada_em').order('criada_em', { ascending: false }).limit(200)
+  const { data: todas } = await sb.from('buscas').select('id, cidade, nicho, status, olhadas, novas, com_dor, criada_em, de_quem').order('criada_em', { ascending: false }).limit(400)
   // um item por lista, com o total de empresas somando cada "Encontrar mais"; pesquisa com erro fica separada
   const data = []
   for (const b of todas || []) {
     const g = b.status === 'erro' ? null : data.find(x => x.status !== 'erro' && mesmaLista(x, b))
     if (g) g.total += b.novas || 0; else data.push({ ...b, total: b.novas || 0 })
   }
-  data.splice(30)
-  $('hist').innerHTML = data.length ? data.map(b => `<div class="hi" data-id="${b.id}"><b>${esc(b.cidade === 'Lista' ? 'Lista · ' + b.nicho : b.nicho + ' · ' + b.cidade.split(',')[0])}</b><small>${new Date(b.criada_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · ${b.total} empresa${b.total === 1 ? '' : 's'} · ${{ pronta: 'pronta', erro: 'deu erro' }[b.status] || 'em andamento'}</small></div>`).join('') : '<div class="vazio">Nenhuma busca ainda.</div>'
+  data.splice(100)
+  $('hist').innerHTML = data.length ? data.map(b => `<div class="hi" data-id="${b.id}"><b>${esc(b.cidade === 'Lista' ? 'Lista · ' + b.nicho : b.nicho + ' · ' + b.cidade.split(',')[0])}</b><small>${new Date(b.criada_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · ${b.total} empresa${b.total === 1 ? '' : 's'} · ${{ pronta: 'pronta', erro: 'deu erro' }[b.status] || 'em andamento'}${b.de_quem ? ' · de ' + esc(b.de_quem) : ''}</small></div>`).join('') : '<div class="vazio">Nenhuma busca ainda.</div>'
   $('hist').insertAdjacentHTML('beforeend', `<button class="sair so-cel" id="bSair2">Sair da conta (${esc(usuario?.email || '')})</button>`)
   $('bSair2').onclick = async () => { await sb.auth.signOut(); location.reload() }
   $('hist').querySelectorAll('.hi').forEach(el => el.onclick = () => abrirBusca(data.find(b => b.id === el.dataset.id)))
