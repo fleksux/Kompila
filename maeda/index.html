@@ -347,8 +347,10 @@ h1,h2{font-feature-settings:"lnum" 1}
       </div>
       <div class="f"><img src="img/n-2.webp" alt="Peru de Natal fatiado com laço vermelho"></div>
     </section>
+    <!-- 16/11/2026 (Alex: "coloca um menu kit e avulso"): cliente não achava os avulsos, que ficam depois dos 7 pacotes -->
+    <nav class="cats" aria-label="Kits e avulsos"><div class="box" id="cats-natal"><a href="#pacotes" data-sub="pacotes" class="on">Kits de ceia</a><a href="#avulsos" data-sub="avulsos">Avulsos</a></div></nav>
     <div class="box">
-      <div class="sec"><h2>Pacotes de ceia</h2><p>Cada pacote vem com entrada, prato principal, acompanhamentos e sobremesa.</p></div>
+      <div class="sec" id="pacotes"><h2>Kits de ceia</h2><p>Cada pacote vem com entrada, prato principal, acompanhamentos e sobremesa.</p></div>
       <div class="info" id="info-natal"></div>
       <div class="pacs" id="pacs"></div>
       <div class="sec" id="avulsos"><h2>Pratos avulsos</h2><p>Especial de Natal e Ano Novo, pra completar a sua ceia.</p></div>
@@ -498,19 +500,29 @@ $('#lista-rot').innerHTML = R.map(s => {
 // categoria ativa conforme rola
 const io = new IntersectionObserver(es => es.forEach(x => {
   if (!x.isIntersecting) return
-  $$('.cats a').forEach(a => a.classList.toggle('on', a.dataset.cat === x.target.id.slice(2)))
-  const on = $('.cats a.on'); if (on) on.parentNode.scrollTo({ left: on.offsetLeft - 16, behavior: 'smooth' })
+  $$('#cats a').forEach(a => a.classList.toggle('on', a.dataset.cat === x.target.id.slice(2)))
+  const on = $('#cats a.on'); if (on) on.parentNode.scrollTo({ left: on.offsetLeft - 16, behavior: 'smooth' })
 }), { rootMargin: '-40% 0px -55% 0px' })
 $$('.bloco').forEach(b => io.observe(b))
+
+// Natal: "Kits de ceia" ou "Avulsos" aceso conforme rola
+const ioNatal = new IntersectionObserver(es => es.forEach(x => {
+  if (!x.isIntersecting) return
+  const sub = x.target.id === 'lista-avulsos' ? 'avulsos' : 'pacotes'
+  $$('#cats-natal a').forEach(a => a.classList.toggle('on', a.dataset.sub === sub))
+}), { rootMargin: '-40% 0px -55% 0px' })
+;['pacs', 'lista-avulsos'].forEach(id => ioNatal.observe(document.getElementById(id)))
 
 // ---------- abas (mesma página) ----------
 function aba() {
   const h = location.hash.slice(1)
   const pulo = h.startsWith('r-')
+  const sub = h === 'pacotes' || h === 'avulsos'   // menu Kits de ceia | Avulsos, dentro do Natal (também serve de link direto)
   const v = h === 'rotisserie' || pulo ? 'rotisserie' : 'natal'
   $$('[data-v]').forEach(el => { const mostra = el.dataset.v === v; if (mostra && el.hidden) { el.classList.remove('entra'); void el.offsetWidth; el.classList.add('entra') } el.hidden = !mostra })
   $$('.aba').forEach(a => a.classList.toggle('on', a.dataset.aba === v))
-  if (!pulo) window.scrollTo(0, 0)
+  if (sub) requestAnimationFrame(() => document.getElementById(h).scrollIntoView())
+  else if (!pulo) window.scrollTo(0, 0)
 }
 window.addEventListener('hashchange', aba)
 
