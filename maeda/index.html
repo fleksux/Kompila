@@ -510,13 +510,13 @@ const io = new IntersectionObserver(es => es.forEach(x => {
 }), { rootMargin: '-40% 0px -55% 0px' })
 $$('.bloco').forEach(b => io.observe(b))
 
-// Natal: "Kits de ceia" ou "Avulsos" aceso conforme rola
-const ioNatal = new IntersectionObserver(es => es.forEach(x => {
-  if (!x.isIntersecting) return
-  const sub = x.target.id === 'lista-avulsos' ? 'avulsos' : 'pacotes'
+// Natal: "Kits de ceia" ou "Avulsos" aceso conforme rola, pela posição do título "Pratos avulsos" (o observador falhava ao abrir direto em #avulsos)
+function subNatal() {
+  const t = document.getElementById('avulsos').getBoundingClientRect().top
+  const sub = t < innerHeight * 0.5 ? 'avulsos' : 'pacotes'
   $$('#cats-natal a').forEach(a => a.classList.toggle('on', a.dataset.sub === sub))
-}), { rootMargin: '-40% 0px -55% 0px' })
-;['pacs', 'lista-avulsos'].forEach(id => ioNatal.observe(document.getElementById(id)))
+}
+addEventListener('scroll', subNatal, { passive: true }); addEventListener('load', subNatal)
 
 // ---------- abas (mesma página) ----------
 function aba() {
@@ -526,7 +526,7 @@ function aba() {
   const v = h === 'rotisserie' || pulo ? 'rotisserie' : 'natal'
   $$('[data-v]').forEach(el => { const mostra = el.dataset.v === v; if (mostra && el.hidden) { el.classList.remove('entra'); void el.offsetWidth; el.classList.add('entra') } el.hidden = !mostra })
   $$('.aba').forEach(a => a.classList.toggle('on', a.dataset.aba === v))
-  if (sub) requestAnimationFrame(() => document.getElementById(h).scrollIntoView())
+  if (sub) requestAnimationFrame(() => { document.getElementById(h).scrollIntoView(); subNatal() })
   else if (!pulo) window.scrollTo(0, 0)
 }
 window.addEventListener('hashchange', aba)
