@@ -12,6 +12,7 @@ User-agent: Applebot-Extended
 Allow: /
 Disallow: /aprovacao/
 Disallow: /convite/
+Disallow: /relatorio/
 Disallow: /glowbos/tema/
 
 Sitemap: https://kompila.com.br/sitemap.xml

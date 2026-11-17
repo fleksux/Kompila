@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico">
+<title>Liz no Luciu's · Dia 1 · Kompila</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: uma história em capítulos de hora em hora. Faixas escuras (a noite) e claras (os números), identidade Kompila, look único escolhido de propósito. */
+:root{
+  --carbono:#0A0B0E; --carbono2:#14161B; --linha-esc:#262A31;
+  --off:#E9EBEE; --off-mu:#9AA0A8;
+  --papel:#F2F3EF; --papel2:#E6E8E2; --tinta:#14171C; --tinta-mu:#5B616A; --linha-cla:#D4D7CF;
+  --verde:#2FD67B; --verde-esc:#12803F; --ambar:#FFB224;
+  --f-txt:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--carbono);color:var(--off);font-family:var(--f-txt);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.faixa{padding-block:72px}
+.faixa.clara{background:var(--papel);color:var(--tinta)}
+.faixa.meio{background:var(--carbono2)}
+.marca{font-family:var(--f-num);font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--off-mu);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.marca b{color:var(--verde);font-weight:600}
+.br{font-family:var(--f-num);font-weight:600;white-space:nowrap}
+.br::before{content:"[ ";color:var(--verde)}
+.br::after{content:" ]";color:var(--verde)}
+.clara .br::before,.clara .br::after{color:var(--verde-esc)}
+h1,h2,h3{text-wrap:balance;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(40px,7.4vw,84px);font-weight:800;line-height:1.02;margin-top:48px}
+h1 em{font-style:normal;color:var(--verde)}
+.lead{font-size:clamp(18px,2.2vw,21px);color:var(--off-mu);max-width:60ch;margin:24px 0 0}
+.lead b{color:var(--off);font-weight:700}
+.hero-num{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--linha-esc);border:1px solid var(--linha-esc);border-radius:14px;overflow:hidden;margin-top:56px}
+.hero-num div{background:var(--carbono);padding:24px 22px;min-width:0}
+.k{font-family:var(--f-num);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--off-mu)}
+.clara .k{color:var(--tinta-mu)}
+.v{font-family:var(--f-num);font-weight:600;font-size:clamp(26px,3.6vw,40px);line-height:1.1;margin-top:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.v small{font-size:.5em;color:var(--off-mu);font-weight:500}
+.s{font-size:14px;color:var(--off-mu);margin-top:6px}
+.clara .s{color:var(--tinta-mu)}
+.eyebrow{font-family:var(--f-num);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--verde)}
+.clara .eyebrow{color:var(--verde-esc)}
+h2{font-size:clamp(28px,4.2vw,44px);font-weight:800;line-height:1.1;margin-top:12px}
+.sub{color:var(--off-mu);max-width:62ch;margin:14px 0 0;font-size:17px}
+.clara .sub{color:var(--tinta-mu)}
+
+/* linha do tempo */
+.tempo{list-style:none;margin:48px 0 0;padding:0;display:grid;gap:0}
+.tempo li{display:grid;grid-template-columns:92px 1fr;gap:24px;padding:26px 0;border-top:1px solid var(--linha-esc)}
+.tempo li:last-child{border-bottom:1px solid var(--linha-esc)}
+.hora{font-family:var(--f-num);font-weight:600;font-size:22px;color:var(--verde);font-variant-numeric:tabular-nums}
+.tempo h3{font-size:20px;font-weight:700}
+.tempo p{margin:6px 0 0;color:var(--off-mu);max-width:62ch}
+.tempo p b{color:var(--off)}
+.balao{margin-top:14px;display:inline-block;max-width:min(100%,460px);background:#103B26;color:#DDF7E8;border-radius:12px 12px 12px 4px;padding:12px 14px;font-size:15px;line-height:1.45}
+.balao .q{display:block;font-family:var(--f-num);font-size:11px;letter-spacing:.06em;color:#7FD9A6;margin-bottom:4px;text-transform:uppercase}
+
+/* canais */
+.canais{margin-top:40px;display:grid;gap:14px}
+.canal{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) auto;gap:18px;align-items:center}
+.canal .nm{font-weight:700}
+.canal .nm span{display:block;font-weight:400;font-size:13px;color:var(--tinta-mu)}
+.trilho{height:30px;background:var(--papel2);border-radius:6px;overflow:hidden}
+.barra{height:100%;background:var(--tinta);border-radius:6px}
+.barra.liz{background:var(--verde-esc)}
+.canal .rs{font-family:var(--f-num);font-weight:600;font-variant-numeric:tabular-nums;text-align:right;min-width:112px}
+.canal .rs small{display:block;font-weight:500;font-size:12px;color:var(--tinta-mu)}
+.soma{margin-top:36px;padding:26px;border-radius:14px;background:var(--tinta);color:var(--papel);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.soma .v{font-size:clamp(22px,2.6vw,30px)}.soma>div{min-width:0}
+.soma .k{color:#A9AFA6}.soma .s{color:#A9AFA6}
+.soma .br::before,.soma .br::after{color:var(--verde)}
+
+/* gráfico */
+.graf{margin-top:40px;overflow-x:auto}
+.graf svg{display:block;width:100%;min-width:560px;height:auto}
+.leg{display:flex;gap:20px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--tinta-mu)}
+.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+
+/* conversa */
+.grade{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--linha-esc);border:1px solid var(--linha-esc);border-radius:14px;overflow:hidden;margin-top:40px}
+.grade div{background:var(--carbono2);padding:22px;min-width:0}
+.meio .grade div{background:var(--carbono)}
+
+/* aprendizados */
+.aprend{margin-top:40px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.ap{border:1px solid var(--linha-cla);border-radius:12px;padding:20px;background:#FAFBF8;min-width:0}
+.ap .antes{font-size:14px;color:var(--tinta-mu)}
+.ap .antes b{color:#A3341F;font-family:var(--f-num);font-size:11px;letter-spacing:.08em;margin-right:6px}
+.ap .depois{margin-top:10px;font-weight:600}
+.ap .depois b{color:var(--verde-esc);font-family:var(--f-num);font-size:11px;letter-spacing:.08em;margin-right:6px}
+
+.fim{padding-block:80px}
+.fim h2{font-size:clamp(30px,5vw,56px)}
+.fonte{margin-top:40px;font-size:13px;color:var(--off-mu);max-width:70ch;border-top:1px solid var(--linha-esc);padding-top:20px}
+.ponto{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ambar);margin-right:8px;vertical-align:1px}
+
+@media (max-width:760px){
+  .faixa{padding-block:52px}
+  .hero-num{grid-template-columns:1fr}
+  .grade{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .soma{grid-template-columns:1fr}
+  .aprend{grid-template-columns:1fr}
+  .tempo li{grid-template-columns:1fr;gap:6px}
+  .canal{grid-template-columns:minmax(0,1fr) auto}
+  .canal .trilho{grid-column:1 / -1;grid-row:2}
+}
+@media (prefers-reduced-motion:no-preference){
+  .barra{animation:cresce .9s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes cresce{from{transform:scaleX(.02);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}
+}
+.volta{position:absolute;top:20px;right:max(16px,env(safe-area-inset-right,0px));font-family:var(--f-num);font-size:13px;color:var(--off-mu);text-decoration:none}.volta:hover{color:var(--verde)}body{position:relative}
+</style>
+</head>
+<body>
+<a class="volta" href="/relatorio/lucius/">← Todos os relatórios</a>
+
+<section class="faixa">
+  <div class="wrap">
+    <div class="marca"><span><b>[</b> kompila <b>]</b> · Liz</span><span>Luciu's Lanches · segunda, 16/11/2026</span></div>
+    <h1>O primeiro dia da Liz no <em>Luciu's</em>.</h1>
+    <p class="lead">Na segunda-feira, o WhatsApp da lanchonete passou a ser atendido pela Liz. Ela respondeu, anotou o pedido e mandou direto pra cozinha. <b>Esta é a noite contada pelos números do sistema.</b></p>
+    <div class="hero-num">
+      <div><div class="k">Pedidos do dia</div><div class="v br">112</div><div class="s">R$ 3.821,50 em vendas, somando mesa, balcão e WhatsApp</div></div>
+      <div><div class="k">Pela Liz + cardápio</div><div class="v br">39</div><div class="s">R$ 1.439,50, ou 37,7% de tudo que a loja vendeu</div></div>
+      <div><div class="k">Tempo de resposta</div><div class="v br">21 s</div><div class="s">mediana em 141 respostas; 9 em cada 10 saíram em até 29 s</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="faixa meio">
+  <div class="wrap">
+    <div class="eyebrow">A noite, hora a hora</div>
+    <h2>Da primeira mensagem ao último lanche.</h2>
+    <ol class="tempo">
+      <li><div class="hora">14:22</div><div><h3>A Liz responde o primeiro cliente</h3><p>O robô antigo foi desligado e os pedidos passaram a cair no app da loja. Quem chamava no WhatsApp recebia o cardápio pra montar o pedido ou falava o pedido pra Liz.</p></div></li>
+      <li><div class="hora">14:25</div><div><h3>Primeiro pedido anotado por ela</h3><p>Três minutos depois da primeira resposta, o primeiro pedido estava no quadro da cozinha, com nome, itens e forma de pagamento.</p></div></li>
+      <li><div class="hora">18:00</div><div><h3>A casa enche</h3><p>Das 18h à meia-noite entraram <b>83 dos 112 pedidos</b> do dia. Mesa, balcão, cardápio e WhatsApp, tudo na mesma tela.</p></div></li>
+      <li><div class="hora">20:00</div><div><h3>A hora que mais vendeu</h3><p><b>R$ 753</b> em 60 minutos. Às 21h veio a hora com mais pedidos: <b>18</b>.</p>
+        <span class="balao"><span class="q">Como a Liz confirma o pedido</span>Oba! Seu pedido está *EM PRODUÇÃO!* 🥳 · Pedido nº, itens, pagamento, previsão e total, no mesmo formato que o cliente já conhecia.</span></div></li>
+      <li><div class="hora">22:00</div><div><h3>Depois das 22h, ela continua</h3><p><b>42 mensagens</b> da Liz depois das dez da noite, sem ninguém da equipe precisar pegar o celular.</p></div></li>
+      <li><div class="hora">23:50</div><div><h3>Última resposta</h3><p>O último pedido foi lançado às 23h48. Dois minutos depois, a Liz mandou a última mensagem da noite.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="faixa clara">
+  <div class="wrap">
+    <div class="eyebrow">De onde veio cada pedido</div>
+    <h2>Pelo WhatsApp, a loja vendeu quase o mesmo que nas mesas.</h2>
+    <p class="sub">Pedidos que valeram (cancelados fora). O cardápio é o link que a Liz manda na conversa: os 18 pedidos dele vieram de clientes que estavam falando com ela.</p>
+    <div class="canais" id="canais"></div>
+    <div class="soma">
+      <div><div class="k">Liz + cardápio</div><div class="v"><span class="br">R$ 1.439,50</span></div><div class="s">39 pedidos</div></div>
+      <div><div class="k">Mesas (app do garçom)</div><div class="v"><span class="br">R$ 1.716</span></div><div class="s">50 pedidos</div></div>
+      <div><div class="k">Maior ticket médio</div><div class="v"><span class="br">R$ 40,83</span></div><div class="s">quem pediu pelo cardápio</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="faixa clara" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Vendas por hora</div>
+    <h2>A noite inteira em uma linha.</h2>
+    <div class="graf" id="graf"></div>
+    <div class="leg"><span><i style="background:var(--verde-esc)"></i>hora de pico</span><span><i style="background:var(--tinta)"></i>demais horas</span><span>Valores em reais, pedidos que valeram</span></div>
+  </div>
+</section>
+
+<section class="faixa">
+  <div class="wrap">
+    <div class="eyebrow">A conversa</div>
+    <h2>50 clientes no WhatsApp. A Liz atendeu, a equipe entrou quando precisou.</h2>
+    <div class="grade">
+      <div><div class="k">Conversas</div><div class="v br">50</div><div class="s">clientes diferentes</div></div>
+      <div><div class="k">Mensagens da Liz</div><div class="v br">258</div><div class="s">contra 104 da equipe</div></div>
+      <div><div class="k">Links do cardápio</div><div class="v br">47</div><div class="s">enviados na conversa</div></div>
+      <div><div class="k">Chamou a equipe</div><div class="v br">10</div><div class="s">quando o assunto era com uma pessoa</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="faixa clara">
+  <div class="wrap">
+    <div class="eyebrow">O que a primeira noite ensinou</div>
+    <h2>Cada erro virou regra, na mesma noite.</h2>
+    <p class="sub">A gente acompanhou cada conversa ao vivo. O que travou um cliente foi consertado antes do próximo pedido.</p>
+    <div class="aprend">
+      <div class="ap"><div class="antes"><b>ANTES</b>Pedido do cardápio esperava o cliente responder "sim" pra ir pra cozinha.</div><div class="depois"><b>AGORA</b>Vai direto pra cozinha, e a Liz confirma no formato EM PRODUÇÃO.</div></div>
+      <div class="ap"><div class="antes"><b>ANTES</b>"Bacon fatiado", "coca 2 litros zero" e "Caribe chocolate" não eram reconhecidos.</div><div class="depois"><b>AGORA</b>Ela entende o jeito que o cliente fala e acha o item no cardápio.</div></div>
+      <div class="ap"><div class="antes"><b>ANTES</b>Um pedido foi lançado sem um item que o cliente tinha pedido.</div><div class="depois"><b>AGORA</b>Trava: se faltar item que o cliente falou, ela não lança.</div></div>
+      <div class="ap"><div class="antes"><b>ANTES</b>Ela chegou a sugerir um refrigerante esgotado.</div><div class="depois"><b>AGORA</b>Esgotado some da Liz, do cardápio, do balcão e das mesas na hora.</div></div>
+      <div class="ap"><div class="antes"><b>ANTES</b>Cliente recebia o link do cardápio e sumia.</div><div class="depois"><b>AGORA</b>Depois de 20 minutos em silêncio, a Liz oferece anotar o pedido por ali mesmo.</div></div>
+      <div class="ap"><div class="antes"><b>ANTES</b>Cliente mandava recado depois do pedido e ninguém via.</div><div class="depois"><b>AGORA</b>O recado entra no pedido com alerta vermelho de ALTERADO na tela da cozinha.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="fim">
+  <div class="wrap">
+    <div class="eyebrow">Resumo da segunda-feira</div>
+    <h2>Um em cada três pedidos do Luciu's passou pela Liz.</h2>
+    <p class="lead">39 dos 112 pedidos, <b>R$ 1.439,50</b>, com resposta em 21 segundos e a cozinha recebendo tudo pronto pra produzir. A equipe ficou com o balcão, as mesas e os 10 casos em que a Liz pediu ajuda.</p>
+    <p class="fonte"><span class="ponto"></span>Fonte: banco do Kompila Pedidos e conversas do WhatsApp do Luciu's, dia da loja de 16/11/2026 (05:00 às 04:59). Pedidos que valeram, sem os 16 cancelados (7 eram teste). Tempo de resposta medido da mensagem do cliente até a resposta da Liz.</p>
+    <div class="marca" style="margin-top:32px"><span><b>[</b> kompila <b>]</b></span><span>IA sob medida pra pequena e média empresa</span></div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var canais=[
+    {nm:'Mesas',d:'app do garçom',n:50,v:1716},
+    {nm:'Cardápio',d:'link enviado pela Liz',n:18,v:735,liz:1},
+    {nm:'Liz',d:'pedido falado no WhatsApp',n:21,v:704.5,liz:1},
+    {nm:'Balcão',d:'retirada e comer aqui',n:23,v:666}
+  ];
+  var max=1716, R=function(x){return 'R$ '+x.toLocaleString('pt-BR',{minimumFractionDigits:x%1?2:0,maximumFractionDigits:2})};
+  var el=document.getElementById('canais');
+  canais.forEach(function(c){
+    var d=document.createElement('div');d.className='canal';
+    d.innerHTML='<div class="nm">'+c.nm+'<span>'+c.d+'</span></div><div class="trilho"><div class="barra'+(c.liz?' liz':'')+'" style="width:'+(c.v/max*100).toFixed(1)+'%"></div></div><div class="rs">'+R(c.v)+'<small>'+c.n+' pedidos</small></div>';
+    el.appendChild(d);
+  });
+  var h=[['12',157],['13',146.5],['14',23],['15',321.5],['16',112],['17',111],['18',240.5],['19',542.5],['20',753],['21',515],['22',579.5],['23',320]];
+  var W=880,H=300,pl=48,pr=12,pt=28,pb=36,iw=W-pl-pr,ih=H-pt-pb,top=800,bw=iw/h.length;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Vendas por hora, de 12h a 23h, pico de R$ 753 às 20h">';
+  [0,200,400,600,800].forEach(function(t){var y=pt+ih-t/top*ih;s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="#D4D7CF" stroke-width="1"/><text x="'+(pl-8)+'" y="'+(y+4)+'" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="11" fill="#5B616A">'+t+'</text>';});
+  h.forEach(function(r,i){var bh=r[1]/top*ih,x=pl+i*bw+bw*.18,w=bw*.64,y=pt+ih-bh,pico=r[0]==='20';
+    s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+bh+'" rx="4" fill="'+(pico?'#12803F':'#14171C')+'"/>';
+    s+='<text x="'+(x+w/2)+'" y="'+(H-12)+'" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#5B616A">'+r[0]+'h</text>';
+    if(pico||r[0]==='22'||r[0]==='19') s+='<text x="'+(x+w/2)+'" y="'+(y-8)+'" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="600" fill="'+(pico?'#12803F':'#14171C')+'">'+Math.round(r[1])+'</text>';
+  });
+  s+='</svg>';document.getElementById('graf').innerHTML=s;
+})();
+</script>
+
+</body>
+</html>
