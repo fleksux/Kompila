@@ -324,6 +324,94 @@ h1,h2{font-feature-settings:"lnum" 1}
 @media (max-width:600px){
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.surge{opacity:1;transform:none}}
+
+/* ===== 17/11/2026 (Alex: "no desktop... vários buracos feios, tudo bagunçado"): estrutura, sem mexer em cor nem fonte ===== */
+/* abertura: o texto começa na mesma linha do logo e dos cards (container .box de 1080px), o título não deixa palavra sozinha */
+.abre .txt{padding-left:max(32px,calc((100vw - 1080px) / 2 + 16px))}
+.abre h1{text-wrap:balance}
+@media (max-width:600px){.abre .txt{padding-left:20px}}
+/* menu interno do Natal com 3 botões */
+#cats-natal a+a{border-left:0}
+#cats-natal a{flex-basis:180px}
+/* pacotes: 3 na primeira linha e 2 + 2 largos nas seguintes (os de escolha, 4 e 5, lado a lado); botões sempre no rodapé do card.
+   Feito para os 7 pacotes de 2026: se o número mudar, rever o nth-child. */
+.pacs{grid-template-columns:repeat(6,minmax(0,1fr));align-items:start}
+.pac{grid-column:span 2}
+.pac:nth-child(n+4){grid-column:span 3}
+.pac:nth-child(n+4) .f{aspect-ratio:16/9}
+.pac .pe{margin-top:auto}
+.pac:nth-child(n+4) .escolha-ou:has(.esc-set+.esc-set){display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pac:nth-child(n+4) .esc-set+.esc-set{margin-top:0}
+/* nos cards largos as opções ficam uma embaixo da outra e o rótulo reserva 2 linhas: o 4 (uma escolha) e o 5 (duas, lado a lado) ficam da mesma altura */
+.pac:nth-child(n+4) .opcs{flex-direction:column}
+.pac:nth-child(n+4) .opc{width:100%}
+.pac:nth-child(n+4) .escolha-ou p{min-height:2.7em;display:flex;align-items:flex-end}
+/* cards da mesma linha com a mesma altura enquanto fechados; o que abre a composição cresce sozinho */
+.pacs .pac{align-self:stretch}
+.pacs:has(.pac.aberto) .pac{align-self:start}
+@media (max-width:860px){
+  .pacs{grid-template-columns:1fr 1fr}
+  .pac,.pac:nth-child(n+4){grid-column:auto}
+  .pac:last-child:nth-child(odd){grid-column:1/-1}
+  .pac:nth-child(n+4) .escolha-ou:has(.esc-set+.esc-set){display:block}
+  .pac:nth-child(n+4) .esc-set+.esc-set{margin-top:12px}
+  .pac:nth-child(n+4) .opcs{flex-direction:row}
+  .pac:nth-child(n+4) .opc{width:auto}
+  .pac:nth-child(n+4) .escolha-ou p{min-height:0;display:block}
+}
+@media (max-width:600px){.pacs{grid-template-columns:1fr}.pac:nth-child(n+4) .f{aspect-ratio:4/3}}
+/* lista de pratos em 2 colunas: o último sozinho ocupa a linha (sem coluna sobrando) */
+@media (min-width:861px){.lista>.prato:last-child:nth-child(odd){grid-column:1/-1}}
+.kits>.prato:last-child:nth-child(odd){grid-column:1/-1}
+/* barra fixa aberta: o rodapé ganha respiro embaixo pra não ficar coberto */
+body.com-barra .rodape{padding-bottom:104px}
+body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que é o último bloco */
+#pedido.on ~ .toast{bottom:auto;top:calc(16px + env(safe-area-inset-top))}
+/* atalhos das categorias da Rotisserie dentro do Natal */
+.cats-in{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:14px 0 0}
+.cats-in a{padding:9px 14px;border:1px solid var(--linha);background:var(--card);border-radius:99px;font-size:14px;font-weight:500;color:var(--cinza)}
+
+/* ===== pedido: pacote editável e ingredientes ===== */
+.ped .mud{grid-column:1/-1;list-style:none;font-size:14px;margin-top:2px}
+.ped .mud li{padding:1px 0;color:var(--tinta)}
+.ped .mud li.tira{color:#9A4A26}
+.ped .mud li.poe{color:var(--ouro-escuro)}
+.sem-tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:#F6E7DF;color:#9A4A26;padding:1px 6px;border-radius:2px;margin:2px 4px 0 0}
+.mais-tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.04em;background:#F3EBDD;color:var(--ouro-escuro);padding:1px 6px;border-radius:2px;margin:2px 4px 0 0}
+.ped .conf{grid-column:1/-1;font-size:13px;color:var(--cinza)}
+.ped .acoes-l{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+.ped .acoes-l .qtd{margin-top:0}
+.lnk{font-size:14px;font-weight:600;color:var(--ouro-escuro);text-decoration:underline;text-underline-offset:3px;padding:8px 4px}
+.btn-ed{height:38px;padding:0 14px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ouro-escuro);box-shadow:inset 0 0 0 1.5px var(--ouro-escuro);border-radius:2px;background:#fff}
+.ed-nota{font-size:14px;color:var(--cinza);padding:6px 0 2px}
+.ed-g{font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ouro-escuro);margin:16px 0 6px}
+.ed-it{background:#fff;border:1px solid var(--linha);padding:10px 12px;margin-top:6px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center}
+.ed-it b{font-size:15px;font-weight:600;line-height:1.3;display:block}
+.ed-it small{display:block;font-size:13px;color:var(--cinza)}
+.ed-it.zero b{color:var(--cinza);text-decoration:line-through}
+.ed-it .qtd{margin:0;grid-column:auto;align-self:start}
+.ed-it .qtd button{width:40px;height:36px}
+.ed-ac{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+.ed-ac button{height:34px;padding:0 12px;font-size:13.5px;font-weight:600;border:1px solid var(--linha);border-radius:99px;color:var(--tinta);background:var(--fundo)}
+.ed-ac button.on{border-color:var(--ouro-escuro);background:var(--ouro-escuro);color:#fff}
+.ed-opcs{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;max-height:260px;overflow-y:auto;padding:4px 0}
+.ed-opcs .sep{flex-basis:100%;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cinza);margin-top:6px}
+.ed-opcs .opc{min-height:40px;padding:7px 12px;font-size:14px}
+.ed-opcs .opc small{display:block;font-size:12.5px;color:var(--ouro-escuro);font-weight:600}
+.ed-opcs .opc.mesmo{border-color:var(--ouro-claro)}
+.ed-mais{margin-top:8px;font-size:14px;font-weight:600;color:var(--ouro-escuro);padding:8px 0;text-decoration:underline;text-underline-offset:3px}
+.ed-ing{grid-column:1/-1;background:var(--fundo);padding:10px;display:grid;gap:8px}
+.ed-ing p{font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ouro-escuro)}
+.ed-ing .opc{min-height:38px;padding:6px 12px;font-size:14px}
+.ed-ing .opc.on{background:#9A4A26;border-color:#9A4A26;color:#fff}
+.ing-por{display:flex;gap:6px}
+.ing-por input{flex:1;min-width:0;height:42px;padding:0 10px;border:1px solid var(--linha);font:400 16px var(--sans);border-radius:0;background:#fff}
+.ing-por button{height:42px;padding:0 14px;background:var(--ouro-escuro);color:#fff;font-weight:600;font-size:14px;border-radius:2px}
+.ed-ing small{font-size:13px;color:var(--cinza)}
+.ed-ing .mais-tag button{margin-left:6px;font-weight:700;color:inherit}
+.ed-tot{display:grid;gap:2px;margin-bottom:10px;font-size:14px;color:var(--cinza)}
+.ed-tot b{font-size:22px;color:var(--tinta);font-weight:600}
+.ed-tot .linha-t{display:flex;justify-content:space-between;align-items:baseline}
 </style>
 </head>
 <body>
@@ -345,7 +433,7 @@ h1,h2{font-feature-settings:"lnum" 1}
     <section class="abre">
       <div class="txt">
         <span class="cap">Ceia de Natal 2026</span>
-        <h1>A ceia de Natal, <em>servida à mesa.</em></h1>
+        <h1>A ceia de Natal, <em>servida à&nbsp;mesa.</em></h1>
         <p>Pacotes completos, assinados pela Chef Elaine Maeda. Encomendas até 2 semanas antes.</p>
         <form class="achar" id="achar"><input id="qtas" type="number" inputmode="numeric" min="1" placeholder="Quantas pessoas?" aria-label="Quantas pessoas"><button type="submit">Ver minha ceia</button></form>
         <p class="achar-msg" id="achar-msg"></p>
@@ -353,13 +441,18 @@ h1,h2{font-feature-settings:"lnum" 1}
       <div class="f"><img src="img/n-2.webp" alt="Peru de Natal fatiado com laço vermelho"></div>
     </section>
     <!-- 16/11/2026 (Alex: "coloca um menu kit e avulso"): cliente não achava os avulsos, que ficam depois dos 7 pacotes -->
-    <nav class="cats" aria-label="Kits e avulsos"><div class="box" id="cats-natal"><a href="#pacotes" data-sub="pacotes" class="on">Kits de ceia</a><a href="#avulsos" data-sub="avulsos">Avulsos</a></div></nav>
+    <!-- 17/11/2026 (Alex: "a Simone precisa que tudo de rotisserie esteja dentro do natal mas natal não esteja na aba rotisserie"): terceiro botão leva à Rotisserie inteira, dentro do Natal -->
+    <nav class="cats" aria-label="Kits, avulsos e rotisserie"><div class="box" id="cats-natal"><a href="#pacotes" data-sub="pacotes" class="on">Kits de ceia</a><a href="#avulsos" data-sub="avulsos">Avulsos</a><a href="#rot-natal" data-sub="rot-natal">Rotisserie</a></div></nav>
     <div class="box">
       <div class="sec" id="pacotes"><h2>Kits de ceia</h2><p>Cada pacote vem com entrada, prato principal, acompanhamentos e sobremesa.</p></div>
       <div class="info" id="info-natal"></div>
       <div class="pacs" id="pacs"></div>
       <div class="sec" id="avulsos"><h2>Pratos avulsos</h2><p>Especial de Natal e Ano Novo, pra completar a sua ceia.</p></div>
       <div id="lista-avulsos"></div>
+      <!-- a mesma Rotisserie da outra aba, com as mesmas chaves de item: o pedido é um só -->
+      <div class="sec" id="rot-natal"><h2>Rotisserie</h2><p>Todo o cardápio da Rotisserie, no mesmo pedido.</p></div>
+      <div class="cats-in" id="cats-rn"></div>
+      <div id="lista-rot-natal"></div>
     </div>
   </div>
 
@@ -368,7 +461,7 @@ h1,h2{font-feature-settings:"lnum" 1}
     <section class="abre">
       <div class="txt">
         <span class="cap">Rotisserie 2026</span>
-        <h1>Sabor autoral <em>pra levar pra casa.</em></h1>
+        <h1>Sabor autoral <em>pra levar pra&nbsp;casa.</em></h1>
         <p>Escolha o que quiser, de qualquer categoria. Pronta entrega, com alguns itens sob encomenda.</p>
       </div>
       <div class="f"><img src="img/r-mini-piramide-de-chevre-presunto-cru-e-figos.webp" alt="Mini pirâmide de chèvre, presunto cru e figos"></div>
@@ -440,15 +533,17 @@ $('#info-rot').innerHTML = info
 
 // ---------- pratos (lista com botão Adicionar) ----------
 const icCam = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>'
+const PR = new Map()   // 17/11: chave do prato avulso → { sec, gt } (seção e grupo), para o Trocar e o Acrescentar do pacote
+const marcaPR = (k, sec, gt) => { if (!PR.has(k)) PR.set(k, { k, sec, gt: gt || '' }); return k }
 const descHTML = d => !d ? '' : d.length > 90 ? `<p class="d clamp">${esc(d)}</p><button class="ler" data-ler>Ler mais</button>` : `<p class="d">${esc(d)}</p>`
-function pratoHTML(i, sid) {
+function pratoHTML(i, sid, gt) {
   const mini = i.f ? `<button class="mini" data-luz="img/${i.f}" data-leg="${esc(i.n)}" aria-label="Ver foto de ${esc(i.n)}"><img src="img/${i.f}" alt="" loading="lazy"><i>${icCam}</i></button>` : ''
   let fim
-  if (i.v) fim = `<div class="vars">${i.v.map(([r, p]) => { const k = reg(`${sid}:${i.n}:${r}`, { n: i.n, det: r, p, min: i.min, f: i.f }); return `<div class="var"><span class="rot">${esc(r)}</span><span class="preco">${brl(p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }).join('')}</div>`
-  else { const k = reg(`${sid}:${i.n}`, { n: i.n, det: i.d && i.d.length < 30 ? i.d : '', p: i.p, min: i.min, f: i.f }); fim = `<div class="rodape-p"><span class="preco">${brl(i.p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }
+  if (i.v) fim = `<div class="vars">${i.v.map(([r, p]) => { const k = marcaPR(reg(`${sid}:${i.n}:${r}`, { n: i.n, det: r, p, min: i.min, f: i.f, d: i.d || '' }), sid, gt); return `<div class="var"><span class="rot">${esc(r)}</span><span class="preco">${brl(p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }).join('')}</div>`
+  else { const k = marcaPR(reg(`${sid}:${i.n}`, { n: i.n, det: i.d && i.d.length < 30 ? i.d : '', p: i.p, min: i.min, f: i.f, d: i.d || '' }), sid, gt); fim = `<div class="rodape-p"><span class="preco">${brl(i.p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }
   return `<article class="prato"><div class="topo-p">${mini}<div class="n">${esc(i.n)}</div></div>${descHTML(i.d)}${fim}</article>`
 }
-const grupoHTML = (g, sid) => `${g.t ? `<div class="grupo-t">${esc(g.t)}${g.nota ? `<small>${esc(g.nota)}</small>` : ''}</div>` : ''}<div class="lista">${g.itens.map(i => pratoHTML(i, sid)).join('')}</div>`
+const grupoHTML = (g, sid) => `${g.t ? `<div class="grupo-t">${esc(g.t)}${g.nota ? `<small>${esc(g.nota)}</small>` : ''}</div>` : ''}<div class="lista">${g.itens.map(i => pratoHTML(i, sid, g.t)).join('')}</div>`
 
 // ---------- natal ----------
 const pacs = M.natal.pacotes
@@ -474,9 +569,9 @@ $('#pacs').innerHTML = pacs.map(p => {
       <span class="quem">${esc(p.pessoas)}</span>
       <button class="ver" data-ver aria-expanded="false">Ver composição <i>+</i></button>
       <div class="comp-w"><div class="comp">${comp}<p class="nota">${esc(M.natal.farofinha)}${temOu ? ' Onde aparece "ou", você escolhe a opção logo abaixo.' : ''}</p></div></div>
-      ${escolha}
+      <div class="pe">${escolha}
       <button class="add" data-add="${k}">Escolher este pacote</button>
-      <a class="zap-link" href="${zap(`Olá, Maeda! Tenho interesse no ${p.n} (${p.pessoas}), ${brl(p.p)}.`)}" target="_blank" rel="noopener">Tirar dúvida no WhatsApp</a>
+      <a class="zap-link" href="${zap(`Olá, Maeda! Tenho interesse no ${p.n} (${p.pessoas}), ${brl(p.p)}.`)}" target="_blank" rel="noopener">Tirar dúvida no WhatsApp</a></div>
     </div></article>`
 }).join('')
 $('#lista-avulsos').innerHTML = M.natal.avulsos.map(g => grupoHTML(g, 'natal-avulso')).join('')
@@ -495,12 +590,16 @@ $('#achar').addEventListener('submit', e => {
 // ---------- rotisserie: tudo numa lista, as categorias só levam até o lugar ----------
 const R = M.rotisserie
 $('#cats').innerHTML = R.map(s => `<a href="#r-${s.id}" data-cat="${s.id}">${esc(s.rotulo)}</a>`).join('')
-$('#lista-rot').innerHTML = R.map(s => {
+$('#cats-rn').innerHTML = R.map(s => `<a href="#nr-${s.id}">${esc(s.rotulo)}</a>`).join('')
+// 17/11: a mesma Rotisserie vai na aba Rotisserie (r-) e dentro do Natal (nr-); reg() devolve a mesma chave, então o botão e o pedido são um só
+const rotHTML = pre => R.map(s => {
   let corpo
-  if (s.kits) corpo = `<p class="d" style="color:var(--cinza);margin-bottom:10px">${esc(s.intro)}</p><div class="kits">${s.kits.map(kt => { const k = reg(`kit:${kt.n}`, { n: `Kit festa ${kt.n}`, det: kt.pessoas, p: kt.p }); return `<article class="prato kit"><div class="n">${esc(kt.n)} · ${esc(kt.pessoas)}</div><ul>${kt.itens.map((x, n) => `<li${n > 2 ? ' class="extra"' : ''}>${esc(x)}</li>`).join('')}</ul><button class="ler" data-kit>Ver os ${kt.itens.length} itens</button><div class="rodape-p"><span class="preco">${brl(kt.p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div></article>` }).join('')}</div>`
+  if (s.kits) corpo = `<p class="d" style="color:var(--cinza);margin-bottom:10px">${esc(s.intro)}</p><div class="kits">${s.kits.map(kt => { const k = marcaPR(reg(`kit:${kt.n}`, { n: `Kit festa ${kt.n}`, det: kt.pessoas, p: kt.p }), s.id, ''); return `<article class="prato kit"><div class="n">${esc(kt.n)} · ${esc(kt.pessoas)}</div><ul>${kt.itens.map((x, n) => `<li${n > 2 ? ' class="extra"' : ''}>${esc(x)}</li>`).join('')}</ul><button class="ler" data-kit>Ver os ${kt.itens.length} itens</button><div class="rodape-p"><span class="preco">${brl(kt.p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div></article>` }).join('')}</div>`
   else corpo = s.grupos.map(g => grupoHTML(g, s.id)).join('')
-  return `<section class="bloco" id="r-${s.id}"><div class="bloco-cab"><div class="f"><img src="img/${s.foto}" alt="" loading="lazy"></div><div><h2>${esc(s.rotulo)}</h2></div></div>${corpo}</section>`
+  return `<section class="bloco" id="${pre}${s.id}"><div class="bloco-cab"><div class="f"><img src="img/${s.foto}" alt="" loading="lazy"></div><div><h2>${esc(s.rotulo)}</h2></div></div>${corpo}</section>`
 }).join('')
+$('#lista-rot').innerHTML = rotHTML('r-')
+$('#lista-rot-natal').innerHTML = rotHTML('nr-')
 
 // categoria ativa conforme rola
 const io = new IntersectionObserver(es => es.forEach(x => {
@@ -508,12 +607,12 @@ const io = new IntersectionObserver(es => es.forEach(x => {
   $$('#cats a').forEach(a => a.classList.toggle('on', a.dataset.cat === x.target.id.slice(2)))
   const on = $('#cats a.on'); if (on) on.parentNode.scrollTo({ left: on.offsetLeft - 16, behavior: 'smooth' })
 }), { rootMargin: '-40% 0px -55% 0px' })
-$$('.bloco').forEach(b => io.observe(b))
+$$('#lista-rot .bloco').forEach(b => io.observe(b))
 
 // Natal: "Kits de ceia" ou "Avulsos" aceso conforme rola, pela posição do título "Pratos avulsos" (o observador falhava ao abrir direto em #avulsos)
 function subNatal() {
-  const t = document.getElementById('avulsos').getBoundingClientRect().top
-  const sub = t < innerHeight * 0.5 ? 'avulsos' : 'pacotes'
+  const t = document.getElementById('avulsos').getBoundingClientRect().top, tr = document.getElementById('rot-natal').getBoundingClientRect().top
+  const sub = tr < innerHeight * 0.5 ? 'rot-natal' : t < innerHeight * 0.5 ? 'avulsos' : 'pacotes'
   $$('#cats-natal a').forEach(a => a.classList.toggle('on', a.dataset.sub === sub))
 }
 addEventListener('scroll', subNatal, { passive: true }); addEventListener('load', subNatal)
@@ -522,7 +621,7 @@ addEventListener('scroll', subNatal, { passive: true }); addEventListener('load'
 function aba() {
   const h = location.hash.slice(1)
   const pulo = h.startsWith('r-')
-  const sub = h === 'pacotes' || h === 'avulsos'   // menu Kits de ceia | Avulsos, dentro do Natal (também serve de link direto)
+  const sub = h === 'pacotes' || h === 'avulsos' || h === 'rot-natal' || h.startsWith('nr-')   // menu Kits de ceia | Avulsos | Rotisserie, dentro do Natal (também serve de link direto)
   const v = h === 'rotisserie' || pulo ? 'rotisserie' : 'natal'
   $$('[data-v]').forEach(el => { const mostra = el.dataset.v === v; if (mostra && el.hidden) { el.classList.remove('entra'); void el.offsetWidth; el.classList.add('entra') } el.hidden = !mostra })
   $$('.aba').forEach(a => a.classList.toggle('on', a.dataset.aba === v))
@@ -537,9 +636,81 @@ let pedido = {}, dados = {}
 try { pedido = JSON.parse(localStorage.getItem(CH) || '{}') || {} } catch (e) {}
 try { dados = JSON.parse(localStorage.getItem(CH + ':dados') || '{}') || {} } catch (e) {}
 Object.keys(pedido).forEach(k => { if (!CAT[k]) delete pedido[k] })
-const salva = () => { try { localStorage.setItem(CH, JSON.stringify(pedido)) } catch (e) {} }
+// 17/11: o que a pessoa mudou em cada linha do pedido (pacote: pratos e ingredientes; avulso: ingredientes)
+let mods = {}
+try { mods = JSON.parse(localStorage.getItem(CH + ':mods') || '{}') || {} } catch (e) {}
+Object.keys(mods).forEach(k => { if (!pedido[k]) delete mods[k] })
+const salva = () => { Object.keys(mods).forEach(k => { if (!pedido[k]) delete mods[k] }); try { localStorage.setItem(CH, JSON.stringify(pedido)); localStorage.setItem(CH + ':mods', JSON.stringify(mods)) } catch (e) {} }
 const nItens = () => Object.values(pedido).reduce((a, b) => a + b, 0)
-const total = () => Object.entries(pedido).reduce((a, [k, q]) => a + CAT[k].p * q, 0)
+const unitP = k => Math.round((CAT[k].p + (ehPac(k) ? contaPac(k).d : 0)) * 100) / 100
+const total = () => Object.entries(pedido).reduce((a, [k, q]) => a + unitP(k) * q, 0)
+
+// ---------- pacote editável (17/11, Alex: "os pacotes podem ser editados completamente") ----------
+// Preço: pacote − (pratos tirados × preço avulso) + (pratos acrescentados × preço avulso). O avulso é o mesmo prato do cardápio,
+// com o mesmo nome e o mesmo tamanho (o peru de 5 kg do pacote = "Peru inteiro" de 5 kg). Sem avulso equivalente: pode tirar ou pôr,
+// não mexe no preço e aparece "a equipe confirma o valor". O servidor (função pedido, precificar) refaz a conta pelo banco.
+const semAc = t => String(t ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+const pesoDe = t => { const m = String(t || '').replace(/\([^)]*unidades?[^)]*\)/gi, '').match(/(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l)\b/i); if (!m) return null; const v = +m[1].replace(',', '.'), u = m[2].toLowerCase(); return Math.round(u === 'kg' || u === 'l' ? v * 1000 : v) }
+const ehPac = k => /^natal:(pacote-|premium)/.test(CAT[k]?.id || k)
+function mesmoPrato(x, k) {
+  const it = CAT[k], ps = k.split(':'), varia = ps.length > 2 ? ps.slice(2).join(':') : ''
+  const base = semAc(varia ? ps[1] : it.n), dn = semAc(x.nome)
+  if (!base || !(dn === base || dn.startsWith(base + ' '))) return false
+  if (varia && !semAc(x.nome + ' ' + x.desc).includes(semAc(varia))) return false
+  const pp = pesoDe(x.desc) ?? pesoDe(x.nome), pa = pesoDe(varia || it.d || '')
+  return !(pp != null && pa != null && pp !== pa)
+}
+const AV = {}
+function avulsoDe(nome, desc) {
+  const c = nome + '|' + desc; if (c in AV) return AV[c]
+  const base = k => { const ps = k.split(':'); return ps.length > 2 ? ps[1] : CAT[k].n }
+  const ks = [...PR.keys()].filter(k => mesmoPrato({ nome, desc }, k)).sort((a, b) => base(b).length - base(a).length || (b.startsWith('natal-avulso') - a.startsWith('natal-avulso')))
+  return (AV[c] = ks[0] || null)
+}
+// família de pratos de cada parte do pacote (pelo título do grupo): é o que o Trocar e o Acrescentar mostram
+const FAMILIA = [
+  [/entrada/i, x => ['entradinhas', 'grazing'].includes(x.sec) || (x.sec === 'natal-avulso' && /entradas|pães/i.test(x.gt))],
+  [/principa/i, x => (x.sec === 'principais' && /pratos principais/i.test(x.gt)) || (x.sec === 'natal-avulso' && /assados/i.test(x.gt))],
+  [/acompanha|salada/i, x => ['guarnicoes', 'massas'].includes(x.sec) || (x.sec === 'natal-avulso' && /arrozes|saladas/i.test(x.gt))],
+  [/sobremesa/i, x => x.sec === 'sobremesas' || (x.sec === 'natal-avulso' && /sobremesas/i.test(x.gt))]
+]
+const familia = g => { const f = FAMILIA.find(([re]) => re.test(g)); return f ? [...PR.values()].filter(f[1]).map(x => x.k) : [...PR.keys()] }
+const nomeK = k => CAT[k].n + (k.split(':').length > 2 ? ' · ' + CAT[k].det : '')
+// o que vem no pacote desta linha (das escolhas "ou", só a escolhida: é o ponto de partida)
+function compo(k) {
+  const it = CAT[k], p = pacs.find(x => 'natal:' + x.id === (it.id || k)); if (!p) return null
+  const esc = (it.obs || '').replace(/^Escolha:\s*/, '').split(' + ').filter(Boolean), itens = []
+  p.grupos.forEach(([g, its]) => its.forEach(x => {
+    if ((x[3] === 'ou' || x[3] === 'alt') && !esc.includes(x[0])) return
+    const m = x[0].match(/^(\d+)\s*×\s*(.+)$/), nome = m ? m[2] : x[0], desc = x[1] || ''
+    itens.push({ nome, desc, n0: m ? +m[1] : 1, g, av: avulsoDe(nome, desc) })
+  }))
+  return { p, itens, grupos: p.grupos.map(([g]) => g) }
+}
+const modPac = k => (mods[k] = mods[k] || { q: {}, ex: [], ing: {} })
+function contaPac(k) {
+  const c = compo(k), m = mods[k] || {}, tira = [], poe = [], lin = []; let d = 0, confirma = false
+  if (!c) return { d: 0, tira, poe, ing: [], lin, confirma }
+  c.itens.forEach(x => {
+    const q = m.q?.[x.nome] ?? x.n0, dif = q - x.n0; if (!dif) return
+    const pr = x.av ? CAT[x.av].p : null; if (pr == null) confirma = true; else d += pr * dif
+    if (dif < 0) { tira.push({ de: x.nome, ...(x.av ? { id: x.av } : {}), qtd: -dif }); lin.push({ t: 'tira', txt: `− ${-dif} ${x.nome}`, sem: pr == null }) }
+    else { poe.push(x.av ? { id: x.av, qtd: dif } : { de: x.nome, qtd: dif }); lin.push({ t: 'poe', txt: `+ ${dif} ${x.nome}`, sem: pr == null }) }
+  })
+  ;(m.ex || []).forEach(e => { if (e.q > 0 && CAT[e.k]) { poe.push({ id: e.k, qtd: e.q }); d += CAT[e.k].p * e.q; lin.push({ t: 'poe', txt: `+ ${e.q} ${nomeK(e.k)}` }) } })
+  const ing = Object.entries(m.ing || {}).filter(([, v]) => v.sem.length || v.mais.length).map(([prato, v]) => ({ prato, sem: v.sem, mais: v.mais }))
+  return { d: Math.round(d * 100) / 100, tira, poe, ing, lin, confirma }
+}
+// ingredientes que dá pra tirar: partes do nome depois de "com" e da descrição, separadas por vírgula e "e" (não temos lista de ingredientes)
+function ingredientes(nome, ...descs) {
+  const corta = t => String(t || '').replace(/\([^)]*\)/g, '').split(/[.,;·:]|\s+e\s+/).map(x => x.trim().replace(/^(acompanha|acompanham|com|coberto com|finalizado com)\s+/i, ''))
+    .filter(x => x.length > 2 && x.length < 40 && !/\d/.test(x) && !/^(assad|finalizad|marinad|servid|embalad|unidade|vegano|para fritar|calda à parte)/i.test(x))
+  const r = [...corta(nome.split(/\s+com\s+/i).slice(1).join(', ')), ...descs.flatMap(corta)]
+  return [...new Set(r.map(x => x[0].toLowerCase() + x.slice(1)))].slice(0, 16)
+}
+const ingDe = (k, prato) => ehPac(k) ? ((modPac(k).ing[prato] = modPac(k).ing[prato] || { sem: [], mais: [] })) : (mods[k] = mods[k] || { sem: [], mais: [] })
+const ingTags = v => !v ? '' : [...(v.sem || []).map(x => `<span class="sem-tag">sem ${esc(x)}</span>`), ...(v.mais || []).map(x => `<span class="mais-tag">+ ${esc(x)}</span>`)].join('')
+const temIng = v => !!v && ((v.sem && v.sem.length) || (v.mais && v.mais.length))
 function marca() {
   const n = nItens()
   $$('[data-conta]').forEach(b => b.textContent = n)
@@ -604,14 +775,117 @@ function voa(de) {
   }
 }
 
+// editor do pacote: abre na própria janela "Meu pedido". Cada prato tem − / quantidade / +, Trocar (pratos da mesma família, na linha)
+// e Ingredientes (tirar e pôr, sem mudar o preço). Cada parte do pacote tem "Acrescentar".
+let editando = null, aberto = null   // aberto: 'trocar:<linha>' | 'ing:<linha>' | 'acres:<grupo>'
+const precoTxt = k => k ? brl(CAT[k].p) + ' cada' : 'a equipe confirma o valor'
+const difTxt = (de, para) => { if (!de) return ''; const d = CAT[para].p - CAT[de].p; return d ? ` · ${d > 0 ? '+' : '−'} ${brl(Math.abs(d))}` : ' · mesmo valor' }
+function opcoesHTML(ks, atual, nomeAtual, attr) {
+  // mesma família; primeiro os do mesmo tipo (mesma primeira palavra: arroz, salada, peru...)
+  const tipo = semAc(nomeAtual).split(' ')[0], mesmo = ks.filter(k => k !== atual && semAc(CAT[k].n).split(' ').includes(tipo)), outros = ks.filter(k => k !== atual && !mesmo.includes(k))
+  const chip = (k, cl) => `<button type="button" class="opc ${cl}" ${attr}="${esc(k)}">${esc(nomeK(k))}<small>${brl(CAT[k].p)}${attr === 'data-ed-por' ? difTxt(atual, k) : ''}</small></button>`
+  return mesmo.map(k => chip(k, 'mesmo')).join('') + (mesmo.length && outros.length ? '<span class="sep">Outros</span>' : '') + outros.map(k => chip(k, '')).join('')
+}
+function ingHTML(k, prato, palavras) {
+  const v = ingDe(k, prato)
+  const todas = [...new Set([...palavras, ...v.sem])]
+  return `<div class="ed-ing" data-ing-k="${esc(k)}" data-ing-prato="${esc(prato)}">
+    ${todas.length ? `<p>Tirar</p><div class="opcs">${todas.map(w => `<button type="button" class="opc ${v.sem.includes(w) ? 'on' : ''}" data-ing-sem="${esc(w)}">sem ${esc(w)}</button>`).join('')}</div>` : ''}
+    <p>Colocar</p><div class="ing-por"><input maxlength="40" placeholder="ex.: mais uva-passa" aria-label="Ingrediente para colocar" data-ing-in><button type="button" data-ing-add>Pôr</button></div>
+    ${v.mais.length ? `<div>${v.mais.map((m, i) => `<span class="mais-tag">+ ${esc(m)}<button type="button" data-ing-tira="${i}" aria-label="Tirar">×</button></span>`).join('')}</div>` : ''}
+    <small>A equipe confirma se tem custo.</small></div>`
+}
+function editorHTML(k) {
+  const c = compo(k), m = modPac(k), conta = contaPac(k), it = CAT[k], q = pedido[k]
+  const linhaBase = x => {
+    const id = 'b:' + x.nome, qq = m.q[x.nome] ?? x.n0
+    return `<div class="ed-it${qq ? '' : ' zero'}"><div><b>${esc(x.nome)}</b><small>${x.n0 ? `vem ${x.n0} no pacote · ` : ''}${precoTxt(x.av)}</small>${ingTags(m.ing[x.nome])}</div>
+      <div class="qtd"><button data-ed-q="${esc(id)}" data-d="-1" aria-label="Menos">−</button><span>${qq}</span><button data-ed-q="${esc(id)}" data-d="1" aria-label="Mais">+</button></div>
+      <div class="ed-ac"><button class="${aberto === 'trocar:' + id ? 'on' : ''}" data-ed-abre="trocar:${esc(id)}">Trocar</button><button class="${aberto === 'ing:' + id ? 'on' : ''}" data-ed-abre="ing:${esc(id)}">Ingredientes</button></div>
+      ${aberto === 'trocar:' + id ? `<div class="ed-opcs" data-ed-de="${esc(id)}">${opcoesHTML(familia(x.g), x.av, x.nome, 'data-ed-por')}</div>` : ''}
+      ${aberto === 'ing:' + id ? ingHTML(k, x.nome, ingredientes(x.nome, x.desc, x.av && CAT[x.av].d)) : ''}</div>`
+  }
+  const linhaEx = (e, i) => {
+    const id = 'e:' + i, nm = CAT[e.k].n
+    return `<div class="ed-it${e.q ? '' : ' zero'}"><div><b>${esc(nomeK(e.k))}</b><small>acrescentado · ${precoTxt(e.k)}</small>${ingTags(m.ing[nm])}</div>
+      <div class="qtd"><button data-ed-q="${esc(id)}" data-d="-1" aria-label="Menos">−</button><span>${e.q}</span><button data-ed-q="${esc(id)}" data-d="1" aria-label="Mais">+</button></div>
+      <div class="ed-ac"><button class="${aberto === 'trocar:' + id ? 'on' : ''}" data-ed-abre="trocar:${esc(id)}">Trocar</button><button class="${aberto === 'ing:' + id ? 'on' : ''}" data-ed-abre="ing:${esc(id)}">Ingredientes</button></div>
+      ${aberto === 'trocar:' + id ? `<div class="ed-opcs" data-ed-de="${esc(id)}">${opcoesHTML(familia(e.g), e.k, nm, 'data-ed-por')}</div>` : ''}
+      ${aberto === 'ing:' + id ? ingHTML(k, nm, ingredientes(nm, CAT[e.k].d)) : ''}</div>`
+  }
+  const grupos = c.grupos.map(g => `<h4 class="ed-g">${esc(g)}</h4>${c.itens.filter(x => x.g === g).map(linhaBase).join('')}${m.ex.map((e, i) => e.g === g ? linhaEx(e, i) : '').join('')}
+    <button type="button" class="ed-mais" data-ed-abre="acres:${esc(g)}">+ Acrescentar em ${esc(g.toLowerCase())}</button>
+    ${aberto === 'acres:' + g ? `<div class="ed-it"><div class="ed-opcs" data-ed-grupo="${esc(g)}">${opcoesHTML(familia(g), null, '', 'data-ed-novo')}</div></div>` : ''}`).join('')
+  const d = conta.d
+  return `<header><h3>Editar ${esc(c.p.n)}</h3><button data-ed-fim>Pronto</button></header>
+    <div class="rola"><p class="ed-nota">Tire, aumente, troque ou acrescente pratos. O valor muda pelo preço avulso de cada prato.${q > 1 ? ` As alterações valem para cada um dos ${q} pacotes.` : ''}</p>${grupos}</div>
+    <footer><div class="ed-tot"><div class="linha-t"><span>Pacote ${brl(it.p)}${d ? ` ${d > 0 ? '+' : '−'} ${brl(Math.abs(d))}` : ''}</span><b>${brl(it.p + d)}</b></div>${conta.confirma ? '<span>Alguns pratos não têm preço avulso: a equipe confirma o valor.</span>' : ''}</div>
+    <button class="add" data-ed-fim>Pronto</button><button class="lnk" data-ed-zerar>Desfazer alterações</button></footer>`
+}
+function mudancasHTML(k) {
+  if (ehPac(k)) {
+    const c = contaPac(k); if (!c.lin.length && !c.ing.length) return ''
+    return `<ul class="mud">${c.lin.map(l => `<li class="${l.t}">${esc(l.txt)}${l.sem ? ' <small>(a equipe confirma o valor)</small>' : ''}</li>`).join('')}${c.ing.map(g => `<li>${esc(g.prato)}: ${ingTags(g)}</li>`).join('')}</ul>${c.ing.length ? '<p class="conf">Ingredientes: a equipe confirma se tem custo.</p>' : ''}`
+  }
+  const v = mods[k]; return temIng(v) ? `<ul class="mud"><li>${ingTags(v)}</li></ul><p class="conf">A equipe confirma se tem custo.</p>` : ''
+}
 function desenha() {
+  const rola = $('#pedido .rola'), topo = rola ? rola.scrollTop : 0
+  if (editando && pedido[editando]) { $('#pedido').innerHTML = editorHTML(editando); const r = $('#pedido .rola'); if (r) r.scrollTop = topo; return }
+  editando = null
   const ks = Object.keys(pedido)
-  const lista = ks.length ? ks.map(k => { const it = CAT[k], q = pedido[k]; return `<div class="ped"><div><b>${esc(it.n)}</b>${it.det ? `<small>${esc(it.det)}</small>` : ''}</div><div class="v">${brl(it.p * q)}</div><div class="qtd"><button data-q="${esc(k)}" data-d="-1" aria-label="Menos">−</button><span>${q}</span><button data-q="${esc(k)}" data-d="1" aria-label="Mais">+</button></div></div>` }).join('')
+  const lista = ks.length ? ks.map(k => { const it = CAT[k], q = pedido[k], pac = ehPac(k)
+    return `<div class="ped"><div><b>${esc(it.n)}</b>${it.det ? `<small>${esc(it.det)}</small>` : ''}</div><div class="v">${brl(unitP(k) * q)}</div>${mudancasHTML(k)}
+      <div class="acoes-l"><div class="qtd"><button data-q="${esc(k)}" data-d="-1" aria-label="Menos">−</button><span>${q}</span><button data-q="${esc(k)}" data-d="1" aria-label="Mais">+</button></div>
+      ${pac ? `<button class="btn-ed" data-ed-pac="${esc(k)}">Editar itens</button>` : `<button class="lnk" data-ed-abre="ing:av:${esc(k)}">${aberto === 'ing:av:' + k ? 'Fechar' : 'Tirar ou pôr ingrediente'}</button>`}</div>
+      ${!pac && aberto === 'ing:av:' + k ? ingHTML(k, it.n, ingredientes(it.n, it.d)) : ''}</div>` }).join('')
     : `<div class="vazio"><p>Seu pedido está vazio.</p>Toque em "Adicionar" nos pacotes ou nos pratos.</div>`
   // 12/11 (Alex: "tira o formulário; fazer o pedido já vai pro WhatsApp e a Liz confirma o restante"): sem campos aqui.
   const form = ''
   $('#pedido').innerHTML = `<header><h3>Meu pedido</h3><button data-fecha>Continuar escolhendo</button></header><div class="rola">${lista}${form}</div>
     ${ks.length ? `<footer><div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Fazer pedido pelo WhatsApp</button><p class="aviso">Você conclui pelo WhatsApp: lá a gente combina a data, a entrega ou retirada e confirma o valor final. Frete e NF (em torno de 14%) à parte.</p></footer>` : ''}`
+  const r = $('#pedido .rola'); if (r) r.scrollTop = topo
+}
+// ações do editor e dos ingredientes (dentro da janela "Meu pedido")
+function acaoEditor(t) {
+  const k = editando
+  if (t.matches('[data-ed-pac]')) { editando = t.dataset.edPac; aberto = null; desenha(); $('#pedido .rola').scrollTop = 0; return true }
+  if (t.matches('[data-ed-fim]')) { editando = null; aberto = null; salva(); marca(); desenha(); return true }
+  if (t.matches('[data-ed-zerar]')) { delete mods[k]; aberto = null; salva(); marca(); desenha(); return true }
+  if (t.matches('[data-ed-abre]')) { aberto = aberto === t.dataset.edAbre ? null : t.dataset.edAbre; desenha(); return true }
+  if (t.matches('[data-ed-q]')) {
+    const m = modPac(k), id = t.dataset.edQ, d = +t.dataset.d
+    if (id.startsWith('b:')) { const nome = id.slice(2), x = compo(k).itens.find(i => i.nome === nome); m.q[nome] = Math.max(0, Math.min(50, (m.q[nome] ?? x.n0) + d)); if (m.q[nome] === x.n0) delete m.q[nome] }
+    else { const e = m.ex[+id.slice(2)]; e.q = Math.max(0, Math.min(50, e.q + d)); if (!e.q) { m.ex.splice(+id.slice(2), 1); aberto = null } }
+    salva(); marca(); desenha(); return true
+  }
+  if (t.matches('[data-ed-por]')) {
+    // trocar: a quantidade inteira do prato vai para o escolhido (se o escolhido já é um prato do pacote, soma nele)
+    const m = modPac(k), de = t.closest('[data-ed-de]').dataset.edDe, para = t.dataset.edPor, c = compo(k)
+    let qtd, g
+    if (de.startsWith('b:')) { const x = c.itens.find(i => i.nome === de.slice(2)); qtd = m.q[x.nome] ?? x.n0; g = x.g; m.q[x.nome] = 0 }
+    else { const i = +de.slice(2), e = m.ex[i]; qtd = e.q; g = e.g; m.ex.splice(i, 1) }
+    const base = c.itens.find(i => i.av === para)
+    if (base) { m.q[base.nome] = (m.q[base.nome] ?? base.n0) + qtd; if (m.q[base.nome] === base.n0) delete m.q[base.nome] }
+    else { const e = m.ex.find(x => x.k === para && x.g === g); if (e) e.q += qtd; else m.ex.push({ k: para, q: qtd, g }) }
+    c.itens.forEach(x => { if (m.q[x.nome] === x.n0) delete m.q[x.nome] })
+    aberto = null; salva(); marca(); desenha(); toast(`Trocado por ${CAT[para].n}`); return true
+  }
+  if (t.matches('[data-ed-novo]')) {
+    const m = modPac(k), g = t.closest('[data-ed-grupo]').dataset.edGrupo, para = t.dataset.edNovo, base = compo(k).itens.find(i => i.av === para)
+    if (base) { m.q[base.nome] = (m.q[base.nome] ?? base.n0) + 1 } else { const e = m.ex.find(x => x.k === para && x.g === g); if (e) e.q++; else m.ex.push({ k: para, q: 1, g }) }
+    aberto = null; salva(); marca(); desenha(); toast(`${CAT[para].n} acrescentado`); return true
+  }
+  const box = t.closest('[data-ing-k]')
+  if (box) {
+    const v = ingDe(box.dataset.ingK, box.dataset.ingPrato)
+    if (t.matches('[data-ing-sem]')) { const w = t.dataset.ingSem, i = v.sem.indexOf(w); if (i < 0) v.sem.push(w); else v.sem.splice(i, 1) }
+    else if (t.matches('[data-ing-add]')) { const inp = box.querySelector('[data-ing-in]'), w = inp.value.replace(/\s+/g, ' ').trim().slice(0, 40); if (!w) { inp.focus(); return true } if (v.mais.length < 5 && !v.mais.includes(w)) v.mais.push(w) }
+    else if (t.matches('[data-ing-tira]')) v.mais.splice(+t.dataset.ingTira, 1)
+    else return false
+    salva(); desenha(); return true
+  }
+  return false
 }
 function lerForm() {
   const f = $('#form'); if (!f) return dados
@@ -625,14 +899,28 @@ const PEDIDO_URL = 'https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/pedido
 let enviando = false
 async function enviar() {
   if (enviando) return
-  const linhas = Object.entries(pedido).map(([k, q]) => { const it = CAT[k]; return `• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(it.p * q)}` })
+  const linhas = Object.entries(pedido).flatMap(([k, q]) => {
+    const it = CAT[k], l = [`• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(unitP(k) * q)}`]
+    if (ehPac(k)) {
+      const c = contaPac(k)
+      if (c.lin.length) l.push(`   Alterações${q > 1 ? ' (em cada pacote)' : ''}: ` + c.lin.map(x => x.txt + (x.sem ? ' (a equipe confirma o valor)' : '')).join('; '))
+      c.ing.forEach(g => l.push(`   ${g.prato}: ${[...g.sem.map(x => 'SEM ' + x), ...g.mais.map(x => '+ ' + x)].join(', ')}`))
+      if (c.ing.length) l.push('   (ingredientes: a equipe confirma se tem custo)')
+    } else if (temIng(mods[k])) l.push(`   ${[...mods[k].sem.map(x => 'SEM ' + x), ...mods[k].mais.map(x => '+ ' + x)].join(', ')} (a equipe confirma se tem custo)`)
+    return l
+  })
   const janela = window.open('', '_blank')
   enviando = true; const bt = $('#enviar'); if (bt) bt.textContent = 'Enviando...'
   let numero = null
   try {
     const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
       chave: 'kmp_maeda', sem_dados: true, origem_link: ORIGEM,
-      itens: Object.entries(pedido).map(([k, qtd]) => ({ id: CAT[k].id || k, qtd, ...(CAT[k].obs ? { obs: CAT[k].obs } : {}) })) }) })
+      itens: Object.entries(pedido).map(([k, qtd]) => {
+        const l = { id: CAT[k].id || k, qtd, ...(CAT[k].obs ? { obs: CAT[k].obs } : {}) }
+        if (ehPac(k)) { const c = contaPac(k); if (c.tira.length || c.poe.length || c.ing.length) l.alt = { tira: c.tira, poe: c.poe, ing: c.ing } }
+        else if (temIng(mods[k])) { l.tira = mods[k].sem; l.mais = mods[k].mais }
+        return l
+      }) }) })
     const j = await r.json().catch(() => ({}))
     if (r.ok && j.numero) numero = j.numero
   } catch (e) {}
@@ -642,12 +930,15 @@ async function enviar() {
   enviando = false; if (bt) bt.textContent = 'Fazer pedido pelo WhatsApp'
   // pedido ainda não pago: é Lead, não Purchase. O eventID serve para juntar com a API de Conversões depois.
   if (numero && window.fbq) fbq('track', 'Lead', { value: total(), currency: 'BRL' }, { eventID: `pedido_${numero}` })
-  if (numero) { pedido = {}; salva(); marca(); fecha(); toast(`Pedido nº ${numero} registrado. Agora é só tocar em enviar no WhatsApp.`) }
+  if (numero) { pedido = {}; mods = {}; salva(); marca(); fecha(); toast(`Pedido nº ${numero} registrado. Agora é só tocar em enviar no WhatsApp.`) }
 }
 function abre() { $('#toast').classList.remove('on'); desenha(); $('#pedido').classList.add('on'); $('#pedido').setAttribute('aria-hidden', 'false'); $('#veu').classList.add('on'); document.body.style.overflow = 'hidden' }
-function fecha() { lerForm(); $('#pedido').classList.remove('on'); $('#pedido').setAttribute('aria-hidden', 'true'); $('#veu').classList.remove('on'); document.body.style.overflow = '' }
+function fecha() { lerForm(); editando = null; aberto = null; $('#pedido').classList.remove('on'); $('#pedido').setAttribute('aria-hidden', 'true'); $('#veu').classList.remove('on'); document.body.style.overflow = '' }
 
 document.addEventListener('click', e => {
+  // 17/11: editor do pacote e ingredientes, dentro da janela do pedido
+  const te = e.target.closest('#pedido [data-ed-pac],#pedido [data-ed-fim],#pedido [data-ed-zerar],#pedido [data-ed-abre],#pedido [data-ed-q],#pedido [data-ed-por],#pedido [data-ed-novo],#pedido [data-ing-sem],#pedido [data-ing-add],#pedido [data-ing-tira]')
+  if (te && acaoEditor(te)) return
   const o = e.target.closest('[data-opc]')
   if (o) { o.parentElement.querySelectorAll('.opc').forEach(x => x.classList.toggle('on', x === o)); o.closest('.esc-set').querySelector('p').classList.remove('falta'); return }
   const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-ver],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-enviar-ja],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
@@ -655,7 +946,7 @@ document.addEventListener('click', e => {
   if (t.matches('[data-add]')) { origem = t; return add(t.dataset.add) }
   if (t.matches('[data-ler]')) { const d = t.previousElementSibling, ab = d.classList.toggle('aberto'); t.textContent = ab ? 'Ler menos' : 'Ler mais'; return }
   if (t.matches('[data-kit]')) { const ul = t.previousElementSibling, ab = ul.classList.toggle('aberto'); t.textContent = ab ? 'Ver menos' : `Ver os ${ul.children.length} itens`; return }
-  if (t.matches('[data-ver]')) { const c = t.nextElementSibling, on = c.classList.toggle('on'); t.setAttribute('aria-expanded', on); t.classList.toggle('on', on); t.firstChild.textContent = on ? 'Fechar composição ' : 'Ver composição '; return }
+  if (t.matches('[data-ver]')) { const c = t.nextElementSibling, on = c.classList.toggle('on'); t.setAttribute('aria-expanded', on); t.classList.toggle('on', on); t.firstChild.textContent = on ? 'Fechar composição ' : 'Ver composição '; const pc = t.closest('.pac'); if (pc) pc.classList.toggle('aberto', on); return }
   if (t.matches('[data-abre-pedido]')) return abre()
   if (t.matches('[data-fecha-oferta]')) return fechaOferta()
   if (t.matches('[data-ir-pedido]')) { fechaOferta(); return abre() }
@@ -663,7 +954,7 @@ document.addEventListener('click', e => {
   if (t.matches('[data-ir-aba]')) { fechaOferta(); location.hash = t.dataset.irAba; return }
   if (t.matches('#veu')) { if ($('#oferta').classList.contains('on')) return fechaOferta(); return fecha() }
   if (t.matches('[data-fecha]')) return fecha()
-  if (t.matches('[data-q]')) { lerForm(); const k = t.dataset.q, it = CAT[k]; let q = (pedido[k] || 0) + +t.dataset.d; if (it.min && q > 0 && q < it.min) q = +t.dataset.d < 0 ? 0 : it.min; if (q <= 0) delete pedido[k]; else pedido[k] = q; salva(); marca(); return desenha() }
+  if (t.matches('[data-q]')) { lerForm(); const k = t.dataset.q, it = CAT[k]; let q = (pedido[k] || 0) + +t.dataset.d; if (it.min && q > 0 && q < it.min) q = +t.dataset.d < 0 ? 0 : it.min; if (q <= 0) { delete pedido[k]; delete mods[k] } else pedido[k] = q; salva(); marca(); return desenha() }
   if (t.matches('[data-luz]')) { const l = $('#luz'); $('img', l).src = t.dataset.luz; $('p', l).textContent = t.dataset.leg; return l.classList.add('on') }
   if (t.matches('[data-fecha-luz]')) return $('#luz').classList.remove('on')
   if (t.id === 'enviar') return enviar()
@@ -671,7 +962,10 @@ document.addEventListener('click', e => {
 })
 document.addEventListener('change', e => { if (e.target.name === 'modo') { $('#c-end').hidden = e.target.value !== 'Entrega'; lerForm() } })
 document.addEventListener('input', e => e.target.classList && e.target.classList.remove('erro'))
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { $('#luz').classList.remove('on'); fecha() } })
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.matches && e.target.matches('[data-ing-in]')) { e.preventDefault(); return acaoEditor(e.target.closest('[data-ing-k]').querySelector('[data-ing-add]')) }
+  if (e.key === 'Escape') { $('#luz').classList.remove('on'); editando = null; aberto = null; fecha() }
+})
 
 // cards surgem ao rolar (só o que está abaixo da tela)
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
