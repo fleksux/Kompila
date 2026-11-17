@@ -411,7 +411,13 @@ body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que 
 .ed-ing .mais-tag button{margin-left:6px;font-weight:700;color:inherit}
 .ed-tot{display:grid;gap:2px;margin-bottom:10px;font-size:14px;color:var(--cinza)}
 .ed-tot b{font-size:22px;color:var(--tinta);font-weight:600}
-.ed-tot .linha-t{display:flex;justify-content:space-between;align-items:baseline}
+.ed-tot .linha-t{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.ed-tot .linha-t span{min-width:0}
+.ed-tot b{white-space:nowrap}
+@media (max-width:600px){
+  #cats-natal a{padding:10px 6px;font-size:14px;white-space:nowrap}
+  .ed-tot b{font-size:20px}
+}
 </style>
 </head>
 <body>
