@@ -1478,7 +1478,7 @@ a.fi-c{text-decoration:none;color:inherit}
 .lk-ac{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
 
 /* ---------- WhatsApp do dono caiu ---------- */
-.wh-caiu{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:39;display:flex;align-items:center;gap:12px;max-width:calc(100% - 32px);padding:10px 10px 10px 16px;border-radius:var(--r12);background:var(--rs);color:var(--r);border:1px solid var(--r);box-shadow:var(--sh);font-size:13px;line-height:1.35}
+.wh-caiu{position:fixed;top:68px;left:50%;transform:translateX(-50%);z-index:39;display:flex;align-items:center;gap:12px;max-width:calc(100% - 32px);padding:10px 10px 10px 16px;border-radius:var(--r12);background:var(--rs);color:var(--r);border:1px solid var(--r);box-shadow:var(--sh);font-size:13px;line-height:1.35}
 .wh-caiu b{font-weight:600}
 .wh-caiu .btn{flex:none;background:var(--r);color:#fff;border-color:var(--r)}
-@media (max-width:600px){.wh-caiu{top:auto;bottom:88px;flex-direction:column;align-items:stretch;text-align:center}}
+@media (max-width:600px){.wh-caiu{top:62px;left:16px;right:16px;transform:none;max-width:none;font-size:12.5px}}
