@@ -123,7 +123,8 @@ async function conferirWhats() {
     const { data: canal } = await sb.from('canal_whatsapp').select('status').eq('dono', usuario.id).maybeSingle()
     if (!canal) return
     const { data } = await sb.functions.invoke('conectar', { body: { acao: 'estado' } })
-    const caiu = !!data?.caiu || (data?.status !== 'WORKING' && canal.status === 'desconectado')
+    // tem canal mas a sessão não está ligada (nem subindo): caiu ou ficou no meio do pareamento
+    const caiu = !!data?.status && data.status !== 'WORKING' && data.status !== 'STARTING'
     let f = $('whCaiu')
     if (!caiu) { if (f) f.remove(); return }
     if (!f) {
