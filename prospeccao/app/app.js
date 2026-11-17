@@ -114,6 +114,25 @@ async function iniciar() {
   carregarSaldo().then(boasVindas)
   carregarHist(); contarCaptacao()
   pergunta(1)
+  conferirWhats(); setInterval(conferirWhats, 5 * 60 * 1000)
+}
+
+// WhatsApp do dono caiu (o WhatsApp desligou o aparelho): faixa vermelha fixa até reconectar
+async function conferirWhats() {
+  try {
+    const { data: canal } = await sb.from('canal_whatsapp').select('status').eq('dono', usuario.id).maybeSingle()
+    if (!canal) return
+    const { data } = await sb.functions.invoke('conectar', { body: { acao: 'estado' } })
+    const caiu = !!data?.caiu || (data?.status !== 'WORKING' && canal.status === 'desconectado')
+    let f = $('whCaiu')
+    if (!caiu) { if (f) f.remove(); return }
+    if (!f) {
+      f = document.createElement('div'); f.id = 'whCaiu'; f.className = 'wh-caiu'; f.setAttribute('role', 'alert')
+      f.innerHTML = `<span><b>WhatsApp desconectado.</b> Nada sai nem chega por esse número até reconectar.</span><button class="btn sm" id="whCaiuB">Reconectar</button>`
+      document.body.appendChild(f)
+      $('whCaiuB').onclick = () => abrirConectar()
+    }
+  } catch (_) {}
 }
 
 /* ======================= pergunta ======================= */
@@ -2542,7 +2561,7 @@ async function abrirConectar() {
     if (error || !data) { parar(); botaoGerar(); return liz('Não consegui confirmar a conexão. Tente de novo.') }
     if (data.status === 'WORKING') {
       parar()
-      mostrarConectado(data.numero)
+      mostrarConectado(data.numero); $('whCaiu')?.remove()
       liz('WhatsApp conectado. Pode disparar e conversar por esse número.')
       return
     }
