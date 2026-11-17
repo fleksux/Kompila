@@ -126,6 +126,11 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .prato .preco{font-size:17px;font-weight:600;color:var(--ouro-escuro)}
 .btn-add{display:flex;align-items:center;gap:6px;height:42px;padding:0 16px;background:var(--ouro-escuro);color:#fff;font-size:14.5px;font-weight:600;white-space:nowrap}
 .btn-add.ok{background:#fff;color:var(--ouro-escuro);box-shadow:inset 0 0 0 1.5px var(--ouro-escuro)}
+/* 17/11/2026 (0484): o cardápio vem do banco; a Simone marca Esgotado no CRM e o botão fica apagado. Prato ou pacote sem foto: fundo creme. */
+.btn-add:disabled,.add:disabled{background:#E7E1D6;color:#8A8273;box-shadow:none;cursor:not-allowed}
+.prato.esg .n,.prato.esg .d,.var.esg .rot,.esg>.rodape-p .preco,.var.esg .preco{opacity:.5}
+.pac .f.vazia,.bloco-cab .f.vazia{background:linear-gradient(135deg,#F1E9D7,#E4D8BF)}
+.carregando{grid-column:1/-1;color:var(--cinza);padding:24px 0;font-size:15px}
 .foto{font-size:13.5px;color:var(--ouro-escuro);text-decoration:underline;text-underline-offset:3px;align-self:flex-start}
 .vars{display:flex;flex-direction:column;gap:6px;margin-top:8px}
 .var{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0 8px 12px;border:1px solid var(--linha);font-size:15px}
@@ -452,7 +457,7 @@ body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que 
     <div class="box">
       <div class="sec" id="pacotes"><h2>Kits de ceia</h2><p>Cada pacote vem com entrada, prato principal, acompanhamentos e sobremesa.</p></div>
       <div class="info" id="info-natal"></div>
-      <div class="pacs" id="pacs"></div>
+      <div class="pacs" id="pacs"><p class="carregando">Carregando o cardápio…</p></div>
       <div class="sec" id="avulsos"><h2>Pratos avulsos</h2><p>Especial de Natal e Ano Novo, pra completar a sua ceia.</p></div>
       <div id="lista-avulsos"></div>
       <!-- a mesma Rotisserie da outra aba, com as mesmas chaves de item: o pedido é um só -->
@@ -499,13 +504,125 @@ body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que 
 
 <script src="dados.js"></script>
 <script>
-(() => {
+(async () => {
 const M = window.MAEDA
 const $ = (s, el = document) => el.querySelector(s)
 const $$ = (s, el = document) => [...el.querySelectorAll(s)]
 const brl = v => 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
 const zap = t => `https://wa.me/${M.contato.whatsapp}?text=${encodeURIComponent(t)}`
+// o pedido entra no CRM da Maeda (tela Pedidos) e depois abre o WhatsApp dela com o número do pedido
+const PEDIDO_URL = 'https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/pedido'
+
+// ---------- CARDÁPIO AO VIVO (17/11/2026, 0484, Alex: "e o site já vê automaticamente") ----------
+// Preço, pratos, o que vem em cada pacote e o que está esgotado vêm do banco (tabela cardapio, a mesma do pedido e da Liz),
+// que a Simone edita na aba Cardápio do CRM. O dados.js fica de RESERVA (a função não respondeu e não há cópia neste aparelho)
+// e de APARÊNCIA: título, foto e destaques de cada seção, a nota de cada subtítulo, e (antes da 0484 preencher o banco) a foto
+// e o subtítulo de cada prato, achados pelo mesmo código (id) do banco.
+const IMG = f => !f ? '' : /^(https?:)?\/\//.test(f) ? f : 'img/' + f
+const ehPacId = id => /^natal:(pacote-|premium)/.test(id)
+function deDados() {   // o dados.js no formato do banco (mesma conta do gerar_cardapio_crm.cjs)
+  const cats = []
+  for (const s of M.rotisserie) {
+    const itens = []
+    if (s.kits) s.kits.forEach(k => itens.push({ id: `kit:${k.n}`, nome: `Kit festa ${k.n} (${k.pessoas})`, preco: k.p, desc: k.itens.join('; ') }))
+    else s.grupos.forEach(g => g.itens.forEach(i => { const ex = { foto: i.f, grupo: g.t, min: i.min }
+      if (i.v) i.v.forEach(([r, p]) => itens.push({ id: `${s.id}:${i.n}:${r}`, nome: `${i.n} · ${r}`, preco: p, desc: i.d, ...ex }))
+      else itens.push({ id: `${s.id}:${i.n}`, nome: i.n, preco: i.p, desc: i.d, ...ex }) }))
+    cats.push({ id: s.id, nome: s.rotulo, itens })
+  }
+  cats.push({ id: 'natal', nome: 'Ceia de Natal · pacotes', itens: M.natal.pacotes.map(p => ({ id: `natal:${p.id}`, nome: `Natal · ${p.n} (${p.pessoas})`, preco: p.p, foto: p.foto, desc: p.grupos.map(([t, it]) => `${t}: ` + it.map(x => (x[3] === 'alt' ? 'ou ' : '') + x[0] + (x[1] ? ` (${x[1]})` : '')).join('; ')).join(' | ') + '. ' + M.natal.farofinha })) })
+  cats.push({ id: 'natal-avulso', nome: 'Ceia de Natal · avulsos', itens: M.natal.avulsos.flatMap(g => g.itens.map(i => ({ id: `natal-avulso:${i.n}`, nome: i.n, preco: i.p, desc: i.d, foto: i.f, grupo: g.t }))) })
+  return { categorias: cats }
+}
+const SEC = {}; M.rotisserie.forEach(s => { SEC[s.id] = s })
+const NOTA = {}
+M.rotisserie.forEach(s => (s.grupos || []).forEach(g => { if (g.t && g.nota) NOTA[s.id + '|' + g.t] = g.nota }))
+M.natal.avulsos.forEach(g => { if (g.nota) NOTA['natal-avulso|' + g.t] = g.nota })
+const APAR = {}; deDados().categorias.forEach(c => c.itens.forEach(i => { APAR[i.id] = { foto: i.foto, grupo: i.grupo, min: i.min } }))
+const COPIA = 'maeda-cardapio-banco'
+async function carregar() {
+  try {
+    const ac = new AbortController(), t = setTimeout(() => ac.abort(), 6000)
+    const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chave: 'kmp_maeda', acao: 'cardapio' }), signal: ac.signal })
+    clearTimeout(t)
+    const j = await r.json()
+    if (r.ok && j.cardapio && Array.isArray(j.cardapio.categorias) && j.cardapio.categorias.length) {
+      try { localStorage.setItem(COPIA, JSON.stringify({ em: Date.now(), c: j.cardapio })) } catch (e) {}
+      return { c: j.cardapio, de: 'banco' }
+    }
+  } catch (e) {}
+  // sem resposta: a última cópia do banco que este aparelho viu (até 7 dias), senão o dados.js
+  try { const x = JSON.parse(localStorage.getItem(COPIA) || 'null'); if (x && x.c && Date.now() - x.em < 7 * 864e5) return { c: x.c, de: 'copia' } } catch (e) {}
+  return { c: deDados(), de: 'reserva' }
+}
+// composição do pacote: "Parte: Prato (desc); 2 × Prato (desc); ou Outro (desc) | Parte: ... . Frase final" (mesmo formato do servidor)
+function partir(s, sep) { const out = []; let d = 0, ini = 0; for (let k = 0; k < s.length; k++) { const ch = s[k]; if (ch === '(') d++; else if (ch === ')') d = Math.max(0, d - 1); else if (d === 0 && s.startsWith(sep, k)) { out.push(s.slice(ini, k)); ini = k + sep.length; k += sep.length - 1 } } out.push(s.slice(ini)); return out }
+function lerPacote(desc) {
+  const grupos = [], notas = []
+  for (const g of partir(desc || '', ' | ')) {
+    const dois = g.indexOf(': '); if (dois < 0) { if (g.trim()) notas.push(g.trim()); continue }
+    const gp = { titulo: g.slice(0, dois).trim(), linhas: [] }
+    for (let it of partir(g.slice(dois + 2), '; ')) {
+      const fim = partir(it, '. '); if (fim.length > 1) { it = fim[0]; notas.push(fim.slice(1).join('. ').trim()) }
+      it = it.trim(); const ou = /^ou\s/i.test(it); if (ou) it = it.replace(/^ou\s+/i, '')
+      const m = it.match(/^(\d+)\s*×\s*(.+)$/); const qtd = m ? +m[1] : 1; if (m) it = m[2]
+      let ab = -1, d0 = 0; if (it.endsWith(')')) for (let k = it.length - 1; k >= 0; k--) { if (it[k] === ')') d0++; else if (it[k] === '(' && --d0 === 0) { ab = k; break } }
+      const nome = (ab > 0 ? it.slice(0, ab) : it).trim(), det = ab > 0 ? it.slice(ab + 1, -1) : ''
+      if (nome) gp.linhas.push({ qtd, nome, det, ou })
+    }
+    grupos.push(gp)
+  }
+  return { grupos, nota: notas.filter(Boolean).join('. ') }
+}
+// o banco → a estrutura que a página sempre usou (pacotes com grupos e "ou"/"alt", avulsos de Natal, seções da rotisserie, kits, variações)
+function montar(c) {
+  // antes da 0484 o banco não tinha foto nem subtítulo: vêm do dados.js pelo código do item. Depois, vale o que está no banco.
+  const semAparencia = !c.categorias.some(k => (k.itens || []).some(i => 'foto' in i || 'grupo' in i))
+  const ap = i => semAparencia && APAR[i.id] ? { ...Object.fromEntries(Object.entries(APAR[i.id]).filter(([, v]) => v != null)), ...i } : i
+  const D = { pacotes: [], avulsos: [], rot: [] }
+  const gruposDe = (itens, sid) => {
+    const gs = [], porT = {}, porBase = {}
+    itens.forEach(i => {
+      const t = i.grupo || ''
+      let g = porT[t]; if (!g) { g = porT[t] = { t, nota: NOTA[sid + '|' + t] || '', itens: [] }; gs.push(g) }
+      const ps = i.id.split(':')
+      if (ps.length > 2) {   // variação ("grazing:Grazing Table:2 pessoas"): um prato só, com os tamanhos
+        const rot = ps.slice(2).join(':'); let n = ps[1], r = rot
+        if (i.nome.endsWith(' · ' + rot)) n = i.nome.slice(0, -(rot.length + 3)); else if (i.nome.includes(' · ')) { n = i.nome.slice(0, i.nome.indexOf(' · ')); r = i.nome.slice(i.nome.indexOf(' · ') + 3) }
+        let pr = porBase[ps[1]]; if (!pr) { pr = porBase[ps[1]] = { n, d: i.desc || '', f: i.foto, min: i.min, v: [] }; g.itens.push(pr) }
+        pr.v.push([r, i.preco, i.id, !!i.esgotado]); if (!pr.f && i.foto) pr.f = i.foto
+      } else g.itens.push({ n: i.nome, d: i.desc || '', p: i.preco, f: i.foto, min: i.min, k: i.id, esg: !!i.esgotado })
+    })
+    return gs
+  }
+  c.categorias.forEach(cat => {
+    const itens = (cat.itens || []).map(ap); if (!itens.length) return
+    const pre = ((itens.find(i => i.id.includes(':')) || {}).id || '').split(':')[0]
+    const sid = cat.id || (pre === 'kit' ? 'kitfesta' : pre) || String(cat.nome).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    if (itens.some(i => ehPacId(i.id))) {
+      itens.filter(i => ehPacId(i.id)).forEach(i => {
+        const m = i.nome.match(/^(?:Natal\s*·\s*)?(.*?)\s*\(([^()]*)\)\s*$/), pessoas = m ? m[2].trim() : '', ns = (pessoas.match(/\d+/g) || []).map(Number), L = lerPacote(i.desc)
+        // cada "ou" abre uma escolha ('ou' no primeiro prato dela, 'alt' nos seguintes), igual ao dados.js
+        // nome que já tem parêntese ("Pãezinhos (2 unidades) e torradinhas (90 g)") fica inteiro, como no dados.js
+        const nm = l => l.det && l.nome.includes('(') ? [l.nome + ' (' + l.det + ')', ''] : [l.nome, l.det]
+        const grupos = L.grupos.map(g => [g.titulo, g.linhas.map((l, k) => [(l.qtd > 1 ? l.qtd + ' × ' : '') + nm(l)[0], nm(l)[1], null, l.ou && k > 0 ? 'alt' : (g.linhas[k + 1] && g.linhas[k + 1].ou ? 'ou' : undefined)])])
+        D.pacotes.push({ id: i.id.slice(6), n: m ? m[1].trim() : i.nome.replace(/^Natal\s*·\s*/, ''), pessoas, min: ns[0] || null, max: ns.length ? ns[ns.length - 1] : null, p: i.preco, foto: i.foto, grupos, nota: L.nota, esg: !!i.esgotado })
+      })
+      return
+    }
+    if (sid === 'natal-avulso') { D.avulsos.push(...gruposDe(itens, sid)); return }
+    const s = SEC[sid] || {}
+    const sec = { id: sid, rotulo: cat.nome, foto: s.foto || (itens.find(i => i.foto) || {}).foto, intro: s.intro || '' }
+    if (pre === 'kit') sec.kits = itens.map(i => { const m = i.nome.match(/^(?:Kit festa\s+)?(.*?)\s*\(([^()]*)\)\s*$/); return { n: m ? m[1] : i.nome, pessoas: m ? m[2] : '', p: i.preco, itens: partir(i.desc || '', '; ').map(x => x.trim()).filter(Boolean), k: i.id, esg: !!i.esgotado } })
+    else sec.grupos = gruposDe(itens, sid)
+    D.rot.push(sec)
+  })
+  return D
+}
+const CARREGADO = await carregar()
+const D = montar(CARREGADO.c)
+document.documentElement.dataset.cardapio = CARREGADO.de   // banco | copia | reserva (pra conferir de onde veio)
 
 // tudo que entra no pedido tem uma chave
 const CAT = {}
@@ -542,51 +659,60 @@ const icCam = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const PR = new Map()   // 17/11: chave do prato avulso → { sec, gt } (seção e grupo), para o Trocar e o Acrescentar do pacote
 const marcaPR = (k, sec, gt) => { if (!PR.has(k)) PR.set(k, { k, sec, gt: gt || '' }); return k }
 const descHTML = d => !d ? '' : d.length > 90 ? `<p class="d clamp">${esc(d)}</p><button class="ler" data-ler>Ler mais</button>` : `<p class="d">${esc(d)}</p>`
+// 17/11 (0484): a chave de cada prato é o código do banco (i.k, ou o 3º campo da variação); esgotado não entra no pedido nem no Trocar
+const botaoAdd = (k, esg) => esg ? `<button class="btn-add" disabled>Esgotado</button>` : `<button class="btn-add" data-add="${esc(k)}">Adicionar</button>`
+const marcaVivo = (k, esg, sid, gt) => esg ? k : marcaPR(k, sid, gt)
 function pratoHTML(i, sid, gt) {
-  const mini = i.f ? `<button class="mini" data-luz="img/${i.f}" data-leg="${esc(i.n)}" aria-label="Ver foto de ${esc(i.n)}"><img src="img/${i.f}" alt="" loading="lazy"><i>${icCam}</i></button>` : ''
-  let fim
-  if (i.v) fim = `<div class="vars">${i.v.map(([r, p]) => { const k = marcaPR(reg(`${sid}:${i.n}:${r}`, { n: i.n, det: r, p, min: i.min, f: i.f, d: i.d || '' }), sid, gt); return `<div class="var"><span class="rot">${esc(r)}</span><span class="preco">${brl(p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }).join('')}</div>`
-  else { const k = marcaPR(reg(`${sid}:${i.n}`, { n: i.n, det: i.d && i.d.length < 30 ? i.d : '', p: i.p, min: i.min, f: i.f, d: i.d || '' }), sid, gt); fim = `<div class="rodape-p"><span class="preco">${brl(i.p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div>` }
-  return `<article class="prato"><div class="topo-p">${mini}<div class="n">${esc(i.n)}</div></div>${descHTML(i.d)}${fim}</article>`
+  const fo = IMG(i.f), mini = fo ? `<button class="mini" data-luz="${esc(fo)}" data-leg="${esc(i.n)}" aria-label="Ver foto de ${esc(i.n)}"><img src="${esc(fo)}" alt="" loading="lazy"><i>${icCam}</i></button>` : ''
+  let fim, todoEsg = false
+  if (i.v) { todoEsg = i.v.every(x => x[3]); fim = `<div class="vars">${i.v.map(([r, p, kk, esg]) => { const k = marcaVivo(reg(kk ?? `${sid}:${i.n}:${r}`, { n: i.n, det: r, p, min: i.min, f: i.f, d: i.d || '', esg }), esg, sid, gt); return `<div class="var${esg ? ' esg' : ''}"><span class="rot">${esc(r)}</span><span class="preco">${brl(p)}</span>${botaoAdd(k, esg)}</div>` }).join('')}</div>` }
+  else { todoEsg = !!i.esg; const k = marcaVivo(reg(i.k ?? `${sid}:${i.n}`, { n: i.n, det: i.d && i.d.length < 30 ? i.d : '', p: i.p, min: i.min, f: i.f, d: i.d || '', esg: i.esg }), i.esg, sid, gt); fim = `<div class="rodape-p"><span class="preco">${brl(i.p)}</span>${botaoAdd(k, i.esg)}</div>` }
+  return `<article class="prato${todoEsg ? ' esg' : ''}"><div class="topo-p">${mini}<div class="n">${esc(i.n)}</div></div>${descHTML(i.d)}${fim}</article>`
 }
 const grupoHTML = (g, sid) => `${g.t ? `<div class="grupo-t">${esc(g.t)}${g.nota ? `<small>${esc(g.nota)}</small>` : ''}</div>` : ''}<div class="lista">${g.itens.map(i => pratoHTML(i, sid, g.t)).join('')}</div>`
 
 // ---------- natal ----------
-const pacs = M.natal.pacotes
+const pacs = D.pacotes   // 17/11 (0484): do banco
+const semQtd = n => n.replace(/^\d+\s*×\s*/, '')   // a escolha "ou" vai pelo nome do prato, sem o "2 ×" (o servidor compara pelo nome)
 $('#pacs').innerHTML = pacs.map(p => {
   // "ou" (02/11): o prato que tem alternativa vira escolha no card; cada escolha é um item do pedido com a opção na obs
   // cada 'ou' abre uma escolha e os 'alt' seguintes entram nela (o pacote 5 tem duas)
-  const sets = []; p.grupos.forEach(([t, it]) => it.forEach(x => { if (x[3] === 'ou') sets.push({ t, ops: [x[0]] }); else if (x[3] === 'alt' && sets.length) sets[sets.length - 1].ops.push(x[0]) }))
+  const sets = []; p.grupos.forEach(([t, it]) => it.forEach(x => { if (x[3] === 'ou') sets.push({ t, ops: [semQtd(x[0])] }); else if (x[3] === 'alt' && sets.length) sets[sets.length - 1].ops.push(semQtd(x[0])) }))
   const temOu = sets.length > 0
-  const k = temOu ? `natal:${p.id}` : reg(`natal:${p.id}`, { n: `Natal · ${p.n}`, det: p.pessoas, p: p.p, f: p.foto })
+  const k = temOu ? `natal:${p.id}` : reg(`natal:${p.id}`, { n: `Natal · ${p.n}`, det: p.pessoas, p: p.p, f: p.foto, esg: p.esg })
   const curto = n => n.split(/,| marinad| assad| com miolo/)[0]
   if (temOu) {
     ESC[k] = sets
     const combos = sets.reduce((acc, st) => acc.flatMap(c => st.ops.map(o => [...c, o])), [[]])
-    combos.forEach(c => reg(`${k}|${c.join(' + ')}`, { id: k, n: `Natal · ${p.n}`, det: `${p.pessoas} · ${c.map(curto).join(' + ')}`, p: p.p, obs: `Escolha: ${c.join(' + ')}` }))
+    combos.forEach(c => reg(`${k}|${c.join(' + ')}`, { id: k, n: `Natal · ${p.n}`, det: `${p.pessoas} · ${c.map(curto).join(' + ')}`, p: p.p, obs: `Escolha: ${c.join(' + ')}`, esg: p.esg }))
   }
-  const rotulo = (st, i) => sets.length > 1 ? `Prato principal ${i + 1}: escolha um` : (/prato/i.test(st.t) ? 'Escolha o prato principal' : 'Escolha uma opção')
+  // 17/11 (0484): a Simone pode pôr "ou" em qualquer parte do pacote; o rótulo segue a parte (antes, toda escolha a mais virava "Prato principal 2")
+  const daParte = st => sets.filter(x => x.t === st.t), ordem = st => daParte(st).indexOf(st) + 1
+  const rotulo = st => /prato/i.test(st.t) ? (daParte(st).length > 1 ? `Prato principal ${ordem(st)}: escolha um` : 'Escolha o prato principal') : `${st.t}${daParte(st).length > 1 ? ' ' + ordem(st) : ''}: escolha uma opção`
   const escolha = temOu ? `<div class="escolha-ou" data-esc="${k}">${sets.map((st, i) => `<div class="esc-set"><p>${rotulo(st, i)}</p><div class="opcs">${st.ops.map(o => `<button type="button" class="opc" data-opc="${esc(o)}">${esc(curto(o))}</button>`).join('')}</div></div>`).join('')}</div>` : ''
   const comp = p.grupos.map(([t, it]) => `<h4>${esc(t)}</h4><ul>${it.map(x => (x[3] === 'alt' ? '<li class="ou">ou</li>' : '') + `<li>${esc(x[0])}${x[1] ? `<span>${esc(x[1])}</span>` : ''}</li>`).join('')}</ul>`).join('')
-  return `<article class="pac" id="p-${p.id}">
-    <div class="f"><img src="img/${p.foto}" alt="${esc(p.n)}" loading="lazy"></div>
+  return `<article class="pac" id="p-${esc(p.id)}">
+    <div class="f${p.foto ? '' : ' vazia'}">${p.foto ? `<img src="${esc(IMG(p.foto))}" alt="${esc(p.n)}" loading="lazy">` : ''}</div>
     <div class="t">
       <div class="topo-c"><h3>${esc(p.n)}</h3><span class="preco">${brl(p.p)}</span></div>
       <span class="quem">${esc(p.pessoas)}</span>
       <button class="ver" data-ver aria-expanded="false">Ver composição <i>+</i></button>
-      <div class="comp-w"><div class="comp">${comp}<p class="nota">${esc(M.natal.farofinha)}${temOu ? ' Onde aparece "ou", você escolhe a opção logo abaixo.' : ''}</p></div></div>
-      <div class="pe">${escolha}
-      <button class="add" data-add="${k}">Escolher este pacote</button>
+      <div class="comp-w"><div class="comp">${comp}<p class="nota">${esc(p.nota)}${temOu ? ' Onde aparece "ou", você escolhe a opção logo abaixo.' : ''}</p></div></div>
+      <div class="pe">${p.esg ? '' : escolha}
+      ${p.esg ? '<button class="add" disabled>Esgotado</button>' : `<button class="add" data-add="${esc(k)}">Escolher este pacote</button>`}
       <a class="zap-link" href="${zap(`Olá, Maeda! Tenho interesse no ${p.n} (${p.pessoas}), ${brl(p.p)}.`)}" target="_blank" rel="noopener">Tirar dúvida no WhatsApp</a></div>
     </div></article>`
 }).join('')
-$('#lista-avulsos').innerHTML = M.natal.avulsos.map(g => grupoHTML(g, 'natal-avulso')).join('')
+$('#lista-avulsos').innerHTML = D.avulsos.map(g => grupoHTML(g, 'natal-avulso')).join('')
 
+// 17/11 (0484): pelos números de "pessoas" do banco, do menor pro maior; pacote esgotado não é sugerido
+const pacsPorTamanho = pacs.filter(x => !x.esg && x.max).sort((a, b) => a.max - b.max)
 $('#achar').addEventListener('submit', e => {
   e.preventDefault()
   const n = parseInt($('#qtas').value, 10)
   if (!n) { $('#qtas').focus(); return }
-  const p = pacs.find(x => n <= x.max) || pacs[pacs.length - 1]
+  const p = pacsPorTamanho.find(x => n <= x.max) || pacsPorTamanho[pacsPorTamanho.length - 1]
+  if (!p) return
   $$('.pac').forEach(el => { el.classList.remove('alvo'); if (el.id === 'p-' + p.id) { void el.offsetWidth; el.classList.add('alvo') } })
   $('#pacs').classList.add('filtro')
   $('#achar-msg').textContent = n > 30 ? `Pra ${n} pessoas: ${p.n} mais avulsos. A equipe ajuda a montar.` : `Pra ${n} pessoas: ${p.n} (${p.pessoas}), ${brl(p.p)}.`
@@ -594,15 +720,15 @@ $('#achar').addEventListener('submit', e => {
 })
 
 // ---------- rotisserie: tudo numa lista, as categorias só levam até o lugar ----------
-const R = M.rotisserie
-$('#cats').innerHTML = R.map(s => `<a href="#r-${s.id}" data-cat="${s.id}">${esc(s.rotulo)}</a>`).join('')
-$('#cats-rn').innerHTML = R.map(s => `<a href="#nr-${s.id}">${esc(s.rotulo)}</a>`).join('')
+const R = D.rot   // 17/11 (0484): seções na ordem das categorias do banco; título e foto da seção do dados.js
+$('#cats').innerHTML = R.map(s => `<a href="#r-${esc(s.id)}" data-cat="${esc(s.id)}">${esc(s.rotulo)}</a>`).join('')
+$('#cats-rn').innerHTML = R.map(s => `<a href="#nr-${esc(s.id)}">${esc(s.rotulo)}</a>`).join('')
 // 17/11: a mesma Rotisserie vai na aba Rotisserie (r-) e dentro do Natal (nr-); reg() devolve a mesma chave, então o botão e o pedido são um só
 const rotHTML = pre => R.map(s => {
   let corpo
-  if (s.kits) corpo = `<p class="d" style="color:var(--cinza);margin-bottom:10px">${esc(s.intro)}</p><div class="kits">${s.kits.map(kt => { const k = marcaPR(reg(`kit:${kt.n}`, { n: `Kit festa ${kt.n}`, det: kt.pessoas, p: kt.p }), s.id, ''); return `<article class="prato kit"><div class="n">${esc(kt.n)} · ${esc(kt.pessoas)}</div><ul>${kt.itens.map((x, n) => `<li${n > 2 ? ' class="extra"' : ''}>${esc(x)}</li>`).join('')}</ul><button class="ler" data-kit>Ver os ${kt.itens.length} itens</button><div class="rodape-p"><span class="preco">${brl(kt.p)}</span><button class="btn-add" data-add="${esc(k)}">Adicionar</button></div></article>` }).join('')}</div>`
+  if (s.kits) corpo = `${s.intro ? `<p class="d" style="color:var(--cinza);margin-bottom:10px">${esc(s.intro)}</p>` : ''}<div class="kits">${s.kits.map(kt => { const k = marcaVivo(reg(kt.k ?? `kit:${kt.n}`, { n: `Kit festa ${kt.n}`, det: kt.pessoas, p: kt.p, esg: kt.esg }), kt.esg, s.id, ''); return `<article class="prato kit${kt.esg ? ' esg' : ''}"><div class="n">${esc(kt.n)} · ${esc(kt.pessoas)}</div><ul>${kt.itens.map((x, n) => `<li${n > 2 ? ' class="extra"' : ''}>${esc(x)}</li>`).join('')}</ul><button class="ler" data-kit>Ver os ${kt.itens.length} itens</button><div class="rodape-p"><span class="preco">${brl(kt.p)}</span>${botaoAdd(k, kt.esg)}</div></article>` }).join('')}</div>`
   else corpo = s.grupos.map(g => grupoHTML(g, s.id)).join('')
-  return `<section class="bloco" id="${pre}${s.id}"><div class="bloco-cab"><div class="f"><img src="img/${s.foto}" alt="" loading="lazy"></div><div><h2>${esc(s.rotulo)}</h2></div></div>${corpo}</section>`
+  return `<section class="bloco" id="${pre}${esc(s.id)}"><div class="bloco-cab"><div class="f${s.foto ? '' : ' vazia'}">${s.foto ? `<img src="${esc(IMG(s.foto))}" alt="" loading="lazy">` : ''}</div><div><h2>${esc(s.rotulo)}</h2></div></div>${corpo}</section>`
 }).join('')
 $('#lista-rot').innerHTML = rotHTML('r-')
 $('#lista-rot-natal').innerHTML = rotHTML('nr-')
@@ -641,7 +767,7 @@ const CH = 'maeda-pedido-v3'
 let pedido = {}, dados = {}
 try { pedido = JSON.parse(localStorage.getItem(CH) || '{}') || {} } catch (e) {}
 try { dados = JSON.parse(localStorage.getItem(CH + ':dados') || '{}') || {} } catch (e) {}
-Object.keys(pedido).forEach(k => { if (!CAT[k]) delete pedido[k] })
+Object.keys(pedido).forEach(k => { if (!CAT[k] || CAT[k].esg) delete pedido[k] })   // 17/11 (0484): saiu do cardápio ou esgotou: sai do pedido guardado
 // 17/11: o que a pessoa mudou em cada linha do pedido (pacote: pratos e ingredientes; avulso: ingredientes)
 let mods = {}
 try { mods = JSON.parse(localStorage.getItem(CH + ':mods') || '{}') || {} } catch (e) {}
@@ -703,7 +829,7 @@ function compo(k) {
   const it = CAT[k], p = pacs.find(x => 'natal:' + x.id === (it.id || k)); if (!p) return null
   const esc = (it.obs || '').replace(/^Escolha:\s*/, '').split(' + ').filter(Boolean), itens = []
   p.grupos.forEach(([g, its]) => its.forEach(x => {
-    if ((x[3] === 'ou' || x[3] === 'alt') && !esc.includes(x[0])) return
+    if ((x[3] === 'ou' || x[3] === 'alt') && !esc.includes(semQtd(x[0]))) return
     const m = x[0].match(/^(\d+)\s*×\s*(.+)$/), nome = m ? m[2] : x[0], desc = x[1] || ''
     const av = avulsoDe(nome, desc); itens.push({ nome, desc, n0: m ? +m[1] : 1, g, av, pao: av ? null : precoPao(nome, desc) })
   }))
@@ -740,7 +866,7 @@ function marca() {
   $('#barra-txt').textContent = n === 1 ? 'item no pedido' : 'itens no pedido'
   $('#barra-total').textContent = brl(total())
   document.body.classList.toggle('com-barra', !!n)
-  $$('[data-add]').forEach(b => {
+  $$('[data-add]:not(:disabled)').forEach(b => {
     const q = ESC[b.dataset.add] ? Object.keys(pedido).filter(x => x.startsWith(b.dataset.add + '|')).reduce((a, x) => a + pedido[x], 0) : pedido[b.dataset.add]
     const ok = !!q
     b.classList.toggle('ok', ok)
@@ -916,8 +1042,6 @@ function lerForm() {
   try { localStorage.setItem(CH + ':dados', JSON.stringify(dados)) } catch (e) {}
   return dados
 }
-// o pedido entra no CRM da Maeda (tela Pedidos) e depois abre o WhatsApp dela com o número do pedido
-const PEDIDO_URL = 'https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/pedido'
 let enviando = false
 async function enviar() {
   if (enviando) return
