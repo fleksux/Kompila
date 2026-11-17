@@ -69,21 +69,14 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .pac h3{font:600 20px/1.2 var(--sans)}
 .pac .preco{font:600 19px/1.2 var(--sans);color:var(--ouro-escuro);white-space:nowrap}
 .pac .quem{font-size:15px;color:var(--cinza)}
-.ver{display:flex;justify-content:space-between;align-items:center;width:100%;padding:12px 0;margin-top:8px;border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);font-size:15px;font-weight:500;text-align:left}
-.ver i{font-style:normal;font-size:20px;line-height:1;color:var(--ouro-escuro)}
-.comp{padding:6px 0 4px}
-.comp h4{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ouro-escuro);margin:12px 0 4px}
-.comp li{list-style:none;font-size:14.5px;padding:5px 0;border-bottom:1px dashed var(--linha)}
-.comp li span{display:block;font-size:13px;color:var(--cinza)}
-.comp .ou{font-size:12.5px;font-weight:600;color:var(--ouro-escuro);text-transform:uppercase;letter-spacing:.12em;padding:4px 0}
-.escolha-ou{margin-top:12px}
-.esc-set+.esc-set{margin-top:12px}
-.escolha-ou p{font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ouro-escuro);margin:0 0 8px}
-.escolha-ou p.falta{color:#B5552A}
+.pac[data-pac]{cursor:pointer}
+.pac[data-pac] .f img{transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+.pac[data-pac]:hover .f img{transform:scale(1.03)}
+/* já está no pedido: selo na foto (o botão continua "Mudar meu pacote") */
+.pac.no-pedido::after{content:"No seu pedido";position:absolute;z-index:2;top:10px;right:10px;background:var(--ouro-escuro);color:#fff;font-size:13px;font-weight:600;padding:6px 10px}
 .opcs{display:flex;flex-wrap:wrap;gap:8px}
 .opc{min-height:44px;padding:10px 14px;border:1px solid var(--linha);background:#fff;font-size:14.5px;text-align:left;line-height:1.25}
 .opc.on{border-color:var(--ouro-escuro);background:var(--ouro-escuro);color:#fff}
-.comp .nota{font-size:13px;color:var(--cinza);background:var(--fundo);padding:10px 12px;margin-top:10px}
 .add{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:50px;background:var(--ouro-escuro);color:#fff;font-size:15.5px;font-weight:600}
 .pac .add{margin-top:12px}
 .add:hover{background:#7A5C2E}
@@ -227,7 +220,7 @@ body{background:var(--fundo)}
 .abre .txt{padding:40px 32px}
 @media (max-width:600px){.abre .txt{padding:24px 20px 28px}}
 .abre h1{font-size:clamp(40px,4.8vw,60px);font-weight:500;letter-spacing:-.01em}
-.abre .cap,.grupo-t,.comp h4,.form h4{letter-spacing:.2em}
+.abre .cap,.grupo-t,.form h4{letter-spacing:.2em}
 .sec{padding:44px 0 6px;text-align:center}
 .sec h2{font-size:clamp(34px,4.2vw,46px)}
 .sec h2::after{content:"";display:block;width:44px;height:1px;background:var(--ouro);margin:14px auto 0}
@@ -239,7 +232,6 @@ body{background:var(--fundo)}
 .pac h3{font:500 30px/1.1 var(--serif);font-feature-settings:"lnum" 1;font-variant-numeric:lining-nums}
 h1,h2{font-feature-settings:"lnum" 1}
 .pac .preco{font-weight:500;font-size:18px}
-.ver{font-size:14.5px;letter-spacing:.04em}
 .add,.btn-add,.achar button{text-transform:uppercase;letter-spacing:.12em;font-size:13px;font-weight:600;border-radius:2px}
 .add{height:50px}
 .btn-add{height:40px;padding:0 16px}
@@ -286,11 +278,6 @@ h1,h2{font-feature-settings:"lnum" 1}
 .kit ul.aberto li.extra{display:list-item}
 
 /* movimento */
-.comp-w{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.22,.61,.36,1)}
-.comp-w.on{grid-template-rows:1fr}
-.comp-w>.comp{overflow:hidden;min-height:0}
-.ver i{display:inline-block;transition:transform .3s}
-.ver.on i{transform:rotate(45deg)}
 .barra{transform:translate(-50%,140%);opacity:0;pointer-events:none;transition:transform .45s cubic-bezier(.22,.61,.36,1),opacity .3s}
 .barra.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}
 .voo{position:fixed;z-index:95;width:18px;height:18px;border-radius:50%;background:var(--ouro-escuro);box-shadow:0 4px 12px rgba(80,60,30,.35);pointer-events:none}
@@ -322,24 +309,12 @@ h1,h2{font-feature-settings:"lnum" 1}
 .pac:nth-child(n+4){grid-column:span 3}
 .pac:nth-child(n+4) .f{aspect-ratio:16/9}
 .pac .pe{margin-top:auto}
-.pac:nth-child(n+4) .escolha-ou:has(.esc-set+.esc-set){display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pac:nth-child(n+4) .esc-set+.esc-set{margin-top:0}
-/* nos cards largos as opções ficam uma embaixo da outra e o rótulo reserva 2 linhas: o 4 (uma escolha) e o 5 (duas, lado a lado) ficam da mesma altura */
-.pac:nth-child(n+4) .opcs{flex-direction:column}
-.pac:nth-child(n+4) .opc{width:100%}
-.pac:nth-child(n+4) .escolha-ou p{min-height:2.7em;display:flex;align-items:flex-end}
-/* cards da mesma linha com a mesma altura enquanto fechados; o que abre a composição cresce sozinho */
+/* 17/11: o card não abre mais nada dentro dele (a composição vai na janela do pacote): todos da mesma linha com a mesma altura */
 .pacs .pac{align-self:stretch}
-.pacs:has(.pac.aberto) .pac{align-self:start}
 @media (max-width:860px){
   .pacs{grid-template-columns:1fr 1fr}
   .pac,.pac:nth-child(n+4){grid-column:auto}
   .pac:last-child:nth-child(odd){grid-column:1/-1}
-  .pac:nth-child(n+4) .escolha-ou:has(.esc-set+.esc-set){display:block}
-  .pac:nth-child(n+4) .esc-set+.esc-set{margin-top:12px}
-  .pac:nth-child(n+4) .opcs{flex-direction:row}
-  .pac:nth-child(n+4) .opc{width:auto}
-  .pac:nth-child(n+4) .escolha-ou p{min-height:0;display:block}
 }
 @media (max-width:600px){.pacs{grid-template-columns:1fr}.pac:nth-child(n+4) .f{aspect-ratio:4/3}}
 /* lista de pratos em 2 colunas: o último sozinho ocupa a linha (sem coluna sobrando) */
@@ -391,6 +366,18 @@ body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que 
 .ing-por button{height:42px;padding:0 14px;background:var(--ouro-escuro);color:#fff;font-weight:600;font-size:14px;border-radius:2px}
 .ed-ing small{font-size:13px;color:var(--cinza)}
 .ed-ing .mais-tag button{margin-left:6px;font-weight:700;color:inherit}
+/* janela do pacote (aberta pelo card): um pouco mais larga, foto e nome no topo, escolhas "ou" dentro da parte delas */
+#pedido.largo{width:min(640px,calc(100% - 24px))}
+.pac-topo{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:center;margin:8px 0 4px}
+.pac-topo img{width:120px;aspect-ratio:4/3;object-fit:cover;border-radius:3px}
+.pac-topo b{display:block;font:500 26px/1.1 var(--serif);font-variant-numeric:lining-nums}
+.pac-topo span{display:block;font-size:14.5px;color:var(--cinza);margin-top:4px}
+.ed-ou{background:#fff;border:1px solid var(--ouro-claro);padding:10px 12px;margin-top:6px}
+.ed-ou p{font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ouro-escuro);margin:0 0 8px}
+.ed-ou .opc{min-height:40px;padding:7px 14px;font-size:14px}
+.ed-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.ed-links:empty{display:none}
+@media (max-width:600px){.pac-topo{grid-template-columns:96px minmax(0,1fr)}.pac-topo img{width:96px}.pac-topo b{font-size:22px}}
 .ed-tot{display:grid;gap:2px;margin-bottom:10px;font-size:14px;color:var(--cinza)}
 .ed-tot b{font-size:22px;color:var(--tinta);font-weight:600}
 .ed-tot .linha-t{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
@@ -703,13 +690,13 @@ const grupoHTML = (g, sid) => `${g.t ? `<div class="grupo-t">${esc(g.t)}${g.nota
 // ---------- natal ----------
 const pacs = D.pacotes   // 17/11 (0484): do banco
 const semQtd = n => n.replace(/^\d+\s*×\s*/, '')   // a escolha "ou" vai pelo nome do prato, sem o "2 ×" (o servidor compara pelo nome)
+const curto = n => n.split(/,| marinad| assad| com miolo/)[0]   // nome curto da escolha "ou" (Peru inteiro, Pernil suíno...)
 $('#pacs').innerHTML = pacs.map(p => {
   // "ou" (02/11): o prato que tem alternativa vira escolha no card; cada escolha é um item do pedido com a opção na obs
   // cada 'ou' abre uma escolha e os 'alt' seguintes entram nela (o pacote 5 tem duas)
   const sets = []; p.grupos.forEach(([t, it]) => it.forEach(x => { if (x[3] === 'ou') sets.push({ t, ops: [semQtd(x[0])] }); else if (x[3] === 'alt' && sets.length) sets[sets.length - 1].ops.push(semQtd(x[0])) }))
   const temOu = sets.length > 0
   const k = temOu ? `natal:${p.id}` : reg(`natal:${p.id}`, { n: `Natal · ${p.n}`, det: p.pessoas, p: p.p, f: p.foto, esg: p.esg })
-  const curto = n => n.split(/,| marinad| assad| com miolo/)[0]
   if (temOu) {
     ESC[k] = sets
     const combos = sets.reduce((acc, st) => acc.flatMap(c => st.ops.map(o => [...c, o])), [[]])
@@ -718,17 +705,16 @@ $('#pacs').innerHTML = pacs.map(p => {
   // 17/11 (0484): a Simone pode pôr "ou" em qualquer parte do pacote; o rótulo segue a parte (antes, toda escolha a mais virava "Prato principal 2")
   const daParte = st => sets.filter(x => x.t === st.t), ordem = st => daParte(st).indexOf(st) + 1
   const rotulo = st => /prato/i.test(st.t) ? (daParte(st).length > 1 ? `Prato principal ${ordem(st)}: escolha um` : 'Escolha o prato principal') : `${st.t}${daParte(st).length > 1 ? ' ' + ordem(st) : ''}: escolha uma opção`
-  const escolha = temOu ? `<div class="escolha-ou" data-esc="${k}">${sets.map((st, i) => `<div class="esc-set"><p>${rotulo(st, i)}</p><div class="opcs">${st.ops.map(o => `<button type="button" class="opc" data-opc="${esc(o)}">${esc(curto(o))}</button>`).join('')}</div></div>`).join('')}</div>` : ''
-  const comp = p.grupos.map(([t, it]) => `<h4>${esc(t)}</h4><ul>${it.map(x => (x[3] === 'alt' ? '<li class="ou">ou</li>' : '') + `<li>${esc(x[0])}${x[1] ? `<span>${esc(x[1])}</span>` : ''}</li>`).join('')}</ul>`).join('')
-  return `<article class="pac" id="p-${esc(p.id)}">
+  // 17/11 (dono: "clicou já vem o produto e a composição editável"): o card só mostra e abre a janela do pacote (abrePac),
+  // onde a composição já é editável e as escolhas "ou" ficam dentro do editor. Nada de composição só de leitura nem escolha no card.
+  sets.forEach(st => { st.rot = rotulo(st) })
+  const base = `natal:${p.id}`
+  return `<article class="pac" id="p-${esc(p.id)}"${p.esg ? '' : ` data-pac="${esc(base)}"`}>
     <div class="f${p.foto ? '' : ' vazia'}">${p.foto ? `<img src="${esc(IMG(p.foto))}" alt="${esc(p.n)}" loading="lazy">` : ''}</div>
     <div class="t">
       <div class="topo-c"><h3>${esc(p.n)}</h3><span class="preco">${brl(p.p)}</span></div>
       <span class="quem">${esc(p.pessoas)}</span>
-      <button class="ver" data-ver aria-expanded="false">Ver composição <i>+</i></button>
-      <div class="comp-w"><div class="comp">${comp}<p class="nota">${esc(p.nota)}${temOu ? ' Onde aparece "ou", você escolhe a opção logo abaixo.' : ''}</p></div></div>
-      <div class="pe">${p.esg ? '' : escolha}
-      ${p.esg ? '<button class="add" disabled>Esgotado</button>' : `<button class="add" data-add="${esc(k)}">Escolher este pacote</button>`}
+      <div class="pe">${p.esg ? '<button class="add" disabled>Esgotado</button>' : `<button class="add" data-pac-btn="${esc(base)}">Mudar meu pacote</button>`}
       <a class="zap-link" href="${zap(`Olá, Maeda! Tenho interesse no ${p.n} (${p.pessoas}), ${brl(p.p)}.`)}" target="_blank" rel="noopener">Tirar dúvida no WhatsApp</a></div>
     </div></article>`
 }).join('')
@@ -832,9 +818,10 @@ try { dados = JSON.parse(localStorage.getItem(CH + ':dados') || '{}') || {} } ca
 Object.keys(pedido).forEach(k => { if (!CAT[k] || CAT[k].esg) delete pedido[k] })   // 17/11 (0484): saiu do cardápio ou esgotou: sai do pedido guardado
 // 17/11: o que a pessoa mudou em cada linha do pedido (pacote: pratos e ingredientes; avulso: ingredientes)
 let mods = {}
+let modoPac = false, rasc = null   // modoPac: editor aberto pelo card do pacote; rasc: linha do pacote ainda fora do pedido (rascunho)
 try { mods = JSON.parse(localStorage.getItem(CH + ':mods') || '{}') || {} } catch (e) {}
 Object.keys(mods).forEach(k => { if (!pedido[k]) delete mods[k] })
-const salva = () => { Object.keys(mods).forEach(k => { if (!pedido[k]) delete mods[k] }); try { localStorage.setItem(CH, JSON.stringify(pedido)); localStorage.setItem(CH + ':mods', JSON.stringify(mods)) } catch (e) {} }
+const salva = () => { Object.keys(mods).forEach(k => { if (!pedido[k] && k !== rasc) delete mods[k] }); try { localStorage.setItem(CH, JSON.stringify(pedido)); localStorage.setItem(CH + ':mods', JSON.stringify(mods)) } catch (e) {} }
 const nItens = () => Object.values(pedido).reduce((a, b) => a + b, 0)
 const unitP = k => Math.round((CAT[k].p + (ehPac(k) ? contaPac(k).d : 0)) * 100) / 100
 const total = () => Object.entries(pedido).reduce((a, [k, q]) => a + unitP(k) * q, 0)
@@ -928,6 +915,8 @@ function marca() {
   $('#barra-txt').textContent = n === 1 ? 'item no pedido' : 'itens no pedido'
   $('#barra-total').textContent = brl(total())
   document.body.classList.toggle('com-barra', !!n)
+  // card do pacote: o botão é sempre "Mudar meu pacote"; já no pedido, o card ganha o selo "No seu pedido"
+  $$('[data-pac]').forEach(c => c.classList.toggle('no-pedido', Object.keys(pedido).some(x => (CAT[x].id || x) === c.dataset.pac)))
   $$('[data-add]:not(:disabled)').forEach(b => {
     const q = ESC[b.dataset.add] ? Object.keys(pedido).filter(x => x.startsWith(b.dataset.add + '|')).reduce((a, x) => a + pedido[x], 0) : pedido[b.dataset.add]
     const ok = !!q
@@ -940,15 +929,7 @@ let tt
 function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('on'), 1800) }
 let origem = null
 function add(k) {
-  if (ESC[k]) {
-    const box = document.querySelector(`[data-esc="${k}"]`), escolhas = []
-    for (const st of box.querySelectorAll('.esc-set')) {
-      const on = st.querySelector('.opc.on')
-      if (!on) { st.querySelector('p').classList.add('falta'); st.scrollIntoView({ block: 'center', behavior: 'smooth' }); return toast('Escolha o prato principal antes de adicionar') }
-      escolhas.push(on.dataset.opc)
-    }
-    k = `${k}|${escolhas.join(' + ')}`
-  }
+  if (ESC[k]) return abrePac(k)   // pacote com "ou": a escolha é feita dentro da janela do pacote
   const it = CAT[k]; if (!it) return
   pedido[k] = (pedido[k] || 0) + (pedido[k] ? 1 : (it.min || 1))
   salva(); marca()
@@ -1023,13 +1004,26 @@ function editorHTML(k) {
       ${aberto === 'trocar:' + id ? `<div class="ed-opcs" data-ed-de="${esc(id)}">${opcoesHTML(familia(e.g), e.k, nm, 'data-ed-por')}</div>` : ''}
       ${aberto === 'ing:' + id ? ingHTML(k, nm, ingredientes(nm, CAT[e.k].d)) : ''}</div>`
   }
-  const grupos = c.grupos.map(g => `<h4 class="ed-g">${esc(g)}</h4>${c.itens.filter(x => x.g === g).map(linhaBase).join('')}${m.ex.map((e, i) => e.g === g ? linhaEx(e, i) : '').join('')}
+  // escolhas "ou" (Peru ou Pernil, Boeuf ou Filet) dentro da parte delas: a 1ª opção vem marcada como ponto de partida
+  const sets = ESC[it.id || k] || [], escAt = (it.obs || '').replace(/^Escolha:\s*/, '').split(' + ')
+  const ouHTML = g => sets.map((st, i) => st.t !== g ? '' : `<div class="ed-ou"><p>${esc(st.rot)}</p><div class="opcs">${st.ops.map(o => `<button type="button" class="opc${escAt[i] === o ? ' on' : ''}" data-ed-ou="${i}" data-o="${esc(o)}" aria-pressed="${escAt[i] === o}">${esc(curto(o))}</button>`).join('')}</div></div>`).join('')
+  const grupos = c.grupos.map(g => `<h4 class="ed-g">${esc(g)}</h4>${ouHTML(g)}${c.itens.filter(x => x.g === g).map(linhaBase).join('')}${m.ex.map((e, i) => e.g === g ? linhaEx(e, i) : '').join('')}
     <button type="button" class="ed-mais" data-ed-abre="acres:${esc(g)}">+ Acrescentar em ${esc(g.toLowerCase())}</button>
     ${aberto === 'acres:' + g ? `<div class="ed-it"><div class="ed-opcs" data-ed-grupo="${esc(g)}">${opcoesHTML(familia(g), null, '', 'data-ed-novo')}</div></div>` : ''}`).join('')
   const d = conta.d
+  const tot = `<div class="ed-tot"><div class="linha-t"><span>Pacote ${brl(it.p)}${d ? ` ${d > 0 ? '+' : '−'} ${brl(Math.abs(d))}` : ''}</span><b>${brl(it.p + d)}</b></div>${conta.confirma ? '<span>Alguns pratos não têm preço avulso: a equipe confirma o valor.</span>' : ''}</div>`
+  // aberto pelo card: a janela do pacote (foto, nome, pessoas, composição editável e "Adicionar ao pedido" no rodapé)
+  if (modoPac) {
+    const mexeu = !!(conta.lin.length || conta.ing.length), fo = c.p.foto ? IMG(c.p.foto) : ''
+    return `<header><h3>${esc(c.p.n)}</h3><button data-fecha>Fechar</button></header>
+    <div class="rola"><div class="pac-topo">${fo ? `<img src="${esc(fo)}" alt="${esc(c.p.n)}">` : ''}<div><b>${esc(c.p.n)}</b><span>${esc(c.p.pessoas)} · ${brl(it.p)}</span></div></div>
+    <p class="ed-nota">Este é o pacote como ele vem. Tire, aumente, troque ou acrescente pratos: o valor muda pelo preço avulso de cada prato.${q > 1 ? ` As alterações valem para cada um dos ${q} pacotes.` : ''}</p>${grupos}${c.p.nota ? `<p class="ed-nota">${esc(c.p.nota)}</p>` : ''}</div>
+    <footer>${tot}${q ? '<button class="add" data-ed-fim>Pronto</button>' : '<button class="add" data-ed-add>Adicionar ao pedido <span>+</span></button>'}
+    <div class="ed-links">${q ? '<button class="lnk" data-ed-lista>Ver meu pedido</button>' : ''}${mexeu ? '<button class="lnk" data-ed-zerar>Desfazer alterações</button>' : ''}</div></footer>`
+  }
   return `<header><h3>Editar ${esc(c.p.n)}</h3><button data-ed-fim>Pronto</button></header>
     <div class="rola"><p class="ed-nota">Tire, aumente, troque ou acrescente pratos. O valor muda pelo preço avulso de cada prato.${q > 1 ? ` As alterações valem para cada um dos ${q} pacotes.` : ''}</p>${grupos}</div>
-    <footer><div class="ed-tot"><div class="linha-t"><span>Pacote ${brl(it.p)}${d ? ` ${d > 0 ? '+' : '−'} ${brl(Math.abs(d))}` : ''}</span><b>${brl(it.p + d)}</b></div>${conta.confirma ? '<span>Alguns pratos não têm preço avulso: a equipe confirma o valor.</span>' : ''}</div>
+    <footer>${tot}
     <button class="add" data-ed-fim>Pronto</button><button class="lnk" data-ed-zerar>Desfazer alterações</button></footer>`
 }
 function mudancasHTML(k) {
@@ -1041,8 +1035,10 @@ function mudancasHTML(k) {
 }
 function desenha() {
   const rola = $('#pedido .rola'), topo = rola ? rola.scrollTop : 0
-  if (editando && pedido[editando]) { $('#pedido').innerHTML = editorHTML(editando); const r = $('#pedido .rola'); if (r) r.scrollTop = topo; return }
-  editando = null
+  $('#pedido').classList.toggle('largo', !!(modoPac && editando))
+  $('#pedido').setAttribute('aria-label', modoPac && editando && CAT[editando] ? CAT[editando].n : 'Meu pedido')
+  if (editando && (pedido[editando] || editando === rasc)) { $('#pedido').innerHTML = editorHTML(editando); const r = $('#pedido .rola'); if (r) r.scrollTop = topo; return }
+  editando = null; modoPac = false; $('#pedido').classList.remove('largo'); $('#pedido').setAttribute('aria-label', 'Meu pedido')
   const ks = Object.keys(pedido)
   const lista = ks.length ? ks.map(k => { const it = CAT[k], q = pedido[k], pac = ehPac(k)
     return `<div class="ped"><div><b>${esc(it.n)}</b>${it.det ? `<small>${esc(it.det)}</small>` : ''}</div><div class="v">${brl(unitP(k) * q)}</div>${mudancasHTML(k)}
@@ -1060,7 +1056,15 @@ function desenha() {
 function acaoEditor(t) {
   const k = editando
   if (t.matches('[data-ed-pac]')) { editando = t.dataset.edPac; aberto = null; desenha(); $('#pedido .rola').scrollTop = 0; return true }
-  if (t.matches('[data-ed-fim]')) { editando = null; aberto = null; salva(); marca(); desenha(); return true }
+  if (t.matches('[data-ed-fim]')) { if (modoPac) { salva(); marca(); fecha(); return true } editando = null; aberto = null; salva(); marca(); desenha(); return true }
+  if (t.matches('[data-ed-lista]')) { editando = null; modoPac = false; aberto = null; salva(); marca(); desenha(); $('#pedido .rola').scrollTop = 0; return true }
+  if (t.matches('[data-ed-add]')) {
+    // põe o pacote no pedido JÁ com as alterações (mods[k] do rascunho vira o da linha)
+    pedido[k] = (pedido[k] || 0) + 1; rasc = null; salva(); marca()
+    if (window.fbq) fbq('track', 'AddToCart', { value: unitP(k), currency: 'BRL' })
+    fecha(); oferta(k); return true
+  }
+  if (t.matches('[data-ed-ou]')) { editando = trocaOu(k, +t.dataset.edOu, t.dataset.o); aberto = null; salva(); marca(); desenha(); return true }
   if (t.matches('[data-ed-zerar]')) { delete mods[k]; aberto = null; salva(); marca(); desenha(); return true }
   if (t.matches('[data-ed-abre]')) { aberto = aberto === t.dataset.edAbre ? null : t.dataset.edAbre; desenha(); return true }
   if (t.matches('[data-ed-q]')) {
@@ -1096,6 +1100,27 @@ function acaoEditor(t) {
     salva(); desenha(); return true
   }
   return false
+}
+// ---------- janela do pacote (17/11, dono: "clicou já vem o produto e a composição editável") ----------
+// Clicar no card abre o mesmo editor do "Editar itens", com o pacote como ele vem. Se o pacote já está no pedido, abre aquela linha.
+// Fora do pedido, a linha fica como rascunho (rasc): as contas (compo, contaPac) são as mesmas, e "Adicionar ao pedido" só a promove.
+const linhaDe = base => Object.keys(pedido).find(x => (CAT[x].id || x) === base)
+const primeiraCombo = base => ESC[base] ? `${base}|${ESC[base].map(st => st.ops[0]).join(' + ')}` : base
+function abrePac(base) {
+  const k = linhaDe(base) || primeiraCombo(base); if (!CAT[k] || CAT[k].esg) return
+  if (!pedido[k]) { if (rasc && rasc !== k && !pedido[rasc]) delete mods[rasc]; rasc = k; delete mods[k] }
+  editando = k; modoPac = true; aberto = null; abre(); const r = $('#pedido .rola'); if (r) r.scrollTop = 0
+}
+// troca a escolha "ou" de uma linha: a linha passa a ser a da nova combinação (pedido e alterações vão juntos);
+// o prato que saiu deixa de ter quantidade e ingrediente mexidos
+function trocaOu(k, i, opc) {
+  const base = CAT[k].id || k, escs = (CAT[k].obs || '').replace(/^Escolha:\s*/, '').split(' + '), velho = escs[i]
+  if (velho === opc) return k
+  escs[i] = opc; const nk = `${base}|${escs.join(' + ')}`; if (!CAT[nk]) return k
+  const m = mods[k]; if (m) { delete m.q[velho]; delete m.ing[velho]; mods[nk] = m; delete mods[k] }
+  if (pedido[k]) { pedido[nk] = (pedido[nk] || 0) + pedido[k]; delete pedido[k] }
+  if (rasc === k) rasc = nk
+  return nk
 }
 function lerForm() {
   const f = $('#form'); if (!f) return dados
@@ -1141,20 +1166,20 @@ async function enviar() {
   if (numero) { pedido = {}; mods = {}; salva(); marca(); fecha(); toast(`Pedido nº ${numero} registrado. Agora é só tocar em enviar no WhatsApp.`) }
 }
 function abre() { $('#toast').classList.remove('on'); desenha(); $('#pedido').classList.add('on'); $('#pedido').setAttribute('aria-hidden', 'false'); $('#veu').classList.add('on'); document.body.style.overflow = 'hidden' }
-function fecha() { lerForm(); editando = null; aberto = null; $('#pedido').classList.remove('on'); $('#pedido').setAttribute('aria-hidden', 'true'); $('#veu').classList.remove('on'); document.body.style.overflow = '' }
+function fecha() { lerForm(); if (rasc && !pedido[rasc]) delete mods[rasc]; rasc = null; editando = null; modoPac = false; aberto = null; salva(); $('#pedido').classList.remove('on'); $('#pedido').setAttribute('aria-hidden', 'true'); $('#veu').classList.remove('on'); document.body.style.overflow = '' }
 
 document.addEventListener('click', e => {
   // 17/11: editor do pacote e ingredientes, dentro da janela do pedido
-  const te = e.target.closest('#pedido [data-ed-pac],#pedido [data-ed-fim],#pedido [data-ed-zerar],#pedido [data-ed-abre],#pedido [data-ed-q],#pedido [data-ed-por],#pedido [data-ed-novo],#pedido [data-ing-sem],#pedido [data-ing-add],#pedido [data-ing-tira]')
+  const te = e.target.closest('#pedido [data-ed-pac],#pedido [data-ed-fim],#pedido [data-ed-zerar],#pedido [data-ed-abre],#pedido [data-ed-q],#pedido [data-ed-por],#pedido [data-ed-novo],#pedido [data-ing-sem],#pedido [data-ing-add],#pedido [data-ing-tira],#pedido [data-ed-add],#pedido [data-ed-lista],#pedido [data-ed-ou]')
   if (te && acaoEditor(te)) return
-  const o = e.target.closest('[data-opc]')
-  if (o) { o.parentElement.querySelectorAll('.opc').forEach(x => x.classList.toggle('on', x === o)); o.closest('.esc-set').querySelector('p').classList.remove('falta'); return }
-  const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-ver],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-enviar-ja],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
+  // card do pacote (foto, nome ou "Mudar meu pacote"): abre a janela editável; o link do WhatsApp segue normal
+  const pc = e.target.closest('[data-pac]')
+  if (pc && !e.target.closest('a')) return abrePac(pc.dataset.pac)
+  const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-enviar-ja],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
   if (!t) { if (e.target.id === 'luz') $('#luz').classList.remove('on'); return }
   if (t.matches('[data-add]')) { origem = t; return add(t.dataset.add) }
   if (t.matches('[data-ler]')) { const d = t.previousElementSibling, ab = d.classList.toggle('aberto'); t.textContent = ab ? 'Ler menos' : 'Ler mais'; return }
   if (t.matches('[data-kit]')) { const ul = t.previousElementSibling, ab = ul.classList.toggle('aberto'); t.textContent = ab ? 'Ver menos' : `Ver os ${ul.children.length} itens`; return }
-  if (t.matches('[data-ver]')) { const c = t.nextElementSibling, on = c.classList.toggle('on'); t.setAttribute('aria-expanded', on); t.classList.toggle('on', on); t.firstChild.textContent = on ? 'Fechar composição ' : 'Ver composição '; const pc = t.closest('.pac'); if (pc) pc.classList.toggle('aberto', on); return }
   if (t.matches('[data-abre-pedido]')) return abre()
   if (t.matches('[data-fecha-oferta]')) return fechaOferta()
   if (t.matches('[data-ir-pedido]')) { fechaOferta(); return abre() }
