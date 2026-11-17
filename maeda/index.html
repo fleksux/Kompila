@@ -666,9 +666,25 @@ function mesmoPrato(x, k) {
   const pp = pesoDe(x.desc) ?? pesoDe(x.nome), pa = pesoDe(varia || it.d || '')
   return !(pp != null && pa != null && pp !== pa)
 }
+// 17/11 (Alex: "exato"): o pacote chama alguns pratos por outro nome; aqui ele vira o nome do avulso do cardápio (o servidor faz igual)
+function equivale(nome, desc) {
+  const n = semAc(nome)
+  if (/^boeuf wellington/.test(n)) return { nome: nome.replace(/^Boeuf/i, 'Beef'), desc }
+  if (/^taca de banoffee/.test(n)) return { nome: 'Banoffee desconstruída', desc: desc || '1 kg' }
+  if (/^panacotta de abacaxi/.test(n)) return { nome: 'Panacotta de abacaxi em sua calda caramelada e toque de hortelã', desc: pesoDe(desc) ? desc : '1 kg' }
+  const t = n.match(/^tabua degustacao para (\d+) pessoas/); if (t) return { nome: 'Tábua Degustação Maeda', desc: t[1] + ' pessoas' }
+  return { nome, desc }
+}
+// pãezinhos e torradinhas do pacote em quantidade que não existe avulsa: pela tabela avulsa, R$ 8 o pãozinho e R$ 20 cada 90 g de torradinhas
+// (2 un + 90 g = 36; 4 + 180 = 72; 8 + 180 = 104). Mesma conta no servidor.
+function precoPao(nome, desc) {
+  const m = semAc(nome + ' ' + desc).match(/^paezinhos (\d+) unidades e torradinhas (\d+) g/); if (!m) return null
+  return Math.round((8 * +m[1] + 20 * (+m[2] / 90)) * 100) / 100
+}
 const AV = {}
-function avulsoDe(nome, desc) {
-  const c = nome + '|' + desc; if (c in AV) return AV[c]
+function avulsoDe(nome0, desc0) {
+  const c = nome0 + '|' + desc0; if (c in AV) return AV[c]
+  const { nome, desc } = equivale(nome0, desc0)
   const base = k => { const ps = k.split(':'); return ps.length > 2 ? ps[1] : CAT[k].n }
   const ks = [...PR.keys()].filter(k => mesmoPrato({ nome, desc }, k)).sort((a, b) => base(b).length - base(a).length || (b.startsWith('natal-avulso') - a.startsWith('natal-avulso')))
   return (AV[c] = ks[0] || null)
@@ -689,7 +705,7 @@ function compo(k) {
   p.grupos.forEach(([g, its]) => its.forEach(x => {
     if ((x[3] === 'ou' || x[3] === 'alt') && !esc.includes(x[0])) return
     const m = x[0].match(/^(\d+)\s*×\s*(.+)$/), nome = m ? m[2] : x[0], desc = x[1] || ''
-    itens.push({ nome, desc, n0: m ? +m[1] : 1, g, av: avulsoDe(nome, desc) })
+    const av = avulsoDe(nome, desc); itens.push({ nome, desc, n0: m ? +m[1] : 1, g, av, pao: av ? null : precoPao(nome, desc) })
   }))
   return { p, itens, grupos: p.grupos.map(([g]) => g) }
 }
@@ -699,7 +715,7 @@ function contaPac(k) {
   if (!c) return { d: 0, tira, poe, ing: [], lin, confirma }
   c.itens.forEach(x => {
     const q = m.q?.[x.nome] ?? x.n0, dif = q - x.n0; if (!dif) return
-    const pr = x.av ? CAT[x.av].p : null; if (pr == null) confirma = true; else d += pr * dif
+    const pr = x.av ? CAT[x.av].p : x.pao; if (pr == null) confirma = true; else d += pr * dif
     if (dif < 0) { tira.push({ de: x.nome, ...(x.av ? { id: x.av } : {}), qtd: -dif }); lin.push({ t: 'tira', txt: `− ${-dif} ${x.nome}`, sem: pr == null }) }
     else { poe.push(x.av ? { id: x.av, qtd: dif } : { de: x.nome, qtd: dif }); lin.push({ t: 'poe', txt: `+ ${dif} ${x.nome}`, sem: pr == null }) }
   })
@@ -805,7 +821,7 @@ function editorHTML(k) {
   const c = compo(k), m = modPac(k), conta = contaPac(k), it = CAT[k], q = pedido[k]
   const linhaBase = x => {
     const id = 'b:' + x.nome, qq = m.q[x.nome] ?? x.n0
-    return `<div class="ed-it${qq ? '' : ' zero'}"><div><b>${esc(x.nome)}</b><small>${x.n0 ? `vem ${x.n0} no pacote · ` : ''}${precoTxt(x.av)}</small>${ingTags(m.ing[x.nome])}</div>
+    return `<div class="ed-it${qq ? '' : ' zero'}"><div><b>${esc(x.nome)}</b><small>${x.n0 ? `vem ${x.n0} no pacote · ` : ''}${!x.av && x.pao != null ? brl(x.pao) + ' cada' : precoTxt(x.av)}</small>${ingTags(m.ing[x.nome])}</div>
       <div class="qtd"><button data-ed-q="${esc(id)}" data-d="-1" aria-label="Menos">−</button><span>${qq}</span><button data-ed-q="${esc(id)}" data-d="1" aria-label="Mais">+</button></div>
       <div class="ed-ac"><button class="${aberto === 'trocar:' + id ? 'on' : ''}" data-ed-abre="trocar:${esc(id)}">Trocar</button><button class="${aberto === 'ing:' + id ? 'on' : ''}" data-ed-abre="ing:${esc(id)}">Ingredientes</button></div>
       ${aberto === 'trocar:' + id ? `<div class="ed-opcs" data-ed-de="${esc(id)}">${opcoesHTML(familia(x.g), x.av, x.nome, 'data-ed-por')}</div>` : ''}
