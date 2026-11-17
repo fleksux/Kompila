@@ -760,7 +760,6 @@ const enrPintar = () => {
   $('enrJ').innerHTML = `<div class="enr-j" role="dialog" aria-modal="true" aria-labelledby="enrJT">
     <header class="enr-j-h"><div><small>Dados de contato</small><h3 id="enrJT">${esc(e.nome || 'Empresa')}</h3></div><button type="button" class="jan-x" id="enrJX" aria-label="Fechar">${IC.x}</button></header>
     <div class="enr-j-b">
-      <button type="button" class="btn go enr-j-busca" id="enrJB"${j.buscando ? ' disabled' : ''}>${j.buscando ? 'Procurando…' : j.buscou ? 'Buscar de novo' : 'Buscar dados'}</button>
       ${j.msg ? `<div class="enr-m ${j.msg.t}" role="status">${j.msg.h}</div>` : ''}
       ${ENR_CAMPOS.map(linha).join('')}
       <div class="enr-j-c"><label for="enrInfo"><i class="enr-j-ic">${ENR_IC_INFO}</i><b>Informações relevantes</b></label><textarea id="enrInfo" rows="3" maxlength="2000" placeholder="Quem decide, melhor horário, o que a empresa precisa"${j.carregado ? '' : ' disabled'}>${esc(j.info)}</textarea></div>
@@ -774,7 +773,6 @@ const enrPintar = () => {
   $('enrInfo').oninput = ev => { j.info = ev.target.value }
   enrPintarFotos()
   $('enrJX').onclick = enrFechar
-  $('enrJB').onclick = enrBuscar
   $('enrJS').onclick = enrSalvar
 }
 const enrSalvar = async () => {
@@ -812,7 +810,7 @@ const enrAbrir = (e, depois) => {
   const o = document.createElement('div'); o.id = 'enrJ'; o.className = 'enr-j-o'
   o.addEventListener('mousedown', ev => { if (ev.target === o) enrFechar() })
   document.body.appendChild(o); document.addEventListener('keydown', enrEsc)
-  enrPintar(); $('enrJB').focus(); enrCarregarExtra(ENR_J)
+  enrPintar(); $('enrC_whatsapp')?.focus(); enrCarregarExtra(ENR_J)
 }
 // liga o botão do card. depois() redesenha a tela onde o card está.
 function ligarEnr(root, e, depois) {
@@ -857,7 +855,7 @@ async function abrirListaHome() {
     <div class="lv-fil"><div class="lv-lin"><label class="pf-q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lvQ" type="search" placeholder="Buscar nome, bairro, telefone ou @" aria-label="Buscar na lista" autocomplete="off" value="${esc(LV.q)}"></label>
       <label class="lv-ord">Ordenar<select id="lvOrd" aria-label="Ordenar">${[['potencial', 'Potencial'], ['nota', 'Nota no Google'], ['avaliacoes', 'Mais avaliações'], ['nome', 'Nome']].map(([k, t]) => `<option value="${k}"${LV.ord === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
       <div class="lv-chips" id="lvChips"></div></div>
-    <div class="lv-res"><label class="lv-selt"><input type="checkbox" id="lvSelT"><span id="lvN"></span></label><div class="lv-resb"><button class="btn line sm" id="lvEnrT" hidden></button><button class="btn ok sm" id="lvAddT" hidden></button></div></div>
+    <div class="lv-res"><label class="lv-selt"><input type="checkbox" id="lvSelT"><span id="lvN"></span></label><div class="lv-resb"><button class="btn ok sm" id="lvAddT" hidden></button></div></div>
     <div class="lv-g" id="lvG"></div>
     <div class="cred"><a href="https://kompila.com.br/?utm_source=prospeccao&utm_medium=credito" target="_blank" rel="noopener">Desenvolvido por <b>[ <i>kompila</i> ]</b> · 2026</a></div></div>`
   $('lv').hidden = false
@@ -892,8 +890,7 @@ function lvPintar() {
   $('lvN').textContent = marcadas.length ? `${marcadas.length} selecionada${marcadas.length === 1 ? '' : 's'} de ${lst.length}` : `Selecionar todas (${lst.length})`
   const st = $('lvSelT'); st.checked = !!idsLst.length && marcadas.length === idsLst.length; st.indeterminate = !!marcadas.length && !st.checked
   st.onchange = () => { idsLst.forEach(i => st.checked ? LV.sel.add(i) : LV.sel.delete(i)); lvPintar() }
-  const be = $('lvEnrT'); be.hidden = !marcadas.length; be.textContent = `Enriquecer ${marcadas.length} selecionada${marcadas.length === 1 ? '' : 's'}`
-  be.onclick = async () => { be.disabled = true; const { data: n, error } = await sb.rpc('enfileirar_enriq', { p_empresas: marcadas }); be.disabled = false; if (error) return liz(esc(error.message)); LV.sel = new Set(); if (!n) liz('Essas empresas já estão na fila.'); lvPintar(); lvAcompanhar(n || 0) }
+  // 17/11/2026 (Alex): enriquecimento pelo sistema saiu; quem enriquece é o Claude, uma por uma, pela janela do cartão
   const novas = lst.filter(d => d.decisao !== 'aprovada' && LV.sel.has(d.empresa?.id) && !lvSemZap(d)) // só as marcadas, igual ao Enriquecer
   const bt = $('lvAddT'); bt.hidden = !novas.length; bt.textContent = `Adicionar ${novas.length} ao pipeline`
   $('lvG').innerHTML = lst.map(d => { const e = d.empresa || {}, tem = Object.keys(d.capivara || {}).length, fila = d.status === 'na_fila' || d.status === 'lendo', w = zap(e.whatsapp) || (ehCelular(e) ? zap(e.telefone) : null), tel = String(e.telefone || '').replace(/[^\d+]/g, '')
