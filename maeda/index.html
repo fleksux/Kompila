@@ -19,10 +19,10 @@
   --preto:#141412; --ouro:#B8935A; --ouro-escuro:#8E6C38; --ouro-claro:#D9BE8C;
   --fundo:#F4EFE9; --card:#FFFFFF; --tinta:#1E1D1A; --cinza:#6E685B; --linha:#E4DDD2;
   --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
-  --hdr:60px; --abas:52px;
+  --hdr:60px; --tags:52px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--hdr) + var(--abas) + 56px)}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--hdr) + var(--tags) + 16px)}
 body{background:var(--fundo);color:var(--tinta);font:400 16px/1.5 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -35,12 +35,6 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .topo{position:sticky;top:0;z-index:40;background:#FBF8F3;color:var(--tinta)}
 .topo .linha1{height:var(--hdr);display:flex;align-items:center;gap:12px}
 .topo .logo img{height:28px;width:auto}
-.btn-ped{margin-left:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--linha);background:#fff;padding:9px 14px;font-size:14px;font-weight:500}
-.btn-ped b{min-width:22px;height:22px;padding:0 6px;border-radius:99px;display:grid;place-items:center;background:var(--ouro-escuro);color:#fff;font-size:12px}
-.abas{display:flex;background:var(--fundo);border-bottom:1px solid var(--linha);height:var(--abas)}
-.abas .box{display:flex;width:100%}
-.aba{flex:1;max-width:220px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:500;color:var(--cinza);border-bottom:3px solid transparent;margin-bottom:-1px}
-.aba.on{color:var(--tinta);border-color:var(--ouro);font-weight:600}
 
 /* abertura de cada cardápio */
 .abre{display:grid;grid-template-columns:1fr 1fr;background:#fff;color:var(--tinta);border-bottom:1px solid var(--linha)}
@@ -100,16 +94,6 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .pacs.filtro .pac:not(.alvo){opacity:.4;filter:grayscale(.7)}
 
 /* lista de pratos (avulsos e rotisserie) */
-.cats{position:sticky;top:calc(var(--hdr) + var(--abas));z-index:30;background:var(--fundo);border-bottom:1px solid var(--linha)}
-.cats .box{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:10px;padding-bottom:10px}
-.cats .box::-webkit-scrollbar{display:none}
-.cats a{flex:none;padding:9px 14px;border:1px solid var(--linha);background:var(--card);border-radius:99px;font-size:14.5px;font-weight:500;color:var(--cinza)}
-.cats a.on{background:var(--ouro-escuro);border-color:var(--ouro-escuro);color:#fff}
-/* 16/11 (Alex: "no desktop achei uma bosta a posição"): Kits | Avulsos = botão duplo no centro, não pílulas soltas à esquerda */
-#cats-natal{justify-content:center;gap:0}
-#cats-natal a{flex:0 1 200px;text-align:center;border-radius:0;padding:10px 18px;font-size:15px}
-#cats-natal a:first-child{border-radius:99px 0 0 99px}
-#cats-natal a:last-child{border-radius:0 99px 99px 0;border-left:0}
 .bloco{padding-top:26px}
 .bloco-cab{display:flex;align-items:center;gap:14px;margin-bottom:12px}
 .bloco-cab .f{width:64px;height:64px;flex:none;overflow:hidden}
@@ -239,9 +223,6 @@ body.com-barra main{padding-bottom:84px}
 :root{--fundo:#FAF7F2;--linha:#ECE4D8;--ouro-escuro:#9C7A45;--card:#FFFFFF}
 body{background:var(--fundo)}
 .topo{background:rgba(250,247,242,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--linha)}
-.abas{background:transparent;border-bottom:0}
-.aba{font-size:15px;letter-spacing:.06em}
-.aba.on{border-bottom-width:2px}
 .abre{background:#fff}
 .abre .txt{padding:40px 32px}
 @media (max-width:600px){.abre .txt{padding:24px 20px 28px}}
@@ -272,7 +253,6 @@ h1,h2{font-feature-settings:"lnum" 1}
 .bloco-cab h2{margin-top:8px}
 @media (max-width:600px){.bloco-cab .f{height:170px}}
 .bloco-cab h2{font-size:clamp(32px,3.8vw,40px)}
-.cats a{border-radius:99px;font-size:14px;letter-spacing:.02em}
 .barra{border-radius:3px}
 .btn-ped{border-radius:2px}
 .achar input{border-radius:2px}
@@ -325,7 +305,7 @@ h1,h2{font-feature-settings:"lnum" 1}
 .pac.alvo{animation:brilha 1.2s ease 2}
 @keyframes brilha{50%{box-shadow:0 0 0 6px rgba(184,147,90,.35)}}
 .pacs .pac{transition:opacity .4s,filter .4s,transform .3s}
-.btn-add,.add,.cats a,.aba,.btn-ped{transition:background .2s,color .2s,box-shadow .2s,border-color .2s}
+.btn-add,.add,.aba,.btn-ped{transition:background .2s,color .2s,box-shadow .2s,border-color .2s}
 @media (max-width:600px){
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.surge{opacity:1;transform:none}}
@@ -335,9 +315,6 @@ h1,h2{font-feature-settings:"lnum" 1}
 .abre .txt{padding-left:max(32px,calc((100vw - 1080px) / 2 + 16px))}
 .abre h1{text-wrap:balance}
 @media (max-width:600px){.abre .txt{padding-left:20px}}
-/* menu interno do Natal com 3 botões */
-#cats-natal a+a{border-left:0}
-#cats-natal a{flex-basis:180px}
 /* pacotes: 3 na primeira linha e 2 + 2 largos nas seguintes (os de escolha, 4 e 5, lado a lado); botões sempre no rodapé do card.
    Feito para os 7 pacotes de 2026: se o número mudar, rever o nth-child. */
 .pacs{grid-template-columns:repeat(6,minmax(0,1fr));align-items:start}
@@ -420,22 +397,76 @@ body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que 
 .ed-tot .linha-t span{min-width:0}
 .ed-tot b{white-space:nowrap}
 @media (max-width:600px){
-  #cats-natal a{padding:10px 6px;font-size:14px;white-space:nowrap}
   .ed-tot b{font-size:20px}
+}
+
+/* ===== 17/11/2026 topo: logo | Ceia de Natal · Rotisserie | carrinho, e embaixo a linha de tags da aba ativa ===== */
+/* o menu de pílulas antigo (Kits | Avulsos | Rotisserie + categorias em outra linha) saiu: agora é uma linha só com todas as seções */
+.topo .linha1{gap:8px}
+.topo .logo{flex:none;display:flex;align-items:center;min-height:44px}
+.menu{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;height:100%}
+.aba{display:flex;align-items:center;min-height:44px;padding:0 14px;font-size:15px;font-weight:500;letter-spacing:.04em;color:var(--cinza);white-space:nowrap;position:relative}
+.aba:hover{color:var(--tinta)}
+.aba.on{color:var(--tinta);font-weight:600}
+.aba.on::after{content:"";position:absolute;left:14px;right:14px;bottom:4px;height:2px;background:var(--ouro)}
+.aba:focus-visible,.tag:focus-visible,.btn-ped:focus-visible{outline:2px solid var(--ouro);outline-offset:2px}
+/* linha de tags: uma linha só; centralizada se couber, senão rola pro lado sem barra, com degradê na ponta que tem mais */
+.tags{border-top:1px solid var(--linha);height:var(--tags)}
+.tags-in{max-width:1080px;height:100%;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.tags-in::-webkit-scrollbar{display:none}
+.tags-in>:first-child{margin-left:auto}
+.tags-in>:last-child{margin-right:auto}
+.tags.esq .tags-in{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 48px);mask-image:linear-gradient(90deg,transparent 0,#000 48px)}
+.tags.dir .tags-in{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 48px),transparent 100%);mask-image:linear-gradient(90deg,#000 calc(100% - 48px),transparent 100%)}
+.tags.esq.dir .tags-in{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 48px,#000 calc(100% - 48px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 48px,#000 calc(100% - 48px),transparent 100%)}
+.tag{flex:none;display:flex;align-items:center;height:34px;padding:0 14px;border:1px solid var(--linha);border-radius:2px;background:#fff;font-size:13.5px;font-weight:500;letter-spacing:.02em;color:var(--cinza);white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+.tag:hover{color:var(--tinta);border-color:var(--ouro-claro)}
+.tag.on{background:var(--ouro-escuro);border-color:var(--ouro-escuro);color:#fff}
+/* o toque vale 44 px de altura mesmo com a tag de 34 */
+.tag{position:relative}
+.tag::before{content:"";position:absolute;left:0;right:0;top:-5px;bottom:-5px}
+/* carrinho */
+.btn-ped{margin-left:0;flex:none;position:relative;display:flex;align-items:center;gap:8px;min-height:44px;min-width:44px;justify-content:center;border:1px solid var(--linha);background:#fff;padding:0 14px;font-size:14px;font-weight:500;border-radius:2px}
+.btn-ped .carrinho{width:22px;height:22px;flex:none;color:var(--tinta)}
+.btn-ped b{min-width:20px;height:20px;padding:0 5px;border-radius:99px;display:grid;place-items:center;background:var(--ouro-escuro);color:#fff;font-size:11.5px;font-weight:600;line-height:1}
+.btn-ped b.zero{background:#E7E1D6;color:#8A8273}
+@media (max-width:860px){
+  .btn-ped-t{display:none}
+  .btn-ped{padding:0;width:44px;height:44px;border-color:transparent;background:transparent}
+  .btn-ped b{position:absolute;top:2px;right:0;box-shadow:0 0 0 2px #FAF7F2}
+}
+/* celular: abas compactas; nas telas mais estreitas a fonte e o logo encolhem pra caber numa linha */
+@media (max-width:600px){
+  .topo .linha1{gap:4px;padding-left:12px;padding-right:8px}
+  .topo .logo img{height:24px;width:auto}
+  .menu{gap:0}
+  .aba{padding:0 10px;font-size:14px;letter-spacing:.01em}
+  .aba.on::after{left:10px;right:10px}
+  .tags-in{padding:0 12px}
+  .tag{font-size:13.5px;padding:0 12px}
+}
+@media (max-width:374px){
+  .topo .logo img{height:20px}
+  .aba{padding:0 7px;font-size:13px;letter-spacing:0}
+  .aba.on::after{left:7px;right:7px}
 }
 </style>
 </head>
 <body>
 
+<!-- 17/11/2026 (Alex: "esse menu em cima torto não me convenceu, sobe ele, deixa entre Maeda e o carrinho, coloca um carrinho no ícone"
+     e depois "não é submenu, é uma linha de tags com todas as categorias do Natal"): barra de cima = logo | Ceia de Natal · Rotisserie | carrinho;
+     embaixo, fixa, uma linha de tags com as seções da aba ativa. As tags são geradas pelo JS a partir do cardápio do banco. -->
 <header class="topo">
   <div class="box linha1">
     <a class="logo" href="#natal" aria-label="Maeda Gastronomia"><img src="img/logo-tinta.svg" alt="Maeda Gastronomia" width="72" height="28"></a>
-    <button class="btn-ped" data-abre-pedido>Meu pedido <b data-conta>0</b></button>
+    <nav class="menu" aria-label="Cardápios">
+      <a class="aba" href="#natal" data-aba="natal">Ceia de Natal</a>
+      <a class="aba" href="#rotisserie" data-aba="rotisserie">Rotisserie</a>
+    </nav>
+    <button class="btn-ped" data-abre-pedido aria-label="Meu pedido"><svg class="carrinho" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 3.5h2.6l2.3 11.2a1.6 1.6 0 0 0 1.6 1.3h8.7a1.6 1.6 0 0 0 1.6-1.2l1.6-6.8H6.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="20" r="1.4" fill="currentColor"/><circle cx="17.5" cy="20" r="1.4" fill="currentColor"/></svg><span class="btn-ped-t">Meu pedido</span><b data-conta>0</b></button>
   </div>
-  <nav class="abas" aria-label="Cardápios"><div class="box">
-    <a class="aba" href="#natal" data-aba="natal">Ceia de Natal</a>
-    <a class="aba" href="#rotisserie" data-aba="rotisserie">Rotisserie</a>
-  </div></nav>
+  <nav class="tags" id="tags" aria-label="Seções do cardápio"><div class="tags-in" id="tags-in"></div></nav>
 </header>
 
 <main>
@@ -453,7 +484,6 @@ body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que 
     </section>
     <!-- 16/11/2026 (Alex: "coloca um menu kit e avulso"): cliente não achava os avulsos, que ficam depois dos 7 pacotes -->
     <!-- 17/11/2026 (Alex: "a Simone precisa que tudo de rotisserie esteja dentro do natal mas natal não esteja na aba rotisserie"): terceiro botão leva à Rotisserie inteira, dentro do Natal -->
-    <nav class="cats" aria-label="Kits, avulsos e rotisserie"><div class="box" id="cats-natal"><a href="#pacotes" data-sub="pacotes" class="on">Kits de ceia</a><a href="#avulsos" data-sub="avulsos">Avulsos</a><a href="#rot-natal" data-sub="rot-natal">Rotisserie</a></div></nav>
     <div class="box">
       <div class="sec" id="pacotes"><h2>Kits de ceia</h2><p>Cada pacote vem com entrada, prato principal, acompanhamentos e sobremesa.</p></div>
       <div class="info" id="info-natal"></div>
@@ -477,7 +507,6 @@ body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que 
       </div>
       <div class="f"><img src="img/r-mini-piramide-de-chevre-presunto-cru-e-figos.webp" alt="Mini pirâmide de chèvre, presunto cru e figos"></div>
     </section>
-    <nav class="cats" aria-label="Categorias"><div class="box" id="cats"></div></nav>
     <div class="box"><div class="info" id="info-rot"></div><div id="lista-rot"></div></div>
   </div>
 </main>
@@ -650,7 +679,7 @@ const ORIGEM = (() => {
   return o
 })()
 
-const info = `<span><b>Entrega:</b> retirada no ateliê ou entrega (frete à parte)</span><span><b>NF:</b> em torno de 14%</span>`
+const info = `<span><b>Entrega:</b> retirada no ateliê ou entrega (frete à parte)</span><span><b>NF:</b> não inclusa</span>`
 $('#info-natal').innerHTML = info
 $('#info-rot').innerHTML = info
 
@@ -721,7 +750,6 @@ $('#achar').addEventListener('submit', e => {
 
 // ---------- rotisserie: tudo numa lista, as categorias só levam até o lugar ----------
 const R = D.rot   // 17/11 (0484): seções na ordem das categorias do banco; título e foto da seção do dados.js
-$('#cats').innerHTML = R.map(s => `<a href="#r-${esc(s.id)}" data-cat="${esc(s.id)}">${esc(s.rotulo)}</a>`).join('')
 $('#cats-rn').innerHTML = R.map(s => `<a href="#nr-${esc(s.id)}">${esc(s.rotulo)}</a>`).join('')
 // 17/11: a mesma Rotisserie vai na aba Rotisserie (r-) e dentro do Natal (nr-); reg() devolve a mesma chave, então o botão e o pedido são um só
 const rotHTML = pre => R.map(s => {
@@ -733,32 +761,66 @@ const rotHTML = pre => R.map(s => {
 $('#lista-rot').innerHTML = rotHTML('r-')
 $('#lista-rot-natal').innerHTML = rotHTML('nr-')
 
-// categoria ativa conforme rola
-const io = new IntersectionObserver(es => es.forEach(x => {
-  if (!x.isIntersecting) return
-  $$('#cats a').forEach(a => a.classList.toggle('on', a.dataset.cat === x.target.id.slice(2)))
-  const on = $('#cats a.on'); if (on) on.parentNode.scrollTo({ left: on.offsetLeft - 16, behavior: 'smooth' })
-}), { rootMargin: '-40% 0px -55% 0px' })
-$$('#lista-rot .bloco').forEach(b => io.observe(b))
-
-// Natal: "Kits de ceia" ou "Avulsos" aceso conforme rola, pela posição do título "Pratos avulsos" (o observador falhava ao abrir direto em #avulsos)
-function subNatal() {
-  const t = document.getElementById('avulsos').getBoundingClientRect().top, tr = document.getElementById('rot-natal').getBoundingClientRect().top
-  const sub = tr < innerHeight * 0.5 ? 'rot-natal' : t < innerHeight * 0.5 ? 'avulsos' : 'pacotes'
-  $$('#cats-natal a').forEach(a => a.classList.toggle('on', a.dataset.sub === sub))
+// ---------- linha de tags (17/11/2026, Alex: "é uma linha de tags com todas as categorias do Natal") ----------
+// Gerada do cardápio (banco ou dados.js), nunca escrita à mão. Natal: Kits de ceia, Avulsos e as categorias da Rotisserie
+// que moram dentro do Natal (nr-). Rotisserie: as categorias (r-). Tocar rola até a seção; a da tela fica acesa.
+const SECOES = {
+  natal: [{ id: 'pacotes', n: 'Kits de ceia' }, { id: 'avulsos', n: 'Avulsos' }, ...R.map(s => ({ id: 'nr-' + s.id, n: s.rotulo }))],
+  rotisserie: R.map(s => ({ id: 'r-' + s.id, n: s.rotulo }))
 }
-addEventListener('scroll', subNatal, { passive: true }); addEventListener('load', subNatal)
+const tagsNav = $('#tags'), tagsIn = $('#tags-in')
+let tagsDe = '', ondeAtual = '', ondeRaf = 0
+// degradê só na ponta que ainda tem tag escondida
+function pontas() {
+  const max = tagsIn.scrollWidth - tagsIn.clientWidth
+  tagsNav.classList.toggle('esq', tagsIn.scrollLeft > 2)
+  tagsNav.classList.toggle('dir', tagsIn.scrollLeft < max - 2)
+}
+function desenhaTags(v) {
+  if (tagsDe === v) return
+  tagsDe = v; ondeAtual = ''
+  tagsIn.innerHTML = SECOES[v].map(i => `<a class="tag" href="#${esc(i.id)}" data-secao="${esc(i.id)}">${esc(i.n)}</a>`).join('')
+  tagsIn.scrollLeft = 0; pontas()
+}
+tagsIn.addEventListener('scroll', pontas, { passive: true })
+addEventListener('resize', pontas)
+tagsIn.addEventListener('click', e => {
+  const a = e.target.closest('[data-secao]'); if (!a) return
+  e.preventDefault()
+  const h = a.dataset.secao
+  if (location.hash.slice(1) === h) aba(); else location.hash = h
+})
+// a seção que passou do topo da tela acende a tag, e a linha rola sozinha pra mostrar a tag acesa
+function ondeEstou() {
+  ondeRaf = 0
+  const ids = SECOES[$('#rotisserie').hidden ? 'natal' : 'rotisserie'].map(i => i.id)
+  const linha = document.querySelector('.topo').getBoundingClientRect().bottom + 24
+  let atual = ids[0]
+  for (const id of ids) { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top <= Math.max(linha, innerHeight * 0.3)) atual = id }
+  if (atual === ondeAtual) return
+  ondeAtual = atual
+  let on = null
+  $$('.tag', tagsIn).forEach(a => { const ok = a.dataset.secao === atual; a.classList.toggle('on', ok); if (ok) { a.setAttribute('aria-current', 'location'); on = a } else a.removeAttribute('aria-current') })
+  if (on && tagsIn.scrollWidth > tagsIn.clientWidth) {
+    const r = on.getBoundingClientRect(), c = tagsIn.getBoundingClientRect()
+    tagsIn.scrollTo({ left: tagsIn.scrollLeft + (r.left - c.left) - (c.width - r.width) / 2, behavior: 'smooth' })
+  }
+}
+addEventListener('scroll', () => { if (!ondeRaf) ondeRaf = requestAnimationFrame(ondeEstou) }, { passive: true })
+addEventListener('load', () => { pontas(); ondeEstou() })
 
 // ---------- abas (mesma página) ----------
 function aba() {
   const h = location.hash.slice(1)
   const pulo = h.startsWith('r-')
-  const sub = h === 'pacotes' || h === 'avulsos' || h === 'rot-natal' || h.startsWith('nr-')   // menu Kits de ceia | Avulsos | Rotisserie, dentro do Natal (também serve de link direto)
+  const sub = h === 'pacotes' || h === 'avulsos' || h === 'rot-natal' || h.startsWith('nr-')   // seções do Natal (submenu e link direto)
   const v = h === 'rotisserie' || pulo ? 'rotisserie' : 'natal'
   $$('[data-v]').forEach(el => { const mostra = el.dataset.v === v; if (mostra && el.hidden) { el.classList.remove('entra'); void el.offsetWidth; el.classList.add('entra') } el.hidden = !mostra })
   $$('.aba').forEach(a => a.classList.toggle('on', a.dataset.aba === v))
-  if (sub) requestAnimationFrame(() => { document.getElementById(h).scrollIntoView(); subNatal() })
-  else if (!pulo) window.scrollTo(0, 0)
+  desenhaTags(v); ondeAtual = ''
+  // a seção vem montada pelo JS, então rola na mão (o navegador sozinho não acha #r-<id> ao abrir o link da Liz)
+  if ((sub || pulo) && document.getElementById(h)) requestAnimationFrame(() => { document.getElementById(h).scrollIntoView(); ondeEstou() })
+  else { window.scrollTo(0, 0); ondeEstou() }
 }
 window.addEventListener('hashchange', aba)
 
@@ -861,7 +923,7 @@ const ingTags = v => !v ? '' : [...(v.sem || []).map(x => `<span class="sem-tag"
 const temIng = v => !!v && ((v.sem && v.sem.length) || (v.mais && v.mais.length))
 function marca() {
   const n = nItens()
-  $$('[data-conta]').forEach(b => b.textContent = n)
+  $$('[data-conta]').forEach(b => { b.textContent = n; b.classList.toggle('zero', !n) })
   $('#barra').classList.toggle('on', !!n)
   $('#barra-txt').textContent = n === 1 ? 'item no pedido' : 'itens no pedido'
   $('#barra-total').textContent = brl(total())
@@ -991,7 +1053,7 @@ function desenha() {
   // 12/11 (Alex: "tira o formulário; fazer o pedido já vai pro WhatsApp e a Liz confirma o restante"): sem campos aqui.
   const form = ''
   $('#pedido').innerHTML = `<header><h3>Meu pedido</h3><button data-fecha>Continuar escolhendo</button></header><div class="rola">${lista}${form}</div>
-    ${ks.length ? `<footer><div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Fazer pedido pelo WhatsApp</button><p class="aviso">Você conclui pelo WhatsApp: lá a gente combina a data, a entrega ou retirada e confirma o valor final. Frete e NF (em torno de 14%) à parte.</p></footer>` : ''}`
+    ${ks.length ? `<footer><div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Fazer pedido pelo WhatsApp</button><p class="aviso">Você conclui pelo WhatsApp: lá a gente combina a data, a entrega ou retirada e confirma o valor final. Frete à parte e NF não inclusa.</p></footer>` : ''}`
   const r = $('#pedido .rola'); if (r) r.scrollTop = topo
 }
 // ações do editor e dos ingredientes (dentro da janela "Meu pedido")
@@ -1119,6 +1181,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObse
   $$('.pac,.prato,.bloco-cab').forEach(el => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('surge'); ob.observe(el) } })
 }
 aba(); marca()
+// link direto pra uma seção (#avulsos, #nr-<id>, #r-<id>): a fonte e as fotos chegam depois e empurram a página; confere de novo e acerta
+{ const h0 = location.hash.slice(1), el0 = h0 && h0 !== 'natal' && h0 !== 'rotisserie' && document.getElementById(h0)
+  const acerta = () => { if (location.hash.slice(1) === h0 && Math.abs(el0.getBoundingClientRect().top - parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)) > 8) el0.scrollIntoView() }
+  if (el0) { (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(acerta, 60)); addEventListener('load', () => setTimeout(acerta, 60), { once: true }) } }
 })()
 </script>
 <style>

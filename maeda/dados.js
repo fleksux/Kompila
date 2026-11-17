@@ -14,7 +14,7 @@ window.MAEDA = {
     ['Pedidos', 'Pronta entrega, com alguns itens sob encomenda.'],
     ['Entrega', 'Retirada no ateliê ou entrega. Frete não incluso.'],
     ['Pesos', 'Todos os pesos são aproximados.'],
-    ['Nota fiscal', 'NF em torno de 14%.']
+    ['Nota fiscal', 'NF não inclusa.']
   ],
 
   rotisserie: [
