@@ -72,6 +72,9 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .pac[data-pac]{cursor:pointer}
 .pac[data-pac] .f img{transition:transform .5s cubic-bezier(.22,.61,.36,1)}
 .pac[data-pac]:hover .f img{transform:scale(1.03)}
+/* card do pacote: Adicionar (cheio) e Mudar meu pacote (contorno), um embaixo do outro */
+.pac .mudar{display:flex;align-items:center;justify-content:center;width:100%;height:50px;margin-top:8px;background:#fff;color:var(--ouro-escuro);box-shadow:inset 0 0 0 1.5px var(--ouro-escuro);text-transform:uppercase;letter-spacing:.12em;font-size:13px;font-weight:600;border-radius:2px}
+.pac .mudar:hover{background:var(--fundo)}
 /* já está no pedido: selo na foto (o botão continua "Mudar meu pacote") */
 .pac.no-pedido::after{content:"No seu pedido";position:absolute;z-index:2;top:10px;right:10px;background:var(--ouro-escuro);color:#fff;font-size:13px;font-weight:600;padding:6px 10px}
 .opcs{display:flex;flex-wrap:wrap;gap:8px}
@@ -714,7 +717,7 @@ $('#pacs').innerHTML = pacs.map(p => {
     <div class="t">
       <div class="topo-c"><h3>${esc(p.n)}</h3><span class="preco">${brl(p.p)}</span></div>
       <span class="quem">${esc(p.pessoas)}</span>
-      <div class="pe">${p.esg ? '<button class="add" disabled>Esgotado</button>' : `<button class="add" data-pac-btn="${esc(base)}">Mudar meu pacote</button>`}
+      <div class="pe">${p.esg ? '<button class="add" disabled>Esgotado</button>' : `<button class="add" data-add-direto="${esc(base)}">Adicionar ao pedido <span>+</span></button><button class="mudar" data-pac-btn="${esc(base)}">Mudar meu pacote</button>`}
       <a class="zap-link" href="${zap(`Olá, Maeda! Tenho interesse no ${p.n} (${p.pessoas}), ${brl(p.p)}.`)}" target="_blank" rel="noopener">Tirar dúvida no WhatsApp</a></div>
     </div></article>`
 }).join('')
@@ -917,6 +920,7 @@ function marca() {
   document.body.classList.toggle('com-barra', !!n)
   // card do pacote: o botão é sempre "Mudar meu pacote"; já no pedido, o card ganha o selo "No seu pedido"
   $$('[data-pac]').forEach(c => c.classList.toggle('no-pedido', Object.keys(pedido).some(x => (CAT[x].id || x) === c.dataset.pac)))
+  $$('[data-add-direto]').forEach(b => { const q = Object.keys(pedido).filter(x => (CAT[x].id || x) === b.dataset.addDireto).reduce((a, x) => a + pedido[x], 0); b.classList.toggle('ok', !!q); b.innerHTML = q ? `No pedido (${q}) <span>+</span>` : 'Adicionar ao pedido <span>+</span>' })
   $$('[data-add]:not(:disabled)').forEach(b => {
     const q = ESC[b.dataset.add] ? Object.keys(pedido).filter(x => x.startsWith(b.dataset.add + '|')).reduce((a, x) => a + pedido[x], 0) : pedido[b.dataset.add]
     const ok = !!q
@@ -1173,6 +1177,9 @@ document.addEventListener('click', e => {
   const te = e.target.closest('#pedido [data-ed-pac],#pedido [data-ed-fim],#pedido [data-ed-zerar],#pedido [data-ed-abre],#pedido [data-ed-q],#pedido [data-ed-por],#pedido [data-ed-novo],#pedido [data-ing-sem],#pedido [data-ing-add],#pedido [data-ing-tira],#pedido [data-ed-add],#pedido [data-ed-lista],#pedido [data-ed-ou]')
   if (te && acaoEditor(te)) return
   // card do pacote (foto, nome ou "Mudar meu pacote"): abre a janela editável; o link do WhatsApp segue normal
+  // 17/11 (dono: "só tenho agora opção de mudar meu pacote?"): o card põe o pacote como ele vem direto no carrinho (escolha "ou" = a primeira de cada)
+  const ad = e.target.closest('[data-add-direto]')
+  if (ad) { const k = ad.dataset.addDireto; origem = ad; return add(ESC[k] ? `${k}|${ESC[k].map(st => st.ops[0]).join(' + ')}` : k) }
   const pc = e.target.closest('[data-pac]')
   if (pc && !e.target.closest('a')) return abrePac(pc.dataset.pac)
   const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-enviar-ja],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
