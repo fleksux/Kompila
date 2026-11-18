@@ -920,7 +920,8 @@ function marca() {
   document.body.classList.toggle('com-barra', !!n)
   // card do pacote: o botão é sempre "Mudar meu pacote"; já no pedido, o card ganha o selo "No seu pedido"
   $$('[data-pac]').forEach(c => c.classList.toggle('no-pedido', Object.keys(pedido).some(x => (CAT[x].id || x) === c.dataset.pac)))
-  $$('[data-add-direto]').forEach(b => { const q = Object.keys(pedido).filter(x => (CAT[x].id || x) === b.dataset.addDireto).reduce((a, x) => a + pedido[x], 0); b.classList.toggle('ok', !!q); b.innerHTML = q ? `No pedido (${q}) <span>+</span>` : 'Adicionar ao pedido <span>+</span>' })
+  // 17/11 (dono: "que merda é esse 'No pedido (1) +'"): o botão do pacote é sempre "Adicionar ao pedido"; o selo "No seu pedido" na foto avisa
+  $$('[data-add-direto]').forEach(b => { b.classList.remove('ok'); b.innerHTML = 'Adicionar ao pedido <span>+</span>' })
   $$('[data-add]:not(:disabled)').forEach(b => {
     const q = ESC[b.dataset.add] ? Object.keys(pedido).filter(x => x.startsWith(b.dataset.add + '|')).reduce((a, x) => a + pedido[x], 0) : pedido[b.dataset.add]
     const ok = !!q
