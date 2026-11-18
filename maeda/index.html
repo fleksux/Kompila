@@ -952,7 +952,7 @@ function oferta(k) {
   const deNatal = k.startsWith('natal'), it = CAT[k], n = Object.values(pedido).reduce((a, b) => a + b, 0)
   $('#oferta').innerHTML = `<header><h3>${deNatal ? 'Pacote escolhido' : 'Adicionado ao pedido'}</h3><button data-fecha-oferta aria-label="Fechar">Fechar</button></header>
     <div class="rola"><div class="ok-add"><i>✓</i><span><b>${esc(it.n)}</b> está no seu pedido.${n > 1 ? ` São ${n} itens, total estimado ${brl(total())}.` : ''}</span></div></div>
-    <footer><button class="add" data-enviar-ja>Fazer pedido pelo WhatsApp</button>${deNatal ? '<button class="seg" data-ir-aba="rotisserie">Adicionar produtos da Rotisserie</button>' : '<button class="seg" data-fecha-oferta>Continuar escolhendo</button>'}</footer>`
+    <footer><button class="add" data-enviar-ja>Fazer pedido pelo WhatsApp</button>${ehPac(k) ? `<button class="seg" data-editar-pac="${esc(CAT[k].id || k)}">Editar o pacote</button>` : ''}${deNatal ? '<button class="seg" data-ir-aba="rotisserie">Adicionar produtos da Rotisserie</button>' : '<button class="seg" data-fecha-oferta>Continuar escolhendo</button>'}</footer>`
   marca()
   $('#toast').classList.remove('on')
   $('#oferta').classList.add('on'); $('#oferta').setAttribute('aria-hidden', 'false'); $('#veu').classList.add('on'); document.body.style.overflow = 'hidden'
@@ -1179,6 +1179,9 @@ document.addEventListener('click', e => {
   if (te && acaoEditor(te)) return
   // card do pacote (foto, nome ou "Mudar meu pacote"): abre a janela editável; o link do WhatsApp segue normal
   // 17/11 (dono: "só tenho agora opção de mudar meu pacote?"): o card põe o pacote como ele vem direto no carrinho (escolha "ou" = a primeira de cada)
+  // 17/11 (dono: "quando add também tem o botão editar o pacote"): da janela "Pacote escolhido" direto pro editor do pacote
+  const ep = e.target.closest('[data-editar-pac]')
+  if (ep) { fechaOferta(); return abrePac(ep.dataset.editarPac) }
   const ad = e.target.closest('[data-add-direto]')
   if (ad) { const k = ad.dataset.addDireto; origem = ad; return add(ESC[k] ? `${k}|${ESC[k].map(st => st.ops[0]).join(' + ')}` : k) }
   const pc = e.target.closest('[data-pac]')
