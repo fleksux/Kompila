@@ -1137,14 +1137,27 @@ function lerForm() {
 let enviando = false
 async function enviar() {
   if (enviando) return
+  // 19/11 (Alex, print do WhatsApp da Simone: "recebe o pedido todo desconfigurado, bagunçado"): pacote em bloco, com o que sai e o que entra
+  // em linhas separadas, cada um com o seu título; avulso continua numa linha só
   const linhas = Object.entries(pedido).flatMap(([k, q]) => {
-    const it = CAT[k], l = [`• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(unitP(k) * q)}`]
-    if (ehPac(k)) {
-      const c = contaPac(k)
-      if (c.lin.length) l.push(`   Alterações${q > 1 ? ' (em cada pacote)' : ''}: ` + c.lin.map(x => x.txt + (x.sem ? ' (a equipe confirma o valor)' : '')).join('; '))
-      c.ing.forEach(g => l.push(`   ${g.prato}: ${[...g.sem.map(x => 'SEM ' + x), ...g.mais.map(x => '+ ' + x)].join(', ')}`))
-      if (c.ing.length) l.push('   (ingredientes: a equipe confirma se tem custo)')
-    } else if (temIng(mods[k])) l.push(`   ${[...mods[k].sem.map(x => 'SEM ' + x), ...mods[k].mais.map(x => '+ ' + x)].join(', ')} (a equipe confirma se tem custo)`)
+    const it = CAT[k]
+    if (!ehPac(k)) {
+      const l = [`• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(unitP(k) * q)}`]
+      if (temIng(mods[k])) l.push(`   ${[...mods[k].sem.map(x => 'SEM ' + x), ...mods[k].mais.map(x => '+ ' + x)].join(', ')} (a equipe confirma se tem custo)`)
+      return l
+    }
+    const c = contaPac(k), [pessoas, ...esc2] = String(it.det || '').split(' · ')
+    const l = ['', `*${q}× ${it.n}*${pessoas ? ' (' + pessoas + ')' : ''}`]
+    if (esc2.length) l.push(`Prato principal: ${esc2.join(' + ')}`)
+    const tira = c.lin.filter(x => x.t === 'tira'), poe = c.lin.filter(x => x.t === 'poe'), conf = x => x.sem ? ' (a equipe confirma o valor)' : ''
+    if (tira.length || poe.length || c.ing.length) {
+      l.push(`Pacote como vem: ${brl(it.p)}`)
+      if (tira.length) l.push('', `*Tirar do pacote${q > 1 ? ' (em cada um)' : ''}:*`, ...tira.map(x => x.txt.replace(/^−\s*/, '− ') + conf(x)))
+      if (poe.length) l.push('', `*Acrescentar${q > 1 ? ' (em cada um)' : ''}:*`, ...poe.map(x => x.txt + conf(x)))
+      if (c.ing.length) l.push('', '*Ingredientes:*', ...c.ing.map(g => `${g.prato}: ${[...g.sem.map(x => 'SEM ' + x), ...g.mais.map(x => '+ ' + x)].join(', ')}`), '(a equipe confirma se tem custo)')
+      l.push('', `*Pacote com as mudanças: ${brl(unitP(k))}${q > 1 ? ` cada (${brl(unitP(k) * q)})` : ''}*`)
+    } else l.push(`Valor: ${brl(unitP(k) * q)}`)
+    l.push('')
     return l
   })
   const janela = window.open('', '_blank')
@@ -1162,7 +1175,7 @@ async function enviar() {
     const j = await r.json().catch(() => ({}))
     if (r.ok && j.numero) numero = j.numero
   } catch (e) {}
-  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `Total estimado: ${brl(total())}`]
+  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `*Total estimado: ${brl(total())}*`].join('\n').replace(/\n{3,}/g, '\n\n').split('\n')
   const url = zap(txt.join('\n'))
   if (janela) janela.location.href = url; else location.href = url
   enviando = false; if (bt) bt.textContent = 'Fazer pedido pelo WhatsApp'
