@@ -58,6 +58,10 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .sec p{color:var(--cinza);font-size:15px;margin-top:4px}
 .info{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--cinza);padding:12px 0 4px}
 .info b{color:var(--tinta);font-weight:600}
+/* 19/11/2026 (Maeda): aviso da faixa de preço do Natal, uma linha no topo do Natal */
+.aviso-natal{margin:0;padding:11px 16px;background:#F3E9D8;color:var(--tinta);border-bottom:1px solid var(--linha);font-size:14.5px;line-height:1.4;text-align:center}
+.aviso-natal b{color:var(--ouro-escuro);font-weight:600}
+.aviso-natal:empty{display:none}
 
 /* cards de pacote */
 .pacs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 0 8px}
@@ -462,6 +466,7 @@ body.com-barra main{padding-bottom:0}   /* o respiro agora fica no rodapé, que 
 <main>
   <!-- NATAL -->
   <div id="natal" data-v="natal">
+    <p class="aviso-natal" id="aviso-natal" role="note"></p>
     <section class="abre">
       <div class="txt">
         <span class="cap">Ceia de Natal 2026</span>
@@ -640,6 +645,30 @@ function montar(c) {
   return D
 }
 const CARREGADO = await carregar()
+// ---------- ACRÉSCIMO DE NATAL (19/11/2026, regra da dona da Maeda) ----------
+// A tabela de Natal vale para pedidos até 10/12; depois o preço sobe por leva de produção. A data é a do pedido em São Paulo.
+// Esta tabela é o único lugar do site; o servidor tem a mesma em supabase/functions/_shared/acrescimo_natal.ts (CRM) e confere de novo.
+// Vale só para o cardápio de Natal (natal:pacote-*, natal:premium, natal-avulso:*, ou categoria com "Natal"); a Rotisserie não muda.
+const FAIXAS_NATAL = [
+  { de: '2026-12-11', ate: '2026-12-15', pct: 20, aviso: 'Pedidos de 11 a 15/12: 2ª leva de produção, valores com acréscimo de 20%.' },
+  { de: '2026-12-16', ate: '2026-12-20', pct: 30, aviso: 'Pedidos de 16 a 20/12: 3ª leva de produção, valores com acréscimo de 30%.' },
+  { de: '2026-12-21', ate: '2026-12-25', pct: 40, aviso: 'De 21/12 até o Natal: produção emergencial, conforme disponibilidade. Valores com acréscimo de 40%.' },
+  { de: '2026-12-26', ate: '2026-12-31', pct: 40, aviso: 'De 26 a 31/12 (Ano Novo): produção emergencial, conforme disponibilidade. Valores com acréscimo de 40%.' }
+]
+const AVISO_ATE_10_12 = 'Valores válidos para pedidos até 10/12.'
+// ?data=2026-12-12 só na prévia local (para testar as faixas); no ar vale a data do aparelho
+const HOJE = (() => {
+  const q = new URLSearchParams(location.search).get('data'), local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:'
+  if (local && /^\d{4}-\d{2}-\d{2}$/.test(q || '')) return q
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
+})()
+const FAIXA = FAIXAS_NATAL.find(f => HOJE >= f.de && HOJE <= f.ate) || null
+const PCT_NATAL = FAIXA ? FAIXA.pct : 0
+const ehNatalId = (id, cat) => /^natal(-avulso)?:/.test(id) || /natal/i.test(cat || '')
+const comAcresc = v => PCT_NATAL ? Math.round(Number(v) * (100 + PCT_NATAL)) / 100 : Number(v)   // × 1,2 / 1,3 / 1,4 em centavos
+if (PCT_NATAL) CARREGADO.c = { ...CARREGADO.c, categorias: CARREGADO.c.categorias.map(cat => ({ ...cat, itens: (cat.itens || []).map(i => ehNatalId(i.id, cat.nome) ? { ...i, preco: comAcresc(i.preco) } : i) })) }
+document.documentElement.dataset.acrescimo = String(PCT_NATAL)
+$('#aviso-natal').innerHTML = FAIXA ? `<b>${esc(FAIXA.aviso.split(':')[0])}:</b>${esc(FAIXA.aviso.slice(FAIXA.aviso.indexOf(':') + 1))}` : esc(AVISO_ATE_10_12)
 const D = montar(CARREGADO.c)
 document.documentElement.dataset.cardapio = CARREGADO.de   // banco | copia | reserva (pra conferir de onde veio)
 
@@ -857,7 +886,7 @@ function equivale(nome, desc) {
 // (2 un + 90 g = 36; 4 + 180 = 72; 8 + 180 = 104). Mesma conta no servidor.
 function precoPao(nome, desc) {
   const m = semAc(nome + ' ' + desc).match(/^paezinhos (\d+) unidades e torradinhas (\d+) g/); if (!m) return null
-  return Math.round((8 * +m[1] + 20 * (+m[2] / 90)) * 100) / 100
+  return comAcresc(Math.round((8 * +m[1] + 20 * (+m[2] / 90)) * 100) / 100)   // 19/11: avulso de Natal, com o acréscimo do dia
 }
 const AV = {}
 function avulsoDe(nome0, desc0) {
@@ -1175,7 +1204,7 @@ async function enviar() {
     const j = await r.json().catch(() => ({}))
     if (r.ok && j.numero) numero = j.numero
   } catch (e) {}
-  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `*Total estimado: ${brl(total())}*`].join('\n').replace(/\n{3,}/g, '\n\n').split('\n')
+  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `*Total estimado: ${brl(total())}*`, ...(PCT_NATAL && Object.keys(pedido).some(k => ehNatalId(CAT[k].id || k)) ? [`Valores com acréscimo de ${PCT_NATAL}% (pedido feito em ${HOJE.slice(8, 10)}/${HOJE.slice(5, 7)}).`] : [])].join('\n').replace(/\n{3,}/g, '\n\n').split('\n')
   const url = zap(txt.join('\n'))
   if (janela) janela.location.href = url; else location.href = url
   enviando = false; if (bt) bt.textContent = 'Fazer pedido pelo WhatsApp'
