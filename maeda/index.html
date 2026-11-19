@@ -62,6 +62,15 @@ h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05}
 .aviso-natal{margin:0;padding:11px 16px;background:#F3E9D8;color:var(--tinta);border-bottom:1px solid var(--linha);font-size:14.5px;line-height:1.4;text-align:center}
 .aviso-natal b{color:var(--ouro-escuro);font-weight:600}
 .aviso-natal:empty{display:none}
+.dia-ent{margin:14px 0 4px;padding:14px;background:#fff;border:1px solid var(--linha)}
+.dia-ent h4{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ouro-escuro);margin:0 0 10px}
+.dia-ent .opcs{display:flex;flex-wrap:wrap;gap:8px}
+.dia-ent .opc{min-height:44px;padding:0 14px;border:1px solid var(--linha);background:var(--fundo);color:var(--tinta);font-size:15px;font-weight:500}
+.dia-ent .opc.on{border-color:var(--ouro-escuro);background:var(--ouro-escuro);color:#fff}
+.dia-ent p{margin:10px 0 0;font-size:13.5px;color:var(--cinza)}
+.sub{display:flex;justify-content:space-between;gap:12px;font-size:14.5px;color:var(--cinza);margin-bottom:6px}
+.sub.acr{color:var(--ouro-escuro);font-weight:600}
+.sub span:last-child{white-space:nowrap}
 
 /* cards de pacote */
 .pacs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 0 8px}
@@ -645,16 +654,17 @@ function montar(c) {
   return D
 }
 const CARREGADO = await carregar()
-// ---------- ACRÉSCIMO DE NATAL (19/11/2026, regra da dona da Maeda) ----------
-// A tabela de Natal vale para pedidos até 10/12; depois o preço sobe por leva de produção. A data é a do pedido em São Paulo.
-// Esta tabela é o único lugar do site; o servidor tem a mesma em supabase/functions/_shared/acrescimo_natal.ts (CRM) e confere de novo.
-// Vale só para o cardápio de Natal (natal:pacote-*, natal:premium, natal-avulso:*, ou categoria com "Natal"); a Rotisserie não muda.
+// ---------- ACRÉSCIMO DE NATAL (19/11/2026, regra da Simone, dona da Maeda) ----------
+// Só vale para pedido com RETIRADA OU ENTREGA em 24 ou 25/12 feito DEPOIS de 10/12, e vale para o pedido inteiro (Ceia de Natal e
+// Rotisserie). A faixa vem da data em que o pedido é feito (São Paulo). Pedido até 10/12, ou para outro dia, ou sem o dia escolhido:
+// valor normal. Esta tabela é o único lugar do site; o servidor tem a mesma em supabase/functions/_shared/acrescimo_natal.ts (CRM) e confere de novo.
 const FAIXAS_NATAL = [
-  { de: '2026-12-11', ate: '2026-12-15', pct: 20, aviso: 'Pedidos de 11 a 15/12: 2ª leva de produção, valores com acréscimo de 20%.' },
-  { de: '2026-12-16', ate: '2026-12-20', pct: 30, aviso: 'Pedidos de 16 a 20/12: 3ª leva de produção, valores com acréscimo de 30%.' },
-  { de: '2026-12-21', ate: '2026-12-25', pct: 40, aviso: 'De 21/12 até o Natal: produção emergencial, conforme disponibilidade. Valores com acréscimo de 40%.' },
-  { de: '2026-12-26', ate: '2026-12-31', pct: 40, aviso: 'De 26 a 31/12 (Ano Novo): produção emergencial, conforme disponibilidade. Valores com acréscimo de 40%.' }
+  { de: '2026-12-11', ate: '2026-12-15', pct: 20, rot: '2ª leva de produção', aviso: 'Pedidos feitos de 11 a 15/12 para retirada ou entrega em 24 ou 25/12 têm acréscimo de 20% (2ª leva de produção).' },
+  { de: '2026-12-16', ate: '2026-12-20', pct: 30, rot: '3ª leva de produção', aviso: 'Pedidos feitos de 16 a 20/12 para retirada ou entrega em 24 ou 25/12 têm acréscimo de 30% (3ª leva de produção).' },
+  { de: '2026-12-21', ate: '2026-12-25', pct: 40, rot: 'produção emergencial', aviso: 'Pedidos feitos a partir de 21/12 para retirada ou entrega em 24 ou 25/12 têm acréscimo de 40% (produção emergencial, conforme disponibilidade).' }
 ]
+// dias de retirada ou entrega que têm acréscimo. 26 a 31/12 ficam com valor normal "a princípio": para mudar, é só pôr o dia aqui (e no servidor)
+const DIAS_COM_ACRESCIMO = ['2026-12-24', '2026-12-25']
 const AVISO_ATE_10_12 = 'Valores válidos para pedidos até 10/12.'
 // ?data=2026-12-12 só na prévia local (para testar as faixas); no ar vale a data do aparelho
 const HOJE = (() => {
@@ -663,12 +673,9 @@ const HOJE = (() => {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
 })()
 const FAIXA = FAIXAS_NATAL.find(f => HOJE >= f.de && HOJE <= f.ate) || null
-const PCT_NATAL = FAIXA ? FAIXA.pct : 0
-const ehNatalId = (id, cat) => /^natal(-avulso)?:/.test(id) || /natal/i.test(cat || '')
-const comAcresc = v => PCT_NATAL ? Math.round(Number(v) * (100 + PCT_NATAL)) / 100 : Number(v)   // × 1,2 / 1,3 / 1,4 em centavos
-if (PCT_NATAL) CARREGADO.c = { ...CARREGADO.c, categorias: CARREGADO.c.categorias.map(cat => ({ ...cat, itens: (cat.itens || []).map(i => ehNatalId(i.id, cat.nome) ? { ...i, preco: comAcresc(i.preco) } : i) })) }
-document.documentElement.dataset.acrescimo = String(PCT_NATAL)
-$('#aviso-natal').innerHTML = FAIXA ? `<b>${esc(FAIXA.aviso.split(':')[0])}:</b>${esc(FAIXA.aviso.slice(FAIXA.aviso.indexOf(':') + 1))}` : esc(AVISO_ATE_10_12)
+const ddmm = d => d.slice(8, 10) + '/' + d.slice(5, 7)
+$('#aviso-natal').textContent = FAIXA ? FAIXA.aviso : HOJE <= '2026-12-10' ? AVISO_ATE_10_12 : ''
+document.documentElement.dataset.faixa = String(FAIXA ? FAIXA.pct : 0)
 const D = montar(CARREGADO.c)
 document.documentElement.dataset.cardapio = CARREGADO.de   // banco | copia | reserva (pra conferir de onde veio)
 
@@ -856,7 +863,12 @@ Object.keys(mods).forEach(k => { if (!pedido[k]) delete mods[k] })
 const salva = () => { Object.keys(mods).forEach(k => { if (!pedido[k] && k !== rasc) delete mods[k] }); try { localStorage.setItem(CH, JSON.stringify(pedido)); localStorage.setItem(CH + ':mods', JSON.stringify(mods)) } catch (e) {} }
 const nItens = () => Object.values(pedido).reduce((a, b) => a + b, 0)
 const unitP = k => Math.round((CAT[k].p + (ehPac(k) ? contaPac(k).d : 0)) * 100) / 100
-const total = () => Object.entries(pedido).reduce((a, [k, q]) => a + unitP(k) * q, 0)
+// 19/11/2026: o dia da retirada ou entrega fica em dados.entrega ('2026-12-24', '2026-12-25', 'outro' ou vazio); com 24 ou 25/12 e a faixa
+// do dia, cada item sobe (× 1,2 / 1,3 / 1,4 em centavos, igual ao servidor). subtotal = valores normais; total = com o acréscimo
+const pctPedido = () => FAIXA && DIAS_COM_ACRESCIMO.includes(dados.entrega) ? FAIXA.pct : 0
+const comAcresc = (v, pct = pctPedido()) => pct ? Math.round(v * (100 + pct)) / 100 : v
+const subtotal = () => Object.entries(pedido).reduce((a, [k, q]) => a + unitP(k) * q, 0)
+const total = () => { const pct = pctPedido(); return Math.round(Object.entries(pedido).reduce((a, [k, q]) => a + comAcresc(unitP(k), pct) * q, 0) * 100) / 100 }
 
 // ---------- pacote editável (17/11, Alex: "os pacotes podem ser editados completamente") ----------
 // Preço: pacote − (pratos tirados × preço avulso) + (pratos acrescentados × preço avulso). O avulso é o mesmo prato do cardápio,
@@ -886,7 +898,7 @@ function equivale(nome, desc) {
 // (2 un + 90 g = 36; 4 + 180 = 72; 8 + 180 = 104). Mesma conta no servidor.
 function precoPao(nome, desc) {
   const m = semAc(nome + ' ' + desc).match(/^paezinhos (\d+) unidades e torradinhas (\d+) g/); if (!m) return null
-  return comAcresc(Math.round((8 * +m[1] + 20 * (+m[2] / 90)) * 100) / 100)   // 19/11: avulso de Natal, com o acréscimo do dia
+  return Math.round((8 * +m[1] + 20 * (+m[2] / 90)) * 100) / 100
 }
 const AV = {}
 function avulsoDe(nome0, desc0) {
@@ -1081,9 +1093,13 @@ function desenha() {
       ${!pac && aberto === 'ing:av:' + k ? ingHTML(k, it.n, ingredientes(it.n, it.d)) : ''}</div>` }).join('')
     : `<div class="vazio"><p>Seu pedido está vazio.</p>Toque em "Adicionar" nos pacotes ou nos pratos.</div>`
   // 12/11 (Alex: "tira o formulário; fazer o pedido já vai pro WhatsApp e a Liz confirma o restante"): sem campos aqui.
-  const form = ''
+  // 19/11/2026 (Simone): só o dia da retirada ou entrega, porque 24 e 25/12 mudam o valor depois de 10/12
+  const ent = dados.entrega || '', chip = (v, t) => `<button class="opc${ent === v ? ' on' : ''}" data-entrega="${v}" aria-pressed="${ent === v}">${t}</button>`
+  const form = ks.length ? `<div class="dia-ent"><h4>Dia da retirada ou entrega</h4><div class="opcs">${chip('2026-12-24', '24/12')}${chip('2026-12-25', '25/12')}${chip('outro', 'Outro dia')}${chip('', 'Ainda não sei')}</div>${FAIXA && !DIAS_COM_ACRESCIMO.includes(ent) ? `<p>Para 24 ou 25/12, os pedidos feitos hoje têm acréscimo de ${FAIXA.pct}%.</p>` : ''}</div>` : ''
+  const pct = pctPedido()
+  const somas = pct ? `<div class="sub"><span>Subtotal</span><span>${brl(subtotal())}</span></div><div class="sub acr"><span>Acréscimo de ${pct}% (${FAIXA.rot}, pedido feito em ${ddmm(HOJE)} para ${ddmm(ent)})</span><span>+ ${brl(total() - subtotal())}</span></div>` : ''
   $('#pedido').innerHTML = `<header><h3>Meu pedido</h3><button data-fecha>Continuar escolhendo</button></header><div class="rola">${lista}${form}</div>
-    ${ks.length ? `<footer><div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Fazer pedido pelo WhatsApp</button><p class="aviso">Você conclui pelo WhatsApp: lá a gente combina a data, a entrega ou retirada e confirma o valor final. Frete à parte e NF não inclusa.</p></footer>` : ''}`
+    ${ks.length ? `<footer>${somas}<div class="total"><span>Total estimado</span><b>${brl(total())}</b></div><button class="add" id="enviar">Fazer pedido pelo WhatsApp</button><p class="aviso">Você conclui pelo WhatsApp: lá a gente combina a data, a entrega ou retirada e confirma o valor final. Frete à parte e NF não inclusa.</p></footer>` : ''}`
   const r = $('#pedido .rola'); if (r) r.scrollTop = topo
 }
 // ações do editor e dos ingredientes (dentro da janela "Meu pedido")
@@ -1194,7 +1210,7 @@ async function enviar() {
   let numero = null
   try {
     const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-      chave: 'kmp_maeda', sem_dados: true, origem_link: ORIGEM,
+      chave: 'kmp_maeda', sem_dados: true, origem_link: ORIGEM, ...(/^\d{4}-\d{2}-\d{2}$/.test(dados.entrega || '') ? { entrega_dia: dados.entrega } : {}),
       itens: Object.entries(pedido).map(([k, qtd]) => {
         const l = { id: CAT[k].id || k, qtd, ...(CAT[k].obs ? { obs: CAT[k].obs } : {}) }
         if (ehPac(k)) { const c = contaPac(k); if (c.tira.length || c.poe.length || c.ing.length) l.alt = { tira: c.tira, poe: c.poe, ing: c.ing } }
@@ -1204,7 +1220,7 @@ async function enviar() {
     const j = await r.json().catch(() => ({}))
     if (r.ok && j.numero) numero = j.numero
   } catch (e) {}
-  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', `*Total estimado: ${brl(total())}*`, ...(PCT_NATAL && Object.keys(pedido).some(k => ehNatalId(CAT[k].id || k)) ? [`Valores com acréscimo de ${PCT_NATAL}% (pedido feito em ${HOJE.slice(8, 10)}/${HOJE.slice(5, 7)}).`] : [])].join('\n').replace(/\n{3,}/g, '\n\n').split('\n')
+  const txt = [numero ? `*Pedido nº ${numero} · Maeda Gastronomia*` : 'Olá, Maeda! Quero fazer um pedido.', '', ...linhas, '', ...(dados.entrega && dados.entrega !== 'outro' ? [`Retirada ou entrega: ${ddmm(dados.entrega)}`] : dados.entrega === 'outro' ? ['Retirada ou entrega: outro dia (combinar)'] : []), ...(pctPedido() ? [`Subtotal: ${brl(subtotal())}`, `Acréscimo de ${pctPedido()}% (${FAIXA.rot}): + ${brl(total() - subtotal())}`] : []), `*Total estimado: ${brl(total())}*`, ...(pctPedido() ? [`Valores com acréscimo de ${pctPedido()}% (pedido feito em ${ddmm(HOJE)} para retirada ou entrega em ${ddmm(dados.entrega)}).`] : [])].join('\n').replace(/\n{3,}/g, '\n\n').split('\n')
   const url = zap(txt.join('\n'))
   if (janela) janela.location.href = url; else location.href = url
   enviando = false; if (bt) bt.textContent = 'Fazer pedido pelo WhatsApp'
@@ -1228,7 +1244,7 @@ document.addEventListener('click', e => {
   if (ad) { const k = ad.dataset.addDireto; origem = ad; return add(ESC[k] ? `${k}|${ESC[k].map(st => st.ops[0]).join(' + ')}` : k) }
   const pc = e.target.closest('[data-pac]')
   if (pc && !e.target.closest('a')) return abrePac(pc.dataset.pac)
-  const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-enviar-ja],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap]')
+  const t = e.target.closest('[data-ler],[data-kit],[data-add],[data-abre-pedido],[data-fecha],[data-fecha-oferta],[data-ir-pedido],[data-enviar-ja],[data-ir-aba],#veu,[data-q],[data-luz],[data-fecha-luz],#enviar,[data-zap],[data-entrega]')
   if (!t) { if (e.target.id === 'luz') $('#luz').classList.remove('on'); return }
   if (t.matches('[data-add]')) { origem = t; return add(t.dataset.add) }
   if (t.matches('[data-ler]')) { const d = t.previousElementSibling, ab = d.classList.toggle('aberto'); t.textContent = ab ? 'Ler menos' : 'Ler mais'; return }
@@ -1240,6 +1256,7 @@ document.addEventListener('click', e => {
   if (t.matches('[data-ir-aba]')) { fechaOferta(); location.hash = t.dataset.irAba; return }
   if (t.matches('#veu')) { if ($('#oferta').classList.contains('on')) return fechaOferta(); return fecha() }
   if (t.matches('[data-fecha]')) return fecha()
+  if (t.matches('[data-entrega]')) { dados.entrega = t.dataset.entrega; try { localStorage.setItem(CH + ':dados', JSON.stringify(dados)) } catch (e) {} marca(); return desenha() }
   if (t.matches('[data-q]')) { lerForm(); const k = t.dataset.q, it = CAT[k]; let q = (pedido[k] || 0) + +t.dataset.d; if (it.min && q > 0 && q < it.min) q = +t.dataset.d < 0 ? 0 : it.min; if (q <= 0) { delete pedido[k]; delete mods[k] } else pedido[k] = q; salva(); marca(); return desenha() }
   if (t.matches('[data-luz]')) { const l = $('#luz'); $('img', l).src = t.dataset.luz; $('p', l).textContent = t.dataset.leg; return l.classList.add('on') }
   if (t.matches('[data-fecha-luz]')) return $('#luz').classList.remove('on')
