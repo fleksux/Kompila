@@ -1032,23 +1032,24 @@ function ingHTML(k, prato, palavras) {
     ${v.mais.length ? `<div>${v.mais.map((m, i) => `<span class="mais-tag">+ ${esc(m)}<button type="button" data-ing-tira="${i}" aria-label="Tirar">×</button></span>`).join('')}</div>` : ''}
     <small>A equipe confirma se tem custo.</small></div>`
 }
+// 21/11 (Alex: "só pode mudar um item por outro ou retirar o item, não pode mudar os ingredientes"): sem botão de ingredientes na Maeda
 function editorHTML(k) {
   const c = compo(k), m = modPac(k), conta = contaPac(k), it = CAT[k], q = pedido[k]
   const linhaBase = x => {
     const id = 'b:' + x.nome, qq = m.q[x.nome] ?? x.n0
     return `<div class="ed-it${qq ? '' : ' zero'}"><div><b>${esc(x.nome)}</b><small>${x.n0 ? `vem ${x.n0} no pacote · ` : ''}${!x.av && x.pao != null ? brl(x.pao) + ' cada' : precoTxt(x.av)}</small>${ingTags(m.ing[x.nome])}</div>
       <div class="qtd"><button data-ed-q="${esc(id)}" data-d="-1" aria-label="Menos">−</button><span>${qq}</span><button data-ed-q="${esc(id)}" data-d="1" aria-label="Mais">+</button></div>
-      <div class="ed-ac"><button class="${aberto === 'trocar:' + id ? 'on' : ''}" data-ed-abre="trocar:${esc(id)}">Trocar</button><button class="${aberto === 'ing:' + id ? 'on' : ''}" data-ed-abre="ing:${esc(id)}">Ingredientes</button></div>
+      <div class="ed-ac"><button class="${aberto === 'trocar:' + id ? 'on' : ''}" data-ed-abre="trocar:${esc(id)}">Trocar</button></div>
       ${aberto === 'trocar:' + id ? `<div class="ed-opcs" data-ed-de="${esc(id)}">${opcoesHTML(familia(x.g), x.av, x.nome, 'data-ed-por')}</div>` : ''}
-      ${aberto === 'ing:' + id ? ingHTML(k, x.nome, ingredientes(x.nome, x.desc, x.av && CAT[x.av].d)) : ''}</div>`
+      </div>`
   }
   const linhaEx = (e, i) => {
     const id = 'e:' + i, nm = CAT[e.k].n
     return `<div class="ed-it${e.q ? '' : ' zero'}"><div><b>${esc(nomeK(e.k))}</b><small>acrescentado · ${precoTxt(e.k)}</small>${ingTags(m.ing[nm])}</div>
       <div class="qtd"><button data-ed-q="${esc(id)}" data-d="-1" aria-label="Menos">−</button><span>${e.q}</span><button data-ed-q="${esc(id)}" data-d="1" aria-label="Mais">+</button></div>
-      <div class="ed-ac"><button class="${aberto === 'trocar:' + id ? 'on' : ''}" data-ed-abre="trocar:${esc(id)}">Trocar</button><button class="${aberto === 'ing:' + id ? 'on' : ''}" data-ed-abre="ing:${esc(id)}">Ingredientes</button></div>
+      <div class="ed-ac"><button class="${aberto === 'trocar:' + id ? 'on' : ''}" data-ed-abre="trocar:${esc(id)}">Trocar</button></div>
       ${aberto === 'trocar:' + id ? `<div class="ed-opcs" data-ed-de="${esc(id)}">${opcoesHTML(familia(e.g), e.k, nm, 'data-ed-por')}</div>` : ''}
-      ${aberto === 'ing:' + id ? ingHTML(k, nm, ingredientes(nm, CAT[e.k].d)) : ''}</div>`
+      </div>`
   }
   // escolhas "ou" (Peru ou Pernil, Boeuf ou Filet) dentro da parte delas: a 1ª opção vem marcada como ponto de partida
   const sets = ESC[it.id || k] || [], escAt = (it.obs || '').replace(/^Escolha:\s*/, '').split(' + ')
@@ -1089,8 +1090,7 @@ function desenha() {
   const lista = ks.length ? ks.map(k => { const it = CAT[k], q = pedido[k], pac = ehPac(k)
     return `<div class="ped"><div><b>${esc(it.n)}</b>${it.det ? `<small>${esc(it.det)}</small>` : ''}</div><div class="v">${brl(unitP(k) * q)}</div>${mudancasHTML(k)}
       <div class="acoes-l"><div class="qtd"><button data-q="${esc(k)}" data-d="-1" aria-label="Menos">−</button><span>${q}</span><button data-q="${esc(k)}" data-d="1" aria-label="Mais">+</button></div>
-      ${pac ? `<button class="btn-ed" data-ed-pac="${esc(k)}">Editar itens</button>` : `<button class="lnk" data-ed-abre="ing:av:${esc(k)}">${aberto === 'ing:av:' + k ? 'Fechar' : 'Tirar ou pôr ingrediente'}</button>`}</div>
-      ${!pac && aberto === 'ing:av:' + k ? ingHTML(k, it.n, ingredientes(it.n, it.d)) : ''}</div>` }).join('')
+      ${pac ? `<button class="btn-ed" data-ed-pac="${esc(k)}">Editar itens</button>` : ''}</div></div>` }).join('')
     : `<div class="vazio"><p>Seu pedido está vazio.</p>Toque em "Adicionar" nos pacotes ou nos pratos.</div>`
   // 12/11 (Alex: "tira o formulário; fazer o pedido já vai pro WhatsApp e a Liz confirma o restante"): sem campos aqui.
   // 19/11/2026 (Simone): só o dia da retirada ou entrega, porque 24 e 25/12 mudam o valor depois de 10/12
