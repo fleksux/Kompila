@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico">
+<title>Atendimento Espaço Analu · Kompila</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --carbono:#0A0B0E; --carbono2:#14161B; --linha-esc:#262A31;
+  --off:#E9EBEE; --off-mu:#9AA0A8;
+  --papel:#F2F3EF; --papel2:#E6E8E2; --tinta:#14171C; --tinta-mu:#5B616A; --linha-cla:#D4D7CF;
+  --verde:#2FD67B; --verde-esc:#12803F; --ambar:#FFB224; --ambar-esc:#A8650A;
+  --f-txt:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--carbono);color:var(--off);font-family:var(--f-txt);font-size:16px;line-height:1.55;margin:0;position:relative}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.faixa{padding-block:72px}
+.faixa.clara{background:var(--papel);color:var(--tinta)}
+.faixa.meio{background:var(--carbono2)}
+.marca{font-family:var(--f-num);font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--off-mu);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.marca b{color:var(--verde);font-weight:600}
+.br{font-family:var(--f-num);font-weight:600;white-space:nowrap}
+.br::before{content:"[ ";color:var(--verde)}
+.br::after{content:" ]";color:var(--verde)}
+.clara .br::before,.clara .br::after{color:var(--verde-esc)}
+h1,h2,h3{text-wrap:balance;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(38px,7vw,78px);font-weight:800;line-height:1.03;margin-top:48px}
+h1 em{font-style:normal;color:var(--verde)}
+.lead{font-size:clamp(18px,2.2vw,21px);color:var(--off-mu);max-width:62ch;margin:24px 0 0}
+.lead b{color:var(--off);font-weight:700}
+.hero-num{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--linha-esc);border:1px solid var(--linha-esc);border-radius:14px;overflow:hidden;margin-top:56px}
+.hero-num div{background:var(--carbono);padding:24px 22px;min-width:0}
+.k{font-family:var(--f-num);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--off-mu)}
+.clara .k{color:var(--tinta-mu)}
+.v{font-family:var(--f-num);font-weight:600;font-size:clamp(26px,3.6vw,40px);line-height:1.1;margin-top:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.s{font-size:14px;color:var(--off-mu);margin-top:6px}
+.clara .s{color:var(--tinta-mu)}
+.eyebrow{font-family:var(--f-num);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--verde)}
+.clara .eyebrow{color:var(--verde-esc)}
+.eyebrow.amb{color:var(--ambar)}
+.clara .eyebrow.amb{color:var(--ambar-esc)}
+h2{font-size:clamp(28px,4.2vw,44px);font-weight:800;line-height:1.1;margin-top:12px}
+.sub{color:var(--off-mu);max-width:64ch;margin:14px 0 0;font-size:17px}
+.clara .sub{color:var(--tinta-mu)}
+
+/* bons */
+.bons{margin-top:40px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--linha-esc);border:1px solid var(--linha-esc);border-radius:14px;overflow:hidden}
+.bons>div{background:var(--carbono2);padding:24px;min-width:0}
+.bons h3{font-size:19px;font-weight:700;margin-top:10px}
+.bons p{margin:6px 0 0;color:var(--off-mu);font-size:15px}
+.bons p b{color:var(--off)}
+
+/* gráfico */
+.graf{margin-top:36px;overflow-x:auto}
+.graf svg{display:block;width:100%;min-width:620px;height:auto}
+.leg{display:flex;gap:20px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--tinta-mu)}
+.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+
+/* melhorias */
+.melh{list-style:none;margin:44px 0 0;padding:0;counter-reset:m}
+.melh li{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,1fr);gap:28px;padding:30px 0;border-top:1px solid var(--linha-cla);counter-increment:m}
+.melh li:last-child{border-bottom:1px solid var(--linha-cla)}
+.melh li::before{content:counter(m,decimal-leading-zero);font-family:var(--f-num);font-weight:600;font-size:22px;color:var(--ambar-esc)}
+.melh h3{font-size:20px;font-weight:700}
+.melh .num{overflow-wrap:anywhere;font-family:var(--f-num);font-weight:600;font-size:15px;margin-top:10px;font-variant-numeric:tabular-nums}
+.melh p{margin:8px 0 0;color:var(--tinta-mu);font-size:15px}
+.melh p b{color:var(--tinta)}
+.fazer{background:#FAFBF8;border:1px solid var(--linha-cla);border-radius:12px;padding:18px 20px;min-width:0;align-self:start}
+.fazer .k{color:var(--verde-esc)}
+.fazer p{color:var(--tinta);margin-top:6px}
+.balao{margin-top:12px;display:block;max-width:420px;border-radius:12px;padding:10px 13px;font-size:14px;line-height:1.45}
+.balao .q{display:block;font-family:var(--f-num);font-size:11px;letter-spacing:.06em;margin-bottom:3px;text-transform:uppercase}
+.balao.cli{background:#fff;border:1px solid var(--linha-cla);border-radius:12px 12px 12px 4px;color:var(--tinta)}
+.balao.cli .q{color:var(--tinta-mu)}
+.balao.loja{background:#DDF3E5;border-radius:12px 12px 4px 12px;color:#0C3B22;margin-left:auto}
+.balao.loja .q{color:var(--verde-esc)}
+
+/* funil */
+.funil{margin-top:40px;display:grid;gap:12px}
+.etapa{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 92px;gap:18px;align-items:center}
+.etapa .nm{font-weight:700}
+.etapa .nm span{display:block;font-weight:400;font-size:13px;color:var(--off-mu)}
+.trilho{height:30px;background:var(--linha-esc);border-radius:6px;overflow:hidden}
+.barra{height:100%;background:var(--verde);border-radius:6px}
+.barra.amb{background:var(--ambar)}
+.barra.vazio{background:repeating-linear-gradient(45deg,#3a3f48 0 6px,transparent 6px 12px)}
+.etapa .rs{font-family:var(--f-num);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.etapa .rs small{display:block;font-weight:500;font-size:12px;color:var(--off-mu)}
+
+/* próximos */
+.prox{margin-top:40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.prox>div{border:1px solid var(--linha-esc);border-radius:12px;padding:20px;min-width:0}
+.prox .k{color:var(--verde)}
+.prox h3{font-size:18px;font-weight:700;margin-top:8px}
+.prox p{color:var(--off-mu);font-size:15px;margin:6px 0 0}
+
+/* limites */
+.lim{margin:28px 0 0;padding:0 0 0 20px;color:var(--tinta-mu);max-width:74ch}
+.lim li{margin:8px 0}
+.lim b{color:var(--tinta)}
+
+.fonte{margin-top:40px;font-size:13px;color:var(--off-mu);max-width:74ch;border-top:1px solid var(--linha-esc);padding-top:20px}
+.ponto{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ambar);margin-right:8px;vertical-align:1px}
+.volta{position:absolute;top:20px;right:max(16px,env(safe-area-inset-right,0px));font-family:var(--f-num);font-size:13px;color:var(--off-mu);text-decoration:none}.volta:hover{color:var(--verde)}
+
+@media (max-width:760px){
+  .faixa{padding-block:52px}
+  .hero-num,.bons,.prox{grid-template-columns:1fr}
+  .melh li{grid-template-columns:1fr;gap:10px}
+  .etapa{grid-template-columns:minmax(0,1fr) auto}
+  .etapa .trilho{grid-column:1 / -1;grid-row:2}
+  .volta{position:static;display:block;padding:16px max(16px,env(safe-area-inset-left,0px)) 0}
+}
+@media (prefers-reduced-motion:no-preference){
+  .barra{animation:cresce .9s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes cresce{from{transform:scaleX(.02);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}
+}
+</style>
+</head>
+<body>
+<a class="volta" href="/relatorio/espacoanalu/">← Todos os relatórios</a>
+
+<section class="faixa">
+  <div class="wrap">
+    <div class="marca"><span><b>[</b> kompila <b>]</b> · atendimento</span><span>Espaço Analu · 06/11 a 23/11/2026</span></div>
+    <h1>Como a Espaço Analu atende no <em>WhatsApp</em>.</h1>
+    <p class="lead">Contamos cada conversa que passou pelo CRM nos dois números da loja, varejo e atacado. <b>Quando a conversa já está andando, a resposta é rápida. As vendas se perdem na primeira mensagem, no fim da tarde e no fechamento.</b></p>
+    <div class="hero-num">
+      <div><div class="k">Resposta na conversa</div><div class="v br">1,2 min</div><div class="s">mediana em 1.334 mensagens de cliente; 81% respondidas em até 15 min</div></div>
+      <div><div class="k">Primeira resposta</div><div class="v br">5,3 min</div><div class="s">mediana em 341 clientes novos; 28% esperaram mais de 4 h ou não tiveram resposta</div></div>
+      <div><div class="k">Esperando a loja</div><div class="v br">60</div><div class="s">clientes com a última mensagem sem resposta há mais de 1 dia (23/11, 10h)</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="faixa meio">
+  <div class="wrap">
+    <div class="eyebrow">O que está bom</div>
+    <h2>Quando a cliente está falando, a loja responde na hora.</h2>
+    <div class="bons">
+      <div><div class="k">Velocidade</div><h3>7 em cada 10 respostas saem em até 5 minutos</h3><p><b>941 de 1.334</b> mensagens de cliente, já com a conversa andando, foram respondidas em até 5 minutos. Entre 8h e 19h, de segunda a sábado, a mediana é de <b>1,4 min</b>.</p></div>
+      <div><div class="k">Produto à vista</div><h3>A cliente vê a peça antes de perguntar</h3><p>A equipe mandou <b>1.562 fotos e 812 vídeos</b> no período. Para moda, mostrar caimento e tecido em vídeo é o que tira a dúvida de tamanho.</p></div>
+      <div><div class="k">Anúncio de 20/11</div><h3>Quase todo mundo que chamou foi atendido</h3><p>Dos <b>165 clientes</b> que vieram dos anúncios (Roseli, Lilian e Melissa), <b>153 receberam resposta</b>, com mediana de 7 min. 96 foram respondidos em até 15 min.</p></div>
+      <div><div class="k">Informação certa</div><h3>Preço e frete do anúncio repetidos sem erro</h3><p>"De 379,00 por 289,00 e o frete é grátis" aparece igual em dezenas de conversas. Só encontramos <b>1 caso</b> em que o frete foi cobrado num anúncio de frete grátis (item 07).</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="faixa clara">
+  <div class="wrap">
+    <div class="eyebrow">Hora a hora</div>
+    <h2>De dia a loja responde em minutos. Às 21h e 22h, a cliente espera até a manhã seguinte.</h2>
+    <p class="sub">Barras: quantas vezes uma cliente mandou mensagem em cada hora. Número em cima: quanto ela esperou pela resposta (mediana, em minutos). Horas com espera acima de 1 hora estão em âmbar.</p>
+    <div class="graf" id="graf"></div>
+    <div class="leg"><span><i style="background:var(--tinta)"></i>resposta em até 1 hora</span><span><i style="background:var(--ambar)"></i>mediana acima de 1 hora</span><span>De 00h a 05h há menos de 20 mensagens por hora, número pouco confiável</span></div>
+  </div>
+</section>
+
+<section class="faixa clara" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow amb">O que pode melhorar</div>
+    <h2>Sete pontos, do que mais custa venda ao que menos custa.</h2>
+    <ol class="melh">
+      <li>
+        <div><h3>Clientes esperando resposta há dias</h3>
+          <div class="num">60 conversas · 33 há 1 a 3 dias · 27 há mais de 3 dias</div>
+          <p>A última mensagem dessas conversas é da cliente, e ninguém respondeu. Parte pode ser só um "obrigada", mas parte é pergunta de preço ou tamanho que ficou para trás.</p></div>
+        <div class="fazer"><div class="k">O que fazer</div><p>Abrir o CRM toda manhã na lista "esperando resposta" e zerar antes de responder conversa nova. Quem esperou mais merece um "desculpa a demora" e a resposta completa.</p></div>
+      </li>
+      <li>
+        <div><h3>A primeira resposta demora mais que as outras</h3>
+          <div class="num">341 clientes novos · 47 sem resposta · 95 esperaram mais de 4 h ou nunca tiveram resposta</div>
+          <p>Na conversa andando, a mediana é de 1,2 min. No primeiro contato sobe para <b>5,3 min</b>, e 1 em cada 4 clientes novos esperou horas. Cliente nova que espera costuma comprar em outra loja.</p></div>
+        <div class="fazer"><div class="k">O que fazer</div><p>Tratar cliente nova como prioridade: ela é a que mais fecha e a que menos espera. A saudação automática não conta como resposta; ela precisa de um "oi, qual tamanho você usa?" de gente.</p></div>
+      </li>
+      <li>
+        <div><h3>A loja pergunta o que a cliente já disse</h3>
+          <div class="num">81 conversas com "Tem interesse no conjunto…?"</div>
+          <p>Quem vem do anúncio já chega escrevendo que quer comprar. Perguntar de novo se ela tem interesse gasta uma mensagem e esfria a conversa.</p>
+          <span class="balao cli"><span class="q">Cliente · 20/11 18:07</span>Gostaria de comprar o conjunto Lilian com colete alongado - R$ 259</span>
+          <span class="balao loja"><span class="q">Loja · 18:12</span>Boa tarde · Tem interesse no conjunto Lilian?</span></div>
+        <div class="fazer"><div class="k">O que fazer</div><p>Responder já andando para a venda: "Oi! O Lilian está R$ 259 com frete grátis. Qual tamanho e cor você quer?" A pergunta certa é a do tamanho.</p></div>
+      </li>
+      <li>
+        <div><h3>Falta a pergunta que fecha</h3>
+          <div class="num">16 de 165 conversas do anúncio tiveram pergunta de tamanho, pagamento, CEP ou endereço</div>
+          <p>A loja responde preço, tecido e cores, e a conversa para ali. <b>Só 68 das 165 clientes</b> voltaram a escrever depois da primeira resposta.</p></div>
+        <div class="fazer"><div class="k">O que fazer</div><p>Terminar toda resposta com uma pergunta que leva ao pedido: tamanho, cor, Pix ou cartão, CEP. Quem responde a uma pergunta continua na conversa.</p></div>
+      </li>
+      <li>
+        <div><h3>Conversa que parou não é retomada</h3>
+          <div class="num">219 conversas com a última mensagem da loja há mais de 48 h, sem desfecho</div>
+          <p>A loja mandou foto, preço ou vídeo, e a cliente sumiu. Não há registro de segunda mensagem da loja nessas conversas.</p></div>
+        <div class="fazer"><div class="k">O que fazer</div><p>Uma retomada curta no dia seguinte, sem pressão: "Separei o seu no M, quer que eu reserve até amanhã?". O CRM já tem a marcação de retorno para não esquecer ninguém.</p></div>
+      </li>
+      <li>
+        <div><h3>Fotos e vídeos demais de uma vez</h3>
+          <div class="num">33 conversas receberam 10 ou mais fotos e vídeos na mesma hora</div>
+          <p>Numa delas foram 25 vídeos e fotos em 5 minutos. A cliente respondeu mandando de novo a mensagem do anúncio, como se não tivesse sido atendida.</p></div>
+        <div class="fazer"><div class="k">O que fazer</div><p>Mandar 3 ou 4 mídias da peça pedida, com o preço escrito, e o link do catálogo para quem quer ver mais. O link da cápsula de festas já existe e já foi mandado 11 vezes.</p></div>
+      </li>
+      <li>
+        <div><h3>Um frete cobrado num anúncio de frete grátis</h3>
+          <div class="num">1 caso · 20/11, 11:55 · anúncio do Roseli</div>
+          <p>A cliente de Manaus pediu orçamento e recebeu "289,00 o conjunto, frete 40,00". O anúncio dizia frete grátis. É um caso só, mas é o tipo de erro que vira reclamação.</p></div>
+        <div class="fazer"><div class="k">O que fazer</div><p>Se o frete grátis tem limite de região, escrever isso no anúncio. Se não tem, corrigir com essa cliente.</p></div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="faixa">
+  <div class="wrap">
+    <div class="eyebrow">Anúncios de 20 e 21/11</div>
+    <h2>165 clientes chamaram. A venda não ficou marcada.</h2>
+    <p class="sub">Dá para medir até onde a conversa foi, mas não quantas compraram: nenhum dos 346 clientes no CRM tem venda registrada. Sem essa marcação, não dá para saber quanto cada anúncio rendeu.</p>
+    <div class="funil" id="funil"></div>
+  </div>
+</section>
+
+<section class="faixa meio">
+  <div class="wrap">
+    <div class="eyebrow">Por onde começar</div>
+    <h2>Três hábitos resolvem a maior parte.</h2>
+    <div class="prox">
+      <div><div class="k">Toda manhã</div><h3>Zerar quem está esperando</h3><p>Antes de qualquer conversa nova, responder as 60 que estão paradas e as que chegaram depois das 20h.</p></div>
+      <div><div class="k">Toda resposta</div><h3>Terminar com uma pergunta</h3><p>Tamanho, cor, Pix ou cartão, CEP. Para quem veio do anúncio, começar por ela.</p></div>
+      <div><div class="k">Toda venda</div><h3>Marcar no CRM</h3><p>Mover a cliente para "fechado" com o valor. Com isso, o próximo relatório mostra quanto cada anúncio vendeu.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="faixa clara">
+  <div class="wrap">
+    <div class="eyebrow">Como medimos e o que ficou de fora</div>
+    <h2>Os limites deste relatório.</h2>
+    <ul class="lim">
+      <li><b>Período:</b> 06/11/2026, 13h52 a 23/11/2026, 08h22 (horário de Brasília). As mensagens das últimas 2 horas ficaram de fora para não contar como "sem resposta" o que ainda ia ser respondido.</li>
+      <li><b>Tempo de resposta:</b> contado da primeira mensagem de uma sequência da cliente até a primeira mensagem da loja depois dela. Qualquer mensagem da loja conta, até uma foto. <b>Não medimos se a resposta foi boa</b>, só se veio e quando.</li>
+      <li><b>Fora da conta:</b> a saudação automática ("D'Luxo modas agradece seu contato"), reações com emoji, mensagens editadas ou apagadas, e os contatos marcados como pessoal ou teste.</li>
+      <li><b>Varejo e atacado juntos:</b> o CRM ainda não grava por qual dos dois números cada mensagem chegou. Os números deste relatório são da loja inteira.</li>
+      <li><b>Horário comercial:</b> usamos 8h às 19h, de segunda a sábado. Se a loja tiver outro horário, essa divisão muda.</li>
+      <li><b>Perguntas de fechamento e frete:</b> encontrados por busca de palavras no texto. Respostas mandadas por áudio não entram nessa busca, então esses dois números podem estar abaixo do real.</li>
+      <li><b>Vendas:</b> não medidas. Nenhum cliente tem venda registrada no CRM no período.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="faixa">
+  <div class="wrap">
+    <p class="fonte" style="margin-top:0;border-top:0;padding-top:0"><span class="ponto"></span>Fonte: banco do CRM da Kompila, conta Espaço Analu, números (11) 97658-2728 e (11) 96325-5678 em modo escuta (todas as respostas são da equipe da loja). 3.624 mensagens de clientes e 5.904 da loja; 346 clientes, 165 vindos de anúncio. Consulta feita em 23/11/2026.</p>
+    <div class="marca" style="margin-top:32px"><span><b>[</b> kompila <b>]</b></span><span>IA sob medida pra pequena e média empresa</span></div>
+  </div>
+</section>
+
+<script>
+(function(){
+  // [hora, mensagens de cliente, mediana de espera em min]
+  var h=[[0,2,null],[1,2,469],[2,1,54],[3,2,332],[4,15,0],[5,5,1],[6,19,3],[7,55,3],[8,116,3],[9,139,2],[10,220,1],[11,240,1],[12,139,1],[13,76,3],[14,121,2],[15,72,2],[16,72,2],[17,121,1],[18,73,1],[19,36,3],[20,41,3],[21,29,739],[22,18,557],[23,61,1]];
+  var W=960,H=320,pl=44,pr=10,pt=34,pb=34,iw=W-pl-pr,ih=H-pt-pb,top=250,bw=iw/h.length;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Mensagens de clientes por hora e espera mediana. Pico às 11h com 240 mensagens; às 21h e 22h a espera mediana passa de 9 horas.">';
+  [0,50,100,150,200,250].forEach(function(t){var y=pt+ih-t/top*ih;s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="#D4D7CF" stroke-width="1"/><text x="'+(pl-8)+'" y="'+(y+4)+'" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="11" fill="#5B616A">'+t+'</text>';});
+  function fmt(m){if(m===null)return '';if(m>=60){var hh=m/60;return (hh>=10?Math.round(hh):hh.toFixed(1).replace('.',','))+'h';}return m+'m';}
+  h.forEach(function(r,i){
+    var bh=Math.max(2,r[1]/top*ih),x=pl+i*bw+bw*.16,w=bw*.68,y=pt+ih-bh,longo=r[2]!==null&&r[2]>60&&r[1]>=15,fraco=r[1]<15;
+    var cor=longo?'#FFB224':(fraco?'#B9BDB4':'#14171C');
+    s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+bh.toFixed(1)+'" rx="3" fill="'+cor+'"/>';
+    s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(H-12)+'" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#5B616A">'+r[0]+'</text>';
+    if(!fraco) s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(y-7).toFixed(1)+'" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" font-weight="600" fill="'+(longo?'#A8650A':'#5B616A')+'">'+fmt(r[2])+'</text>';
+  });
+  s+='</svg>';document.getElementById('graf').innerHTML=s;
+
+  var f=[
+    {nm:'Chamaram pelo anúncio',d:'Roseli, Lilian, Melissa e outro',n:165},
+    {nm:'Receberam resposta',d:'mediana de 7 min',n:153},
+    {nm:'Voltaram a escrever',d:'depois da primeira resposta',n:68},
+    {nm:'Ouviram pergunta de fechamento',d:'tamanho, pagamento, CEP',n:16,amb:1},
+    {nm:'Venda registrada',d:'nenhuma marcada no CRM',n:null}
+  ];
+  var el=document.getElementById('funil');
+  f.forEach(function(e){
+    var d=document.createElement('div');d.className='etapa';
+    var pct=e.n===null?100:(e.n/165*100);
+    d.innerHTML='<div class="nm">'+e.nm+'<span>'+e.d+'</span></div><div class="trilho"><div class="barra'+(e.amb?' amb':'')+(e.n===null?' vazio':'')+'" style="width:'+pct.toFixed(1)+'%"></div></div><div class="rs">'+(e.n===null?'?':e.n)+'<small>'+(e.n===null?'sem dado':Math.round(e.n/165*100)+'%')+'</small></div>';
+    el.appendChild(d);
+  });
+})();
+</script>
+</body>
+</html>
