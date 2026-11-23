@@ -472,7 +472,7 @@ function abrirSacola() {
 // Se a internet ou o servidor falhar, o pedido segue pelo WhatsApp do mesmo jeito.
 const PEDIDO_URL = 'https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/pedido'
 async function registrar(dados) {
-  const c = new AbortController(), t = setTimeout(() => c.abort(), 6000)
+  const c = new AbortController(), t = setTimeout(() => c.abort(), 15000)   // 23/11: 6 s cortava pedido que o servidor já tinha gravado e o cliente mandava de novo
   try { const r = await fetch(PEDIDO_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(dados), signal: c.signal }); const j = await r.json(); return r.ok ? j : null } catch (e) { return null } finally { clearTimeout(t) }
 }
 // PUSH (0190): ao enviar, pergunta uma vez se pode avisar quando o pedido sair; aceito, o aparelho fica inscrito só naquele pedido
@@ -511,12 +511,13 @@ async function enviar() {
   const destino = r && r.numero
     ? (r.whats === 'resumo' ? `https://wa.me/${WA_CONFIRMA}` : `https://wa.me/${WA_CONFIRMA}?text=${encodeURIComponent(r.whats === 'equipe' ? `*Pedido nº ${r.numero} · ${D.loja.nome}*\nFiz meu pedido pelo cardápio.` : `*Pedido nº ${r.numero} · ${D.loja.nome}*\nQuero confirmar meu pedido.`)}`)
     : `https://wa.me/${D.loja.whatsapp}?text=${encodeURIComponent(msg)}`
-  if (r && r.numero) { bt.textContent = r.whats === 'resumo' ? `Pedido nº ${r.numero} recebido! Te mandamos o resumo no WhatsApp pra confirmar.` : r.whats === 'equipe' ? `Pedido nº ${r.numero} recebido! A loja já está com ele.` : `Pedido nº ${r.numero} recebido! Abrindo o WhatsApp…`; $('#erro').innerHTML = `Se o WhatsApp não abrir sozinho, <a href="${destino}" style="color:inherit;text-decoration:underline">toque aqui</a>.` }
+  // 23/11 (39 repetidos no domingo): pedido gravado esvazia a sacola e o botão não volta; voltar do WhatsApp não manda outro
+  if (r && r.numero) { sacola = []; guardar(); bt.textContent = r.whats === 'resumo' ? `Pedido nº ${r.numero} recebido! Te mandamos o resumo no WhatsApp pra confirmar.` : r.whats === 'equipe' ? `Pedido nº ${r.numero} recebido! A loja já está com ele.` : `Pedido nº ${r.numero} recebido! Abrindo o WhatsApp…`; $('#erro').innerHTML = `Se o WhatsApp não abrir sozinho, <a href="${destino}" style="color:inherit;text-decoration:underline">toque aqui</a>.` }
   else { bt.disabled = false; bt.textContent = 'Confirmar pelo WhatsApp' }
   // 0192 (19/10, Alex): o pedido grava 'aguardando' e o cliente confirma no WhatsApp da Kompila; a Liz da loja manda o resumo e o Pix ou a maquininha.
   // Se o registro falhou, cai no jeito antigo: o pedido inteiro vai pro WhatsApp da loja.
   location.href = destino
-  setTimeout(() => { bt.disabled = false; bt.textContent = 'Confirmar pelo WhatsApp' }, 8000)
+  if (!(r && r.numero)) setTimeout(() => { bt.disabled = false; bt.textContent = 'Confirmar pelo WhatsApp' }, 8000)
 }
 
 /* pedir de novo: o último pedido deste celular */
