@@ -1482,3 +1482,17 @@ a.fi-c{text-decoration:none;color:inherit}
 .wh-caiu b{font-weight:600}
 .wh-caiu .btn{flex:none;background:var(--r);color:#fff;border-color:var(--r)}
 @media (max-width:600px){.wh-caiu{top:62px;left:16px;right:16px;transform:none;max-width:none;font-size:12.5px}}
+/* achar o dono (25/11) */
+.dn-t{display:flex;flex-direction:column;gap:2px;margin-bottom:6px}
+.dn-t b{font-size:17px}
+.dn-t small{color:var(--mu)}
+.dn-c{display:flex;flex-direction:column;gap:6px;padding:12px;background:var(--s);border-radius:var(--r8);min-width:0}
+.dn-v{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.dn-v b{overflow-wrap:anywhere}
+.dn-c small{color:var(--mu)}
+.dn-c small a{color:inherit;text-decoration:underline}
+.dn-a{display:flex;flex-wrap:wrap;gap:6px}
+.dn-a:empty{display:none}
+.dn-s{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--s2,rgba(0,0,0,.06));color:var(--mu)}
+.dn-s.ok{background:rgba(22,163,74,.14);color:#15803d}
+.dn-s.no{background:rgba(220,38,38,.1);color:#b91c1c}

@@ -958,12 +958,54 @@ function lkLigar(root, e, depois) {
   })
 }
 
+/* ======================= Achar o dono (25/11) ======================= */
+// quem decide e o telefone dele: Receita (sem o do contador), empresa/MEI no nome dele, web com fonte; confere WhatsApp
+function donoSecao(e) {
+  const o = e.dono_info
+  if (!o) return `<p class="fi-v">Acha quem decide e o contato dele: sócios da Receita, celular do cadastro (sem o do contador), empresa ou MEI no nome dele e o que tiver na web. Confere quais números têm WhatsApp. Leva até 1 minuto.</p><button class="btn go sm" data-dono>Achar o dono</button>`
+  const host = u => { try { return new URL(u).hostname.replace(/^www\./, '') } catch { return 'fonte' } }
+  const selo = c => c.tipo !== 'celular' ? '' : c.whatsapp === true ? '<span class="dn-s ok">Tem WhatsApp</span>' : c.whatsapp === false ? '<span class="dn-s no">Sem WhatsApp</span>' : ''
+  const acoes = c => {
+    if (c.tipo === 'celular' || c.tipo === 'fixo') return `${c.whatsapp ? `<button class="btn ok sm" data-dn-zap="55${esc(c.valor)}">WhatsApp</button><button class="btn line sm" data-dn-usa="${esc(c.valor)}">Usar no disparo</button>` : ''}<a class="btn line sm" href="tel:+55${esc(c.valor)}">Ligar</a>`
+    if (c.tipo === 'email') return `<a class="btn line sm" href="mailto:${esc(c.valor)}">E-mail</a>`
+    if (c.tipo === 'instagram') return `<a class="btn line sm" href="https://instagram.com/${esc(c.valor.replace(/^@/, ''))}" target="_blank" rel="noopener">Abrir</a>`
+    return ''
+  }
+  const linhas = (o.contatos || []).map(c => `<div class="dn-c"><div class="dn-v"><b>${esc(c.tipo === 'celular' || c.tipo === 'fixo' ? tfmt(c.valor) : c.valor)}</b>${selo(c)}</div><small>${esc([c.de_quem, c.origem].filter(Boolean).join(' · '))}${c.fonte ? ` · <a href="${esc(c.fonte)}" target="_blank" rel="noopener">${esc(host(c.fonte))}</a>` : ''}</small><div class="dn-a">${acoes(c)}</div></div>`).join('')
+  const outros = (o.socios || []).filter(s => s.nome !== o.nome)
+  return `${o.nome ? `<div class="dn-t"><b>${esc(o.nome)}</b>${o.cargo ? `<small>${esc(o.cargo)}</small>` : ''}</div>` : '<p class="fi-v">Não achei quem decide.</p>'}
+    ${outros.length ? `<p class="fi-v">Outros sócios: ${esc(outros.map(s => s.nome).join('; '))}</p>` : ''}
+    ${o.aviso ? `<p class="fi-v">${esc(o.aviso)}</p>` : ''}
+    ${linhas ? `<div class="lk-l"><small class="lk-h">Contatos</small>${linhas}</div>` : '<p class="fi-v">Não achei telefone nem e-mail dele.</p>'}
+    ${(o.descartados || []).length ? `<p class="fi-v">Deixei de fora: ${esc(o.descartados.map(x => `${tfmt(x.valor)} (${x.motivo})`).join('; '))}</p>` : ''}
+    <div class="lk-r"><small>Pesquisado em ${new Date(o.pesquisado_em).toLocaleDateString('pt-BR')}</small><button class="btn line sm" data-dono>Procurar de novo</button></div>`
+}
+function donoLigar(root, e, d, depois) {
+  root.querySelectorAll('[data-dono]').forEach(b => b.onclick = async () => {
+    b.disabled = true
+    consultaAbre({ tipo: 'dono', t: 'Achando o dono', s: e.nome || '' })
+    try { const r = await chamar('achar_dono', { empresa_id: e.id }); Object.assign(e, r.novo || {}); e.dono_info = r.dono; fimCarregando('dono'); depois() }
+    catch (er) { fimCarregando('dono'); b.disabled = false; liz(esc(er.message)) }
+  })
+  root.querySelectorAll('[data-dn-zap]').forEach(b => b.onclick = () => abrirConversas(true, b.dataset.dnZap))
+  root.querySelectorAll('[data-dn-usa]').forEach(b => b.onclick = async () => {
+    if (!d?.id) return liz('Abre pela lista pra trocar o número do disparo.')
+    b.disabled = true
+    const { error } = await sb.from('diagnosticos').update({ whatsapp: b.dataset.dnUsa }).eq('id', d.id)
+    if (error) { b.disabled = false; return liz('Não consegui trocar. Tenta de novo.') }
+    // se já está na fila, o envio que ainda não saiu vai pro número novo
+    await sb.from('envio').update({ telefone: '55' + b.dataset.dnUsa }).eq('diagnostico_id', d.id).eq('status', 'na_fila')
+    d.whatsapp = b.dataset.dnUsa; b.textContent = 'No disparo'
+    liz(`O disparo vai pro ${tfmt(b.dataset.dnUsa)}.`)
+  })
+}
+
 /* ======================= ficha da empresa: tudo que o Maps entrega ======================= */
 let fichaAberta = null
 async function abrirFichaMaps(d, empilhar = true) {
   fichaAberta = d
   const e = empNorm(d.empresa) || {}, x = e.google_extra || {}
-  const { data: extra } = await sb.from('empresas').select('info, fotos, linkedin').eq('id', e.id).maybeSingle()
+  const { data: extra } = await sb.from('empresas').select('info, fotos, linkedin, dono_info').eq('id', e.id).maybeSingle()
   if (extra) Object.assign(e, extra)
   const fotosE = await enrFotosUrl(Array.isArray(e.fotos) ? e.fotos : [])
   const { data: avs } = await sb.from('avaliacoes').select('estrelas, texto, publicada_em, autor, autor_link, tempo').eq('empresa_id', e.id).order('publicada_em', { ascending: false, nullsFirst: false }).limit(20)
@@ -996,6 +1038,7 @@ async function abrirFichaMaps(d, empilhar = true) {
     ${sec('Sobre', [x.resumo, x.resumo_avaliacoes].filter(Boolean).map(t => `<p>${esc(t)}</p>`).join(''))}
     ${sec('Horários', horas)}
     ${sec('O que oferece', etiquetas(x.oferece))}${sec('Pagamento', etiquetas(x.pagamento))}${sec('Estacionamento', etiquetas(x.estacionamento))}${sec('Acessibilidade', etiquetas(x.acessibilidade))}
+    ${sec('Dono', donoSecao(e))}
     ${sec('Dados da empresa', enrDados(e))}
     ${sec('LinkedIn e quem decide', lkSecao(e))}
     ${sec(`Avaliações${lista ? ` <small>O Google mostra até 5 por empresa</small>` : ''}`, lista || '<p class="fi-v">Nenhuma avaliação trazida ainda.</p>')}
@@ -1005,6 +1048,7 @@ async function abrirFichaMaps(d, empilhar = true) {
   const fiDepois = () => { abrirFichaMaps(d, false); if (LV.todos?.length && $('lvG')) lvPintar() }
   ligarEnr($('cap'), e, fiDepois)
   lkLigar($('cap'), e, fiDepois)
+  donoLigar($('cap'), e, d, fiDepois)
   $('cap').querySelectorAll('[data-enr-add]').forEach(b => b.onclick = () => enrAbrir(e, fiDepois))
   if ($('fiAdd')) $('fiAdd').onclick = async ev => { ev.currentTarget.disabled = true; const { error } = await sb.from('diagnosticos').update({ decisao: 'aprovada', decidida_em: new Date().toISOString() }).eq('id', d.id); if (error) { ev.currentTarget.disabled = false; return liz('Não entrou no pipeline. Tenta de novo.') } d.decisao = 'aprovada'; contarCaptacao(); abrirFichaMaps(d, false) }
   if ($('fiBaixar')) $('fiBaixar').onclick = async () => {
