@@ -934,7 +934,8 @@ function contaPac(k) {
   if (!c) return { d: 0, tira, poe, ing: [], lin, confirma }
   c.itens.forEach(x => {
     const q = m.q?.[x.nome] ?? x.n0, dif = q - x.n0; if (!dif) return
-    const pr = x.av ? CAT[x.av].p : x.pao; if (pr == null) confirma = true; else d += pr * dif
+    // 25/11 (Alex: pãezinhos do pacote são cortesia): tirar o pão não muda o preço
+    const pr = dif < 0 && /^p[aã]ezinhos/i.test(x.nome) ? 0 : x.av ? CAT[x.av].p : x.pao; if (pr == null) confirma = true; else d += pr * dif
     if (dif < 0) { tira.push({ de: x.nome, ...(x.av ? { id: x.av } : {}), qtd: -dif }); lin.push({ t: 'tira', txt: `− ${-dif} ${x.nome}`, sem: pr == null }) }
     else { poe.push(x.av ? { id: x.av, qtd: dif } : { de: x.nome, qtd: dif }); lin.push({ t: 'poe', txt: `+ ${dif} ${x.nome}`, sem: pr == null }) }
   })
