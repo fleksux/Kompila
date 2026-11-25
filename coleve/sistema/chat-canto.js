@@ -6,7 +6,7 @@ const eu = await quemSou().catch(() => null);
 if (eu?.pessoa?.tipo === 'equipe') {
   // marketing não vê dado de cliente: some o Clientes do menu (no celular, a barra fica com 5)
   if (eu.pessoa.area === 'marketing' && !['admin', 'gestor'].includes(eu.pessoa.papel)) {
-    document.querySelectorAll('.barra__nav a[href$="clientes/"]').forEach(a => a.remove());
+    document.querySelectorAll('.barra__nav a[href$="clientes/"], .barra__nav a[href$="propostas/"]').forEach(a => a.remove());
     document.querySelectorAll('.barra__nav').forEach(n => n.style.setProperty('grid-template-columns', 'repeat(5,1fr)', 'important'));
   }
   const base = new URL('conversas/?mini=1', import.meta.url).href;

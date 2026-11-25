@@ -6,7 +6,7 @@ if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../..
 const P = eu.pessoa;
 const chefe = ['admin', 'gestor'].includes(P.papel);
 const veCliente = chefe || P.area !== 'marketing';
-if (!veCliente) document.querySelectorAll('.barra__nav a[href$="clientes/"]').forEach(a => a.remove());
+if (!veCliente) document.querySelectorAll('.barra__nav a[href$="clientes/"], .barra__nav a[href$="propostas/"]').forEach(a => a.remove());
 
 const $ = id => document.getElementById(id);
 const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));

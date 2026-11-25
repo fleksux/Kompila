@@ -6,7 +6,7 @@ const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../../entrar/'); throw 0; }
 const P = eu.pessoa;
 const chefe = ['admin', 'gestor'].includes(P.papel);
-if (P.area === 'marketing' && !chefe) document.querySelectorAll('.barra__nav a[href$="clientes/"]').forEach(a => a.remove());
+if (P.area === 'marketing' && !chefe) document.querySelectorAll('.barra__nav a[href$="clientes/"], .barra__nav a[href$="propostas/"]').forEach(a => a.remove());
 
 const $ = id => document.getElementById(id);
 const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));

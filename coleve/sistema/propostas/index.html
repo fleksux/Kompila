@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propostas · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A71FF">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icones/apple_180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Coleve">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=30">
+<link rel="stylesheet" href="../tarefas/tarefas.css?v=10">
+<link rel="stylesheet" href="../proposta-doc.css?v=1">
+<link rel="stylesheet" href="propostas.css?v=1">
+</head>
+<body class="carregando">
+
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema"><a href="../">Área interna</a><a href="../feed/">Feed</a><a href="../tarefas/">Tarefas</a><a href="../marketing/">Marketing</a><a href="../conversas/">Conversas</a><a href="../clientes/">Clientes</a><a href="./" aria-current="page">Propostas</a></nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="quadro-pg pp-pg">
+  <div class="pp-topo">
+    <div>
+      <p class="sec">Área interna · comercial</p>
+      <h1 class="h1">Propostas <b id="total"></b></h1>
+      <p class="sub">Reunião comercial, proposta, aceite, contrato. Contrato assinado vira cliente e o onboarding começa sozinho.</p>
+    </div>
+    <button class="btn-lima-q" id="nova" type="button">+ Proposta</button>
+  </div>
+  <div class="pp-numeros" id="numeros"></div>
+  <p class="aviso-q" id="aviso" role="status"></p>
+  <section class="pp-funil" id="funil" aria-label="Funil de propostas"></section>
+</main>
+
+<!-- montar a proposta -->
+<div class="gaveta gaveta--pp" id="gaveta" hidden>
+  <div class="gaveta__fundo" data-fecha></div>
+  <aside class="gaveta__painel" role="dialog" aria-modal="true" aria-labelledby="g-titulo">
+    <button class="gaveta__x" data-fecha aria-label="Fechar">×</button>
+    <p class="d-empresa" id="g-num">Nova proposta</p>
+    <h2 id="g-titulo">Nova proposta</h2>
+    <p class="pp-salvo" id="g-salvo" aria-live="polite"></p>
+
+    <div class="pp-grade">
+      <form class="pp-form" id="f" autocomplete="off">
+        <h3><span class="n">1</span>Cliente</h3>
+        <div class="pp-chips" role="radiogroup" aria-label="Situação da empresa">
+          <label><input type="radio" name="tem" value="tem" checked><span>Já tem CNPJ</span></label>
+          <label><input type="radio" name="tem" value="abrir"><span>Vai abrir empresa</span></label>
+        </div>
+        <label class="cp-t" id="l-cnpj">CNPJ<input id="cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"><small class="pp-dica" id="cnpj-dica">Com o CNPJ completo, o nome e a cidade vêm sozinhos.</small></label>
+        <label class="cp-t"><span id="l-razao">Razão social</span><input id="razao_social" required placeholder="Nome da empresa"></label>
+        <div class="cp-2">
+          <label class="cp-t">Nome fantasia<input id="nome_fantasia" placeholder="Como o cliente chama"></label>
+          <div class="cp-2 pp-cid"><label class="cp-t">Cidade<input id="municipio"></label><label class="cp-t">UF<input id="uf" maxlength="2"></label></div>
+        </div>
+        <div class="cp-2">
+          <label class="cp-t">Contato<input id="contato_nome" placeholder="Quem decide"></label>
+          <label class="cp-t">WhatsApp<input id="contato_telefone" inputmode="tel" placeholder="(11) 90000-0000"></label>
+        </div>
+        <div class="cp-2">
+          <label class="cp-t">E-mail<input id="contato_email" type="email"></label>
+          <label class="cp-t">Reunião comercial<select id="reuniao_id"><option value="">Sem reunião registrada</option></select></label>
+        </div>
+        <label class="pp-check"><input type="checkbox" id="ev"> Eletroposto ou mobilidade elétrica</label>
+
+        <h3><span class="n">2</span>O que a empresa precisa</h3>
+        <div class="pp-perg">
+          <p>Quantas empresas (CNPJs)?</p>
+          <div class="pp-qtd"><button type="button" data-qtd="-1" aria-label="Menos">−</button><input id="qtd_cnpj" type="number" min="1" max="50" value="1" inputmode="numeric"><button type="button" data-qtd="1" aria-label="Mais">+</button></div>
+        </div>
+        <div class="pp-perg"><p>Tem funcionário registrado?</p><div class="pp-chips" data-campo="funcionario"><label><input type="radio" name="funcionario" value="false" checked><span>Não</span></label><label><input type="radio" name="funcionario" value="true"><span>Sim</span></label></div></div>
+        <div class="pp-perg"><p>O sócio tira uma retirada mensal?</p><div class="pp-chips" data-campo="prolabore"><label><input type="radio" name="prolabore" value="false" checked><span>Não</span></label><label><input type="radio" name="prolabore" value="true"><span>Sim</span></label></div></div>
+        <div class="pp-perg pp-perg--col"><p>Quer ver o resultado da empresa (lucro ou prejuízo)?</p><div class="pp-chips" data-campo="acompanhamento"><label><input type="radio" name="acompanhamento" value="nao" checked><span>Não precisa</span></label><label><input type="radio" name="acompanhamento" value="anual"><span>Por ano</span></label><label><input type="radio" name="acompanhamento" value="trimestral"><span>A cada 3 meses</span></label><label><input type="radio" name="acompanhamento" value="mensal"><span>Todo mês</span></label></div></div>
+        <div class="pp-perg pp-perg--col"><p>Regime de impostos</p><div class="pp-chips" data-campo="regime"><label><input type="radio" name="regime" value="simples" checked><span>Simples</span></label><label><input type="radio" name="regime" value="mei"><span>MEI</span></label><label><input type="radio" name="regime" value="presumido"><span>Presumido</span></label><label><input type="radio" name="regime" value="real"><span>Real</span></label></div></div>
+      </form>
+
+      <aside class="pp-res" id="res" aria-live="polite">
+        <p class="pp-res__vazio" id="res-vazio">Preencha o nome da empresa. O plano aparece aqui na hora.</p>
+        <div id="res-cheio" hidden>
+          <p class="pp-tag">Recomendado pelo sistema</p>
+          <h4 id="res-plano"></h4>
+          <p class="pp-motivo" id="res-motivo"></p>
+          <div class="pp-valor"><s id="res-tab"></s><strong id="res-final"></strong><span id="res-mes">por mês</span><em id="res-desc"></em></div>
+
+          <details class="pp-ajuste" id="ajuste">
+            <summary>Ajustar plano ou preço</summary>
+            <label class="cp-t">Plano<select id="plano_codigo"></select></label>
+            <label class="cp-t">Fecha em (R$ por mês)<input id="preco_combinado" inputmode="decimal" placeholder="Vazio = preço da tabela"></label>
+            <label class="cp-t">Motivo (aparece pro cliente)<input id="motivo" placeholder="Só quando você troca o plano"></label>
+          </details>
+          <label class="cp-t">Recado pro cliente (opcional)<input id="observacao" placeholder="Uma linha, ex.: começamos em dezembro"></label>
+          <div class="cp-2"><label class="cp-t">Válida até<input id="validade" type="date"></label><label class="pp-check pp-check--al"><input type="checkbox" id="abertura_gratis" checked> Abertura sem custo</label></div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="pp-botoes" id="botoes"></div>
+  </aside>
+</div>
+
+<!-- prévia / PDF -->
+<article class="pc" id="doc" hidden></article>
+
+<script type="module" src="propostas.js?v=1"></script>
+<script type="module" src="../chat-canto.js?v=5"></script>
+<script type="module" src="../avisos.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proposta · Coleve Contabilidade</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#071A44">
+<link rel="icon" href="../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema/sistema.css?v=30">
+<link rel="stylesheet" href="../sistema/proposta-doc.css?v=1">
+<style>
+  body{background:var(--nevoa);padding:28px 16px 48px}
+  .pc-acoes{display:flex;justify-content:flex-end;max-width:760px;margin:0 auto 10px}
+  .pc-acoes button{height:38px;padding:0 16px;border-radius:999px;border:1.5px solid var(--linha);background:#fff;font:700 14px Gabarito,sans-serif;color:var(--cinza);cursor:pointer}
+  .pc-msg{max-width:520px;margin:80px auto;text-align:center;background:#fff;border-radius:24px;padding:36px 28px}
+  .pc-msg img{width:150px;margin:0 auto 18px}
+  @media (max-width:640px){body{padding:0 0 32px}.pc-acoes{padding:12px 16px 0}}
+  @media print{.pc-acoes{display:none}body{padding:0}}
+</style>
+</head>
+<body>
+<div class="pc-acoes" id="acoes" hidden><button type="button" onclick="print()">Salvar PDF</button></div>
+<article class="pc" id="doc" aria-busy="true"></article>
+<script type="module">
+import { banco } from '../sistema/conexao.js?v=2';
+import { docHTML } from '../sistema/proposta-doc.js?v=1';
+
+const t = new URLSearchParams(location.search).get('t');
+const doc = document.getElementById('doc');
+const nada = txt => { doc.outerHTML = `<div class="pc-msg"><img src="../img/logo_contabilidade.svg" alt="Coleve"><p>${txt}</p></div>`; };
+
+async function mostra() {
+  if (!/^[0-9a-f-]{36}$/i.test(t || '')) return nada('Link de proposta incompleto. Peça um novo para a Coleve.');
+  const { data: d, error } = await banco.rpc('proposta_publica', { t });
+  if (error || !d) return nada('Não encontramos esta proposta. Peça um novo link para a Coleve.');
+  document.title = `Proposta ${d.numero} · Coleve Contabilidade`;
+  doc.innerHTML = docHTML(d, { raizImg: '../img/', aceite: true });
+  doc.removeAttribute('aria-busy');
+  document.getElementById('acoes').hidden = false;
+  const f = document.getElementById('pc-aceite');
+  if (f) f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const bt = f.querySelector('button'), erro = document.getElementById('pc-erro');
+    bt.disabled = true; bt.textContent = 'Enviando…'; erro.textContent = '';
+    const { data: r, error } = await banco.rpc('proposta_aceitar', { t, nome: document.getElementById('pc-nome').value });
+    if (error || !r?.ok) { erro.textContent = r?.erro || 'Não deu para registrar agora. Tente de novo em instantes.'; bt.disabled = false; bt.textContent = 'Aceitar proposta'; return; }
+    await mostra();
+    document.querySelector('.pc-ok')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}
+await mostra();
+</script>
+</body>
+</html>
