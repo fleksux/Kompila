@@ -966,7 +966,7 @@ function donoSecao(e) {
   const host = u => { try { return new URL(u).hostname.replace(/^www\./, '') } catch { return 'fonte' } }
   const selo = c => c.tipo !== 'celular' ? '' : c.whatsapp === true ? '<span class="dn-s ok">Tem WhatsApp</span>' : c.whatsapp === false ? '<span class="dn-s no">Sem WhatsApp</span>' : ''
   const acoes = c => {
-    if (c.tipo === 'celular' || c.tipo === 'fixo') return `${c.whatsapp ? `<button class="btn ok sm" data-dn-zap="55${esc(c.valor)}">WhatsApp</button><button class="btn line sm" data-dn-usa="${esc(c.valor)}">Usar no disparo</button>` : ''}<a class="btn line sm" href="tel:+55${esc(c.valor)}">Ligar</a>`
+    if (c.tipo === 'celular' || c.tipo === 'fixo') return `${c.whatsapp ? `<button class="btn ok sm" data-dn-zap="55${esc(c.valor)}">WhatsApp</button>${String(e.whatsapp || '').replace(/\D/g, '').replace(/^55/, '') === c.valor ? '<span class="dn-s ok">Número do disparo</span>' : `<button class="btn line sm" data-dn-usa="${esc(c.valor)}">Usar no disparo</button>`}` : ''}<a class="btn line sm" href="tel:+55${esc(c.valor)}">Ligar</a>`
     if (c.tipo === 'email') return `<a class="btn line sm" href="mailto:${esc(c.valor)}">E-mail</a>`
     if (c.tipo === 'instagram') return `<a class="btn line sm" href="https://instagram.com/${esc(c.valor.replace(/^@/, ''))}" target="_blank" rel="noopener">Abrir</a>`
     return ''
@@ -989,14 +989,15 @@ function donoLigar(root, e, d, depois) {
   })
   root.querySelectorAll('[data-dn-zap]').forEach(b => b.onclick = () => abrirConversas(true, b.dataset.dnZap))
   root.querySelectorAll('[data-dn-usa]').forEach(b => b.onclick = async () => {
-    if (!d?.id) return liz('Abre pela lista pra trocar o número do disparo.')
     b.disabled = true
-    const { error } = await sb.from('diagnosticos').update({ whatsapp: b.dataset.dnUsa }).eq('id', d.id)
+    // o número do disparo é o WhatsApp da empresa (o mesmo campo do Enriquecer manual)
+    const { error } = await sb.from('empresas').update({ whatsapp: b.dataset.dnUsa }).eq('id', e.id)
     if (error) { b.disabled = false; return liz('Não consegui trocar. Tenta de novo.') }
     // se já está na fila, o envio que ainda não saiu vai pro número novo
-    await sb.from('envio').update({ telefone: '55' + b.dataset.dnUsa }).eq('diagnostico_id', d.id).eq('status', 'na_fila')
-    d.whatsapp = b.dataset.dnUsa; b.textContent = 'No disparo'
+    if (d?.id) await sb.from('envio').update({ telefone: '55' + b.dataset.dnUsa }).eq('diagnostico_id', d.id).eq('status', 'na_fila')
+    e.whatsapp = b.dataset.dnUsa
     liz(`O disparo vai pro ${tfmt(b.dataset.dnUsa)}.`)
+    depois()
   })
 }
 
