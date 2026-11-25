@@ -2,7 +2,7 @@
 // Funil: reunião comercial -> proposta -> aceite -> contrato (Autentique) -> cliente + onboarding.
 // A tela só pergunta e mostra: plano, motivo, desconto e preço saem do banco (gatilho proposta_calcula).
 import { banco, quemSou, raiz } from '../conexao.js?v=2';
-import { deLinha, docHTML, textoWhats, reais } from '../proposta-doc.js?v=1';
+import { deLinha, docHTML, pdfHTML, textoWhats, reais } from '../proposta-doc.js?v=2';
 
 const eu = await quemSou().catch(() => null);
 if (!eu?.pessoa?.ativo || eu.pessoa.tipo !== 'equipe') { location.replace('../../entrar/'); throw 0; }
@@ -39,7 +39,7 @@ if (ver) {
   document.body.classList.add('modo-doc');
   $('doc').hidden = false;
   $('doc').innerHTML = p
-    ? `<div class="pc-acoes"><button type="button" class="btn-a" onclick="print()">Salvar PDF</button></div>` + docHTML(deLinha(p, PLANOS), { raizImg: '../../img/' })
+    ? `<div class="pc-acoes"><button type="button" class="btn-a" onclick="print()">Salvar PDF</button></div>` + pdfHTML(deLinha(p, PLANOS), { raizImg: '../../img/' })
     : '<p>Proposta não encontrada.</p>';
   document.title = 'Proposta ' + (p?.numero || '');
   document.body.classList.remove('carregando');

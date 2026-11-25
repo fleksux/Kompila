@@ -18,7 +18,7 @@ export function deLinha(p, planos) {
     validade: p.validade, status: p.status, aceita_em: p.aceita_em, aceite_nome: p.aceite_nome, vencida: p.vencida,
     plano: { codigo: pl.codigo, nome: pl.nome, resumo: pl.resumo, inclui: pl.inclui || [] },
     outros: planos.filter(x => x.ativo && x.codigo !== p.plano_codigo).map(x => ({ nome: x.nome, preco: x.preco })),
-    vendedor: p.vendedor_nome
+    vendedor: p.vendedor_nome, emitida: p.enviada_em || p.criado_em
   };
 }
 
@@ -35,6 +35,74 @@ export function textoWhats(d, link) {
     `Os detalhes e o botão para aceitar estão aqui: ${link}`,
     `A proposta vale até ${dataBR(d.validade)}. Qualquer dúvida, me chama por aqui.`
   ].filter(Boolean).join('\n\n');
+}
+
+// PDF da proposta: 2 páginas deitadas (16:9) no visual da Coleve. Lição do Farol (8 páginas, 5 planos):
+// dono de empresa não tem tempo. Página 1 já diz plano e preço; página 2 tem o porquê, o que inclui e como começa.
+export function pdfHTML(d, { raizImg = '../img/' } = {}) {
+  const ev = d.segmento === 'ev';
+  const desconto = Number(d.desconto_pct) > 0;
+  const mais = d.qtd_cnpj > 1 ? ` por empresa · ${d.qtd_cnpj} empresas` : '';
+  const emitida = dataBR(d.emitida ? String(d.emitida).slice(0, 10) : new Date().toISOString().slice(0, 10));
+  const onde = [d.municipio, d.uf].filter(Boolean).join('/');
+  const titulo = ev
+    ? 'O seu eletroposto merece uma contabilidade que <em>entende do assunto.</em>'
+    : 'Contabilidade em dia e <em>número na mão</em> para decidir.';
+  const vantagens = [
+    d.abrir_empresa && d.abertura_gratis ? ['Abertura sem custo', 'A constituição da empresa fica por nossa conta, já no enquadramento certo.'] : null,
+    d.abrir_empresa ? null : ['Troca sem dor de cabeça', 'Falamos com o contador atual e trazemos tudo para a Coleve.'],
+    ['Consultor que fala a sua língua', 'Atendimento humano direto pelo WhatsApp, sem fila de chamado.'],
+    ['Tudo numa plataforma', 'Guias, documentos e pedidos num lugar só, no celular.']
+  ].filter(Boolean).slice(0, 3);
+  const passos = [
+    ['Você aceita', 'Pelo link que enviamos ou respondendo a mensagem.'],
+    ['Contrato digital', 'Assinatura pelo celular, sem papel.'],
+    [d.abrir_empresa ? 'Abrimos a empresa' : 'Assumimos a contabilidade', d.abrir_empresa ? 'E começamos com tudo no lugar.' : 'E você já começa com a gente no mês seguinte.']
+  ];
+  const logo = (branco) => ev ? `<img class="pdf-logo" src="${raizImg}${branco ? 'logo_ev_branco.png' : 'logo_ev.png'}" alt="Coleve">`
+                              : `<img class="pdf-logo${branco ? ' pdf-logo--branco' : ''}" src="${raizImg}logo_contabilidade.svg" alt="Coleve">`;
+  const pe = (n) => `<footer class="pdf-pe"><span>Coleve Contabilidade · CRC-SP 2SP048990 · coleve.com.br</span><span>${esc(d.numero || 'Rascunho')} · ${n}/2</span></footer>`;
+  return `
+  <section class="pdf-pg pdf-capa">
+    <div class="pdf-capa__txt">
+      ${logo(true)}
+      <p class="pdf-pill">Proposta · ${esc(nomeEmpresa(d))}</p>
+      <p class="pdf-sec">${ev ? 'Contabilidade para eletromobilidade' : 'Proposta comercial'}</p>
+      <h1>${titulo}</h1>
+      <p class="pdf-para">Preparada para <b>${esc(d.contato_nome || nomeEmpresa(d))}</b>${d.contato_nome ? `, da ${esc(nomeEmpresa(d))}` : ''}${onde ? `, em ${esc(onde)}` : ''}.</p>
+      <div class="pdf-capa__plano">
+        <div><span>Plano recomendado</span><b>${esc(d.plano.nome)}</b></div>
+        <strong>${reais(d.preco_final)}<small>/mês${mais}</small></strong>
+      </div>
+      <p class="pdf-capa__datas">Emitida em ${emitida} · válida até ${dataBR(d.validade)}${d.vendedor ? ` · consultor ${esc(d.vendedor)}` : ''}</p>
+    </div>
+    <div class="pdf-capa__foto" style="background-image:url('${raizImg}${ev ? 'banner_hero.webp' : 'escritorio_2.webp'}')"></div>
+  </section>
+
+  <section class="pdf-pg pdf-prop">
+    <div class="pdf-prop__esq">
+      ${logo(false)}
+      <p class="pdf-sec pdf-sec--azul">Por que este plano</p>
+      <h2>${esc(d.plano.nome)}</h2>
+      ${d.motivo ? `<p class="pdf-motivo">${esc(d.motivo)}</p>` : `<p class="pdf-motivo">${esc(d.plano.resumo)}</p>`}
+      <ul class="pdf-inclui">${d.plano.inclui.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+      <div class="pdf-vant">${vantagens.map(([t, x]) => `<div><b>${t}</b><p>${x}</p></div>`).join('')}</div>
+      ${d.observacao ? `<p class="pdf-obs">${esc(d.observacao)}</p>` : ''}
+      ${d.outros.length ? `<p class="pdf-outros">Outros planos: ${d.outros.map(o => `${esc(o.nome)} ${reais(o.preco)}`).join(' · ')}</p>` : ''}
+      ${pe(2)}
+    </div>
+    <div class="pdf-prop__dir">
+      <p class="pdf-sec">Investimento</p>
+      <div class="pdf-preco">${desconto ? `<s>${reais(d.preco_tabela)}</s>` : ''}<strong>${reais(d.preco_final)}</strong><span>por mês${mais}</span>${desconto ? `<em>${Number(d.desconto_pct).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}% de desconto</em>` : ''}</div>
+      <p class="pdf-sec">Como começa</p>
+      <ol class="pdf-passos">${passos.map(([t, x], i) => `<li><span>${i + 1}</span><div><b>${t}</b><p>${x}</p></div></li>`).join('')}</ol>
+      <div class="pdf-contato">
+        <b>Fale com a Coleve</b>
+        <p>WhatsApp (11) 92002-7321 · Telefone (11) 96378-1010</p>
+        <p>Travessa Dona Paula, 13 · Higienópolis · São Paulo</p>
+      </div>
+    </div>
+  </section>`;
 }
 
 // a página da proposta (link do cliente e prévia da equipe). opcoes.aceite = true mostra o botão de aceitar
