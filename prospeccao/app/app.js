@@ -959,6 +959,8 @@ function lkLigar(root, e, depois) {
 }
 
 /* ======================= Achar o dono (25/11) ======================= */
+// 25/11 Alex: só nas contas dele; o restante continua no básico
+const DONO_LIBERADO = ['fleks.ux@gmail.com', 'regesux@gmail.com']
 // quem decide e o telefone dele: Receita (sem o do contador), empresa/MEI no nome dele, web com fonte; confere WhatsApp
 function donoSecao(e) {
   const o = e.dono_info
@@ -1040,7 +1042,7 @@ async function abrirFichaMaps(d, empilhar = true) {
     ${sec('Sobre', [x.resumo, x.resumo_avaliacoes].filter(Boolean).map(t => `<p>${esc(t)}</p>`).join(''))}
     ${sec('Horários', horas)}
     ${sec('O que oferece', etiquetas(x.oferece))}${sec('Pagamento', etiquetas(x.pagamento))}${sec('Estacionamento', etiquetas(x.estacionamento))}${sec('Acessibilidade', etiquetas(x.acessibilidade))}
-    ${sec('Dono', donoSecao(e))}
+    ${DONO_LIBERADO.includes(String(usuario?.email).toLowerCase()) ? sec('Dono', donoSecao(e)) : ''}
     ${sec('Dados da empresa', enrDados(e))}
     ${sec('LinkedIn e quem decide', lkSecao(e))}
     ${sec(`Avaliações${lista ? ` <small>O Google mostra até 5 por empresa</small>` : ''}`, lista || '<p class="fi-v">Nenhuma avaliação trazida ainda.</p>')}
