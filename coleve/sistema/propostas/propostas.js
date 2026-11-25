@@ -209,7 +209,9 @@ function botoes(p) {
     b.innerHTML = `<p class="pp-etapa">Aceita por <b>${esc(p.aceite_nome)}</b> em ${new Date(p.aceita_em).toLocaleDateString('pt-BR')}. Mande o contrato pelo Autentique; quando ele assinar, marque aqui e o cliente entra com o onboarding.</p>
       ${ver}<button type="button" class="btn-a" data-acao="assinado">Contrato assinado</button>`;
   } else if (p.status === 'assinada') {
-    b.innerHTML = `<p class="pp-etapa">Contrato assinado em ${new Date(p.contrato_assinado_em).toLocaleDateString('pt-BR')}. <b>${esc(p.empresa_nome || '')}</b> já é cliente e o onboarding está no quadro.</p>${ver}<a class="btn-a pp-link" href="../clientes/#${p.empresa_id}">Abrir o cliente</a>`;
+    const omie = p.omie_erro ? ` <span class="pp-alerta">Omie recusou: ${esc(p.omie_erro)}. Cadastre à mão no passo 6 do onboarding.</span>` : p.omie_contrato_id ? ' Cliente e mensalidade já estão no Omie.' : '';
+    b.innerHTML = `<p class="pp-etapa">Contrato assinado em ${new Date(p.contrato_assinado_em).toLocaleDateString('pt-BR')}${p.contrato_origem === 'autentique' ? ' pelo Autentique' : ''}. <b>${esc(p.empresa_nome || '')}</b> já é cliente e o onboarding está no quadro.${omie}</p>
+      ${p.contrato_pdf_url ? `<a class="sair" href="${esc(p.contrato_pdf_url)}" target="_blank" rel="noopener">Contrato assinado</a>` : ''}${ver}<a class="btn-a pp-link" href="../clientes/#${p.empresa_id}">Abrir o cliente</a>`;
   } else {
     b.innerHTML = `<p class="pp-etapa">Perdida${p.motivo_perda ? ': ' + esc(p.motivo_perda) : ''}.</p>${ver}<button type="button" class="sair" data-acao="reabrir">Reabrir</button>`;
   }

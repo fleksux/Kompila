@@ -104,3 +104,4 @@ body.modo-doc .cc-bot,body.modo-doc .cc-painel,body:has(.gaveta:not([hidden])) .
   .pp-botoes .btn-a,.pp-botoes .sair{flex:1 1 auto;justify-content:center}
 }
 @media print{body.modo-doc{padding:0;background:#fff}}
+.pp-alerta{display:block;margin-top:4px;color:#a35a00;font-weight:700}
