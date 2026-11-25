@@ -1496,3 +1496,4 @@ a.fi-c{text-decoration:none;color:inherit}
 .dn-s{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--s2,rgba(0,0,0,.06));color:var(--mu)}
 .dn-s.ok{background:rgba(22,163,74,.14);color:#15803d}
 .dn-s.no{background:rgba(220,38,38,.1);color:#b91c1c}
+.dn-a a.btn{text-decoration:none;color:inherit}
