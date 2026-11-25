@@ -962,6 +962,7 @@ function lkLigar(root, e, depois) {
 // quem decide e o telefone dele: Receita (sem o do contador), empresa/MEI no nome dele, web com fonte; confere WhatsApp
 function donoSecao(e) {
   const o = e.dono_info
+  if (!o && ['pendente', 'buscando'].includes(e.dono_status)) return '<p class="fi-v">Procurando o dono sozinho. Leva uns minutos; abre a ficha de novo daqui a pouco.</p>'
   if (!o) return `<p class="fi-v">Acha quem decide e o contato dele: sócios da Receita, celular do cadastro (sem o do contador), empresa ou MEI no nome dele e o que tiver na web. Confere quais números têm WhatsApp. Leva até 1 minuto.</p><button class="btn go sm" data-dono>Achar o dono</button>`
   const host = u => { try { return new URL(u).hostname.replace(/^www\./, '') } catch { return 'fonte' } }
   const selo = c => c.tipo !== 'celular' ? '' : c.whatsapp === true ? '<span class="dn-s ok">Tem WhatsApp</span>' : c.whatsapp === false ? '<span class="dn-s no">Sem WhatsApp</span>' : ''
@@ -1006,7 +1007,7 @@ let fichaAberta = null
 async function abrirFichaMaps(d, empilhar = true) {
   fichaAberta = d
   const e = empNorm(d.empresa) || {}, x = e.google_extra || {}
-  const { data: extra } = await sb.from('empresas').select('info, fotos, linkedin, dono_info').eq('id', e.id).maybeSingle()
+  const { data: extra } = await sb.from('empresas').select('info, fotos, linkedin, dono_info, dono_status').eq('id', e.id).maybeSingle()
   if (extra) Object.assign(e, extra)
   const fotosE = await enrFotosUrl(Array.isArray(e.fotos) ? e.fotos : [])
   const { data: avs } = await sb.from('avaliacoes').select('estrelas, texto, publicada_em, autor, autor_link, tempo').eq('empresa_id', e.id).order('publicada_em', { ascending: false, nullsFirst: false }).limit(20)
