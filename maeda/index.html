@@ -1181,11 +1181,14 @@ function lerForm() {
 }
 // 19/11 (Alex, print do WhatsApp da Simone: "recebe o pedido todo desconfigurado, bagunçado"): pacote em bloco, com título
 // avulso continua numa linha só
+// 25/11 (Simone: "precisa dos pesos no pedido", "a cozinha executa o que está no papel"): peso de cada prato, tirado do começo da descrição
+const pesoTxt = d => { const f = String(d || '').split(/\.\s/)[0].replace(/\.$/, '').trim(); return /\d\s*(kg|g|ml|l|unidades?)\b/i.test(f) && f.length <= 70 ? f : '' }
 function linhasZap() {
   return Object.entries(pedido).flatMap(([k, q]) => {
     const it = CAT[k]
     if (!ehPac(k)) {
-      const l = [`• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : ''} · ${brl(unitP(k) * q)}`]
+      const pe = !it.det ? pesoTxt(it.d) : ''
+      const l = [`• ${q}× ${it.n}${it.det ? ' (' + it.det + ')' : pe ? ' (' + pe + ')' : ''} · ${brl(unitP(k) * q)}`]
       if (temIng(mods[k])) l.push(`   ${[...mods[k].sem.map(x => 'SEM ' + x), ...mods[k].mais.map(x => '+ ' + x)].join(', ')} (a equipe confirma se tem custo)`)
       return l
     }
@@ -1198,10 +1201,10 @@ function linhasZap() {
       const ingDo = nome => { const g = c.ing.find(x => x.prato === nome); return g ? ` (${[...g.sem.map(x => 'sem ' + x), ...g.mais.map(x => '+ ' + x)].join(', ')})` : '' }
       cp.grupos.forEach(g => {
         const vai = cp.itens.filter(x => x.g === g).map(x => ({ x, n: m.q?.[x.nome] ?? x.n0 })).filter(v => v.n > 0)
-        if (vai.length) l.push(`${g}:`, ...vai.map(v => `- ${v.n > 1 ? v.n + ' ' : ''}${v.x.nome}${ingDo(v.x.nome)}`))
+        if (vai.length) l.push(`${g}:`, ...vai.map(v => { const pe = pesoTxt(v.x.desc); return `- ${v.n > 1 ? v.n + ' ' : ''}${v.x.nome}${pe ? ' — ' + pe + (v.n > 1 && !/cada/.test(pe) ? ' cada' : '') : ''}${ingDo(v.x.nome)}` }))
       })
       const ex = (m.ex || []).filter(e => e.q > 0 && CAT[e.k])
-      if (ex.length) l.push('Acrescentado:', ...ex.map(e => `- ${e.q > 1 ? e.q + ' ' : ''}${nomeK(e.k)}`))
+      if (ex.length) l.push('Acrescentado:', ...ex.map(e => { const pe = e.k.split(':').length > 2 ? '' : pesoTxt(CAT[e.k].d); return `- ${e.q > 1 ? e.q + ' ' : ''}${nomeK(e.k)}${pe ? ' — ' + pe + (e.q > 1 && !/cada/.test(pe) ? ' cada' : '') : ''}` }))
       if (c.confirma || c.ing.length) l.push('(a equipe confirma o valor das mudanças)')
     }
     l.push(`*Valor${c.lin.length || c.ing.length ? ' do pacote personalizado' : ''}: ${brl(unitP(k))}${q > 1 ? ` cada (${brl(unitP(k) * q)})` : ''}*`)
