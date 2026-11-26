@@ -44,6 +44,8 @@
   var APP = '2248152579306460', CONFIG = '1084583623978524';
   var res = document.getElementById('resultado'), btn = document.getElementById('conectar');
   var sessao = {}, codigo = '', ligado = false;
+  // 26/11: veio do portal do cliente (onboarding): o 'c' assinado faz o número entrar direto no CRM dele
+  var doPortal = (new URLSearchParams(location.search).get('c') || '').slice(0, 400);
   function mostra(classe, html) { res.className = 'cartao ' + classe; res.innerHTML = html; }
   // 10/11/2026: no fim da conexão, o servidor inscreve o app Kompila na conta nova (antes era à mão e as mensagens não chegavam)
   function ligar() {
@@ -51,11 +53,12 @@
     ligado = true;
     mostra('ok', '<p><b>Conectado.</b> Ligando o número no CRM da Kompila…</p>');
     fetch('https://fmbxnfebumfhrviumkbu.supabase.co/functions/v1/wa_conectar', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: codigo, waba_id: sessao.waba_id, phone_number_id: sessao.phone_number_id }) })
+      body: JSON.stringify({ code: codigo, waba_id: sessao.waba_id, phone_number_id: sessao.phone_number_id, c: doPortal || undefined }) })
       .then(function (r) { return r.json(); })
       .then(function (j) {
         var n = j.numero || {};
-        if (j.inscrito) mostra('ok', '<p><b>Pronto. O número já está ligado no CRM da Kompila.</b> Avise a Kompila.</p>' +
+        if (j.inscrito && doPortal && j.crm === 'ligado') mostra('ok', '<p><b>Pronto. Seu WhatsApp está ligado no CRM.</b></p><p>Pode fechar esta aba e voltar ao portal: o passo já aparece como feito.</p>');
+        else if (j.inscrito) mostra('ok', '<p><b>Pronto. O número já está ligado no CRM da Kompila.</b> Avise a Kompila.</p>' +
           '<p><code>' + (n.telefone || '') + ' ' + (n.nome || '') + '<br>WABA: ' + sessao.waba_id + '<br>Número (ID): ' + (sessao.phone_number_id || '-') + '</code></p>');
         else mostra('erro', '<p><b>Conectado na Meta, mas o CRM ainda não recebe.</b> Avise a Kompila com estes dados:</p>' +
           '<p><code>WABA: ' + sessao.waba_id + '<br>Número (ID): ' + (sessao.phone_number_id || '-') + '<br>' + (j.erro || '') + '</code></p>');
