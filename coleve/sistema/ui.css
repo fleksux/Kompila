@@ -145,3 +145,12 @@ body.ui .toast{background:var(--ui-txt)!important;font-size:13px!important;font-
 body.ui .gaveta__painel{box-shadow:var(--ui-sombra-2)}
 body.ui .gaveta h2{font-size:18px;font-weight:600}
 body.ui .linha--nova{outline-color:var(--ui-azul)!important}
+
+/* Marketing: Lista/Feed fora do navy */
+body.ui .barra-mk .vista{background:var(--ui-hover)!important}
+body.ui .barra-mk .vista button{height:26px!important;color:var(--ui-txt-2)!important;padding:0 10px!important}
+body.ui .barra-mk .vista button.is-ativo{background:var(--ui-sup)!important;color:var(--ui-txt)!important;box-shadow:var(--ui-sombra)}
+/* selo "Drive ligado" sem lima */
+body.ui [class*=drive]:not(.aviso-drive):not(.btn-pasta){border-radius:var(--ui-r)}
+/* chat do canto some quando um painel lateral está aberto */
+body.ui:has(.gaveta:not([hidden])) .cc-bot,body.ui:has(dialog[open]) .cc-bot{display:none}
