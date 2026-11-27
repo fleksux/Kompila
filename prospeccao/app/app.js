@@ -1468,7 +1468,7 @@ const campoMensagem = () => `<label class="dp-lbl" for="dGrupo">Grupo de mensage
       <small class="at-hint"><b>{saudacao}</b> vira bom dia, boa tarde ou boa noite. <b>{Olá|Oi|Bom dia}</b> sorteia uma opção por pessoa.</small>
       <button type="button" class="btn line sm dp-gr-salva" id="dGrSalva" hidden></button>
       <div class="dp-cfg" style="margin-top:8px">Vai chegar assim: <b id="dMsgPrev"></b></div>
-      <div class="dp-teste"><input id="dTel" class="at-in" inputmode="tel" placeholder="Seu número" aria-label="Seu número com DDD para receber o teste" autocomplete="tel"><button type="button" class="btn line sm" id="dTeste">Enviar teste para mim</button></div>`
+      <div class="dp-teste"><input id="dTel" class="at-in" inputmode="tel" placeholder="Seu número" aria-label="Seu número com DDD para receber o teste" autocomplete="tel"><button type="button" class="btn line sm" id="dTeste">Enviar teste para mim</button></div><small class="at-hint" id="dTesteMsg" role="status" hidden></small>`
 const ligarVersoes = () => {
   const t = $('dMsg'); if (!t) return
   const previa = () => { $('dMsgPrev').textContent = comSaudacao(comSorteio(t.value.trim())) || 'escreva a mensagem' }
@@ -1491,7 +1491,9 @@ const ligarVersoes = () => {
     if (!versoes.length) return liz('Escreve a mensagem antes de testar.')
     try { localStorage.setItem('kz_tel_teste', telefone) } catch (_) {}
     b.disabled = true; b.textContent = 'Enviando…'
-    try { const r = await chamar('disparo_teste', { telefone, versoes }); liz(`Teste enviado: ${r.enviadas} ${r.enviadas === 1 ? 'versão' : 'versões'}.`) } catch (e) { liz(esc(e.message || 'O teste não saiu. Tenta de novo.')) }
+    // 27/11: o aviso da Liz fica atrás da página do disparo; o resultado aparece embaixo do botão
+    const avisa = (tx, ok) => { const m = $('dTesteMsg'); if (m) { m.hidden = false; m.style.color = ok ? '#1FA463' : '#C0392B'; m.textContent = tx } liz(esc(tx)) }
+    try { const r = await chamar('disparo_teste', { telefone, versoes }); avisa(`Teste enviado: ${r.enviadas} ${r.enviadas === 1 ? 'versão' : 'versões'}.`, true) } catch (e) { avisa(e.message || 'O teste não saiu. Tenta de novo.', false) }
     b.disabled = false; b.textContent = 'Enviar teste para mim'
   }
 }
