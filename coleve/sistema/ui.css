@@ -1,7 +1,7 @@
 /* Sistema Coleve · padrão de tela de sistema (27/11/2026)
    Régua: ferramenta de trabalho no nível do ClickUp. Letra pequena e limpa, linha compacta,
    cinza neutro, cor só para dizer algo (status, prioridade, atraso). A marca fica no logo e no azul de ação. */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 :root{
   --ui-fundo:#F6F7F9; --ui-sup:#FFFFFF; --ui-sup-2:#FAFBFC; --ui-hover:#F2F4F7; --ui-sel:#EAF1FF;
@@ -68,3 +68,80 @@ select.ui-in{padding-right:26px;appearance:none;background:var(--ui-sup) url("da
   body.ui .barra__nav a{font-size:10.5px;font-weight:500;padding:6px 2px 4px}
   body.ui .barra__nav a[aria-current]{background:none}
 }
+
+/* ===================================================================================
+   CAMADA DE TRANSIÇÃO · telas antigas (Área interna, Clientes, Propostas, Marketing,
+   Conversas, Feed, Reuniões, Meu dia) no padrão de sistema, sem mexer na lógica delas.
+   =================================================================================== */
+body.ui *{font-family:var(--ui-fonte)!important}
+body.ui{--azul:#1A71FF;--navy:#1F2328;--grafite:#1F2328;--cinza:#6B7280;--linha:#E5E7EB;--nevoa:#F3F4F6}
+body.ui .miolo{max-width:1240px;padding:20px 24px 64px}
+
+/* cabeçalho de página: discreto */
+body.ui .sec{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--ui-txt-3);margin-bottom:4px}
+body.ui .sec::before{display:none}
+body.ui .h1,body.ui:not(.ui-tf) h1{font-size:20px!important;font-weight:600!important;letter-spacing:-.01em;line-height:1.3}
+body.ui .h1 b,body.ui:not(.ui-tf) h1 b{font-weight:600!important;color:inherit!important}
+body.ui .sub{font-size:13px;color:var(--ui-txt-2);margin:2px 0 16px}
+body.ui:not(.ui-tf) h2{font-size:15px;font-weight:600}
+body.ui:not(.ui-tf) h3{font-size:14px;font-weight:600}
+body.ui .abas-cl{gap:16px;border-bottom-width:1px;margin:0 0 16px}
+body.ui .abas-cl a{height:36px;font-size:13px;font-weight:500;border-bottom-width:2px;margin-bottom:-1px}
+
+/* números e cartões */
+body.ui :is(.num,.mod,.emp,.pp-col,.linha,.caixa-mk,.gerar,.col){border-radius:var(--ui-r2)!important;outline:1px solid var(--ui-linha)!important;outline-offset:-1px!important;box-shadow:none!important}
+body.ui .num{padding:14px 16px}
+body.ui .num strong{font-size:22px;font-weight:600;color:var(--ui-txt)}
+body.ui .num span{font-size:12px;color:var(--ui-txt-3)}
+body.ui :is(.mod,.emp){padding:16px}
+body.ui :is(.mod,.emp) .ico{width:28px;height:28px;border-radius:6px;background:var(--ui-sel);margin-bottom:10px}
+body.ui :is(.mod,.emp) .ico svg{width:16px;height:16px;stroke:var(--ui-azul)}
+body.ui .mod h3,body.ui .emp b{font-size:14px;font-weight:600}
+body.ui .mod p,body.ui .emp small{font-size:12px;color:var(--ui-txt-2)}
+body.ui :is(.mod,.emp) em{top:14px;right:14px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px}
+body.ui .mod--ativo:hover,body.ui .emp:hover{transform:none;box-shadow:var(--ui-sombra-2)!important}
+body.ui .mod--ativo{outline-color:var(--ui-linha)!important}
+body.ui .mod--ativo em{background:var(--ui-sel)!important;color:var(--ui-azul)!important}
+body.ui :is(.numeros,.modulos,.empresas){gap:10px}
+body.ui :is(.pp-card,.cartao,.arq-card,.dm__brief,.mini-chat,.pp-perg,.pp-ajuste,.ajuste,.decisao,.enviado,.aviso-drive){border-radius:var(--ui-r)!important}
+body.ui .pp-card b{font-size:13px;font-weight:600}
+body.ui .pp-card__pe strong{font-size:13px}
+body.ui .pp-col header b{font-size:13px;font-weight:600}
+body.ui .pp-col header span,body.ui .canal__n,body.ui .badge-nav{border-radius:4px;font-weight:500;font-size:11px}
+body.ui .pp-col--aceita header span{background:#E7F6EE;color:#1E7A4C}
+body.ui .pp-res{background:var(--ui-sup);color:var(--ui-txt);border-radius:var(--ui-r2);outline:1px solid var(--ui-linha);outline-offset:-1px}
+body.ui .pp-res h4{font-size:16px;font-weight:600}
+body.ui .pp-res .cp-t,body.ui .pp-res__vazio{color:var(--ui-txt-2)}
+body.ui .pp-tag{background:var(--ui-sel);color:var(--ui-azul);border-radius:4px;font-weight:500}
+
+/* botões antigos: pílula lima/navy vira botão de sistema */
+body.ui :is(.btn-lima,.btn-lima-q,.nova,.btn-a,.btn-pub,.dp--btn,.btn-ok){height:30px!important;padding:0 12px!important;border-radius:var(--ui-r)!important;font-size:13px!important;font-weight:500!important;background:var(--ui-azul)!important;color:#fff!important;border:0!important;box-shadow:none!important;filter:none!important}
+body.ui :is(.btn-lima,.btn-lima-q,.nova,.btn-a,.btn-pub,.dp--btn,.btn-ok):hover{background:var(--ui-azul-2)!important}
+body.ui .btn-lima::before,body.ui .btn-lima-q::before{display:none}
+body.ui .nova--2{background:var(--ui-sup)!important;color:var(--ui-txt)!important;outline:1px solid var(--ui-linha)!important}
+body.ui :is(.sair,.d-baixar,.btn-pasta,.membros-btn,.membro__tirar,.mais,.dp,.env,.chip-arq){border-radius:var(--ui-r)!important;font-weight:500!important;height:auto;min-height:28px}
+body.ui :is(.vista,.abas){border-radius:var(--ui-r)!important;padding:2px!important;outline:0!important;background:var(--ui-hover)!important}
+body.ui :is(.vista,.abas) button{border-radius:5px!important;font-size:12px!important;font-weight:500!important;min-height:26px}
+
+/* campos */
+body.ui:not(.ui-tf) :is(input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea):not(.ui-in):not(.ui-txt){border-radius:var(--ui-r)!important;font-size:13px!important;border:1px solid var(--ui-linha)!important;outline:0;box-shadow:none}
+body.ui:not(.ui-tf) :is(input:not([type=checkbox]):not([type=radio]):not([type=file]),select):not(.ui-in){min-height:30px;height:auto!important}
+
+/* selos */
+body.ui .st,body.ui .barra__tag{border-radius:4px!important;font-size:10.5px!important;font-weight:600!important;letter-spacing:.02em!important;padding:2px 7px!important}
+body.ui .st--lido{background:#E7F6EE;color:#1E7A4C}
+body.ui .st-pub{background:var(--ui-hover);color:var(--ui-txt)}
+
+/* Marketing: a faixa navy vira abas de sistema */
+body.ui .barra-mk{background:var(--ui-sup)!important;border-radius:0!important;padding:0 0 8px!important;gap:8px!important;border-bottom:1px solid var(--ui-linha);margin-bottom:16px!important;flex-wrap:wrap}
+body.ui .aba-st{flex:none!important;min-height:30px!important;padding:0 10px!important;border-radius:var(--ui-r)!important;background:none!important;color:var(--ui-txt-2)!important;font-size:13px!important;font-weight:500!important}
+body.ui .aba-st:hover{background:var(--ui-hover)!important}
+body.ui .aba-st[aria-selected=true],body.ui .aba-st.is-ativo,body.ui .aba-st[aria-current]{background:var(--ui-sel)!important;color:var(--ui-azul)!important}
+body.ui .aba-st *{color:inherit!important}
+
+/* diálogos, avisos, painéis */
+body.ui :is(.dlg,.dlg-t,.dm__painel){border-radius:12px!important;box-shadow:var(--ui-sombra-2)!important}
+body.ui .toast{background:var(--ui-txt)!important;font-size:13px!important;font-weight:500!important;border-radius:var(--ui-r2)!important}
+body.ui .gaveta__painel{box-shadow:var(--ui-sombra-2)}
+body.ui .gaveta h2{font-size:18px;font-weight:600}
+body.ui .linha--nova{outline-color:var(--ui-azul)!important}
