@@ -151,7 +151,7 @@ function prazoHTML(t) {
 }
 const prioHTML = t => t.prioridade ? `<span class="tf-pr" data-pr="${t.prioridade}">${ICO_FLAG}${PRIO[t.prioridade]}</span>` : '<span class="tf-vazio-c">·</span>';
 function rostos(t, max = 3) {
-  const ids = envolvidos(t).slice(0, max);
+  const ids = [...new Set([t.responsavel_id, ...(acompanha.get(t.id) || [])].filter(Boolean))].slice(0, max);
   if (!ids.length) return '<span class="ui-mini ui-mini--vazio" title="Sem responsável">+</span>';
   return ids.map(id => `<span class="ui-mini${id === t.responsavel_id ? '' : ' mini--seg'}" title="${esc(nomeDe(id))}${id === t.responsavel_id ? ' · responsável' : ' · acompanha'}">${iniciais(nomeDe(id))}</span>`).join('');
 }
@@ -162,7 +162,7 @@ const tagsHTML = t => [
   t.empresa_teste ? '<span class="tf-tag tf-tag--teste">teste</span>' : ''
 ].join('');
 const subHTML = t => t.sub_total ? `<span class="tf-contador" title="Subtarefas">${ICO_SUB}${t.sub_feitas}/${t.sub_total}</span>` : '';
-const empHTML = t => t.empresa_id || t.demanda ? esc(t.empresa_nome) : '<span class="tf-vazio-c">Interno</span>';
+const empHTML = t => t.empresa_id || t.demanda ? esc(t.empresa_nome) : '<span class="tf-vazio-c">·</span>';
 
 // ===== vista lista =====
 function linha(t, sub = false) {
@@ -215,7 +215,7 @@ function desenhaQuadro(ts) {
       <div class="tf-col__cab"><span class="tf-st">${nome}</span><small>${cs.length}</small></div>
       ${cs.map(t => `<article class="tf-card${t.atrasada ? ' tf-card--atraso' : ''}" draggable="true" data-id="${t.id}" tabindex="0">
         <p class="tf-card__t">${esc(t.titulo)}</p>
-        <p class="tf-card__emp">${lista === 'todas' || lista === 'minhas' || lista === 'atrasadas' ? (AREA[t.area]?.n || '') + ' · ' : ''}${t.empresa_id || t.demanda ? esc(t.empresa_nome) : 'Interno'}</p>
+        <p class="tf-card__emp">${lista === 'todas' || lista === 'minhas' || lista === 'atrasadas' ? (AREA[t.area]?.n || '') + ' · ' : ''}${t.empresa_id || t.demanda ? esc(t.empresa_nome) : 'Interno · Coleve'}</p>
         <div class="tf-card__meta">${tagsHTML(t)}${subHTML(t)}</div>
         <div class="tf-card__pe">${prazoHTML(t)}${t.prioridade ? prioHTML(t) : ''}<div class="tf-resp">${rostos(t)}</div></div>
       </article>`).join('')}

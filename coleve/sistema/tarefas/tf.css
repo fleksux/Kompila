@@ -1,10 +1,10 @@
 /* Sistema Coleve · Tarefas no molde do ClickUp (27/11/2026). Depende de ../ui.css */
 body.ui{overflow:hidden}
 body.carregando .tf{opacity:0}
-.tf{display:grid;grid-template-columns:232px 1fr;height:calc(100vh - 48px);transition:opacity .2s}
+.tf{display:grid;grid-template-columns:232px minmax(0,1fr);grid-template-rows:minmax(0,1fr);height:calc(100vh - 48px);height:calc(100dvh - 48px);transition:opacity .2s}
 
 /* lateral */
-.tf-lado{background:var(--ui-sup-2);border-right:1px solid var(--ui-linha);padding:12px 8px;overflow-y:auto}
+.tf-lado{min-height:0;background:var(--ui-sup-2);border-right:1px solid var(--ui-linha);padding:12px 8px;overflow-y:auto}
 .tf-sub{display:flex;gap:2px;padding:2px;margin:0 4px 14px;background:var(--ui-hover);border-radius:var(--ui-r)}
 .tf-sub a{flex:1;text-align:center;padding:4px 0;border-radius:5px;font-size:12px;font-weight:500;color:var(--ui-txt-2);text-decoration:none}
 .tf-sub a[aria-current]{background:var(--ui-sup);color:var(--ui-txt);box-shadow:var(--ui-sombra)}
@@ -20,7 +20,7 @@ body.carregando .tf{opacity:0}
 .tf-gerar .tf-lado__t{margin:14px 4px 2px}
 
 /* principal */
-.tf-main{display:flex;flex-direction:column;min-width:0;background:var(--ui-sup)}
+.tf-main{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;background:var(--ui-sup)}
 .tf-topo{display:flex;align-items:center;gap:12px;padding:14px 20px 10px}
 .tf-titulo{display:flex;align-items:center;gap:8px;min-width:0;margin-right:auto}
 .tf-titulo .ui-ponto{width:10px;height:10px;color:var(--cor,#8A919C)}
@@ -39,7 +39,7 @@ body.carregando .tf{opacity:0}
 .tf-busca input{border:0;outline:0;width:100%;font-size:12px;background:none}
 .tf-chk{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ui-txt-2);cursor:pointer;padding:0 4px}
 .tf-chk input{accent-color:var(--ui-azul)}
-.tf-corpo{flex:1;overflow:auto;padding:4px 20px 40px}
+.tf-corpo{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:4px 20px 80px}
 
 /* vista lista */
 .tf-grupo{margin-top:14px}
