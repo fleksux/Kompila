@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tarefas · Sistema Coleve</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#1A71FF">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../icones/apple_180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../sistema.css?v=30">
-<link rel="stylesheet" href="tarefas.css?v=10">
+<link rel="stylesheet" href="../ui.css?v=1">
+<link rel="stylesheet" href="tf.css?v=1">
 </head>
-<body class="carregando">
-
+<body class="ui carregando">
 <header class="barra">
   <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
   <nav class="barra__nav" aria-label="Sistema">
@@ -24,7 +24,7 @@
     <a href="./" aria-current="page">Tarefas</a>
     <a href="../marketing/">Marketing</a>
     <a href="../conversas/">Conversas</a>
-  <a href="../clientes/">Clientes</a><a href="../propostas/">Propostas</a></nav>
+    <a href="../clientes/">Clientes</a><a href="../propostas/">Propostas</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -32,93 +32,127 @@
   </div>
 </header>
 
-<main class="quadro-pg">
-  <nav class="abas-cl" aria-label="Tarefas"><a href="./" aria-current="page">Quadro</a><a href="reunioes/">Reuniões</a><a href="meu-dia/">Meu dia</a></nav>
-  <div class="topo-q">
-    <div>
-      <p class="sec">Área interna · tarefas</p>
-      <h1 class="h1">Tarefas <b id="total">do time</b></h1>
+<div class="tf">
+  <!-- lateral: espaços e listas, como no ClickUp -->
+  <aside class="tf-lado" aria-label="Listas">
+    <nav class="tf-sub" aria-label="Tarefas"><a href="./" aria-current="page">Tarefas</a><a href="reunioes/">Reuniões</a><a href="meu-dia/">Meu dia</a></nav>
+    <p class="tf-lado__t">Visões</p>
+    <ul class="tf-listas" id="visoes"></ul>
+    <p class="tf-lado__t">Listas</p>
+    <ul class="tf-listas" id="listas"></ul>
+    <div class="tf-gerar" id="gerar" hidden>
+      <p class="tf-lado__t">Guias do mês</p>
+      <input type="month" id="gerar-mes" class="ui-in" aria-label="Competência">
+      <button class="ui-btn" id="gerar-btn" type="button">Gerar guias</button>
     </div>
-    <div class="acoes-q">
-      <div class="vista" id="vista-q" role="tablist" aria-label="Ver"><button role="tab" data-v="minhas">Minhas</button><button role="tab" data-v="todas">Todas</button></div>
-      <button class="btn-lima-q" id="nova-t" type="button">+ Tarefa</button>
+  </aside>
+
+  <main class="tf-main">
+    <header class="tf-topo">
+      <div class="tf-titulo">
+        <span class="ui-ponto" id="t-ponto"></span>
+        <h1 id="t-nome">Todas as tarefas</h1>
+        <span class="tf-conta" id="total"></span>
+      </div>
+      <select class="ui-in tf-lista-cel" id="lista-cel" aria-label="Lista"></select>
+      <div class="tf-vistas" role="tablist" aria-label="Vista">
+        <button role="tab" data-v="lista" class="is-on"><svg viewBox="0 0 16 16"><path d="M5 4h8M5 8h8M5 12h8M2.5 4h.01M2.5 8h.01M2.5 12h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>Lista</button>
+        <button role="tab" data-v="quadro"><svg viewBox="0 0 16 16"><rect x="2" y="2.5" width="3.5" height="11" rx="1" stroke="currentColor" stroke-width="1.4" fill="none"/><rect x="7" y="2.5" width="3.5" height="7" rx="1" stroke="currentColor" stroke-width="1.4" fill="none"/><rect x="12" y="2.5" width="2.5" height="9" rx="1" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>Quadro</button>
+      </div>
+      <button class="ui-btn ui-btn--pri" id="nova-t" type="button"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Tarefa</button>
+    </header>
+
+    <div class="tf-filtros">
+      <label class="tf-busca"><svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input type="search" id="f-busca" placeholder="Buscar" aria-label="Buscar tarefa ou cliente"></label>
+      <select class="ui-in" id="f-resp" aria-label="Responsável"><option value="">Responsável</option><option value="-">Sem responsável</option></select>
+      <select class="ui-in" id="f-emp" aria-label="Cliente"><option value="">Cliente</option><option value="interno">Interno · Coleve</option></select>
+      <select class="ui-in" id="f-pr" aria-label="Prioridade"><option value="">Prioridade</option><option value="1">Urgente</option><option value="2">Alta</option><option value="3">Normal</option><option value="4">Baixa</option></select>
+      <label class="tf-chk"><input type="checkbox" id="f-atraso"> Atrasadas</label>
+      <label class="tf-chk"><input type="checkbox" id="f-fechadas"> Mostrar concluídas</label>
     </div>
-    <div class="gerar" id="gerar" hidden>
-      <label>Competência <input type="month" id="gerar-mes"></label>
-      <button class="btn-a" id="gerar-btn" type="button">Gerar guias do mês</button>
-    </div>
-  </div>
 
-  <div class="filtros">
-    <input type="search" id="f-busca" placeholder="Buscar tarefa ou cliente" aria-label="Buscar">
-    <select id="f-area" aria-label="Área"><option value="">Todas as áreas</option></select>
-    <select id="f-resp" aria-label="Responsável"><option value="">Todos os responsáveis</option><option value="-">Sem responsável</option></select>
-    <select id="f-emp" aria-label="Cliente"><option value="">Todos os clientes</option></select>
-    <label class="chk"><input type="checkbox" id="f-atraso"> Só atrasadas</label>
-  </div>
-
-  <p class="aviso-q" id="aviso" role="status" aria-live="polite"></p>
-
-  <section class="quadro" id="quadro" aria-label="Quadro de tarefas"></section>
-</main>
+    <section class="tf-corpo" id="corpo" aria-live="polite"></section>
+  </main>
+</div>
 
 <!-- nova tarefa -->
-<dialog class="dlg-t" id="dlg-t">
+<dialog class="tf-dlg" id="dlg-t">
   <form id="f-nova-t" method="dialog">
-    <h2>Nova tarefa</h2>
-    <label class="cp-t"><span>O que precisa ser feito?</span><input id="n-titulo" required placeholder="Ex.: Ajustar o site da Coleve no celular"></label>
-    <div class="cp-2">
-      <label class="cp-t"><span>Área</span><select id="n-area"></select></label>
-      <label class="cp-t"><span>Prazo</span><input type="date" id="n-prazo"></label>
+    <input class="tf-dlg__t" id="n-titulo" required placeholder="Nome da tarefa" aria-label="Nome da tarefa" autocomplete="off">
+    <textarea class="ui-txt" id="n-desc" rows="3" placeholder="Descrição (opcional)"></textarea>
+    <div class="tf-dlg__campos">
+      <label><span>Lista</span><select class="ui-in" id="n-area"></select></label>
+      <label><span>Responsável</span><select class="ui-in" id="n-resp"><option value="">Ninguém</option></select></label>
+      <label><span>Prazo</span><input class="ui-in" type="date" id="n-prazo"></label>
+      <label><span>Prioridade</span><select class="ui-in" id="n-pr"><option value="">Sem</option><option value="1">Urgente</option><option value="2">Alta</option><option value="3">Normal</option><option value="4">Baixa</option></select></label>
+      <label><span>Cliente</span><select class="ui-in" id="n-emp"><option value="">Interno · Coleve</option></select></label>
     </div>
-    <div class="cp-2">
-      <label class="cp-t"><span>Com quem</span><select id="n-resp"><option value="">Sem responsável</option></select></label>
-      <label class="cp-t"><span>Cliente</span><select id="n-emp"><option value="">Interno · Coleve</option></select></label>
-    </div>
-    <div class="botoes-t"><button class="sair" type="button" id="n-cancela">Cancelar</button><button class="btn-a" type="submit">Criar tarefa</button></div>
+    <div class="tf-dlg__pe"><button class="ui-btn ui-btn--fan" type="button" id="n-cancela">Cancelar</button><button class="ui-btn ui-btn--pri" type="submit">Criar tarefa</button></div>
   </form>
 </dialog>
 
 <!-- detalhe da tarefa -->
-<div class="gaveta" id="gaveta" hidden>
+<div class="gaveta tf-gav" id="gaveta" hidden>
   <div class="gaveta__fundo" data-fecha></div>
   <aside class="gaveta__painel" role="dialog" aria-modal="true" aria-labelledby="d-titulo">
-    <button class="gaveta__x" data-fecha aria-label="Fechar">×</button>
-    <p class="d-empresa" id="d-empresa"></p>
-    <h2 id="d-titulo"></h2>
-    <div class="d-status" id="d-status" role="group" aria-label="Status"></div>
-    <dl class="d-campos">
-      <div><dt>Área</dt><dd id="d-area"></dd></div>
-      <div><dt>Competência</dt><dd id="d-comp"></dd></div>
-      <div><dt>Prazo</dt><dd><input type="date" id="d-prazo"></dd></div>
-      <div><dt>Responsável</dt><dd><select id="d-resp"><option value="">Sem responsável</option></select></dd></div>
-      <div><dt>Visível ao cliente</dt><dd><label class="chk"><input type="checkbox" id="d-visivel"> sim</label></dd></div>
-    </dl>
-    <section id="d-docs" hidden>
-      <h3>Documentos <small class="h3-dica">o cliente só vê depois de enviar</small></h3>
-      <ul class="d-docs" id="d-doc-lista"></ul>
-      <form class="d-anexo" id="d-anexo">
-        <label class="d-arq"><input type="file" id="d-arq" required><span id="d-arq-nome">Escolher arquivo</span></label>
-        <div class="d-anexo__campos">
-          <label>Tipo<select id="d-doc-tipo"></select></label>
-          <label>Valor (R$)<input type="number" step="0.01" min="0" id="d-doc-valor" inputmode="decimal" placeholder="0,00"></label>
-          <label>Vencimento<input type="date" id="d-doc-venc"></label>
-        </div>
-        <button class="btn-a" type="submit" id="d-anexar">Anexar</button>
-      </form>
-      <button class="btn-lima-q d-entregar" id="d-entregar" type="button" hidden>Enviar ao cliente</button>
-    </section>
-    <h3>Envolvidos <small class="h3-dica">recebem aviso quando o card anda ou recebe comentário</small></h3>
-    <div class="envolvidos" id="d-envolvidos"></div>
-    <h3>Comentários da equipe</h3>
-    <ul class="d-coment" id="d-coment"></ul>
-    <form class="d-novo" id="d-novo"><textarea id="d-texto" rows="2" placeholder="Escreva um comentário interno"></textarea><button class="btn-a" type="submit">Comentar</button></form>
-    <h3>Histórico</h3>
-    <ul class="d-hist" id="d-hist"></ul>
+    <header class="tf-gav__topo">
+      <span class="tf-gav__onde" id="d-onde"></span>
+      <button class="ui-btn ui-btn--fan" id="d-pai" type="button" hidden></button>
+      <button class="ui-btn ui-btn--fan tf-gav__x" data-fecha aria-label="Fechar"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </header>
+    <div class="tf-gav__miolo">
+      <h2 id="d-titulo" class="tf-gav__titulo" contenteditable="plaintext-only" spellcheck="false"></h2>
+      <dl class="tf-props">
+        <div><dt>Status</dt><dd><select class="ui-in tf-st-sel" id="d-status"></select></dd></div>
+        <div><dt>Responsável</dt><dd><select class="ui-in" id="d-resp"><option value="">Ninguém</option></select></dd></div>
+        <div><dt>Prazo</dt><dd><input class="ui-in" type="date" id="d-prazo"></dd></div>
+        <div><dt>Prioridade</dt><dd><select class="ui-in" id="d-pr"><option value="">Sem</option><option value="1">Urgente</option><option value="2">Alta</option><option value="3">Normal</option><option value="4">Baixa</option></select></dd></div>
+        <div><dt>Lista</dt><dd><select class="ui-in" id="d-area"></select></dd></div>
+        <div><dt>Cliente</dt><dd id="d-empresa"></dd></div>
+        <div id="d-comp-l"><dt>Competência</dt><dd id="d-comp"></dd></div>
+        <div><dt>Etiquetas</dt><dd><input class="ui-in" id="d-tags" placeholder="separe por vírgula"></dd></div>
+        <div id="d-visivel-l"><dt>Cliente vê</dt><dd><label class="tf-chk"><input type="checkbox" id="d-visivel"> sim</label></dd></div>
+      </dl>
+
+      <section class="tf-sec">
+        <h3>Descrição</h3>
+        <textarea class="ui-txt tf-desc" id="d-desc" placeholder="Escreva os detalhes, o passo a passo, links…"></textarea>
+      </section>
+
+      <section class="tf-sec">
+        <h3>Subtarefas <span id="d-sub-conta"></span></h3>
+        <ul class="tf-subs" id="d-subs"></ul>
+        <form class="tf-sub-nova" id="d-sub-nova"><input class="ui-in" id="d-sub-titulo" placeholder="+ Adicionar subtarefa" autocomplete="off"></form>
+      </section>
+
+      <section class="tf-sec" id="d-docs" hidden>
+        <h3>Documentos <small>o cliente só vê depois de enviar</small></h3>
+        <ul class="tf-docs" id="d-doc-lista"></ul>
+        <form class="tf-anexo" id="d-anexo">
+          <label class="ui-btn"><input type="file" id="d-arq" required hidden><span id="d-arq-nome">Escolher arquivo</span></label>
+          <select class="ui-in" id="d-doc-tipo" aria-label="Tipo"></select>
+          <input class="ui-in" type="number" step="0.01" min="0" id="d-doc-valor" inputmode="decimal" placeholder="Valor R$" aria-label="Valor">
+          <input class="ui-in" type="date" id="d-doc-venc" aria-label="Vencimento">
+          <button class="ui-btn" type="submit" id="d-anexar">Anexar</button>
+        </form>
+        <button class="ui-btn ui-btn--pri" id="d-entregar" type="button" hidden>Enviar ao cliente</button>
+      </section>
+
+      <section class="tf-sec">
+        <h3>Envolvidos <small>recebem aviso quando o card anda ou recebe comentário</small></h3>
+        <div class="tf-env" id="d-envolvidos"></div>
+      </section>
+
+      <section class="tf-sec">
+        <h3>Atividade</h3>
+        <ul class="tf-ativ" id="d-ativ"></ul>
+        <form class="tf-coment" id="d-novo"><textarea class="ui-txt" id="d-texto" rows="2" placeholder="Escreva um comentário"></textarea><button class="ui-btn ui-btn--pri" type="submit">Comentar</button></form>
+      </section>
+    </div>
   </aside>
 </div>
-
-<script type="module" src="tarefas.js?v=11"></script>
+<p class="ui-aviso" id="aviso" role="status" aria-live="polite"></p>
+<script type="module" src="tarefas.js?v=20"></script>
 <script type="module" src="../chat-canto.js?v=5"></script>
 <script type="module" src="../avisos.js?v=1"></script>
 </body>
