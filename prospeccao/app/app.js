@@ -138,7 +138,7 @@ async function conferirWhats() {
 
 /* ======================= pergunta ======================= */
 const PIN = IC.ok
-let esc_ = { cidade: '', nicho: '', todas: false }
+let esc_ = { cidade: '', nicho: '', todas: false, dono: false }
 function pergunta(passo) {
   $('lv').hidden = true
   document.body.classList.add('fora')
@@ -153,6 +153,7 @@ function pergunta(passo) {
     <div class="fld"><input type="text" id="aq" placeholder="${q.ph}" autocomplete="off"><button class="btn go lg" id="ab">${q.bt}</button></div>
     <div class="err" id="ae"></div><div class="sg">${q.sg.map(x => `<button>${x}</button>`).join('')}</div>
     ${passo === 2 ? `<div class="mds-s" id="mdS">${saldoDepois()}</div>` : ''}
+    ${passo === 2 && DONO_LIBERADO.includes(String(usuario?.email).toLowerCase()) ? `<label class="dono-ch"><input type="checkbox" id="aDono"${esc_.dono ? ' checked' : ''}><span><b>Achar o dono de cada empresa</b><small>Sócios e celular de cada uma, cerca de R$ 0,30 por empresa. Desligado, você escolhe na ficha qual pesquisar.</small></span></label>` : ''}
     ${passo === 1 ? `<div class="ou">ou</div><div class="drop" id="drop"><div class="di">${IC.arq}</div><div><b>Sobe uma lista</b><small>Excel ou CSV com empresa, site ou cidade. Conta pessoal eu descarto.</small></div></div>
       <div class="drop" id="lkB"><div class="di">${IC.mala}</div><div><b>Buscar no LinkedIn</b><small>Escreve o que procura, do seu jeito. Cidade, estado e tamanho da empresa são opcionais.</small></div></div>` : ''}`
   const aq = $('aq'); if (!mob()) aq.focus()
@@ -163,6 +164,7 @@ function pergunta(passo) {
     else { esc_.nicho = v.charAt(0).toUpperCase() + v.slice(1); fecharPergunta(); rodarBusca(esc_.cidade, esc_.nicho, 'lista') }
   }
   $('ab').onclick = () => vai(aq.value)
+  if ($('aDono')) $('aDono').onchange = e => { esc_.dono = e.target.checked }
   aq.onkeydown = e => { if (e.key === 'Enter') vai(aq.value) }
   $('askc').querySelectorAll('.sg button').forEach(b => b.onclick = () => vai(b.textContent))
   if (false) $('askc').querySelectorAll('.md').forEach(b => b.onclick = () => { esc_.modo = b.dataset.m; $('askc').querySelectorAll('.md').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b) }); $('mdS').innerHTML = saldoDepois() })
@@ -299,7 +301,7 @@ async function rodarBusca(cidade, nicho, modo = 'lista', quero = 60, novaMesmo =
   montarCanvas({ cidade, nicho, status: 'buscando', olhadas: 0, novas: 0, com_dor: 0 }, true)
   vivo(true, 'Liz procurando')
   try {
-    const b = await chamar('buscar', { cidade, nicho, quero })
+    const b = await chamar('buscar', { cidade, nicho, quero, achar_dono: !!esc_.dono })
     busca = { id: b.busca_id, cidade, nicho, status: 'peneirando', olhadas: b.olhadas, novas: b.novas, com_dor: 0 }
     atualizarFunil(); dizer(`Olhei ${b.olhadas} empresas. ${b.ja_tinha ? b.ja_tinha + ' você já tinha, então ' : ''}${b.novas} são novas${b.novas < quero ? (b.teto ? ` (você pediu ${quero}; parei aqui pra não gastar à toa, é só buscar de novo pra trazer mais)` : ` (você pediu ${quero}, mas a cidade não tem mais que isso nesse nicho)`) : ''}. Lendo as avaliações agora.`)
     if (!b.novas) return fim('Nenhuma empresa nova nessa busca. Tenta outro nicho ou outra cidade.')
