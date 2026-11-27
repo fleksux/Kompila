@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envio de documentos · Coleve Contabilidade</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema/sistema.css?v=30">
+<link rel="stylesheet" href="../sistema/ui.css?v=5">
+<link rel="stylesheet" href="envio-contador.css?v=1">
+</head>
+<body class="ui ui-tf">
+<header class="ec-topo">
+  <img src="../img/logo_contabilidade.svg" alt="Coleve contabilidade" width="160" height="40">
+  <span class="ec-topo__tag">Transferência técnica</span>
+</header>
+
+<main class="ec" id="ec" aria-busy="true">
+  <p class="ec-carrega">Carregando…</p>
+</main>
+
+<template id="tpl">
+  <section class="ec-cab">
+    <p class="ec-sec">Envio de documentos para a Coleve</p>
+    <h1 id="e-empresa"></h1>
+    <p class="ec-sub" id="e-sub"></p>
+    <dl class="ec-dados">
+      <div><dt>Contador anterior</dt><dd id="e-contador"></dd></div>
+      <div><dt>Responsável na Coleve</dt><dd id="e-resp"></dd></div>
+      <div><dt>Link válido até</dt><dd id="e-validade"></dd></div>
+    </dl>
+  </section>
+
+  <section class="ec-caixa">
+    <h2>Quem está enviando</h2>
+    <p class="ec-dica">Fica registrado no protocolo de cada arquivo.</p>
+    <div class="ec-2">
+      <label class="ec-c"><span>Seu nome</span><input class="ui-in" id="r-nome" autocomplete="name" required></label>
+      <label class="ec-c"><span>E-mail</span><input class="ui-in" id="r-email" type="email" autocomplete="email"></label>
+    </div>
+  </section>
+
+  <section class="ec-caixa">
+    <h2>Documentos por categoria <small id="e-placar"></small></h2>
+    <p class="ec-dica">Escolha a competência (mês de referência) quando o documento for de um mês específico e anexe um ou mais arquivos. Cada arquivo recebe um número de protocolo.</p>
+    <ul class="ec-cats" id="e-cats"></ul>
+  </section>
+
+  <section class="ec-caixa ec-comp" id="e-comp" hidden>
+    <h2>Comprovante deste envio</h2>
+    <ul class="ec-prot" id="e-prot"></ul>
+    <button type="button" class="ui-btn" id="e-imprime">Imprimir comprovante</button>
+  </section>
+  <p class="ec-rodape">Os arquivos vão direto para a pasta da empresa na Coleve, sem link público. Dúvidas: fale com o responsável indicado acima.</p>
+</template>
+
+<p class="ui-aviso" id="aviso" role="status"></p>
+<script type="module" src="envio-contador.js?v=1"></script>
+</body>
+</html>

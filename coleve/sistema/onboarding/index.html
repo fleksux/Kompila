@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onboarding · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icones/apple_180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Coleve">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=30">
+<link rel="stylesheet" href="../ui.css?v=5">
+<link rel="stylesheet" href="onboarding.css?v=1">
+</head>
+<body class="ui ui-tf carregando">
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema">
+    <a href="../">Área interna</a>
+    <a href="../feed/">Feed</a>
+    <a href="../tarefas/">Tarefas</a><a href="../paralegal/">Paralegal</a><a href="../regularidade/">Regularidade</a>
+    <a href="../marketing/">Marketing</a>
+    <a href="../conversas/">Conversas</a>
+    <a href="../clientes/" aria-current="page">Clientes</a><a href="../propostas/">Propostas</a></nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="ob">
+  <div class="ob-topo">
+    <div>
+      <p class="ob-sec">Área interna · clientes</p>
+      <h1>Onboarding</h1>
+      <p class="ob-sub">Os passos de cada empresa nova até o início do atendimento, e a trilha de vídeos que o cliente assiste.</p>
+    </div>
+    <a class="ui-btn" href="cliente.html" target="_blank" rel="noopener">Ver a trilha como o cliente</a>
+  </div>
+  <div class="ob-abas" role="tablist" aria-label="Vista">
+    <button type="button" role="tab" data-aba="emp" class="is-on" id="aba-emp">Empresas</button>
+    <button type="button" role="tab" data-aba="vid">Trilha de vídeos</button>
+  </div>
+
+  <section id="v-emp">
+    <div class="ob-caixa"><ul class="ob-emp" id="emp"></ul></div>
+    <p class="ob-dica">O início do atendimento é marcado sozinho no dia seguinte ao último passo concluído; aí nascem o acompanhamento do 1º fechamento e os 3 meses de acompanhamento.</p>
+  </section>
+
+  <section id="v-vid" hidden>
+    <div class="ob-caixa">
+      <ul class="ob-vid" id="vid"></ul>
+      <div class="ob-pe"><span class="ob-dica">Cole o link do YouTube (não listado), do Google Drive (compartilhado com quem tem o link) ou de um arquivo mp4.</span><button type="button" class="ui-btn ui-btn--pri" id="vid-novo">+ Vídeo</button></div>
+    </div>
+  </section>
+</main>
+<p class="ui-aviso" id="aviso" role="status"></p>
+
+<script type="module" src="onboarding.js?v=1"></script>
+<script type="module" src="../chat-canto.js?v=5"></script>
+<script type="module" src="../avisos.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reuniões · Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icones/apple_180.png">
+<link rel="icon" href="../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="sistema.css?v=30">
+<link rel="stylesheet" href="ui.css?v=5">
+<link rel="stylesheet" href="tarefas/reunioes/reunioes.css?v=2">
+<style>
+  body.ui{background:var(--ui-fundo)}
+  .rc{max-width:860px;margin:0 auto;padding:20px 16px 64px}
+  .rc-volta{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ui-txt-3);text-decoration:none;margin-bottom:8px}
+  .rc-volta:hover{color:var(--ui-azul)}
+  .rc h1{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0}
+  .rc-sub{color:var(--ui-txt-2);margin:2px 0 16px}
+  .rc-filtro{margin-bottom:12px}
+  .rc-lista{list-style:none;margin:0;padding:0;background:var(--ui-sup);border:1px solid var(--ui-linha);border-radius:var(--ui-r2)}
+  .rc-lista li+li{border-top:1px solid var(--ui-linha-2)}
+  .rc-it{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;background:none;text-align:left;cursor:pointer}
+  .rc-it:hover{background:var(--ui-sup-2)}
+  .rc-dt{flex:none;width:44px;text-align:center;font-size:11px;color:var(--ui-txt-3);text-transform:uppercase;line-height:1.1}
+  .rc-dt b{display:block;font-size:17px;font-weight:600;color:var(--ui-txt)}
+  .rc-t{flex:1;min-width:0}
+  .rc-t b{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rc-t small{color:var(--ui-txt-3);font-size:12px}
+  .rc-vazio{padding:40px 16px;text-align:center;color:var(--ui-txt-3)}
+  .rc-doc-topo{display:flex;align-items:center;justify-content:space-between;gap:8px;max-width:900px;margin:16px auto 0;padding:0 16px}
+  .doc{margin-top:8px}
+  .doc__barra{display:none}
+  @media print{.rc-doc-topo{display:none!important}}
+</style>
+</head>
+<body class="ui ui-tf carregando">
+<header class="barra">
+  <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <span class="barra__tag" id="tag">Área do cliente</span>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="rc" id="lista-pg">
+  <a class="rc-volta" href="./">← Início</a>
+  <h1>Reuniões</h1>
+  <p class="rc-sub">Resumo de cada reunião com a Coleve: o que foi decidido, quem faz o quê e os próximos passos.</p>
+  <select class="ui-in rc-filtro" id="filtro" aria-label="Empresa" hidden></select>
+  <ul class="rc-lista" id="lista"></ul>
+</main>
+
+<div class="rc-doc-topo" id="doc-topo" hidden>
+  <button type="button" class="ui-btn ui-btn--fan" id="voltar">← Reuniões</button>
+  <button type="button" class="ui-btn ui-btn--pri" onclick="print()">Baixar PDF</button>
+</div>
+<article class="doc" id="doc" hidden></article>
+
+<script type="module">
+import { banco, quemSou } from './conexao.js?v=2';
+import { docHTML } from './tarefas/reunioes/reuniao-doc.js?v=1';
+
+const eu = await quemSou().catch(() => null);
+if (!eu?.pessoa?.ativo) { location.replace('../entrar/'); throw 0; }
+const P = eu.pessoa, equipe = P.tipo === 'equipe';
+const $ = id => document.getElementById(id);
+const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+$('nome').textContent = P.nome;
+$('avatar').textContent = P.nome.split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
+$('papel').textContent = equipe ? 'Equipe · vendo como o cliente' : 'Cliente';
+$('sair').onclick = async () => { await banco.auth.signOut(); location.replace('../entrar/'); };
+
+// só as reuniões que a equipe publicou para a empresa (sem assunto reservado e sem transcrição)
+const { data, error } = await banco.rpc('reunioes_cliente');
+const reunioes = error ? [] : (data || []);
+const empresas = [...new Map(reunioes.map(r => [r.empresa_id, r.empresa_nome]))];
+if (empresas.length > 1) {
+  $('filtro').hidden = false;
+  $('filtro').innerHTML = '<option value="">Todas as empresas</option>' + empresas.map(([id, n]) => `<option value="${id}">${esc(n)}</option>`).join('');
+}
+function lista() {
+  const f = $('filtro').value;
+  const rs = reunioes.filter(r => !f || r.empresa_id === f);
+  $('lista').innerHTML = rs.map(r => {
+    const d = new Date(r.quando);
+    const n = (r.acoes || []).filter(a => a.tipo !== 'pendencia').length;
+    return `<li><button type="button" class="rc-it" data-id="${r.id}">
+      <span class="rc-dt"><b>${d.toLocaleDateString('pt-BR', { day: '2-digit' })}</b>${d.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</span>
+      <span class="rc-t"><b>${esc(r.titulo)}</b><small>${empresas.length > 1 ? esc(r.empresa_nome) + ' · ' : ''}${n ? n + ' ação' + (n > 1 ? 'ões' : '') : 'sem ações'}${r.proximo_acomp ? ' · próximo acompanhamento ' + r.proximo_acomp.split('-').reverse().join('/') : ''}</small></span>
+      <span class="ui-btn">Ver</span></button></li>`;
+  }).join('') || `<li class="rc-vazio">${error ? 'Não deu para carregar agora.' : 'Nenhuma reunião publicada ainda.'}</li>`;
+}
+function abre(id) {
+  const r = reunioes.find(x => x.id === id); if (!r) return;
+  history.replaceState(null, '', '#' + id);
+  document.title = 'Resumo de reunião · ' + r.titulo;
+  $('doc').innerHTML = docHTML(r, { logo: '../img/logo_contabilidade.svg', imprimir: false });
+  $('lista-pg').hidden = true; $('doc-topo').hidden = false; $('doc').hidden = false;
+  scrollTo(0, 0);
+}
+$('voltar').onclick = () => { history.replaceState(null, '', location.pathname); $('lista-pg').hidden = false; $('doc-topo').hidden = true; $('doc').hidden = true; };
+$('lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) abre(b.dataset.id); });
+$('filtro').addEventListener('change', lista);
+lista();
+if (location.hash.length > 1) abre(location.hash.slice(1));
+document.body.classList.remove('carregando');
+</script>
+</body>
+</html>

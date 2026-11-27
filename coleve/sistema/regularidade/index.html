@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regularidade fiscal · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icones/apple_180.png">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=30">
+<link rel="stylesheet" href="../ui.css?v=5">
+<link rel="stylesheet" href="regularidade.css?v=1">
+</head>
+<body class="ui ui-tf carregando">
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema">
+    <a href="../">Área interna</a>
+    <a href="../feed/">Feed</a>
+    <a href="../tarefas/">Tarefas</a><a href="../paralegal/">Paralegal</a><a href="../regularidade/">Regularidade</a>
+    <a href="../marketing/">Marketing</a>
+    <a href="../conversas/">Conversas</a>
+    <a href="../clientes/">Clientes</a>
+    <a href="../propostas/">Propostas</a>
+    <a href="../regularidade/" aria-current="page">Regularidade</a></nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<div class="rg">
+  <aside class="rg-lado" aria-label="Visões">
+    <p class="rg-lado__t">Central de Regularidade</p>
+    <ul class="rg-listas" id="visoes"></ul>
+    <p class="rg-nota">Fase 1: a equipe consulta no portal do órgão, lança o resultado com a evidência e um contador valida antes de o cliente ver. Falha de consulta nunca conta como regular.</p>
+  </aside>
+
+  <main class="rg-main">
+    <header class="rg-topo">
+      <div class="rg-titulo"><h1 id="t-nome">Fila de trabalho</h1><span class="rg-conta" id="total"></span></div>
+      <select class="ui-in rg-vista-cel" id="vista-cel" aria-label="Visão"></select>
+      <button class="ui-btn ui-btn--pri" id="nova-c" type="button"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Registrar consulta</button>
+    </header>
+
+    <div class="rg-kpis" id="kpis"></div>
+
+    <div class="rg-filtros" id="filtros">
+      <label class="rg-busca"><svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input type="search" id="f-busca" placeholder="Empresa ou CNPJ" aria-label="Buscar empresa ou CNPJ"></label>
+      <select class="ui-in" id="f-resp" aria-label="Responsável"><option value="">Responsável</option><option value="-">Sem responsável</option></select>
+      <select class="ui-in" id="f-orgao" aria-label="Órgão"><option value="">Órgão</option></select>
+      <select class="ui-in" id="f-regime" aria-label="Regime"><option value="">Regime</option><option value="mei">MEI</option><option value="simples">Simples</option><option value="presumido">Presumido</option><option value="real">Real</option></select>
+      <select class="ui-in" id="f-local" aria-label="Município e UF"><option value="">Município/UF</option></select>
+      <select class="ui-in" id="f-status" aria-label="Situação da regularização"><option value="">Situação</option></select>
+      <select class="ui-in" id="f-urg" aria-label="Urgência"><option value="">Urgência</option><option value="1">Alta</option><option value="2">Média</option><option value="3">Baixa</option></select>
+      <input class="ui-in" type="number" min="0" step="100" id="f-valor" inputmode="decimal" placeholder="Valor a partir de" aria-label="Valor a partir de">
+      <label class="ui-in rg-data"><span>Consulta antes de</span><input type="date" id="f-data" aria-label="Última consulta antes de"></label>
+    </div>
+
+    <section class="rg-corpo" id="corpo" aria-live="polite"></section>
+  </main>
+</div>
+
+<!-- registrar consulta -->
+<dialog class="rg-dlg" id="dlg">
+  <form id="f-consulta" method="dialog" novalidate>
+    <div class="rg-dlg__cab"><h2>Registrar consulta</h2><p class="rg-dica">Consulte no portal do órgão e lance aqui o resultado, com o arquivo da consulta. Portal fora do ar ou sem resposta: marque "Consulta indisponível", nunca "Regular".</p></div>
+    <div class="rg-dlg__miolo">
+      <div class="rg-form">
+        <label class="rg-larga"><span>Empresa</span><select class="ui-in" id="c-emp" required></select></label>
+        <label><span>Órgão</span><select class="ui-in" id="c-orgao" required></select></label>
+        <label><span>Data e hora da consulta</span><input class="ui-in" type="datetime-local" id="c-quando" required></label>
+        <label><span>Resultado</span><select class="ui-in" id="c-res" required>
+          <option value="">Escolha</option><option value="regular">Regular</option><option value="irregular">Irregular</option>
+          <option value="sem_informacao">Sem informação</option><option value="indisponivel">Consulta indisponível</option><option value="nao_aplica">Não se aplica</option></select></label>
+        <label><span>Inscrição usada (CNPJ, IE ou IM)</span><input class="ui-in" id="c-insc" autocomplete="off"></label>
+        <label class="rg-larga"><span>Resumo para o cliente</span><textarea class="ui-txt" id="c-resumo" rows="2" placeholder="Ex.: Sem débitos em aberto na conta fiscal. Obrigatório em Não se aplica."></textarea></label>
+        <label class="rg-larga"><span>Evidência (PDF, print do portal)</span><input class="ui-in" type="file" id="c-arqs" multiple style="padding-top:4px"></label>
+      </div>
+      <p class="rg-alerta" id="c-alerta" hidden></p>
+      <div id="c-pends"></div>
+      <div id="c-certs"></div>
+      <div class="rg-acoes">
+        <button class="ui-btn" type="button" id="c-mais-p">+ Pendência</button>
+        <button class="ui-btn" type="button" id="c-mais-c">+ Certidão</button>
+      </div>
+    </div>
+    <div class="rg-dlg__pe"><button class="ui-btn ui-btn--fan" type="button" id="c-cancela">Cancelar</button><button class="ui-btn ui-btn--pri" type="submit" id="c-salva">Salvar consulta</button></div>
+  </form>
+</dialog>
+
+<!-- empresa -->
+<div class="gaveta" id="gaveta" hidden>
+  <div class="gaveta__fundo" data-fecha></div>
+  <aside class="gaveta__painel" role="dialog" aria-modal="true" aria-labelledby="g-nome">
+    <header class="rg-gav__topo">
+      <span class="rg-gav__onde">Central de Regularidade</span>
+      <button class="ui-btn" id="g-consulta" type="button">Registrar consulta</button>
+      <a class="ui-btn" id="g-cliente" target="_blank" rel="noopener">Visão do cliente</a>
+      <a class="ui-btn" id="g-pdf" target="_blank" rel="noopener">PDF</a>
+      <button class="ui-btn ui-btn--fan rg-gav__x" data-fecha aria-label="Fechar"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </header>
+    <div class="rg-gav__miolo" id="g-miolo"></div>
+  </aside>
+</div>
+
+<p class="ui-aviso" id="aviso" role="status" aria-live="polite"></p>
+<script type="module" src="regularidade.js?v=1"></script>
+<script type="module" src="../chat-canto.js?v=5"></script>
+<script type="module" src="../avisos.js?v=1"></script>
+</body>
+</html>

@@ -13,14 +13,14 @@
 <link rel="icon" href="../../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../sistema.css?v=30">
 <link rel="stylesheet" href="../../tarefas/tarefas.css?v=9">
-<link rel="stylesheet" href="../clientes.css?v=5"><link rel="stylesheet" href="transferencias.css?v=3">
-<link rel="stylesheet" href="../../ui.css?v=4">
+<link rel="stylesheet" href="../clientes.css?v=5"><link rel="stylesheet" href="transferencias.css?v=4">
+<link rel="stylesheet" href="../../ui.css?v=5">
 </head>
 <body class="ui carregando">
 
 <header class="barra">
   <a href="../../" class="barra__marca"><img src="../../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
-  <nav class="barra__nav" aria-label="Sistema"><a href="../../">Área interna</a><a href="../../feed/">Feed</a><a href="../../tarefas/">Tarefas</a><a href="../../marketing/">Marketing</a><a href="../../conversas/">Conversas</a><a href="../" aria-current="page">Clientes</a><a href="../../propostas/">Propostas</a></nav>
+  <nav class="barra__nav" aria-label="Sistema"><a href="../../">Área interna</a><a href="../../feed/">Feed</a><a href="../../tarefas/">Tarefas</a><a href="../../paralegal/">Paralegal</a><a href="../../regularidade/">Regularidade</a><a href="../../marketing/">Marketing</a><a href="../../conversas/">Conversas</a><a href="../../clientes/" aria-current="page">Clientes</a><a href="../../propostas/">Propostas</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -40,6 +40,7 @@
   </div>
 
   <section class="numeros" id="numeros"></section>
+  <section class="tt-alertas" id="alertas" hidden aria-label="Alertas"></section>
   <p class="aviso-q" id="aviso" role="status"></p>
   <section class="empresas" id="lista"></section>
 </main>
@@ -55,6 +56,16 @@
 
     <ol class="etapas" id="t-etapas"></ol>
     <div class="tt-acoes" id="t-acoes"></div>
+
+    <div class="tt-ficha"><button type="button" class="sair" id="t-ficha">Copiar ficha de transferência</button><a class="sair" id="t-termo" target="_blank" rel="noopener">Termo de conclusão</a></div>
+
+    <h3>Link para o contador anterior <small class="h3-dica">ele envia os documentos de cada categoria sem login</small></h3>
+    <ul class="tt-links" id="t-links"></ul>
+    <form class="tt-link-form" id="f-link">
+      <label class="cp-t">Para quem<input id="l-dest" placeholder="Escritório ou pessoa do contador"></label>
+      <label class="cp-t">Validade<select id="l-dias"><option value="7">7 dias</option><option value="15" selected>15 dias</option><option value="30">30 dias</option></select></label>
+      <button class="btn-a" type="submit">Gerar link</button>
+    </form>
 
     <h3>Pedir ao contador anterior <small class="h3-dica" id="t-pede-n"></small></h3>
     <div class="tt-pede"><p id="t-pede-txt"></p><button type="button" class="btn-a" id="t-copia">Copiar pedido</button></div>
@@ -102,7 +113,10 @@
   </form>
 </dialog>
 
-<script type="module" src="transferencias.js?v=2"></script>
+<!-- termo de conclusão (?termo=<id>) -->
+<article class="tt-doc" id="termo" hidden></article>
+
+<script type="module" src="transferencias.js?v=3"></script>
 <script type="module" src="../../chat-canto.js?v=5"></script>
 <script type="module" src="../../avisos.js?v=1"></script>
 </body>

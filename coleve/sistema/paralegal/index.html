@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paralegal · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icones/apple_180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Coleve">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=30">
+<link rel="stylesheet" href="../ui.css?v=5">
+<link rel="stylesheet" href="../tarefas/tf.css?v=3">
+<link rel="stylesheet" href="paralegal.css?v=1">
+</head>
+<body class="ui ui-tf carregando">
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema">
+    <a href="../">Área interna</a>
+    <a href="../feed/">Feed</a>
+    <a href="../tarefas/">Tarefas</a><a href="../paralegal/" aria-current="page">Paralegal</a><a href="../regularidade/">Regularidade</a>
+    <a href="../marketing/">Marketing</a>
+    <a href="../conversas/">Conversas</a>
+    <a href="../clientes/">Clientes</a><a href="../propostas/">Propostas</a></nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<div class="tf">
+  <aside class="tf-lado" aria-label="Filtros do paralegal">
+    <nav class="tf-sub" aria-label="Tarefas"><a href="../tarefas/">Tarefas</a><a href="./" aria-current="page">Paralegal</a></nav>
+    <p class="tf-lado__t">Visões</p>
+    <ul class="tf-listas" id="visoes"></ul>
+    <p class="tf-lado__t">Tipo de processo</p>
+    <ul class="tf-listas" id="tipos"></ul>
+    <p class="tf-lado__t">Indicadores</p>
+    <ul class="tf-listas pl-inds" id="inds"></ul>
+  </aside>
+
+  <main class="tf-main">
+    <header class="tf-topo">
+      <div class="tf-titulo">
+        <span class="ui-ponto" id="t-ponto" style="--cor:#7C5CDB"></span>
+        <h1 id="t-nome">Paralegal</h1>
+        <span class="tf-conta" id="total"></span>
+      </div>
+      <select class="ui-in tf-lista-cel" id="tipo-cel" aria-label="Tipo de processo"></select>
+      <div class="tf-vistas" role="tablist" aria-label="Vista">
+        <button role="tab" data-v="quadro" class="is-on"><svg viewBox="0 0 16 16"><rect x="2" y="2.5" width="3.5" height="11" rx="1" stroke="currentColor" stroke-width="1.4" fill="none"/><rect x="7" y="2.5" width="3.5" height="7" rx="1" stroke="currentColor" stroke-width="1.4" fill="none"/><rect x="12" y="2.5" width="2.5" height="9" rx="1" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>Quadro</button>
+        <button role="tab" data-v="lista"><svg viewBox="0 0 16 16"><path d="M5 4h8M5 8h8M5 12h8M2.5 4h.01M2.5 8h.01M2.5 12h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>Lista</button>
+        <button role="tab" data-v="painel"><svg viewBox="0 0 16 16"><path d="M3 13V8M8 13V3M13 13V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>Painel</button>
+      </div>
+      <button class="ui-btn ui-btn--pri" id="novo" type="button"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Processo</button>
+    </header>
+
+    <div class="tf-filtros">
+      <label class="tf-busca"><svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input type="search" id="f-busca" placeholder="Buscar" aria-label="Buscar processo, cliente ou CNPJ"></label>
+      <select class="ui-in" id="f-resp" aria-label="Responsável"><option value="">Responsável</option><option value="-">Sem responsável</option></select>
+      <select class="ui-in" id="f-pr" aria-label="Prioridade"><option value="">Prioridade</option><option value="1">Urgente</option><option value="2">Alta</option><option value="3">Normal</option><option value="4">Baixa</option></select>
+      <span class="pl-filtro-ind" id="f-ind" hidden></span>
+    </div>
+
+    <section class="tf-corpo" id="corpo" aria-live="polite"></section>
+  </main>
+</div>
+
+<!-- novo processo -->
+<dialog class="tf-dlg" id="dlg-novo">
+  <form id="f-novo" method="dialog">
+    <input class="tf-dlg__t" id="n-cliente" required placeholder="Nome do cliente" aria-label="Nome do cliente" autocomplete="off">
+    <div class="tf-dlg__campos">
+      <label><span>Tipo de serviço</span><select class="ui-in" id="n-tipo" required></select></label>
+      <label><span>Empresa já cadastrada</span><select class="ui-in" id="n-emp"><option value="">Nenhuma (abertura)</option></select></label>
+      <label><span>Tipo jurídico</span><input class="ui-in" id="n-tj" list="tipos-juridicos" placeholder="LTDA, SLU, MEI..."></label>
+      <label><span>Município</span><input class="ui-in" id="n-mun"></label>
+      <label><span>UF</span><input class="ui-in" id="n-uf" maxlength="2"></label>
+      <label><span>Responsável</span><select class="ui-in" id="n-resp"><option value="">Ninguém</option></select></label>
+      <label><span>Executor</span><select class="ui-in" id="n-exec"><option value="">Ninguém</option></select></label>
+      <label><span>Prioridade</span><select class="ui-in" id="n-pr"><option value="">Sem</option><option value="1">Urgente</option><option value="2">Alta</option><option value="3">Normal</option><option value="4">Baixa</option></select></label>
+      <label><span>Prazo interno</span><input class="ui-in" type="date" id="n-prazo" title="Vazio usa o prazo padrão do tipo"></label>
+    </div>
+    <fieldset class="pl-nat" id="n-nat-box" hidden>
+      <legend>Natureza da alteração <small>as etapas que não se aplicam são dispensadas sozinhas</small></legend>
+      <div class="pl-nat__op" id="n-nat"></div>
+    </fieldset>
+    <label class="pl-campo"><span>Próxima ação</span><input class="ui-in" id="n-prox" placeholder="Ex.: pedir documentos dos sócios"></label>
+    <label class="pl-campo"><span>Link da pasta documental</span><input class="ui-in" id="n-pasta" type="url" placeholder="https://drive.google.com/..."></label>
+    <div class="tf-dlg__pe"><button class="ui-btn ui-btn--fan" type="button" data-fecha-dlg>Cancelar</button><button class="ui-btn ui-btn--pri" type="submit">Abrir processo</button></div>
+  </form>
+</dialog>
+<datalist id="tipos-juridicos"><option>LTDA</option><option>SLU</option><option>EI</option><option>MEI</option><option>SA</option><option>Sociedade simples</option><option>EIRELI (antiga)</option></datalist>
+
+<!-- mover -->
+<dialog class="tf-dlg" id="dlg-mover">
+  <form id="f-mover" method="dialog">
+    <p class="pl-dlg__t" id="m-titulo">Mover o card</p>
+    <label class="pl-campo"><span>Para a etapa</span><select class="ui-in" id="m-etapa" required></select></label>
+    <label class="pl-campo"><span>Observação</span><textarea class="ui-txt" id="m-obs" rows="2" placeholder="O que foi feito ou por que volta"></textarea></label>
+    <label class="pl-campo"><span>Próxima ação</span><input class="ui-in" id="m-prox" placeholder="O que vem agora"></label>
+    <p class="pl-erro" id="m-erro" hidden></p>
+    <div class="tf-dlg__pe"><button class="ui-btn ui-btn--fan" type="button" data-fecha-dlg>Cancelar</button><button class="ui-btn ui-btn--pri" type="submit" id="m-ok">Mover</button></div>
+  </form>
+</dialog>
+
+<!-- exigência -->
+<dialog class="tf-dlg" id="dlg-exig">
+  <form id="f-exig" method="dialog">
+    <p class="pl-dlg__t">Registrar exigência</p>
+    <label class="pl-campo"><span>O que o órgão pediu</span><textarea class="ui-txt" id="x-desc" rows="3" required placeholder="Descrição objetiva da correção necessária"></textarea></label>
+    <div class="tf-dlg__campos">
+      <label><span>Responsável pela correção</span><select class="ui-in" id="x-resp"><option value="">Executor do card</option></select></label>
+      <label><span>Prazo</span><input class="ui-in" type="date" id="x-prazo" required></label>
+    </div>
+    <label class="tf-chk"><input type="checkbox" id="x-mover" checked> Mover o card para a etapa de exigência</label>
+    <p class="pl-dica">Vira uma tarefa na lista Paralegal, com prazo e responsável.</p>
+    <div class="tf-dlg__pe"><button class="ui-btn ui-btn--fan" type="button" data-fecha-dlg>Cancelar</button><button class="ui-btn ui-btn--pri" type="submit">Registrar</button></div>
+  </form>
+</dialog>
+
+<!-- texto curto: justificativa, motivo, entrega -->
+<dialog class="tf-dlg" id="dlg-texto">
+  <form id="f-texto" method="dialog">
+    <p class="pl-dlg__t" id="tx-titulo"></p>
+    <textarea class="ui-txt" id="tx-campo" rows="3"></textarea>
+    <div class="tf-dlg__pe"><button class="ui-btn ui-btn--fan" type="button" data-fecha-dlg>Cancelar</button><button class="ui-btn ui-btn--pri" type="submit" id="tx-ok">Salvar</button></div>
+  </form>
+</dialog>
+
+<!-- gaveta do card -->
+<div class="gaveta tf-gav" id="gaveta" hidden>
+  <div class="gaveta__fundo" data-fecha></div>
+  <aside class="gaveta__painel" role="dialog" aria-modal="true" aria-labelledby="d-cliente">
+    <header class="tf-gav__topo">
+      <span class="tf-gav__onde" id="d-onde"></span>
+      <button class="ui-btn ui-btn--fan tf-gav__x" data-fecha aria-label="Fechar"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </header>
+    <div class="tf-gav__miolo" id="d-miolo">
+      <h2 id="d-cliente" class="tf-gav__titulo" contenteditable="plaintext-only" spellcheck="false"></h2>
+      <div class="pl-etapa-atual" id="d-etapa"></div>
+      <div class="pl-acoes" id="d-acoes">
+        <button class="ui-btn ui-btn--pri" type="button" id="a-avancar">Avançar</button>
+        <button class="ui-btn" type="button" id="a-mover">Mover</button>
+        <button class="ui-btn" type="button" id="a-exig">Exigência</button>
+        <button class="ui-btn" type="button" id="a-entrega">Registrar entrega</button>
+        <button class="ui-btn ui-btn--fan" type="button" id="a-cancelar">Cancelar processo</button>
+      </div>
+      <p class="pl-falta" id="d-falta" hidden></p>
+
+      <section class="tf-sec pl-sec-ind">
+        <h3>Indicadores <small>não mudam a etapa</small></h3>
+        <div class="pl-chips" id="d-inds"></div>
+      </section>
+
+      <section class="tf-sec">
+        <h3>Propriedades</h3>
+        <dl class="tf-props" id="d-props"></dl>
+        <div class="pl-nat pl-nat--gav" id="d-nat-box" hidden>
+          <p class="pl-nat__t">Natureza da alteração</p>
+          <div class="pl-nat__op" id="d-nat"></div>
+        </div>
+      </section>
+
+      <section class="tf-sec">
+        <h3>Etapas <span id="d-et-conta"></span></h3>
+        <ol class="pl-etapas" id="d-etapas"></ol>
+      </section>
+
+      <section class="tf-sec">
+        <h3>Documentos <span id="d-doc-conta"></span></h3>
+        <ul class="pl-docs" id="d-docs"></ul>
+        <form class="tf-sub-nova" id="d-doc-novo"><input class="ui-in" id="d-doc-nome" placeholder="+ Adicionar documento" autocomplete="off"></form>
+      </section>
+
+      <section class="tf-sec" id="d-exig-sec" hidden>
+        <h3>Exigências</h3>
+        <ul class="pl-exigs" id="d-exigs"></ul>
+      </section>
+
+      <section class="tf-sec">
+        <h3>Histórico</h3>
+        <ul class="tf-ativ pl-hist" id="d-hist"></ul>
+        <form class="tf-coment" id="d-nota"><textarea class="ui-txt" id="d-nota-txt" rows="2" placeholder="Anotação interna (ligação, consulta ao órgão...)"></textarea><button class="ui-btn ui-btn--pri" type="submit">Anotar</button></form>
+      </section>
+    </div>
+  </aside>
+</div>
+<p class="ui-aviso" id="aviso" role="status" aria-live="polite"></p>
+<script type="module" src="paralegal.js?v=1"></script>
+<script type="module" src="../chat-canto.js?v=5"></script>
+<script type="module" src="../avisos.js?v=1"></script>
+</body>
+</html>

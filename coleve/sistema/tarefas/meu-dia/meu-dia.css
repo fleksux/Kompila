@@ -66,3 +66,25 @@
   .md-time{overflow-x:auto}
 }
 @media (max-width:860px){.numeros.md-num{grid-template-columns:1fr 1fr!important}}
+
+/* ===== 0040: aba Relatório (gestor) ===== */
+.md-abas{display:inline-flex;gap:2px;padding:2px;background:var(--ui-hover,#F2F4F7);border-radius:6px;margin:0 0 12px}
+.md-abas button{height:26px;padding:0 12px;border:0;border-radius:5px;background:none;font-size:12px;font-weight:500;color:var(--ui-txt-2,#4B5563);cursor:pointer}
+.md-abas button.is-on{background:#fff;color:var(--ui-txt,#1F2328);box-shadow:0 1px 2px rgb(16 24 40 / .05)}
+.md-rel__f{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:8px}
+.md-rel__f .cp-t{min-width:140px}
+.md-rel__f .sair{margin:0 0 0 auto}
+.md-rel__tab{overflow-x:auto;margin-bottom:16px}
+.md-rel__h{font-size:14px;font-weight:600;margin:8px 0}
+.md-tab--rel{font-size:13px}
+.md-tab--rel th,.md-tab--rel td{padding:8px 10px;white-space:nowrap}
+.md-tab--rel td:first-child{white-space:normal;min-width:160px}
+.md-tab td.abaixo{color:#1E7A4C}
+.md-tot td{font-weight:700;background:#FAFBFC}
+.md-col-barra{width:180px}
+.md-bar{position:relative;display:block;height:14px}
+.md-bar i{position:absolute;left:0;display:block;border-radius:3px}
+.md-bar i.p{top:0;height:6px;background:#C5CAD3}
+.md-bar i.r{top:8px;height:6px;background:var(--azul)}
+.md-bar i.r.acima{background:#E5484D}
+@media (max-width:860px){.md-rel__f .cp-t{flex:1 1 140px}.md-rel__f .sair{margin:0;width:100%}.md-col-barra{display:none}}

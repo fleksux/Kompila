@@ -26,6 +26,75 @@ function cnpjOk(s) {
   return dv(12) === +d[12] && dv(13) === +d[13];
 }
 ['e-cnpj', 'n-cnpj'].forEach(id => $(id).addEventListener('input', e => { e.target.value = mascara(e.target.value); }));
+['e-cep', 'n-cep'].forEach(id => $(id).addEventListener('input', e => { e.target.value = soDig(e.target.value).slice(0, 8).replace(/^(\d{5})(\d)/, '$1-$2'); }));
+
+// ===== cadastro completo (0035): campos que vão e voltam do banco, com o prefixo e- (ficha) ou n- (nova) =====
+const CAMPOS = { ie: 'inscricao_estadual', im: 'inscricao_municipal', cnae: 'cnae_principal', natureza: 'natureza_juridica',
+  abertura: 'data_abertura', situacao: 'situacao_cadastral', endereco: 'endereco', cep: 'cep', codigo: 'codigo_dominio', drive: 'drive_coleve_pasta_id' };
+const SUBPASTAS = ['01_SOCIETARIO', '02_FISCAL', '03_CONTABILIDADE', '04_DEPARTAMENTO PESSOAL', '05_BPO FINANCEIRO', '06_PARALEGAL', '07_CNDS', '08_PARCELAMENTOS', '09_CONTRATOS COLEVE', '99_OUTROS'];
+const semAcento = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+// mesmo nome que o banco calcula em v_empresa.pasta_drive_nome
+const pastaNome = (cod, nome) => cod ? `${cod}_${semAcento(nome).replace(/[^A-Za-z0-9]+/g, ' ').trim().toUpperCase()}` : '';
+function lerCampos(px) {
+  const o = {};
+  for (const [k, col] of Object.entries(CAMPOS)) {
+    const v = $(`${px}-${k}`).value.trim();
+    o[col] = k === 'codigo' ? (v ? parseInt(v, 10) : null) : k === 'situacao' ? (v.toUpperCase() || null) : (v || null);
+  }
+  return o;
+}
+function poeCampos(px, e) { for (const [k, col] of Object.entries(CAMPOS)) $(`${px}-${k}`).value = e?.[col] ?? ''; mostraPasta(px); }
+function mostraPasta(px) {
+  const cod = parseInt($(`${px}-codigo`).value, 10);
+  const nome = $(`${px}-fantasia`).value.trim() || $(`${px}-razao`).value.trim();
+  const sit = $(`${px}-situacao`).value.trim().toUpperCase();
+  $(`${px}-situacao`).classList.toggle('situacao-alerta', !!sit && sit !== 'ATIVA');
+  $(`${px}-pasta`).innerHTML = cod > 0 && nome
+    ? `Pasta padrão no Drive: <code>${esc(pastaNome(cod, nome))}</code><details><summary>Subpastas</summary><ul>${SUBPASTAS.map(x => `<li><code>${x}</code></li>`).join('')}</ul></details>`
+    : 'Com o código do Domínio preenchido, aparece aqui o nome da pasta no Drive (CCC_CLIENTE).';
+}
+['e', 'n'].forEach(px => ['codigo', 'fantasia', 'razao', 'situacao'].forEach(k => $(`${px}-${k}`).addEventListener('input', () => mostraPasta(px))));
+
+// BrasilAPI: preenche, o usuário confere e salva
+const MINUSC = new Set(['de', 'da', 'do', 'das', 'dos', 'e']);
+const titulo = t => String(t || '').toLowerCase().split(/\s+/).filter(Boolean).map((w, i) => i && MINUSC.has(w) ? w : w[0].toUpperCase() + w.slice(1)).join(' ');
+const municipioBonito = m => ({ 'SAO PAULO': 'São Paulo' }[String(m || '').toUpperCase()] || titulo(m));
+const cnaeFmt = c => { const d = soDig(c).padStart(7, '0'); return d.length === 7 ? `${d.slice(0, 4)}-${d[4]}/${d.slice(5)}` : String(c || ''); };
+const natFmt = c => { const d = soDig(c); return d.length === 4 ? `${d.slice(0, 3)}-${d[3]}` : d; };
+async function buscaCnpj(px) {
+  const msg = $(`${px}-cnpj-msg`), btn = document.querySelector(`[data-busca="${px}"]`);
+  const d = soDig($(`${px}-cnpj`).value);
+  msg.className = 'cnpj-msg';
+  if (d.length !== 14 || !cnpjOk(d)) { msg.classList.add('is-erro'); msg.textContent = 'Digite um CNPJ válido para buscar.'; return $(`${px}-cnpj`).focus(); }
+  btn.disabled = true; msg.textContent = 'Buscando na Receita (BrasilAPI)…';
+  try {
+    const r = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${d}`);
+    if (r.status === 404) throw new Error('CNPJ não encontrado na Receita.');
+    if (!r.ok) throw new Error('A consulta não respondeu agora. Tente de novo em instantes.');
+    const j = await r.json();
+    const poe = (k, v) => { if (v != null && String(v).trim() !== '') $(`${px}-${k}`).value = String(v).trim(); };
+    poe('razao', j.razao_social);
+    poe('fantasia', j.nome_fantasia ? titulo(j.nome_fantasia) : '');
+    poe('municipio', municipioBonito(j.municipio));
+    poe('uf', j.uf);
+    const tipo = String(j.descricao_tipo_de_logradouro || '').trim(), logr = String(j.logradouro || '').trim();
+    const rua = tipo && !logr.toUpperCase().startsWith(tipo.toUpperCase()) ? `${tipo} ${logr}` : logr;
+    const num = /^S\/?N$/i.test(String(j.numero || '').trim()) ? 's/n' : j.numero;
+    poe('endereco', [titulo(rua), num, titulo(j.complemento), titulo(j.bairro)].map(x => String(x || '').trim()).filter(Boolean).join(', '));
+    poe('cep', soDig(j.cep).replace(/^(\d{5})(\d{3})$/, '$1-$2'));
+    if (j.cnae_fiscal) poe('cnae', `${cnaeFmt(j.cnae_fiscal)} · ${j.cnae_fiscal_descricao || ''}`.replace(/ · $/, ''));
+    if (j.codigo_natureza_juridica || j.natureza_juridica) poe('natureza', [natFmt(j.codigo_natureza_juridica), j.natureza_juridica].filter(Boolean).join(' · '));
+    poe('abertura', j.data_inicio_atividade);
+    poe('situacao', String(j.descricao_situacao_cadastral || '').toUpperCase());
+    mostraPasta(px);
+    msg.classList.add('is-ok');
+    msg.textContent = `Preenchido pela Receita${j.descricao_situacao_cadastral && j.descricao_situacao_cadastral.toUpperCase() !== 'ATIVA' ? ` (situação ${j.descricao_situacao_cadastral})` : ''}. Confira antes de salvar; inscrições e código do Domínio são à mão.`;
+  } catch (er) {
+    msg.classList.add('is-erro'); msg.textContent = er.message || 'Não deu para buscar agora.';
+  } finally { btn.disabled = false; }
+}
+document.querySelectorAll('[data-busca]').forEach(b => b.addEventListener('click', () => buscaCnpj(b.dataset.busca)));
+const erroSalvar = er => er?.code === '23505' ? (/codigo_dominio/.test(er.message + er.details) ? 'Já existe uma empresa com esse código do Domínio.' : 'Já existe uma empresa com esse CNPJ.') : null;
 
 // barra de cima
 $('nome').textContent = P.nome;
@@ -54,7 +123,7 @@ async function carrega() {
 function desenha() {
   const b = $('f-busca').value.trim().toLowerCase(), bd = soDig(b), rg = $('f-regime').value, rp = $('f-resp').value;
   const lista = empresas.filter(e =>
-    (!b || (e.razao_social + ' ' + (e.nome_fantasia || '')).toLowerCase().includes(b) || (bd && soDig(e.cnpj).includes(bd))) &&
+    (!b || (e.razao_social + ' ' + (e.nome_fantasia || '')).toLowerCase().includes(b) || (bd && (soDig(e.cnpj).includes(bd) || String(e.codigo_dominio || '') === bd))) &&
     (!rg || e.regime === rg) &&
     (!rp || Object.values(e.responsaveis).some(r => r.id === rp)));
   $('total').textContent = `· ${lista.length}`;
@@ -63,7 +132,7 @@ function desenha() {
     return `<button type="button" class="emp${e.ativo ? '' : ' emp--off'}" data-id="${e.id}">
       <span class="emp__topo"><span class="ico"><svg viewBox="0 0 24 24"><path d="M4 21V5l8-3v19M12 9h8v12M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/></svg></span><em>${REGIMES[e.regime]}</em></span>
       <b>${esc(e.nome_fantasia || e.razao_social)}${e.teste ? ' <i class="tag-teste">teste</i>' : ''}</b>
-      <small>${e.nome_fantasia ? esc(e.razao_social) + ' · ' : ''}${e.cnpj ? esc(e.cnpj) : 'CNPJ a cadastrar'}</small>
+      <small>${e.codigo_dominio ? e.codigo_dominio + ' · ' : ''}${e.nome_fantasia ? esc(e.razao_social) + ' · ' : ''}${e.cnpj ? esc(e.cnpj) : 'CNPJ a cadastrar'}</small>
       <span class="emp__pe">
         <span class="emp__n${e.tarefas_atrasadas ? ' emp__n--atraso' : ''}">${e.tarefas_atrasadas ? `${e.tarefas_atrasadas} atrasada${e.tarefas_atrasadas > 1 ? 's' : ''}` : `${e.tarefas_abertas} aberta${e.tarefas_abertas === 1 ? '' : 's'}`}${e.ativo ? '' : ' · inativa'}</span>
         <span class="rostos-c">${resp.slice(0, 4).map(([a, r]) => `<span class="mini" title="${esc(r.nome)} · ${AREAS[a] || a}">${iniciais(r.nome)}</span>`).join('') || '<span class="mini mini--vazio" title="Sem responsável">+</span>'}</span>
@@ -90,6 +159,7 @@ async function abre(id) {
   $('e-razao').value = e.razao_social; $('e-fantasia').value = e.nome_fantasia || ''; $('e-cnpj').value = e.cnpj || '';
   $('e-regime-sel').value = e.regime; $('e-municipio').value = e.municipio || ''; $('e-uf').value = e.uf || '';
   $('e-plano').value = e.plano || ''; $('e-inicio').value = e.inicio_atendimento || ''; $('e-ativo').checked = e.ativo;
+  poeCampos('e', e); $('e-cnpj-msg').textContent = '';
   $('e-resp').innerHTML = Object.entries(AREAS).map(([a, nome]) => `<label class="cp-t">${nome}<select data-area="${a}"><option value="">Sem responsável</option>${(equipe || []).map(p => `<option value="${p.id}"${e.responsaveis[a]?.id === p.id ? ' selected' : ''}>${esc(p.nome)}</option>`).join('')}</select></label>`).join('');
   $('e-obrig').innerHTML = $('e-contatos').innerHTML = $('e-docs').innerHTML = '';
   $('gaveta').hidden = false;
@@ -155,12 +225,14 @@ $('e-ficha').onsubmit = async ev => {
   const campos = {
     razao_social: $('e-razao').value.trim(), nome_fantasia: $('e-fantasia').value.trim() || null, cnpj: $('e-cnpj').value || null,
     regime: $('e-regime-sel').value, municipio: $('e-municipio').value.trim() || null, uf: $('e-uf').value.trim().toUpperCase() || null,
-    plano: $('e-plano').value.trim() || null, inicio_atendimento: $('e-inicio').value || null, ativo: $('e-ativo').checked
+    plano: $('e-plano').value.trim() || null, inicio_atendimento: $('e-inicio').value || null, ativo: $('e-ativo').checked,
+    ...lerCampos('e')
   };
   const trocouRegime = campos.regime !== aberta.regime;
   const { error } = await banco.from('empresa').update(campos).eq('id', aberta.id);
-  if (error) return avisa(error.code === '23505' ? 'Já existe uma empresa com esse CNPJ.' : 'Não deu para salvar.');
+  if (error) return avisa(erroSalvar(error) || 'Não deu para salvar.');
   Object.assign(aberta, campos);
+  aberta.pasta_drive_nome = pastaNome(campos.codigo_dominio, campos.nome_fantasia || campos.razao_social) || null;
   $('e-titulo').textContent = campos.nome_fantasia || campos.razao_social;
   $('e-regime').textContent = REGIMES[campos.regime] + (aberta.teste ? ' · empresa de teste' : '');
   avisa(trocouRegime ? 'Salvo. As obrigações foram ajustadas para o regime novo.' : 'Salvo.');
@@ -203,16 +275,23 @@ $('email-copia').onclick = async () => {
 };
 
 // ===== nova empresa =====
-$('nova-e').onclick = () => { $('f-nova-e').reset(); $('n-erro').textContent = ''; $('dlg-e').showModal(); $('n-razao').focus(); };
+$('nova-e').onclick = async () => {
+  $('f-nova-e').reset(); $('n-erro').textContent = ''; $('n-cnpj-msg').textContent = ''; mostraPasta('n');
+  $('dlg-e').showModal(); $('n-cnpj').focus();
+  // sugere o próximo código do Domínio (a partir de 100); o Manu pode trocar
+  const { data: cod } = await banco.rpc('proximo_codigo_dominio');
+  if (cod && !$('n-codigo').value) { $('n-codigo').value = cod; mostraPasta('n'); }
+};
 $('n-cancela').onclick = () => $('dlg-e').close();
 $('f-nova-e').addEventListener('submit', async ev => {
   ev.preventDefault();
   if (!cnpjOk($('n-cnpj').value)) { $('n-erro').textContent = 'CNPJ inválido: confira os números.'; return $('n-cnpj').focus(); }
   const { data, error } = await banco.from('empresa').insert({
     razao_social: $('n-razao').value.trim(), nome_fantasia: $('n-fantasia').value.trim() || null, cnpj: $('n-cnpj').value || null,
-    regime: $('n-regime').value, municipio: $('n-municipio').value.trim() || null, uf: $('n-uf').value.trim().toUpperCase() || null
+    regime: $('n-regime').value, municipio: $('n-municipio').value.trim() || null, uf: $('n-uf').value.trim().toUpperCase() || null,
+    ...lerCampos('n')
   }).select('id').single();
-  if (error) { $('n-erro').textContent = error.code === '23505' ? 'Já existe uma empresa com esse CNPJ.' : 'Não deu para criar.'; return; }
+  if (error) { $('n-erro').textContent = erroSalvar(error) || 'Não deu para criar.'; return; }
   $('dlg-e').close(); avisa('Empresa criada com as obrigações do regime.');
   await carrega(); abre(data.id);
 });

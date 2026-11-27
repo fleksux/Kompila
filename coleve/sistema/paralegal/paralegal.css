@@ -1,0 +1,159 @@
+/* Sistema Coleve · Paralegal (27/11/2026). Em cima de ../ui.css e ../tarefas/tf.css; só o que é do paralegal. */
+
+/* indicadores: cor só aqui */
+[data-ind=aguardando_cliente]{--ind:#E8A33D}[data-ind=aguardando_assinatura]{--ind:#7C5CDB}[data-ind=aguardando_orgao]{--ind:#1E9AAE}
+[data-ind=aguardando_pagamento]{--ind:#B7791F}[data-ind=exigencia]{--ind:#E5484D}[data-ind=correcao_interna]{--ind:#C2410C}
+[data-ind=bloqueado]{--ind:#4B5563}[data-ind=em_atraso]{--ind:#E5484D}[data-ind=pronto_revisao]{--ind:#1A71FF}[data-ind=pronto_entrega]{--ind:#2F9E66}
+.pl-ind{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:4px;font-size:11px;font-weight:500;white-space:nowrap;
+  background:color-mix(in srgb,var(--ind) 11%,#fff);color:color-mix(in srgb,var(--ind) 82%,#000)}
+.pl-ind::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ind)}
+.pl-inds .ui-ponto{color:var(--ind)}
+
+/* filtro de indicador ativo no topo */
+.pl-filtro-ind{display:inline-flex;align-items:center;gap:4px}
+.pl-filtro-ind button{border:0;background:none;color:var(--ui-txt-3);cursor:pointer;font-size:14px;line-height:1;padding:0 2px}
+
+/* quadro */
+.pl-quadro{grid-auto-columns:minmax(248px,272px);overflow-x:auto;min-height:0;padding-bottom:8px;overscroll-behavior-x:contain}
+.tf-grupo>.pl-quadro{padding-top:8px}
+.tf-lado .tf-listas button span:not(.ui-ponto){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-col--exig .tf-col__cab b{color:var(--ui-verm)}
+.pl-col--fim{opacity:.85}
+.tf-col__cab b{font-size:12px;font-weight:600;color:var(--ui-txt);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tf-col__cab .pl-ord{font-size:11px;color:var(--ui-txt-3);font-weight:500;flex:none}
+.tf-col__cab small{margin-left:auto}
+.pl-col__vazio{font-size:12px;color:var(--ui-txt-3);padding:4px 2px 8px}
+.pl-card__top{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.pl-num{font-size:11px;font-weight:500;color:var(--ui-txt-3);font-variant-numeric:tabular-nums}
+.pl-card__inds{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 0}
+.pl-docs-mini{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--ui-txt-3)}
+.pl-docs-mini svg{width:11px;height:11px}
+.pl-docs-mini.is-ok{color:var(--ui-verde)}
+.pl-dias{font-size:11px;color:var(--ui-txt-3)}
+.pl-dias.is-muito{color:#C2410C;font-weight:500}
+.pl-prox{font-size:12px;color:var(--ui-txt-2);margin:6px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pl-prox b{font-weight:500;color:var(--ui-txt-3)}
+
+/* lista */
+.pl-cel-etapa{display:none}
+.pl-tab .c-num{width:112px}.pl-tab .tf-nome .pl-ind{flex:none}.pl-tab .tf-nome__t{min-width:60px}.pl-tab .c-tipo{width:150px}.pl-tab .c-etapa{width:200px}.pl-tab .c-docs{width:70px}.pl-tab .c-mov{width:90px}
+.pl-etapa-sel{display:inline-flex;align-items:center;gap:6px;max-width:100%;font-size:12px;color:var(--ui-txt-2)}
+.pl-etapa-sel i{font-style:normal;font-size:11px;color:var(--ui-txt-3)}
+.pl-sit{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--ui-txt-3)}
+.pl-sit--concluido{color:var(--ui-verde)}
+
+/* painel */
+.pl-painel{padding-top:14px;display:grid;gap:18px}
+.pl-nums{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.pl-num-c{display:grid;gap:2px;text-align:left;padding:10px 12px;border:1px solid var(--ui-linha);border-radius:var(--ui-r2);background:var(--ui-sup);cursor:pointer}
+.pl-num-c:hover{background:var(--ui-sup-2);border-color:#CDD2DA}
+.pl-num-c strong{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ui-txt)}
+.pl-num-c span{font-size:12px;color:var(--ui-txt-2)}
+.pl-num-c[data-alerta="1"] strong{color:var(--ui-verm)}
+.pl-bloco h3{font-size:13px;font-weight:600;margin:0 0 6px;display:flex;align-items:baseline;gap:8px}
+.pl-bloco h3 small{font-size:12px;font-weight:400;color:var(--ui-txt-3)}
+.pl-duas{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:18px}
+.pl-barra{height:6px;border-radius:3px;background:var(--ui-hover);overflow:hidden;min-width:40px}
+.pl-barra i{display:block;height:100%;background:var(--ui-azul);border-radius:3px}
+.pl-tab-p{width:100%;border-collapse:collapse;table-layout:fixed}
+.pl-tab-p th{height:28px;font-size:11px;font-weight:500;color:var(--ui-txt-3);text-align:left;padding:0 8px;border-bottom:1px solid var(--ui-linha)}
+.pl-tab-p td{height:32px;padding:0 8px;border-bottom:1px solid var(--ui-linha-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-tab-p th.pl-grupo{padding-top:10px}
+.pl-bloco{min-width:0}
+.pl-tab-p .n{text-align:right;font-variant-numeric:tabular-nums;width:72px}
+.pl-tab-p th.n{text-align:right}
+
+/* gaveta */
+.pl-etapa-atual{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-8px 0 12px;font-size:12px;color:var(--ui-txt-2)}
+.pl-etapa-atual .tf-st{--st:#7C5CDB}
+.pl-etapa-atual .pl-sit{margin-left:2px}
+.pl-acoes{display:flex;flex-wrap:wrap;gap:6px}
+.pl-falta{margin:10px 0 0;padding:8px 10px;border-radius:var(--ui-r);background:#FFF7ED;color:#9A3412;font-size:12px;line-height:1.5}
+.pl-chips{display:flex;flex-wrap:wrap;gap:6px}
+.pl-chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 9px;border:1px solid var(--ui-linha);border-radius:var(--ui-r);background:var(--ui-sup);font-size:12px;color:var(--ui-txt-2);cursor:pointer}
+.pl-chip::before{content:"";width:7px;height:7px;border-radius:50%;border:1.5px solid var(--ind);box-sizing:border-box}
+.pl-chip[aria-pressed=true]{border-color:color-mix(in srgb,var(--ind) 45%,#fff);background:color-mix(in srgb,var(--ind) 10%,#fff);color:color-mix(in srgb,var(--ind) 82%,#000);font-weight:500}
+.pl-chip[aria-pressed=true]::before{background:var(--ind)}
+.pl-chip:disabled{cursor:default}
+.tf-props textarea.ui-in{height:auto;min-height:28px;padding:5px 6px;resize:vertical;line-height:1.4}
+.tf-props .pl-largo{grid-column:1/-1}
+.tf-props .pl-largo{grid-template-columns:96px 1fr}
+.pl-link{display:flex;align-items:center;gap:4px}
+.pl-link a{flex:none;font-size:12px;color:var(--ui-azul)}
+.pl-nat{border:1px solid var(--ui-linha);border-radius:var(--ui-r2);padding:8px 10px;margin:0}
+.pl-nat legend{font-size:11px;font-weight:500;color:var(--ui-txt-3);padding:0 4px}
+.pl-nat legend small{font-weight:400}
+.pl-nat--gav{margin-top:8px;border:0;padding:0}
+.pl-nat__t{font-size:12px;color:var(--ui-txt-3);margin:0 0 6px}
+.pl-nat__op{display:flex;flex-wrap:wrap;gap:4px 12px}
+.pl-nat__op label{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ui-txt-2);cursor:pointer;min-height:26px}
+.pl-nat__op input{accent-color:var(--ui-azul)}
+
+.pl-etapas{list-style:none;margin:0;padding:0}
+.pl-etapas li{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:8px;align-items:start;padding:6px;border-radius:var(--ui-r)}
+.pl-etapas li:hover{background:var(--ui-hover)}
+.pl-etapas li.is-atual{background:var(--ui-sel)}
+.pl-et-bol{width:14px;height:14px;margin-top:2px;border-radius:50%;border:2px solid #C5CAD3;display:grid;place-items:center}
+.pl-etapas li[data-s=feita] .pl-et-bol{border-color:var(--ui-verde);background:var(--ui-verde)}
+.pl-etapas li[data-s=feita] .pl-et-bol::after{content:"";width:5px;height:3px;border:solid #fff;border-width:0 0 1.5px 1.5px;transform:rotate(-45deg) translate(0,-1px)}
+.pl-etapas li[data-s=dispensada] .pl-et-bol{border-style:dashed}
+.pl-etapas li.is-atual .pl-et-bol{border-color:var(--ui-azul)}
+.pl-et-nome{font-size:13px;color:var(--ui-txt);cursor:pointer;border:0;background:none;padding:0;text-align:left}
+.pl-etapas li[data-s=feita] .pl-et-nome{color:var(--ui-txt-2)}
+.pl-etapas li[data-s=dispensada] .pl-et-nome{color:var(--ui-txt-3);text-decoration:line-through}
+.pl-et-info{display:block;font-size:11px;color:var(--ui-txt-3);margin-top:1px}
+.pl-et-desc{margin:4px 0 2px;padding:0 0 0 12px;font-size:12px;color:var(--ui-txt-2);line-height:1.5}
+.pl-et-acao{display:flex;gap:2px;opacity:0;transition:opacity .12s}
+.pl-etapas li:hover .pl-et-acao,.pl-etapas li.is-atual .pl-et-acao,.pl-et-acao:focus-within{opacity:1}
+@media (hover:none){.pl-et-acao{opacity:1}}
+.pl-et-acao button{height:24px;padding:0 7px;border:0;border-radius:5px;background:none;font-size:11px;font-weight:500;color:var(--ui-txt-3);cursor:pointer}
+.pl-et-acao button:hover{background:var(--ui-sup);color:var(--ui-azul)}
+
+.pl-docs{list-style:none;margin:0 0 6px;padding:0}
+.pl-docs li{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:4px 8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--ui-linha-2)}
+.pl-docs b{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-docs b small{font-weight:400;color:var(--ui-txt-3);margin-left:6px;font-size:11px}
+.pl-docs .ui-in{height:26px;font-size:12px;width:100%}
+.pl-docs .pl-doc-link{grid-column:1/-1;display:flex;gap:6px;align-items:center}
+.pl-docs .pl-doc-link a{font-size:12px;color:var(--ui-azul);flex:none}
+.pl-docs .pl-doc-link .ui-in{border-color:transparent;background:var(--ui-sup-2)}
+.pl-docs .pl-doc-link .ui-in:hover{border-color:var(--ui-linha)}
+.pl-docs .pl-grupo{display:block;grid-column:1/-1;font-size:11px;font-weight:600;color:var(--ui-txt-3);text-transform:uppercase;letter-spacing:.04em;padding-top:8px;border:0}
+.pl-doc-st[data-s=pendente]{color:var(--ui-txt-2)}.pl-doc-st[data-s=recebido]{color:var(--ui-azul)}.pl-doc-st[data-s=conferido]{color:var(--ui-verde)}
+.pl-doc-st[data-s=recusado]{color:var(--ui-verm)}.pl-doc-st[data-s=dispensado]{color:var(--ui-txt-3)}
+
+.pl-exigs{list-style:none;margin:0;padding:0}
+.pl-exigs li{display:flex;gap:10px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--ui-linha-2);font-size:12px}
+.pl-exigs li p{flex:1;margin:0;color:var(--ui-txt)}
+.pl-exigs a{color:var(--ui-azul);flex:none}
+.pl-hist li{flex-wrap:wrap}
+.pl-hist li span{flex:1;min-width:0}
+.pl-hist li em{display:block;font-style:normal;color:var(--ui-txt);margin-top:2px;white-space:pre-wrap}
+.pl-hist li .pl-prox-h{display:block;color:var(--ui-txt-3)}
+
+/* diálogos */
+.pl-dlg__t{font-size:16px;font-weight:600;margin:0}
+.pl-campo{display:grid;gap:4px}
+.pl-campo span{font-size:11px;color:var(--ui-txt-3);font-weight:500}
+.pl-campo .ui-in{width:100%}
+.pl-dica{margin:0;font-size:12px;color:var(--ui-txt-3)}
+.pl-erro{margin:0;padding:8px 10px;border-radius:var(--ui-r);background:#FEF2F2;color:#B42318;font-size:12px;line-height:1.5}
+.pl-sem{padding:60px 16px;text-align:center;color:var(--ui-txt-2)}
+
+@media (max-width:860px){
+  .pl-quadro{grid-auto-columns:82vw}
+  .tf-topo .tf-lista-cel{flex:1 1 100%;order:1}
+  .tf-topo .tf-vistas{order:2;margin-right:auto}
+  .tf-topo #novo{order:3}
+  .pl-duas{grid-template-columns:1fr}
+  .pl-tab .c-tipo,.pl-tab .c-docs,.pl-tab .c-mov,.pl-tab .c-pr{display:none}
+  .pl-tab td.c-etapa,.pl-tab .tf-nome .pl-ind,.pl-tab .tf-nome .tf-contador{display:none}
+  .pl-cel-etapa{display:block;font-size:11px;color:var(--ui-txt-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+  .pl-tab tr{padding:6px 0}
+  .pl-tab td.c-num{display:none}
+  .pl-docs li{grid-template-columns:minmax(0,1fr) 110px}
+  .tf-props .pl-largo{grid-column:auto}
+  .pl-nums{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pl-tab-p td,.pl-tab-p th{padding:0 4px}
+  .pl-tab-p .n{width:52px}
+}

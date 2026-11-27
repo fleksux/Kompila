@@ -13,14 +13,14 @@
 <link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../sistema.css?v=30">
 <link rel="stylesheet" href="../tarefas/tarefas.css?v=9">
-<link rel="stylesheet" href="clientes.css?v=5">
-<link rel="stylesheet" href="../ui.css?v=4">
+<link rel="stylesheet" href="clientes.css?v=6">
+<link rel="stylesheet" href="../ui.css?v=5">
 </head>
 <body class="ui carregando">
 
 <header class="barra">
   <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
-  <nav class="barra__nav" aria-label="Sistema"><a href="../">Área interna</a><a href="../feed/">Feed</a><a href="../tarefas/">Tarefas</a><a href="../marketing/">Marketing</a><a href="../conversas/">Conversas</a><a href="./" aria-current="page">Clientes</a><a href="../propostas/">Propostas</a></nav>
+  <nav class="barra__nav" aria-label="Sistema"><a href="../">Área interna</a><a href="../feed/">Feed</a><a href="../tarefas/">Tarefas</a><a href="../paralegal/">Paralegal</a><a href="../regularidade/">Regularidade</a><a href="../marketing/">Marketing</a><a href="../conversas/">Conversas</a><a href="../clientes/" aria-current="page">Clientes</a><a href="../propostas/">Propostas</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -42,7 +42,7 @@
   <section class="numeros" id="numeros"></section>
 
   <div class="filtros">
-    <input type="search" id="f-busca" placeholder="Buscar por nome ou CNPJ" aria-label="Buscar empresa">
+    <input type="search" id="f-busca" placeholder="Buscar por nome, CNPJ ou código" aria-label="Buscar empresa">
     <select id="f-regime" aria-label="Regime"><option value="">Todos os regimes</option></select>
     <select id="f-resp" aria-label="Responsável"><option value="">Todos os responsáveis</option></select>
   </div>
@@ -68,13 +68,33 @@
       <label class="cp-t">Razão social<input id="e-razao" required></label>
       <label class="cp-t">Nome fantasia<input id="e-fantasia"></label>
       <div class="cp-2">
-        <label class="cp-t">CNPJ<input id="e-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></label>
+        <label class="cp-t">CNPJ<span class="cnpj-linha"><input id="e-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"><button type="button" class="ui-btn btn-cnpj" data-busca="e">Buscar pelo CNPJ</button></span></label>
         <label class="cp-t">Regime<select id="e-regime-sel" required></select></label>
       </div>
+      <p class="cnpj-msg" id="e-cnpj-msg" role="status"></p>
       <div class="cp-2">
         <label class="cp-t">Município<input id="e-municipio"></label>
         <label class="cp-t">UF<input id="e-uf" maxlength="2"></label>
       </div>
+      <div class="cp-2 cp-2--end">
+        <label class="cp-t">Endereço<input id="e-endereco" placeholder="rua, número, complemento, bairro"></label>
+        <label class="cp-t">CEP<input id="e-cep" inputmode="numeric" placeholder="00000-000"></label>
+      </div>
+      <div class="cp-2">
+        <label class="cp-t">Inscrição estadual<input id="e-ie" placeholder="isento, se não tiver"></label>
+        <label class="cp-t">Inscrição municipal (CCM)<input id="e-im"></label>
+      </div>
+      <label class="cp-t">CNAE principal<input id="e-cnae" placeholder="0000-0/00 · descrição"></label>
+      <label class="cp-t">Natureza jurídica<input id="e-natureza" placeholder="206-2 · Sociedade Empresária Limitada"></label>
+      <div class="cp-2">
+        <label class="cp-t">Data de abertura<input type="date" id="e-abertura"></label>
+        <label class="cp-t">Situação cadastral<input id="e-situacao" placeholder="ATIVA"></label>
+      </div>
+      <div class="cp-2">
+        <label class="cp-t">Código no Domínio<input id="e-codigo" type="number" min="1" inputmode="numeric" placeholder="a partir de 100"></label>
+        <label class="cp-t">Pasta no Drive da Coleve (id)<input id="e-drive" placeholder="id da pasta CCC_CLIENTE"></label>
+      </div>
+      <p class="pasta-nome" id="e-pasta"></p>
       <div class="cp-2">
         <label class="cp-t">Plano<input id="e-plano" placeholder="Start, Operation, Growth…"></label>
         <label class="cp-t">Cliente desde<input type="date" id="e-inicio"></label>
@@ -107,13 +127,33 @@
     <label class="cp-t">Razão social<input id="n-razao" required></label>
     <label class="cp-t">Nome fantasia<input id="n-fantasia"></label>
     <div class="cp-2">
-      <label class="cp-t">CNPJ<input id="n-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></label>
+      <label class="cp-t">CNPJ<span class="cnpj-linha"><input id="n-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"><button type="button" class="ui-btn btn-cnpj" data-busca="n">Buscar pelo CNPJ</button></span></label>
       <label class="cp-t">Regime<select id="n-regime" required></select></label>
     </div>
+    <p class="cnpj-msg" id="n-cnpj-msg" role="status"></p>
     <div class="cp-2">
       <label class="cp-t">Município<input id="n-municipio" value="São Paulo"></label>
       <label class="cp-t">UF<input id="n-uf" maxlength="2" value="SP"></label>
     </div>
+    <div class="cp-2 cp-2--end">
+        <label class="cp-t">Endereço<input id="n-endereco" placeholder="rua, número, complemento, bairro"></label>
+        <label class="cp-t">CEP<input id="n-cep" inputmode="numeric" placeholder="00000-000"></label>
+      </div>
+    <div class="cp-2">
+      <label class="cp-t">Inscrição estadual<input id="n-ie"></label>
+      <label class="cp-t">Inscrição municipal (CCM)<input id="n-im"></label>
+    </div>
+    <label class="cp-t">CNAE principal<input id="n-cnae"></label>
+    <label class="cp-t">Natureza jurídica<input id="n-natureza"></label>
+    <div class="cp-2">
+      <label class="cp-t">Data de abertura<input type="date" id="n-abertura"></label>
+      <label class="cp-t">Situação cadastral<input id="n-situacao"></label>
+    </div>
+    <div class="cp-2">
+      <label class="cp-t">Código no Domínio<input id="n-codigo" type="number" min="1" inputmode="numeric"></label>
+      <label class="cp-t">Pasta no Drive da Coleve (id)<input id="n-drive"></label>
+    </div>
+    <p class="pasta-nome" id="n-pasta"></p>
     <p class="h3-dica" id="n-erro" role="alert"></p>
     <div class="botoes-t"><button type="button" class="sair" id="n-cancela">Cancelar</button><button class="btn-a" type="submit">Criar empresa</button></div>
   </form>
@@ -125,7 +165,7 @@
   <div class="dlg-email__corpo" id="email-corpo"></div>
 </dialog>
 
-<script type="module" src="clientes.js?v=4"></script>
+<script type="module" src="clientes.js?v=5"></script>
 <script type="module" src="../chat-canto.js?v=5"></script>
 <script type="module" src="../avisos.js?v=1"></script>
 </body>

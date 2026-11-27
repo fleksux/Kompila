@@ -1,0 +1,81 @@
+/* Sistema Coleve · Envios (27/11/2026). Depende de ../ui.css e ../tarefas/tf.css */
+.tf-main>section{display:flex;flex-direction:column;flex:1;min-height:0}
+.tf-main>section[hidden]{display:none}
+
+/* faixa de envio desligado: a única cor forte da tela */
+.ev-desligado{display:flex;align-items:flex-start;gap:10px;margin:12px 20px 0;padding:10px 12px;border:1px solid #F3D9A4;background:#FFF8E8;border-radius:var(--ui-r2);color:#7A4E00;font-size:13px}
+.ev-desligado[hidden]{display:none}
+.ev-desligado svg{width:16px;height:16px;flex:none;margin-top:1px}
+.ev-desligado b{font-weight:600}
+.ev-desligado span{color:#8A6212}
+
+/* canais na lateral */
+.ev-canais{list-style:none;margin:0;padding:0 8px;display:grid;gap:6px}
+.ev-canais li{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--ui-txt-2);min-height:26px}
+.ev-canais small{color:var(--ui-txt-3)}
+
+/* status: cor só aqui */
+[data-ev=pendente]{--st:#8A919C}[data-ev=enviando]{--st:var(--ui-azul)}[data-ev=enviado]{--st:var(--ui-ciano)}
+[data-ev=entregue]{--st:var(--ui-verde)}[data-ev=lido]{--st:var(--ui-roxo)}[data-ev=falhou]{--st:var(--ui-verm)}[data-ev=cancelado]{--st:#B0B6BF}
+[data-ev=ligado]{--st:var(--ui-verde)}[data-ev=desligado]{--st:#B0B6BF}
+.ev-st{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:4px;background:color-mix(in srgb,var(--st) 12%,#fff);color:color-mix(in srgb,var(--st) 85%,#000);font-size:11px;font-weight:600;white-space:nowrap}
+.ev-st::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--st)}
+
+/* barra de seleção */
+.ev-acoes{display:flex;align-items:center;gap:6px;padding:8px 20px;border-bottom:1px solid var(--ui-linha);background:var(--ui-sel);font-size:12px}
+.ev-acoes[hidden]{display:none}
+.ev-acoes span{font-weight:500;color:var(--ui-azul);margin-right:6px}
+
+/* tabela */
+.ev-tab .c-chk{width:32px}.ev-tab .c-data{width:96px}.ev-tab .c-emp{width:170px}.ev-tab .c-canal{width:84px}.ev-tab .c-st{width:96px}.ev-tab .c-mod{width:170px}
+.ev-tab input[type=checkbox]{width:15px;height:15px;accent-color:var(--ui-azul);vertical-align:middle}
+.ev-dest{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+.ev-dest b{font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.ev-dest small{color:var(--ui-txt-3);font-size:11px;overflow:hidden;text-overflow:ellipsis}
+.ev-erro{color:var(--ui-verm);font-size:11px}
+.ev-num{text-align:right;font-variant-numeric:tabular-nums}
+.ev-tab th.ev-num{text-align:right}
+.ev-zero{color:#C5CAD3}
+.ev-falta{color:var(--ui-verm);font-weight:500}
+.ev-rot{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ui-txt-2)}
+
+/* gaveta */
+.ev-texto{white-space:pre-wrap;font:13px/1.55 var(--ui-fonte);background:var(--ui-sup-2);border:1px solid var(--ui-linha-2);border-radius:var(--ui-r2);padding:12px 14px;margin:0}
+
+/* modelos */
+.ev-mod{border:1px solid var(--ui-linha);border-radius:var(--ui-r2);padding:12px 14px;margin-top:12px;background:var(--ui-sup)}
+.ev-mod h3{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin:0 0 8px}
+.ev-mod h3 small{font-weight:400;color:var(--ui-txt-3);font-size:12px}
+.ev-mod__g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ev-mod label{display:grid;gap:4px;font-size:11px;color:var(--ui-txt-3);font-weight:500}
+.ev-mod textarea{min-height:120px;field-sizing:content;max-height:360px}
+.ev-mod__pe{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:var(--ui-txt-3)}
+
+/* novo envio */
+.ev-lote-cab{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px;font-weight:500;color:var(--ui-txt-3)}
+.ev-lote-cab>span{margin-right:auto}
+.ev-lote-cab small{font-weight:400;margin-left:6px}
+.ev-lote-cab .tf-busca{width:150px}
+.ev-lote{list-style:none;margin:0;padding:4px;max-height:220px;overflow:auto;border:1px solid var(--ui-linha);border-radius:var(--ui-r)}
+.ev-lote label{display:flex;align-items:center;gap:8px;min-height:30px;padding:0 6px;border-radius:5px;cursor:pointer;font-size:13px}
+.ev-lote label:hover{background:var(--ui-hover)}
+.ev-lote input{accent-color:var(--ui-azul)}
+.ev-lote small{margin-left:auto;color:var(--ui-txt-3);font-size:11px}
+.ev-nota{margin:6px 0 0;font-size:11px;color:var(--ui-txt-3)}
+.ev-prev summary{cursor:pointer;font-size:12px;color:var(--ui-txt-2)}
+.ev-prev pre{white-space:pre-wrap;font:12px/1.5 var(--ui-fonte);background:var(--ui-sup-2);border:1px solid var(--ui-linha-2);border-radius:var(--ui-r);padding:10px;margin:6px 0 0;max-height:200px;overflow:auto}
+
+@media (max-width:860px){
+  .ev-desligado{margin:10px 16px 0}
+  .ev-acoes{padding:8px 16px;flex-wrap:wrap}
+  .ev-tab .c-mod,.ev-tab .c-emp,.ev-tab .c-data{display:none}
+  .ev-tab td.c-dest{flex:1;min-width:0}
+  .ev-tab td.c-chk,.ev-tab td.c-canal,.ev-tab td.c-st{flex:none}
+  .ev-tab td.c-canal{width:auto}
+  .ev-comp,.ev-comp tbody{display:table!important;width:100%}
+  .ev-comp thead{display:table-header-group!important}
+  .ev-comp tr{display:table-row!important}
+  .ev-comp td,.ev-comp th{display:table-cell!important;padding:6px 4px!important;font-size:12px}
+  .ev-comp .c-opc{display:none!important}
+  .ev-mod__g{grid-template-columns:1fr}
+}

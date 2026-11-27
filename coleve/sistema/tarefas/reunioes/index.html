@@ -12,8 +12,8 @@
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../../../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../sistema.css?v=30">
-<link rel="stylesheet" href="../tarefas.css?v=10"><link rel="stylesheet" href="reunioes.css?v=1">
-<link rel="stylesheet" href="../../ui.css?v=4">
+<link rel="stylesheet" href="../tarefas.css?v=10"><link rel="stylesheet" href="reunioes.css?v=2">
+<link rel="stylesheet" href="../../ui.css?v=5">
 </head>
 <body class="ui carregando">
 
@@ -22,7 +22,7 @@
   <nav class="barra__nav" aria-label="Sistema">
     <a href="../../">Área interna</a>
     <a href="../../feed/">Feed</a>
-    <a href="../" aria-current="page">Tarefas</a>
+    <a href="../../tarefas/" aria-current="page">Tarefas</a><a href="../../paralegal/">Paralegal</a><a href="../../regularidade/">Regularidade</a>
     <a href="../../marketing/">Marketing</a>
     <a href="../../conversas/">Conversas</a>
   <a href="../../clientes/">Clientes</a><a href="../../propostas/">Propostas</a></nav>
@@ -59,6 +59,18 @@
       <div class="cp-2"><label class="cp-t">Participantes<input id="r-part" placeholder="Nomes de quem participou"></label><label class="cp-t">Responsável pelo acompanhamento<select id="r-acomp"><option value="">Ninguém</option></select></label></div>
       <div class="cp-2"><label class="cp-t">Cliente (se for reunião com cliente)<select id="r-empresa"><option value="">Reunião interna</option></select></label><label class="cp-t">Status geral<select id="r-status"><option value="a_fazer">A fazer</option><option value="andamento">Em andamento</option><option value="atencao">Em atenção</option><option value="concluido">Concluído</option></select></label></div>
 
+      <details class="rn-ia" id="rn-ia">
+        <summary>Transcrição ou anotações brutas <small class="h3-dica">só a equipe vê; nunca vai para o cliente</small></summary>
+        <textarea id="r-transcricao" rows="6" placeholder="Cole aqui a transcrição da gravação ou as anotações soltas da reunião."></textarea>
+        <div class="rn-ia__bt"><button type="button" class="sair" id="r-ia">Montar resumo pela IA</button><small class="h3-dica" id="r-ia-dica"></small></div>
+        <div class="rn-ia__saida" id="r-ia-saida" hidden>
+          <p class="h3-dica">Texto pronto e copiado. Cole numa IA (ChatGPT, Claude, Gemini), copie a resposta e cole abaixo para preencher o resumo.</p>
+          <textarea id="r-ia-prompt" rows="4" readonly></textarea>
+          <textarea id="r-ia-resp" rows="4" placeholder="Cole aqui a resposta da IA (o JSON)."></textarea>
+          <div class="rn-ia__bt"><button type="button" class="btn-a" id="r-ia-preenche">Preencher o resumo</button></div>
+        </div>
+      </details>
+
       <h3><span class="n">1</span>Objetivo da reunião</h3>
       <textarea id="r-objetivo" rows="2" placeholder="Em 1 a 3 frases: o objetivo e o resultado esperado."></textarea>
 
@@ -76,9 +88,9 @@
       <h3><span class="n">5</span>O que já foi feito</h3>
       <textarea id="r-feito" rows="2" placeholder="Uma entrega por linha."></textarea>
 
-      <h3><span class="n">6</span>Pendências e assuntos em aberto</h3>
-      <div class="linhas" data-lista="pendencias"></div>
-      <button type="button" class="mais" data-add="pendencias">+ pendência</button>
+      <h3><span class="n">6</span>Pendências e assuntos em aberto <small class="h3-dica">com responsável também vira tarefa</small></h3>
+      <div class="linhas" data-lista="pendencia"></div>
+      <button type="button" class="mais" data-add="pendencia">+ pendência</button>
 
       <h3><span class="n">7</span>Pontos de atenção e riscos</h3>
       <div class="linhas" data-lista="riscos"></div>
@@ -90,11 +102,17 @@
       <h3 id="h-reserv"><span class="n">9</span>Assuntos reservados <small class="h3-dica">só quem criou a reunião, admin e gestor leem</small></h3>
       <textarea id="r-reservado" rows="2" placeholder="Fica fora do PDF e de quem não tem acesso."></textarea>
 
-      <h3><span class="n">10</span>Próximos passos <small class="h3-dica">também viram tarefa</small></h3>
+      <h3><span class="n">10</span>Próximos passos <small class="h3-dica">prazo ou gatilho em cada um; também viram tarefa</small></h3>
       <div class="linhas" data-lista="proximo"></div>
       <button type="button" class="mais" data-add="proximo">+ passo</button>
 
-      <div class="cp-2 rn-fim"><label class="cp-t">Próximo acompanhamento<input type="date" id="r-prox"></label><label class="cp-t">Resultado esperado<input id="r-result" placeholder="Entrega ou objetivo que deve estar concluído"></label></div>
+      <div class="cp-2 rn-fim"><label class="cp-t">Próximo acompanhamento<input type="date" id="r-prox"></label><label class="cp-t">Responsável pelo próximo acompanhamento<select id="r-prox-resp"><option value="">A definir</option></select></label></div>
+      <label class="cp-t">Resultado esperado<input id="r-result" placeholder="Entrega ou objetivo que deve estar concluído"></label>
+
+      <div class="rn-pub" id="rn-pub">
+        <label class="rn-pub__ck"><input type="checkbox" id="r-publica"><span><b>Publicar para o cliente</b><small id="r-publica-dica">O cliente vê este resumo e baixa o PDF na Área do cliente. O reservado e a transcrição nunca aparecem.</small></span></label>
+        <label class="rn-pub__ck"><input type="checkbox" id="r-envia"><span><b>Enviar o resumo ao cliente</b><small id="r-envia-dica">Fica na fila de envios (WhatsApp ou e-mail dos contatos da empresa).</small></span></label>
+      </div>
 
       <div class="rn-botoes"><a class="sair" id="r-pdf" target="_blank" hidden>Ver PDF</a><button class="btn-a" type="submit" id="r-salva">Salvar e criar tarefas</button></div>
     </form>
@@ -104,7 +122,7 @@
 <!-- versão para imprimir / PDF -->
 <article class="doc" id="doc" hidden></article>
 
-<script type="module" src="reunioes.js?v=1"></script>
+<script type="module" src="reunioes.js?v=2"></script>
 <script type="module" src="../../chat-canto.js?v=5"></script>
 <script type="module" src="../../avisos.js?v=1"></script>
 </body>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seus processos · Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=30">
+<link rel="stylesheet" href="../ui.css?v=5">
+<style>
+  body.ui{background:var(--ui-fundo)}
+  body.carregando .plc{opacity:0}
+  .plc{max-width:760px;margin:0 auto;padding:20px 16px 64px;transition:opacity .2s}
+  .plc__topo{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+  .plc__topo h1{font-size:17px;font-weight:600;margin:0;letter-spacing:-.01em}
+  .plc__topo a{margin-left:auto;font-size:12px;color:var(--ui-azul);text-decoration:none}
+  .plc__sub{font-size:13px;color:var(--ui-txt-2);margin:0 0 16px}
+  .plc-card{background:var(--ui-sup);border:1px solid var(--ui-linha);border-radius:var(--ui-r2);padding:14px 16px;margin-bottom:10px}
+  .plc-card__cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+  .plc-card__cab b{font-size:14px;font-weight:600}
+  .plc-num{font-size:11px;color:var(--ui-txt-3);font-variant-numeric:tabular-nums}
+  .plc-sit{margin-left:auto;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--ui-azul)}
+  .plc-sit--concluido{color:var(--ui-verde)}
+  .plc-emp{font-size:12px;color:var(--ui-txt-3);margin:2px 0 10px}
+  .plc-agora{font-size:13px;margin:0 0 10px;color:var(--ui-txt)}
+  .plc-agora small{color:var(--ui-txt-3)}
+  .plc-aviso{font-size:12px;margin:0 0 10px;padding:7px 10px;border-radius:var(--ui-r);background:#FFF7ED;color:#9A3412}
+  .plc-barra{height:6px;border-radius:3px;background:var(--ui-hover);overflow:hidden;margin:0 0 4px}
+  .plc-barra i{display:block;height:100%;background:var(--ui-azul);border-radius:3px}
+  .plc-barra-t{font-size:11px;color:var(--ui-txt-3);margin:0 0 8px}
+  details summary{cursor:pointer;font-size:12px;font-weight:500;color:var(--ui-txt-2);padding:4px 0;list-style:none}
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"+ ";color:var(--ui-txt-3)}
+  details[open] summary::before{content:"− "}
+  .plc-etapas{list-style:none;margin:6px 0 4px;padding:0}
+  .plc-etapas li{display:flex;align-items:center;gap:8px;min-height:26px;font-size:13px;color:var(--ui-txt-3)}
+  .plc-etapas li::before{content:"";width:10px;height:10px;border-radius:50%;border:2px solid #C5CAD3;flex:none;box-sizing:border-box}
+  .plc-etapas li.is-feita{color:var(--ui-txt-2)}
+  .plc-etapas li.is-feita::before{background:var(--ui-verde);border-color:var(--ui-verde)}
+  .plc-etapas li.is-atual{color:var(--ui-txt);font-weight:500}
+  .plc-etapas li.is-atual::before{border-color:var(--ui-azul);background:var(--ui-sel)}
+  .plc-docs{list-style:none;margin:6px 0 4px;padding:0}
+  .plc-docs li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--ui-linha-2);font-size:13px}
+  .plc-docs li span{font-size:11px;font-weight:600;color:var(--ui-txt-3);white-space:nowrap}
+  .plc-docs li span[data-s=pendente],.plc-docs li span[data-s=recusado]{color:#C2410C}
+  .plc-docs li span[data-s=recebido],.plc-docs li span[data-s=conferido]{color:var(--ui-verde)}
+  .plc-nada{padding:48px 0;text-align:center;color:var(--ui-txt-3)}
+</style>
+</head>
+<body class="ui carregando">
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <span class="barra__tag">Área do cliente</span>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small>Cliente</small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="plc">
+  <div class="plc__topo"><h1>Seus processos</h1><a href="../">Voltar ao início</a></div>
+  <p class="plc__sub">Abertura, alteração e outros processos que a Coleve está cuidando para a sua empresa.</p>
+  <div id="lista" aria-live="polite"></div>
+</main>
+
+<script type="module">
+import { banco, quemSou } from '../conexao.js?v=2';
+const eu = await quemSou().catch(() => null);
+if (!eu?.pessoa?.ativo) { location.replace('../../entrar/'); throw 0; }
+if (eu.pessoa.tipo === 'equipe') { location.replace('./'); throw 0; }
+const $ = id => document.getElementById(id);
+const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const dataBR = d => d ? String(d).slice(0, 10).split('-').reverse().join('/') : '';
+$('nome').textContent = eu.pessoa.nome;
+$('avatar').textContent = (eu.pessoa.nome || '?').split(' ').filter(Boolean).map(x => x[0]).slice(0, 2).join('').toUpperCase();
+$('sair').onclick = async () => { await banco.auth.signOut(); location.replace('../../entrar/'); };
+const DOC = { pendente: 'Falta enviar', recebido: 'Recebido', conferido: 'Conferido', recusado: 'Enviar de novo' };
+
+async function desenha() {
+  const { data, error } = await banco.rpc('paralegal_do_cliente');
+  if (error) { $('lista').innerHTML = '<p class="plc-nada">Não deu para carregar agora. Tente de novo em instantes.</p>'; return; }
+  if (!data?.length) { $('lista').innerHTML = '<p class="plc-nada">Nenhum processo em andamento.</p>'; return; }
+  $('lista').innerHTML = data.map(p => {
+    const ets = p.etapas || [], feitas = ets.filter(e => e.status === 'feita').length;
+    const pct = ets.length ? Math.round(feitas / ets.length * 100) : 0;
+    const faltam = (p.documentos || []).filter(d => d.status === 'pendente' || d.status === 'recusado').length;
+    const fim = p.situacao === 'concluido';
+    return `<article class="plc-card">
+      <div class="plc-card__cab"><b>${esc(p.tipo)}</b><span class="plc-num">${esc(p.numero)}</span><span class="plc-sit${fim ? ' plc-sit--concluido' : ''}">${fim ? 'Concluído' : 'Em andamento'}</span></div>
+      <p class="plc-emp">${esc(p.empresa)} · aberto em ${dataBR(p.aberto_em)}</p>
+      <p class="plc-agora">${fim ? `Concluído em ${dataBR(p.concluido_em)}.` : `Etapa atual: <b>${esc(p.etapa)}</b> <small>desde ${dataBR(p.etapa_desde)}</small>`}</p>
+      ${!fim && (p.aguardando_cliente || faltam) ? `<p class="plc-aviso">Estamos esperando ${faltam ? (faltam === 1 ? '1 documento seu' : faltam + ' documentos seus') : 'um retorno seu'}. Fale com a Coleve se tiver dúvida.</p>` : ''}
+      ${!fim && p.aguardando_assinatura ? '<p class="plc-aviso">Tem documento esperando a sua assinatura.</p>' : ''}
+      <div class="plc-barra" aria-hidden="true"><i style="width:${fim ? 100 : pct}%"></i></div>
+      <p class="plc-barra-t">${feitas} de ${ets.length} etapas</p>
+      <details><summary>Ver as etapas</summary><ol class="plc-etapas">${ets.map(e => `<li class="${e.status === 'feita' ? 'is-feita' : ''}${e.atual ? ' is-atual' : ''}">${esc(e.nome)}</li>`).join('')}</ol></details>
+      ${(p.documentos || []).length ? `<details${faltam && !fim ? ' open' : ''}><summary>Documentos</summary><ul class="plc-docs">${p.documentos.map(d => `<li>${esc(d.nome)}<span data-s="${d.status}">${DOC[d.status] || ''}</span></li>`).join('')}</ul></details>` : ''}
+    </article>`;
+  }).join('');
+}
+await desenha();
+document.body.classList.remove('carregando');
+</script>
+</body>
+</html>

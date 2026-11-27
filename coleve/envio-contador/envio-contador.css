@@ -1,0 +1,51 @@
+/* Coleve · página pública do contador anterior (padrão de sistema, depende de ../sistema/ui.css) */
+body.ui{background:var(--ui-fundo);min-height:100vh}
+.ec-topo{display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px;padding:0 16px;background:var(--ui-sup);border-bottom:1px solid var(--ui-linha)}
+.ec-topo img{height:32px;width:auto}
+.ec-topo__tag{font-size:11px;font-weight:600;color:var(--ui-txt-3);text-transform:uppercase;letter-spacing:.04em}
+.ec{max-width:760px;margin:0 auto;padding:20px 16px 64px;display:grid;gap:12px}
+.ec-carrega,.ec-msg{color:var(--ui-txt-2);text-align:center;padding:60px 0}
+.ec-msg b{display:block;font-size:15px;color:var(--ui-txt);margin-bottom:4px}
+.ec-sec{font-size:11px;font-weight:500;color:var(--ui-txt-3);text-transform:uppercase;letter-spacing:.04em;margin:0 0 2px}
+.ec-cab h1{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0}
+.ec-sub{color:var(--ui-txt-2);margin:2px 0 12px}
+.ec-dados{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0}
+.ec-dados div{background:var(--ui-sup);border:1px solid var(--ui-linha);border-radius:var(--ui-r2);padding:8px 12px}
+.ec-dados dt{font-size:11px;color:var(--ui-txt-3)}
+.ec-dados dd{margin:0;font-weight:500}
+.ec-caixa{background:var(--ui-sup);border:1px solid var(--ui-linha);border-radius:var(--ui-r2);padding:16px}
+.ec-caixa h2{font-size:14px;font-weight:600;margin:0;display:flex;align-items:baseline;gap:8px}
+.ec-caixa h2 small{font-size:12px;font-weight:400;color:var(--ui-txt-3)}
+.ec-dica{font-size:12px;color:var(--ui-txt-3);margin:2px 0 12px}
+.ec-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ec-c{display:grid;gap:4px}
+.ec-c span{font-size:11px;font-weight:500;color:var(--ui-txt-3)}
+.ec-c .ui-in{width:100%}
+.ec-cats{list-style:none;margin:0;padding:0}
+.ec-cat{border-top:1px solid var(--ui-linha-2);padding:12px 0;display:grid;gap:8px}
+.ec-cat:first-child{border-top:0;padding-top:0}
+.ec-cat__topo{display:flex;align-items:center;gap:10px}
+.ec-cat__t{flex:1;min-width:0}
+.ec-cat__t b{display:block;font-weight:500}
+.ec-cat__t small{color:var(--ui-txt-3);font-size:12px}
+.ec-cat__motivo{margin:0;font-size:12px;color:var(--ui-verm)}
+.ec-cat__env{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ec-cat__env .ui-in{width:150px}
+.ec-arqs{list-style:none;margin:0;padding:0;font-size:12px;color:var(--ui-txt-2)}
+.ec-arqs li{display:flex;gap:8px;justify-content:space-between;padding:2px 0}
+.ec-arqs li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ec-arqs code{font:500 11px var(--ui-fonte);color:var(--ui-txt-3);white-space:nowrap}
+.ec-barra{height:4px;border-radius:2px;background:var(--ui-hover);overflow:hidden}
+.ec-barra i{display:block;height:100%;width:0;background:var(--ui-azul);transition:width .2s}
+.ec-file{position:relative;overflow:hidden}
+.ec-file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.ec-prot{list-style:none;margin:0 0 12px;padding:0;font-size:12px}
+.ec-prot li{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--ui-linha-2)}
+.ec-rodape{font-size:12px;color:var(--ui-txt-3);text-align:center}
+/* selo de status */
+.sx{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:4px;font-size:11px;font-weight:600;white-space:nowrap;background:color-mix(in srgb,var(--c) 12%,#fff);color:color-mix(in srgb,var(--c) 85%,#000)}
+.sx::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c)}
+[data-s=pendente]{--c:#8A919C}[data-s=recebido]{--c:var(--ui-azul)}[data-s=conferencia]{--c:var(--ui-roxo)}
+[data-s=aprovado]{--c:var(--ui-verde)}[data-s=recusado]{--c:var(--ui-verm)}[data-s=substituido]{--c:#B0B6BF}
+@media (max-width:640px){.ec-dados,.ec-2{grid-template-columns:1fr}.ec-cat__env .ui-in{flex:1}}
+@media print{.ec-topo__tag,.ec-caixa:not(.ec-comp),.ec-rodape,#e-imprime{display:none!important}body.ui{background:#fff}}

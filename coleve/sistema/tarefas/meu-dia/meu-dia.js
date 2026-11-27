@@ -181,7 +181,75 @@ $('f-b').addEventListener('submit', async e => {
   $('dlg-b').close(); carrega();
 });
 
-banco.channel('coleve-timebox').on('postgres_changes', { event: '*', schema: 'public', table: 'timebox' }, () => carrega()).subscribe();
+// ===== relatório (gestor): previsto x real por período, colaborador, empresa, tarefa =====
+const iso = d => { const x = new Date(d); x.setMinutes(x.getMinutes() - x.getTimezoneOffset()); return x.toISOString().slice(0, 10); };
+const brD = d => d.split('-').reverse().join('/');
+let aba = 'dia', relLinhas = [];
+if (chefe) {
+  $('md-abas').hidden = false;
+  (equipe || []).forEach(p => $('rl-pessoa').insertAdjacentHTML('beforeend', `<option value="${p.id}">${esc(p.nome)}</option>`));
+  (empresas || []).forEach(e => $('rl-empresa').insertAdjacentHTML('beforeend', `<option value="${e.id}">${esc(e.nome_fantasia || e.razao_social)}</option>`));
+  if (!veCliente) $('rl-emp-l').hidden = true;
+}
+$('md-abas').addEventListener('click', e => {
+  const b = e.target.closest('[data-aba]'); if (!b) return;
+  aba = b.dataset.aba;
+  $('md-abas').querySelectorAll('button').forEach(x => x.classList.toggle('is-on', x === b));
+  const rel = aba === 'rel';
+  ['md-dia-topo', 'numeros', 'lista'].forEach(id => { $(id).hidden = rel; });
+  $('rel').hidden = !rel;
+  if (rel) { $('time').hidden = true; $('pomo').hidden = true; carregaRel(); } else carrega();
+});
+function periodo() {
+  const v = $('rl-per').value, h = new Date(); h.setHours(12, 0, 0, 0);
+  document.querySelectorAll('[data-livre]').forEach(x => { x.hidden = v !== 'livre'; });
+  if (v === 'livre') return [$('rl-de').value || iso(h), $('rl-ate').value || iso(h)];
+  if (v.startsWith('sem')) { const ini = new Date(h); ini.setDate(h.getDate() - ((h.getDay() + 6) % 7) - (v === 'sem-1' ? 7 : 0)); const fim = new Date(ini); fim.setDate(ini.getDate() + 6); return [iso(ini), iso(fim)]; }
+  const ini = new Date(h.getFullYear(), h.getMonth() - (v === 'mes-1' ? 1 : 0), 1, 12), fim = new Date(ini.getFullYear(), ini.getMonth() + 1, 0, 12);
+  return [iso(ini), iso(fim)];
+}
+const tabela = (linhas, rotulo) => {
+  if (!linhas.length) return '<p class="fv">Nenhum bloco no período.</p>';
+  const maior = Math.max(...linhas.map(l => Math.max(l.previsto_min, l.real_min)), 1);
+  const tp = linhas.reduce((s, l) => s + l.previsto_min, 0), tr = linhas.reduce((s, l) => s + l.real_min, 0);
+  return `<table class="md-tab md-tab--rel"><tr><th>${rotulo}</th><th>Blocos</th><th>Previsto</th><th>Trabalhado</th><th>Diferença</th><th>No tempo</th><th>Verificados</th><th class="md-col-barra">Previsto x real</th></tr>
+    ${linhas.map(l => { const dif = l.real_min - l.previsto_min; return `<tr><td>${esc(l.nome)}</td><td>${l.blocos}</td><td>${horas(l.previsto_min)}</td><td class="${dif > 0 ? 'acima' : ''}">${horas(l.real_min)}</td>
+      <td class="${dif > 0 ? 'acima' : 'abaixo'}">${dif === 0 ? '0' : (dif > 0 ? '+' : '-') + horas(Math.abs(dif))}</td>
+      <td>${l.realizados ? Math.round(l.no_tempo / l.realizados * 100) + '%' : '-'}</td><td>${l.verificados}/${l.blocos}</td>
+      <td class="md-col-barra"><span class="md-bar"><i class="p" style="width:${l.previsto_min / maior * 100}%"></i><i class="r${dif > 0 ? ' acima' : ''}" style="width:${l.real_min / maior * 100}%"></i></span></td></tr>`; }).join('')}
+    <tr class="md-tot"><td>Total</td><td>${linhas.reduce((s, l) => s + l.blocos, 0)}</td><td>${horas(tp)}</td><td class="${tr > tp ? 'acima' : ''}">${horas(tr)}</td><td>${tr === tp ? '0' : (tr > tp ? '+' : '-') + horas(Math.abs(tr - tp))}</td><td></td><td></td><td class="md-col-barra"></td></tr></table>`;
+};
+const ROT = { pessoa: 'Colaborador', empresa: 'Empresa', tarefa: 'Tarefa', semana: 'Semana', dia: 'Dia' };
+async function carregaRel() {
+  const [de, ate] = periodo(), por = $('rl-por').value;
+  const filtro = { p_de: de, p_ate: ate, p_pessoa: $('rl-pessoa').value || null, p_empresa: $('rl-empresa').value || null };
+  $('rl-periodo').textContent = `De ${brD(de)} a ${brD(ate)}`;
+  const [{ data, error }, { data: porEmp }] = await Promise.all([
+    banco.rpc('timebox_relatorio', { ...filtro, p_por: por }),
+    por === 'empresa' ? Promise.resolve({ data: null }) : banco.rpc('timebox_relatorio', { ...filtro, p_por: 'empresa' })
+  ]);
+  if (error) return avisa('Não deu para carregar o relatório.');
+  relLinhas = data || [];
+  const tp = relLinhas.reduce((s, l) => s + l.previsto_min, 0), tr = relLinhas.reduce((s, l) => s + l.real_min, 0);
+  const real = relLinhas.reduce((s, l) => s + l.realizados, 0), nt = relLinhas.reduce((s, l) => s + l.no_tempo, 0);
+  $('rl-num').innerHTML =
+    `<div class="num"><strong>${relLinhas.reduce((s, l) => s + l.blocos, 0)}</strong><span>blocos</span></div>` +
+    `<div class="num"><strong>${horas(tp)}</strong><span>previsto</span></div>` +
+    `<div class="num"><strong>${horas(tr)}</strong><span>trabalhado</span></div>` +
+    `<div class="num"><strong>${real ? Math.round(nt / real * 100) + '%' : '-'}</strong><span>dentro do tempo</span></div>`;
+  $('rl-tab').innerHTML = tabela(relLinhas, ROT[por]);
+  $('rl-emp-h').hidden = $('rl-emp').hidden = por === 'empresa' || !veCliente;
+  if (porEmp) $('rl-emp').innerHTML = tabela(porEmp, 'Empresa');
+}
+['rl-per', 'rl-de', 'rl-ate', 'rl-por', 'rl-pessoa', 'rl-empresa'].forEach(id => $(id).addEventListener('change', carregaRel));
+$('rl-copia').onclick = async () => {
+  const [de, ate] = periodo();
+  const txt = [`Time Box ${brD(de)} a ${brD(ate)} · por ${ROT[$('rl-por').value].toLowerCase()}`, ['Nome', 'Blocos', 'Previsto (min)', 'Trabalhado (min)', 'Realizados', 'No tempo', 'Verificados'].join('\t'),
+    ...relLinhas.map(l => [l.nome, l.blocos, l.previsto_min, l.real_min, l.realizados, l.no_tempo, l.verificados].join('\t'))].join('\n');
+  await navigator.clipboard.writeText(txt); avisa('Tabela copiada. Cole na planilha.');
+};
+
+banco.channel('coleve-timebox').on('postgres_changes', { event: '*', schema: 'public', table: 'timebox' }, () => aba === 'rel' ? carregaRel() : carrega()).subscribe();
 
 await carrega();
 document.body.classList.remove('carregando');

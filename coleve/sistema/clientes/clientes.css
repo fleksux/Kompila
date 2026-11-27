@@ -61,3 +61,22 @@
 .abas-cl a{display:flex;align-items:center;height:44px;margin-bottom:-1.5px;border-bottom:3px solid transparent;color:var(--cinza);font-weight:800;font-size:15px;text-decoration:none}
 .abas-cl a[aria-current]{color:var(--azul);border-bottom-color:var(--azul)}
 .abas-cl a:hover{color:var(--azul)}
+
+/* cadastro completo (0035): busca pelo CNPJ, campos fiscais e nome da pasta no Drive */
+.cnpj-linha{display:flex;gap:6px;align-items:stretch}
+.cnpj-linha input{flex:1 1 auto;min-width:0}
+.btn-cnpj{flex:0 0 auto;height:auto;min-height:30px}
+.cnpj-msg,.pasta-nome{margin:-4px 0 0;font-size:12px;color:var(--ui-txt-3,#8A919C)}
+.cnpj-msg:empty,.pasta-nome:empty{display:none}
+.cnpj-msg.is-erro{color:var(--ui-verm,#E5484D)}
+.cnpj-msg.is-ok{color:var(--ui-txt-2,#4B5563)}
+.pasta-nome code{font:500 12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ui-txt,#1F2328);background:var(--ui-hover,#F2F4F7);border-radius:4px;padding:1px 5px}
+.pasta-nome details{margin-top:4px}
+.pasta-nome summary{cursor:pointer;color:var(--ui-txt-2,#4B5563)}
+.pasta-nome ul{margin:4px 0 0;padding-left:16px;columns:2;column-gap:16px}
+.situacao-alerta{color:var(--ui-verm,#E5484D)!important}
+#dlg-e{max-height:92vh;overflow:auto}
+#dlg-e[open]{width:min(560px,96vw)}
+@media (max-width:860px){.cnpj-linha{flex-direction:column}.pasta-nome ul{columns:1}}
+.cp-2--end{grid-template-columns:1fr 130px}
+@media (max-width:860px){.cp-2--end{grid-template-columns:1fr}}

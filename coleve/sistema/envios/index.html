@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envios · Sistema Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icones/apple_180.png">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=30">
+<link rel="stylesheet" href="../ui.css?v=5">
+<link rel="stylesheet" href="../tarefas/tf.css?v=3">
+<link rel="stylesheet" href="envios.css?v=1">
+</head>
+<body class="ui ui-tf carregando">
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <nav class="barra__nav" aria-label="Sistema"><a href="../">Área interna</a><a href="../feed/">Feed</a><a href="../tarefas/">Tarefas</a><a href="../paralegal/">Paralegal</a><a href="../regularidade/">Regularidade</a><a href="../marketing/">Marketing</a><a href="../conversas/">Conversas</a><a href="../clientes/">Clientes</a><a href="../propostas/">Propostas</a></nav>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<div class="tf">
+  <aside class="tf-lado" aria-label="Envios">
+    <p class="tf-lado__t">Envios</p>
+    <ul class="tf-listas" id="visoes">
+      <li><button type="button" data-v="fila" class="is-on"><span class="ui-ponto" style="--cor:#1A71FF"></span>Fila<b id="n-fila"></b></button></li>
+      <li><button type="button" data-v="competencia"><span class="ui-ponto" style="--cor:#2F9E66"></span>Por competência</button></li>
+      <li><button type="button" data-v="modelos"><span class="ui-ponto" style="--cor:#7C5CDB"></span>Textos padrão</button></li>
+    </ul>
+    <p class="tf-lado__t">Canais</p>
+    <ul class="ev-canais" id="canais"></ul>
+  </aside>
+
+  <main class="tf-main">
+    <div class="ev-desligado" id="desligado" hidden role="status">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 4.5v4M8 10.8v.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <div><b>Envio desligado: falta decidir provedor e chaves.</b> <span>Nada sai por WhatsApp nem por e-mail. O que for gerado fica guardado na fila como pendente.</span></div>
+    </div>
+
+    <header class="tf-topo">
+      <div class="tf-titulo"><span class="ui-ponto" id="t-ponto" style="--cor:#1A71FF"></span><h1 id="t-nome">Fila de envio</h1><span class="tf-conta" id="total"></span></div>
+      <select class="ui-in tf-lista-cel" id="visao-cel" aria-label="Vista">
+        <option value="fila">Fila</option><option value="competencia">Por competência</option><option value="modelos">Textos padrão</option>
+      </select>
+      <button class="ui-btn ui-btn--pri" id="novo" type="button"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Novo envio</button>
+    </header>
+
+    <!-- fila -->
+    <section id="v-fila">
+      <div class="tf-filtros">
+        <label class="tf-busca"><svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input type="search" id="f-busca" placeholder="Buscar" aria-label="Buscar contato, destino ou texto"></label>
+        <select class="ui-in" id="f-canal" aria-label="Canal"><option value="">Canal</option><option value="whatsapp">WhatsApp</option><option value="email">E-mail</option></select>
+        <select class="ui-in" id="f-status" aria-label="Status"><option value="">Status</option></select>
+        <select class="ui-in" id="f-emp" aria-label="Cliente"><option value="">Cliente</option></select>
+        <input class="ui-in" type="date" id="f-de" aria-label="De">
+        <input class="ui-in" type="date" id="f-ate" aria-label="Até">
+      </div>
+      <div class="ev-acoes" id="acoes" hidden>
+        <span id="sel-n"></span>
+        <button class="ui-btn" type="button" id="reenviar">Reenviar</button>
+        <button class="ui-btn ui-btn--fan" type="button" id="cancelar">Cancelar envio</button>
+        <button class="ui-btn ui-btn--fan" type="button" id="limpar">Limpar seleção</button>
+      </div>
+      <div class="tf-corpo" id="corpo-fila" aria-live="polite"></div>
+    </section>
+
+    <!-- por competência (RF08) -->
+    <section id="v-competencia" hidden>
+      <div class="tf-filtros">
+        <label class="ev-rot">Competência <input class="ui-in" type="month" id="f-comp" aria-label="Competência"></label>
+        <label class="tf-chk"><input type="checkbox" id="f-falta"> Só quem tem documento sem enviar</label>
+      </div>
+      <div class="tf-corpo" id="corpo-comp"></div>
+    </section>
+
+    <!-- textos padrão -->
+    <section id="v-modelos" hidden>
+      <div class="tf-corpo" id="corpo-mod"></div>
+    </section>
+  </main>
+</div>
+
+<!-- detalhe do envio -->
+<div class="gaveta tf-gav" id="gaveta" hidden>
+  <div class="gaveta__fundo" data-fecha></div>
+  <aside class="gaveta__painel" role="dialog" aria-modal="true" aria-labelledby="g-titulo">
+    <header class="tf-gav__topo">
+      <span class="tf-gav__onde" id="g-onde"></span>
+      <button class="ui-btn ui-btn--fan tf-gav__x" data-fecha aria-label="Fechar"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </header>
+    <div class="tf-gav__miolo" id="g-miolo"></div>
+  </aside>
+</div>
+
+<!-- novo envio (um cliente ou lote) -->
+<dialog class="tf-dlg" id="dlg">
+  <form id="f-novo" method="dialog">
+    <p class="tf-dlg__t">Novo envio</p>
+    <div class="tf-dlg__campos">
+      <label><span>Texto padrão</span><select class="ui-in" id="n-modelo" required></select></label>
+      <label><span>Canais</span><select class="ui-in" id="n-canais"><option value="">WhatsApp e e-mail</option><option value="whatsapp">Só WhatsApp</option><option value="email">Só e-mail</option></select></label>
+      <label><span>Quando</span><input class="ui-in" type="datetime-local" id="n-quando" aria-label="Agendar para"></label>
+    </div>
+    <div id="n-vars" class="tf-dlg__campos"></div>
+    <div>
+      <div class="ev-lote-cab"><span>Clientes <small id="n-sel-n">0 escolhidos</small></span>
+        <label class="tf-busca"><input type="search" id="n-busca" placeholder="Filtrar" aria-label="Filtrar clientes"></label>
+        <button class="ui-btn ui-btn--fan" type="button" id="n-todos">Marcar os visíveis</button></div>
+      <ul class="ev-lote" id="n-emps"></ul>
+      <p class="ev-nota">Só recebe quem autorizou receber aviso (LGPD), no canal autorizado. Contato sem autorização fica de fora.</p>
+    </div>
+    <details class="ev-prev"><summary>Ver o texto</summary><pre id="n-prev"></pre></details>
+    <div class="tf-dlg__pe">
+      <button class="ui-btn ui-btn--fan" type="button" id="n-fechar">Fechar</button>
+      <button class="ui-btn ui-btn--pri" type="submit" id="n-ok">Colocar na fila</button>
+    </div>
+  </form>
+</dialog>
+
+<p class="ui-aviso" id="aviso" role="status" aria-live="polite"></p>
+<script type="module" src="envios.js?v=1"></script>
+<script type="module" src="../chat-canto.js?v=5"></script>
+<script type="module" src="../avisos.js?v=1"></script>
+</body>
+</html>

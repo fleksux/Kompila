@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boas-vindas · Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icones/apple_180.png">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=30">
+<link rel="stylesheet" href="../ui.css?v=5">
+<link rel="stylesheet" href="onboarding.css?v=1">
+</head>
+<body class="ui ui-tf carregando">
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <span class="barra__tag">Área do cliente</span>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small id="papel"></small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="ob tr">
+  <a class="ob-volta" href="../">← Início</a>
+  <p class="ob-sec">Boas-vindas</p>
+  <h1>Sua trilha na Coleve</h1>
+  <p class="ob-sub">Vídeos curtos para você entender como trabalhamos juntos. Assista na ordem e marque cada um como assistido.</p>
+  <div class="ob-caixa tr-prog"><b id="prog-t"></b><span class="tr-prog__barra"><i id="prog-b"></i></span></div>
+  <ol class="tr-etapas" id="trilha"></ol>
+</main>
+<p class="ui-aviso" id="aviso" role="status"></p>
+
+<script type="module" src="cliente.js?v=1"></script>
+</body>
+</html>

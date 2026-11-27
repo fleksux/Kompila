@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pedidos · Área do cliente · Coleve</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icones/apple_180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Coleve">
+<link rel="icon" href="../../img/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../sistema.css?v=30">
+<link rel="stylesheet" href="../ui.css?v=5">
+<link rel="stylesheet" href="pd.css?v=1">
+</head>
+<body class="ui ui-tf carregando">
+<header class="barra">
+  <a href="../" class="barra__marca"><img src="../../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
+  <span class="barra__tag">Área do cliente</span>
+  <div class="barra__eu">
+    <span class="avatar" id="avatar">·</span>
+    <div><b id="nome">…</b><small>Cliente</small></div>
+    <button class="sair" id="sair" type="button">Sair</button>
+  </div>
+</header>
+
+<main class="pd">
+  <a class="pd-volta" href="../">← Início</a>
+  <div class="pd-topo">
+    <h1 id="titulo">Pedidos</h1>
+    <div class="pd-dir">
+      <div class="pd-abas" role="tablist" aria-label="Pedidos">
+        <button role="tab" id="aba-pedir" data-aba="pedir" aria-selected="true">Fazer um pedido</button>
+        <button role="tab" id="aba-andamento" data-aba="andamento" aria-selected="false">Andamento<b id="n-abertos"></b></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- fazer um pedido -->
+  <section id="pedir" role="tabpanel" aria-labelledby="aba-pedir">
+    <form class="pd-caixa" id="form" novalidate>
+      <div class="pd-campo" id="campo-emp" hidden>
+        <label class="pd-rot" for="emp">Empresa</label>
+        <select class="ui-in" id="emp"></select>
+      </div>
+      <div class="pd-campo">
+        <span class="pd-rot">O que você precisa?</span>
+        <div id="tipos"></div>
+      </div>
+      <div class="pd-campo" id="campo-mes" hidden>
+        <label class="pd-rot" for="mes">De qual mês é a guia?</label>
+        <input class="ui-in" type="month" id="mes">
+        <p class="pd-ajuda">Se a guia já estiver pronta, ela aparece na hora para você baixar.</p>
+      </div>
+      <div class="pd-campo">
+        <label class="pd-rot" for="desc">Conte um pouco mais <small id="desc-obr">(opcional)</small></label>
+        <textarea class="ui-txt" id="desc" rows="4" maxlength="4000" placeholder="Ex.: preciso para uma licitação até sexta."></textarea>
+        <p class="pd-ajuda" id="tipo-ajuda"></p>
+      </div>
+      <div class="pd-campo">
+        <span class="pd-rot">Arquivo <small id="arq-obr">(opcional)</small></span>
+        <div class="pd-arq">
+          <label class="ui-btn" for="arq"><svg viewBox="0 0 16 16"><path d="M10.5 5 6 9.5a1.4 1.4 0 0 0 2 2L13 6.5a2.8 2.8 0 0 0-4-4L4 7.5a4.2 4.2 0 0 0 6 6l3.5-3.5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>Anexar</label>
+          <input type="file" id="arq" hidden>
+          <span id="arq-nome">Nenhum arquivo</span>
+        </div>
+      </div>
+      <div class="pd-campo">
+        <label class="pd-urg"><input type="checkbox" id="urgente"><span><b>É urgente</b><small>A equipe vê primeiro. Use quando tiver um prazo próximo.</small></span></label>
+      </div>
+      <div class="pd-acoes">
+        <button class="ui-btn ui-btn--pri" id="enviar" type="submit">Enviar pedido</button>
+        <span class="pd-erro" id="erro" role="alert"></span>
+      </div>
+    </form>
+    <div class="pd-caixa" id="resultado" hidden></div>
+
+    <div class="pd-atalhos" id="atalhos"></div>
+  </section>
+
+  <!-- andamento -->
+  <section id="andamento" role="tabpanel" aria-labelledby="aba-andamento" hidden>
+    <div class="pd-filtros">
+      <div class="pd-abas" role="tablist" aria-label="Filtro">
+        <button role="tab" data-f="abertos" aria-selected="true">Com a Coleve</button>
+        <button role="tab" data-f="feitos" aria-selected="false">Concluídos</button>
+      </div>
+    </div>
+    <div class="pd-lista" id="lista" aria-live="polite"></div>
+    <p class="pd-ajuda">Recebido, Em andamento, Em conferência, Pronto e Enviado: são as etapas de cada entrega. Toque em um item para ver detalhes e falar com a equipe.</p>
+  </section>
+</main>
+<div class="ui-aviso" id="aviso" role="status"></div>
+
+<script type="module" src="cliente.js?v=1"></script>
+<script type="module" src="../avisos.js?v=1"></script>
+</body>
+</html>

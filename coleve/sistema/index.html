@@ -13,14 +13,14 @@
 <meta name="apple-mobile-web-app-title" content="Coleve">
 <link rel="icon" href="../img/icone.svg" type="image/svg+xml">
 <link rel="stylesheet" href="sistema.css?v=30">
-<link rel="stylesheet" href="ui.css?v=4">
+<link rel="stylesheet" href="ui.css?v=5">
 </head>
 <body class="ui carregando">
 
 <header class="barra">
   <a href="./" class="barra__marca"><img src="../img/logo_ev.png" alt="Coleve eletromobilidade" width="900" height="270"></a>
   <span class="barra__tag" id="tag" hidden>Área do cliente</span>
-  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" id="nav-inicio">Área interna</a><a href="feed/" id="nav-feed">Feed</a><a href="tarefas/">Tarefas</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a><a href="clientes/">Clientes</a><a href="propostas/">Propostas</a></nav>
+  <nav class="barra__nav" id="nav" aria-label="Sistema" hidden><a href="./" id="nav-inicio">Área interna</a><a href="feed/" id="nav-feed">Feed</a><a href="tarefas/">Tarefas</a><a href="paralegal/">Paralegal</a><a href="regularidade/">Regularidade</a><a href="marketing/">Marketing</a><a href="conversas/">Conversas</a><a href="clientes/">Clientes</a><a href="propostas/">Propostas</a></nav>
   <div class="barra__eu">
     <span class="avatar" id="avatar">·</span>
     <div><b id="nome">…</b><small id="papel"></small></div>
@@ -181,7 +181,11 @@ if (equipe && ['marketing', 'tecnologia'].includes(p.area)) {
     mod('Clientes', 'Ficha da empresa, regime, responsáveis, obrigações e documentos enviados.', I.empresa, 'clientes/') +
     mod('Propostas', 'Quatro perguntas, um plano recomendado e o link pro cliente aceitar. Contrato assinado vira cliente.', I.check, 'propostas/') +
     mod('Documentos', 'Guias, apurações e o que o cliente mandou, com protocolo de envio.', I.doc) +
-    mod('Pedidos', 'Segunda via, certidão e alteração pedidas pelo cliente.', I.pedido) +
+    mod('Pedidos', 'Segunda via, certidão e alteração pedidas pelo cliente. Cada pedido já vira tarefa.', I.pedido, 'pedidos/') +
+    mod('Paralegal', 'Abertura, alteração, baixa e licenças em quadro por etapa, com exigência virando tarefa.', I.empresa, 'paralegal/') +
+    mod('Regularidade fiscal', 'Consulta por órgão, pendências com valores separados, certidões e o que o cliente vê.', I.check, 'regularidade/') +
+    mod('Envios', 'Fila de WhatsApp e e-mail com protocolo, cobranças e lembretes de vencimento.', I.doc, 'envios/') +
+    mod('Onboarding', 'Passos de cada cliente novo e a trilha de vídeos de boas-vindas.', I.raio, 'onboarding/') +
     mod('Ligações', 'Discar para o cliente e registrar cada chamada na ficha.', I.fone);
   document.getElementById('modulos').insertAdjacentHTML('afterbegin', mod('Marketing', 'Peça um post com referência, receba a versão na cara do Instagram e aprove.', I.doc, 'marketing/'));
   document.getElementById('modulos').insertAdjacentHTML('afterbegin', mod('Conversas', 'Canais por área e conversa direta, com troca de arquivos. O cliente nunca vê.', I.pedido, 'conversas/'));
@@ -189,9 +193,16 @@ if (equipe && ['marketing', 'tecnologia'].includes(p.area)) {
   const { data: emps } = await banco.from('empresa').select('id,nome_fantasia,razao_social,segmento');
   const nomes = (emps || []).map(e => e.nome_fantasia || e.razao_social).join(', ');
   document.getElementById('sub').textContent = nomes ? 'Empresa: ' + nomes : 'Sua empresa ainda está sendo cadastrada pela Coleve.';
+  // pedidos e andamento moram em pedidos/cliente.html; os outros três são páginas de outras frentes (só o link)
+  const { data: andam } = await banco.from('v_andamento').select('id').eq('encerrado', false);
+  const nAnd = (andam || []).length;
   document.getElementById('modulos').innerHTML =
-    mod('Pedidos', 'Peça uma certidão, segunda via ou alteração.', I.pedido) +
-    mod('Andamento', 'Veja quem está cuidando de cada entrega e o prazo.', I.tarefa);
+    mod('Fazer um pedido', 'Segunda via de guia, certidão, declaração, alteração, funcionários ou uma reunião.', I.pedido, 'pedidos/cliente.html#pedir') +
+    mod('Andamento', nAnd ? `${nAnd} ${nAnd === 1 ? 'entrega' : 'entregas'} com a Coleve agora. Veja o prazo e o que falta.` : 'Veja o que está com a Coleve, o prazo e o que falta você mandar.', I.tarefa, 'pedidos/cliente.html#andamento') +
+    mod('Regularidade fiscal', 'Veja se a empresa está em dia com as certidões.', I.check, 'regularidade/cliente.html') +
+    mod('Reuniões', 'Marque e reveja as conversas com o seu contador.', I.cal, 'reunioes-cliente.html') +
+    mod('Vídeos de boas-vindas', 'Como a Coleve trabalha e como usar a Área do cliente.', I.raio, 'onboarding/cliente.html') +
+    mod('Abertura e alterações', 'Acompanhe cada etapa da abertura ou alteração da sua empresa.', I.empresa, 'paralegal/cliente.html');
   // documentos que a Coleve enviou: o mais novo em cima, "novo" até o cliente abrir
   const { baixar, TIPOS, reais, enviarPendencia, mesNome } = await import('./documentos.js?v=3');
   const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
