@@ -154,3 +154,10 @@ body.ui .barra-mk .vista button.is-ativo{background:var(--ui-sup)!important;colo
 body.ui [class*=drive]:not(.aviso-drive):not(.btn-pasta){border-radius:var(--ui-r)}
 /* chat do canto some quando um painel lateral está aberto */
 body.ui:has(.gaveta:not([hidden])) .cc-bot,body.ui:has(dialog[open]) .cc-bot{display:none}
+
+/* celular: menu de baixo com os 7 itens numa linha só */
+@media (max-width:860px){
+  body.ui .barra .barra__nav{grid-template-columns:repeat(7,1fr)!important}
+  body.ui .barra .barra__nav a{font-size:9.5px!important;letter-spacing:-.01em}
+  body.ui .barra__nav a:nth-child(7){--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h4'/%3E%3C/svg%3E")}
+}

@@ -187,9 +187,18 @@ tr.is-feita .tf-nome__t{color:var(--ui-txt-3);text-decoration:line-through}
   .tf-filtros>*{flex:none}
   .tf-busca{width:150px}
   .tf-corpo{padding:0 16px 24px;overflow:visible}
-  .tf-tab thead,.tf-tab .c-emp,.tf-tab .c-pr,.tf-tab .c-lista{display:none}
-  .tf-tab .c-resp{width:44px}.tf-tab .c-prazo{width:78px}
+  /* no celular a linha vira faixa: nome ocupa o espaço, depois responsável e prazo */
+  .tf-tab,.tf-tab tbody{display:block}
+  .tf-tab colgroup,.tf-tab thead,.tf-tab .c-emp,.tf-tab .c-pr,.tf-tab .c-lista{display:none}
+  .tf-tab tr{display:flex;align-items:center;gap:8px;min-height:44px;border-bottom:1px solid var(--ui-linha-2)}
+  .tf-tab td{display:block;height:auto;border:0;padding:0}
+  .tf-tab td.c-nome{flex:1;min-width:0}
+  .tf-tab td.c-resp{flex:none}
+  .tf-tab td.c-prazo{flex:none;width:44px;text-align:right}
+  .tf-add-lin td{flex:1;padding:12px 0}
+  .tf-nome .tf-tag{display:none}
   tr.is-sub .tf-nome{padding-left:16px}
+  .tf-lista-cel{min-width:150px}
   .tf-quadro{grid-auto-columns:82vw;overflow-x:auto;scroll-snap-type:x mandatory}
   .tf-col{scroll-snap-align:start}
   .tf-props{grid-template-columns:1fr}
